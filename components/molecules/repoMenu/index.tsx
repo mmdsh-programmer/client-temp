@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button, Drawer, Typography } from "@material-tailwind/react";
 import {
   ArchiveIcon,
   DeleteIcon,
@@ -17,10 +16,9 @@ import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRest
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
 import ButtonAtom from "@components/atoms/button";
 import RepoEditDialog from "@components/organisms/dialogs/repository/repoEditDialog";
-import MenuComponent from "../menu";
-import { listMode } from "@atom/app";
-import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
+import MenuTemplate from "@components/templates/menuTemplate";
+import DrawerTemplate from "@components/templates/drawerTemplate";
 
 interface IProps {
   repo: IRepo;
@@ -37,8 +35,9 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
   const [bookmarkRepoModal, setBookmarkRepoModal] = useState(false);
   const [shareRepoModal, setShareRepoModal] = useState(false);
   const [goToRepo, setGoToRepo] = useState(false);
-  const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState(false);
-  const mode = useRecoilValue(listMode);
+  const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
+    boolean | null
+  >(false);
 
   const adminRole = repo.roleName === "owner" || repo.roleName === "admin";
 
@@ -109,75 +108,51 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
     <div className="">
       {isList ? (
         <>
-          <div className="hidden xs:flex flex-wrap gap-1 mr-6">
+          <div className="hidden xs:flex flex-wrap gap-2 mr-6">
             {adminRole && (
               <>
-                <Button
-                  placeholder=""
-                  className="flex bg-white p-2"
-                  onClick={() => {
-                    setDeleteRepoModal(true);
-                    setOpenRepoActionDrawer(false);
-                  }}
-                >
-                  <DeleteIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  placeholder=""
-                  className="flex bg-white p-2"
-                  onClick={() => {
-                    setEditRepoModal(true);
-                  }}
-                >
-                  <EditIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  placeholder=""
-                  className="flex bg-white p-2"
-                  onClick={() => {
-                    setShareRepoModal(true);
-                  }}
-                >
-                  <ShareIcon className="w-4 h-4" />
-                </Button>
-                <Button
-                  placeholder=""
-                  className="flex bg-white p-2"
-                  onClick={() => {
-                    setArchiveRepoModal(true);
-                    setOpenRepoActionDrawer(false);
-                  }}
-                >
-                  <ArchiveIcon className="w-4 h-4 stroke-gray-900" />
-                </Button>
+                {menuList.map((item, index) => {
+                  return (
+                    index !== 0 && (
+                      <ButtonAtom
+                        className="bg-white !p-2 border-[1px] border-normal"
+                        onClick={() => {
+                          item.onClick();
+                          setOpenRepoActionDrawer(false);
+                        }}
+                      >
+                        {item.icon}
+                      </ButtonAtom>
+                    )
+                  );
+                })}
               </>
             )}
-            <Button
-              placeholder=""
-              className="flex xs:hidden bg-white p-2"
+            <ButtonAtom
+              className="bg-white !p-2 border-[1px] border-normal"
               onClick={() => {
                 setBookmarkRepoModal(true);
               }}
             >
               <StarIcon className="w-4 h-4 stroke-gray-900" />
-            </Button>
+            </ButtonAtom>
           </div>
-          <div className="block xs:hidden">
-            <div className="flex gap-x-2 justify-end">
-              <Button
-                className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8"
-                placeholder="menu-button"
-                onClick={() => {
-                  setOpenRepoActionDrawer(true);
-                }}
-              >
-                <MoreDotIcon className="w-4 h-4" />
-              </Button>
-            </div>
+          <div className="flex xs:hidden">
+            <MenuTemplate
+              setOpenDrawer={() => {
+                setOpenRepoActionDrawer(true);
+              }}
+              menuList={menuList}
+              icon={
+                <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+                  <MoreDotIcon className="w-4 h-4" />
+                </div>
+              }
+            />
           </div>
         </>
       ) : (
-        <div className="flex gap-x-2 justify-end">
+        <div className="flex items-center gap-x-2 justify-end">
           {archived ? null : (
             <ButtonAtom
               className="rounded-lg border-2 border-gray-50 
@@ -186,87 +161,42 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
               <StarIcon className="w-4 h-4" />
             </ButtonAtom>
           )}
-          <div className="hidden xs:block">
-            <MenuComponent variant="small" menuList={menuList}>
-              <Button
-                className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8"
-                placeholder="menu-button"
-              >
+
+          <MenuTemplate
+            setOpenDrawer={() => {
+              setOpenRepoActionDrawer(true);
+            }}
+            menuList={menuList}
+            icon={
+              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
                 <MoreDotIcon className="w-4 h-4" />
-              </Button>
-            </MenuComponent>
-          </div>
-          <div className="block xs:hidden">
-            <div className="flex gap-x-2 justify-end">
-              <Button
-                className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8"
-                placeholder="menu-button"
-                onClick={() => {
-                  setOpenRepoActionDrawer(true);
-                }}
-              >
-                <MoreDotIcon className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
+              </div>
+            }
+          />
         </div>
       )}
-      <Drawer
-        placement="bottom"
-        open={openRepoActionDrawer}
-        onClose={() => setOpenRepoActionDrawer(false)}
-        className="p-4 !h-auto"
-        placeholder="repo-action-drawer"
-      >
-        <ul
-          className={`w-full
-                   ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
-        >
-          {menuList.map((menuItem, index) => {
-            return (
-              <li
-                key={index}
-                className={`cursor-pointer py-2 flex`}
-                onClick={menuItem.onClick}
-              >
-                <div className="flex items-center">
-                  {menuItem.icon}
-                  <Typography
-                    placeholder="menu-item-text"
-                    className={`font-iranYekan font-medium text-base mr-2`}
-                  >
-                    {menuItem.text}
-                  </Typography>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </Drawer>
+      <div className="xs:hidden flex">
+        <DrawerTemplate
+          openDrawer={openRepoActionDrawer}
+          setOpenDrawer={setOpenRepoActionDrawer}
+          menuList={menuList}
+        />
+      </div>
 
       {editRepoModal && (
         <RepoEditDialog repo={repo} setOpen={setEditRepoModal} />
       )}
       {deleteRepoModal && (
-        <RepoDeleteDialog
-          repo={repo}
-          setOpen={setDeleteRepoModal}
-        />
+        <RepoDeleteDialog repo={repo} setOpen={setDeleteRepoModal} />
       )}
       {archiveRepoModal && (
         <RepoArchiveDialog repo={repo} setOpen={setArchiveRepoModal} />
       )}
       {restoreRepoModal && (
-        <RepoRestoreDialog
-          repo={repo}
-          setOpen={setRestoreRepoModal}
-        />
+        <RepoRestoreDialog repo={repo} setOpen={setRestoreRepoModal} />
       )}
       {shareRepoModal && (
-        <RepoShareDialog
-          repo={repo}
-          setOpen={setShareRepoModal}
-        />
+        <RepoShareDialog repo={repo} setOpen={setShareRepoModal} />
       )}
     </div>
   );

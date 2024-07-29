@@ -1,5 +1,6 @@
 import React from "react";
-import { Drawer, Typography } from "@material-tailwind/react";
+import { Drawer } from "@material-tailwind/react";
+import Text from "@components/atoms/typograghy/text";
 
 interface IProps {
   openDrawer: boolean | null;
@@ -33,14 +34,13 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
               className={`cursor-pointer py-2 flex`}
               onClick={menuItem?.onClick}
             >
-              <div className="flex items-center">
+              <div className="flex items-center gap-1">
                 {menuItem.icon}
-                <Typography
-                  placeholder="menu-item-text"
-                  className={`font-iranYekan font-medium text-base mr-2`}
+                <Text
+                  className={`text-[13px] leading-[18.2px] -tracking-[0.13px] font-normal`}
                 >
                   {menuItem.text}
-                </Typography>
+                </Text>
               </div>
             </li>
           );

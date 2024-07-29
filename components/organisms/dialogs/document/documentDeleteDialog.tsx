@@ -5,15 +5,16 @@ import { repoAtom } from "@atom/repository";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
 import useDeleteDocument from "@hooks/document/useDeleteDocument";
-import { IDocumentMetadata } from "@interface/document.interface";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IProps {
-  document?: IDocumentMetadata;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const DocumentDeleteDialog = ({ document, setOpen }: IProps) => {
+const DocumentDeleteDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const document = useRecoilValue(selectedDocumentAtom);
+
   const deleteDocument = useDeleteDocument();
 
   const deleteCategory = useDeleteCategory();

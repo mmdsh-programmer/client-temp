@@ -10,8 +10,8 @@ import EditDialog from "@components/templates/dialog/editDialog";
 import useEditCategory from "@hooks/category/useEditCategory";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import NumberInput from "@components/atoms/input/numberInput";
-import { IDocumentMetadata } from "@interface/document.interface";
 import useEditDocument from "@hooks/document/useEditDocument";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IForm {
   id?: number;
@@ -22,12 +22,12 @@ interface IForm {
 }
 
 interface IProps {
-  document?: IDocumentMetadata
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const DocumentEditDialog = ({ document, setOpen }: IProps) => {
+const DocumentEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const document = useRecoilValue(selectedDocumentAtom)
   const editDocument = useEditDocument();
 
   const editCategory = useEditCategory();

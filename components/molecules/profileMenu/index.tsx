@@ -6,6 +6,7 @@ import { UserIcon } from "@components/atoms/icons";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Button } from "@material-tailwind/react";
 import MenuComponent from "../menu";
+import ImageComponent from "@components/atoms/image";
 
 const ProfileMenu = () => {
   const { data: userData } = useGetUser();
@@ -51,11 +52,10 @@ const ProfileMenu = () => {
         className="rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 "
       >
         {userData?.profileImage ? (
-          <Image
+          <ImageComponent
             className="rounded-full h-6 w-6 "
-            resource={userData?.profileImage}
-            alt={userData?.username}
             src={userData?.profileImage}
+            alt={userData?.username}
           />
         ) : (
           <UserIcon className="h-4 w-4 fill-gray-400" />

@@ -5,15 +5,15 @@ import { repoAtom } from "@atom/repository";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { useForm } from "react-hook-form";
 import useEditDocument from "@hooks/document/useEditDocument";
-import { IDocumentMetadata } from "@interface/document.interface";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IProps {
-  document?: IDocumentMetadata;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const DocumentHideDialog = ({ document, setOpen }: IProps) => {
+const DocumentHideDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const document = useRecoilValue(selectedDocumentAtom)
 
   const hideDocument = useEditDocument();
 

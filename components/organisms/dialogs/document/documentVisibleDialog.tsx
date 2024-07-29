@@ -4,16 +4,16 @@ import { toast } from "react-toastify";
 import { repoAtom } from "@atom/repository";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { useForm } from "react-hook-form";
-import { IDocumentMetadata } from "@interface/document.interface";
 import useEditDocument from "@hooks/document/useEditDocument";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IProps {
-  document?: IDocumentMetadata;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const DocumentVisibleDialog = ({ document, setOpen }: IProps) => {
+const DocumentVisibleDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const document = useRecoilValue(selectedDocumentAtom)
 
   const visibleDocument = useEditDocument();
 
