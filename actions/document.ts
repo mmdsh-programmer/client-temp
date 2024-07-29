@@ -1,0 +1,178 @@
+import {
+  createDocument,
+  createDocumentTemplate,
+  deleteDocument,
+  editDocument,
+  getClasorField,
+  getDocument,
+  getUserDocument,
+} from "@service/clasor";
+import { getMe } from "./auth";
+import { EDocumentTypes } from "@interface/enums";
+import { ISortProps } from "@atom/sortParam";
+import { IReportFilter } from "@interface/app.interface";
+
+export const getClasorFieldAction = async () => {
+  const userInfo = await getMe();
+  try {
+    const response = await getClasorField(userInfo.access_token);
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const getDocumentAction = async (
+  repoId?: number,
+  documentId?: number
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getDocument(
+      userInfo.access_token,
+      repoId,
+      documentId
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const createDocumentAction = async (
+  repoId: number | undefined,
+  categoryId: number | undefined,
+  title: string,
+  description: string | undefined,
+  contentType: EDocumentTypes,
+  isTemplate: boolean,
+  order?: number,
+  imageUrl?: string
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createDocument(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      title,
+      description,
+      contentType,
+      isTemplate,
+      order,
+      imageUrl
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const createDocumentTemplateAction = async (
+  repoId: number | undefined,
+  categoryId: number | undefined,
+  title: string,
+  description: string | undefined,
+  contentType: EDocumentTypes,
+  versionNumber: string,
+  templateId: number,
+  order?: number,
+  imageUrl?: string
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createDocumentTemplate(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      title,
+      description,
+      contentType,
+      versionNumber,
+      templateId,
+      order,
+      imageUrl
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const editDocumentAction = async (
+  repoId: number | undefined,
+  documentId: number,
+  categoryId: number | null,
+  title: string,
+  description: string | undefined,
+  contentType: EDocumentTypes,
+  order?: number | null,
+  isHidden?: boolean,
+  tagIds?: number[]
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await editDocument(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      categoryId,
+      title,
+      description,
+      contentType,
+      order,
+      isHidden,
+      tagIds
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const deleteDocumentAction = async (
+  repoId: number,
+  documentId: number
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await deleteDocument(
+      userInfo.access_token,
+      repoId,
+      documentId
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const getUserDocumentAction = async (
+  repoId: number | undefined,
+  sortParams: ISortProps,
+  offset: number,
+  size: number,
+  filters?: IReportFilter | null
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getUserDocument(
+      userInfo.access_token,
+      repoId,
+      sortParams,
+      offset,
+      size,
+      filters
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};

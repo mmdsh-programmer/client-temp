@@ -1,0 +1,13 @@
+import { ERepoGrouping } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import { atom } from "recoil";
+
+export const repoGrouping = atom<ERepoGrouping>({
+  key: "repoGrouping",
+  default: ERepoGrouping.MY_REPO,
+});
+
+export const repoAtom = atom<IRepo | null>({
+  key: "repoAtom",
+  default: null
+})

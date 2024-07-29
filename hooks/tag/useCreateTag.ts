@@ -1,0 +1,31 @@
+import { createTagAction } from "@actions/tag";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
+const useCreateTag = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ["createTag"],
+    mutationFn: async (values: {
+      repoId: number;
+      name: string;
+      callBack?: () => void;
+    }) => {
+      const { name, repoId } = values;
+      const response = await createTagAction(repoId, name);
+      return response;
+    },
+    onSuccess: (response, values) => {
+      const { callBack, repoId } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`getTags-${repoId}`],
+      });
+      callBack?.();
+    },  
+    onError: (error) => {
+      toast.error(error.message || "خطای نامشخصی رخ داد");
+    },
+  });
+};
+
+export default useCreateTag;

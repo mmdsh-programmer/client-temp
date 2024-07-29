@@ -1,0 +1,34 @@
+import React from "react";
+import Button from "@components/atoms/button";
+import { CardIcon, MoreLineIcon } from "@components/atoms/icons";
+import { EListMode } from "@interface/enums";
+import { useRecoilState } from "recoil";
+import { listMode } from "@atom/app";
+
+const ListMode = () => {
+  const [getListMode, setListMode] = useRecoilState(listMode);
+  return (
+    <>
+      <Button
+        className={`rounded-lg p-1 flex justify-center items-center h-9 w-9
+    ${getListMode === EListMode.table ? "bg-white !shadow-lg" : "bg-transparent"}`}
+        onClick={() => {
+          setListMode(EListMode.table);
+        }}
+      >
+        <MoreLineIcon className="h-4 w-4" />
+      </Button>
+      <Button
+        className={`rounded-lg p-1  flex justify-center items-center h-9 w-9
+    ${getListMode === EListMode.card ? "bg-white !shadow-lg" : "bg-transparent"}`}
+        onClick={() => {
+          setListMode(EListMode.card);
+        }}
+      >
+        <CardIcon className="h-4 w-4" />
+      </Button>
+    </>
+  );
+};
+
+export default ListMode;

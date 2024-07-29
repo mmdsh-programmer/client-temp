@@ -1,0 +1,106 @@
+import React from "react";
+import { UserIcon } from "@components/atoms/icons";
+import ImageComponent from "@components/atoms/image";
+import SelectAtom from "@components/atoms/select/select";
+import Text from "@components/atoms/typograghy/text";
+import { IUser } from "@interface/users.interface";
+import { ERoles } from "@interface/enums";
+import { translateRoles } from "@utils/index";
+import useGetRoles from "@hooks/user/useGetRoles";
+import useEditUserRole from "@hooks/user/useEditUserRole";
+import { repoAtom } from "@atom/repository";
+import { useRecoilValue } from "recoil";
+import { Spinner } from "@material-tailwind/react";
+import { toast } from "react-toastify";
+import useDeleteUser from "@hooks/user/useDeleteUser";
+
+interface IProps {
+  user: IUser;
+}
+
+const UserItem = ({ user }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const editRole = useEditUserRole();
+  const deleteUser = useDeleteUser();
+  const rolesOption = getRoles
+    ?.filter((role) => {
+      return role.name !== ERoles.owner && role.name !== ERoles.default;
+    })
+    .map((item) => {
+      return {
+        label: translateRoles(item.name),
+        value: item.name,
+      };
+    }) as {
+    label: string;
+    value: ERoles | string;
+  }[];
+
+  rolesOption?.push({ label: "حذف کاربر", value: "delete" });
+
+  const handleChange = (role: string) => {
+    if (!getRepo) return;
+    if (role === "delete") {
+      deleteUser.mutate({
+        repoId: getRepo.id,
+        userName: user.userInfo.userName,
+        callBack: () => {
+          toast.success(`کاربر ${user.userInfo.name} با موفقیت حذف شد.`);
+        },
+      });
+    } else {
+      editRole.mutate({
+        repoId: getRepo.id,
+        userName: user.userInfo.userName,
+        roleName: role,
+        callBack: () => {
+          toast.success(`نقش کاربر ${user.userInfo.name} با موفقیت تغییر کرد.`);
+        },
+      });
+    }
+  };
+
+  return (
+    <div
+      className="flex items-center gap-x-[10px] min-h-[50px] h-[50px] cursor-pointer"
+      title={user.userInfo.userName}
+    >
+      <div className="h-8 w-8">
+        {user.userInfo.img ? (
+          <ImageComponent
+            className="w-full h-full rounded-[64px] overflow-hidden"
+            src={user.userInfo.img}
+            alt={user.userInfo.userName}
+          />
+        ) : (
+          <UserIcon className="w-full h-full p-1 border-[2px] border-normal rounded-[64px] overflow-hidden fill-icon-hover" />
+        )}
+      </div>
+      <Text className="flex-grow text-primary text-[13px] font-medium leading-[19.5px] -tracking-[0.13px]">
+        {user.userInfo.name}
+      </Text>
+      {user.userRole === ERoles.owner ? (
+        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
+          <Text className="text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]">
+            {translateRoles(user.userRole)}
+          </Text>
+        </div>
+      ) : editRole.isPending || deleteUser.isPending ? (
+        <div className="w-5">
+          <Spinner className="h-4 w-4" color="deep-purple" />
+        </div>
+      ) : (
+        <SelectAtom
+          className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+          defaultOption={translateRoles(user.userRole)}
+          options={rolesOption}
+          selectedOption={user.userRole}
+          setSelectedOption={handleChange}
+        />
+      )}
+    </div>
+  );
+};
+
+export default UserItem;
