@@ -7,11 +7,7 @@ import {
   IReportFilter,
   IServerResult,
 } from "@interface/app.interface";
-import {
-  ICategory,
-  ICategoryChildren,
-  ICategoryMetadata,
-} from "@interface/category.interface";
+import { ICategory, ICategoryChildren } from "@interface/category.interface";
 import { IContentSearchResult } from "@interface/contentSearch.interface";
 import {
   IClasorField,
@@ -19,7 +15,12 @@ import {
   IDocumentMetadata,
 } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
-import { ICreateGroup, IGetGroup, IGroupResult, IUpdateGroup } from "@interface/group.interface";
+import {
+  ICreateGroup,
+  IGetGroup,
+  IGroupResult,
+  IUpdateGroup,
+} from "@interface/group.interface";
 import { IReport, IResponse } from "@interface/repo.interface";
 import { ITags } from "@interface/tags.interface";
 import { IRoles, IUserResponse } from "@interface/users.interface";
@@ -815,7 +816,7 @@ export const updateGroup = async (
 export const deleteGroup = async (
   access_token: string,
   repoId: number | undefined,
-  title: string,
+  title: string
 ) => {
   try {
     const response = await fetch(
@@ -988,24 +989,24 @@ export const getChildren = async (
     isTemplate: filters?.isTemplate,
     withTemplate: !filters?.isTemplate,
   };
-  const filteredParams = Object.entries(params).reduce(
-    (acc: any, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = value;
-      }
-      return acc;
-    },
-    {}
-  );
 
-  const queryString = Object.entries(params)
-    .filter(([key, value]) => value !== undefined) // Filter out undefined values
-    .map(([key, value]) => `${key}=${encodeURIComponent(value as any)}`)
-    .join("&");
-  const baseUrl = title
-    ? `${CLASOR}/repositories/${repoId}/categories/getChildren?title=${title}&`
-    : `${CLASOR}/repositories/${repoId}/categories/getChildren?`;
-  // &title=${title}&contentTypes=${filters?.contentTypes}&tagIds=${filters?.tagIds}&bookmarked=${filters?.bookmarked}&isTemplate=${filters?.isTemplate}&withTemplate=${!filters?.isTemplate}&type=${finalType}
+  let baseUrl = `${CLASOR}/repositories/${repoId}/categories/getChildren?`;
+
+  // Add filter parameters to the base URL
+  if (filters) {
+    const filterParams = new URLSearchParams();
+
+    if (filters.title) filterParams.append("title", filters.title);
+    if (filters.isTemplate)
+      filterParams.append("isTemplate", filters.isTemplate.toString());
+    if (filters.contentTypes)
+      filterParams.append("contentTypes", filters.contentTypes.join(","));
+    if (filters.tagIds) filterParams.append("tagIds", filters.tagIds.join(","));
+    if (filters.bookmarked)
+      filterParams.append("bookmarked", filters.bookmarked.toString());
+
+    baseUrl += filterParams.toString() + "&";
+  }
   try {
     const response = await fetch(
       `${baseUrl}${[

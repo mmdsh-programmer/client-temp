@@ -19,7 +19,7 @@ const DashboardPage = () => {
 
   return (
     <div className="h-full flex flex-col justify-between">
-      <div className="p-4 xs:p-0 h-full flex flex-col gap-6 ">
+      <div className="p-4 xs:p-0 h-full flex flex-col gap-4 xs:gap-6 ">
         <RepoCards />
         <HeaderListTemplate
           header="مخزن‌ها"

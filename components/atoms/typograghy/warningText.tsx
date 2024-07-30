@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@material-tailwind/react";
+import Text from "./text";
 
 interface IProps {
   children: React.ReactNode;
@@ -7,12 +7,11 @@ interface IProps {
 
 const WarningText = ({ children }: IProps) => {
   return (
-    <Typography
-      placeholder="warning-text"
+    <Text
       className="text-error text-xs w-full h-5"
     >
       {children}
-    </Typography>
+    </Text>
   );
 };
 

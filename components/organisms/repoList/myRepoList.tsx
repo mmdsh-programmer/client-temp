@@ -1,21 +1,18 @@
 import React from "react";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import RenderIf from "@components/renderIf";
-import { Card, Spinner } from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
 import { EListMode } from "@interface/enums";
 import { useRecoilValue } from "recoil";
 import { listMode } from "@atom/app";
 import LoadMore from "@components/molecules/loadMore";
 import TableHead from "@components/molecules/tableHead";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import RepoCardMode from "@components/molecules/repoCardMode";
 import { FaDateFromTimestamp } from "@utils/index";
 import TableCell from "@components/molecules/tableCell";
 import RepoMenu from "@components/molecules/repoMenu";
-import RepoCardBody from "@components/molecules/repoCardBody";
-import Image from "next/image";
-import Text from "@components/atoms/typograghy/text";
-import ImageComponent from "@components/atoms/image";
+import MobileCard from "@components/molecules/mobileCard";
+import RepoCardMode from "@components/molecules/repoCardMode";
 
 interface IProps {
   archived: boolean;
@@ -34,22 +31,19 @@ const MyRepoList = ({ archived }: IProps) => {
 
   const listLength = getMyRepoList?.pages[0].total;
 
-  return (
-    <div className="xs:p-4 bg-transparent w-full shadow-small">
-      {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="purple" />
-        </div>
-      ) : listLength ? (
+  return isLoading ? (
+    <div className="w-full h-full flex justify-center items-center">
+      <Spinner className="h-8 w-8" color="deep-purple" />
+    </div>
+  ) : (
+    <>
+      <RenderIf isTrue={mode === EListMode.table}>
         <>
-          <RenderIf isTrue={mode === EListMode.table}>
-            <>
-              <Card
-                placeholder=""
-                className="hidden xs:flex flex-col w-full rounded-lg h-full overflow-auto shadow-none"
-              >
-                <div >
-                  <table className=" w-full min-w-max overflow-x-hidden ">
+          <div className="hidden xs:block">
+            <div className="bg-primary p-5 min-h-[calc(100vh-300px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
+              <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+                {listLength ? (
+                  <table className="w-full min-w-max ">
                     <TableHead
                       tableHead={[
                         {
@@ -108,92 +102,65 @@ const MyRepoList = ({ archived }: IProps) => {
                       </RenderIf>
                     </tbody>
                   </table>
-                </div>
-              </Card>
-              <div className="flex flex-wrap gap-y-4 xs:hidden">
-                {getMyRepoList?.pages.map((page) => {
-                  return page.list.map((repo) => {
-                    return (
-                      <div
-                        key={`repo-table-moblie-item-${repo.id}`}
-                        className="px-2 bg-white w-full border-2 border-gray-200 rounded-md shadow-none"
-                      >
-                        <div className="p-0">
-                          <RepoCardBody
-                            icon={
-                              repo.imageFileHash ? (
-                                <ImageComponent
-                                  className="object-cover"
-                                  src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo.imageFileHash}`}
-                                  alt="repo-image"
-                                />
-                              ) : null
-                            }
-                            title={repo.name}
-                          >
-                            <RepoMenu repo={repo} archived={archived} />
-                          </RepoCardBody>
-                        </div>
-                        <div className="flex px-3 justify-between pt-1 pb-4">
-                          <Text className="font-iranYekan text-placeholder text-xs">
-                            تاریخ ایجاد
-                          </Text>
-                          <Text className="font-iranYekan text-xs text-primary">
-                            {FaDateFromTimestamp(+new Date(repo.createDate))}
-                          </Text>
-                        </div>
-                      </div>
-                    );
-                  });
-                })}
-                <RenderIf isTrue={!!hasNextPage}>
-                  <div className="m-auto">
-                    <LoadMore
-                      isFetchingNextPage={isFetchingNextPage}
-                      fetchNextPage={fetchNextPage}
-                    />
-                  </div>
-                </RenderIf>
-              </div>
-            </>
-          </RenderIf>
-          <RenderIf isTrue={mode === EListMode.card}>
-            <Card
-              placeholder=""
-              className="overflow-auto bg-transparent xs:bg-inherit shadow-none"
-            >
-              <div className="flex gap-4 flex-wrap min-w-full">
-                {getMyRepoList?.pages.map((page) => {
-                  return page.list.map((repo) => {
-                    return (
-                      <Card
-                        placeholder=""
-                        key={`repo-card-item-${repo.id}`}
-                        className="flex flex-col flex-grow flex-shrink max-w-full w-full  xs:w-[250px] md:w-[300px] lg:w-[300px]  rounded-lg bg-white border-2 border-gray-200 shadow-none"
-                      >
-                        <RepoCardMode repo={repo} archived={archived} />
-                      </Card>
-                    );
-                  });
-                })}
-              </div>
-              <RenderIf isTrue={!!hasNextPage}>
-                <div className="m-auto">
-                  <LoadMore
-                    isFetchingNextPage={isFetchingNextPage}
-                    fetchNextPage={fetchNextPage}
+                ) : (
+                  <EmptyList
+                    type={
+                      archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO
+                    }
                   />
-                </div>
-              </RenderIf>
-            </Card>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col xs:hidden gap-y-4 ">
+            {getMyRepoList?.pages.map((page) => {
+              return page.list.map((repo) => {
+                return (
+                  <MobileCard
+                    key={repo.id}
+                    name={repo.name}
+                    createDate={
+                      repo.createDate
+                        ? FaDateFromTimestamp(+new Date(repo.createDate))
+                        : "--"
+                    }
+                    creator={repo.owner?.userName}
+                    cardAction={<RepoMenu repo={repo} isList={true} />}
+                  />
+                );
+              });
+            })}
+            <RenderIf isTrue={!!hasNextPage}>
+              <div className="m-auto">
+                <LoadMore
+                  isFetchingNextPage={isFetchingNextPage}
+                  fetchNextPage={fetchNextPage}
+                />
+              </div>
+            </RenderIf>
+          </div>
+        </>
+      </RenderIf>
+      <RenderIf isTrue={mode === EListMode.card}>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 flex-wrap">
+            {getMyRepoList?.pages.map((page) => {
+              return page.list.map((repo) => {
+                return <RepoCardMode key={repo.id} repo={repo} />;
+              });
+            })}
+          </div>
+          <RenderIf isTrue={!!hasNextPage}>
+            <div className="m-auto">
+              <LoadMore
+                isFetchingNextPage={isFetchingNextPage}
+                fetchNextPage={fetchNextPage}
+              />
+            </div>
           </RenderIf>
         </>
-      ) : (
-        <EmptyList
-          type={archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO}
-        />
-      )}
-    </div>
+      </RenderIf>
+    </>
   );
 };
 

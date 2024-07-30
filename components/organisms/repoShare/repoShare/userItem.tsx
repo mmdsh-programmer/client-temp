@@ -1,7 +1,6 @@
 import React from "react";
 import { UserIcon } from "@components/atoms/icons";
 import ImageComponent from "@components/atoms/image";
-import SelectAtom from "@components/atoms/select/select";
 import Text from "@components/atoms/typograghy/text";
 import { IUser } from "@interface/users.interface";
 import { ERoles } from "@interface/enums";
@@ -13,6 +12,7 @@ import { useRecoilValue } from "recoil";
 import { Spinner } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useDeleteUser from "@hooks/user/useDeleteUser";
+import SelectAtom from "@components/molecules/select";
 
 interface IProps {
   user: IUser;

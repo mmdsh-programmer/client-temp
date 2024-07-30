@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ChevronLeftIcon } from "../icons";
-import Text from "../typograghy/text";
+import { ChevronLeftIcon } from "@components/atoms/icons";
+import Text from "@components/atoms/typograghy/text";
 
 interface IProps {
   options?: any[];
@@ -66,7 +66,7 @@ const SelectAtom = ({
           : defaultOption}
         <ChevronLeftIcon
           className={`w-2 h-2 stroke-icon-active transform transition-transform ${
-            isOpen ? "-rotate-90" : "rotate-0"
+            isOpen ? "rotate-90" : "-rotate-90"
           }`}
         />
       </button>

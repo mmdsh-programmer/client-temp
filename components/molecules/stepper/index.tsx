@@ -1,6 +1,7 @@
 import React from "react";
-import { Step, Stepper, Typography } from "@material-tailwind/react";
+import { Step, Stepper } from "@material-tailwind/react";
 import { StepperIcon, TickIcon } from "@components/atoms/icons";
+import Text from "@components/atoms/typograghy/text";
 
 interface IProps {
   getActiveStep: number;
@@ -36,12 +37,11 @@ const StepperComponent = ({ getActiveStep, stepList }: IProps) => {
             <div className="absolute -bottom-8 w-max text-center">
               {getActiveStep === index && (
                 <div className="bg-gray-100 px-2 py-1 rounded-xl flex justify-center items-center">
-                  <Typography
-                    placeholder="step"
-                    className="font-medium font-iranYekan text-center text-primary text-xs"
+                  <Text
+                    className="font-medium text-center text-primary text-xs"
                   >
                     {step}
-                  </Typography>
+                  </Text>
                 </div>
               )}
             </div>

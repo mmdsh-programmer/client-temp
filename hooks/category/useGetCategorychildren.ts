@@ -13,11 +13,13 @@ const useGetCategoryChildren = (
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
   forMove?: boolean,
-  enabled= true,
+  enabled = true
 ) => {
   return useInfiniteQuery({
     queryKey: [
-      `category-${categoryId || "parent"}-children`,
+      `category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
+        filters ? `-filters=${JSON.stringify(filters)}` : ""
+      }`,
       title,
     ],
     queryFn: async ({ signal, pageParam }) => {

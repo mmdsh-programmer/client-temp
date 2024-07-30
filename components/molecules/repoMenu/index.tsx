@@ -19,6 +19,10 @@ import RepoEditDialog from "@components/organisms/dialogs/repository/repoEditDia
 import { useRouter } from "next/navigation";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { listMode } from "@atom/app";
+import { repoActionDrawerAtom, repoInfoAtom } from "@atom/repository";
+import { EListMode } from "@interface/enums";
 
 interface IProps {
   repo: IRepo;
@@ -34,18 +38,16 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
   const [restoreRepoModal, setRestoreRepoModal] = useState(false);
   const [bookmarkRepoModal, setBookmarkRepoModal] = useState(false);
   const [shareRepoModal, setShareRepoModal] = useState(false);
-  const [goToRepo, setGoToRepo] = useState(false);
   const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
     boolean | null
   >(false);
 
+  const mode = useRecoilValue(listMode);
+
+  const setRepoInfo = useSetRecoilState(repoInfoAtom);
+
   const adminRole = repo.roleName === "owner" || repo.roleName === "admin";
 
-  useEffect(() => {
-    if (!!goToRepo) {
-      router.push(`/admin/repositories?repoId=${repo.id}`);
-    }
-  }, [goToRepo]);
   const menuList = archived
     ? [
         {
@@ -67,7 +69,13 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
           {
             text: "اطلاعات پوشه",
             icon: <FolderInfoIcon className="w-4 h-4" />,
-            onClick: () => setGoToRepo(true),
+            onClick: () => {
+              if (mode === EListMode.card) {
+                setRepoInfo(repo);
+              } else {
+                router.push(`/admin/repositories?repoId=${repo.id}`);
+              }
+            },
           },
           {
             text: "ویرایش",
@@ -100,12 +108,18 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
           {
             text: "اطلاعات پوشه",
             icon: <FolderInfoIcon className="w-4 h-4" />,
-            onClick: () => setGoToRepo(true),
+            onClick: () => {
+              if (mode === EListMode.card) {
+                setRepoInfo(repo);
+              } else {
+                router.push(`/admin/repositories?repoId=${repo.id}`);
+              }
+            },
           },
         ];
 
   return (
-    <div className="">
+    <>
       {isList ? (
         <>
           <div className="hidden xs:flex flex-wrap gap-2 mr-6">
@@ -115,7 +129,7 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
                   return (
                     index !== 0 && (
                       <ButtonAtom
-                        className="bg-white !p-2 border-[1px] border-normal"
+                        className="bg-white w-8 h-8 border-[1px] border-normal"
                         onClick={() => {
                           item.onClick();
                           setOpenRepoActionDrawer(false);
@@ -129,7 +143,7 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
               </>
             )}
             <ButtonAtom
-              className="bg-white !p-2 border-[1px] border-normal"
+              className="bg-white w-8 h-8 border-[1px] border-normal"
               onClick={() => {
                 setBookmarkRepoModal(true);
               }}
@@ -152,7 +166,7 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
           </div>
         </>
       ) : (
-        <div className="flex items-center gap-x-2 justify-end">
+        <div className="flex items-center gap-1 justify-end">
           {archived ? null : (
             <ButtonAtom
               className="rounded-lg border-2 border-gray-50 
@@ -198,7 +212,7 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
       {shareRepoModal && (
         <RepoShareDialog repo={repo} setOpen={setShareRepoModal} />
       )}
-    </div>
+    </>
   );
 };
 

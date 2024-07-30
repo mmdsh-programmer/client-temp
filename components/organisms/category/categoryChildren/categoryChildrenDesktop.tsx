@@ -4,9 +4,8 @@ import { useRecoilValue } from "recoil";
 import { sort } from "@atom/sortParam";
 import { categoryQueryParams, categoryShow } from "@atom/category";
 import { filterChildren, filterReport } from "@atom/filter";
-import { useInView } from "react-intersection-observer";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
-import { Card, Checkbox, Spinner } from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
 import CategoryBreadCrumb from "../categoryBreadCrumb";
 import RenderIf from "@components/renderIf";
 import LoadMore from "@components/molecules/loadMore";
@@ -14,7 +13,6 @@ import TableHead from "@components/molecules/tableHead";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import TableCell from "@components/molecules/tableCell";
 import CategoryTableRow from "../../../molecules/categoryTableRow";
 import DocumentTableRow from "@components/molecules/documentTableRow";
 
@@ -29,8 +27,6 @@ const CategoryChildrenDesktop = () => {
   const [openSearchModal, setOpenSearchModal] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
 
-  const { ref, inView } = useInView();
-
   const {
     data: childrenData,
     hasNextPage: childrenHasNextPage,
@@ -42,7 +38,7 @@ const CategoryChildrenDesktop = () => {
     getRepo?.id,
     getCategoryShow?.id,
     getSortParams,
-    20,
+    queryParams.limit,
     getFilterChildren?.title,
     undefined,
     getFilterChildren,
@@ -89,11 +85,16 @@ const CategoryChildrenDesktop = () => {
                     );
                   });
                 })}
+                <RenderIf isTrue={!!childrenHasNextPage}>
+                  <LoadMore
+                    className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                    isFetchingNextPage={childrenIsFetchingNextPage}
+                    fetchNextPage={childrenFetchNextPage}
+                  />
+                </RenderIf>
               </tbody>
             </table>
           </div>
-
-          <div className="block xs:hidden"></div>
         </>
       ) : (
         <EmptyList type={EEmptyList.CATEGORY} />

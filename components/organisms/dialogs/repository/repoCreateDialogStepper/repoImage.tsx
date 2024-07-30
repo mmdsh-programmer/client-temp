@@ -1,28 +1,35 @@
 import { repoActiveStep } from "@atom/stepper";
-import ButtonAtom from "@components/atoms/button";
 import { AddImageIcon } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
-import { Button, DialogBody, DialogFooter } from "@material-tailwind/react";
+import {
+  Button,
+  DialogBody,
+  DialogFooter,
+  Radio,
+} from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useSetRecoilState } from "recoil";
-import Files from "./files";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
+import CancelButton from "@components/atoms/button/cancelButton";
+import Text from "@components/atoms/typograghy/text";
+import RepoDefaultImage from "@components/molecules/repoDefaultImage";
 
 interface IProps {
-  repo: any;
   handleClose: () => void;
+  setOpenFileManagement: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IForm {
   fileHash: string;
 }
 
-const RepoImage = ({ repo, handleClose }: IProps) => {
+const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
   const setActiveStep = useSetRecoilState(repoActiveStep);
   const [getSelectedFile, setSelectedFile] = useState();
-  const [openFileManagement, setOpenFileManagement] = useState(false);
 
   const { isPending, mutate } = useAddImageToRepo();
   const {
@@ -39,10 +46,14 @@ const RepoImage = ({ repo, handleClose }: IProps) => {
     reset();
   };
 
+  const handleSelect = (image: string) => {
+    console.log("-------------------- select image -----------------", image);
+  };
+
   const onSubmit = async () => {
-    if (!getSelectedFile) return;
+    if (!getSelectedFile || !getRepo) return;
     mutate({
-      repoId: repo.id,
+      repoId: getRepo.id,
       fileHash: getSelectedFile,
       callBack: () => {
         toast.success("عکس با موفقیت به مخزن اضافه شد.");
@@ -53,61 +64,82 @@ const RepoImage = ({ repo, handleClose }: IProps) => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-full">
-      <DialogBody placeholder="repo-image-dialog-body " className="p-0 flex-grow">
-        <form className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="image"
-              className="text-base font-semibold text-primary"
-            >
-              تصویر سفارشی
-            </label>
-
+    <>
+      <DialogBody
+        placeholder="dialog body"
+        className="flex-grow px-5 py-3 xs:p-6"
+      >
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
+            <Radio
+              name="description"
+              color="deep-purple"
+              label={
+                <div>
+                  <Text className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                    تصویر پیش‌فرض
+                  </Text>
+                  <Text className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
+                    انتخاب تصویر پیش‌فرض برای مخزن
+                  </Text>
+                </div>
+              }
+              containerProps={{
+                className: "-mt-5",
+              }}
+              crossOrigin=""
+            />
+            <RepoDefaultImage onClick={handleSelect} />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Radio
+              name="description"
+              color="deep-purple"
+              label={
+                <div>
+                  <Text className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                    تصویر سفارشی
+                  </Text>
+                  <Text className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
+                    انتخاب تصویر دلخواه برای مخزن
+                  </Text>
+                </div>
+              }
+              containerProps={{
+                className: "-mt-5",
+              }}
+              crossOrigin=""
+            />
             <Button
               onClick={() => {
                 setOpenFileManagement(true);
               }}
-              className="flex justify-center items-center rounded-lg border-2 border-dashed border-gray-400 bg-gray-200 w-32 h-32"
+              className="flex justify-center items-center rounded-lg border-[1px] border-dashed border-normal bg-secondary w-[82px] h-[82px]"
               placeholder=""
             >
-              {/* {getSelectedFile ? } */}
-              <AddImageIcon className="h-10 w-10" />
+              <AddImageIcon className="h-6 w-6" />
             </Button>
           </div>
-        </form>
+        </div>
       </DialogBody>
       <DialogFooter
-        placeholder="create user dialog footer"
-        className="p-0 flex gap-2.5 mt-[30px]"
+        placeholder="dialog footer"
+        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
-        <Button
-          placeholder="cancel button"
-          variant="text"
-          onClick={handleReset}
-          className="text-primary bg-gray-50 text-[13px] font-iranYekan w-[100px]"
-          disabled={isPending}
-        >
+        <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
-        </Button>
+        </CancelButton>
         <LoadingButton
-          className="bg-purple-normal flex justify-center items-center rounded-lg px-4 py-3 text-[13px] text-white font-iranYekan"
+          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          ادامه
+          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+            ایجاد
+          </Text>
         </LoadingButton>
       </DialogFooter>
-      {openFileManagement && (
-        <Files
-          userGroupHash={repo?.userGroupHash}
-          resourceId={repo?.id}
-          type="public"
-          setSelectedFile={setSelectedFile}
-          handleClose={()=>{ setOpenFileManagement(false)}}
-        />
-      )}
-    </div>
+    </>
   );
 };
 

@@ -11,8 +11,8 @@ import AllRepoList from "./allRepoList";
 const RepoList = () => {
   const getRepoGroup = useRecoilValue(repoGrouping);
 
-  return (<div className="bg-secondary flex  xs:h-[calc(100%-400px)] md:h-[calc(100%-200px)] flex-grow flex-shrink-0 xs:bg-primary rounded-lg">
-    
+  return (
+    <>
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />
       </RenderIf>
@@ -28,7 +28,7 @@ const RepoList = () => {
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.BOOKMARK_REPO}>
         <BookmarkRepoList />
       </RenderIf>
-    </div>
+    </>
   );
 };
 

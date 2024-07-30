@@ -15,7 +15,7 @@ import { ERepoGrouping } from "@interface/enums";
 import useGetSearchAllRepo from "@hooks/repository/useGetSearchAllRepo";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import InputAtom from "@components/atoms/input";
-import SelectAtom from "@components/atoms/select/select";
+import SelectAtom from "@components/molecules/select";
 
 const AllRepoList = () => {
   const [search, setSearch] = useState<string>("");

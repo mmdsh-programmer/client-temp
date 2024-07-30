@@ -79,6 +79,13 @@ const CategoryChildrenMobile = () => {
               );
             });
           })}
+          <RenderIf isTrue={!!childrenHasNextPage}>
+            <LoadMore
+              className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+              isFetchingNextPage={childrenIsFetchingNextPage}
+              fetchNextPage={childrenFetchNextPage}
+            />
+          </RenderIf>
         </div>
       ) : (
         <EmptyList type={EEmptyList.CATEGORY} />

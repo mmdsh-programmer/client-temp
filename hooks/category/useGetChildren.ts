@@ -11,7 +11,8 @@ const useGetChildren = (
   size: number,
   title?:string,
   type?: "category" | "document",
-  filters?: IChildrenFilter | null
+  filters?: IChildrenFilter | null,
+
 ) => {
   return useInfiniteQuery({
     queryKey: [`category-${categoryId || "parent"}-children`, title],
@@ -31,7 +32,7 @@ const useGetChildren = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: categoryId !== 0 && categoryId !== null,
+    enabled: !!categoryId && categoryId !== 0 && categoryId !== null,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

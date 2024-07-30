@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import InputAtom from "@components/atoms/input/formInput";
 import Label from "@components/atoms/typograghy/label";
 import WarningText from "@components/atoms/typograghy/warningText";
 import EditDialog from "@components/templates/dialog/editDialog";
@@ -12,6 +11,7 @@ import TextareaAtom from "@components/atoms/textarea/textarea";
 import NumberInput from "@components/atoms/input/numberInput";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { selectedDocumentAtom } from "@atom/document";
+import FormInput from "@components/atoms/input/formInput";
 
 interface IForm {
   id?: number;
@@ -91,7 +91,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Label>نام سند</Label>
-          <InputAtom
+          <FormInput
             className="w-full"
             placeholder="نام سند"
             register={{

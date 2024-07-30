@@ -3,13 +3,12 @@ import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
 import useGetInviteRequestsByOwner from "@hooks/user/useGetInviteRequestsByOwner";
-import useGetRoles from "@hooks/user/useGetRoles";
 import UserItem from "./userItem";
 import InviteRequestByOwner from "./inviteRequestByOwner";
+import { Spinner } from "@material-tailwind/react";
 
 const RepoUsers = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
   const {
     data: getRepoUsers,
     isFetching: isFetchingRepoUsers,
@@ -24,18 +23,22 @@ const RepoUsers = () => {
 
   return (
     <div className="overflow-y-auto">
-      <div className="flex flex-col overflow-y-auto h-[510px] xs:h-[210px]">
-        {getRepoUsers?.pages.map((page) => {
-          return page.list.map((user) => {
-            return <UserItem key={user.userInfo.ssoId} user={user} />;
-          });
-        })}
-        {getInviteToRepoRequests?.pages.map((page) => {
-          return page.list.map((user) => {
-            return <InviteRequestByOwner key={user.userSSOID} user={user} />;
-          });
-        })}
-      </div>
+      {isLoadingInviteToRepoRequests || isLoadingRepoUsers ? (
+        <Spinner className="h-0 w-0" />
+      ) : (
+        <div className="flex flex-col overflow-y-auto">
+          {getRepoUsers?.pages.map((page) => {
+            return page.list.map((user) => {
+              return <UserItem key={user.userInfo.ssoId} user={user} />;
+            });
+          })}
+          {getInviteToRepoRequests?.pages.map((page) => {
+            return page.list.map((user) => {
+              return <InviteRequestByOwner key={user.userSSOID} user={user} />;
+            });
+          })}
+        </div>
+      )}
     </div>
   );
 };

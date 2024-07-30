@@ -1,11 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  DialogFooter,
-  DialogBody,
-  Typography,
-} from "@material-tailwind/react";
+import { DialogFooter, DialogBody, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -15,6 +11,12 @@ import { repoActiveStep } from "@atom/stepper";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateSchema } from "../validation.yup";
 import CancelButton from "@components/atoms/button/cancelButton";
+import Label from "@components/atoms/typograghy/label";
+import FormInput from "@components/atoms/input/formInput";
+import WarningText from "@components/atoms/typograghy/warningText";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import Text from "@components/atoms/typograghy/text";
+import { repoAtom } from "@atom/repository";
 
 interface IForm {
   name: string;
@@ -22,12 +24,12 @@ interface IForm {
 }
 
 interface IProps {
-  setRepo: (repo: any) => void;
   handleClose: () => void;
 }
 
-const RepoCreateDialog = ({ setRepo, handleClose }: IProps) => {
+const RepoCreateDialog = ({ handleClose }: IProps) => {
   const setActiveStep = useSetRecoilState(repoActiveStep);
+  const setRepo = useSetRecoilState(repoAtom)
 
   const { isPending, mutate } = useCreateRepo();
   const {
@@ -60,59 +62,49 @@ const RepoCreateDialog = ({ setRepo, handleClose }: IProps) => {
 
   return (
     <>
-      <DialogBody placeholder="dialog body" className="p-0">
-        <form className="flex flex-col gap-5">
+      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6">
+        <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label htmlFor="title" className="text-sm text-primary font-normal">
-              عنوان مخزن
-            </label>
-            <input
-              id="title"
-              type="text"
-              placeholder="عنوان"
-              {...register("name")}
-              className="bg-transparent px-[15px] py-[9px] rounded-[4px] focus:px-[15px] focus:outline-none text-[13px] 
-              font-iranYekan font-normal text-primary placeholder:text-placeholder w-full
-              border border-gray-400 border-solid focus:border-gray-400"
+            <Label>عنوان مخزن</Label>
+            <FormInput
+              className="w-full"
+              placeholder="عنوان مخزن"
+              register={{
+                ...register("name"),
+              }}
             />
-            {errors.name && (
-              <Typography
-                placeholder="error-message"
-                className="text-error font-iranYekan text-xs w-full h-5"
-              >
-                {errors.name?.message}
-              </Typography>
-            )}
+            {errors.name && <WarningText>{errors.name?.message}</WarningText>}
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="order" className="text-sm text-primary font-normal">
-              توضیحات مخزن
-            </label>
-            <input
-              id="description"
-              type="text"
-              placeholder="توضیحات"
-              className="bg-transparent px-[15px] py-[9px] rounded-[4px] focus:px-[15px] focus:outline-none text-[13px] 
-              font-iranYekan font-normal text-primary placeholder:text-placeholder w-full
-              border border-gray-400 border-solid focus:border-gray-400"
-              {...register("description")}
+            <Label>توضیحات مخزن</Label>
+            <TextareaAtom
+              className="w-full"
+              placeholder="توضیحات مخزن"
+              register={{
+                ...register("description"),
+              }}
             />
+            {errors.description && (
+              <WarningText>{errors.description?.message}</WarningText>
+            )}
           </div>
         </form>
       </DialogBody>
       <DialogFooter
-        placeholder="create user dialog footer"
-        className="p-0 flex gap-2.5 mt-[30px]"
+        placeholder="dialog footer"
+        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
         </CancelButton>
         <LoadingButton
-          className="bg-purple-normal flex justify-center items-center rounded-lg px-4 py-3 text-[13px] text-white font-iranYekan"
+          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          ادامه
+          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+            ادامه
+          </Text>
         </LoadingButton>
       </DialogFooter>
     </>

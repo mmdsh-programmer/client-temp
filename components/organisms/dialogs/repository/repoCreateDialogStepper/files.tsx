@@ -24,8 +24,8 @@ const { NEXT_PUBLIC_CLASOR } = process.env;
 
 interface IProps {
   setSelectedFile?: (file: any) => void;
-  userGroupHash: string;
-  resourceId: number;
+  userGroupHash?: string;
+  resourceId: null | number;
   type: "private" | "public";
   handleClose: () => void;
   cropMode?: boolean;

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import InputAtom from "@components/atoms/input/formInput";
 import Label from "@components/atoms/typograghy/label";
 import WarningText from "@components/atoms/typograghy/warningText";
 import CreateDialog from "@components/templates/dialog/createDialog";
@@ -11,6 +10,7 @@ import { category } from "@atom/category";
 import useCreateCategory from "@hooks/category/useCreateCategory";
 import NumberInput from "@components/atoms/input/numberInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
+import FormInput from "@components/atoms/input/formInput";
 
 interface IForm {
   name: string;
@@ -72,7 +72,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Label>نام دسته‌بندی</Label>
-          <InputAtom
+          <FormInput
             className="w-full"
             placeholder="نام دسته بندی"
             register={{

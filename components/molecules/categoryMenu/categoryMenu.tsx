@@ -9,6 +9,7 @@ import CategoryEditDialog from "@components/organisms/dialogs/category/categoryE
 import CategoryDeleteDialog from "@components/organisms/dialogs/category/categoryDeleteDialog";
 import CategoryCreateDialog from "@components/organisms/dialogs/category/categoryCreateDialog";
 import CategoryHideDialog from "@components/organisms/dialogs/category/categoryHideDialog";
+import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
 
 interface IProps {
   category?: ICategoryMetadata;
@@ -162,6 +163,18 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
           setOpen={() => {
             setHideModal(false);
           }}
+        />
+      )}
+      {createDocumentModal && (
+        <DocumentCreate
+          isTemplate={false}
+          setOpen={() => setCreateDocumentModal(false)}
+        />
+      )}
+      {createTemplateModal && (
+        <DocumentCreate
+          isTemplate={true}
+          setOpen={() => setCreateTemplateModal(false)}
         />
       )}
     </>

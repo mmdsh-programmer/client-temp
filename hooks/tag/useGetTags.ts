@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetTags = (repoId: number | undefined, size: number, enabled?: boolean) => {
   return useInfiniteQuery({
-    queryKey: [`getTags-${repoId}-${size}`],
+    queryKey: [`getTags-${repoId}`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getRepositoryTagAction(
         repoId,

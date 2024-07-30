@@ -18,6 +18,9 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
       className="cursor-pointer text-[13px] font-normal text-primary border-b-2 border-gray-100"
       onClick={() => {
         onClick?.();
+        if (navigateTo) {
+          router.push(navigateTo);
+        }
       }}
     >
       {tableCell.map((row, index) => {
@@ -29,9 +32,6 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
             onClick={(e) => {
               if (index === tableCell.length - 1) {
                 e.stopPropagation();
-              }
-              if (navigateTo) {
-                router.push(navigateTo);
               }
             }}
           >

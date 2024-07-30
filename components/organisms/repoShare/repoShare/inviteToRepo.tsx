@@ -9,11 +9,11 @@ import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import Label from "@components/atoms/typograghy/label";
 import InputAtom from "@components/atoms/input";
-import SelectAtom from "@components/atoms/select/select";
 import { ERoles } from "@interface/enums";
 import Text from "@components/atoms/typograghy/text";
 import WarningText from "@components/atoms/typograghy/warningText";
 import LoadingButton from "@components/molecules/loadingButton";
+import SelectAtom from "@components/molecules/select";
 
 interface IForm {
   username: string;
@@ -53,7 +53,7 @@ const InviteToRepo = () => {
   const handleClose = () => {
     handleReset();
   };
-
+  
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
     mutate({

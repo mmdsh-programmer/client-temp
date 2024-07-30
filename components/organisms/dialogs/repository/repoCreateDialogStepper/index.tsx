@@ -1,56 +1,65 @@
 import React, { useState } from "react";
 import { repoActiveStep } from "@atom/stepper";
 import StepperDialog from "@components/templates/stepperDialog";
-import { IRepo } from "@interface/repo.interface";
 import { useRecoilState } from "recoil";
 import RepoCreate from "./repoCreate";
-import RepoShare from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoShare";
 import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/tags";
 import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
-
+import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
+import { repoAtom } from "@atom/repository";
+import Files from "./files";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
   const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStep);
-  const [repo, setRepo] = useState<IRepo | null>(null);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
+
+  const [openFileManagement, setOpenFileManagement] = useState(false);
 
   const steplist = ["عنوان مخزن", "اشتراک گذاری", "تگ", "افزودن تصویر"];
 
   const handleClose = () => {
     setActiveStep(0);
     setOpen(false);
+    setRepo(null);
   };
-  const handleStepperContent = () => {
 
+  const handleStepperContent = () => {
     if (getActiveStep === 0) {
-      return <RepoCreate setRepo={setRepo} handleClose={handleClose} />;
+      return <RepoCreate handleClose={handleClose} />;
     }
     if (getActiveStep === 1) {
-      return <RepoShare repo={repo} handleClose={handleClose} />;
+      return <RepoAddUser handleClose={handleClose} />;
     }
     if (getActiveStep === 2) {
-      return <Tags repo={repo} handleClose={handleClose} />;
+      return <Tags handleClose={handleClose} />;
     }
     if (getActiveStep === 3) {
       return (
         <RepoImage
-          repo={repo}
+          setOpenFileManagement={setOpenFileManagement}
           handleClose={handleClose}
         />
       );
     }
   };
   return (
-    <StepperDialog
-      dialogHeader="ایجاد مخزن"
-      stepList={steplist}
-      handleClose={handleClose}
-      activeStep={getActiveStep}
-    >
-      {handleStepperContent()}
-    </StepperDialog>
+    <>
+      {openFileManagement ? (
+        <Files userGroupHash={getRepo?.id} resourceId={null} type="public" handleClose={handleClose} />
+      ) : (
+        <StepperDialog
+          dialogHeader="ایجاد مخزن"
+          stepList={steplist}
+          handleClose={handleClose}
+          activeStep={getActiveStep}
+        >
+          {handleStepperContent()}
+        </StepperDialog>
+      )}
+    </>
   );
 };
 

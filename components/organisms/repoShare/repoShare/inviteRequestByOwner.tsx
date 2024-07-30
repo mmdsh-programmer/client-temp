@@ -1,6 +1,5 @@
 import React from "react";
 import ImageComponent from "@components/atoms/image";
-import SelectAtom from "@components/atoms/select/select";
 import Text from "@components/atoms/typograghy/text";
 import { ERoles } from "@interface/enums";
 import { translateRoles } from "@utils/index";
@@ -10,6 +9,7 @@ import { Spinner } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import useDeleteInviteRequest from "@hooks/user/useDeleteInviteRequest";
+import SelectAtom from "@components/molecules/select";
 
 interface IProps {
   user: IAccessRequest;
