@@ -444,6 +444,20 @@ export const DeleteIcon = (props: IProps) => {
   );
 };
 
+export const CopyIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 17 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M14.8333 17.4999H5.66666V5.83325H14.8333V17.4999ZM14.8333 4.16659H5.66666C5.22463 4.16659 4.80071 4.34218 4.48815 4.65474C4.17558 4.9673 3.99999 5.39122 3.99999 5.83325V17.4999C3.99999 17.9419 4.17558 18.3659 4.48815 18.6784C4.80071 18.991 5.22463 19.1666 5.66666 19.1666H14.8333C15.2754 19.1666 15.6993 18.991 16.0118 18.6784C16.3244 18.3659 16.5 17.9419 16.5 17.4999V5.83325C16.5 5.39122 16.3244 4.9673 16.0118 4.65474C15.6993 4.34218 15.2754 4.16659 14.8333 4.16659V4.16659ZM12.3333 0.833252H2.33332C1.8913 0.833252 1.46737 1.00885 1.15481 1.32141C0.842251 1.63397 0.666656 2.05789 0.666656 2.49992V14.1666H2.33332V2.49992H12.3333V0.833252Z" />
+    </svg>
+  );
+};
+
 export const DocIcon = (props: IProps) => {
   const { className } = props;
   return (
@@ -2163,6 +2177,22 @@ export const SupportIcon = (props: IProps) => {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+};
+
+export const KeyIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor;"
+        d="M21 18h-6v-3h-1.7c-1.1 2.4-3.6 4-6.3 4c-3.9 0-7-3.1-7-7s3.1-7 7-7c2.7 0 5.2 1.6 6.3 4H24v6h-3zm-4-2h2v-3h3v-2H11.9l-.2-.7C11 8.3 9.1 7 7 7c-2.8 0-5 2.2-5 5s2.2 5 5 5c2.1 0 4-1.3 4.7-3.3l.2-.7H17zM7 15c-1.7 0-3-1.3-3-3s1.3-3 3-3s3 1.3 3 3s-1.3 3-3 3m0-4c-.6 0-1 .4-1 1s.4 1 1 1s1-.4 1-1s-.4-1-1-1"
+      ></path>
     </svg>
   );
 };

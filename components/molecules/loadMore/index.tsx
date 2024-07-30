@@ -33,7 +33,7 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
       }}
       disabled={isFetchingNextPage}
     >
-      {isFetchingNextPage ? <div className="spinner" /> :
+      {true ? <div className="spinner" /> :
       <Typography placeholder="" className="font-iranYekan text-gray-600 text-xs">نمایش موارد بیشتر</Typography>
       }
     </Button>

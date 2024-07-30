@@ -11,6 +11,7 @@ export enum EEmptyList {
   CATEGORY = "category",
   VERSION = "version",
   RELEASE = "release",
+  REPO_KEYS = "repo_keys",
 }
 
 interface IProps {
@@ -86,6 +87,15 @@ const EmptyList = ({ type }: IProps) => {
           className="text-primary text-base font-iranYekan"
         >
           شما در حال حاضر درخواست فعالی ندارید.
+        </Typography>
+      )}
+
+      {type === EEmptyList.REPO_KEYS && (
+        <Typography
+          placeholder=""
+          className="text-primary text-base font-iranYekan"
+        >
+          شما در حال حاضر کلیدی ندارید
         </Typography>
       )}
     </div>

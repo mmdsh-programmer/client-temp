@@ -1,17 +1,17 @@
-import { getAccessRepositoryList } from "@actions/repository";
-import { IRepo, IResponse } from "@interface/repo.interface";
+import { getRepoKeysAction } from "@actions/repository";
+import { IPublicKey, IResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetAccessList = (size: number) => {
+const useGetRepoPublicKeys = (repoId: number, size: number) => {
   return useInfiniteQuery({
-    queryKey: [`accessRepoList`],
+    queryKey: [`repo-${repoId}-public-keys`],
     queryFn: async ({ signal, pageParam }) => {
-      const response = await getAccessRepositoryList(
+      const response = await getRepoKeysAction(
+        repoId,
         (pageParam - 1) * size,
-        size,
-        undefined
+        size
       );
-      return response?.data as IResponse<IRepo>;
+      return response as IResponse<IPublicKey>;
     },
     initialPageParam: 1,
     retry: false,
@@ -24,4 +24,4 @@ const useGetAccessList = (size: number) => {
   });
 };
 
-export default useGetAccessList;
+export default useGetRepoPublicKeys;

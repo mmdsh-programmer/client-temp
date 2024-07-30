@@ -35,8 +35,8 @@ export interface IPublicLink {
   link: string;
 }
 
-export interface IResponse {
-  list: IRepo[];
+export interface IResponse<Type> {
+  list: Type[];
   offset: number;
   size: number;
   total: number;
@@ -70,4 +70,14 @@ export interface INotificationAccess {
   notificationAccess: boolean;
   allowed: boolean;
   blocked: boolean;
+}
+
+export interface IPublicKey {
+  id: number;
+  name: string;
+  key: string;
+  createdAt: string;
+  updatedAt: string | null;
+  repoId: number;
+  creatorSSOID: number;
 }
