@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { CopyIcon, DeleteIcon, MoreDotIcon } from "@components/atoms/icons";
-import { IPublicKey, IRepo } from "@interface/repo.interface";
-import RepoKeyDeleteDialog from "@components/organisms/dialogs/repository/repoKey/repoKeyDeleteDialog";
+import { IPublicKey } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
+import copy from "copy-to-clipboard";
+import { toast } from "react-toastify";
+import { useSetRecoilState } from "recoil";
+import { deleteRepoKeyAtom } from "@atom/repository";
 
 interface IProps {
   keyItem: IPublicKey;
@@ -11,12 +14,15 @@ interface IProps {
 }
 
 const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
-  const [deleteKeyModal, setDeleteKeyModal] = useState(false);
+  const setDeleteKeyModal = useSetRecoilState(deleteRepoKeyAtom)
   const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
     boolean | null
   >(false);
 
-  const handleCopyKey = () => {};
+  const handleCopyKey = () => {
+    copy(keyItem.key);
+    toast.success("کلید با موفقیت کپی شد");
+  };
 
   const menuList = [
     {
@@ -31,7 +37,7 @@ const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
       text: "حذف ",
       icon: <DeleteIcon className="fillw-4 h-4" />,
       onClick: () => {
-        setDeleteKeyModal(true);
+        setDeleteKeyModal(keyItem);
         setOpenRepoActionDrawer(false);
       },
     },
@@ -75,10 +81,6 @@ const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
           menuList={menuList}
         />
       </div>
-
-      {deleteKeyModal && (
-        <RepoKeyDeleteDialog keyItem={keyItem} setOpen={setDeleteKeyModal} />
-      )}
     </>
   );
 };

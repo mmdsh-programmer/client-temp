@@ -224,6 +224,64 @@ export const getRepositoryKeys = async (
   }
 };
 
+export const deleteRepositoryKey = async (
+  access_token: string,
+  repoId: number,
+  keyId: number
+) => {
+  try {
+    const response = await fetch(
+      `${CLASOR}/repositories/${repoId}/publicKey/${keyId}`,
+      {
+        method: "DELETE",
+        headers: {
+          _token_: access_token,
+          _token_issuer_: 1,
+          Authorization: "Bearer " + access_token,
+          "Content-Type": "application/json",
+        } as any,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const createRepositoryKey = async (
+  access_token: string,
+  repoId: number,
+  name: string,
+  key: string
+) => {
+  try {
+    const response = await fetch(`${CLASOR}/repositories/${repoId}/publicKey`, {
+      method: "POST",
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      } as any,
+      body: JSON.stringify({
+        name,
+        key,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
 export const getMyRepositories = async (
   access_token: string,
   offset: number,

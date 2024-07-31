@@ -36,7 +36,7 @@ const InputAtom = ({
       flex items-center !min-w-0 
       !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
        font-normal text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]
-        placeholder:text-hint text-right
+        placeholder:text-hint text-right focus:border-t-current
         `}
     />
   );

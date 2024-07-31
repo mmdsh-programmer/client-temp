@@ -11,6 +11,10 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { AddIcon } from "@components/atoms/icons";
 import Text from "@components/atoms/typograghy/text";
 import RepoKeyMenu from "@components/molecules/repoKeyMenu";
+import { useRecoilState } from "recoil";
+import { createRepoKeyAtom, deleteRepoKeyAtom } from "@atom/repository";
+import RepoKeyDeleteDialog from "./repoKeyDeleteDialog";
+import RepoKeyCreateDialog from "./repoKeyCreateDialog";
 
 interface IProps {
   repo: IRepo;
@@ -18,6 +22,10 @@ interface IProps {
 }
 
 const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
+  const [getDeleteRepoKey, setDeleteRepoKey] =
+    useRecoilState(deleteRepoKeyAtom);
+  const [getCreateRepoKey, setCreateRepoKey] =
+    useRecoilState(createRepoKeyAtom);
   const {
     data: publicKeyList,
     isLoading,
@@ -31,15 +39,19 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
 
   const itemCount = publicKeyList?.pages[0]?.list.length;
 
-  return (
+  return getCreateRepoKey ? (
+    <RepoKeyCreateDialog repoId={repo.id} setOpen={setCreateRepoKey} />
+  ) : getDeleteRepoKey ? (
+    <RepoKeyDeleteDialog repoId={repo.id} setOpen={setDeleteRepoKey} />
+  ) : (
     <InfoDialog dialogHeader="لیست کلید های مخزن" setOpen={handleClose}>
       <div className="p-4">
         <Button
           placeholder="create group"
           className="flex justify-between items-center shadow-none hover:shadow-none px-1 h-8 bg-white hover:bg-transparent border-[1px] border-normal mr-auto"
-          // onClick={() => {
-          //   setCreateGroupModal(true);
-          // }}
+          onClick={() => {
+            setCreateRepoKey(true);
+          }}
         >
           <AddIcon className="h-5 w-5 stroke-icon-active" />
           <Text className="text-primary px-2 text-[12px] font-medium leading-[18px] -tracking-[0.12px]">
@@ -69,7 +81,7 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
                       <TableCell
                         key={`publick-key-table-item-${key.id}`}
                         tableCell={[
-                          { data: key.name, className: "block" },
+                          { data: key.name },
                           { data: key.key, className: "max-w-28" },
                           { data: <RepoKeyMenu keyItem={key} /> },
                         ]}

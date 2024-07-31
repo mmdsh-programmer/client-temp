@@ -2,7 +2,9 @@ import {
   archiveRepository,
   bookmarkRepository,
   createRepo,
+  createRepositoryKey,
   deleteRepository,
+  deleteRepositoryKey,
   editRepo,
   getAccessRepositories,
   getAllRepositories,
@@ -228,7 +230,42 @@ export const getRepoKeysAction = async (
       offset,
       size
     );
-    
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const deleteRepoKeyAction = async (repoId: number, keyId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await deleteRepositoryKey(
+      userInfo.access_token,
+      repoId,
+      keyId
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const createRepoKeyAction = async (
+  repoId: number,
+  name: string,
+  key: string
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createRepositoryKey(
+      userInfo.access_token,
+      repoId,
+      name,
+      key
+    );
+
     return response;
   } catch (error) {
     console.log("============ error ==========", error);
