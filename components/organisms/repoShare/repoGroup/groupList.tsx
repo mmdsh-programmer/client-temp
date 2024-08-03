@@ -12,7 +12,7 @@ const GroupList = () => {
     data: getGroups,
     isFetching,
     isLoading,
-  } = useGetGroups(getRepo?.id, 5);
+  } = useGetGroups(getRepo?.id, 10);
   return (
     <>
       {isFetching ? (

@@ -75,9 +75,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <FormInput
             className="w-full"
             placeholder="نام دسته بندی"
-            register={{
-              ...register("name"),
-            }}
+            {...register("name")}
           />
           {errors.name && <WarningText>{errors.name?.message}</WarningText>}
         </div>
@@ -86,9 +84,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <NumberInput
             className="w-full"
             placeholder="اولویت دسته بندی"
-            register={{
-              ...register("order"),
-            }}
+            {...register("order")}
           />
           {errors.order && <WarningText>{errors.order?.message}</WarningText>}
         </div>
@@ -97,9 +93,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <TextareaAtom
             className="w-full"
             placeholder="توضیحات دسته بندی"
-            register={{
-              ...register("description"),
-            }}
+            {...register("description")}
           />
           {errors.description && (
             <WarningText>{errors.description?.message}</WarningText>

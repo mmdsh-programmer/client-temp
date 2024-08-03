@@ -9,9 +9,15 @@ interface IProps {
   header: string;
   buttonText: string;
   onClick: () => void;
+  listModeHide: boolean;
 }
 
-const HeaderListTemplate = ({ buttonText, header, onClick }: IProps) => {
+const HeaderListTemplate = ({
+  buttonText,
+  header,
+  onClick,
+  listModeHide,
+}: IProps) => {
   return (
     <header className="flex justify-between items-center">
       <Text className="text-primary text-base -tracking-[0.32px] font-medium ">
@@ -27,7 +33,7 @@ const HeaderListTemplate = ({ buttonText, header, onClick }: IProps) => {
         <div className="absolute z-[999] bottom-20 left-6 xs:hidden">
           <MobileHeaderList onClick={onClick} />
         </div>
-        <ListMode />
+        {!!listModeHide ? null : <ListMode />}
       </div>
     </header>
   );

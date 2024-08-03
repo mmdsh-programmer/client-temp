@@ -7,12 +7,12 @@ import { useRecoilValue } from "recoil";
 import { listMode } from "@atom/app";
 import LoadMore from "@components/molecules/loadMore";
 import TableHead from "@components/molecules/tableHead";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { FaDateFromTimestamp } from "@utils/index";
 import TableCell from "@components/molecules/tableCell";
 import RepoMenu from "@components/molecules/repoMenu";
 import MobileCard from "@components/molecules/mobileCard";
 import RepoCardMode from "@components/molecules/repoCardMode";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 interface IProps {
   archived: boolean;
@@ -20,29 +20,31 @@ interface IProps {
 
 const MyRepoList = ({ archived }: IProps) => {
   const mode = useRecoilValue(listMode);
+
   const {
     data: getMyRepoList,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
-  } = useGetMyRepoList(10, archived, undefined, true);
+  } = useGetMyRepoList(20, archived, undefined, true);
 
   const listLength = getMyRepoList?.pages[0].total;
 
-  return isLoading ? (
-    <div className="w-full h-full flex justify-center items-center">
-      <Spinner className="h-8 w-8" color="deep-purple" />
-    </div>
-  ) : (
+  return (
     <>
       <RenderIf isTrue={mode === EListMode.table}>
         <>
           <div className="hidden xs:block">
-            <div className="bg-primary p-5 min-h-[calc(100vh-300px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
-              <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-                {listLength ? (
+            <div
+              className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+            >
+              {isLoading ? (
+                <div className="w-full h-full flex justify-center items-center">
+                  <Spinner className="h-8 w-8" color="deep-purple" />
+                </div>
+              ) : listLength ? (
+                <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
                   <table className="w-full min-w-max ">
                     <TableHead
                       tableHead={[
@@ -50,13 +52,11 @@ const MyRepoList = ({ archived }: IProps) => {
                           key: "name",
                           value: "نام مخزن",
                           isSorted: true,
-                          className: "",
                         },
                         {
                           key: "createDate",
                           value: "تاریخ ایجاد",
                           isSorted: true,
-                          className: "",
                         },
                         {
                           key: "action",
@@ -71,7 +71,11 @@ const MyRepoList = ({ archived }: IProps) => {
                           return (
                             <TableCell
                               key={`repo-table-item-${repo.id}`}
-                              navigateTo={`/admin/repositories?repoId=${repo.id}`}
+                              navigateTo={
+                                repo.isArchived
+                                  ? undefined
+                                  : `/admin/repositories?repoId=${repo.id}`
+                              }
                               tableCell={[
                                 { data: repo.name },
                                 {
@@ -102,34 +106,42 @@ const MyRepoList = ({ archived }: IProps) => {
                       </RenderIf>
                     </tbody>
                   </table>
-                ) : (
-                  <EmptyList
-                    type={
-                      archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO
-                    }
-                  />
-                )}
-              </div>
+                </div>
+              ) : (
+                <EmptyList
+                  type={archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO}
+                />
+              )}
             </div>
           </div>
-          <div className="flex flex-col xs:hidden gap-y-4 ">
-            {getMyRepoList?.pages.map((page) => {
-              return page.list.map((repo) => {
-                return (
-                  <MobileCard
-                    key={repo.id}
-                    name={repo.name}
-                    createDate={
-                      repo.createDate
-                        ? FaDateFromTimestamp(+new Date(repo.createDate))
-                        : "--"
-                    }
-                    creator={repo.owner?.userName}
-                    cardAction={<RepoMenu repo={repo} isList={true} />}
-                  />
-                );
-              });
-            })}
+          <div className="flex flex-col h-full min-h-[calc(100vh-340px)] xs:hidden gap-y-4 ">
+            {isLoading ? (
+              <div className="w-full h-full flex justify-center items-center">
+                <Spinner className="h-8 w-8" color="deep-purple" />
+              </div>
+            ) : listLength ? (
+              getMyRepoList?.pages.map((page) => {
+                return page.list.map((repo) => {
+                  return (
+                    <MobileCard
+                      key={repo.id}
+                      name={repo.name}
+                      createDate={
+                        repo.createDate
+                          ? FaDateFromTimestamp(+new Date(repo.createDate))
+                          : "--"
+                      }
+                      creator={repo.owner?.userName}
+                      cardAction={<RepoMenu repo={repo} isList={true} />}
+                    />
+                  );
+                });
+              })
+            ) : (
+              <EmptyList
+                type={archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO}
+              />
+            )}
             <RenderIf isTrue={!!hasNextPage}>
               <div className="m-auto">
                 <LoadMore
@@ -143,21 +155,33 @@ const MyRepoList = ({ archived }: IProps) => {
       </RenderIf>
       <RenderIf isTrue={mode === EListMode.card}>
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 flex-wrap">
-            {getMyRepoList?.pages.map((page) => {
-              return page.list.map((repo) => {
-                return <RepoCardMode key={repo.id} repo={repo} />;
-              });
-            })}
-          </div>
-          <RenderIf isTrue={!!hasNextPage}>
-            <div className="m-auto">
-              <LoadMore
-                isFetchingNextPage={isFetchingNextPage}
-                fetchNextPage={fetchNextPage}
-              />
+          {isLoading ? (
+            <div className="w-full h-full  min-h-[calc(100vh-340px)] flex justify-center items-center">
+              <Spinner className="h-8 w-8" color="deep-purple" />
             </div>
-          </RenderIf>
+          ) : listLength ? (
+            <>
+              <div className="h-full  min-h-[calc(100vh-340px)] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4 flex-wrap">
+                {getMyRepoList?.pages.map((page) => {
+                  return page.list.map((repo) => {
+                    return <RepoCardMode key={repo.id} repo={repo} />;
+                  });
+                })}
+              </div>
+              <RenderIf isTrue={!!hasNextPage}>
+                <div className="m-auto">
+                  <LoadMore
+                    isFetchingNextPage={isFetchingNextPage}
+                    fetchNextPage={fetchNextPage}
+                  />
+                </div>
+              </RenderIf>
+            </>
+          ) : (
+            <EmptyList
+              type={archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO}
+            />
+          )}
         </>
       </RenderIf>
     </>

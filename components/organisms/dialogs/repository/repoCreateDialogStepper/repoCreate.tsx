@@ -1,7 +1,5 @@
-"use client";
-
 import React from "react";
-import { DialogFooter, DialogBody, Typography } from "@material-tailwind/react";
+import { DialogFooter, DialogBody } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -11,12 +9,12 @@ import { repoActiveStep } from "@atom/stepper";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateSchema } from "../validation.yup";
 import CancelButton from "@components/atoms/button/cancelButton";
-import Label from "@components/atoms/typograghy/label";
 import FormInput from "@components/atoms/input/formInput";
 import WarningText from "@components/atoms/typograghy/warningText";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import Text from "@components/atoms/typograghy/text";
 import { repoAtom } from "@atom/repository";
+import Label from "@components/atoms/typograghy/label";
 
 interface IForm {
   name: string;
@@ -29,7 +27,7 @@ interface IProps {
 
 const RepoCreateDialog = ({ handleClose }: IProps) => {
   const setActiveStep = useSetRecoilState(repoActiveStep);
-  const setRepo = useSetRecoilState(repoAtom)
+  const setRepo = useSetRecoilState(repoAtom);
 
   const { isPending, mutate } = useCreateRepo();
   const {
@@ -62,16 +60,18 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
 
   return (
     <>
-      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6">
+      <DialogBody
+        placeholder="dialog body"
+        className="flex-grow px-5 py-3 xs:p-6"
+      >
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Label>عنوان مخزن</Label>
             <FormInput
               className="w-full"
               placeholder="عنوان مخزن"
-              register={{
-                ...register("name"),
-              }}
+              register={{...register("name")}}
+              id="repo-name"
             />
             {errors.name && <WarningText>{errors.name?.message}</WarningText>}
           </div>

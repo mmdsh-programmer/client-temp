@@ -1,5 +1,6 @@
-
 import { getFileAction } from "@actions/files";
+import { IPodspaceResult } from "@interface/app.interface";
+import { IFile } from "@interface/file.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetFiles = (
@@ -24,14 +25,16 @@ const useGetFiles = (
         dataType
       );
 
-      console.log("----------------------- response ------------------", response)
-      return response.result;
+      return response?.data as {
+        list: IFile[];
+        count: number;
+      };
     },
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
     getNextPageParam: (lastPage, pages) => {
-      if (pages.length < Math.ceil(lastPage.total / size)) {
+      if (pages.length < Math.ceil(lastPage.count / size)) {
         return pages.length + 1;
       }
     },
