@@ -1,5 +1,6 @@
 import { IDocumentMetadata } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
+import { IPublicKey } from "@interface/repo.interface";
 import { logger } from "@utils/index";
 import { atom } from "recoil";
 
@@ -81,6 +82,18 @@ export const documentInfo = atom<IDocInfo | null>({
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
         logger("documentInfo", newValue, oldValue);
+      });
+    },
+  ],
+});
+
+export const documentKey = atom<IPublicKey | null>({
+  key: "documentKey",
+  default: null,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("documentKey", newValue, oldValue);
       });
     },
   ],

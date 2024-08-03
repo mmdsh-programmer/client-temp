@@ -1481,7 +1481,8 @@ export const createDocument = async (
   contentType: EDocumentTypes,
   isTemplate: boolean,
   order?: number,
-  imageUrl?: string
+  imageUrl?: string,
+  publicKeyId?: string
 ) => {
   const body = {
     title,
@@ -1491,6 +1492,7 @@ export const createDocument = async (
     imageUrl,
     order,
     isTemplate,
+    // publicKeyId
   };
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}/documents`, {

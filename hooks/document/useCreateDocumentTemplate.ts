@@ -1,7 +1,4 @@
-import {
-  createDocumentAction,
-  createDocumentTemplateAction,
-} from "@actions/document";
+import { createDocumentTemplateAction } from "@actions/document";
 import { IDocument } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

@@ -51,7 +51,8 @@ export const createDocumentAction = async (
   contentType: EDocumentTypes,
   isTemplate: boolean,
   order?: number,
-  imageUrl?: string
+  imageUrl?: string,
+  publicKeyId?: string
 ) => {
   const userInfo = await getMe();
   try {
@@ -64,7 +65,8 @@ export const createDocumentAction = async (
       contentType,
       isTemplate,
       order,
-      imageUrl
+      imageUrl,
+      publicKeyId
     );
 
     return response;
