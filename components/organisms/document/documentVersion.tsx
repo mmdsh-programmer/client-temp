@@ -5,7 +5,12 @@ import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { category } from "@atom/category";
-import { documentInfo, documentTemplate, documentType } from "@atom/document";
+import {
+  documentInfo,
+  documentKey,
+  documentTemplate,
+  documentType,
+} from "@atom/document";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import useCreateDocument from "@hooks/document/useCreateDocument";
@@ -34,6 +39,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const getDocumentType = useRecoilValue(documentType);
   const getDocumentInfo = useRecoilValue(documentInfo);
   const getDocumentTemplate = useRecoilValue(documentTemplate);
+  const getDocumentKey = useRecoilValue(documentKey);
   const getCategory = useRecoilValue(category);
   const getRepo = useRecoilValue(repoAtom);
   const createDocumentHook = useCreateDocument();
@@ -81,6 +87,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         contentType: getDocumentType,
         isTemplate,
         order: getDocumentInfo.order,
+        publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         successCallBack: (result: IDocument) => {
           close();
           setOpen(false);
