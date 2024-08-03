@@ -48,7 +48,7 @@ const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
   return (
     <>
       {openFileManagement ? (
-        <Files userGroupHash={getRepo?.id} resourceId={null} type="public" handleClose={handleClose} />
+        <Files userGroupHash={getRepo?.userGroupHash} resourceId={null} type="public" handleClose={handleClose} />
       ) : (
         <StepperDialog
           dialogHeader="ایجاد مخزن"

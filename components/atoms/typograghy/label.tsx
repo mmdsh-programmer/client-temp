@@ -10,7 +10,7 @@ const Label = ({ children, labelFor, className }: IProps) => {
   return (
     <label
       htmlFor={labelFor}
-      className={`${className || ""} !p-0 text-[12px] leading-[16.8px] -tracking-[0.12] text-primary`}
+      className={`${className || ""} !p-0 text-[12px] leading-[16.8px] -tracking-[0.12px] text-primary font-iranYekan`}
     >
       {children}
     </label>

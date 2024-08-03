@@ -63,6 +63,7 @@ const InviteToRepo = () => {
       callBack: () => {
         toast.success(`${dataForm.username} با موفقیت به مخرن اضافه شد.`);
         handleClose();
+        handleReset();
       },
     });
   };

@@ -5,10 +5,9 @@ import useRenameFile from "@hooks/files/useRenameFile";
 import useGetReport from "@hooks/report/useGetReport";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { IFile } from "node_modules/cls-file-management/dist";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { ClasorFileManagement } from "cls-file-management";
+// import { ClasorFileManagement } from "cls-file-management";
 import {
   Button,
   Dialog,
@@ -17,6 +16,7 @@ import {
   DialogHeader,
 } from "@material-tailwind/react";
 import { ArrowRightIcon, XIcon } from "@components/atoms/icons";
+import { IFile } from "@interface/file.interface";
 
 const fileTablePageSize = 20;
 
@@ -152,7 +152,7 @@ const Files = (props: IProps) => {
             if (result.data.data.result.hash) {
               await onSuccess();
             }
-            queryClient.invalidateQueries(`getReport-${resourceId}`);
+            queryClient.invalidateQueries({queryKey:[`getReport-${resourceId}`]});
           });
       } catch {
         setIsLoading(false);
@@ -189,7 +189,7 @@ const Files = (props: IProps) => {
             onSuccess();
             setIsLoading(false);
           }
-          queryClient.invalidateQueries(`getReport-${resourceId}`);
+          queryClient.invalidateQueries({queryKey:[`getReport-${resourceId}`]});
         })
         .catch((error: any) => {
           toast.error("خطا در بارگذاری فایل");
@@ -238,7 +238,7 @@ const Files = (props: IProps) => {
         </Button>
       </DialogHeader>
       <DialogBody placeholder="dialog body" className="p-0 flex-grow">
-        <ClasorFileManagement
+        {/* <ClasorFileManagement
           //   dataReport={dataReport}
           fetchingReport={fetchingReport}
           files={files}
@@ -261,7 +261,7 @@ const Files = (props: IProps) => {
             setPage(0);
             setName(search);
           }}
-        />
+        /> */}
       </DialogBody>
       <DialogFooter
         placeholder="create user dialog footer"

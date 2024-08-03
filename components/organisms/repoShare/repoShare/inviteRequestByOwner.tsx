@@ -21,7 +21,6 @@ const InviteRequestByOwner = ({ user }: IProps) => {
 
   const name = `${user.user.given_name} ${user.user.family_name} `;
   const rolesOption = [
-    { label: translateRoles(user.role), value: user.role },
     { label: "حذف کاربر", value: "delete" },
   ];
 

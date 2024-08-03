@@ -1,4 +1,4 @@
-import { deleteFileAction, renameFileAction } from "@actions/files";
+import { deleteFileAction } from "@actions/files";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 

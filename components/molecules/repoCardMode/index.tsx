@@ -6,6 +6,8 @@ import { RepoIcon } from "@components/atoms/icons";
 import Text from "@components/atoms/typograghy/text";
 import ImageComponent from "@components/atoms/image";
 import RepoCardMoreInfo from "./repoCardMoreInfo";
+import { useRecoilValue } from "recoil";
+import { repoInfoAtom } from "@atom/repository";
 
 interface IProps {
   repo: IRepo;
@@ -13,6 +15,8 @@ interface IProps {
 }
 
 const RepoCardMode = ({ repo, archived }: IProps) => {
+  const getRepoInfo = useRecoilValue(repoInfoAtom);
+
   return (
     <Card
       placeholder="card"
@@ -39,11 +43,11 @@ const RepoCardMode = ({ repo, archived }: IProps) => {
         <div className="block xs:hidden">
           <RepoMenu repo={repo} archived={archived} isList />
         </div>
-        <div className=" hidden xs:block">
+        <div className="hidden xs:block">
           <RepoMenu repo={repo} archived={archived} />
         </div>
       </div>
-      <RepoCardMoreInfo repo={repo} />
+      {getRepoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
     </Card>
   );
 };

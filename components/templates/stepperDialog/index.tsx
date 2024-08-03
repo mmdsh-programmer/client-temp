@@ -44,7 +44,9 @@ const StepperDialog = ({
         <div className="w-full px-8 py-4">
           <StepperComponent getActiveStep={activeStep} stepList={stepList} />
         </div>
-        <div className="flex-grow flex flex-col justify-between">{children}</div>
+        <div className="flex-grow flex flex-col justify-between">
+          {children}
+        </div>
       </div>
     </Dialog>
   );

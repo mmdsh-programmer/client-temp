@@ -4,6 +4,7 @@ import { ISortProps } from "@atom/sortParam";
 import { IAccessRequestResponse } from "@interface/accessRequest.interface";
 import {
   IChildrenFilter,
+  IPodspaceResult,
   IReportFilter,
   IServerResult,
 } from "@interface/app.interface";
@@ -15,6 +16,7 @@ import {
   IDocumentMetadata,
 } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
+import { IFile } from "@interface/file.interface";
 import {
   ICreateGroup,
   IGetGroup,
@@ -167,19 +169,19 @@ export const getAllRepositories = async (
   size: number,
   name: string | undefined
 ) => {
+  const baseUrl = name
+    ? `${CLASOR}/repositories?offset=${offset}&size=${size}&title=${name}`
+    : `${CLASOR}/repositories?offset=${offset}&size=${size}`;
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories?offset=${offset}&size=${size}&title=${name || ""}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["allRepoList"] },
-      }
-    );
+    const response = await fetch(`${baseUrl}`, {
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      } as any,
+      next: { tags: ["allRepoList"] },
+    });
     if (!response.ok) {
       throw new Error("خطا در شبکه");
     }
@@ -197,9 +199,12 @@ export const getMyRepositories = async (
   archived: boolean,
   name: string | undefined
 ) => {
+  const baseUrl = name
+  ? `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}&title=${name}`
+  : `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}`;
   try {
     const response = await fetch(
-      `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}`,
+      `${baseUrl}`,
       {
         headers: {
           _token_: access_token,
@@ -245,9 +250,12 @@ export const getAccessRepositories = async (
   size: number,
   name: string | undefined
 ) => {
+  const baseUrl = name
+  ? `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}&title=${name}`
+  : `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}`;
   try {
     const response = await fetch(
-      `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}`,
+      `${baseUrl}`,
       {
         headers: {
           _token_: access_token,
@@ -273,9 +281,12 @@ export const getBookmarkRepositories = async (
   size: number,
   name: string | undefined
 ) => {
+  const baseUrl = name
+  ? `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}&title=${name}`
+  : `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}`;
   try {
     const response = await fetch(
-      `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}`,
+      `${baseUrl}`,
       {
         headers: {
           _token_: access_token,
@@ -980,15 +991,6 @@ export const getChildren = async (
   } else if (!filters?.type.category && filters?.type.document) {
     finalType = "document";
   }
-  const params = {
-    title: title?.length ? title : undefined,
-    type: finalType,
-    contentTypes: filters?.contentTypes,
-    tagIds: filters?.tagIds,
-    bookmarked: filters?.bookmarked,
-    isTemplate: filters?.isTemplate,
-    withTemplate: !filters?.isTemplate,
-  };
 
   let baseUrl = `${CLASOR}/repositories/${repoId}/categories/getChildren?`;
 
@@ -1644,11 +1646,10 @@ export const getResourceFiles = async (
       throw new Error("خطا در شبکه");
     }
     const data = await response.json();
-    console.log(
-      "-----------------------data ----------------------",
-      data.data
-    );
-    return data.data as any;
+    return data as IServerResult<{
+      list: IFile[];
+      count: number;
+    }>;
   } catch (error) {
     console.log("============ error ==========", error);
   }

@@ -15,7 +15,7 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
   const router = useRouter();
   return (
     <tr
-      className="cursor-pointer text-[13px] font-normal text-primary border-b-2 border-gray-100"
+      className="cursor-pointer text-[13px] font-normal text-primary"
       onClick={() => {
         onClick?.();
         if (navigateTo) {

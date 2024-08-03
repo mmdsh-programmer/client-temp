@@ -19,6 +19,7 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: () => Promise<void>;
   className?: string;
+  backToMain?: boolean;
 }
 
 const EditDialog = ({
@@ -28,6 +29,7 @@ const EditDialog = ({
   setOpen,
   onSubmit,
   className,
+  backToMain
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -47,6 +49,11 @@ const EditDialog = ({
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
+        </div>
+        <div className="hidden xs:block">
+          {backToMain ? (
+            <BackButton onClick={handleClose} disabled={isPending} />
+          ) : null}
         </div>
         <Title>{dialogHeader}</Title>
         <div className="hidden xs:block">

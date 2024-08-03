@@ -4,10 +4,10 @@ import { Textarea } from "@material-tailwind/react";
 interface IProps {
   className?: string;
   placeholder?: string;
-  register: any;
+  [key: string]: any;
 }
 
-const TextareaAtom = ({ className, placeholder, register }: IProps) => {
+const TextareaAtom = ({ className, placeholder, ...restProps }: IProps) => {
   return (
     <Textarea
       labelProps={{
@@ -17,9 +17,7 @@ const TextareaAtom = ({ className, placeholder, register }: IProps) => {
         className: "min-w-0",
       }}
       placeholder={placeholder}
-      {...register}
-      id="description"
-      type="text"
+      {...restProps}
       className={`${className || ""} 
       flex items-center !h-12 gap-2 !p-3
       !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
