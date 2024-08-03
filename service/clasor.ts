@@ -1492,7 +1492,7 @@ export const createDocument = async (
     imageUrl,
     order,
     isTemplate,
-    // publicKeyId
+    publicKeyId
   };
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}/documents`, {
