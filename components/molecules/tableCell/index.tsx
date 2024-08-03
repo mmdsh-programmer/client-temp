@@ -6,6 +6,8 @@ interface IProps {
     data: string | React.ReactNode;
     title?: string;
     className?: string;
+    rowSpan?: number;
+    colSpan?: number;
     onClick?: () => void;
   }[];
   navigateTo?: string;
@@ -34,6 +36,8 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
                 e.stopPropagation();
               }
             }}
+            rowSpan={row.rowSpan}
+            colSpan={row.colSpan}
           >
             {row.data}
           </td>

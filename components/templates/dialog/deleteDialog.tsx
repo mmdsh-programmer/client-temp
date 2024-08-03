@@ -4,7 +4,6 @@ import {
   DialogFooter,
   DialogBody,
   DialogHeader,
-  Typography,
 } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
 import Title from "@components/atoms/typograghy/title";
@@ -17,7 +16,7 @@ interface IProps {
   children: React.ReactNode;
   dialogHeader?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit: () => Promise<void>;
+  onSubmit: () => void;
   className?: string;
 }
 
@@ -52,9 +51,7 @@ const DeleteDialog = ({
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
       >
-        <Text
-          className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]"
-        >
+        <Text className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
             title={children as string}

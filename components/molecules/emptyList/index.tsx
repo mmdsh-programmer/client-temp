@@ -12,6 +12,7 @@ export enum EEmptyList {
   VERSION = "version",
   RELEASE = "release",
   FILTER = "filter",
+  REPO_KEYS = "repo_keys",
 }
 
 interface IProps {
@@ -103,6 +104,13 @@ const EmptyList = ({ type }: IProps) => {
             نتیجه‌ای یافت نشد.
           </Typography>
         );
+      case EEmptyList.REPO_KEYS:
+        <Typography
+          placeholder="empty-message"
+          className="title_t3 text-primary"
+        >
+          شما در حال حاضر کلیدی ندارید
+        </Typography>;
       default:
         return null;
     }

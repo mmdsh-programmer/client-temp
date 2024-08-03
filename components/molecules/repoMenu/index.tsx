@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ArchiveIcon,
   DeleteIcon,
   EditIcon,
   FolderInfoIcon,
+  KeyIcon,
   MoreDotIcon,
   RestoreIcon,
   ShareIcon,
@@ -19,10 +20,11 @@ import RepoEditDialog from "@components/organisms/dialogs/repository/repoEditDia
 import { useRouter } from "next/navigation";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { listMode } from "@atom/app";
-import { repoActionDrawerAtom, repoInfoAtom } from "@atom/repository";
+import { repoInfoAtom } from "@atom/repository";
 import { EListMode } from "@interface/enums";
+import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
 
 interface IProps {
   repo: IRepo;
@@ -41,6 +43,7 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
   const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
     boolean | null
   >(false);
+  const [repoKeyModal, setRepoKeyModal] = useState(false);
 
   const mode = useRecoilValue(listMode);
 
@@ -94,6 +97,11 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
             text: "اشتراک گذاری",
             icon: <ShareIcon className="w-4 h-4" />,
             onClick: () => setShareRepoModal(true),
+          },
+          {
+            text: "لیست کلید های مخزن",
+            icon: <KeyIcon className="w-4 h-4 stroke-1" />,
+            onClick: () => setRepoKeyModal(true),
           },
           {
             text: "حذف",
@@ -211,6 +219,9 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
       )}
       {shareRepoModal && (
         <RepoShareDialog repo={repo} setOpen={setShareRepoModal} />
+      )}
+      {repoKeyModal && (
+        <RepoKeyDialog repo={repo} setOpen={setRepoKeyModal} />
       )}
     </>
   );

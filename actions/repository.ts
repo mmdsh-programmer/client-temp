@@ -2,13 +2,16 @@ import {
   archiveRepository,
   bookmarkRepository,
   createRepo,
+  createRepositoryKey,
   deleteRepository,
+  deleteRepositoryKey,
   editRepo,
   getAccessRepositories,
   getAllRepositories,
   getBookmarkRepositories,
   getMyRepositories,
   getRepository,
+  getRepositoryKeys,
   imageRepository,
   leaveRepository,
   restoreRepository,
@@ -16,13 +19,12 @@ import {
 import { getMe } from "./auth";
 import { TUserData } from "@interface/app.interface";
 
-
 export const getAllRepositoryList = async (
   offset: number,
   size: number,
   name?: string
 ) => {
-  const userInfo = await getMe() as TUserData;
+  const userInfo = (await getMe()) as TUserData;
   try {
     const response = await getAllRepositories(
       userInfo.access_token,
@@ -43,7 +45,7 @@ export const getMyRepositoryList = async (
   archived: boolean,
   name?: string
 ) => {
-  const userInfo = await getMe() as TUserData;
+  const userInfo = (await getMe()) as TUserData;
   try {
     const response = await getMyRepositories(
       userInfo.access_token,
@@ -59,15 +61,10 @@ export const getMyRepositoryList = async (
   }
 };
 
-export const getRepositoryAction = async (
-  repoId: number,
-) => {
+export const getRepositoryAction = async (repoId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await getRepository(
-      userInfo.access_token,
-      repoId,
-    );
+    const response = await getRepository(userInfo.access_token, repoId);
 
     return response;
   } catch (error) {
@@ -135,17 +132,10 @@ export const editRepoAction = async (
   }
 };
 
-export const createRepoAction = async (
-  name: string,
-  description?: string
-) => {
+export const createRepoAction = async (name: string, description?: string) => {
   const userInfo = await getMe();
   try {
-    const response = await createRepo(
-      userInfo.access_token,
-      name,
-      description
-    );
+    const response = await createRepo(userInfo.access_token, name, description);
 
     return response;
   } catch (error) {
@@ -153,15 +143,10 @@ export const createRepoAction = async (
   }
 };
 
-export const deleteRepoAction = async (
-  repoId: number,
-) => {
+export const deleteRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await deleteRepository(
-      userInfo.access_token,
-      repoId,
-    );
+    const response = await deleteRepository(userInfo.access_token, repoId);
 
     return response;
   } catch (error) {
@@ -169,15 +154,10 @@ export const deleteRepoAction = async (
   }
 };
 
-export const archiveRepoAction = async (
-  repoId: number,
-) => {
+export const archiveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await archiveRepository(
-      userInfo.access_token,
-      repoId,
-    );
+    const response = await archiveRepository(userInfo.access_token, repoId);
 
     return response;
   } catch (error) {
@@ -185,15 +165,10 @@ export const archiveRepoAction = async (
   }
 };
 
-export const restoreRepoAction = async (
-  repoId: number,
-) => {
+export const restoreRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await restoreRepository(
-      userInfo.access_token,
-      repoId,
-    );
+    const response = await restoreRepository(userInfo.access_token, repoId);
 
     return response;
   } catch (error) {
@@ -201,15 +176,10 @@ export const restoreRepoAction = async (
   }
 };
 
-export const leaveRepoAction = async (
-  repoId: number,
-) => {
+export const leaveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await leaveRepository(
-      userInfo.access_token,
-      repoId,
-    );
+    const response = await leaveRepository(userInfo.access_token, repoId);
 
     return response;
   } catch (error) {
@@ -217,10 +187,7 @@ export const leaveRepoAction = async (
   }
 };
 
-export const bookmarkRepoAction = async (
-  repoId: number,
-  detach?: boolean
-) => {
+export const bookmarkRepoAction = async (repoId: number, detach?: boolean) => {
   const userInfo = await getMe();
   try {
     const response = await bookmarkRepository(
@@ -235,10 +202,7 @@ export const bookmarkRepoAction = async (
   }
 };
 
-export const imageRepoAction = async (
-  repoId: number,
-  fileHash: string
-) => {
+export const imageRepoAction = async (repoId: number, fileHash: string) => {
   const userInfo = await getMe();
   try {
     const response = await imageRepository(
@@ -253,7 +217,57 @@ export const imageRepoAction = async (
   }
 };
 
+export const getRepoKeysAction = async (
+  repoId: number,
+  offset: number,
+  size: number
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getRepositoryKeys(
+      userInfo.access_token,
+      repoId,
+      offset,
+      size
+    );
 
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
 
+export const deleteRepoKeyAction = async (repoId: number, keyId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await deleteRepositoryKey(
+      userInfo.access_token,
+      repoId,
+      keyId
+    );
 
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
 
+export const createRepoKeyAction = async (
+  repoId: number,
+  name: string,
+  key: string
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createRepositoryKey(
+      userInfo.access_token,
+      repoId,
+      name,
+      key
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};

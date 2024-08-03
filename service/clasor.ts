@@ -23,7 +23,12 @@ import {
   IGroupResult,
   IUpdateGroup,
 } from "@interface/group.interface";
-import { IReport, IResponse } from "@interface/repo.interface";
+import {
+  IPublicKey,
+  IRepo,
+  IReport,
+  IResponse,
+} from "@interface/repo.interface";
 import { ITags } from "@interface/tags.interface";
 import { IRoles, IUserResponse } from "@interface/users.interface";
 import {
@@ -186,7 +191,94 @@ export const getAllRepositories = async (
       throw new Error("خطا در شبکه");
     }
     const data = await response.json();
-    return data as IServerResult<IResponse>;
+    return data as IServerResult<IResponse<IRepo>>;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const getRepositoryKeys = async (
+  access_token: string,
+  repoId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await fetch(
+      `${CLASOR}/repositories/${repoId}/publicKey?offset=${offset}&size=${size}`,
+      {
+        headers: {
+          _token_: access_token,
+          _token_issuer_: 1,
+          Authorization: "Bearer " + access_token,
+          "Content-Type": "application/json",
+        } as any,
+        next: { tags: [`repo-${repoId}-keys`] },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data as IResponse<IPublicKey>;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const deleteRepositoryKey = async (
+  access_token: string,
+  repoId: number,
+  keyId: number
+) => {
+  try {
+    const response = await fetch(
+      `${CLASOR}/repositories/${repoId}/publicKey/${keyId}`,
+      {
+        method: "DELETE",
+        headers: {
+          _token_: access_token,
+          _token_issuer_: 1,
+          Authorization: "Bearer " + access_token,
+          "Content-Type": "application/json",
+        } as any,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const createRepositoryKey = async (
+  access_token: string,
+  repoId: number,
+  name: string,
+  key: string
+) => {
+  try {
+    const response = await fetch(`${CLASOR}/repositories/${repoId}/publicKey`, {
+      method: "POST",
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      } as any,
+      body: JSON.stringify({
+        name,
+        key,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.log("============ error ==========", error);
   }
@@ -218,7 +310,7 @@ export const getMyRepositories = async (
       throw new Error("خطا در شبکه");
     }
     const data = await response.json();
-    return data as IServerResult<IResponse>;
+    return data as IServerResult<IResponse<IRepo>>;
   } catch (error) {
     console.log("============ error ==========", error);
   }
@@ -269,7 +361,7 @@ export const getAccessRepositories = async (
       throw new Error("خطا در شبکه");
     }
     const data = await response.json();
-    return data as IServerResult<IResponse>;
+    return data as IServerResult<IResponse<IRepo>>;
   } catch (error) {
     console.log("============ error ==========", error);
   }
@@ -300,7 +392,7 @@ export const getBookmarkRepositories = async (
       throw new Error("خطا در شبکه");
     }
     const data = await response.json();
-    return data as IServerResult<IResponse>;
+    return data as IServerResult<IResponse<IRepo>>;
   } catch (error) {
     console.log("============ error ==========", error);
   }

@@ -1,5 +1,5 @@
 import { ERepoGrouping } from "@interface/enums";
-import { IRepo } from "@interface/repo.interface";
+import { IPublicKey, IRepo } from "@interface/repo.interface";
 import { atom } from "recoil";
 
 export const repoGrouping = atom<ERepoGrouping>({
@@ -28,4 +28,13 @@ export const repoSearchParamAtom = atom<{
 } | null>({
   key: "repoSearchParamAtom",
   default: null,
+});
+export const deleteRepoKeyAtom = atom<IPublicKey | null>({
+  key: "deleteRepoKeyAtom",
+  default: null,
+});
+
+export const createRepoKeyAtom = atom<boolean>({
+  key: "createRepoKeyAtom",
+  default: false,
 });
