@@ -4,28 +4,23 @@ import { Input } from "@material-tailwind/react";
 interface IProps {
   className?: string;
   placeholder?: string;
-  register?: any;
-  setValue?: (value: any) => void;
-  id?: string;
+  register?: any
+  [key: string]: any;
 }
 
-const FormInput = ({ className, placeholder, register, setValue, id }: IProps) => {
+const FormInput = ({ className, placeholder, register, ...restProps }: IProps) => {
   return (
     <Input
-      crossOrigin=""
       labelProps={{
         className: "before:content-none after:content-none",
       }}
       containerProps={{
         className: "min-w-0 !h-12",
       }}
-      id={id}
       type="text"
       placeholder={placeholder}
+      {...restProps}
       {...register}
-      onChange={(e) => {
-        setValue?.(e.target.value);
-      }}
       className={`${className || ""}
       flex items-center !h-12 gap-2 pr-3 pl-2
       !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan

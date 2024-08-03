@@ -1,10 +1,8 @@
-"use client";
-
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
-import { repoGrouping } from "@atom/repository";
+import { repoGrouping, repoSearchParamAtom } from "@atom/repository";
 import SidebarHeader from "@components/molecules/sidebarHeader";
 import {
   ArchiveIcon,
@@ -18,6 +16,7 @@ import { ERepoGrouping } from "@interface/enums";
 const Sidebar = () => {
   const router = useRouter();
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGrouping);
+  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
 
   const sidebarList = [
     {
@@ -80,6 +79,7 @@ const Sidebar = () => {
                   onClick={() => {
                     router.push("/admin/dashboard");
                     item.onClick();
+                    setSearchParam(null);
                   }}
                 >
                   {item.icon}

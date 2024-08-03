@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "../node_modules/cls-file-management/dist/style.css";
+/* @import "../node_modules/cls-file-management/dist/style.css"; */
 
 html {
   @apply h-full !scroll-smooth;
@@ -21,55 +21,16 @@ body {
     @apply !border-r-purple-normal !border-t-purple-normal;
   }
 
-  .select {
-    background-image: url("data:image/svg+xml;utf8,<svg width='10' height='7' viewBox='0 0 10 7' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M1.175 0.149902L5 3.9749L8.825 0.149902L10 1.33324L5 6.33324L0 1.33324L1.175 0.149902Z' fill='rgb(145,145,145)'/></svg>");
-    background-position-x: 15px;
-    background-size: 10px;
-    @apply rounded-sm bg-no-repeat appearance-none
+  .title_t3 {
+    @apply !text-[13px] !leading-[19.5px] !-tracking-[0.13px] !font-medium !font-iranYekan
   }
 
-  .chip span {
-    @apply truncate whitespace-nowrap
+  .caption_c1 {
+    @apply !text-[12px] !leading-[20px] -tracking-[0.12px] !font-normal !font-iranYekan
   }
 
-  .chip div {
-    @apply top-[14px]
-  }
+  .form__title, .title_t1{
 
-  .tab div {
-    @apply whitespace-nowrap
-  }
-
-  .search-container {
-    display: flex;
-    align-items: center;
-  }
-
-  .search-icon {
-    cursor: pointer;
-    /* Style the search icon as desired */
-  }
-
-  .search-input {
-    display: none;
-    /* Style the input field as desired */
-  }
-
-  .search-container:focus-within .search-input {
-    display: block;
-  }
-
-  .select {
-    background-position-y: 50%;
-    background-position-x: 3%
-  }
-
-  label {
-    @apply !p-[3px] shadow-none
-  }
-
-  .radio::before:hover{
-    @apply shadow-none
   }
 }
 

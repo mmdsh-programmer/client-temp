@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { repoActiveStep } from "@atom/stepper";
 import { AddImageIcon } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -8,7 +9,6 @@ import {
   DialogFooter,
   Radio,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -87,7 +87,6 @@ const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
               containerProps={{
                 className: "-mt-5",
               }}
-              crossOrigin=""
             />
             <RepoDefaultImage onClick={handleSelect} />
           </div>
@@ -108,7 +107,6 @@ const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
               containerProps={{
                 className: "-mt-5",
               }}
-              crossOrigin=""
             />
             <Button
               onClick={() => {

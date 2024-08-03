@@ -46,7 +46,7 @@ const CategoryChildrenDesktop = () => {
   );
 
   return (
-    <div className="bg-primary px-5 min-h-[calc(100vh-300px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
+    <div className="bg-primary px-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
       <div className="flex flex-col">
         <CategoryBreadCrumb />
       </div>

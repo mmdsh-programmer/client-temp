@@ -4,7 +4,7 @@ import { atom } from "recoil";
 
 export const repoGrouping = atom<ERepoGrouping>({
   key: "repoGrouping",
-  default: ERepoGrouping.MY_REPO,
+  default: ERepoGrouping.DASHBOARD,
 });
 
 export const repoAtom = atom<IRepo | null>({
@@ -22,6 +22,13 @@ export const repoActionDrawerAtom = atom<boolean | null>({
   default: null,
 });
 
+export const repoSearchParamAtom = atom<{
+  repoType: ERepoGrouping;
+  search?: string;
+} | null>({
+  key: "repoSearchParamAtom",
+  default: null,
+});
 export const deleteRepoKeyAtom = atom<IPublicKey | null>({
   key: "deleteRepoKeyAtom",
   default: null,

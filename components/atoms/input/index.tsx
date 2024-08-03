@@ -4,17 +4,13 @@ import { Input } from "@material-tailwind/react";
 interface IProps {
   className?: string;
   placeholder?: string;
-  register?: any;
-  setValue?: (value: any) => void;
-  id?: string;
+  [key: string]: any;
 }
 
 const InputAtom = ({
   className,
   placeholder,
-  register,
-  setValue,
-  id,
+  ...restProps
 }: IProps) => {
   return (
     <Input
@@ -25,13 +21,9 @@ const InputAtom = ({
       containerProps={{
         className: "!min-w-0 ",
       }}
-      id={id}
       type="text"
       placeholder={placeholder}
-      {...register}
-      onChange={(e) => {
-        setValue?.(e.target.value);
-      }}
+      {...restProps}
       className={`${className || ""}
       flex items-center !min-w-0 
       !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
