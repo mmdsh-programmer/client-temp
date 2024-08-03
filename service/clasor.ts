@@ -1,5 +1,3 @@
-"use server";
-
 import { ISortProps } from "@atom/sortParam";
 import { IAccessRequestResponse } from "@interface/accessRequest.interface";
 import {

@@ -1,3 +1,5 @@
+"use server";
+
 import { deleteFile, editFile, getResourceFiles } from "@service/clasor";
 import { getMe } from "./auth";
 

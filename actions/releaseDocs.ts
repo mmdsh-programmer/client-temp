@@ -1,3 +1,5 @@
+"use server";
+
 import { TUserData } from "@interface/app.interface";
 import { getMe } from "./auth";
 import { getPendingDrafts, getPendingVersion } from "@service/clasor";

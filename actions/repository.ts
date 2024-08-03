@@ -1,3 +1,5 @@
+"use server";
+
 import {
   archiveRepository,
   bookmarkRepository,
@@ -233,6 +235,7 @@ export const getRepoKeysAction = async (
 
     return response;
   } catch (error) {
+    console.log("fucccckkkkk you--------------------------", error);
     console.log("============ error ==========", error);
   }
 };

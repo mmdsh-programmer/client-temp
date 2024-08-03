@@ -1,3 +1,5 @@
+"use server";
+
 import { getContent } from "@service/clasor";
 import { getMe } from "./auth";
 
