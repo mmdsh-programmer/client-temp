@@ -1,4 +1,14 @@
-import { addUserToRepo, deleteInviteRequest, deleteUser, editUserRole, getRepositoryInviteRequestsByOwner, getRepositoryUsers, getRoles } from "@service/clasor";
+"use server";
+
+import {
+  addUserToRepo,
+  deleteInviteRequest,
+  deleteUser,
+  editUserRole,
+  getRepositoryInviteRequestsByOwner,
+  getRepositoryUsers,
+  getRoles,
+} from "@service/clasor";
 import { getMe } from "./auth";
 
 export const getRepositoryUserList = async (
@@ -41,13 +51,10 @@ export const getRepositoryInviteRequestsAction = async (
   }
 };
 
-export const getRolesAction = async (
-) => {
+export const getRolesAction = async () => {
   const userInfo = await getMe();
   try {
-    const response = await getRoles(
-      userInfo.access_token,
-    );
+    const response = await getRoles(userInfo.access_token);
 
     return response;
   } catch (error) {
@@ -95,17 +102,10 @@ export const userRoleEditAction = async (
   }
 };
 
-export const deleteUserAction = async (
-  repoId: number,
-  userName: string,
-) => {
+export const deleteUserAction = async (repoId: number, userName: string) => {
   const userInfo = await getMe();
   try {
-    const response = await deleteUser(
-      userInfo.access_token,
-      repoId,
-      userName,
-    );
+    const response = await deleteUser(userInfo.access_token, repoId, userName);
 
     return response;
   } catch (error) {
@@ -115,14 +115,14 @@ export const deleteUserAction = async (
 
 export const deleteInviteRequestAction = async (
   repoId: number,
-  userId: number,
+  userId: number
 ) => {
   const userInfo = await getMe();
   try {
     const response = await deleteInviteRequest(
       userInfo.access_token,
       repoId,
-      userId,
+      userId
     );
 
     return response;

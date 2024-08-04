@@ -17,6 +17,7 @@ const useCreateDocument = () => {
       isTemplate: boolean;
       order?: number;
       imageUrl?: string;
+      publicKeyId?: string;
       successCallBack?: (result: IDocument) => void;
       errorCallBack?: () => void;
     }) => {
@@ -29,6 +30,7 @@ const useCreateDocument = () => {
         contentType,
         isTemplate,
         imageUrl,
+        publicKeyId,
       } = values;
       const response = await createDocumentAction(
         repoId,
@@ -38,7 +40,8 @@ const useCreateDocument = () => {
         contentType,
         isTemplate,
         order,
-        imageUrl
+        imageUrl,
+        publicKeyId
       );
       return response?.data as IDocument;
     },

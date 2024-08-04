@@ -1,3 +1,5 @@
+"use server";
+
 import { getReport } from "@service/clasor";
 import { getMe } from "./auth";
 

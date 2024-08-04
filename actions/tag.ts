@@ -1,3 +1,5 @@
+"use server";
+
 import { createTag, deleteTag, editTag, getRepositoryTags } from "@service/clasor";
 import { getMe } from "./auth";
 
