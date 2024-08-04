@@ -4,7 +4,6 @@ import { ISortProps } from "@atom/sortParam";
 import { IAccessRequestResponse } from "@interface/accessRequest.interface";
 import {
   IChildrenFilter,
-  IPodspaceResult,
   IReportFilter,
   IServerResult,
 } from "@interface/app.interface";
@@ -16,7 +15,7 @@ import {
   IDocumentMetadata,
 } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
-import { IFile } from "@interface/file.interface";
+import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   ICreateGroup,
   IGetGroup,
@@ -292,20 +291,17 @@ export const getMyRepositories = async (
   name: string | undefined
 ) => {
   const baseUrl = name
-  ? `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}&title=${name}`
-  : `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}`;
+    ? `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}&title=${name}`
+    : `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}`;
   try {
-    const response = await fetch(
-      `${baseUrl}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["myRepoList"] },
-      }
-    );
+    const response = await fetch(`${baseUrl}`, {
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+      } as any,
+      next: { tags: ["myRepoList"] },
+    });
     if (!response.ok) {
       throw new Error("خطا در شبکه");
     }
@@ -343,20 +339,17 @@ export const getAccessRepositories = async (
   name: string | undefined
 ) => {
   const baseUrl = name
-  ? `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}&title=${name}`
-  : `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}`;
+    ? `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}&title=${name}`
+    : `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}`;
   try {
-    const response = await fetch(
-      `${baseUrl}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["myAccessRepoList"] },
-      }
-    );
+    const response = await fetch(`${baseUrl}`, {
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+      } as any,
+      next: { tags: ["myAccessRepoList"] },
+    });
     if (!response.ok) {
       throw new Error("خطا در شبکه");
     }
@@ -374,20 +367,17 @@ export const getBookmarkRepositories = async (
   name: string | undefined
 ) => {
   const baseUrl = name
-  ? `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}&title=${name}`
-  : `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}`;
+    ? `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}&title=${name}`
+    : `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}`;
   try {
-    const response = await fetch(
-      `${baseUrl}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["bookmarkRepoList"] },
-      }
-    );
+    const response = await fetch(`${baseUrl}`, {
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+      } as any,
+      next: { tags: ["bookmarkRepoList"] },
+    });
     if (!response.ok) {
       throw new Error("خطا در شبکه");
     }
@@ -1491,7 +1481,7 @@ export const createDocument = async (
     categoryId,
     description,
     imageUrl,
-    order,
+    order: order && order > 0 ? order : undefined,
     isTemplate,
   };
   try {
@@ -1722,26 +1712,29 @@ export const getResourceFiles = async (
   order?: string,
   dataType?: string
 ) => {
+  let baseUrl = name
+    ? `${CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}?offset=${offset}&size=${size}&name=${name}`
+    : `${CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}?offset=${offset}&size=${size}`;
+
   try {
-    const response = await fetch(
-      `${CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}?offset=${offset}&size=${size}&name=${name}&dataType=${dataType}&order=${order}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getRepositoryFiles"] },
-      }
-    );
+    const response = await fetch(`${baseUrl}`, {
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+      } as any,
+      next: { tags: ["getRepositoryFiles"] },
+    });
     if (!response.ok) {
       throw new Error("خطا در شبکه");
     }
     const data = await response.json();
-    return data as IServerResult<{
-      list: IFile[];
-      count: number;
-    }>;
+    return data as IServerResult<
+      IPodspaceResult<{
+        list: IFile[];
+        count: number;
+      }>
+    >;
   } catch (error) {
     console.log("============ error ==========", error);
   }

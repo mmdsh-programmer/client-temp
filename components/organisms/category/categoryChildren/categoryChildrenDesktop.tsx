@@ -42,7 +42,7 @@ const CategoryChildrenDesktop = () => {
     getFilterChildren?.title,
     undefined,
     getFilterChildren,
-    false
+    true
   );
 
   return (

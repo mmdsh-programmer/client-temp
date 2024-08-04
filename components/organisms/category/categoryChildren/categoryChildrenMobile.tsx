@@ -40,7 +40,7 @@ const CategoryChildrenMobile = () => {
     getFilterChildren?.title,
     undefined,
     getFilterChildren,
-    false
+    true
   );
 
   return (
