@@ -4,7 +4,7 @@ export interface IServerResult<T> {
   data: T;
   referenceNumber: string;
   timestamp: number;
-  cacheResponse: boolean
+  cacheResponse: boolean;
 }
 
 export interface IUserInfo {
@@ -169,4 +169,16 @@ export interface IReportFilter {
   isTemplate: boolean;
   bookmarked: boolean;
   slug?: string;
+}
+
+export interface IClasorError {
+  cacheResponse: boolean;
+  messages: string[];
+  referenceNumber: string;
+  timestamp: number;
+}
+
+export interface IGetToken {
+  accessToken: string;
+  refreshToken: string;
 }

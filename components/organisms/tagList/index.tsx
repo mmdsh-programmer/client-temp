@@ -17,11 +17,12 @@ const TagList = () => {
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo!.id;
   const {
     data: getTags,
     isLoading,
     isFetching,
-  } = useGetTags(getRepo?.id, 2, true);
+  } = useGetTags(repoId, 2, true);
 
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";

@@ -1,12 +1,3 @@
-import { IDocumentMetadata } from "./document.interface";
-
-export interface ICategoryChildren {
-  list: (ICategoryMetadata | IDocumentMetadata)[];
-  size: number;
-  page: number;
-  total: number;
-}
-
 export interface ICategory {
   id: number;
   name: string;

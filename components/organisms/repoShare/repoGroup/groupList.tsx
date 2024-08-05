@@ -8,11 +8,8 @@ import Text from "@components/atoms/typograghy/text";
 
 const GroupList = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const {
-    data: getGroups,
-    isFetching,
-    isLoading,
-  } = useGetGroups(getRepo?.id, 10);
+  const repoId = getRepo!.id;
+  const { data: getGroups, isFetching, isLoading } = useGetGroups(repoId, 10);
   return (
     <>
       {isFetching ? (

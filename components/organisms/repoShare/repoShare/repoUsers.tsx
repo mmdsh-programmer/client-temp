@@ -9,17 +9,18 @@ import { Spinner } from "@material-tailwind/react";
 
 const RepoUsers = () => {
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo!.id;
   const {
     data: getRepoUsers,
     isFetching: isFetchingRepoUsers,
     isLoading: isLoadingRepoUsers,
-  } = useGetRepoUsers(getRepo?.id, 20, true);
+  } = useGetRepoUsers(repoId, 20, true);
 
   const {
     data: getInviteToRepoRequests,
     isFetching: isFetchingInviteToRepoRequests,
     isLoading: isLoadingInviteToRepoRequests,
-  } = useGetInviteRequestsByOwner(getRepo?.id, 20, true);
+  } = useGetInviteRequestsByOwner(repoId, 20, true);
 
   return (
     <div className="overflow-y-auto">

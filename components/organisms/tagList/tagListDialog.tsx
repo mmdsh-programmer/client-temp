@@ -24,13 +24,10 @@ interface IProps {
 
 const TagListDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo!.id;
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
-  const {
-    data: getTags,
-    isLoading,
-    isFetching,
-  } = useGetTags(getRepo?.id, 30, true);
+  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 30, true);
 
   const handleClose = () => {
     setOpen(false);

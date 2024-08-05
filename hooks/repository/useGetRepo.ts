@@ -1,4 +1,5 @@
 import { getRepositoryAction } from "@actions/repository";
+import { IRepo } from "@interface/repo.interface";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetRepo = (repoId: number, setRepo: (repo: any) => void) => {
@@ -6,7 +7,7 @@ const useGetRepo = (repoId: number, setRepo: (repo: any) => void) => {
     queryKey: [`getRepo-${repoId}`],
     queryFn: async ({ signal }) => {
       const response = await getRepositoryAction(repoId);
-      setRepo(response.data);
+      setRepo(response as IRepo);
       return response;
     },
     retry: false,

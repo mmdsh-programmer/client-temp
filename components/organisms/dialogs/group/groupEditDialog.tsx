@@ -44,7 +44,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
     mutate({
-      repoId: getRepo.id,
+      repoId: getRepo!.id,
       title: dataForm.title,
       // description
       // members:

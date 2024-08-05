@@ -1,7 +1,9 @@
 import { getChildrenAction } from "@actions/category";
 import { ISortProps } from "@atom/sortParam";
 import { IChildrenFilter } from "@interface/app.interface";
-import { ICategoryChildren } from "@interface/category.interface";
+import { ICategoryMetadata } from "@interface/category.interface";
+import { IDocumentMetadata } from "@interface/document.interface";
+import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetCategoryChildren = (
@@ -31,10 +33,9 @@ const useGetCategoryChildren = (
         size,
         title,
         type,
-        filters,
-        forMove
+        filters
       );
-      return response?.data as ICategoryChildren;
+      return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,
     retry: false,

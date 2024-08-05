@@ -10,7 +10,7 @@ import { getMe } from "./auth";
 import { ISortProps } from "@atom/sortParam";
 import { IChildrenFilter } from "@interface/app.interface";
 
-export const  getChildrenAction = async (
+export const getChildrenAction = async (
   repoId: number | undefined,
   categoryId: number | undefined | null,
   sortParams: ISortProps,
@@ -18,8 +18,7 @@ export const  getChildrenAction = async (
   size: number,
   title?: string | null,
   type?: "category" | "document",
-  filters?: IChildrenFilter | null,
-  forMove?: boolean,
+  filters?: IChildrenFilter | null
 ) => {
   const userInfo = await getMe();
   try {
@@ -32,8 +31,7 @@ export const  getChildrenAction = async (
       size,
       title,
       type,
-      filters,
-      forMove
+      filters
     );
 
     return response;

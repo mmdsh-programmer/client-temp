@@ -1,8 +1,13 @@
 import { getRepositoryInviteRequestsAction } from "@actions/users";
-import { IAccessRequestResponse } from "@interface/accessRequest.interface";
+import { IAccessRequest } from "@interface/accessRequest.interface";
+import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetInviteRequestsByOwner = (repoId: number | undefined, size: number, enabled: boolean) => {
+const useGetInviteRequestsByOwner = (
+  repoId: number,
+  size: number,
+  enabled: boolean
+) => {
   return useInfiniteQuery({
     queryKey: [`getRepoInviteRequestsByOwner-${repoId}`],
     queryFn: async ({ signal, pageParam }) => {
@@ -11,12 +16,12 @@ const useGetInviteRequestsByOwner = (repoId: number | undefined, size: number, e
         (pageParam - 1) * size,
         size
       );
-      return response?.data as IAccessRequestResponse;
+      return response as IListResponse<IAccessRequest>;
     },
     initialPageParam: 1,
     retry: false,
     enabled: !!repoId && !!enabled,
-    refetchOnWindowFocus: false, 
+    refetchOnWindowFocus: false,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

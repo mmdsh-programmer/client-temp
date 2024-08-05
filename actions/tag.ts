@@ -4,7 +4,7 @@ import { createTag, deleteTag, editTag, getRepositoryTags } from "@service/claso
 import { getMe } from "./auth";
 
 export const getRepositoryTagAction = async (
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {

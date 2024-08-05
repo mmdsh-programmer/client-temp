@@ -20,10 +20,3 @@ export interface IAccessRequest {
   user: IRequestUser;
   userSSOID: number;
 }
-
-export interface IAccessRequestResponse {
-  list: IAccessRequest[];
-  offset: number;
-  size: number;
-  total: number;
-}

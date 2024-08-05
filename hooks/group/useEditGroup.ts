@@ -7,7 +7,7 @@ const useEditGroup = () => {
   return useMutation({
     mutationKey: ["editGroup"],
     mutationFn: async (values: {
-      repoId: number | undefined;
+      repoId: number;
       title: string;
       description?: string;
       members?: string[];

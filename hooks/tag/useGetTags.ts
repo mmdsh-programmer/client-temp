@@ -1,17 +1,18 @@
 import { getRepositoryTagAction } from "@actions/tag";
-import { ITags } from "@interface/tags.interface";
+import { IListResponse } from "@interface/repo.interface";
+import { ITag } from "@interface/tags.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetTags = (repoId: number | undefined, size: number, enabled?: boolean) => {
+const useGetTags = (repoId: number, size: number, enabled?: boolean) => {
   return useInfiniteQuery({
     queryKey: [`getTags-${repoId}`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getRepositoryTagAction(
         repoId,
         (pageParam - 1) * size,
-        size,
+        size
       );
-      return response?.data as ITags;
+      return response as IListResponse<ITag>;
     },
     initialPageParam: 1,
     retry: false,

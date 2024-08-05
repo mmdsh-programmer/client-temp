@@ -1,5 +1,4 @@
 import { getRolesAction } from "@actions/users";
-import { IRoles } from "@interface/users.interface";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetRoles = () => {
@@ -7,7 +6,7 @@ const useGetRoles = () => {
     queryKey: [`getRoles`],
     queryFn: async ({ signal }) => {
       const response = await getRolesAction();
-      return response?.data as IRoles[];
+      return response;
     },
     retry: false,
     refetchOnWindowFocus: false,

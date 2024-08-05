@@ -1,8 +1,9 @@
 import { getRepositoryGroupsAction } from "@actions/group";
-import { IGroupResult } from "@interface/group.interface";
+import { IGetGroups } from "@interface/group.interface";
+import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetGroups = (repoId: number | undefined, size: number) => {
+const useGetGroups = (repoId: number, size: number) => {
   return useInfiniteQuery({
     queryKey: [`getRepoGroups-${repoId}`],
     queryFn: async ({ signal, pageParam }) => {
@@ -11,12 +12,12 @@ const useGetGroups = (repoId: number | undefined, size: number) => {
         (pageParam - 1) * size,
         size
       );
-      return response?.data as IGroupResult;
+      return response as IListResponse<IGetGroups>;
     },
     initialPageParam: 1,
     retry: false,
     enabled: !!repoId,
-    refetchOnWindowFocus: false, 
+    refetchOnWindowFocus: false,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

@@ -42,7 +42,7 @@ const GroupCreateDialog = ({setOpen}: IProps) => {
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
     mutate({
-      repoId: getRepo.id,
+      repoId: getRepo!.id,
       title: dataForm.title,
       callBack: () => {
         toast.success("گروه با موفقیت ایجاد شد.");

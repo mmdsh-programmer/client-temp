@@ -18,13 +18,14 @@ interface IForm {
 
 const RepoUsers = () => {
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo!.id;
   const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
 
   const { data: getInviteRequests, isFetching: isFetchingInviteRequests } =
-    useGetInviteRequests(getRepo?.id, 10, true);
+    useGetInviteRequests(repoId, 10, true);
 
   const { data: getRepoUsers, isFetching: isFetchingUsers } = useGetUsers(
-    getRepo?.id,
+    repoId,
     10,
     true
   );

@@ -12,7 +12,7 @@ import {
 import { getMe } from "./auth";
 
 export const getRepositoryUserList = async (
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
@@ -32,7 +32,7 @@ export const getRepositoryUserList = async (
 };
 
 export const getRepositoryInviteRequestsAction = async (
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {

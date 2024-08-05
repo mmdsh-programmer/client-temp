@@ -5,12 +5,6 @@ export interface IRoles {
   name: ERoles;
 }
 
-export interface IUserResponse {
-  offset: number;
-  size: number;
-  total: number;
-  list: IUser[];
-}
 export interface IUser {
   lastAccessDate: number | null;
   userInfo: {

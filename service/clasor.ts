@@ -1,11 +1,14 @@
 import { ISortProps } from "@atom/sortParam";
-import { IAccessRequestResponse } from "@interface/accessRequest.interface";
+import { IAccessRequest } from "@interface/accessRequest.interface";
 import {
   IChildrenFilter,
+  IClasorError,
+  IGetToken,
   IReportFilter,
   IServerResult,
+  IUserInfo,
 } from "@interface/app.interface";
-import { ICategory, ICategoryChildren } from "@interface/category.interface";
+import { ICategory, ICategoryMetadata } from "@interface/category.interface";
 import { IContentSearchResult } from "@interface/contentSearch.interface";
 import {
   IClasorField,
@@ -17,150 +20,179 @@ import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   ICreateGroup,
   IGetGroup,
-  IGroupResult,
+  IGetGroups,
   IUpdateGroup,
 } from "@interface/group.interface";
 import {
   IPublicKey,
   IRepo,
   IReport,
-  IResponse,
+  IListResponse,
 } from "@interface/repo.interface";
-import { ITags } from "@interface/tags.interface";
-import { IRoles, IUserResponse } from "@interface/users.interface";
+import { ITag } from "@interface/tags.interface";
+import { IRoles, IUser } from "@interface/users.interface";
 import {
   IAddVersion,
   IFileVersion,
   IVersion,
 } from "@interface/version.interface";
+import {
+  AuthorizationError,
+  ForbiddenError,
+  InputError,
+  NotFoundError,
+  ServerError,
+} from "@utils/error";
+import Logger from "@utils/logger";
+import axios, { AxiosError, isAxiosError } from "axios";
+import qs from "qs";
 
 const { CLASOR } = process.env;
+
+const axiosClasorInstance = axios.create({
+  baseURL: CLASOR,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+axiosClasorInstance.interceptors.request.use((request) => {
+  const { headers, baseURL, method, url, data } = request;
+  const log = JSON.stringify({
+    headers,
+    baseURL,
+    method,
+    url,
+    data,
+  });
+
+  Logger.info(log);
+  return request;
+});
+
+axiosClasorInstance.interceptors.response.use((response) => {
+  const { data, status } = response;
+
+  const log = JSON.stringify({
+    data,
+    status,
+  });
+
+  Logger.info(log);
+  return response;
+});
+
+export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
+  if (isAxiosError(error)) {
+    const message = [error.response?.data.messages[0] || error.message];
+    switch (error.response?.status) {
+      case 400:
+        throw new InputError(message);
+      case 401:
+        throw new AuthorizationError(message);
+      case 403:
+        throw new ForbiddenError(message);
+      case 404:
+        throw new NotFoundError(message);
+      default:
+        throw new ServerError(message);
+    }
+  } else {
+    throw new ServerError(["حطای نامشخصی رخ داد"]);
+  }
+};
 
 /////////////////////// AUTH ///////////////////
 export const handleRedirect = async (redirectUrl: string) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/auth/loginUrl?redirectUrl=${redirectUrl}`,
-      {
-        next: { tags: ["loginUrl"] },
-      }
+    const response = await axiosClasorInstance.get(
+      `auth/loginUrl?redirectUrl=${redirectUrl}`
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getToken = async (code: string, redirect_uri: string) => {
   try {
-    const response = await fetch(`${CLASOR}/auth/login`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ code: code, redirectUrl: redirect_uri }),
-      next: { tags: ["login"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
+      "auth/login",
+      { code: code, redirectUrl: redirect_uri }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error get token ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const userInfo = async (access_token: string) => {
   try {
-    const response = await fetch(`${CLASOR}/auth/getMe`, {
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["getMe"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
+      "auth/getMe",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error get token ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const renewToken = async (refresh_token: string) => {
-  console.log(
-    "=============== service refresh token ==========",
-    refresh_token
-  );
   try {
-    const response = await fetch(`${CLASOR}/auth/renewToken`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken: refresh_token }),
-      next: { tags: ["renewToken"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    console.log("================= data refresh token ==========", data);
-    return data as any;
+    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
+      "auth/renewToken",
+      {
+        refreshToken: refresh_token,
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error renew token ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ////////////////////////// INFO /////////////////////////
 export const getMyInfo = async (access_token: string) => {
   try {
-    const response = await fetch(`${CLASOR}/myInfo`, {
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["myInfo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.get<IServerResult<any>>(
+      "myInfo",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ///////////////////////// REPORT //////////////////////
 export const getReport = async (access_token: string, repoId: number) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/report`, {
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["getReport"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IReport>;
+    const response = await axiosClasorInstance.get<IServerResult<IReport>>(
+      `repositories/${repoId}/report`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -169,28 +201,25 @@ export const getAllRepositories = async (
   access_token: string,
   offset: number,
   size: number,
-  name: string | undefined
+  name?: string
 ) => {
-  const baseUrl = name
-    ? `${CLASOR}/repositories?offset=${offset}&size=${size}&title=${name}`
-    : `${CLASOR}/repositories?offset=${offset}&size=${size}`;
   try {
-    const response = await fetch(`${baseUrl}`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories", {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      next: { tags: ["allRepoList"] },
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        title: name,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IResponse<IRepo>>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -201,25 +230,22 @@ export const getRepositoryKeys = async (
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/publicKey?offset=${offset}&size=${size}`,
+    const response = await axiosClasorInstance.get<IListResponse<IPublicKey>>(
+      `repositories/${repoId}/publicKey`,
       {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: [`repo-${repoId}-keys`] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IResponse<IPublicKey>;
+
+    return response.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -229,25 +255,18 @@ export const deleteRepositoryKey = async (
   keyId: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/publicKey/${keyId}`,
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/publicKey/${keyId}`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -258,26 +277,22 @@ export const createRepositoryKey = async (
   key: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/publicKey`, {
-      method: "POST",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/publicKey`,
+      {
         name,
         key,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data;
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -286,47 +301,43 @@ export const getMyRepositories = async (
   offset: number,
   size: number,
   archived: boolean,
-  name: string | undefined
+  name?: string
 ) => {
-  const baseUrl = name
-    ? `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}&title=${name}`
-    : `${CLASOR}/repositories/myRepoList?offset=${offset}&size=${size}&archived=${archived}`;
   try {
-    const response = await fetch(`${baseUrl}`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories/myRepoList", {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["myRepoList"] },
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        archived,
+        title: name,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IResponse<IRepo>>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getRepository = async (access_token: string, repoId: number) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}`, {
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["repo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
+      `repositories/${repoId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -334,27 +345,25 @@ export const getAccessRepositories = async (
   access_token: string,
   offset: number,
   size: number,
-  name: string | undefined
+  name?: string
 ) => {
-  const baseUrl = name
-    ? `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}&title=${name}`
-    : `${CLASOR}/repositories/myAccessRepoList?offset=${offset}&size=${size}`;
   try {
-    const response = await fetch(`${baseUrl}`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories/myAccessRepoList", {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["myAccessRepoList"] },
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        title: name,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IResponse<IRepo>>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -362,27 +371,25 @@ export const getBookmarkRepositories = async (
   access_token: string,
   offset: number,
   size: number,
-  name: string | undefined
+  name?: string
 ) => {
-  const baseUrl = name
-    ? `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}&title=${name}`
-    : `${CLASOR}/repositories/myBookmarkList?offset=${offset}&size=${size}`;
   try {
-    const response = await fetch(`${baseUrl}`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories/myBookmarkList", {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["bookmarkRepoList"] },
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        title: name,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IResponse<IRepo>>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -393,24 +400,22 @@ export const editRepo = async (
   description: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}`, {
-      method: "PUT",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ name: name, description: description }),
-      next: { tags: ["edit-repo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}`,
+      {
+        name,
+        description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -419,22 +424,18 @@ export const deleteRepository = async (
   repoId: number
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}`, {
-      method: "DELETE",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["deleteRepo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -443,22 +444,19 @@ export const archiveRepository = async (
   repoId: number
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/archive`, {
-      method: "PATCH",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["archiveRepo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/archive`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -467,22 +465,19 @@ export const restoreRepository = async (
   repoId: number
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/restore`, {
-      method: "PATCH",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["restoreRepo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/restore`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -492,45 +487,39 @@ export const createRepo = async (
   description?: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories`, {
-      method: "POST",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ name, description }),
-      next: { tags: ["create-repo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      "repositories",
+      {
+        name,
+        description,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const leaveRepository = async (access_token: string, repoId: number) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/leftRepo`, {
-      method: "DELETE",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["leftRepo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/leftRepo`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -540,25 +529,22 @@ export const bookmarkRepository = async (
   detach?: boolean
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/bookmark?detach=${detach}`,
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/bookmark`,
+      {},
       {
-        method: "PATCH",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["bookmarkRepo"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          detach,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -568,103 +554,89 @@ export const imageRepository = async (
   fileHash: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/image`, {
-      method: "PUT",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ fileHash }),
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/image`,
+      {
+        fileHash,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
 
-      next: { tags: ["bookmarkRepo"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ////////////////////////// USERS ///////////////////////
 export const getRepositoryUsers = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/acl/getRepoUsers?offset=${offset}&size=${size}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getRepositoryUsers"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IUserResponse>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IUser>>
+    >(`repositories/${repoId}/acl/getRepoUsers`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getRepositoryInviteRequestsByOwner = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/userAccessRequest?offset=${offset}&size=${size}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getRepositoryInviteRequests"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    console.log("===================== data users ===================", data);
-    return data as IServerResult<IAccessRequestResponse>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IAccessRequest>>
+    >(`repositories/${repoId}/userAccessRequest`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getRoles = async (access_token: string) => {
   try {
-    const response = await fetch(`${CLASOR}/admin/getRoles`, {
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["getRoles"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IRoles[]>;
+    const response = await axiosClasorInstance.get<IServerResult<IRoles[]>>(
+      "admin/getRoles",
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -675,28 +647,22 @@ export const addUserToRepo = async (
   accessName: string
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/userAccessRequest`,
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/userAccessRequest`,
       {
-        method: "POST",
+        username,
+        accessName,
+      },
+      {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify({ username, accessName }),
-        next: { tags: ["addUserTpRepo"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    console.log("----------------- data-------------------", response);
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error add user ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -707,24 +673,19 @@ export const editUserRole = async (
   roleName: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/acl`, {
-      method: "POST",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ userName, roleName }),
-      next: { tags: ["editUserRole"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/acl`,
+      { userName, roleName },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -734,24 +695,21 @@ export const deleteUser = async (
   userName: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/acl`, {
-      method: "DELETE",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ userName }),
-      next: { tags: ["deleteUserRole"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/acl`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        data: {
+          userName,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -761,203 +719,157 @@ export const deleteInviteRequest = async (
   userId: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/userAccessRequest/${userId}`,
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/userAccessRequest/${userId}`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["deleteInviteRequest"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ///////////////////////////// GROUPS ///////////////////////
 export const getRepositoryGroups = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/groups/getRepoGroups?offset=${offset}&size=${size}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getRepositoryGroups"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IGroupResult>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IGetGroups>>
+    >(`repositories/${repoId}/groups/getRepoGroups`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getGroupInfo = async (
   access_token: string,
-  repoId?: number,
-  title?: string
+  repoId: number,
+  title: string
 ) => {
   try {
-    const response = await fetch(
+    const response = await axiosClasorInstance.get<IServerResult<IGetGroup>>(
       `${CLASOR}/repositories/${repoId}/groups/${title}`,
       {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getGroupInfo"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IGetGroup>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const createGroup = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   title: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/groups`, {
-      method: "POST",
+    const response = await axiosClasorInstance.post<
+      IServerResult<ICreateGroup>
+    >(`repositories/${repoId}/groups`, {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ title }),
-      next: { tags: ["createGroup"] },
+        Authorization: `Bearer ${access_token}`,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<ICreateGroup>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const updateGroup = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   title: string,
   description?: string,
   members?: string[]
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/groups/${title}`,
+    const response = await axiosClasorInstance.patch<
+      IServerResult<IUpdateGroup>
+    >(
+      `repositories/${repoId}/groups/${title}`,
+      { title, description, members, memberType: "username" },
       {
-        method: "PATCH",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify({
-          title,
-          description,
-          members,
-          memberType: "username",
-        }),
-        next: { tags: ["updateGroup"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IUpdateGroup>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const deleteGroup = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   title: string
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/groups/${title}`,
-      {
-        method: "DELETE",
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["deleteGroup"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IUpdateGroup>;
+    const response = await axiosClasorInstance.delete<
+      IServerResult<IUpdateGroup>
+    >(`repositories/${repoId}/groups/${title}`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 /////////////////////////// TAGS /////////////////////
 export const getRepositoryTags = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/tags?offset=${offset}&size=${size}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getRepositoryTags"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<ITags>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ITag>>
+    >(`repositories/${repoId}/tags`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -967,25 +879,19 @@ export const createTag = async (
   name: string
 ) => {
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/tags`, {
-      method: "POST",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify({ name: name }),
-      next: { tags: ["create-tag"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/tags`,
+      { name },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
 
-    const data = await response.json();
-    return data as any;
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -996,27 +902,19 @@ export const editTag = async (
   name: string
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/tags/${tagId}`,
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/tags/${tagId}`,
+      { name },
       {
-        method: "PUT",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify({ name: name }),
-        next: { tags: ["editTag"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1026,26 +924,18 @@ export const deleteTag = async (
   idTag: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/tags/${idTag}`,
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/tags/${idTag}`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["deleteTag"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1059,8 +949,7 @@ export const getChildren = async (
   size: number,
   title?: string | null,
   type?: "category" | "document",
-  filters?: IChildrenFilter | null,
-  forMove?: boolean
+  filters?: IChildrenFilter | null
 ) => {
   let finalType = type;
 
@@ -1072,26 +961,11 @@ export const getChildren = async (
     finalType = "document";
   }
 
-  let baseUrl = `${CLASOR}/repositories/${repoId}/categories/getChildren?`;
-
-  // Add filter parameters to the base URL
-  if (filters) {
-    const filterParams = new URLSearchParams();
-
-    if (filters.title) filterParams.append("title", filters.title);
-    if (filters.isTemplate)
-      filterParams.append("isTemplate", filters.isTemplate.toString());
-    if (filters.contentTypes)
-      filterParams.append("contentTypes", filters.contentTypes.join(","));
-    if (filters.tagIds) filterParams.append("tagIds", filters.tagIds.join(","));
-    if (filters.bookmarked)
-      filterParams.append("bookmarked", filters.bookmarked.toString());
-
-    baseUrl += filterParams.toString() + "&";
-  }
   try {
-    const response = await fetch(
-      `${baseUrl}${[
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
+    >(
+      `repositories/${repoId}/categories/getChildren?${[
         {
           field: "type",
           order: sortParams.type,
@@ -1112,32 +986,41 @@ export const getChildren = async (
         .map((n) => {
           return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
         })
-        .join("&")}&parentId=${categoryId}&offset=${offset}&size=${size}`,
+        .join("&")}`,
       {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["getChildren"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          parentId: categoryId,
+          offset,
+          size,
+          title: title?.length ? title : undefined,
+          type: finalType,
+          contentTypes: filters?.contentTypes,
+          tagIds: filters?.tagIds,
+          bookmarked: filters?.bookmarked,
+          isTemplate: filters?.isTemplate,
+          withTemplate: !filters?.isTemplate,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            arrayFormat: "repeat",
+          });
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    console.log("-------------------- data ------------------", data);
-    return data as IServerResult<ICategoryChildren>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const createCategory = async (
   access_token: string,
-  repoId: number | undefined,
-  parentId: number | null | undefined,
+  repoId: number,
+  parentId: number | null,
   name: string,
   description: string,
   order: number | null
@@ -1338,7 +1221,9 @@ export const getUserDocument = async (
     }
     const data = await response.json();
     console.log("-------------------- data ------------------", data);
-    return data as IServerResult<ICategoryChildren>;
+    return data as IServerResult<
+      IListResponse<ICategoryMetadata | IDocumentMetadata>
+    >;
   } catch (error) {
     console.log("============ error ==========", error);
   }
@@ -1482,7 +1367,7 @@ export const createDocument = async (
     imageUrl,
     order: order && order > 0 ? order : undefined,
     isTemplate,
-    publicKeyId
+    publicKeyId,
   };
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}/documents`, {
