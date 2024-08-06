@@ -182,3 +182,9 @@ export interface IGetToken {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface IActionError {
+  errorCode: number;
+  errorList: string[];
+  originalError?: string;
+}

@@ -4,6 +4,7 @@ import LoadMore from "@components/molecules/loadMore";
 import RepoKeyMenu from "@components/molecules/repoKeyMenu";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
+import Error from "@components/organisms/error";
 import RenderIf from "@components/renderIf";
 import useGetRepoPublicKeys from "@hooks/repository/useGetRepoPublicKeys";
 import { IPublicKey } from "@interface/repo.interface";
@@ -31,6 +32,9 @@ const RepoKeyList = ({
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
+    isError,
+    error,
+    refetch,
   } = useGetRepoPublicKeys(repoId, 10);
 
   const tableHead = hasAction
@@ -50,6 +54,10 @@ const RepoKeyList = ({
     if (!isSelectable) return;
     onSelect?.(keyItem);
   };
+
+  if (isError) {
+    return <Error error={error} retry={refetch} />;
+  }
 
   return isLoading ? (
     <div className="w-full h-full flex justify-center items-center my-2">

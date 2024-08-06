@@ -19,13 +19,15 @@ import {
   restoreRepository,
 } from "@service/clasor";
 import { getMe } from "./auth";
+import { handleActionError } from "@utils/error";
+import { IActionError } from "@interface/app.interface";
 
 export const getAllRepositoryList = async (
   offset: number,
   size: number,
   name?: string
 ) => {
-  const userInfo = (await getMe());
+  const userInfo = await getMe();
   try {
     const response = await getAllRepositories(
       userInfo.access_token,
@@ -46,7 +48,7 @@ export const getMyRepositoryList = async (
   archived: boolean,
   name?: string
 ) => {
-  const userInfo = (await getMe());
+  const userInfo = await getMe();
   try {
     const response = await getMyRepositories(
       userInfo.access_token,
@@ -234,7 +236,7 @@ export const getRepoKeysAction = async (
 
     return response;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleActionError(error as IActionError);
   }
 };
 
