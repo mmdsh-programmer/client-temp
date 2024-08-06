@@ -1025,65 +1025,52 @@ export const createCategory = async (
   description: string,
   order: number | null
 ) => {
-  const body = { parentId, name, description, order };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/categories`,
+    const response = await axiosClasorInstance.post<IServerResult<ICategory>>(
+      `repositories/${repoId}/categories`,
       {
-        method: "POST",
+        parentId,
+        name,
+        description,
+        order,
+      },
+      {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["create-category"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<ICategory>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const editCategory = async (
   access_token: string,
-  repoId: number | undefined,
-  categoryId: number | undefined | null,
+  repoId: number,
+  categoryId: number | null,
   // parentId: number | null,
   name: string,
   description: string,
   order: number | null,
   isHidden: boolean
 ) => {
-  const body = { name, description, order, isHidden };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/categories/${categoryId}`,
+    const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
+      `repositories/${repoId}/categories/${categoryId}`,
+      { name, description, order, isHidden },
       {
-        method: "PUT",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["edit-category"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<ICategory>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1094,98 +1081,68 @@ export const deleteCategory = async (
   forceDelete: boolean
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/categories/${categoryId}?forceDelete=${forceDelete}`,
+    const response = await axiosClasorInstance.delete<IServerResult<ICategory>>(
+      `repositories/${repoId}/categories/${categoryId}`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["deleteCategory"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          forceDelete,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<ICategory>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 //////////////////////// CONTENT ///////////////////////
 export const getContent = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   searchParam: string,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/publicContent/repository/${repoId}/search/${encodeURIComponent(searchParam)}?offset=${offset}&size=${size}`,
+    const response = await axiosClasorInstance.get<
+      IServerResult<IContentSearchResult>
+    >(
+      `publicContent/repository/${repoId}/search/${encodeURIComponent(searchParam)}`,
       {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getContent"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IContentSearchResult>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ////////////////////////////// REPORT ////////////////////
 export const getUserDocument = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   sortParams: ISortProps,
   offset: number,
   size: number,
   filters?: IReportFilter | null
 ) => {
-  const params = {
-    repoId,
-    repoType: "clasor",
-    offset: offset,
-    size,
-    title: filters?.title || undefined,
-    contentTypes: filters?.contentTypes,
-    tagIds: filters?.tagIds,
-    slug: filters?.slug || undefined,
-    bookmarked: filters?.bookmarked,
-    isTemplate: filters?.isTemplate,
-    withTemplate: !filters?.isTemplate,
-  };
-
-  const filteredParams = Object.entries(params).reduce(
-    (acc: any, [key, value]) => {
-      if (value !== undefined) {
-        acc[key] = value;
-      }
-      return acc;
-    },
-    {}
-  );
-
-  const queryString = new URLSearchParams(filteredParams).toString();
-
-  // &title=${title}&contentTypes=${filters?.contentTypes}&tagIds=${filters?.tagIds}&bookmarked=${filters?.bookmarked}&isTemplate=${filters?.isTemplate}&withTemplate=${!filters?.isTemplate}&type=${finalType}
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/categories/getChildren?${[
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
+    >(
+      `repositories/${repoId}/categories/getChildren?${[
         {
           field: "type",
           order: sortParams.type,
@@ -1206,279 +1163,228 @@ export const getUserDocument = async (
         .map((n) => {
           return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
         })
-        .join("&")}&offset=${offset}&size=${size}&${queryString}`,
+        .join("&")}`,
       {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getChildren"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          repoId,
+          repoType: "clasor",
+          title: filters?.title,
+          contentTypes: filters?.contentTypes,
+          tagIds: filters?.tagIds,
+          slug: filters?.slug,
+          bookmarked: filters?.bookmarked,
+          isTemplate: filters?.isTemplate,
+          withTemplate: !filters?.isTemplate,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            arrayFormat: "repeat",
+          });
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    console.log("-------------------- data ------------------", data);
-    return data as IServerResult<
-      IListResponse<ICategoryMetadata | IDocumentMetadata>
-    >;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 /////////////////////// BULK ////////////////////
 export const moveBulk = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   parentId: number | null,
   children: number[]
 ) => {
-  const body = {
-    parentId,
-    children,
-  };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/categories/moveChildren`,
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/categories/moveChildren`,
       {
-        method: "PATCH",
+        parentId,
+        children,
+      },
+      {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["move-bulk"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<any>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const deleteBulk = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   children: number[],
   forceDelete?: boolean
 ) => {
-  const body = {
-    children,
-  };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/categories/deleteChildren?forceDelete=${forceDelete}`,
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/categories/deleteChildren`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["delete-bulk"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          forceDelete,
+        },
+        data: { children },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<any>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ///////////////////////// DOCUMENT ///////////////////////
 export const getDocument = async (
   access_token: string,
-  repoId: number | undefined,
-  documentId?: number
+  repoId: number,
+  documentId: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/documents/${documentId}/info`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-        } as any,
-        next: { tags: ["getDocumentInfo"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IDocumentMetadata>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IDocumentMetadata>
+    >(`repositories/${repoId}/documents/${documentId}/info`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getClasorField = async (access_token: string) => {
   try {
-    const response = await fetch(`${CLASOR}/clasorFields`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IClasorField[]>
+    >(`clasorFields`, {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["getClasorFields"] },
+        Authorization: `Bearer ${access_token}`,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IClasorField[]>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const createDocument = async (
   access_token: string,
-  repoId: number | undefined,
-  categoryId: number | undefined,
+  repoId: number,
+  categoryId: number | null,
   title: string,
-  description: string | undefined,
   contentType: EDocumentTypes,
   isTemplate: boolean,
+  description?: string,
   order?: number,
   imageUrl?: string,
   publicKeyId?: string
 ) => {
-  const body = {
-    title,
-    contentType,
-    categoryId,
-    description,
-    imageUrl,
-    order: order && order > 0 ? order : undefined,
-    isTemplate,
-    publicKeyId,
-  };
   try {
-    const response = await fetch(`${CLASOR}/repositories/${repoId}/documents`, {
-      method: "POST",
-      headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-        "Content-Type": "application/json",
-      } as any,
-      body: JSON.stringify(body),
-      next: { tags: ["create-document"] },
-    });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IDocument>;
+    const response = await axiosClasorInstance.post<IServerResult<IDocument>>(
+      `repositories/${repoId}/documents`,
+      {
+        title,
+        contentType,
+        categoryId,
+        description,
+        imageUrl,
+        order: order && order > 0 ? order : undefined,
+        isTemplate,
+        publicKeyId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const createDocumentTemplate = async (
   access_token: string,
-  repoId: number | undefined,
-  categoryId: number | undefined,
+  repoId: number,
+  categoryId: number | null,
   title: string,
-  description: string | undefined,
   contentType: EDocumentTypes,
   versionNumber: string,
   templateId: number,
+  description?: string,
   order?: number,
   imageUrl?: string
 ) => {
-  const body = {
-    title,
-    contentType,
-    categoryId,
-    description,
-    imageUrl,
-    order,
-  };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/documents/withDraft/${versionNumber}/template/${templateId}`,
+    const response = await axiosClasorInstance.post<IServerResult<IDocument>>(
+      `repositories/${repoId}/documents/withDraft/${versionNumber}/template/${templateId}`,
       {
-        method: "POST",
+        title,
+        contentType,
+        categoryId,
+        description,
+        imageUrl,
+        order,
+      },
+      {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["create-document-template"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IDocument>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const editDocument = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   documentId: number,
   categoryId: number | null,
   title: string,
-  description: string | undefined,
   contentType: EDocumentTypes,
+  description?: string,
   order?: number | null,
   isHidden?: boolean,
   tagIds?: number[]
 ) => {
-  const body = {
-    categoryId,
-    title,
-    contentType,
-    order,
-    description,
-    isHidden,
-    tagIds,
-  };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/documents/${documentId}`,
+    const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
+      `repositories/${repoId}/documents/${documentId}`,
+      { categoryId, title, contentType, order, description, isHidden, tagIds },
       {
-        method: "PUT",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["edit-document"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IDocument>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1488,101 +1394,68 @@ export const deleteDocument = async (
   documentId: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/documents/${documentId}`,
+    const response = await axiosClasorInstance.delete<IServerResult<IDocument>>(
+      `repositories/${repoId}/documents/${documentId}`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["deleteDocument"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IDocument>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 ///////////////////// VERSION //////////////////
 export const createVersion = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   documentId: number,
   versionNumber: string,
   content: string,
   outline: string
 ) => {
-  const body = {
-    versionNumber,
-    content,
-    outline,
-  };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/documents/${documentId}/versions`,
+    const response = await axiosClasorInstance.post<IServerResult<IAddVersion>>(
+      `repositories/${repoId}/documents/${documentId}/versions`,
+      { versionNumber, content, outline },
       {
-        method: "POST",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["create-version"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<IAddVersion>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const createFileVersion = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   documentId: number,
   versionNumber: string,
   fileHash?: IFileVersion
 ) => {
-  const body = {
-    versionNumber,
-    fileHash,
-  };
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/documents/${documentId}/versions`,
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions`,
+      { versionNumber, fileHash },
       {
-        method: "POST",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify(body),
-        next: { tags: ["create-file-version"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<unknown>;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1597,31 +1470,28 @@ export const getResourceFiles = async (
   order?: string,
   dataType?: string
 ) => {
-  let baseUrl = name
-    ? `${CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}?offset=${offset}&size=${size}&name=${name}`
-    : `${CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}?offset=${offset}&size=${size}`;
-
   try {
-    const response = await fetch(`${baseUrl}`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<
+        IPodspaceResult<{
+          list: IFile[];
+          count: number;
+        }>
+      >
+    >(`fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`, {
       headers: {
-        _token_: access_token,
-        _token_issuer_: 1,
-        Authorization: "Bearer " + access_token,
-      } as any,
-      next: { tags: ["getRepositoryFiles"] },
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        name,
+      },
     });
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<
-      IPodspaceResult<{
-        list: IFile[];
-        count: number;
-      }>
-    >;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1632,27 +1502,21 @@ export const editFile = async (
   hash: string
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/fileManagement/resource/${resourceId}/rename/file/${hash}/newName/${newName}`,
+    const response = await axiosClasorInstance.patch(
+      `fileManagement/resource/${resourceId}/rename/file/${hash}/newName/${newName}`,
       {
-        method: "PATCH",
+        newName,
+      },
+      {
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        body: JSON.stringify({ newName }),
-        next: { tags: ["editFile"] },
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -1664,94 +1528,71 @@ export const deleteFile = async (
   type: "private" | "public"
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/files/resource/${resourceId}/fileHash/${fileHash}?type=${type}`,
+    const response = await axiosClasorInstance.delete(
+      `repositories/${repoId}/files/resource/${resourceId}/fileHash/${fileHash}`,
       {
-        method: "DELETE",
         headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["deleteFile"] },
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          type,
+        },
       }
     );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as any;
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 /////////////////////////// RELEASE DOCS //////////////////////////
 export const getPendingDrafts = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/repositories/${repoId}/getPendingDrafts?offset=${offset}&size=${size}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["pending-draft"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<{
-      list: IVersion[];
-      total: number;
-      offset: number;
-      size: number;
-    }>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IVersion>>
+    >(`repositories/${repoId}/getPendingDrafts`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
 export const getPendingVersion = async (
   access_token: string,
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
   try {
-    const response = await fetch(
-      `${CLASOR}/admin/${repoId}/getRepoPendingVersion?offset=${offset}&size=${size}`,
-      {
-        headers: {
-          _token_: access_token,
-          _token_issuer_: 1,
-          Authorization: "Bearer " + access_token,
-          "Content-Type": "application/json",
-        } as any,
-        next: { tags: ["pending-version"] },
-      }
-    );
-    if (!response.ok) {
-      throw new Error("خطا در شبکه");
-    }
-    const data = await response.json();
-    return data as IServerResult<{
-      list: IVersion[];
-      total: number;
-      offset: number;
-      size: number;
-    }>;
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IVersion>>
+    >(`admin/${repoId}/getRepoPendingVersion`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
-    console.log("============ error ==========", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };

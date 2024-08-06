@@ -8,7 +8,7 @@ const useCreateVersion = () => {
   return useMutation({
     mutationKey: ["createVersion"],
     mutationFn: async (values: {
-      repoId: number | undefined;
+      repoId: number;
       documentId: number;
       versionNumber: string;
       content: string;
@@ -23,7 +23,7 @@ const useCreateVersion = () => {
         content,
         outline
       );
-      return response?.data as IAddVersion;
+      return response as IAddVersion;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;

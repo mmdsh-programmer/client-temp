@@ -7,7 +7,7 @@ import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetUserDocument = (
-  repoId: number | undefined,
+  repoId: number,
   sortParams: ISortProps,
   size: number,
   filters?: IReportFilter | null,
@@ -23,7 +23,7 @@ const useGetUserDocument = (
         size,
         filters
       );
-      return response?.data as IListResponse<
+      return response as IListResponse<
         ICategoryMetadata | IDocumentMetadata
       >;
     },

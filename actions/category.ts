@@ -41,8 +41,8 @@ export const getChildrenAction = async (
 };
 
 export const editCategoryAction = async (
-  repoId: number | undefined,
-  categoryId: number | undefined | null,
+  repoId: number,
+  categoryId: number | null,
   name: string,
   description: string,
   order: number | null,
@@ -67,8 +67,8 @@ export const editCategoryAction = async (
 };
 
 export const createCategoryAction = async (
-  repoId: number | undefined,
-  parentId: number | undefined | null,
+  repoId: number,
+  parentId: number | null,
   name: string,
   description: string,
   order: number | null

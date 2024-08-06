@@ -50,7 +50,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
     if (!getRepo) return;
     createCategory.mutate({
       repoId: getRepo?.id,
-      parentId: getCategory?.id,
+      parentId: getCategory?.id || null,
       name: dataForm.name,
       description: dataForm?.description,
       order: null,
@@ -93,7 +93,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <TextareaAtom
             className="w-full"
             placeholder="توضیحات دسته بندی"
-            {...register("description")}
+            register={{ ...register("description") }}
           />
           {errors.description && (
             <WarningText>{errors.description?.message}</WarningText>

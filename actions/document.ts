@@ -25,10 +25,7 @@ export const getClasorFieldAction = async () => {
   }
 };
 
-export const getDocumentAction = async (
-  repoId?: number,
-  documentId?: number
-) => {
+export const getDocumentAction = async (repoId: number, documentId: number) => {
   const userInfo = await getMe();
   try {
     const response = await getDocument(
@@ -44,12 +41,12 @@ export const getDocumentAction = async (
 };
 
 export const createDocumentAction = async (
-  repoId: number | undefined,
-  categoryId: number | undefined,
+  repoId: number,
+  categoryId: number | null,
   title: string,
-  description: string | undefined,
   contentType: EDocumentTypes,
   isTemplate: boolean,
+  description?: string,
   order?: number,
   imageUrl?: string,
   publicKeyId?: string
@@ -61,9 +58,9 @@ export const createDocumentAction = async (
       repoId,
       categoryId,
       title,
-      description,
       contentType,
       isTemplate,
+      description,
       order,
       imageUrl,
       publicKeyId
@@ -76,13 +73,13 @@ export const createDocumentAction = async (
 };
 
 export const createDocumentTemplateAction = async (
-  repoId: number | undefined,
-  categoryId: number | undefined,
+  repoId: number,
+  categoryId: number | null,
   title: string,
-  description: string | undefined,
   contentType: EDocumentTypes,
   versionNumber: string,
   templateId: number,
+  description?: string,
   order?: number,
   imageUrl?: string
 ) => {
@@ -93,10 +90,10 @@ export const createDocumentTemplateAction = async (
       repoId,
       categoryId,
       title,
-      description,
       contentType,
       versionNumber,
       templateId,
+      description,
       order,
       imageUrl
     );
@@ -108,12 +105,12 @@ export const createDocumentTemplateAction = async (
 };
 
 export const editDocumentAction = async (
-  repoId: number | undefined,
+  repoId: number,
   documentId: number,
   categoryId: number | null,
   title: string,
-  description: string | undefined,
   contentType: EDocumentTypes,
+  description?: string,
   order?: number | null,
   isHidden?: boolean,
   tagIds?: number[]
@@ -126,8 +123,8 @@ export const editDocumentAction = async (
       documentId,
       categoryId,
       title,
-      description,
       contentType,
+      description,
       order,
       isHidden,
       tagIds
@@ -158,7 +155,7 @@ export const deleteDocumentAction = async (
 };
 
 export const getUserDocumentAction = async (
-  repoId: number | undefined,
+  repoId: number,
   sortParams: ISortProps,
   offset: number,
   size: number,

@@ -1,5 +1,4 @@
 import { getFileAction } from "@actions/files";
-import { IPodspaceResult } from "@interface/app.interface";
 import { IFile } from "@interface/file.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
@@ -25,7 +24,7 @@ const useGetFiles = (
         dataType
       );
 
-      return response?.data as {
+      return response?.result as {
         list: IFile[];
         count: number;
       };

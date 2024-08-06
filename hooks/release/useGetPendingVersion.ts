@@ -1,8 +1,9 @@
-import { getPendingDraftsAction, getPendingVersionAction } from "@actions/releaseDocs";
+import { getPendingVersionAction } from "@actions/releaseDocs";
+import { IListResponse } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetPendingVersion = (repoId: number | undefined, size: number) => {
+const useGetPendingVersion = (repoId: number, size: number) => {
   return useInfiniteQuery({
     queryKey: [`pending-version-${repoId}`],
     queryFn: async ({ signal, pageParam }) => {
@@ -11,12 +12,7 @@ const useGetPendingVersion = (repoId: number | undefined, size: number) => {
         (pageParam - 1) * size,
         size
       );
-      return response?.data as {
-        list: IVersion[];
-        total: number;
-        offset: number;
-        size: number;
-      };
+      return response as IListResponse<IVersion>;
     },
     initialPageParam: 1,
     retry: false,

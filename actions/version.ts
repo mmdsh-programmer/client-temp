@@ -5,7 +5,7 @@ import { getMe } from "./auth";
 import { IFileVersion } from "@interface/version.interface";
 
 export const createVersionAction = async (
-  repoId: number | undefined,
+  repoId: number,
   documentId: number,
   versionNumber: string,
   content: string,
@@ -29,7 +29,7 @@ export const createVersionAction = async (
 };
 
 export const createFileVersionAction = async (
-  repoId: number | undefined,
+  repoId: number,
   documentId: number,
   versionNumber: string,
   fileHash?: IFileVersion

@@ -9,8 +9,8 @@ const useEditCategory = () => {
     mutationKey: ["editCategory"],
     mutationFn: async (values: {
       repoId: number;
-      categoryId: number | undefined | null;
-      parentId: number | undefined | null;
+      categoryId: number | null;
+      parentId: number | null;
       name: string;
       description: string;
       order: number | null;
@@ -26,7 +26,7 @@ const useEditCategory = () => {
         order,
         isHidden
       );
-      return response?.data as ICategory;
+      return response as ICategory;
     },
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;

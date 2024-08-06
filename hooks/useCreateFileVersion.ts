@@ -1,5 +1,5 @@
 import { createFileVersionAction } from "@actions/version";
-import { IAddVersion, IFileVersion } from "@interface/version.interface";
+import { IFileVersion } from "@interface/version.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -8,7 +8,7 @@ const useCreateFileVersion = () => {
   return useMutation({
     mutationKey: ["createFileVersion"],
     mutationFn: async (values: {
-      repoId: number | undefined;
+      repoId: number;
       documentId: number;
       versionNumber: string;
       fileHash?: IFileVersion;
@@ -21,7 +21,7 @@ const useCreateFileVersion = () => {
         versionNumber,
         fileHash,
       );
-      return response?.data as unknown;
+      return response;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;

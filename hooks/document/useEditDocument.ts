@@ -9,12 +9,12 @@ const useEditDocument = () => {
   return useMutation({
     mutationKey: ["editDocument"],
     mutationFn: async (values: {
-      repoId: number | undefined;
+      repoId: number;
       documentId: number;
       categoryId: number | null;
       title: string;
-      description: string | undefined;
       contentType: EDocumentTypes;
+      description?: string;
       order?: number | null;
       isHidden?: boolean;
       tagIds?: number[];
@@ -36,13 +36,13 @@ const useEditDocument = () => {
         documentId,
         categoryId,
         title,
-        description,
         contentType,
+        description,
         order,
         isHidden,
         tagIds
       );
-      return response?.data as IDocument;
+      return response as IDocument;
     },
     onSuccess: (response, values) => {
       const { callBack, categoryId } = values;
