@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateKeySchema } from "../validation.yup";
 import Label from "@components/atoms/typograghy/label";
-import InputAtom from "@components/atoms/input";
 import WarningText from "@components/atoms/typograghy/warningText";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import ButtonAtom from "@components/atoms/button";
 import forge from "node-forge";
 import copy from "copy-to-clipboard";
 import Text from "@components/atoms/typograghy/text";
+import FormInput from "@components/atoms/input/formInput";
 
 interface IProps {
   repoId: number;
@@ -35,6 +35,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   const { register, handleSubmit, formState, reset, clearErrors, setValue } =
     form;
   const { errors } = formState;
+  console.log(errors)
 
   const handleClose = () => {
     reset();
@@ -101,7 +102,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
     >
       <form className="flex flex-col gap-2">
         <Label labelFor="repo-key-name">نام کلید</Label>
-        <InputAtom
+        <FormInput
           id="repo-key-name"
           className="w-full"
           placeholder="نام کلید"

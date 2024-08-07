@@ -4,12 +4,14 @@ import { Input } from "@material-tailwind/react";
 interface IProps {
   className?: string;
   placeholder?: string;
+  register?: any;
   [key: string]: any;
 }
 
 const InputAtom = ({
   className,
   placeholder,
+  register,
   ...restProps
 }: IProps) => {
   return (
@@ -24,6 +26,7 @@ const InputAtom = ({
       type="text"
       placeholder={placeholder}
       {...restProps}
+      {...register}
       className={`${className || ""}
       flex items-center !min-w-0 
       !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
