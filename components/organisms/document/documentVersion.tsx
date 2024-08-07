@@ -125,6 +125,12 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     }
   };
 
+  const isLoading =
+    createDocFromTemplateHook.isPending ||
+    createDocumentHook.isPending ||
+    createVersionHook.isPending ||
+    createFileVersionHook.isPending;
+
   return (
     <>
       <DialogBody
@@ -155,6 +161,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         <LoadingButton
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
+          loading={isLoading}
         >
           <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
             ایجاد
