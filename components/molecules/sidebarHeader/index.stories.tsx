@@ -20,16 +20,14 @@ type Story = StoryObj<typeof SiderbarHeader>;
 
 export const ArchiveFolder: Story = {
   args: {
-    classNameCard: "flex justify-between items-center p-2 rounded-md bg-tertiary w-[215px] border-2 border-gray-200",
+    classNameCard:
+      "flex justify-between items-center p-2 rounded-md bg-tertiary w-[215px] border-2 border-gray-200",
     classNameTitle: "text-primary font-medium text-sm",
   },
   render: function Render(args) {
     return (
       <div dir="rtl">
-      <SiderbarHeader
-        {...args}
-        title="کلاسور"
-      />
+        <SiderbarHeader />
       </div>
     );
   },

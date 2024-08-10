@@ -1,5 +1,6 @@
 import type { Preview } from "@storybook/react";
-import "../app/styles/tailwind-output.css";
+import "../styles/tailwind-output.css";
+import "../styles/globals.css";
 
 import { withThemeByClassName } from "@storybook/addon-themes";
 
@@ -20,7 +21,8 @@ const preview: Preview = {
           dark: 'dark',
       },
       defaultTheme: 'light',
-  })]
+  }),
+]
 };
 
 export default preview;

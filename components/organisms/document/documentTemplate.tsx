@@ -1,10 +1,8 @@
 import React from "react";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { DialogBody, DialogFooter } from "@material-tailwind/react";
-import Label from "@components/atoms/typograghy/label";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import Text from "@components/atoms/typograghy/text";
 import DocumentTemplateTree from "./documentTemplateTree";
 
 const DocumentTemplate = () => {
@@ -16,7 +14,7 @@ const DocumentTemplate = () => {
         className="flex-grow px-5 py-3 xs:p-6 "
       >
         <div className="flex flex-col gap-2">
-          <Label>انتخاب نمونه سند</Label>
+          <Typography className="label">انتخاب نمونه سند</Typography>
           <DocumentTemplateTree />
         </div>
       </DialogBody>
@@ -31,9 +29,9 @@ const DocumentTemplate = () => {
             handleNextStep();
           }}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

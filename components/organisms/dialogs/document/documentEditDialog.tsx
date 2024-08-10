@@ -3,15 +3,14 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import Label from "@components/atoms/typograghy/label";
-import WarningText from "@components/atoms/typograghy/warningText";
 import EditDialog from "@components/templates/dialog/editDialog";
 import useEditCategory from "@hooks/category/useEditCategory";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import NumberInput from "@components/atoms/input/numberInput";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { selectedDocumentAtom } from "@atom/document";
 import FormInput from "@components/atoms/input/formInput";
+import InputAtom from "@components/atoms/input";
+import { Typography } from "@material-tailwind/react";
 
 interface IForm {
   id?: number;
@@ -27,7 +26,7 @@ interface IProps {
 
 const DocumentEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom)
+  const document = useRecoilValue(selectedDocumentAtom);
   const editDocument = useEditDocument();
 
   const editCategory = useEditCategory();
@@ -79,7 +78,6 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
     });
   };
 
-
   return (
     <EditDialog
       isPending={editCategory.isPending}
@@ -90,9 +88,8 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Label>نام سند</Label>
+          <Typography className="label">نام سند</Typography>
           <FormInput
-            className="w-full"
             placeholder="نام سند"
             register={{
               ...register("name", {
@@ -100,12 +97,17 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
               }),
             }}
           />
-          {errors.name && <WarningText>{errors.name?.message}</WarningText>}
+          {errors.name && (
+            <Typography className="warning_text">
+              {errors.name?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label>اولویت سند </Label>
-          <NumberInput
-            className="w-full"
+          <Typography className="label">اولویت سند </Typography>
+          <FormInput
+            type="number"
+            min={0}
             placeholder="اولویت سند"
             register={{
               ...register("order", {
@@ -113,19 +115,24 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
               }),
             }}
           />
-          {errors.order && <WarningText>{errors.order?.message}</WarningText>}
+          {errors.order && (
+            <Typography className="warning_text">
+              {errors.order?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label>توضیحات سند</Label>
+          <Typography className="label">توضیحات سند</Typography>
           <TextareaAtom
-            className="w-full"
             placeholder="توضیحات سند"
             register={{
               ...register("description", { value: document?.description }),
             }}
           />
           {errors.description && (
-            <WarningText>{errors.description?.message}</WarningText>
+            <Typography className="warning_text">
+              {errors.description?.message}
+            </Typography>
           )}
         </div>
       </form>

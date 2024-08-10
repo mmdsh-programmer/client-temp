@@ -5,13 +5,14 @@ import { BackIcon } from "../icons";
 interface IProps {
   onClick: () => void;
   disabled?: boolean;
+  className?: string;
 }
 
-const BackButton = ({ onClick, disabled }: IProps) => {
+const BackButton = ({ onClick, disabled, className }: IProps) => {
   return (
     <Button
       placeholder="back button"
-      className="bg-transparent shadow-none hover:shadow-none outline-none p-3"
+      className={`${className || ""} bg-transparent shadow-none hover:shadow-none outline-none p-3`}
       onClick={onClick}
       disabled={disabled}
     >

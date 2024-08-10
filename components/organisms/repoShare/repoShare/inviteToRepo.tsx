@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import useAddUser from "@hooks/user/useAddUser";
@@ -7,11 +7,8 @@ import useGetRoles from "@hooks/user/useGetRoles";
 import { translateRoles } from "@utils/index";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
-import Label from "@components/atoms/typograghy/label";
 import InputAtom from "@components/atoms/input";
 import { ERoles } from "@interface/enums";
-import Text from "@components/atoms/typograghy/text";
-import WarningText from "@components/atoms/typograghy/warningText";
 import LoadingButton from "@components/molecules/loadingButton";
 import SelectAtom from "@components/molecules/select";
 
@@ -75,7 +72,7 @@ const InviteToRepo = () => {
     <form className="pb-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-3 my-4">
         <div className="flex flex-col gap-2">
-          <Label labelFor="username"> اشتراک گذاری با </Label>
+          <Typography className="label"> اشتراک گذاری با </Typography>
           <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
             <InputAtom
               id="username"
@@ -95,19 +92,19 @@ const InviteToRepo = () => {
               onClick={handleSubmit(onSubmit)}
               className="!h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
             >
-              <Text className="!text-primary px-3 font-medium text-[13px] leading-[18px] -tracking-[0.12px]">
+              <Typography className="text__label__button !text-primary px-3 font-medium">
                 دعوت
-              </Text>
+              </Typography>
             </LoadingButton>
           </div>
         </div>
         {errors.username && (
-          <WarningText>{errors.username?.message}</WarningText>
+          <Typography className="warning_text">{errors.username?.message}</Typography>
         )}
-        <Text className="text-placeholder text-[11px] leading-[18px] -tracking-[0.11px] ">
+        <Typography className="caption_c2 text-placeholder">
           برای اشتراک‌گذاری با سایر کاربران، نام کاربری و سطوح دسترسی مورد نظر
           را در این قسمت وارد کنید.
-        </Text>
+        </Typography>
       </div>
       <div className="border-b-[1px] bg-gray-200 w-full" />
     </form>

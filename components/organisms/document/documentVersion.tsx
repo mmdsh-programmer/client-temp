@@ -1,6 +1,6 @@
 import React from "react";
 import { EDocumentTypes } from "@interface/enums";
-import { DialogBody, DialogFooter } from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
@@ -18,12 +18,9 @@ import useCreateVersion from "@hooks/useCreateVersion";
 import useCreateFileVersion from "@hooks/useCreateFileVersion";
 import useCreateDocumentTemplate from "@hooks/document/useCreateDocumentTemplate";
 import { IDocument } from "@interface/document.interface";
-import Label from "@components/atoms/typograghy/label";
 import FormInput from "@components/atoms/input/formInput";
-import WarningText from "@components/atoms/typograghy/warningText";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import Text from "@components/atoms/typograghy/text";
 
 interface IProps {
   isTemplate: boolean;
@@ -133,7 +130,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
       >
         <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
-            <Label>نام نسخه</Label>
+            <Typography className="label">نام نسخه</Typography>
             <FormInput
               className="w-full"
               placeholder="نام نسخه"
@@ -142,7 +139,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               }}
             />
             {errors.versionNumber && (
-              <WarningText>{errors.versionNumber?.message}</WarningText>
+              <Typography className="warning_text">{errors.versionNumber?.message}</Typography>
             )}
           </div>
         </form>
@@ -156,9 +153,9 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text-Typography-button text-white">
             ایجاد
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

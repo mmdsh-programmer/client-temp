@@ -9,10 +9,12 @@ const useCreateGroup = () => {
     mutationFn: async (values: {
       repoId: number;
       title: string;
+      description?: string;
+      members?: string[];
       callBack?: () => void;
     }) => {
-      const { title, repoId } = values;
-      const response = await createGroupAction(repoId, title);
+      const { title, repoId, description, members } = values;
+      const response = await createGroupAction(repoId, title, description, members);
       return response;
     },
     onSuccess: (response, values) => {

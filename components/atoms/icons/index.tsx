@@ -328,6 +328,20 @@ export const ClasorLogo = (props: IProps) => {
   );
 };
 
+export const CopyIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 17 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M14.8333 17.4999H5.66666V5.83325H14.8333V17.4999ZM14.8333 4.16659H5.66666C5.22463 4.16659 4.80071 4.34218 4.48815 4.65474C4.17558 4.9673 3.99999 5.39122 3.99999 5.83325V17.4999C3.99999 17.9419 4.17558 18.3659 4.48815 18.6784C4.80071 18.991 5.22463 19.1666 5.66666 19.1666H14.8333C15.2754 19.1666 15.6993 18.991 16.0118 18.6784C16.3244 18.3659 16.5 17.9419 16.5 17.4999V5.83325C16.5 5.39122 16.3244 4.9673 16.0118 4.65474C15.6993 4.34218 15.2754 4.16659 14.8333 4.16659V4.16659ZM12.3333 0.833252H2.33332C1.8913 0.833252 1.46737 1.00885 1.15481 1.32141C0.842251 1.63397 0.666656 2.05789 0.666656 2.49992V14.1666H2.33332V2.49992H12.3333V0.833252Z" />
+    </svg>
+  );
+};
+
 export const DashboardIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
@@ -440,20 +454,6 @@ export const DeleteIcon = (props: IProps) => {
         d="M6.74748 8.99875C6.74748 8.58454 6.4117 8.24875 5.99748 8.24875C5.58327 8.24875 5.24748 8.58454 5.24748 8.99875H6.74748ZM18.7525 8.99875C18.7525 8.58454 18.4167 8.24875 18.0025 8.24875C17.5883 8.24875 17.2525 8.58454 17.2525 8.99875H18.7525ZM14.7508 9.99917C14.7508 9.58495 14.415 9.24917 14.0008 9.24917C13.5866 9.24917 13.2508 9.58495 13.2508 9.99917H14.7508ZM13.2508 17.0021C13.2508 17.4163 13.5866 17.7521 14.0008 17.7521C14.415 17.7521 14.7508 17.4163 14.7508 17.0021H13.2508ZM10.7491 9.99917C10.7491 9.58495 10.4134 9.24917 9.99915 9.24917C9.58493 9.24917 9.24915 9.58495 9.24915 9.99917H10.7491ZM9.24915 17.0021C9.24915 17.4163 9.58493 17.7521 9.99915 17.7521C10.4134 17.7521 10.7491 17.4163 10.7491 17.0021H9.24915ZM4.49686 5.2475C4.08264 5.2475 3.74686 5.58329 3.74686 5.9975C3.74686 6.41171 4.08264 6.7475 4.49686 6.7475V5.2475ZM19.5031 6.7475C19.9173 6.7475 20.2531 6.41171 20.2531 5.9975C20.2531 5.58329 19.9173 5.2475 19.5031 5.2475V6.7475ZM7.2868 5.76033C7.15582 6.15328 7.36819 6.57802 7.76114 6.70901C8.1541 6.84 8.57884 6.62763 8.70983 6.23467L7.2868 5.76033ZM8.54254 4.36482L9.25405 4.60199L9.25411 4.60182L8.54254 4.36482ZM10.4413 2.99625L10.4412 3.74625H10.4413V2.99625ZM13.5586 2.99625V3.74625L13.5596 3.74625L13.5586 2.99625ZM15.4594 4.36482L16.1712 4.12843L16.171 4.12782L15.4594 4.36482ZM15.2899 6.23388C15.4204 6.62699 15.8449 6.83982 16.238 6.70927C16.6311 6.57872 16.844 6.15421 16.7134 5.76111L15.2899 6.23388ZM5.24748 8.99875V19.0029H6.74748V8.99875H5.24748ZM5.24748 19.0029C5.24748 20.5222 6.47907 21.7537 7.99831 21.7537V20.2537C7.3075 20.2537 6.74748 19.6937 6.74748 19.0029H5.24748ZM7.99831 21.7537H16.0016V20.2537H7.99831V21.7537ZM16.0016 21.7537C17.5209 21.7537 18.7525 20.5222 18.7525 19.0029H17.2525C17.2525 19.6937 16.6925 20.2537 16.0016 20.2537V21.7537ZM18.7525 19.0029V8.99875H17.2525V19.0029H18.7525ZM13.2508 9.99917V17.0021H14.7508V9.99917H13.2508ZM9.24915 9.99917V17.0021H10.7491V9.99917H9.24915ZM4.49686 6.7475H19.5031V5.2475H4.49686V6.7475ZM8.70983 6.23467L9.25405 4.60199L7.83103 4.12765L7.2868 5.76033L8.70983 6.23467ZM9.25411 4.60182C9.42431 4.0908 9.90253 3.74612 10.4412 3.74625L10.4415 2.24625C9.25698 2.24596 8.20528 3.00399 7.83097 4.12782L9.25411 4.60182ZM10.4413 3.74625H13.5586V2.24625H10.4413V3.74625ZM13.5596 3.74625C14.0986 3.74558 14.5775 4.09036 14.7479 4.60182L16.171 4.12782C15.7964 3.00303 14.7432 2.24478 13.5577 2.24625L13.5596 3.74625ZM14.7476 4.60121L15.2899 6.23388L16.7134 5.76111L16.1712 4.12843L14.7476 4.60121Z"
         fill="#1B1B1D"
       />
-    </svg>
-  );
-};
-
-export const CopyIcon = (props: IProps) => {
-  const { className } = props;
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 17 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path d="M14.8333 17.4999H5.66666V5.83325H14.8333V17.4999ZM14.8333 4.16659H5.66666C5.22463 4.16659 4.80071 4.34218 4.48815 4.65474C4.17558 4.9673 3.99999 5.39122 3.99999 5.83325V17.4999C3.99999 17.9419 4.17558 18.3659 4.48815 18.6784C4.80071 18.991 5.22463 19.1666 5.66666 19.1666H14.8333C15.2754 19.1666 15.6993 18.991 16.0118 18.6784C16.3244 18.3659 16.5 17.9419 16.5 17.4999V5.83325C16.5 5.39122 16.3244 4.9673 16.0118 4.65474C15.6993 4.34218 15.2754 4.16659 14.8333 4.16659V4.16659ZM12.3333 0.833252H2.33332C1.8913 0.833252 1.46737 1.00885 1.15481 1.32141C0.842251 1.63397 0.666656 2.05789 0.666656 2.49992V14.1666H2.33332V2.49992H12.3333V0.833252Z" />
     </svg>
   );
 };
@@ -1032,8 +1032,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           <path
             d="M81.5117 75.2625C82.6992 68.425 85.9617 63.075 90.3992 58.975C94.6742 55.025 103.124 50.1375 106.599 56.6125C108.987 61.0625 106.274 69.2125 101.699 69.5625C97.3867 69.8875 92.6867 54.125 98.4242 44.2375C99.3867 42.575 101.024 40.625 102.674 39.0625"
             stroke="#B096D6"
-            stroke-miterlimit="10"
-            stroke-linecap="round"
+            strokeMiterlimit="10"
+            strokeLinecap="round"
             stroke-dasharray="2 3"
           />
           <path
@@ -1050,9 +1050,9 @@ export const FolderEmptyIcon = (props: IProps) => {
           width="153.762"
           height="137.562"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -1071,9 +1071,9 @@ export const FolderEmptyIcon = (props: IProps) => {
           width="63.1992"
           height="21.2625"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -1093,8 +1093,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           y2="15.4875"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="#E9E2F2" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="#E9E2F2" />
         </linearGradient>
         <radialGradient
           id="paint1_radial_2129_98472"
@@ -1104,8 +1104,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(98.6648 104.018) scale(81.9695 31.405)"
         >
-          <stop offset="0.189313" stop-color="#BBA7DB" />
-          <stop offset="1" stop-color="white" stop-opacity="0" />
+          <stop offset="0.189313" stopColor="#BBA7DB" />
+          <stop offset="1" stopColor="white" stop-opacity="0" />
         </radialGradient>
         <linearGradient
           id="paint2_linear_2129_98472"
@@ -1115,8 +1115,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           y2="76.9003"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B49ED8" />
-          <stop offset="1" stop-color="#B49ED8" stop-opacity="0" />
+          <stop stopColor="#B49ED8" />
+          <stop offset="1" stopColor="#B49ED8" stop-opacity="0" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_2129_98472"
@@ -1126,8 +1126,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           y2="77.5877"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#B49ED8" stop-opacity="0" />
-          <stop offset="1" stop-color="#B49ED8" />
+          <stop stopColor="#B49ED8" stop-opacity="0" />
+          <stop offset="1" stopColor="#B49ED8" />
         </linearGradient>
         <radialGradient
           id="paint4_radial_2129_98472"
@@ -1137,8 +1137,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(118.037 50.1253) scale(22.2125 22.2125)"
         >
-          <stop offset="0.18" stop-color="#E9E2F2" />
-          <stop offset="0.77" stop-color="white" />
+          <stop offset="0.18" stopColor="#E9E2F2" />
+          <stop offset="0.77" stopColor="white" />
         </radialGradient>
         <linearGradient
           id="paint5_linear_2129_98472"
@@ -1148,8 +1148,8 @@ export const FolderEmptyIcon = (props: IProps) => {
           y2="55.3128"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#DCD3EA" />
-          <stop offset="1" stop-color="#CBBDE0" />
+          <stop stopColor="#DCD3EA" />
+          <stop offset="1" stopColor="#CBBDE0" />
         </linearGradient>
         <clipPath id="clip0_2129_98472">
           <rect width="200" height="150" fill="white" />
@@ -1686,6 +1686,61 @@ export const PlusIcon = (props: IProps) => {
   );
 };
 
+export const PublishIcon = (props: IProps) => {
+  const { className, stroke } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M13 21H5.25C4.007 21 3 19.993 3 18.75V8.14C3 7.836 3.062 7.535 3.181 7.256L4.416 4.366C4.771 3.538 5.584 3 6.485 3H17.514C18.415 3 19.229 3.538 19.583 4.366L20.818 7.256C20.938 7.536 21 7.836 21 8.14V12"
+        stroke={stroke}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M19.0039 16L21.0047 18.0008L19.0039 20.0017"
+        stroke={stroke}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M21.0025 18.0012H15"
+        stroke={stroke}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12 3V7.995"
+        stroke={stroke}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M20.989 8H3"
+        stroke={stroke}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M6 17H8"
+        stroke={stroke}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
+
 export const QuestionIcon = (props: IProps) => {
   const { className } = props;
   return (
@@ -1724,361 +1779,6 @@ export const RepoIcon = (props: IProps) => {
   return (
     <svg
       className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 160 130"
-      fill="none"
-    >
-      <g id="Frame">
-        <g id="Group 811520">
-          <path
-            id="Vector"
-            d="M20.846 21.8466C20.8246 21.0701 20.9589 20.2972 21.241 19.5735C21.5231 18.8497 21.9473 18.1898 22.4886 17.6327C23.0299 17.0755 23.6773 16.6324 24.3926 16.3295C25.1078 16.0266 25.8765 15.87 26.6533 15.869H55.5161C56.6396 15.869 57.7336 16.2162 58.654 16.8615L70.0982 24.9026C71.0153 25.5478 72.1126 25.895 73.236 25.895H133.3C136.582 25.895 139.216 28.6103 139.114 31.889L136.897 103.548C136.809 106.383 135.621 109.073 133.585 111.048C131.548 113.023 128.823 114.127 125.986 114.128H34.023C31.1802 114.128 28.4495 113.019 26.4114 111.038C24.3733 109.056 23.1887 106.357 23.1093 103.515L20.8428 21.8433L20.846 21.8466Z"
-            fill="url(#paint0_linear_624_104765)"
-          />
-          <g id="Group" filter="url(#filter0_d_624_104765)">
-            <path
-              id="Vector_2"
-              d="M15.2219 47.7025C15.1291 46.5745 15.2711 45.4396 15.639 44.3693C16.0069 43.299 16.5927 42.3166 17.3593 41.4841C18.126 40.6515 19.0569 39.987 20.0933 39.5323C21.1298 39.0777 22.2492 38.8428 23.3809 38.8425H136.618C137.75 38.8428 138.869 39.0777 139.906 39.5323C140.942 39.987 141.873 40.6515 142.64 41.4841C143.406 42.3166 143.992 43.299 144.36 44.3693C144.728 45.4396 144.87 46.5745 144.777 47.7025L140.136 104.108C139.911 106.84 138.668 109.387 136.652 111.243C134.636 113.1 131.996 114.131 129.255 114.131H30.744C28.0034 114.131 25.3629 113.1 23.3471 111.243C21.3313 109.387 20.0876 106.84 19.8632 104.108L15.2219 47.7025Z"
-              fill="url(#paint1_linear_624_104765)"
-            />
-          </g>
-          <path
-            id="Vector_3"
-            opacity="0.5"
-            d="M64.9791 54.1814H34.9732C32.7066 54.1814 30.8691 56.0189 30.8691 58.2855V58.2887C30.8691 60.5554 32.7066 62.3928 34.9732 62.3928H64.9791C67.2458 62.3928 69.0832 60.5554 69.0832 58.2887V58.2855C69.0832 56.0189 67.2458 54.1814 64.9791 54.1814Z"
-            fill="#EBC350"
-          />
-        </g>
-      </g>
-      <defs>
-        <filter
-          id="filter0_d_624_104765"
-          x="15.1943"
-          y="38.8425"
-          width="129.61"
-          height="75.8714"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dy="0.583021" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_624_104765"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_624_104765"
-            result="shape"
-          />
-        </filter>
-        <linearGradient
-          id="paint0_linear_624_104765"
-          x1="89.9995"
-          y1="15.869"
-          x2="89.9995"
-          y2="114.128"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#FFCA41" />
-          <stop offset="1" stopColor="#FFAB5E" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_624_104765"
-          x1="21.9856"
-          y1="33.3661"
-          x2="155.946"
-          y2="113.017"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor="#FFDF7D" />
-          <stop offset="1" stopColor="#FFDA86" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-};
-
-export const RepoPurpleIcon = (props: IProps) => {
-  const { className } = props;
-  return (
-    <svg
-      width="58"
-      height="47"
-      viewBox="0 0 58 47"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
-        fill="url(#paint0_linear_624_87506)"
-      />
-      <g filter="url(#filter0_d_624_87506)">
-        <path
-          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
-          fill="url(#paint1_linear_624_87506)"
-        />
-      </g>
-      <path
-        opacity="0.5"
-        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
-        fill="#9E50EB"
-      />
-      <defs>
-        <filter
-          id="filter0_d_624_87506"
-          x="1.1875"
-          y="12.2739"
-          width="55.6252"
-          height="32.562"
-          filterUnits="userSpaceOnUse"
-          colorInterpolationFilters="sRGB"
-        >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dy="0.250217" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_624_87506"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_624_87506"
-            result="shape"
-          />
-        </filter>
-        <linearGradient
-          id="paint0_linear_624_87506"
-          x1="33.2918"
-          y1="2.41455"
-          x2="33.2918"
-          y2="44.5846"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#BA75FF" />
-          <stop offset="1" stop-color="#8000FF" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_624_87506"
-          x1="4.10214"
-          y1="9.92357"
-          x2="61.5944"
-          y2="44.1077"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#BE7DFF" />
-          <stop offset="1" stop-color="#C386FF" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-};
-
-export const RepoRedIcon = (props: IProps) => {
-  const { className } = props;
-  return (
-    <svg
-      width="58"
-      height="47"
-      viewBox="0 0 58 47"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
-        fill="url(#paint0_linear_624_87497)"
-      />
-      <g filter="url(#filter0_d_624_87497)">
-        <path
-          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
-          fill="url(#paint1_linear_624_87497)"
-        />
-      </g>
-      <path
-        opacity="0.5"
-        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
-        fill="#EB5050"
-      />
-      <defs>
-        <filter
-          id="filter0_d_624_87497"
-          x="1.1875"
-          y="12.2739"
-          width="55.6252"
-          height="32.562"
-          filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
-        >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dy="0.250217" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_624_87497"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_624_87497"
-            result="shape"
-          />
-        </filter>
-        <linearGradient
-          id="paint0_linear_624_87497"
-          x1="33.2918"
-          y1="2.41455"
-          x2="33.2918"
-          y2="44.5846"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#FF6B6B" />
-          <stop offset="1" stop-color="#CC0000" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_624_87497"
-          x1="4.10214"
-          y1="9.92357"
-          x2="61.5944"
-          y2="44.1077"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#FF7D7D" />
-          <stop offset="1" stop-color="#FF8686" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-};
-
-export const RepoBlueIcon = (props: IProps) => {
-  const { className } = props;
-  return (
-    <svg
-      width="58"
-      height="47"
-      viewBox="0 0 58 47"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
-        fill="url(#paint0_linear_624_87489)"
-      />
-      <g filter="url(#filter0_d_624_87489)">
-        <path
-          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
-          fill="url(#paint1_linear_624_87489)"
-        />
-      </g>
-      <path
-        opacity="0.5"
-        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
-        fill="#3A94E9"
-      />
-      <defs>
-        <filter
-          id="filter0_d_624_87489"
-          x="1.1875"
-          y="12.2739"
-          width="55.6252"
-          height="32.562"
-          filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
-        >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
-          <feColorMatrix
-            in="SourceAlpha"
-            type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-            result="hardAlpha"
-          />
-          <feOffset dy="0.250217" />
-          <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_624_87489"
-          />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="effect1_dropShadow_624_87489"
-            result="shape"
-          />
-        </filter>
-        <linearGradient
-          id="paint0_linear_624_87489"
-          x1="33.2918"
-          y1="2.41455"
-          x2="33.2918"
-          y2="44.5846"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#42A4FF" />
-          <stop offset="1" stop-color="#0069CC" />
-        </linearGradient>
-        <linearGradient
-          id="paint1_linear_624_87489"
-          x1="4.10214"
-          y1="9.92357"
-          x2="61.5944"
-          y2="44.1077"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stop-color="#7DC0FF" />
-          <stop offset="1" stop-color="#4DA9FF" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-};
-
-export const RepoYellowIcon = (props: IProps) => {
-  const { className } = props;
-  return (
-    <svg
-      width="58"
-      height="47"
       viewBox="0 0 58 47"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -2106,9 +1806,9 @@ export const RepoYellowIcon = (props: IProps) => {
           width="55.6252"
           height="32.562"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -2141,8 +1841,8 @@ export const RepoYellowIcon = (props: IProps) => {
           y2="44.5846"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFCA41" />
-          <stop offset="1" stop-color="#FFAB5E" />
+          <stop stopColor="#FFCA41" />
+          <stop offset="1" stopColor="#FFAB5E" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_624_87481"
@@ -2152,8 +1852,352 @@ export const RepoYellowIcon = (props: IProps) => {
           y2="44.1077"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#FFDF7D" />
-          <stop offset="1" stop-color="#FFDA86" />
+          <stop stopColor="#FFDF7D" />
+          <stop offset="1" stopColor="#FFDA86" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+export const RepoPurpleIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 58 47"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
+        fill="url(#paint0_linear_624_87506)"
+      />
+      <g filter="url(#filter0_d_624_87506)">
+        <path
+          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
+          fill="url(#paint1_linear_624_87506)"
+        />
+      </g>
+      <path
+        opacity="0.5"
+        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
+        fill="#9E50EB"
+      />
+      <defs>
+        <filter
+          id="filter0_d_624_87506"
+          x="1.1875"
+          y="12.2739"
+          width="55.6252"
+          height="32.562"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="0.250217" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_624_87506"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_624_87506"
+            result="shape"
+          />
+        </filter>
+        <linearGradient
+          id="paint0_linear_624_87506"
+          x1="33.2918"
+          y1="2.41455"
+          x2="33.2918"
+          y2="44.5846"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#BA75FF" />
+          <stop offset="1" stopColor="#8000FF" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_624_87506"
+          x1="4.10214"
+          y1="9.92357"
+          x2="61.5944"
+          y2="44.1077"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#BE7DFF" />
+          <stop offset="1" stopColor="#C386FF" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+export const RepoRedIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 58 47"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
+        fill="url(#paint0_linear_624_87497)"
+      />
+      <g filter="url(#filter0_d_624_87497)">
+        <path
+          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
+          fill="url(#paint1_linear_624_87497)"
+        />
+      </g>
+      <path
+        opacity="0.5"
+        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
+        fill="#EB5050"
+      />
+      <defs>
+        <filter
+          id="filter0_d_624_87497"
+          x="1.1875"
+          y="12.2739"
+          width="55.6252"
+          height="32.562"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="0.250217" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_624_87497"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_624_87497"
+            result="shape"
+          />
+        </filter>
+        <linearGradient
+          id="paint0_linear_624_87497"
+          x1="33.2918"
+          y1="2.41455"
+          x2="33.2918"
+          y2="44.5846"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#FF6B6B" />
+          <stop offset="1" stopColor="#CC0000" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_624_87497"
+          x1="4.10214"
+          y1="9.92357"
+          x2="61.5944"
+          y2="44.1077"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#FF7D7D" />
+          <stop offset="1" stopColor="#FF8686" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+export const RepoBlueIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 58 47"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
+        fill="url(#paint0_linear_624_87489)"
+      />
+      <g filter="url(#filter0_d_624_87489)">
+        <path
+          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
+          fill="url(#paint1_linear_624_87489)"
+        />
+      </g>
+      <path
+        opacity="0.5"
+        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
+        fill="#3A94E9"
+      />
+      <defs>
+        <filter
+          id="filter0_d_624_87489"
+          x="1.1875"
+          y="12.2739"
+          width="55.6252"
+          height="32.562"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="0.250217" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_624_87489"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_624_87489"
+            result="shape"
+          />
+        </filter>
+        <linearGradient
+          id="paint0_linear_624_87489"
+          x1="33.2918"
+          y1="2.41455"
+          x2="33.2918"
+          y2="44.5846"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#42A4FF" />
+          <stop offset="1" stopColor="#0069CC" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_624_87489"
+          x1="4.10214"
+          y1="9.92357"
+          x2="61.5944"
+          y2="44.1077"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#7DC0FF" />
+          <stop offset="1" stopColor="#4DA9FF" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+export const RepoYellowIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 58 47"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
+        fill="url(#paint0_linear_624_87481)"
+      />
+      <g filter="url(#filter0_d_624_87481)">
+        <path
+          d="M1.19934 16.0764C1.15951 15.5923 1.22046 15.1052 1.37835 14.6459C1.53623 14.1865 1.78763 13.7649 2.11666 13.4076C2.44569 13.0503 2.84522 12.7651 3.29002 12.57C3.73482 12.3748 4.21525 12.274 4.70097 12.2739H53.2993C53.785 12.274 54.2655 12.3748 54.7103 12.57C55.1551 12.7651 55.5546 13.0503 55.8836 13.4076C56.2127 13.7649 56.4641 14.1865 56.6219 14.6459C56.7798 15.1052 56.8408 15.5923 56.801 16.0764L54.8091 40.2842C54.7127 41.4565 54.179 42.5496 53.3138 43.3465C52.4487 44.1434 51.3155 44.5857 50.1393 44.5857H7.86102C6.68479 44.5857 5.55158 44.1434 4.68645 43.3465C3.82132 42.5496 3.28757 41.4565 3.19123 40.2842L1.19934 16.0764Z"
+          fill="url(#paint1_linear_624_87481)"
+        />
+      </g>
+      <path
+        opacity="0.5"
+        d="M22.5529 18.8572H9.67518C8.70241 18.8572 7.91382 19.6458 7.91382 20.6185V20.6199C7.91382 21.5927 8.70241 22.3813 9.67518 22.3813H22.5529C23.5257 22.3813 24.3143 21.5927 24.3143 20.6199V20.6185C24.3143 19.6458 23.5257 18.8572 22.5529 18.8572Z"
+        fill="#EBC350"
+      />
+      <defs>
+        <filter
+          id="filter0_d_624_87481"
+          x="1.1875"
+          y="12.2739"
+          width="55.6252"
+          height="32.562"
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dy="0.250217" />
+          <feComposite in2="hardAlpha" operator="out" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="BackgroundImageFix"
+            result="effect1_dropShadow_624_87481"
+          />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="effect1_dropShadow_624_87481"
+            result="shape"
+          />
+        </filter>
+        <linearGradient
+          id="paint0_linear_624_87481"
+          x1="33.2918"
+          y1="2.41455"
+          x2="33.2918"
+          y2="44.5846"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#FFCA41" />
+          <stop offset="1" stopColor="#FFAB5E" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_624_87481"
+          x1="4.10214"
+          y1="9.92357"
+          x2="61.5944"
+          y2="44.1077"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#FFDF7D" />
+          <stop offset="1" stopColor="#FFDA86" />
         </linearGradient>
       </defs>
     </svg>
@@ -2201,6 +2245,35 @@ export const SearchIcon = (props: IProps) => {
   );
 };
 
+export const SettingIcon = (props: IProps) => {
+  const { className, stroke } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 25"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11.9141 15.3475C13.2257 15.3475 14.2891 14.2841 14.2891 12.9725C14.2891 11.6608 13.2257 10.5975 11.9141 10.5975C10.6024 10.5975 9.53906 11.6608 9.53906 12.9725C9.53906 14.2841 10.6024 15.3475 11.9141 15.3475Z"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 13.6691V12.2758C4 11.4525 4.67292 10.7716 5.50417 10.7716C6.93708 10.7716 7.52292 9.7583 6.8025 8.51538C6.39083 7.80288 6.63625 6.87663 7.35667 6.46496L8.72625 5.68121C9.35167 5.30913 10.1592 5.5308 10.5313 6.15621L10.6183 6.30663C11.3308 7.54955 12.5025 7.54955 13.2229 6.30663L13.31 6.15621C13.6821 5.5308 14.4896 5.30913 15.115 5.68121L16.4846 6.46496C17.205 6.87663 17.4504 7.80288 17.0387 8.51538C16.3183 9.7583 16.9042 10.7716 18.3371 10.7716C19.1604 10.7716 19.8413 11.4445 19.8413 12.2758V13.6691C19.8413 14.4925 19.1683 15.1733 18.3371 15.1733C16.9042 15.1733 16.3183 16.1866 17.0387 17.4295C17.4504 18.15 17.205 19.0683 16.4846 19.48L15.115 20.2637C14.4896 20.6358 13.6821 20.4141 13.31 19.7887L13.2229 19.6383C12.5104 18.3954 11.3387 18.3954 10.6183 19.6383L10.5313 19.7887C10.1592 20.4141 9.35167 20.6358 8.72625 20.2637L7.35667 19.48C6.63625 19.0683 6.39083 18.142 6.8025 17.4295C7.52292 16.1866 6.93708 15.1733 5.50417 15.1733C4.67292 15.1733 4 14.4925 4 13.6691Z"
+        stroke="#181C20"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
 export const ShareIcon = (props: IProps) => {
   const { className } = props;
   return (
@@ -2224,7 +2297,7 @@ export const ShareIcon = (props: IProps) => {
 };
 
 export const StarIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, stroke } = props;
   return (
     <svg
       className={className}
@@ -2236,7 +2309,7 @@ export const StarIcon = (props: IProps) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M7.73124 20.8327C7.22417 21.0974 6.61072 21.0508 6.14946 20.7125C5.68819 20.3743 5.45933 19.8032 5.55933 19.24L6.36867 14.6011L2.96125 11.3357C2.54475 10.9385 2.39211 10.3381 2.56835 9.79024C2.74458 9.24236 3.21864 8.84354 3.7886 8.76365L8.51957 8.08737L10.6555 3.8266C10.9087 3.31561 11.4297 2.99233 12 2.99233C12.5703 2.99233 13.0913 3.31561 13.3446 3.8266L15.4805 8.08737L20.2114 8.76365C20.7814 8.84354 21.2555 9.24236 21.4317 9.79024C21.6079 10.3381 21.4553 10.9385 21.0388 11.3357L17.6314 14.6011L18.4407 19.241C18.5407 19.8042 18.3118 20.3753 17.8506 20.7135C17.3893 21.0518 16.7759 21.0984 16.2688 20.8337L12 18.6278L7.73124 20.8327Z"
-        stroke="#1B1B1D"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -1,35 +1,28 @@
 import React from "react";
-import { Input } from "@material-tailwind/react";
+import { Input, InputProps } from "@material-tailwind/react";
 
-interface IProps {
-  className?: string;
-  placeholder?: string;
-  [key: string]: any;
+interface IProps extends InputProps {
+  register?: any;
 }
 
-const InputAtom = ({
-  className,
-  placeholder,
-  ...restProps
-}: IProps) => {
+const InputAtom = ({ register, ...restProps }: IProps) => {
   return (
     <Input
-      crossOrigin=""
       labelProps={{
         className: "before:content-none after:content-none",
       }}
       containerProps={{
-        className: "!min-w-0 ",
+        className: "!min-w-0 !h-12 ",
       }}
       type="text"
-      placeholder={placeholder}
-      {...restProps}
-      className={`${className || ""}
-      flex items-center !min-w-0 
-      !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
-       font-normal text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]
-        placeholder:text-hint text-right focus:border-t-current
+      {...register}
+      className={`${restProps.className || ""}
+      flex items-center !min-w-0 !h-12 gap-2 pr-3 pl-2
+      !font-iranYekan focus:font-iranYekan placeholder:!font-iranYekan
+       font-normal text-primary text-[13px] placeholder:!text-[13px] leading-[18.2px] -tracking-[0.13px]
+        placeholder:!text-hint text-right 
         `}
+      {...restProps}
     />
   );
 };

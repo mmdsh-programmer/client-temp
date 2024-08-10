@@ -6,7 +6,7 @@ import {
 } from "@components/atoms/icons";
 import Breadcrumb from "@components/molecules/breadcumb";
 import ProfileMenu from "@components/molecules/profileMenu";
-import Button from "@components/atoms/button";
+import { Button } from "@material-tailwind/react";
 
 const Header = () => {
 

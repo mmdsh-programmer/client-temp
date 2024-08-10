@@ -7,7 +7,7 @@ import { repoAtom, repoGrouping } from "@atom/repository";
 import { useRouter } from "next/navigation";
 import { Button, Typography } from "@material-tailwind/react";
 
-const Breadcrumb = () => {
+const Breadcrumb: React.FC  = () => {
   const getRepoGroup = useRecoilValue(repoGrouping);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
   const router = useRouter();

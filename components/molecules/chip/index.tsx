@@ -1,5 +1,5 @@
+import { Typography } from "@material-tailwind/react";
 import React from "react";
-import Text from "@components/atoms/typograghy/text";
 
 interface IProps {
   value: string;
@@ -12,10 +12,10 @@ const ChipMolecule = ({ className, value, icon }: IProps) => {
     <div
       className={`${className || ""} flex items-center justify-center rounded-full cursor-pointer`}
     >
-      <Text className="truncate text-right lowercase font-normal text-xs leading-[16.8px] -tracking-[0.12]">{value}</Text>
-      <>
+      <Typography className="label text-primary truncate text-right lowercase  ">
+        {value}
+      </Typography>
       {icon}
-      </>
     </div>
   );
 };

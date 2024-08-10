@@ -1,10 +1,10 @@
 import React from "react";
 import { repoActiveStep } from "@atom/stepper";
-import Text from "@components/atoms/typograghy/text";
 import LoadingButton from "@components/molecules/loadingButton";
 import {
   DialogBody,
   DialogFooter,
+  Typography,
 } from "@material-tailwind/react";
 import { useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -36,9 +36,9 @@ const RepoAddUser = ({ handleClose }: IProps) => {
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={() => setActiveStep(2)}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

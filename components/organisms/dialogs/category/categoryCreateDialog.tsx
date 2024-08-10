@@ -3,14 +3,12 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import Label from "@components/atoms/typograghy/label";
-import WarningText from "@components/atoms/typograghy/warningText";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import { category } from "@atom/category";
 import useCreateCategory from "@hooks/category/useCreateCategory";
-import NumberInput from "@components/atoms/input/numberInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import FormInput from "@components/atoms/input/formInput";
+import { Typography } from "@material-tailwind/react";
 
 interface IForm {
   name: string;
@@ -71,32 +69,41 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Label>نام دسته‌بندی</Label>
+          <Typography className="label">نام دسته‌بندی</Typography>
           <FormInput
-            className="w-full"
             placeholder="نام دسته بندی"
-            {...register("name")}
+            register={{ ...register("name") }}
           />
-          {errors.name && <WarningText>{errors.name?.message}</WarningText>}
+          {errors.name && (
+            <Typography className="warning_text">
+              {errors.name?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label>اولویت دسته‌بندی</Label>
-          <NumberInput
-            className="w-full"
+          <Typography className="label">اولویت دسته‌بندی</Typography>
+          <FormInput
+            type="number"
+            min={0}
             placeholder="اولویت دسته بندی"
-            {...register("order")}
+            register={{ ...register("order") }}
           />
-          {errors.order && <WarningText>{errors.order?.message}</WarningText>}
+          {errors.order && (
+            <Typography className="warning_text">
+              {errors.order?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label>توضیحات دسته بندی</Label>
+          <Typography className="label">توضیحات دسته بندی</Typography>
           <TextareaAtom
-            className="w-full"
             placeholder="توضیحات دسته بندی"
-            {...register("description")}
+            register={{...register("description")}}
           />
           {errors.description && (
-            <WarningText>{errors.description?.message}</WarningText>
+            <Typography className="warning_text">
+              {errors.description?.message}
+            </Typography>
           )}
         </div>
       </form>

@@ -6,7 +6,7 @@ import LoadingButton from "@components/molecules/loadingButton";
 import { getUserToken, login } from "@actions/auth";
 import { ClasorLogo } from "@components/atoms/icons";
 import { useDebouncedCallback } from "use-debounce";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 
 const SignInComponent = () => {
   const searchParams = useSearchParams();
@@ -53,7 +53,7 @@ const SignInComponent = () => {
     return (
       <div className="get-user-info w-screen h-screen flex items-center justify-center bg-slate-50">
         <Spinner className="h-8 w-8" color="purple" />
-        <h1 className="font-bold mr-2">در حال دریافت اطلاعات کاربری</h1>
+        <Typography className="font-bold mr-2 title_t1">در حال دریافت اطلاعات کاربری</Typography>
       </div>
     );
   }

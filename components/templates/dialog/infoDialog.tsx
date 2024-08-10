@@ -1,10 +1,9 @@
 import React from "react";
-import { Dialog, DialogBody, DialogHeader } from "@material-tailwind/react";
-import Title from "@components/atoms/typograghy/title";
+import { Dialog, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
 import CloseButton from "@components/atoms/button/closeButton";
 import BackButton from "@components/atoms/button/backButton";
 
-interface IProps {
+export interface IProps {
   children: React.ReactNode;
   dialogHeader: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,8 +30,7 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className }: IProps) => {
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
         </div>
-        <Title>{dialogHeader}</Title>
-        <div className="hidden xs:block">
+        <Typography className="form__title">{dialogHeader}</Typography >        <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />
         </div>
       </DialogHeader>

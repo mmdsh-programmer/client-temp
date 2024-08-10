@@ -1,5 +1,6 @@
-import { Checkbox } from "@material-tailwind/react";
-import { useState } from "react";
+import { ChevronLeftIcon } from "@components/atoms/icons";
+import { Checkbox, Typography } from "@material-tailwind/react";
+import { useEffect, useRef, useState } from "react";
 
 interface IProps {
   options: any[];
@@ -17,10 +18,26 @@ const SelectBox = ({
   className,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleOptionChange = (option: string) => {
     setSelectedOptions(
@@ -31,10 +48,10 @@ const SelectBox = ({
   };
 
   return (
-    <div className={`${className || ""} relative inline-block `}>
+    <div ref={dropdownRef} className={`${className || ""} relative inline-block `}>
       <button
         onClick={toggleDropdown}
-        className="w-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 flex justify-between font-normal items-center text-left bg-white border-2 border-gray-300 rounded-md focus:outline-none"
+        className="w-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 flex justify-between font-normal items-center text-left bg-white border-2 border-normal rounded-md focus:outline-none"
       >
         <span className="max-w-full truncate">
           {selectedOptions.length > 0
@@ -46,40 +63,33 @@ const SelectBox = ({
                 .join(", ")
             : defaultOption}
         </span>
-        <span className="float-left">
-          <svg
-            className={`w-3 h-3 transform transition-transform ${
-              isOpen ? "rotate-180" : "rotate-0"
-            }`}
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </span>
+        {selectedOptions
+          ? options?.find((option) => option.value === selectedOptions)?.label
+          : defaultOption}
+        <ChevronLeftIcon
+          className={`w-2 h-2 stroke-icon-active transform transition-transform ${
+            isOpen ? "rotate-90" : "-rotate-90"
+          }`}
+        />
       </button>
       {isOpen && (
-        <div className="absolute z-[99999] mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <div className="absolute z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
           <ul
-            className="max-h-60 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
+            className="rounded-md p-1 text-right shadow-menu overflow-auto focus:outline-none"
             role="listbox"
             aria-labelledby="listbox-label"
           >
             {options.map((option) => (
               <li
                 key={option.value}
-                className="text-gray-900 cursor-pointer select-none relative py-2 px-2 font-iranYekan"
+                className="cursor-pointer select-none relative p-[6px]"
                 onClick={() => handleOptionChange(option.value)}
               >
                 <div className="flex items-center">
                   <Checkbox
+                    containerProps={{
+                      className: "p-1",
+                    }}
                     placeholder="checkbox"
                     className=" p-0"
                     checked={selectedOptions.includes(option.value)}
@@ -87,7 +97,9 @@ const SelectBox = ({
                     color="deep-purple"
                     crossOrigin=""
                   />
-                  <span className="ml-3 block truncate">{option.label}</span>
+                  <Typography className="select_option__text truncate text-right text-primary ">
+                    {option.label}
+                  </Typography>
                 </div>
               </li>
             ))}

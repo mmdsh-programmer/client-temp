@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { UserIcon } from "@components/atoms/icons";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Button } from "@material-tailwind/react";
 import MenuComponent from "../menu";
 import ImageComponent from "@components/atoms/image";
 
-const ProfileMenu = () => {
+const ProfileMenu: React.FC  = () => {
   const { data: userData } = useGetUser();
 
   return (

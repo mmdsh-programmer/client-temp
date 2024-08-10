@@ -13,7 +13,7 @@ const MobileMenu = ({ setOpenDrawer, icon, className }: IProps) => {
     <>
       <div className="flex gap-x-2 justify-end">
         <Button
-          className={`${className || ""} rounded-lg bg-transparent p-1 shadow-none flex justify-center hover:shadow-none items-center`}
+          className={`${className || ""} rounded-lg bg-transparent p-0 shadow-none flex justify-center hover:shadow-none items-center`}
           placeholder="menu-button"
           onClick={setOpenDrawer}
         >

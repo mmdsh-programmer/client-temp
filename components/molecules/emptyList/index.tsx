@@ -1,6 +1,6 @@
+import React, { useMemo } from "react";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
-import React, { useMemo } from "react";
 
 export enum EEmptyList {
   DASHBOARD = "dashboard",
@@ -13,6 +13,7 @@ export enum EEmptyList {
   RELEASE = "release",
   FILTER = "filter",
   REPO_KEYS = "repo_keys",
+  GROUP = "group",
 }
 
 interface IProps {
@@ -20,12 +21,13 @@ interface IProps {
 }
 
 const EmptyList = ({ type }: IProps) => {
-  const content = useMemo(() => {
+  
+  const content = () => {
     switch (type) {
       case EEmptyList.DASHBOARD:
       case EEmptyList.MY_REPO:
         return (
-          <>
+          <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary"
@@ -39,7 +41,7 @@ const EmptyList = ({ type }: IProps) => {
               برای ایجاد مخزن جدید می توانید روی دکمه ایجاد مخزن کلیک کنید و
               اطلاعات مخزن خود را وارد کنید.
             </Typography>
-          </>
+          </div>
         );
       case EEmptyList.BOOKMARK_REPO:
         return (
@@ -70,7 +72,7 @@ const EmptyList = ({ type }: IProps) => {
         );
       case EEmptyList.CATEGORY:
         return (
-          <>
+          <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary"
@@ -84,7 +86,7 @@ const EmptyList = ({ type }: IProps) => {
               برای ایجاد دسته‌بندی یا سند جدید می توانید روی دکمه ایجاد کلیک
               کنید و اطلاعات دسته‌بندی یا سند خود را وارد کنید.
             </Typography>
-          </>
+          </div>
         );
       case EEmptyList.RELEASE:
         return (
@@ -111,17 +113,24 @@ const EmptyList = ({ type }: IProps) => {
         >
           شما در حال حاضر کلیدی ندارید
         </Typography>;
+      case EEmptyList.GROUP:
+        <Typography
+          placeholder="empty-message"
+          className="title_t3 text-primary"
+        >
+          شما در حال حاضر گروهی ندارید
+        </Typography>;
       default:
         return null;
     }
-  }, [type]);
+  };
 
   return (
     <div className="flex flex-col h-full mx-auto justify-center items-center gap-3">
       <FolderEmptyIcon className="h-16 w-16 stroke-gray-300" />
-      <div className="flex flex-col gap-1">{content}</div>
+      {content()}
     </div>
   );
 };
 
-export default React.memo(EmptyList);
+export default EmptyList;

@@ -1,11 +1,11 @@
 import React from "react";
-import Text from "@components/atoms/typograghy/text";
 import DesktopHeaderList from "./desktopHeaderList";
 import TabletHeaderList from "./tabletHeaderList";
 import MobileHeaderList from "./mobileHeaderList";
 import ListMode from "@components/molecules/listMode";
+import { Typography } from "@material-tailwind/react";
 
-interface IProps {
+export interface IProps {
   header: string;
   buttonText: string;
   onClick: () => void;
@@ -20,9 +20,9 @@ const HeaderListTemplate = ({
 }: IProps) => {
   return (
     <header className="flex justify-between items-center">
-      <Text className="text-primary text-base -tracking-[0.32px] font-medium ">
+      <Typography className="title_t1 text-primary">
         {header}
-      </Text>
+      </Typography>
       <div className="flex gap-2">
         <div className="hidden md:flex">
           <DesktopHeaderList buttonText={buttonText} onClick={onClick} />

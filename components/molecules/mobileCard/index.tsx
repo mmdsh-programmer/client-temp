@@ -1,6 +1,6 @@
 import React from "react";
-import Text from "@components/atoms/typograghy/text";
 import CardItemRow from "./cardItemRow";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   name: string;
@@ -20,15 +20,13 @@ const MobileCard = ({
   return (
     <div className="flex flex-col w-full shadow-xSmall bg-primary rounded-lg p-4 gap-4">
       <div className="flex justify-between items-center w-full gap-[10px]">
-        <div className="flex gap-3">
-          <Text className="text-[14px] flex-grow font-medium leading-[21px] -treacking-[0.14] text-ellipsis whitespace-nowrap">
-            {name}
-          </Text>
+        <div className="flex items-center gap-3">
           {icon}
+          <Typography className="title_t2 flex-grow text-ellipsis whitespace-nowrap">
+            {name}
+          </Typography>
         </div>
-        <div className="rounded-lg border-[1px] border-normal h-8 w-8 flex justify-center items-center">
-          {cardAction}
-        </div>
+        <div className="flex">{cardAction}</div>
       </div>
       {creator ? (
         <div className="flex flex-col gap-3">

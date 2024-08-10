@@ -1,6 +1,6 @@
 import React from "react";
-import Text from "@components/atoms/typograghy/text";
 import Sort from "../sort";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   tableHead: {
@@ -14,27 +14,22 @@ interface IProps {
 
 const TableHead = ({ tableHead, className }: IProps) => {
   return (
-    <thead
-      className={` top-0 z-[9999] bg-tertiary h-10 `}
-    >
+    <thead className={` top-0 z-[9999] bg-tertiary h-10 `}>
       <tr>
         {tableHead.map((head, index) => (
           <th key={head.key} className="text-right px-5 py-[6px]">
             {head.isSorted ? (
               <div className={`flex items-center ${head.className || ""}`}>
-                <Text
-                  className="py-1 !font-bold text-[12px] text-ellipsis leading-[18px] -tracking-[0.12px] text-secondary"
-                >
+                <Typography className="table-head py-1 text-secondary">
                   {head.value}
-                </Text>
+                </Typography>
                 <Sort />
               </div>
             ) : (
               <div className={`flex items-center ${head.className || ""}`}>
-                <Text className="py-1 !font-bold text-[12px] text-ellipsis leading-[18px] -tracking-[0.12px] text-secondary">
+                <Typography className="table-head py-1 text-secondary">
                   {head.value}
-                </Text>
-                
+                </Typography>
               </div>
             )}
           </th>

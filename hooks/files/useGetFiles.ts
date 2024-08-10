@@ -1,7 +1,6 @@
 import { getFileAction } from "@actions/files";
-import { IPodspaceResult } from "@interface/app.interface";
-import { IFile } from "@interface/file.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IFile } from "@interface/file.interface";
 
 const useGetFiles = (
   resourceId: number,
@@ -13,7 +12,7 @@ const useGetFiles = (
   dataType?: string
 ) => {
   return useInfiniteQuery({
-    queryKey: [`getFiles-${userGroupHash}`],
+    queryKey: [`getFiles-${userGroupHash}`, name],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getFileAction(
         resourceId,
@@ -25,7 +24,7 @@ const useGetFiles = (
         dataType
       );
 
-      return response?.data as {
+      return response?.data.result as {
         list: IFile[];
         count: number;
       };

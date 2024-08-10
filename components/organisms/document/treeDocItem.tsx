@@ -3,8 +3,7 @@ import { IDocumentTreeItem } from "atom/category";
 import { documentTemplate } from "atom/document";
 import { useRecoilState } from "recoil";
 import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
-import ButtonAtom from "@components/atoms/button";
-import Text from "@components/atoms/typograghy/text";
+import { Button, Typography } from "@material-tailwind/react";
 
 interface IProps {
   docItem: IDocumentTreeItem;
@@ -23,7 +22,8 @@ const TreeDocItem = ({ docItem }: IProps) => {
   return (
     <div className="pr-4">
       <div className="flex">
-        <ButtonAtom
+        <Button
+          placeholder="button"
           className="flex p-2 bg-transparent "
           onClick={handleDocClick}
         >
@@ -36,10 +36,10 @@ const TreeDocItem = ({ docItem }: IProps) => {
               <InvisibleIcon className="w-5 h-5 stroke-neutral-content flex-none" />
             )}
           </div>
-          <Text className="text-primary lowercase mr-2" key={docItem.id}>
+          <Typography className="text-primary lowercase mr-2" key={docItem.id}>
             {docItem.name}
-          </Text>
-        </ButtonAtom>
+          </Typography>
+        </Button>
       </div>
     </div>
   );

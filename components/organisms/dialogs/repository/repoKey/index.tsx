@@ -1,9 +1,8 @@
 import React from "react";
 import { IRepo } from "@interface/repo.interface";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import { Button } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { AddIcon } from "@components/atoms/icons";
-import Text from "@components/atoms/typograghy/text";
 import { useRecoilState } from "recoil";
 import { createRepoKeyAtom, deleteRepoKeyAtom } from "@atom/repository";
 import RepoKeyDeleteDialog from "./repoKeyDeleteDialog";
@@ -40,9 +39,9 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
           }}
         >
           <AddIcon className="h-5 w-5 stroke-icon-active" />
-          <Text className="text-primary px-2 text-[12px] font-medium leading-[18px] -tracking-[0.12px]">
+          <Typography className="text__label__button text-primary px-2">
             ایجاد کلید
-          </Text>
+          </Typography>
         </Button>
 
         <div className="w-full overflow-auto max-h-[calc(100dvh-200px)] border-[0.5px] border-normal rounded-lg mt-4">

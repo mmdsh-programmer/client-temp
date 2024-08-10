@@ -1,7 +1,6 @@
 import React from "react";
 import { QuestionIcon } from "@components/atoms/icons";
-import TooltipComponent from "../tooltip";
-import { Typography } from "@material-tailwind/react";
+import { Tooltip, Typography } from "@material-tailwind/react";
 
 interface IProps {
   repoNumber: number;
@@ -24,9 +23,16 @@ const RepoTypeCardFooter = ({ icon, repoNumber, tooltipContent }: IProps) => {
           </Typography>
         </div>
       </div>
-      <TooltipComponent content={tooltipContent}>
-        <QuestionIcon className="h-5 w-5" />
-      </TooltipComponent>
+
+      <Tooltip
+        content={tooltipContent}
+        placement="bottom"
+        className="rounded shadow-lg bg-gray-900 text-gray-100 font-iranYekan text-xs p-2"
+      >
+        <div className="cursor-pointer">
+          <QuestionIcon className="h-5 w-5" />
+        </div>
+      </Tooltip>
     </>
   );
 };

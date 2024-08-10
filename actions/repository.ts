@@ -63,7 +63,7 @@ export const getMyRepositoryList = async (
   }
 };
 
-export const getRepositoryAction = async (repoId: number) => {
+export const getRepositoryAction = async (repoId?: number) => {
   const userInfo = await getMe();
   try {
     const response = await getRepository(userInfo.access_token, repoId);
@@ -204,7 +204,7 @@ export const bookmarkRepoAction = async (repoId: number, detach?: boolean) => {
   }
 };
 
-export const imageRepoAction = async (repoId: number, fileHash: string) => {
+export const imageRepoAction = async (repoId: number, fileHash: string | null) => {
   const userInfo = await getMe();
   try {
     const response = await imageRepository(

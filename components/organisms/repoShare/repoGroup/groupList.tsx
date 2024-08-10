@@ -2,9 +2,9 @@ import React from "react";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import useGetGroups from "@hooks/group/useGetGroups";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import GroupItem from "./groupItem";
-import Text from "@components/atoms/typograghy/text";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 const GroupList = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -26,7 +26,7 @@ const GroupList = () => {
               return <GroupItem key={group.title} group={group} />;
             })
           ) : (
-            <Text> هنوز گروهی نساخته اید </Text>
+            <EmptyList type={EEmptyList.GROUP} />
           );
         })
       )}

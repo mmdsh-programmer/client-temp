@@ -22,6 +22,7 @@ const BookmarkRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
+    isFetching
   } = useGetBookmarkList(10, undefined, true);
 
   const listLength = getBookmarkRepoList?.pages[0].total;
@@ -34,13 +35,13 @@ const BookmarkRepoList = () => {
           <div
             className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
           >
-            {isLoading ? (
+            {isLoading || isFetching ? (
               <div className="w-full h-full flex justify-center items-center">
                 <Spinner className="h-8 w-8" color="deep-purple" />
               </div>
             ) : listLength ? (
               <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-                <table className="w-full min-w-max ">
+                <table className="w-full overflow-hidden min-w-max ">
                   <TableHead
                     tableHead={[
                       {
@@ -127,7 +128,7 @@ const BookmarkRepoList = () => {
                         : "--"
                     }
                     creator={repo.owner?.userName}
-                    cardAction={<RepoMenu repo={repo} isList={true} />}
+                    cardAction={<RepoMenu repo={repo} />}
                   />
                 );
               });

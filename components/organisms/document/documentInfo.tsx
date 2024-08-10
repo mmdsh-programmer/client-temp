@@ -1,17 +1,14 @@
 import React from "react";
 import { documentInfo } from "@atom/document";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { DialogBody, DialogFooter } from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useRecoilState } from "recoil";
-import Label from "@components/atoms/typograghy/label";
-import WarningText from "@components/atoms/typograghy/warningText";
-import NumberInput from "@components/atoms/input/numberInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import CancelButton from "@components/atoms/button/cancelButton";
-import Text from "@components/atoms/typograghy/text";
 import LoadingButton from "@components/molecules/loadingButton";
 import FormInput from "@components/atoms/input/formInput";
+import InputAtom from "@components/atoms/input";
 
 interface IForm {
   title: string;
@@ -42,7 +39,7 @@ const DocumentInfo = () => {
       >
         <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
-            <Label>نام سند</Label>
+            <Typography className="label">نام سند</Typography>
             <FormInput
               className="w-full"
               placeholder="نام سند"
@@ -50,21 +47,21 @@ const DocumentInfo = () => {
                 ...register("title", { value: getDocumentInfo?.title }),
               }}
             />
-            {errors.title && <WarningText>{errors.title?.message}</WarningText>}
+            {errors.title && <Typography className="warning_text">{errors.title?.message}</Typography>}
           </div>
           <div className="flex flex-col gap-2">
-            <Label>اولویت سند </Label>
-            <NumberInput
+            <Typography className="label">اولویت سند </Typography>
+            <InputAtom
               className="w-full"
               placeholder="اولویت سند"
               register={{
                 ...register("order", { value: getDocumentInfo?.order }),
               }}
             />
-            {errors.order && <WarningText>{errors.order?.message}</WarningText>}
+            {errors.order && <Typography className="warning_text">{errors.order?.message}</Typography>}
           </div>
           <div className="flex flex-col gap-2">
-            <Label>توضیحات سند</Label>
+            <Typography className="label">توضیحات سند</Typography>
             <TextareaAtom
               className="w-full"
               placeholder="توضیحات سند"
@@ -75,7 +72,7 @@ const DocumentInfo = () => {
               }}
             />
             {errors.description && (
-              <WarningText>{errors.description?.message}</WarningText>
+              <Typography className="warning_text">{errors.description?.message}</Typography>
             )}
           </div>
         </form>
@@ -89,9 +86,9 @@ const DocumentInfo = () => {
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text-Typography-button text-white">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

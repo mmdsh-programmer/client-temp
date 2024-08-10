@@ -2,10 +2,9 @@ import React from "react";
 import { categoryQueryParams } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { sort } from "@atom/sortParam";
-import Text from "@components/atoms/typograghy/text";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import { IChildrenFilter } from "@interface/app.interface";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { useRecoilValue } from "recoil";
 import RenderIf from "@components/renderIf";
 import LoadMore from "@components/molecules/loadMore";
@@ -65,7 +64,7 @@ const DocumentTemplateTree = () => {
             });
           })
         ) : (
-          <Text className="w-full text-center">نمونه سندی ایجاد نشده است.</Text>
+          <Typography className="w-full text-center">نمونه سندی ایجاد نشده است.</Typography>
         )}
         <RenderIf isTrue={!!hasNextPage}>
           <LoadMore

@@ -1,5 +1,5 @@
 import React from "react";
-import { DialogFooter, DialogBody } from "@material-tailwind/react";
+import { DialogFooter, DialogBody, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -10,11 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateSchema } from "../validation.yup";
 import CancelButton from "@components/atoms/button/cancelButton";
 import FormInput from "@components/atoms/input/formInput";
-import WarningText from "@components/atoms/typograghy/warningText";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import Text from "@components/atoms/typograghy/text";
 import { repoAtom } from "@atom/repository";
-import Label from "@components/atoms/typograghy/label";
 
 interface IForm {
   name: string;
@@ -66,26 +63,30 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
       >
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <Label>عنوان مخزن</Label>
+            <Typography className="label">عنوان مخزن</Typography>
             <FormInput
-              className="w-full"
               placeholder="عنوان مخزن"
-              register={{...register("name")}}
+              register={{ ...register("name") }}
               id="repo-name"
             />
-            {errors.name && <WarningText>{errors.name?.message}</WarningText>}
+            {errors.name && (
+              <Typography className="warning_text">
+                {errors.name?.message}
+              </Typography>
+            )}
           </div>
           <div className="flex flex-col gap-2">
-            <Label>توضیحات مخزن</Label>
+            <Typography className="label">توضیحات مخزن</Typography>
             <TextareaAtom
-              className="w-full"
               placeholder="توضیحات مخزن"
               register={{
                 ...register("description"),
               }}
             />
             {errors.description && (
-              <WarningText>{errors.description?.message}</WarningText>
+              <Typography className="warning_text">
+                {errors.description?.message}
+              </Typography>
             )}
           </div>
         </form>
@@ -102,9 +103,9 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white font-iranYekan">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

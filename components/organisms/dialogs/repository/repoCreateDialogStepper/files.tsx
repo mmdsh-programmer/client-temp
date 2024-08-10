@@ -1,31 +1,21 @@
-import { getMe } from "@actions/auth";
+import React, { useState } from "react";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useRenameFile from "@hooks/files/useRenameFile";
-import useGetReport from "@hooks/report/useGetReport";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useState } from "react";
 import { toast } from "react-toastify";
-// import { ClasorFileManagement } from "cls-file-management";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-} from "@material-tailwind/react";
-import { ArrowRightIcon, XIcon } from "@components/atoms/icons";
-import { IFile } from "@interface/file.interface";
+import { ClasorFileManagement, IFile } from "cls-file-management";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
+import { repoAtom } from "@atom/repository";
+import FileManagementDialog from "@components/templates/dialog/fileManagementDialog";
 
 const fileTablePageSize = 20;
-
-const { NEXT_PUBLIC_CLASOR } = process.env;
-
 interface IProps {
-  setSelectedFile?: (file: any) => void;
-  userGroupHash?: string;
-  resourceId: null | number;
+  setSelectedFile?: (file: IFile | null) => void;
+  userGroupHash: string;
+  resourceId: number;
   type: "private" | "public";
   handleClose: () => void;
   cropMode?: boolean;
@@ -44,18 +34,21 @@ const Files = (props: IProps) => {
     hasPreview,
     cardMode,
   } = props;
+  const getRepo = useRecoilValue(repoAtom);
   const [page, setPage] = useState<number>(0);
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [name, setName] = useState<string>();
   const [dataType, setDataType] = useState<string>();
+  const [selectedImage, setSelectedImage] = useState<IFile | null>(null);
 
   const queryClient = useQueryClient();
-
+  const { data: userInfo } = useGetUser();
   const {
     data: files,
     isFetching,
+    isLoading: isLoadingFiles,
     refetch,
     fetchNextPage,
   } = useGetFiles(
@@ -73,9 +66,6 @@ const Files = (props: IProps) => {
   const handleDataType = (dtype: string) => {
     setDataType(dtype);
   };
-
-  const { data: dataReport, isFetching: fetchingReport } =
-    useGetReport(resourceId);
 
   const handleRenameFile = (file: IFile, dataForm: string) => {
     setIsLoading(true);
@@ -95,13 +85,13 @@ const Files = (props: IProps) => {
 
   const handleDeleteFile = (file: IFile) => {
     setIsLoading(true);
-    if (resourceId) {
+    if (resourceId && getRepo) {
       deleteFile.mutate({
+        repoId: getRepo?.id,
         resourceId,
         userGroupHash,
         fileHash: file.hash,
         type,
-        repoId: resourceId,
         callBack: () => {
           setIsLoading(false);
           refetch();
@@ -126,18 +116,17 @@ const Files = (props: IProps) => {
   const handleUploadFile = async (item: any, showCropper: boolean) => {
     setProcessCount(0);
     setIsLoading(true);
-    const userInfo = await getMe();
     if (showCropper) {
       try {
         await axios
           .put(
-            `${NEXT_PUBLIC_CLASOR}fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
+            `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
             item,
             {
               headers: {
                 "Content-Type": "multipart/form-data;",
-                Authorization: `Bearer ${userInfo.access_token}`,
-                _token_: userInfo.access_token || "",
+                Authorization: `Bearer ${userInfo?.access_token}`,
+                _token_: userInfo?.access_token || "",
                 _token_issuer_: "1",
               },
               onUploadProgress(progressEvent: any) {
@@ -152,7 +141,9 @@ const Files = (props: IProps) => {
             if (result.data.data.result.hash) {
               await onSuccess();
             }
-            queryClient.invalidateQueries({queryKey:[`getReport-${resourceId}`]});
+            queryClient.invalidateQueries({
+              queryKey: [`getReport-${resourceId}`],
+            });
           });
       } catch {
         setIsLoading(false);
@@ -167,13 +158,13 @@ const Files = (props: IProps) => {
       file.append("file", fileItem, encodeURIComponent(item.name));
       axios
         .put(
-          `${NEXT_PUBLIC_CLASOR}fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
+          `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
           file,
           {
             headers: {
               "Content-Type": "multipart/form-data;",
-              Authorization: `Bearer ${userInfo.access_token}`,
-              _token_: userInfo.access_token || "",
+              Authorization: `Bearer ${userInfo?.access_token}`,
+              _token_: userInfo?.access_token || "",
               _token_issuer_: "1",
             },
             onUploadProgress(progressEvent: any) {
@@ -189,7 +180,9 @@ const Files = (props: IProps) => {
             onSuccess();
             setIsLoading(false);
           }
-          queryClient.invalidateQueries({queryKey:[`getReport-${resourceId}`]});
+          queryClient.invalidateQueries({
+            queryKey: [`getReport-${resourceId}`],
+          });
         })
         .catch((error: any) => {
           toast.error("خطا در بارگذاری فایل");
@@ -199,83 +192,58 @@ const Files = (props: IProps) => {
     }
   };
 
-  const generateDownloadLink = async (file: IFile) => {
-    const userInfo = await getMe();
+  const generateDownloadLink = (file: IFile) => {
     return `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${
       file.hash
-    }?&checkUserGroupAccess=true&Authorization=${userInfo.access_token}&time=${Date.now()}`;
+    }?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`;
   };
+
+  const handleSelect = () => {
+    const fileExtension = selectedImage?.extension.toLowerCase();
+    if (
+      fileExtension === "png" ||
+      fileExtension === "jpg" ||
+      fileExtension === "jfif" ||
+      fileExtension === "svg"
+    ) {
+      setSelectedFile?.(selectedImage);
+      handleClose()
+    } else {
+      toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");
+    }
+  };
+
   return (
-    <Dialog
-      placeholder=""
-      size="sm"
-      open={true}
-      handler={handleClose}
-      className="p-5 rounded-none h-full max-w-full w-full xs:rounded-md xs:max-h-[600px] xs:h-[80%] xs:max-w-[66%] md-max-w-[40%] flex flex-col"
+    <FileManagementDialog
+      dialogClassName="flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
+      dialogBodyClassName="bg-secondary h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
+      dialogHeader="افزودن عکس"
+      setOpen={handleClose}
+      handleSelect={handleSelect}
     >
-      <DialogHeader
-        placeholder="dialog header"
-        className="flex items-center justify-between p-0"
-      >
-        <div className="flex items-center justify-center">
-          <Button
-            placeholder="close button"
-            className="bg-transparent ml-2 shadow-none hover:shadow-none p-0"
-            onClick={handleClose}
-          >
-            <ArrowRightIcon className="h-4 w-4" />
-          </Button>
-          <span className="text-primary text-base font-bold font-iranYekan">
-            افزودن عکس
-          </span>
-        </div>
-        <Button
-          placeholder="close button"
-          className="bg-transparent shadow-none hover:shadow-none p-0"
-          onClick={handleClose}
-        >
-          <XIcon className="fill-gray-200 w-7 h-7" />
-        </Button>
-      </DialogHeader>
-      <DialogBody placeholder="dialog body" className="p-0 flex-grow">
-        {/* <ClasorFileManagement
-          //   dataReport={dataReport}
-          fetchingReport={fetchingReport}
-          files={files}
-          cropMode={cropMode}
-          isFetching={isFetching}
-          isLoading={isLoading}
-          isError={isError}
-          hasPreview={hasPreview}
-          processCount={processCount}
-          onSelectFile={(file) => {
-            return setSelectedFile?.(file);
-          }}
-          getDataType={handleDataType}
-          generateDownloadLink={generateDownloadLink}
-          onFetchNextPage={handleFetchNextPage}
-          onRenameFile={handleRenameFile}
-          onDeleteFile={handleDeleteFile}
-          onUploadFile={handleUploadFile}
-          onSearchFile={(search?: string) => {
-            setPage(0);
-            setName(search);
-          }}
-        /> */}
-      </DialogBody>
-      <DialogFooter
-        placeholder="create user dialog footer"
-        className="p-0 flex gap-2.5 mt-[30px]"
-      >
-        <Button
-          placeholder=""
-          className="bg-purple-normal flex justify-center items-center rounded-lg px-4 py-3 text-[13px] text-white font-iranYekan"
-          onClick={handleClose}
-        >
-          افزودن
-        </Button>
-      </DialogFooter>
-    </Dialog>
+      <ClasorFileManagement
+        files={files}
+        cropMode={false}
+        isFetching={isFetching}
+        isLoading={isLoading}
+        isError={isError}
+        hasPreview={false}
+        processCount={processCount}
+        onSelectFile={(file: IFile) => {
+          setSelectedImage(file);
+        }}
+        getDataType={handleDataType}
+        generateDownloadLink={generateDownloadLink}
+        onFetchNextPage={handleFetchNextPage}
+        onRenameFile={handleRenameFile}
+        onDeleteFile={handleDeleteFile}
+        onUploadFile={handleUploadFile}
+        onSearchFile={(search?: string) => {
+          setPage(0);
+          setName(search);
+        }}
+      />
+    </FileManagementDialog>
   );
 };
 

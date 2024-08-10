@@ -15,11 +15,9 @@ import {
   FolderIcon,
   InvisibleIcon,
 } from "@components/atoms/icons";
-import { Collapse } from "@material-tailwind/react";
+import { Button, Collapse, Typography } from "@material-tailwind/react";
 import RenderIf from "@components/renderIf";
 import LoadMore from "@components/molecules/loadMore";
-import Text from "@components/atoms/typograghy/text";
-import ButtonAtom from "@components/atoms/button";
 import TreeDocItem from "./treeDocItem";
 import { docTemplateFilter } from "./documentTemplateTree";
 
@@ -63,7 +61,11 @@ const TreeCatItem = ({ catItem }: IProps) => {
       {catItem.type === "category" ? (
         <div className="flex flex-col items-start">
           <div className="flex">
-            <ButtonAtom className="flex p-2 bg-transparent " onClick={handleClick}>
+            <Button
+              placeholder="button"
+              className="flex p-2 bg-transparent "
+              onClick={handleClick}
+            >
               <div className="flex items-center">
                 <div
                   className={`flex items-center justify-center cursor-pointer h-6 w-6 ${
@@ -77,10 +79,10 @@ const TreeCatItem = ({ catItem }: IProps) => {
                   <InvisibleIcon className="w-5 h-5 stroke-neutral-content flex-none" />
                 )}
               </div>
-              <Text className="text-primary lowercase mr-2" key={catItem.id}>
+              <Typography className="text-primary lowercase mr-2" key={catItem.id}>
                 {catItem.name}
-              </Text>
-            </ButtonAtom>
+              </Typography>
+            </Button>
           </div>
           <div className="flex flex-col pr-6">
             {isLoading && <div className="spinner" />}
@@ -98,12 +100,12 @@ const TreeCatItem = ({ catItem }: IProps) => {
                     );
                   }
                   return (
-                    <Text
+                    <Typography
                       className="text-xs text-center"
                       key={`doc-create-no-item-${page.page}`}
                     >
                       موردی برای نمایش وجود ندارد
-                    </Text>
+                    </Typography>
                   );
                 })}
                 <RenderIf isTrue={!!hasNextPage}>

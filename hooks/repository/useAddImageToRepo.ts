@@ -8,7 +8,7 @@ const useAddImageToRepo = () => {
     mutationKey: [`imageRepo`],
     mutationFn: async (values: {
       repoId: number;
-      fileHash: string;
+      fileHash: string | null;
       callBack?: () => void;
     }) => {
       const { fileHash ,repoId } = values;
@@ -18,7 +18,7 @@ const useAddImageToRepo = () => {
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`],
+        queryKey: [`getRepo-${repoId}`],
       });
       callBack?.();
     },

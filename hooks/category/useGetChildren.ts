@@ -12,7 +12,7 @@ const useGetChildren = (
   title?:string,
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
-  enabled?: boolean
+  // enabled?: boolean
 ) => {
   return useInfiniteQuery({
     queryKey: [`category-${categoryId || "parent"}-children`, title],

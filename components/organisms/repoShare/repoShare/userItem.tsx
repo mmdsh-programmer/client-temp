@@ -1,7 +1,6 @@
 import React from "react";
 import { UserIcon } from "@components/atoms/icons";
 import ImageComponent from "@components/atoms/image";
-import Text from "@components/atoms/typograghy/text";
 import { IUser } from "@interface/users.interface";
 import { ERoles } from "@interface/enums";
 import { translateRoles } from "@utils/index";
@@ -9,7 +8,7 @@ import useGetRoles from "@hooks/user/useGetRoles";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useDeleteUser from "@hooks/user/useDeleteUser";
 import SelectAtom from "@components/molecules/select";
@@ -77,14 +76,14 @@ const UserItem = ({ user }: IProps) => {
           <UserIcon className="w-full h-full p-1 border-[2px] border-normal rounded-[64px] overflow-hidden fill-icon-hover" />
         )}
       </div>
-      <Text className="flex-grow text-primary text-[13px] font-medium leading-[19.5px] -tracking-[0.13px]">
+      <Typography className="title_t3 flex-grow text-primary ">
         {user.userInfo.name}
-      </Text>
+      </Typography>
       {user.userRole === ERoles.owner ? (
         <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
-          <Text className="text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]">
+          <Typography className="select_option__text text-primary">
             {translateRoles(user.userRole)}
-          </Text>
+          </Typography>
         </div>
       ) : editRole.isPending || deleteUser.isPending ? (
         <div className="w-5">

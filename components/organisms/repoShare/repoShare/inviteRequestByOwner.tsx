@@ -1,15 +1,13 @@
 import React from "react";
 import ImageComponent from "@components/atoms/image";
-import Text from "@components/atoms/typograghy/text";
 import { ERoles } from "@interface/enums";
 import { translateRoles } from "@utils/index";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import useDeleteInviteRequest from "@hooks/user/useDeleteInviteRequest";
-import SelectAtom from "@components/molecules/select";
 
 interface IProps {
   user: IAccessRequest;
@@ -20,11 +18,8 @@ const InviteRequestByOwner = ({ user }: IProps) => {
   const deleteInviteRequest = useDeleteInviteRequest();
 
   const name = `${user.user.given_name} ${user.user.family_name} `;
-  const rolesOption = [
-    { label: "حذف کاربر", value: "delete" },
-  ];
 
-  const handleChange = (role: string) => {
+  const handleChange = () => {
     if (!getRepo) return;
     deleteInviteRequest.mutate({
       repoId: getRepo.id,
@@ -51,27 +46,26 @@ const InviteRequestByOwner = ({ user }: IProps) => {
           <div className="w-full h-full p-1 border-[2px] border-dashed border-normal rounded-[64px] overflow-hidden fill-icon-hover" />
         )}
       </div>
-      <Text className="flex-grow text-hint text-[13px] font-medium leading-[19.5px] -tracking-[0.13px]">
-        {name}
-      </Text>
+      <Typography className="title_t3 flex-grow text-hint">{name}</Typography>
       {user.role === ERoles.owner ? (
         <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
-          <Text className="text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]">
+          <Typography className="select_option__text text-primary">
             {translateRoles(user.role)}
-          </Text>
+          </Typography>
         </div>
       ) : deleteInviteRequest.isPending ? (
         <div className="w-5">
           <Spinner className="h-4 w-4" color="deep-purple" />
         </div>
       ) : (
-        <SelectAtom
+        <div
           className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
-          defaultOption={translateRoles(user.role)}
-          options={rolesOption}
-          selectedOption={user.role}
-          setSelectedOption={handleChange}
-        />
+          onClick={handleChange}
+        >
+          <Typography className="select_option__text text-primary">
+            حذف کاربر
+          </Typography>
+        </div>
       )}
     </div>
   );

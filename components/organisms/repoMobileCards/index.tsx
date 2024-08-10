@@ -6,9 +6,9 @@ import {
   FolderShareIcon,
   MyFolderIcon,
 } from "@components/atoms/icons";
-import Text from "@components/atoms/typograghy/text";
 import { ERepoGrouping } from "@interface/enums";
 import { useRecoilState } from "recoil";
+import { Typography } from "@material-tailwind/react";
 
 const RepoMobileCards = () => {
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGrouping);
@@ -23,9 +23,9 @@ const RepoMobileCards = () => {
           }}
         >
           <MyFolderIcon className="h-6 w-6 " />
-          <Text className="text-[12px] font-medium leading-[18px]">
+          <Typography className="title_t4">
             مخزن‌های من
-          </Text>
+          </Typography>
         </div>
         <div
           className={`flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "text-primary stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
@@ -34,9 +34,9 @@ const RepoMobileCards = () => {
           }}
         >
           <FolderBookmarkIcon className="h-6 w-6 " />
-          <Text className="text-[12px] font-medium leading-[18px]">
+          <Typography className="title_t4">
             نشان شده
-          </Text>
+          </Typography>
         </div>
         <div
           className={`flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.ACCESS_REPO ? "text-primary stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
@@ -45,9 +45,9 @@ const RepoMobileCards = () => {
           }}
         >
           <FolderShareIcon className="h-6 w-6 " />
-          <Text className=" text-[12px] font-medium leading-[18px]">
+          <Typography className="title_t4">
             اشتراکی
-          </Text>
+          </Typography>
         </div>
         <div
           className={`flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "text-primary stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
@@ -56,9 +56,9 @@ const RepoMobileCards = () => {
           }}
         >
           <FolderArchiveIcon className="h-6 w-6 " />
-          <Text className=" text-[12px] font-medium leading-[18px]">
+          <Typography className="title_t4">
             بایگانی شده
-          </Text>
+          </Typography>
         </div>
       </div>
     </div>

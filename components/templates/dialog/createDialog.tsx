@@ -4,15 +4,14 @@ import {
   DialogFooter,
   DialogBody,
   DialogHeader,
+  Typography,
 } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
-import Title from "@components/atoms/typograghy/title";
 import CloseButton from "@components/atoms/button/closeButton";
 import CancelButton from "@components/atoms/button/cancelButton";
-import Text from "@components/atoms/typograghy/text";
 import BackButton from "@components/atoms/button/backButton";
 
-interface IProps {
+export interface IProps {
   isPending: boolean;
   children: React.ReactNode;
   dialogHeader?: string;
@@ -41,21 +40,23 @@ const CreateDialog = ({
       size="sm"
       open={true}
       handler={handleClose}
-      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
+      className={`${className} flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary xs:!rounded-lg `}
     >
       <DialogHeader
         placeholder="dialog header"
         className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
-        <div className="block xs:hidden">
+      <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
         </div>
-        <div className="hidden xs:block">
+        <div className="flex items-center">
           {backToMain ? (
-            <BackButton onClick={handleClose} disabled={isPending} />
+            <div className="hidden xs:block">
+              <BackButton className="!pl-2 !pr-0 !py-0" onClick={handleClose} disabled={isPending} />
+            </div>
           ) : null}
+        <Typography className="form__title">{dialogHeader}</Typography>{" "}
         </div>
-        <Title>{dialogHeader}</Title>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
         </div>
@@ -79,9 +80,9 @@ const CreateDialog = ({
           onClick={onSubmit}
           loading={isPending}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ایجاد
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </Dialog>

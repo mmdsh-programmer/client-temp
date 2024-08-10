@@ -3,10 +3,9 @@ import { repoAtom } from "@atom/repository";
 import useGetInviteRequests from "@hooks/user/useGetInviteRequestsByOwner";
 import useGetUsers from "@hooks/user/useGetRepoUsers";
 import { useRecoilValue } from "recoil";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import ImageComponent from "@components/atoms/image";
 import { UserIcon } from "@components/atoms/icons";
-import Text from "@components/atoms/typograghy/text";
 import useGetRoles from "@hooks/user/useGetRoles";
 import { useForm } from "react-hook-form";
 import { translateRoles } from "@utils/index";
@@ -68,7 +67,7 @@ const RepoUsers = () => {
                       </div>
                     )}
                   </div>
-                  <Text> {user.userInfo.userName}</Text>
+                  <Typography> {user.userInfo.userName}</Typography>
                   <select
                     id="user-create-role"
                     className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
@@ -112,7 +111,7 @@ const RepoUsers = () => {
                       </div>
                     )}
                   </div>
-                  <Text> {user.user.preferred_username}</Text>
+                  <Typography> {user.user.preferred_username}</Typography>
                   <select
                     id="user-create-role"
                     className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"

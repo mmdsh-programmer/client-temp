@@ -1,30 +1,58 @@
-import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import Select from ".";
+import React, { useState } from 'react';
+import SelectAtom from '.';
+import type { Meta, StoryObj } from '@storybook/react';
 
-const meta: Meta<typeof Select> = {
-  title: "components/Atoms/Select",
-  component: Select,
+interface IProps {
+  options: { value: string, label: string }[];
+  selectedOption?: string;
+  setSelectedOption: (option: string) => void;
+  defaultOption?: string;
+  className?: string;
+}
 
-  parameters: {
-    backgrounds: {
-      default: "dark",
+const meta: Meta<IProps> = {
+  title: 'Components/Molecules/SelectAtom',
+  component: SelectAtom,
+  tags: ['autodocs'],
+  argTypes: {
+    options: {
+      control: 'object',
+      description: 'List of options for the select box',
     },
-    layout: "centered",
+    selectedOption: {
+      control: 'text',
+      description: 'Currently selected option',
+    },
+    setSelectedOption: {
+      action: 'optionSelected',
+      description: 'Callback to update selected option',
+    },
+    defaultOption: {
+      control: 'text',
+      description: 'Default text when no option is selected',
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes to apply',
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Select>;
+type Story = StoryObj<IProps>;
 
-export const SelectExample: Story = {
+export const Default: Story = {
   args: {
-    classNameSelect:
-      "rounded-md !px-[15px] !py-[9px] focus:px-[15px] focus:outline-none text-[16px] font-normal text-primary placeholder:text-hint w-full text-right",
-    classNameOption: "",
+    options: [
+      { value: 'option1', label: 'Option 1' },
+      { value: 'option2', label: 'Option 2' },
+      { value: 'option3', label: 'Option 3' },
+    ],
+    defaultOption: 'Select an option...',
   },
-  render: function Render(args) {
-    return <Select {...args} options={["سند", "نمونه سند", "دسته بندی"]} />;
+  render: (args) => {
+    const [selectedOption, setSelectedOption] = useState<string | undefined>(undefined);
+    return <SelectAtom {...args} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />;
   },
 };

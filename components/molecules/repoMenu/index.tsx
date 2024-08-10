@@ -6,6 +6,7 @@ import {
   FolderInfoIcon,
   KeyIcon,
   MoreDotIcon,
+  PublishIcon,
   RestoreIcon,
   ShareIcon,
   StarIcon,
@@ -15,24 +16,24 @@ import RepoDeleteDialog from "@components/organisms/dialogs/repository/repoDelet
 import RepoArchiveDialog from "@components/organisms/dialogs/repository/repoArchiveDialog";
 import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRestoreDialog";
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
-import ButtonAtom from "@components/atoms/button";
 import RepoEditDialog from "@components/organisms/dialogs/repository/repoEditDialog";
 import { useRouter } from "next/navigation";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { listMode } from "@atom/app";
-import { repoInfoAtom } from "@atom/repository";
+import { repoAtom, repoInfoAtom } from "@atom/repository";
 import { EListMode } from "@interface/enums";
 import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
+import { Button } from "@material-tailwind/react";
+import RepoBookmarkDialog from "@components/organisms/dialogs/repository/repoBookmarkDialog";
 
 interface IProps {
   repo: IRepo;
   archived?: boolean;
-  isList?: boolean;
 }
 
-const RepoMenu = ({ archived, repo, isList }: IProps) => {
+const RepoMenu = ({ archived, repo }: IProps) => {
   const router = useRouter();
   const [editRepoModal, setEditRepoModal] = useState(false);
   const [deleteRepoModal, setDeleteRepoModal] = useState(false);
@@ -46,7 +47,7 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
   const [repoKeyModal, setRepoKeyModal] = useState(false);
 
   const mode = useRecoilValue(listMode);
-
+  const setRepo = useSetRecoilState(repoAtom);
   const setRepoInfo = useSetRecoilState(repoInfoAtom);
 
   const adminRole = repo.roleName === "owner" || repo.roleName === "admin";
@@ -96,7 +97,22 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
           {
             text: "اشتراک گذاری",
             icon: <ShareIcon className="w-4 h-4" />,
-            onClick: () => setShareRepoModal(true),
+            onClick: () => {
+              setShareRepoModal(true);
+
+              setRepo(repo);
+            },
+          },
+          {
+            ...(repo.isPublish
+              ? {
+                  text: " مخزن منتشرشده",
+                  icon: <PublishIcon className="w-4 h-4 stroke-black" />,
+                  onClick: () => {
+                    
+                  },
+                }
+              : {}),
           },
           {
             text: "لیست کلید های مخزن",
@@ -128,82 +144,38 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
 
   return (
     <>
-      {isList ? (
-        <>
-          <div className="hidden xs:flex flex-wrap gap-2 mr-6">
-            {adminRole && (
-              <>
-                {menuList.map((item, index) => {
-                  return (
-                    index !== 0 && (
-                      <ButtonAtom
-                        className="bg-white w-8 h-8 border-[1px] border-normal"
-                        onClick={() => {
-                          item.onClick();
-                          setOpenRepoActionDrawer(false);
-                        }}
-                      >
-                        {item.icon}
-                      </ButtonAtom>
-                    )
-                  );
-                })}
-              </>
-            )}
-            <ButtonAtom
-              className="bg-white w-8 h-8 border-[1px] border-normal"
-              onClick={() => {
-                setBookmarkRepoModal(true);
-              }}
-            >
-              <StarIcon className="w-4 h-4 stroke-gray-900" />
-            </ButtonAtom>
-          </div>
-          <div className="flex xs:hidden">
-            <MenuTemplate
-              setOpenDrawer={() => {
-                setOpenRepoActionDrawer(true);
-              }}
-              menuList={menuList}
-              icon={
-                <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                  <MoreDotIcon className="w-4 h-4" />
-                </div>
-              }
-            />
-          </div>
-        </>
-      ) : (
-        <div className="flex items-center gap-1 justify-end">
-          {archived ? null : (
-            <ButtonAtom
-              className="rounded-lg border-2 border-gray-50 
+      <div className="flex items-center gap-1 justify-end">
+        {archived ? null : (
+          <Button
+            placeholder="button"
+            className="rounded-lg border-2 border-gray-50 
              bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
-            >
-              <StarIcon className="w-4 h-4" />
-            </ButtonAtom>
-          )}
-
-          <MenuTemplate
-            setOpenDrawer={() => {
-              setOpenRepoActionDrawer(true);
+            onClick={() => {
+              setBookmarkRepoModal(true);
             }}
-            menuList={menuList}
-            icon={
-              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                <MoreDotIcon className="w-4 h-4" />
-              </div>
-            }
-          />
-        </div>
-      )}
-      <div className="xs:hidden flex">
-        <DrawerTemplate
-          openDrawer={openRepoActionDrawer}
-          setOpenDrawer={setOpenRepoActionDrawer}
+          >
+            <StarIcon
+              className={`w-4 h-4 ${repo.bookmark ? "fill-amber-600 stroke-amber-600" : "stroke-icon-active"}`}
+            />
+          </Button>
+        )}
+        <MenuTemplate
+          setOpenDrawer={() => {
+            setOpenRepoActionDrawer(true);
+          }}
           menuList={menuList}
+          icon={
+            <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+              <MoreDotIcon className="w-4 h-4" />
+            </div>
+          }
         />
       </div>
+      <DrawerTemplate
+        openDrawer={openRepoActionDrawer}
+        setOpenDrawer={setOpenRepoActionDrawer}
+        menuList={menuList}
+      />
 
       {editRepoModal && (
         <RepoEditDialog repo={repo} setOpen={setEditRepoModal} />
@@ -220,9 +192,10 @@ const RepoMenu = ({ archived, repo, isList }: IProps) => {
       {shareRepoModal && (
         <RepoShareDialog repo={repo} setOpen={setShareRepoModal} />
       )}
-      {repoKeyModal && (
-        <RepoKeyDialog repo={repo} setOpen={setRepoKeyModal} />
+      {bookmarkRepoModal && (
+        <RepoBookmarkDialog repo={repo} setOpen={setBookmarkRepoModal} />
       )}
+      {repoKeyModal && <RepoKeyDialog repo={repo} setOpen={setRepoKeyModal} />}
     </>
   );
 };

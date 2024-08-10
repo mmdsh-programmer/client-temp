@@ -1,5 +1,5 @@
 import { getMyRepositoryList } from "@actions/repository";
-import { IResponse } from "@interface/repo.interface";
+import { IRepo, IResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetMyRepoList = (
@@ -17,7 +17,7 @@ const useGetMyRepoList = (
         archived,
         name
       );
-      return response?.data as IResponse;
+      return response?.data as IResponse<IRepo>;
     },
     initialPageParam: 1,
     retry: false,

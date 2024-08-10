@@ -1,6 +1,5 @@
 import React from "react";
-import Text from "@components/atoms/typograghy/text";
-import Button from "@components/atoms/button";
+import { Button, Typography } from "@material-tailwind/react";
 
 interface IProps {
   classNameText?: string;
@@ -21,7 +20,7 @@ const IconTextButton = ({
     <Button className={`${classNameButton || ""} flex justify-center items-center rounded-lg `} onClick={onClick}>
       <>
         {icon}
-        <Text className={classNameText}>{text}</Text>
+        <Typography className={classNameText}>{text}</Typography>
       </>
     </Button>
   );

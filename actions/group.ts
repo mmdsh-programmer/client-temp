@@ -36,10 +36,7 @@ export const getRepositoryGroupsAction = async (
   }
 };
 
-export const getGroupInfoAction = async (
-  repoId?: number,
-  title?: string
-) => {
+export const getGroupInfoAction = async (repoId?: number, title?: string) => {
   const userInfo = await getMe();
   try {
     const response = await getGroupInfo(userInfo.access_token, repoId, title);
@@ -52,11 +49,19 @@ export const getGroupInfoAction = async (
 
 export const createGroupAction = async (
   repoId: number | undefined,
-  title: string
+  title: string,
+  description?: string,
+  members?: string[]
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await createGroup(userInfo.access_token, repoId, title);
+    const response = await createGroup(
+      userInfo.access_token,
+      repoId,
+      title,
+      description,
+      members,
+    );
     return response;
   } catch (error) {
     console.log("============ error ==========", error);

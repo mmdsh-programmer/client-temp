@@ -1,16 +1,14 @@
 import React from "react";
 import { repoActiveStep } from "@atom/stepper";
-import Text from "@components/atoms/typograghy/text";
 import LoadingButton from "@components/molecules/loadingButton";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import useGetTags from "@hooks/tag/useGetTags";
-import { DialogBody, DialogFooter, Spinner } from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Spinner, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoTagSchema } from "../validation.yup";
-import Label from "@components/atoms/typograghy/label";
 import InputAtom from "@components/atoms/input";
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
@@ -65,10 +63,9 @@ const Tags = ({ handleClose }: IProps) => {
       >
         <form className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <Label labelFor="username"> تگ</Label>
+            <Typography className="label"> تگ</Typography>
             <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
               <InputAtom
-                id="username"
                 className="!w-auto h-auto overflow-hidden !p-0 border-none"
                 placeholder="عنوان تگ"
                 register={{ ...register("name") }}
@@ -78,9 +75,9 @@ const Tags = ({ handleClose }: IProps) => {
                 onClick={handleSubmit(onSubmit)}
                 className="!h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
-                <Text className="!text-primary px-3 font-medium text-[13px] leading-[18px] -tracking-[0.12px]">
+                <Typography className="!text-primary text__label__button px-3">
                   افزودن
-                </Text>
+                </Typography>
               </LoadingButton>
             </div>
           </div>
@@ -114,9 +111,9 @@ const Tags = ({ handleClose }: IProps) => {
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={() => setActiveStep(3)}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

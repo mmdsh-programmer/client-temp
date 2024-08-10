@@ -1,6 +1,5 @@
 import React from "react";
-import { Button } from "@material-tailwind/react";
-import Text from "../typograghy/text";
+import { Button, Typography } from "@material-tailwind/react";
 
 interface IProps {
   onClick: () => void;
@@ -17,9 +16,9 @@ const CancelButton = ({ onClick, disabled, children }: IProps) => {
       onClick={onClick}
       disabled={disabled}
     >
-      <Text className="text-primary text-[12px] font-medium leading-[18px] -tracking-[0.12px] ">
+      <Typography className="text__label__button text-primary">
         {children}
-      </Text>
+      </Typography>
     </Button>
   );
 };

@@ -27,6 +27,7 @@ const GroupDeleteDialog = ({ setOpen }: IProps) => {
       title: group?.title,
       callBack: () => {
         toast.error("گروه حذف شد.");
+        handleClose()
       },
     });
   };

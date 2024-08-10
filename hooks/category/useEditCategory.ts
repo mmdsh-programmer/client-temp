@@ -18,6 +18,7 @@ const useEditCategory = () => {
       callBack?: () => void;
     }) => {
       const { repoId, categoryId, order, isHidden, description, name } = values;
+
       const response = await editCategoryAction(
         repoId,
         categoryId,

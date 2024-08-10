@@ -8,6 +8,7 @@ import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialog
 import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
 import { repoAtom } from "@atom/repository";
 import Files from "./files";
+import { IFile } from "cls-file-management";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -15,6 +16,7 @@ interface IProps {
 const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
   const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStep);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const [selectedFile, setSelectedFile] = useState<IFile | null>(null);
 
   const [openFileManagement, setOpenFileManagement] = useState(false);
 
@@ -41,14 +43,24 @@ const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
         <RepoImage
           setOpenFileManagement={setOpenFileManagement}
           handleClose={handleClose}
+          selectedFile={selectedFile}
         />
       );
     }
   };
+
   return (
     <>
-      {openFileManagement ? (
-        <Files userGroupHash={getRepo?.userGroupHash} resourceId={null} type="public" handleClose={handleClose} />
+      {openFileManagement && getRepo ? (
+        <Files
+          userGroupHash={getRepo.userGroupHash}
+          resourceId={getRepo.id}
+          type="public"
+          handleClose={() => {
+            setOpenFileManagement(false);
+          }}
+          setSelectedFile={setSelectedFile}
+        />
       ) : (
         <StepperDialog
           dialogHeader="ایجاد مخزن"

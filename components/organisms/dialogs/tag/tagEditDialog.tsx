@@ -5,10 +5,10 @@ import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import InputAtom from "@components/atoms/input/formInput";
-import Label from "@components/atoms/typograghy/label";
-import WarningText from "@components/atoms/typograghy/warningText";
 import EditDialog from "@components/templates/dialog/editDialog";
 import { selectedTagAtom } from "@atom/tag";
+import { Typography } from "@material-tailwind/react";
+import FormInput from "@components/atoms/input/formInput";
 
 interface IForm {
   name: string;
@@ -58,11 +58,11 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
+      backToMain
     >
       <form className="flex flex-col gap-2">
-        <Label>نام تگ</Label>
-        <InputAtom
-          className="w-full"
+        <Typography className="label">نام تگ</Typography>
+        <FormInput
           placeholder="نام تگ"
           register={{
             ...register("name", {
@@ -70,7 +70,11 @@ const TagEditDialog = ({ setOpen }: IProps) => {
             }),
           }}
         />
-        {errors.name && <WarningText>{errors.name?.message}</WarningText>}
+        {errors.name && (
+          <Typography className="warning_text">
+            {errors.name?.message}
+          </Typography>
+        )}
       </form>
     </EditDialog>
   );

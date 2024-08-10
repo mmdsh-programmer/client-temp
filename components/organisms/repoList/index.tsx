@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { repoGrouping, repoSearchParamAtom } from "@atom/repository";
+import { repoAtom, repoGrouping, repoSearchParamAtom } from "@atom/repository";
 import { ERepoGrouping } from "@interface/enums";
 import RenderIf from "@components/renderIf";
 import MyRepoList from "./myRepoList";
@@ -13,10 +13,12 @@ import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepp
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
   const getRepoGroup = useRecoilValue(repoGrouping);
+  const setRepo = useSetRecoilState(repoAtom);
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
 
   useEffect(() => {
     setSearchParam(null);
+    setRepo(null);
   }, []);
 
   return (

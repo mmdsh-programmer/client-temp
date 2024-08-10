@@ -4,10 +4,9 @@ import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
-import InputAtom from "@components/atoms/input/formInput";
-import WarningText from "@components/atoms/typograghy/warningText";
-import Label from "@components/atoms/typograghy/label";
 import CreateDialog from "@components/templates/dialog/createDialog";
+import { Typography } from "@material-tailwind/react";
+import FormInput from "@components/atoms/input/formInput";
 
 interface IForm {
   name: string;
@@ -60,13 +59,16 @@ const TagCreateDialog = ({ setOpen }: IProps) => {
       className="h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "
     >
       <form className="flex flex-col gap-2 ">
-        <Label>نام تگ</Label>
-        <InputAtom
-          className="w-full"
+        <Typography className="label">نام تگ</Typography>
+        <FormInput
           placeholder="نام تگ"
           register={{ ...register("name") }}
         />
-        {errors.name && <WarningText>{errors.name?.message}</WarningText>}
+        {errors.name && (
+          <Typography className="warning_text">
+            {errors.name?.message}
+          </Typography>
+        )}
       </form>
     </CreateDialog>
   );

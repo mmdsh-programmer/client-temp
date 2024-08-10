@@ -45,7 +45,7 @@ const MyRepoList = ({ archived }: IProps) => {
                 </div>
               ) : listLength ? (
                 <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-                  <table className="w-full min-w-max ">
+                  <table className="w-full overflow-hidden min-w-max ">
                     <TableHead
                       tableHead={[
                         {
@@ -132,7 +132,7 @@ const MyRepoList = ({ archived }: IProps) => {
                           : "--"
                       }
                       creator={repo.owner?.userName}
-                      cardAction={<RepoMenu repo={repo} isList={true} />}
+                      cardAction={<RepoMenu repo={repo} />}
                     />
                   );
                 });

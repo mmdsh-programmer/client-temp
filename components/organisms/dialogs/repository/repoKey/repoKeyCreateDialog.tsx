@@ -5,14 +5,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateKeySchema } from "../validation.yup";
-import Label from "@components/atoms/typograghy/label";
 import InputAtom from "@components/atoms/input";
-import WarningText from "@components/atoms/typograghy/warningText";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import ButtonAtom from "@components/atoms/button";
 import forge from "node-forge";
 import copy from "copy-to-clipboard";
-import Text from "@components/atoms/typograghy/text";
+import { Button, Typography } from "@material-tailwind/react";
+import FormInput from "@components/atoms/input/formInput";
 
 interface IProps {
   repoId: number;
@@ -100,60 +98,62 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
       className="h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4"
     >
       <form className="flex flex-col gap-2">
-        <Label labelFor="repo-key-name">نام کلید</Label>
-        <InputAtom
+        <Typography className="label">نام کلید</Typography>
+        <FormInput
           id="repo-key-name"
-          className="w-full"
           placeholder="نام کلید"
           register={{ ...register("name") }}
         />
-        {errors.name ? <WarningText>{errors.name?.message}</WarningText> : null}
+        {errors.name ? (
+          <Typography className="warning_text">
+            {errors.name?.message}
+          </Typography>
+        ) : null}
 
-        <Label labelFor="repo-public-key" className="mt-2">
-          کلید عمومی
-        </Label>
+        <Typography className="label mt-2">کلید عمومی</Typography>
         <TextareaAtom
           id="repo-public-key"
           placeholder="کلید عمومی..."
           register={{ ...register("publicKey") }}
         />
         {errors.publicKey ? (
-          <WarningText>{errors.publicKey?.message}</WarningText>
+          <Typography className="warning_text">
+            {errors.publicKey?.message}
+          </Typography>
         ) : null}
 
         {showPrivateKey ? (
           <>
-            <Label labelFor="repo-private-key" className="mt-2">
-              کلید خصوصی
-            </Label>
+            <Typography className="label mt-2">کلید خصوصی</Typography>
             <TextareaAtom
               id="repo-private-key"
               placeholder="کلید خصوصی..."
               readOnly
               register={{ ...register("privateKey") }}
-              className="w-full"
             />
-            <Text className="text-xs mt-1">
+            <Typography className="text-xs mt-1">
               *کلید خصوصی را کپی کنید. کلید خصوصی ذخیره نخواهد شد*
-            </Text>
+            </Typography>
           </>
         ) : null}
 
         <div className="flex justify-end gap-2 mt-2">
           {showPrivateKey ? (
-            <ButtonAtom
+            <Button
+              placeholder="button"
               className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !p-2 !px-3"
               onClick={clearKeys}
             >
               حذف کلید ها
-            </ButtonAtom>
+            </Button>
           ) : null}
-          <ButtonAtom
+          <Button
+            placeholder="button"
             className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !p-2 !px-3"
             onClick={generateKey}
           >
             تولید کلید
-          </ButtonAtom>
+          </Button>
         </div>
       </form>
     </CreateDialog>

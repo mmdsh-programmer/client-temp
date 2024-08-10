@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { repoActiveStep } from "@atom/stepper";
 import { AddImageIcon } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
@@ -8,37 +7,41 @@ import {
   DialogBody,
   DialogFooter,
   Radio,
+  Typography,
 } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import CancelButton from "@components/atoms/button/cancelButton";
-import Text from "@components/atoms/typograghy/text";
 import RepoDefaultImage from "@components/molecules/repoDefaultImage";
+import { IFile } from "cls-file-management";
 
 interface IProps {
   handleClose: () => void;
   setOpenFileManagement: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedFile: IFile | null;
 }
 
 interface IForm {
   fileHash: string;
 }
 
-const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
+const RepoImage = ({
+  handleClose,
+  setOpenFileManagement,
+  selectedFile,
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const setActiveStep = useSetRecoilState(repoActiveStep);
-  const [getSelectedFile, setSelectedFile] = useState();
+  const [imageType, setImageType] = useState<"default" | "custom">(selectedFile ? "custom": "default");
+  const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
   const { isPending, mutate } = useAddImageToRepo();
   const {
-    register,
     handleSubmit,
     formState: { errors },
     clearErrors,
     reset,
-    getValues,
   } = useForm<IForm>();
 
   const handleReset = () => {
@@ -47,18 +50,20 @@ const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
   };
 
   const handleSelect = (image: string) => {
-    console.log("-------------------- select image -----------------", image);
+    setDefualtImage(image);
   };
 
   const onSubmit = async () => {
-    if (!getSelectedFile || !getRepo) return;
+    if ( !getRepo ) return;
+    if (imageType === "default" && !defualtImage) return;
+    if (imageType === "custom" && !selectedFile) return
     mutate({
       repoId: getRepo.id,
-      fileHash: getSelectedFile,
+      fileHash: selectedFile ? selectedFile.hash : defualtImage,
       callBack: () => {
         toast.success("عکس با موفقیت به مخزن اضافه شد.");
         handleReset();
-        setActiveStep(1);
+        handleClose();
       },
     });
   };
@@ -72,40 +77,53 @@ const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <Radio
-              name="description"
+              name="default_image"
               color="deep-purple"
               label={
                 <div>
-                  <Text className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                  <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                     تصویر پیش‌فرض
-                  </Text>
-                  <Text className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
+                  </Typography>
+                  <Typography className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
                     انتخاب تصویر پیش‌فرض برای مخزن
-                  </Text>
+                  </Typography>
                 </div>
               }
               containerProps={{
                 className: "-mt-5",
               }}
+              checked={imageType === "default"}
+              onClick={() => {
+                setImageType("default");
+              }}
             />
-            <RepoDefaultImage onClick={handleSelect} />
+            <div className="">
+              <RepoDefaultImage
+                onClick={handleSelect}
+                disabled={imageType !== "default"}
+              />
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <Radio
-              name="description"
+              name="custom_image"
               color="deep-purple"
               label={
                 <div>
-                  <Text className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                  <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                     تصویر سفارشی
-                  </Text>
-                  <Text className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
+                  </Typography>
+                  <Typography className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
                     انتخاب تصویر دلخواه برای مخزن
-                  </Text>
+                  </Typography>
                 </div>
               }
               containerProps={{
                 className: "-mt-5",
+              }}
+              checked={imageType === "custom"}
+              onClick={() => {
+                setImageType("custom");
               }}
             />
             <Button
@@ -114,6 +132,7 @@ const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
               }}
               className="flex justify-center items-center rounded-lg border-[1px] border-dashed border-normal bg-secondary w-[82px] h-[82px]"
               placeholder=""
+              disabled={imageType !== "custom"}
             >
               <AddImageIcon className="h-6 w-6" />
             </Button>
@@ -132,9 +151,9 @@ const RepoImage = ({ handleClose, setOpenFileManagement }: IProps) => {
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
-            ایجاد
-          </Text>
+          <Typography className="text__label__button text-white">
+            ادامه
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

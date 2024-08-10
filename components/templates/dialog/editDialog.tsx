@@ -4,15 +4,14 @@ import {
   DialogFooter,
   DialogBody,
   DialogHeader,
+  Typography,
 } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
-import Title from "@components/atoms/typograghy/title";
 import CloseButton from "@components/atoms/button/closeButton";
 import CancelButton from "@components/atoms/button/cancelButton";
-import Text from "@components/atoms/typograghy/text";
 import BackButton from "@components/atoms/button/backButton";
 
-interface IProps {
+export interface IProps {
   isPending: boolean;
   children: React.ReactNode;
   dialogHeader?: string;
@@ -29,7 +28,7 @@ const EditDialog = ({
   setOpen,
   onSubmit,
   className,
-  backToMain
+  backToMain,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -50,12 +49,14 @@ const EditDialog = ({
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
         </div>
-        <div className="hidden xs:block">
+        <div className="flex items-center">
           {backToMain ? (
-            <BackButton onClick={handleClose} disabled={isPending} />
+            <div className="hidden xs:block">
+              <BackButton className="!pl-2 !pr-0 !py-0" onClick={handleClose} disabled={isPending} />
+            </div>
           ) : null}
+        <Typography className="form__title">{dialogHeader}</Typography>{" "}
         </div>
-        <Title>{dialogHeader}</Title>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
         </div>
@@ -79,9 +80,9 @@ const EditDialog = ({
           onClick={onSubmit}
           loading={isPending}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ویرایش
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </Dialog>

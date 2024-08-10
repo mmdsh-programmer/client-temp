@@ -3,11 +3,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import useEditRepo from "@hooks/repository/useEditRepo";
 import { IRepo } from "@interface/repo.interface";
-import Label from "@components/atoms/typograghy/label";
-import WarningText from "@components/atoms/typograghy/warningText";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   repo: IRepo;
@@ -60,9 +59,8 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Label>عنوان مخزن</Label>
+          <Typography className="label">عنوان مخزن</Typography>
           <FormInput
-            className="w-full"
             placeholder="عنوان"
             register={{
               ...register("name", {
@@ -70,19 +68,24 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
               }),
             }}
           />
-          {errors.name && <WarningText>{errors.name?.message}</WarningText>}
+          {errors.name && (
+            <Typography className="warning_text">
+              {errors.name?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Label>توضیحات مخزن</Label>
+          <Typography className="label">توضیحات مخزن</Typography>
           <TextareaAtom
-            className="w-full"
             placeholder="توضیحات"
             register={{
               ...register("description", { value: repo.description }),
             }}
           />
           {errors.name && (
-            <WarningText>{errors.description?.message}</WarningText>
+            <Typography className="warning_text">
+              {errors.description?.message}
+            </Typography>
           )}
         </div>
       </form>

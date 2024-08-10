@@ -1,8 +1,7 @@
 import React from "react";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { bulkItems } from "@atom/bulk";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRecoilState } from "recoil";
 import { FaDateFromTimestamp } from "@utils/index";
 import { DocIcon, InvisibleIcon } from "@components/atoms/icons";
 import { Checkbox } from "@material-tailwind/react";
@@ -16,7 +15,6 @@ interface IProps {
 
 const DocumentTableRow = ({ document }: IProps) => {
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;

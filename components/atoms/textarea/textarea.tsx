@@ -17,11 +17,11 @@ const TextareaAtom = ({ register, ...otherProps }: IProps) => {
       {...register}
       type="text"
       className={`${otherProps.className || ""} 
-      flex items-center !h-12 gap-2 !p-3
+      flex items-center gap-2 !p-3
       !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
-       font-normal text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]
+       font-normal text-primary text-[13px] placeholder:text-[13px] leading-[18.2px] -tracking-[0.13px]
        placeholder:text-placeholder text-right
-       !bg-gray-50 border-[1px] !border-normal focus:!border-normal focus:border-t-current`}
+       !bg-gray-50 border-[1px] !border-normal focus:!border-normal `}
       {...otherProps}
     />
   );

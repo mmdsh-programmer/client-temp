@@ -12,7 +12,7 @@ module.exports = withMT({
       colors: {
         gray: {
           50: "#F6F7F8", // cancel background
-          100: "#F4F4F5",
+          100: "#EEF0F2",
           200: "#ECECEE", // border-normel // menu-active
           300: "#CED4D9",
           400: "#9AA6B1", // text-hint // icon-normal
@@ -57,6 +57,7 @@ module.exports = withMT({
         placeholder: "#98A2B3",
         disabled: "#9AA6B1",
         primary_normal: "#7446B2",
+        link: "#0C8CE9"
       },
       fontFamily: {
         iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans],

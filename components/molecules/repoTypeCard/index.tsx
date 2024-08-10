@@ -24,7 +24,7 @@ const RepoTypeCard = ({ cardTitle, icon, repoNumber, onClick }: IProps) => {
             onClick={onClick}
             className="bg-transparent p-1 shadow-none hover:shadow-none"
           >
-            <ChevronLeftIcon className="h-3 w-3" />
+            <ChevronLeftIcon className="h-3 w-3 stroke-icon-active" />
           </Button>
         </RepoCardBody>
       </CardBody>

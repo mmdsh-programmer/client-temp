@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import Text from "@components/atoms/typograghy/text";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   options?: any[];
-  selectedOption?: string;
+  selectedOption?: string | null;
   setSelectedOption: (options: string | any) => void;
   defaultOption?: string;
   className?: string;
@@ -48,7 +48,7 @@ const SelectAtom = ({
   return (
     <div
       ref={dropdownRef}
-      className={`relative inline-block`}
+      className={` relative inline-block`}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -87,9 +87,9 @@ const SelectAtom = ({
                   setIsOpen(false);
                 }}
               >
-                <Text className="truncate text-right text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]">
+                <Typography className="select_option__text truncate text-right text-primary ">
                   {option.label}
-                </Text>
+                </Typography>
               </li>
             ))}
           </ul>

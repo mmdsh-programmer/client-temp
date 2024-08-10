@@ -10,7 +10,7 @@ import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
 import { useRecoilValue } from "recoil";
 import { repoSearchParamAtom } from "@atom/repository";
-import RepoSearch from "./repoSearch";
+import RepoSearch from "../../molecules/repoSearch";
 import { ERepoGrouping } from "@interface/enums";
 import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
@@ -119,7 +119,7 @@ const AllRepoList = () => {
               : "--"
           }
           creator={repo.owner?.userName}
-          cardAction={<RepoMenu repo={repo} isList={true} />}
+          cardAction={<RepoMenu repo={repo} />}
         />
       ))
     );
@@ -127,7 +127,7 @@ const AllRepoList = () => {
   return (
     <>
       <div className="hidden xs:block">
-        <div className="flex flex-col h-full bg-primary px-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
+        <div className="flex flex-col h-full bg-primary px-5 pb-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
           {isLoadingAllRepos ? (
             <div className="w-full h-full flex justify-center items-center">
               <Spinner className="h-8 w-8" color="deep-purple" />

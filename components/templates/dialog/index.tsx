@@ -6,9 +6,9 @@ import {
   DialogFooter,
   DialogBody,
   DialogHeader,
+  Typography,
 } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
-import Title from "@components/atoms/typograghy/title";
 import CloseButton from "@components/atoms/button/closeButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 
@@ -47,7 +47,7 @@ const DialogOrganism = ({
         placeholder="dialog header"
         className="flex items-center justify-between p-0"
       >
-        <Title>{dialogHeader}</Title>
+        <Typography className="form__title">{dialogHeader}</Typography>{" "}
         <CloseButton onClose={handleClose} disabled={isPending} />
       </DialogHeader>
       <DialogBody placeholder="dialog body" className="flex-grow p-0 mt-[30px]">

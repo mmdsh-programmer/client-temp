@@ -12,6 +12,11 @@ export const repoAtom = atom<IRepo | null>({
   default: null,
 });
 
+export const repoMenuAtom = atom<IRepo | null>({
+  key: "repoMenuAtom",
+  default: null,
+});
+
 export const repoInfoAtom = atom<IRepo | null>({
   key: "repoInfoAtom",
   default: null,

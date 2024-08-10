@@ -94,6 +94,9 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
       text: document?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
       onClick: () => {
         document?.isHidden ? setVisibleModal(true) : setHideModal(true);
+        if (document) {
+          setDocument(document);
+        }
       },
     },
     {
@@ -128,34 +131,27 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
       )}
       {deleteDocumentModal && (
         <DocumentDeleteDialog
-          document={document}
           setOpen={() => {
             setDeleteDocumentModal(false);
           }}
         />
       )}
-
       {editDocumentModal && (
         <DocumentEditDialog
-          document={document}
           setOpen={() => {
             setEditDocumentModal(false);
           }}
         />
       )}
-
       {hideModal && (
         <DocumentHideDialog
-          document={document}
           setOpen={() => {
             setHideModal(false);
           }}
         />
       )}
-
       {visibleModal && (
         <DocumentVisibleDialog
-          document={document}
           setOpen={() => {
             setVisibleModal(false);
           }}

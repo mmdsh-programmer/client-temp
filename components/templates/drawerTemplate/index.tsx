@@ -1,8 +1,7 @@
 import React from "react";
-import { Drawer } from "@material-tailwind/react";
-import Text from "@components/atoms/typograghy/text";
+import { Drawer, Typography } from "@material-tailwind/react";
 
-interface IProps {
+export interface IProps {
   openDrawer: boolean | null;
   setOpenDrawer: React.Dispatch<React.SetStateAction<boolean | null>>;
   menuList: {
@@ -36,11 +35,11 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
             >
               <div className="flex items-center gap-1">
                 {menuItem.icon}
-                <Text
-                  className={`text-[13px] leading-[18.2px] -tracking-[0.13px] font-normal`}
+                <Typography
+                  className={`select_option__text font-normal`}
                 >
                   {menuItem.text}
-                </Text>
+                </Typography>
               </div>
             </li>
           );

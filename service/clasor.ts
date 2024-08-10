@@ -35,6 +35,7 @@ import {
 } from "@interface/version.interface";
 
 const { CLASOR } = process.env;
+const {  TINY_BASE_URL } = process.env;
 
 /////////////////////// AUTH ///////////////////
 export const handleRedirect = async (redirectUrl: string) => {
@@ -310,7 +311,7 @@ export const getMyRepositories = async (
   }
 };
 
-export const getRepository = async (access_token: string, repoId: number) => {
+export const getRepository = async (access_token: string, repoId?: number) => {
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}`, {
       headers: {
@@ -318,7 +319,7 @@ export const getRepository = async (access_token: string, repoId: number) => {
         _token_issuer_: 1,
         Authorization: "Bearer " + access_token,
       } as any,
-      next: { tags: ["repo"] },
+      next: { tags: ["get-repo"] },
     });
     if (!response.ok) {
       throw new Error("خطا در شبکه");
@@ -565,7 +566,7 @@ export const bookmarkRepository = async (
 export const imageRepository = async (
   access_token: string,
   repoId: number,
-  fileHash: string
+  fileHash: string | null
 ) => {
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}/image`, {
@@ -843,7 +844,9 @@ export const getGroupInfo = async (
 export const createGroup = async (
   access_token: string,
   repoId: number | undefined,
-  title: string
+  title: string,
+  description?: string,
+  members?: string[]
 ) => {
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}/groups`, {
@@ -854,7 +857,12 @@ export const createGroup = async (
         Authorization: "Bearer " + access_token,
         "Content-Type": "application/json",
       } as any,
-      body: JSON.stringify({ title }),
+      body: JSON.stringify({
+        title,
+        description,
+        members,
+        memberType: "username",
+      }),
       next: { tags: ["createGroup"] },
     });
     if (!response.ok) {
@@ -1482,7 +1490,7 @@ export const createDocument = async (
     imageUrl,
     order: order && order > 0 ? order : undefined,
     isTemplate,
-    publicKeyId
+    publicKeyId,
   };
   try {
     const response = await fetch(`${CLASOR}/repositories/${repoId}/documents`, {
@@ -1866,6 +1874,151 @@ export const getPendingVersion = async (
       offset: number;
       size: number;
     }>;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+///////////////////////// PUBLIC LINK ///////////////////
+export const createRepoPublicLink = async (
+  access_token: string,
+  repoId: number,
+  roleId: number,
+  expireTime: number,
+  password?: string
+) => {
+  try {
+    const response = await fetch(
+      `https://clasor-backend.sandpod.ir/v1/repositories/${repoId}/publicLink`,
+      {
+        method: "POST",
+        headers: {
+          _token_: access_token,
+          _token_issuer_: 1,
+          Authorization: "Bearer " + access_token,
+          "Content-Type": "application/json",
+        } as any,
+        body: JSON.stringify({
+          roleId,
+          expireTime,
+          password,
+        }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const deletePublicLink = async (
+  access_token: string,
+  repoId: number,
+  roleId: number
+) => {
+  try {
+    const response = await fetch(
+      `https://clasor-backend.sandpod.ir/v1/repositories/${repoId}/publicLink`,
+      {
+        method: "DELETE",
+        headers: {
+          _token_: access_token,
+          _token_issuer_: 1,
+          Authorization: "Bearer " + access_token,
+          "Content-Type": "application/json",
+        } as any,
+        body: JSON.stringify({
+          roleId,
+        }),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+/////////////////////////// PUBLISH /////////////////////
+export const createRepoPublishLink = async (
+  access_token: string,
+  repoId: number,
+  expireTime?: number,
+  password?: string
+) => {
+  try {
+    const response = await fetch(`https://clasor-backend.sandpod.ir/v1/repositories/${repoId}/publish`, {
+      method: "POST",
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      } as any,
+      body: JSON.stringify({
+        expireTime,
+        password,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const deletePublishLink = async (
+  access_token: string,
+  repoId: number
+) => {
+  try {
+    const response = await fetch(`https://clasor-backend.sandpod.ir/v1/repositories/${repoId}/publish`, {
+      method: "DELETE",
+      headers: {
+        _token_: access_token,
+        _token_issuer_: 1,
+        Authorization: "Bearer " + access_token,
+        "Content-Type": "application/json",
+      } as any,
+    });
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+///////////////////////////// TINY LINK //////////////////
+export const createTinyLink = async (access_token: string, url: string) => {
+  try {
+    const response = await fetch(
+      `${TINY_BASE_URL}/tiny/add?urlOrContent=${url}&shortenObjectKind=link`,
+      {
+        method: "POST",
+        headers: {
+          _token_: access_token,
+          _token_issuer_: 1,
+          Authorization: "Bearer " + access_token,
+          "Content-Type": "application/json",
+        } as any,
+      }
+    );
+    if (!response.ok) {
+      throw new Error("خطا در شبکه");
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.log("============ error ==========", error);
   }

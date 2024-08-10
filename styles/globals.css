@@ -1,36 +1,117 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* @import "../node_modules/cls-file-management/dist/style.css"; */
+@import "../node_modules/cls-file-management/dist/style.css";
 
-html {
-  @apply h-full !scroll-smooth;
-}
+@layer base {
+  html {
+    @apply h-full !scroll-smooth;
+  }
 
-body {
-  direction: rtl;
-  @apply bg-tertiary !font-iranYekan
-}
+  body {
+    direction: rtl;
+    @apply bg-tertiary !font-iranYekan
+  }
 
-* {
-  @apply !scroll-smooth;
+  * {
+    @apply !scroll-smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span {
+    @apply !font-iranYekan
+  }
 }
 
 @layer components {
+
+
   .spinner {
     @apply !border-r-purple-normal !border-t-purple-normal;
+  }
+
+  button {
+    @apply flex items-center justify-center !shadow-none !outline-none !font-iranYekan hover:!shadow-none
+  }
+
+  .primary_button {
+    @apply bg-purple-normal hover:bg-purple-normal text-white
+  }
+
+  .form__input {
+    @apply flex items-center !h-12 gap-2 pr-3 pl-2 placeholder: !opacity-100 !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan font-normal text-primary text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-placeholder placeholder:text-[13px] text-right !bg-gray-50 border-[1px] !border-normal focus:!border-normal
+  }
+
+  .input {
+    @apply flex items-center !min-w-0 !font-iranYekan focus:font-iranYekan placeholder:!font-iranYekan font-normal text-primary text-[13px] placeholder:!text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-hint text-right
+  }
+
+  .form__title, .title_t1 {
+    @apply text-primary !text-[16px] !leading-6 !-tracking-[0.32px] font-medium !font-iranYekan
+  }
+
+  .title_t2 {
+    @apply !text-[14px] !leading-[21px] !-tracking-[0.14px] !font-medium !font-iranYekan
   }
 
   .title_t3 {
     @apply !text-[13px] !leading-[19.5px] !-tracking-[0.13px] !font-medium !font-iranYekan
   }
 
-  .caption_c1 {
-    @apply !text-[12px] !leading-[20px] -tracking-[0.12px] !font-normal !font-iranYekan
+  .title_t4 {
+    @apply !text-[12px] !leading-[18px] !font-medium !font-iranYekan
   }
 
-  .form__title, .title_t1{
+  .caption_c1 {
+    @apply !text-[12px] !leading-[20px] !-tracking-[0.12px] !font-normal !font-iranYekan
+  }
 
+  .caption_c2 {
+    @apply !text-[11px] text-hint !leading-[18px] !-tracking-[0.11px] font-normal !font-iranYekan
+  }
+
+  .body_b3 {
+    @apply !text-[13px] !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan
+  }
+
+  .label {
+    @apply !text-primary !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan
+  }
+
+  .label_l2 {
+    @apply text-primary !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan
+  }
+
+  .text__label__button {
+    @apply !text-[12px] !leading-[18px] !-tracking-[0.12px] !font-bold !font-iranYekan
+    }
+
+  .warning_text {
+    @apply text-error !text-xs w-full h-5 !font-iranYekan
+  }
+
+  .select_option__text {
+    @apply !text-[13px] !leading-[18.2px] !-tracking-[0.13px] !font-iranYekan
+  }
+
+  .table-head {
+    @apply !text-[12px] !leading-[18px] !-tracking-[0.12px] !font-bold text-ellipsis !font-iranYekan
+  }
+
+  .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+  
+  .sticky + .category-children {
+    padding-top: 102px;
   }
 }
 
@@ -55,5 +136,5 @@ body {
   .repo__card-footer {
     @apply rounded-b-md py-3 px-3 w-full flex justify-between items-center bg-gray-50
   }
-  
+
 }

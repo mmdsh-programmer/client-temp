@@ -4,11 +4,9 @@ import useGetClasorField from "@hooks/document/useGetClasorField";
 import { EDocumentTypes } from "@interface/enums";
 import { useRecoilState } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { DialogBody, DialogFooter, Spinner } from "@material-tailwind/react";
-import Label from "@components/atoms/typograghy/label";
+import { DialogBody, DialogFooter, Spinner, Typography } from "@material-tailwind/react";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import Text from "@components/atoms/typograghy/text";
 import SelectAtom from "@components/molecules/select";
 
 interface IProps {
@@ -20,7 +18,7 @@ const DocumentType = ({ isTemplate, setOpen }: IProps) => {
   const [getDocumentType, setDocumentType] = useRecoilState(documentType);
   const { handleNextStep } = useStepperNavigate();
   const { data: getDocumentTypes, isLoading } = useGetClasorField();
-  const [type, setType] = useState<EDocumentTypes | null>(null);
+  const [type, setType] = useState<EDocumentTypes | null>(EDocumentTypes.classic);
 
   const handleSelectType = () => {
     setDocumentType(type);
@@ -58,7 +56,7 @@ const DocumentType = ({ isTemplate, setOpen }: IProps) => {
           ) : (
             <>
               <div className="flex flex-col gap-2">
-                <Label>نوع سند</Label>
+                <Typography className="label">نوع سند</Typography>
                 <SelectAtom
                   className="w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
                   defaultOption={getDocumentType || typeOptions?.[0].label}
@@ -80,9 +78,9 @@ const DocumentType = ({ isTemplate, setOpen }: IProps) => {
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSelectType}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

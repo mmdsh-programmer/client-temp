@@ -17,7 +17,7 @@ const useGetCategoryChildren = (
 ) => {
   return useInfiniteQuery({
     queryKey: [
-      `category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
+      `repo-${repoId}-category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
         filters ? `-filters=${JSON.stringify(filters)}` : ""
       }`,
       title,

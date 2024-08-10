@@ -1,7 +1,6 @@
 import React from "react";
-import { Dialog, DialogHeader } from "@material-tailwind/react";
+import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
 import StepperComponent from "@components/molecules/stepper";
-import Title from "@components/atoms/typograghy/title";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
 
@@ -35,7 +34,7 @@ const StepperDialog = ({
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
         </div>
-        <Title>{dialogHeader} </Title>
+        <Typography className="form__title">{dialogHeader}</Typography>{" "}
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />
         </div>

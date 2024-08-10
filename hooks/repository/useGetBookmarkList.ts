@@ -1,5 +1,5 @@
 import { getBookmarkRepositoryList } from "@actions/repository";
-import { IResponse } from "@interface/repo.interface";
+import { IRepo, IResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetBookmarkList = (size: number, name?: string, enabled?: boolean) => {
@@ -11,7 +11,7 @@ const useGetBookmarkList = (size: number, name?: string, enabled?: boolean) => {
         size,
         name
       );
-      return response?.data as IResponse;
+      return response?.data as IResponse<IRepo>;
     },
     initialPageParam: 1,
     retry: false,

@@ -2,7 +2,7 @@ import React from "react";
 import DesktopMenu from "./desktopMenu";
 import MobileMenu from "./mobileMenu";
 
-interface IProps {
+export interface IProps {
   setOpenDrawer: () => void;
   menuList: {
     text: string;

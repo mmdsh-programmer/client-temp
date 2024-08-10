@@ -1,9 +1,8 @@
 import React from "react";
 import RepoKeyList from "../dialogs/repository/repoKey/repoKeyList";
-import { DialogBody, DialogFooter } from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import Text from "@components/atoms/typograghy/text";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { IPublicKey } from "@interface/repo.interface";
 import { useRecoilState } from "recoil";
@@ -49,9 +48,9 @@ const DocumentEncryption = ({ repoId }: IProps) => {
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleNextStep}
         >
-          <Text className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white">
+          <Typography className="text__label__button text-white">
             ادامه
-          </Text>
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </>

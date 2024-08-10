@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
@@ -61,8 +61,8 @@ const Sidebar = () => {
         <SidebarHeader />
       </div>
       <hr className="" />
-      <div className="p-4">
-        <List placeholder="sidebar-list">
+      <div className="p-3">
+        <List placeholder="sidebar-list" className="p-0 gap-1">
           {sidebarList.map((item) => {
             return (
               <ListItem
@@ -72,10 +72,10 @@ const Sidebar = () => {
               >
                 <Button
                   placeholder="sidebar-button"
-                  className={`!shadow-none bg-transparent font-iranYekan mb-[2px] w-full 
-                    flex items-center text-sm text-secondary
-                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-[#0E0E0F] text-primary" : "!stroke-[#71717A]"}
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-[#0E0E0F]`}
+                  className={` bg-transparent justify-start w-full 
+                     text-secondary gap-1 px-3 h-[44px]
+                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-icon-active text-primary" : "!stroke-icon-hover"}
+                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active`}
                   onClick={() => {
                     router.push("/admin/dashboard");
                     item.onClick();
@@ -85,7 +85,7 @@ const Sidebar = () => {
                   {item.icon}
                   <Typography
                     placeholder="sidebar-text"
-                    className="whitespace-nowrap font-iranYekan mr-2"
+                    className="title_t3"
                   >
                     {item.text}
                   </Typography>
