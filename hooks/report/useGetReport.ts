@@ -1,5 +1,4 @@
 import { getRepositoryReport } from "@actions/report";
-import { IReport } from "@interface/repo.interface";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetReport = (repoId: number) => {
@@ -9,7 +8,7 @@ const useGetReport = (repoId: number) => {
       const response = await getRepositoryReport(
         repoId,
       );
-      return response?.data as IReport;
+      return response;
     },
     retry: false,
     refetchOnWindowFocus: false,

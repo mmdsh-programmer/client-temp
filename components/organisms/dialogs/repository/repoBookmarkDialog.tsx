@@ -6,7 +6,7 @@ import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 
 interface IProps {
-  repo: IRepo;
+  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -40,18 +40,18 @@ const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={isPending}
-      dialogHeader={repo.bookmark ? "حذف نشان مخزن" : "نشان‌دار کردن مخزن"}
+      dialogHeader={repo?.bookmark ? "حذف نشان مخزن" : "نشان‌دار کردن مخزن"}
       onSubmit={handleSubmit}
       setOpen={handleClose}
       className=""
     >
       آیا از {repo?.bookmark ? " حذف نشان   " : "  نشان‌دار کردن  "}"
       <Typography
-        title={repo.name}
+        title={repo?.name}
         placeholder="name"
         className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
       >
-        {repo.name}
+        {repo?.name}
       </Typography>
       " اطمینان دارید؟
     </ConfirmDialog>

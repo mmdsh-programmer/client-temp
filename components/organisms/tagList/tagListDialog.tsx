@@ -3,21 +3,18 @@ import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
 import {
   Spinner,
-  Dialog,
   DialogBody,
-  DialogHeader,
   Typography,
   Button,
 } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
-import TagMenu from "./tagMenu";
-import CloseButton from "@components/atoms/button/closeButton";
-import BackButton from "@components/atoms/button/backButton";
 import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 import TagEditDialog from "../dialogs/tag/tagEditDialog";
 import TagDeleteDialog from "../dialogs/tag/tagDeleteDialog";
+import TagMenu from "@components/molecules/tagMenu/tagMenu";
+import InfoDialog from "@components/templates/dialog/infoDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,16 +22,13 @@ interface IProps {
 
 const TagListDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo?.id!;
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
 
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
 
-  const {
-    data: getTags,
-    isLoading,
-    isFetching,
-  } = useGetTags(getRepo?.id, 30, true);
+  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 20, true);
 
   const handleClose = () => {
     setOpen(false);
@@ -52,29 +46,10 @@ const TagListDialog = ({ setOpen }: IProps) => {
       ) : getDeleteTagModal ? (
         <TagDeleteDialog setOpen={setDeleteTagModal} />
       ) : (
-        <Dialog
-          placeholder=""
-          size="sm"
-          open={true}
-          handler={handleClose}
-          className={` flex flex-col !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
-        >
-          <DialogHeader
-            placeholder="dialog header"
-            className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
-          >
-            <div className="block xs:hidden">
-              <BackButton onClick={handleClose} />
-            </div>
-            <Typography className="form__title">لیست تگ‌ها</Typography>
-            <div className="hidden xs:block">
-              <CloseButton onClose={handleClose} />
-            </div>
-          </DialogHeader>
-          <div className="block xs:hidden h-2 w-full bg-secondary" />
+        <InfoDialog dialogHeader="لیست تگ‌ها" setOpen={handleClose}>
           <DialogBody placeholder="dialog body" className="p-0 h-full">
             <div className="h-full px-5 py-3 xs:p-6">
-              {isLoading || isFetching ? (
+              {isLoading ? (
                 <div className="flex h-full w-full items-center justify-center">
                   <Spinner color="purple" className="" />
                 </div>
@@ -99,7 +74,7 @@ const TagListDialog = ({ setOpen }: IProps) => {
                               value={tag.name}
                               key={tag.id}
                               className="bg-gray-50 h-6 px-2 text-primary max-w-[150px]"
-                              icon={<TagMenu tag={tag} />}
+                              actionIcon={adminRole ? <TagMenu tag={tag} /> : null}
                             />
                           </div>
                         );
@@ -118,7 +93,7 @@ const TagListDialog = ({ setOpen }: IProps) => {
                               <Typography className="label_l2 text-primary cursor-default lowercase">
                                 {tag.name}
                               </Typography>
-                              <TagMenu tag={tag} />
+                              {adminRole ? <TagMenu tag={tag} /> : null}
                             </li>
                           );
                         });
@@ -142,7 +117,7 @@ const TagListDialog = ({ setOpen }: IProps) => {
             </div>
           </DialogBody>
           <TagMenu showDrawer={true} />
-        </Dialog>
+        </InfoDialog>
       )}
     </>
   );

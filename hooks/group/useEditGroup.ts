@@ -7,7 +7,7 @@ const useEditGroup = () => {
   return useMutation({
     mutationKey: ["editGroup"],
     mutationFn: async (values: {
-      repoId: number | undefined;
+      repoId: number;
       title: string;
       description?: string;
       members?: string[];
@@ -23,9 +23,12 @@ const useEditGroup = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack, repoId, title } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoGroups-${repoId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`getGroup-${title}-repo-${repoId}`],
       });
       callBack?.();
     },

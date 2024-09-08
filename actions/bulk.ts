@@ -4,7 +4,7 @@ import { deleteBulk, moveBulk } from "@service/clasor";
 import { getMe } from "./auth";
 
 export const moveBulkAction = async (
-  repoId: number | undefined,
+  repoId: number,
   parentId: number | null,
   children: number[]
 ) => {
@@ -24,7 +24,7 @@ export const moveBulkAction = async (
 };
 
 export const deleteBulkAction = async (
-  repoId: number | undefined,
+  repoId: number,
   children: number[],
   forceDelete?: boolean
 ) => {

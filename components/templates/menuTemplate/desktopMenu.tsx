@@ -18,13 +18,13 @@ const DesktopMenu = ({ menuList, icon, className }: IProps) => {
     <MenuComponent
       variant="small"
       menuList={menuList}
-      className="!min-w-[170px] !w-[170px]"
+      className="!min-w-max !w-auto"
     >
       <Button
         className={`${className || ""} rounded-lg bg-transparent p-1 shadow-none flex justify-center hover:shadow-none items-center`}
         placeholder="menu-button"
       >
-        {icon ? icon : <MoreDotIcon className="w-4 h-4 fill-icon-active" />}
+        {icon ? icon : <MoreDotIcon className="w-4 h-4 " />}
       </Button>
     </MenuComponent>
   );

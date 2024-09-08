@@ -34,9 +34,11 @@ module.exports = withMT({
         },
         error: "#E03E1A",
         success: {
-          normal: "#10B981",
+          normal: "#1F7A37",
+          secondary: "#F7FDF8"
         },
         info: "#0C8CE9",
+        "info-secondary": "#E7F5FD"
       },
       backgroundColor: {
         primary: "#FFFFFF",
@@ -68,6 +70,7 @@ module.exports = withMT({
         sm: "600px",
         md: "768px",
         lg: "920px",
+        xl:"1214px",
         "2xl": "1536px",
       },
       boxShadow: {

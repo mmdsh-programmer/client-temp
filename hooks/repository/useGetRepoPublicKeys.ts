@@ -1,5 +1,5 @@
 import { getRepoKeysAction } from "@actions/repository";
-import { IPublicKey, IResponse } from "@interface/repo.interface";
+import { IPublicKey, IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetRepoPublicKeys = (repoId: number, size: number) => {
@@ -11,7 +11,7 @@ const useGetRepoPublicKeys = (repoId: number, size: number) => {
         (pageParam - 1) * size,
         size
       );
-      return response as IResponse<IPublicKey>;
+      return response as IListResponse<IPublicKey>;
     },
     initialPageParam: 1,
     retry: false,

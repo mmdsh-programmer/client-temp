@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react";
 import { useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
-import RepoShare from "@components/organisms/repoShare/repoShare";
+import RepoShare from "@components/organisms/users";
 
 interface IProps {
   handleClose: () => void;

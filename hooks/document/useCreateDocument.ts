@@ -10,11 +10,11 @@ const useCreateDocument = () => {
     mutationKey: ["createDocument"],
     mutationFn: async (values: {
       repoId: number;
-      categoryId: number | undefined;
+      categoryId: number | null;
       title: string;
-      description: string | undefined;
       contentType: EDocumentTypes;
       isTemplate: boolean;
+      description?: string;
       order?: number;
       imageUrl?: string;
       publicKeyId?: string;
@@ -36,19 +36,19 @@ const useCreateDocument = () => {
         repoId,
         categoryId,
         title,
-        description,
         contentType,
         isTemplate,
+        description,
         order,
         imageUrl,
         publicKeyId
       );
-      return response?.data as IDocument;
+      return response as IDocument;
     },
     onSuccess: (response, values) => {
       const { successCallBack, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`],
+        queryKey: [`category-${categoryId || "parent"}-children`, undefined],
       });
       successCallBack?.(response);
     },

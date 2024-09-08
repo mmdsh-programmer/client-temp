@@ -1,4 +1,10 @@
-import { createRepoPublicLink, deletePublicLink } from "@service/clasor";
+"use server";
+
+import {
+  createRepoPublicLink,
+  deletePublicLink,
+  subscribeRepo,
+} from "@service/clasor";
 import { getMe } from "./auth";
 
 export const createRepoPublicLinkAction = async (
@@ -34,6 +40,17 @@ export const deletePublicLinkAction = async (
       repoId,
       roleId
     );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const subscribeRepoAction = async (hash: string, password?: string) => {
+  const userInfo = await getMe();
+  try {
+    const response = await subscribeRepo(userInfo.access_token, hash, password);
 
     return response;
   } catch (error) {

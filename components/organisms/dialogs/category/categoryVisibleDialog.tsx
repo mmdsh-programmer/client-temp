@@ -5,15 +5,15 @@ import { repoAtom } from "@atom/repository";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
-import { ICategoryMetadata } from "@interface/category.interface";
+import { category } from "@atom/category";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
-  category?: ICategoryMetadata
 }
 
-const CategoryVisibleDialog = ({ setOpen, category }: IProps) => {
+const CategoryVisibleDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const getCategory = useRecoilValue(category);
 
   const editCategory = useEditCategory();
 
@@ -26,13 +26,13 @@ const CategoryVisibleDialog = ({ setOpen, category }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !category) return;
+    if (!getRepo || !getCategory) return;
     editCategory.mutate({
       repoId: getRepo?.id,
-      categoryId: category?.id,
-      parentId: category.parentId,
-      name: category.name,
-      description: category?.description,
+      categoryId: getCategory?.id,
+      parentId: getCategory.parentId,
+      name: getCategory.name,
+      description: getCategory?.description,
       order: null,
       isHidden: false,
       callBack: () => {
@@ -52,7 +52,7 @@ const CategoryVisibleDialog = ({ setOpen, category }: IProps) => {
     >
       آیا از عدم مخفی سازی"
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
-        {category?.name}
+        {getCategory?.name}
       </span>
       " اطمینان دارید؟
     </ConfirmDialog>

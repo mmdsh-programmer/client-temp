@@ -10,13 +10,12 @@ import {
   renewToken,
   userInfo,
 } from "@service/clasor";
-import { IUserInfo } from "@interface/app.interface";
 
 const { JWT_SECRET_KEY, SECURE } = process.env;
 
 const refreshCookieHeader = async (rToken: string) => {
   const response = await renewToken(rToken);
-  const { accessToken, refreshToken } = response.data;
+  const { accessToken, refreshToken } = response;
 
   const encryptedData = encryptKey(
     JSON.stringify({
@@ -36,7 +35,7 @@ const refreshCookieHeader = async (rToken: string) => {
 
   const userData = await userInfo(accessToken);
   return {
-    ...userData.data,
+    ...userData,
     access_token: accessToken,
     refresh_token: refreshToken,
   };
@@ -53,15 +52,16 @@ export const getMe = async () => {
     access_token: string;
     refresh_token: string;
   };
-  const response = await userInfo(tokenInfo.access_token);
-  if (!response) {
-    return refreshCookieHeader(tokenInfo.refresh_token);
-  } else {
+
+  try {
+    const userData = await userInfo(tokenInfo.access_token);
     return {
-      ...response.data as IUserInfo,
+      ...userData,
       access_token: tokenInfo.access_token,
       refresh_token: tokenInfo.refresh_token,
     };
+  } catch {
+    return refreshCookieHeader(tokenInfo.refresh_token);
   }
 };
 
@@ -72,7 +72,7 @@ export const login = async (redirectUrl: string) => {
 
 export const getUserToken = async (code: string, redirect_uri: string) => {
   const response = await getToken(code, redirect_uri);
-  const { accessToken, refreshToken } = response.data;
+  const { accessToken, refreshToken } = response;
 
   const encryptedData = encryptKey(
     JSON.stringify({
@@ -90,5 +90,5 @@ export const getUserToken = async (code: string, redirect_uri: string) => {
     sameSite: "lax",
   });
 
-  return { ...response.data };
+  return { ...response };
 };

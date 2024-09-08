@@ -35,7 +35,7 @@ export interface IPublicLink {
   link: string;
 }
 
-export interface IResponse<Type> {
+export interface IListResponse<Type> {
   list: Type[];
   offset: number;
   size: number;

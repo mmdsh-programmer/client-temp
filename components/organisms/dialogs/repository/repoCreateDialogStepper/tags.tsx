@@ -24,13 +24,14 @@ interface IProps {
 const Tags = ({ handleClose }: IProps) => {
   const setActiveStep = useSetRecoilState(repoActiveStep);
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo!.id;
 
   const { isPending, mutate, isSuccess } = useCreateTag();
   const {
     data: tagList,
     isLoading,
     isFetching,
-  } = useGetTags(getRepo?.id, 10, isSuccess);
+  } = useGetTags(repoId, 10, isSuccess);
 
   const {
     register,

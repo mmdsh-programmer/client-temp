@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { repoActiveStep } from "@atom/stepper";
-import StepperDialog from "@components/templates/stepperDialog";
+import StepperDialog from "@components/templates/dialog/stepperDialog";
 import { useRecoilState } from "recoil";
 import RepoCreate from "./repoCreate";
 import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/tags";

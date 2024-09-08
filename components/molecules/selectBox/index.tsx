@@ -51,9 +51,9 @@ const SelectBox = ({
     <div ref={dropdownRef} className={`${className || ""} relative inline-block `}>
       <button
         onClick={toggleDropdown}
-        className="w-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 flex justify-between font-normal items-center text-left bg-white border-2 border-normal rounded-md focus:outline-none"
+        className="w-full h-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 flex justify-between font-normal items-center text-left bg-white border-2 border-normal rounded-md focus:outline-none"
       >
-        <span className="max-w-full truncate">
+        <span className="max-w-min truncate">
           {selectedOptions.length > 0
             ? selectedOptions
                 .map(

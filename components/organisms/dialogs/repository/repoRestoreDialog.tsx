@@ -6,7 +6,7 @@ import { IRepo } from "@interface/repo.interface";
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
-  repo: IRepo;
+  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -17,6 +17,7 @@ const RepoRestoreDialog = ({ repo, setOpen }: IProps) => {
     setOpen(!open);
   };
   const handleSubmit = async () => {
+    if (!repo) return;
     mutate({
       repoId: repo.id,
       callBack: () => {
@@ -36,11 +37,11 @@ const RepoRestoreDialog = ({ repo, setOpen }: IProps) => {
     >
       آیا از بازگردانی"
       <Typography
-        title={repo.name}
+        title={repo?.name}
         placeholder="name"
         className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
       >
-        {repo.name}
+        {repo?.name}
       </Typography>
       " اطمینان دارید؟
     </ConfirmDialog>

@@ -37,7 +37,7 @@ const RepoSearch = () => {
         <SearchIcon className="h-5 w-5 stroke-icon-hover" />
         <InputAtom
           placeholder="جستجو ..."
-          className=" pr-0 outline-none overflow-hidden border-none focus:border-none !w-auto"
+          className="bg-white !h-8 pr-0 outline-none !overflow-hidden border-none focus:border-none !w-auto"
           onChange={(event: any) => {
             setSearch(event.target.value);
           }}

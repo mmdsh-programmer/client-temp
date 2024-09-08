@@ -10,12 +10,12 @@ const useCreateDocumentTemplate = () => {
     mutationKey: ["createDocument"],
     mutationFn: async (values: {
       repoId: number;
-      categoryId: number | undefined;
+      categoryId: number | null;
       title: string;
-      description: string | undefined;
       contentType: EDocumentTypes;
       versionNumber: string;
       templateId: number;
+      description?: string;
       order?: number;
       imageUrl?: string;
       callBack?: () => void;
@@ -35,14 +35,14 @@ const useCreateDocumentTemplate = () => {
         repoId,
         categoryId,
         title,
-        description,
         contentType,
         versionNumber,
         templateId,
+        description,
         order,
         imageUrl
       );
-      return response?.data as IDocument;
+      return response as IDocument;
     },
     onSuccess: (response, values) => {
       const { callBack, categoryId } = values;

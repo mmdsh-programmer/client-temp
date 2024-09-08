@@ -1,20 +1,24 @@
 import { editDocumentAction } from "@actions/document";
+import { categoryShow } from "@atom/category";
 import { IDocument } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
 
-const useEditDocument = () => {
+const useEditDocument = (move?: boolean) => {
   const queryClient = useQueryClient();
+  const getCategoryShow = useRecoilValue(categoryShow);
+
   return useMutation({
     mutationKey: ["editDocument"],
     mutationFn: async (values: {
-      repoId: number | undefined;
+      repoId: number;
       documentId: number;
       categoryId: number | null;
       title: string;
-      description: string | undefined;
       contentType: EDocumentTypes;
+      description?: string;
       order?: number | null;
       isHidden?: boolean;
       tagIds?: number[];
@@ -36,18 +40,27 @@ const useEditDocument = () => {
         documentId,
         categoryId,
         title,
-        description,
         contentType,
+        description,
         order,
         isHidden,
         tagIds
       );
-      return response?.data as IDocument;
+      return response as IDocument;
     },
     onSuccess: (response, values) => {
       const { callBack, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`],
+        queryKey: [
+          `category-${getCategoryShow?.id || "parent"}-children`,
+          undefined,
+        ],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [
+          `category-${categoryId || "parent"}-children`,
+          undefined,
+        ],
       });
       callBack?.();
     },

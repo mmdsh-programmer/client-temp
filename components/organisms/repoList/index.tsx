@@ -2,13 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { repoAtom, repoGrouping, repoSearchParamAtom } from "@atom/repository";
 import { ERepoGrouping } from "@interface/enums";
-import RenderIf from "@components/renderIf";
+import RenderIf from "@components/atoms/renderIf";
 import MyRepoList from "./myRepoList";
 import AccessRepoList from "./accessRepoList";
 import BookmarkRepoList from "./bookmarkList";
 import AllRepoList from "./allRepoList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
+import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query";
+import { IListResponse, IRepo } from "@interface/repo.interface";
+import { EEmptyList } from "@components/molecules/emptyList";
+
+export interface IRepoView {
+  isLoading: boolean;
+  getRepoList:  InfiniteData<IListResponse<IRepo>, unknown> | undefined;
+  hasNextPage: boolean;
+  fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult<InfiniteData<IListResponse<IRepo>, unknown>, Error>>;
+  isFetchingNextPage: boolean;
+  isFetching?: boolean;
+  type: EEmptyList
+}
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
@@ -27,7 +40,7 @@ const RepoList = () => {
         header="مخزن‌ها"
         buttonText="ایجاد مخزن جدید"
         onClick={() => setOpenCreateRepo(true)}
-        listModeHide={getRepoGroup === ERepoGrouping.DASHBOARD}
+        listMode={getRepoGroup !== ERepoGrouping.DASHBOARD}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />

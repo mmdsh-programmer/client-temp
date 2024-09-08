@@ -21,7 +21,7 @@ const MenuTemplate = ({
 }: IProps) => {
   return (
     <>
-      <div className="hidden xs:flex">
+      <div className="hidden xs:flex justify-end">
         <DesktopMenu menuList={menuList} icon={icon} className={className} />
       </div>
       <div className="xs:hidden flex">

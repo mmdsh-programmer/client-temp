@@ -23,7 +23,7 @@ export interface CategoryChildrenQueryParams {
 export const categoryQueryParams = atom<CategoryChildrenQueryParams>({
   key: "categoryQueryParams",
   default: {
-    limit: 20,
+    limit: 10,
     page: 1,
     total: 0,
   },

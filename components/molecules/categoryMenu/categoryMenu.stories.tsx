@@ -1,12 +1,10 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import CategoryMenu from "./categoryMenuStory";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import CategoryMenu from "./categoryMenu";
 import { RecoilRoot } from "recoil";
-import { categoryDrawerAtom } from "@atom/category";
-import { ICategoryMetadata } from "@interface/category.interface";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const mockCategory: ICategoryMetadata = {
+const mockCategory = {
   id: 1,
   name: "دسته بندی تست",
   description: "توضیحات دسته بندی تست",
@@ -22,7 +20,7 @@ const mockCategory: ICategoryMetadata = {
   active: false,
   isTemplate: false,
   userGroupHash: null,
-};
+} as any;
 
 const queryClient = new QueryClient();
 
@@ -30,16 +28,14 @@ const meta: Meta<typeof CategoryMenu> = {
   title: "components/Molecules/CategoryMenu",
   component: CategoryMenu,
   parameters: {
-    backgrounds: {
-      default: "light",
+    nextjs: {
+      appDirectory: true,
     },
-    layout: "centered",
   },
   decorators: [
     (Story) => (
       <QueryClientProvider client={queryClient}>
-        <RecoilRoot
-        >
+        <RecoilRoot>
           <div className="flex w-full items-center justify-center !font-iranYekan">
             <Story />
           </div>
@@ -47,12 +43,18 @@ const meta: Meta<typeof CategoryMenu> = {
       </QueryClientProvider>
     ),
   ],
+  args: {
+    category: mockCategory,
+    showDrawer: false,
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof CategoryMenu>;
+type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => <CategoryMenu {...args} category={mockCategory} />,
+export const Dafault: Story = {
+  render: (args) => (
+    <CategoryMenu {...args} category={mockCategory} />
+  ),
 };

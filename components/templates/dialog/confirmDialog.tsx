@@ -9,6 +9,7 @@ import {
 import LoadingButton from "@components/molecules/loadingButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import CancelButton from "@components/atoms/button/cancelButton";
+import BackButton from "@components/atoms/button/backButton";
 
 interface IProps {
   isPending: boolean;
@@ -17,6 +18,7 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: () => Promise<void>;
   className?: string;
+  backToMain?: boolean;
 }
 
 const ConfirmDialog = ({
@@ -26,6 +28,7 @@ const ConfirmDialog = ({
   setOpen,
   onSubmit,
   className,
+  backToMain,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -43,16 +46,29 @@ const ConfirmDialog = ({
         placeholder="dialog header"
         className="flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
       >
-        <Typography className="form__title">{dialogHeader}</Typography >
-        <CloseButton onClose={handleClose} disabled={isPending} />
+        <div className="flex items-center">
+          {backToMain ? (
+            <div className="">
+              <BackButton
+                className="!pl-2 !pr-0 !py-0"
+                onClick={handleClose}
+                disabled={isPending}
+              />
+            </div>
+          ) : null}
+          <Typography className="form__title">{dialogHeader}</Typography>{" "}
+        </div>
+        <div className="hidden xs:block">
+          <CloseButton onClose={handleClose} disabled={isPending} />
+        </div>
       </DialogHeader>
       <DialogBody
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
       >
-        <Typography className="body_b3 flex text-primary">
+        <div className="body_b3 flex text-primary">
           {children}
-        </Typography>
+        </div>
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"

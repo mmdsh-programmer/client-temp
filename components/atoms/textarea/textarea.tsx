@@ -2,10 +2,10 @@ import React from "react";
 import { Textarea, TextareaProps } from "@material-tailwind/react";
 
 interface IProps extends TextareaProps {
-  register: any;
+  register?: any;
 }
 
-const TextareaAtom = ({ register, ...otherProps }: IProps) => {
+const TextareaAtom = ({ register, className, ...otherProps }: IProps) => {
   return (
     <Textarea
       labelProps={{
@@ -16,12 +16,12 @@ const TextareaAtom = ({ register, ...otherProps }: IProps) => {
       }}
       {...register}
       type="text"
-      className={`${otherProps.className || ""} 
-      flex items-center gap-2 !p-3
-      !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
-       font-normal text-primary text-[13px] placeholder:text-[13px] leading-[18.2px] -tracking-[0.13px]
-       placeholder:text-placeholder text-right
-       !bg-gray-50 border-[1px] !border-normal focus:!border-normal `}
+      className={`${className || ""} 
+      flex items-center gap-2 pr-3 pl-2 placeholder:!opacity-100
+        !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
+        font-normal text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]
+        placeholder:!text-placeholder placeholder:text-[13px] text-right
+        !bg-gray-50 border-[1px] !border-normal focus:!border-normal`}
       {...otherProps}
     />
   );

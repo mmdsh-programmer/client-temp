@@ -6,6 +6,10 @@ interface IProps {
   name: string;
   createDate?: string;
   creator?: string;
+  status?: {
+    translated: any;
+    className: any;
+  };
   cardAction?: React.JSX.Element;
   icon?: React.ReactNode;
 }
@@ -14,6 +18,7 @@ const MobileCard = ({
   name,
   createDate,
   creator,
+  status,
   cardAction,
   icon,
 }: IProps) => {
@@ -32,6 +37,13 @@ const MobileCard = ({
         <div className="flex flex-col gap-3">
           <CardItemRow title="تاریخ ایجاد" value={createDate} />
           <CardItemRow title="سازنده" value={creator} />
+          {status ? (
+            <CardItemRow
+              title="وضعیت"
+              value={status.translated}
+              className={status.className}
+            />
+          ) : null}
         </div>
       ) : null}
     </div>

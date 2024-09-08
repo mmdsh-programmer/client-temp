@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const useCreateTinyLink = () => {
   return useMutation({
-    mutationKey: [`repo-publish`],
+    mutationKey: [`createTinyLink`],
     mutationFn: async (values: { url: string; callBack?: (result: any) => void }) => {
       const { url } = values;
       const response = await createTinyLinkAction(url);

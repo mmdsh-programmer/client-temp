@@ -16,9 +16,12 @@ const useDeleteGroup = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack, repoId, title } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoGroups-${repoId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`getGroup-${title}-repo-${repoId}`],
       });
       callBack?.();
     },

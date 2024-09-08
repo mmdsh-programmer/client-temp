@@ -5,7 +5,7 @@ import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { IRepo } from "@interface/repo.interface";
 
 interface IProps {
-  repo: IRepo;
+  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -16,6 +16,7 @@ const RepoArchiveDialog = ({ repo, setOpen }: IProps) => {
     setOpen(!open);
   };
   const handleSubmit = async () => {
+    if (!repo) return;
     mutate({
       repoId: repo.id,
       callBack: () => {
@@ -33,7 +34,7 @@ const RepoArchiveDialog = ({ repo, setOpen }: IProps) => {
       setOpen={handleClose}
       className=""
     >
-      {repo.name}
+      {repo?.name}
     </DeleteDialog>
   );
 };

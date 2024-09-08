@@ -10,6 +10,9 @@ import CategoryDeleteDialog from "@components/organisms/dialogs/category/categor
 import CategoryCreateDialog from "@components/organisms/dialogs/category/categoryCreateDialog";
 import CategoryHideDialog from "@components/organisms/dialogs/category/categoryHideDialog";
 import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
+import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryMoveDialog";
+import { MoreDotIcon } from "@components/atoms/icons";
+import CategoryAccessDialog from "@components/organisms/dialogs/category/categoryAccessDialog";
 
 interface IProps {
   category?: ICategoryMetadata;
@@ -23,21 +26,16 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
   const [moveModal, setMoveModal] = useState(false);
   const [hideModal, setHideModal] = useState(false);
   const [visibleModal, setVisibleModal] = useState(false);
-  const [CategoryAccessModal, setCategoryAccessModal] = useState(false);
+  const [categoryAccessModal, setCategoryAccessModal] = useState(false);
   const [createCategoryModal, setCreateCategoryModal] = useState(false);
-
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
   const [openCategoryActionDrawer, setOpenCategoryActionDrawer] =
     useRecoilState(categoryDrawerAtom);
 
-  const menuList: {
-    text: string;
-    icon?: React.JSX.Element;
-    onClick: () => void;
-  }[] = [
+  const createOptions = [
     {
-      text: "ساخت زیردسته بندی",
+      text: "ساخت زیر دسته بندی",
       onClick: () => {
         setCreateCategoryModal(true);
         if (categoryProp) {
@@ -63,14 +61,18 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
         }
       },
     },
+  ];
+
+  const menuList: {
+    text: string;
+    icon?: React.JSX.Element;
+    onClick: () => void;
+    subMenu?: { text: string; icon?: React.JSX.Element; onClick: () => void }[];
+  }[] = [
     {
-      text: "انتقال",
-      onClick: () => {
-        setMoveModal(true);
-        if (categoryProp) {
-          setCategory(categoryProp);
-        }
-      },
+      text: "ایجاد",
+      subMenu: createOptions,
+      onClick: () => {},
     },
     {
       text: "ویرایش دسته بندی",
@@ -82,9 +84,9 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
       },
     },
     {
-      text: "حذف دسته بندی",
+      text: "انتقال",
       onClick: () => {
-        setDeleteCategoryModal(true);
+        setMoveModal(true);
         if (categoryProp) {
           setCategory(categoryProp);
         }
@@ -103,6 +105,15 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
       text: "دسترسی دسته‌بندی",
       onClick: () => {
         setCategoryAccessModal(true);
+        if (categoryProp) {
+          setCategory(categoryProp);
+        }
+      },
+    },
+    {
+      text: "حذف دسته بندی",
+      onClick: () => {
+        setDeleteCategoryModal(true);
         if (categoryProp) {
           setCategory(categoryProp);
         }
@@ -127,6 +138,11 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
             setOpenCategoryActionDrawer(true);
           }}
           menuList={menuList}
+          icon={
+            <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+              <MoreDotIcon className="w-4 h-4" />
+            </div>
+          }
         />
       )}
       {visibleModal && (
@@ -136,7 +152,6 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
           }}
         />
       )}
-
       {editCategoryModal && (
         <CategoryEditDialog
           setOpen={() => {
@@ -175,6 +190,20 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
         <DocumentCreate
           isTemplate={true}
           setOpen={() => setCreateTemplateModal(false)}
+        />
+      )}
+      {moveModal && (
+        <CategoryMoveDialog
+          setOpen={() => {
+            setMoveModal(false);
+          }}
+        />
+      )}
+      {categoryAccessModal && (
+        <CategoryAccessDialog
+          setOpen={() => {
+            setCategoryAccessModal(false);
+          }}
         />
       )}
     </>

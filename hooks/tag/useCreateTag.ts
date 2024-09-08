@@ -21,7 +21,7 @@ const useCreateTag = () => {
         queryKey: [`getTags-${repoId}`],
       });
       callBack?.();
-    },  
+    },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },

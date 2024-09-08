@@ -120,6 +120,8 @@ export interface IDocumentMetadata {
   deletedAt: string | null;
   creatorSSOID: number;
   isHidden: boolean;
+  isBookmarked: boolean;
+  hasPassword: boolean;
   creator: {
     img: string;
     name: string;
@@ -145,3 +147,17 @@ export interface IVersionMetadata {
   size: number;
   total: number;
 }
+
+export interface IWhiteListItem {
+  preferred_username: string;
+  given_name: string;
+  family_name: string;
+  id: number;
+  picture: string;
+}
+
+export interface IWhiteList {
+  blackList: IWhiteListItem[],
+  whiteList: IWhiteListItem[],
+}
+

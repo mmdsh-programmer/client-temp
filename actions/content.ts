@@ -4,7 +4,7 @@ import { getContent } from "@service/clasor";
 import { getMe } from "./auth";
 
 export const getContentAction = async (
-  repoId: number | undefined,
+  repoId: number,
   searchParam: string,
   offset: number,
   size: number

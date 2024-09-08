@@ -3,7 +3,7 @@ import { ChevronLeftIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
-  options?: any[];
+  options?: { label: string; value: any; className?: string }[];
   selectedOption?: string | null;
   setSelectedOption: (options: string | any) => void;
   defaultOption?: string;
@@ -84,10 +84,11 @@ const SelectAtom = ({
                 className="cursor-pointer select-none relative p-[6px]"
                 onClick={() => {
                   handleOptionChange(option.value);
-                  setIsOpen(false);
                 }}
               >
-                <Typography className="select_option__text truncate text-right text-primary ">
+                <Typography
+                  className={`${option.className || ""} select_option__text truncate text-right text-primary`}
+                >
                   {option.label}
                 </Typography>
               </li>

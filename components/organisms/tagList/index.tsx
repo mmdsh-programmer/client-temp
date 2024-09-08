@@ -4,12 +4,12 @@ import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
 import { Button, Spinner } from "@material-tailwind/react";
 import ChipMolecule from "@components/molecules/chip";
-import TagMenu from "./tagMenu";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
 import TagListDialog from "./tagListDialog";
 import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import TagDelete from "../dialogs/tag/tagDeleteDialog";
 import TagEdit from "../dialogs/tag/tagEditDialog";
+import TagMenu from "@components/molecules/tagMenu/tagMenu";
 
 const TagList = () => {
   const [openTagsModal, setOpenTagsModal] = useState(false);
@@ -17,11 +17,12 @@ const TagList = () => {
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
   const getRepo = useRecoilValue(repoAtom);
+  const repoId = getRepo?.id!;
   const {
     data: getTags,
     isLoading,
     isFetching,
-  } = useGetTags(getRepo?.id, 2, true);
+  } = useGetTags(repoId, 2, true);
 
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
@@ -31,7 +32,7 @@ const TagList = () => {
   return (
     <div className="">
       {isLoading || isFetching ? (
-        <Spinner color="purple" className="" />
+        <Spinner color="deep-purple" className="" />
       ) : (
         <div className="flex flex-wrap gap-2">
           {getTags?.pages.map((page) => {
@@ -41,7 +42,7 @@ const TagList = () => {
                   value={tag.name}
                   key={tag.id}
                   className="bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
-                  icon={<TagMenu tag={tag} />}
+                  actionIcon={adminRole ? <TagMenu tag={tag} /> : null}
                 />
               );
             });

@@ -24,7 +24,7 @@ const useGetFiles = (
         dataType
       );
 
-      return response?.data.result as {
+      return response?.result as {
         list: IFile[];
         count: number;
       };

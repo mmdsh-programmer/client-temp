@@ -9,7 +9,7 @@ const useCreateCategory = () => {
     mutationKey: ["createCategory"],
     mutationFn: async (values: {
       repoId: number;
-      parentId: number | undefined | null;
+      parentId: number | null;
       name: string;
       description: string;
       order: number | null;
@@ -23,12 +23,12 @@ const useCreateCategory = () => {
         description,
         order,
       );
-      return response?.data as ICategory;
+      return response as ICategory;
     },
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`],
+        queryKey: [`category-${parentId || "parent"}-children`, undefined],
       });
       callBack?.();
     },

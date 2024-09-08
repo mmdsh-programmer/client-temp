@@ -28,6 +28,7 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
       tagId: getTag.id,
       callBack: () => {
         toast.error("تگ حذف شد.");
+        handleClose()
       },
     });
   };

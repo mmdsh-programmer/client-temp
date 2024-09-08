@@ -1,23 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { repoAtom } from "@atom/repository";
 import FormInput from "@components/atoms/input/formInput";
 import useCreateGroup from "@hooks/group/useCreateGroup";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import AddUsers, { IUsers } from "./addUser";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userGroupSchema } from "./validation.yup";
 import ChipMolecule from "@components/molecules/chip";
-import { XIcon } from "@components/atoms/icons";
+import { UserIcon, XIcon } from "@components/atoms/icons";
 import CreateDialog from "@components/templates/dialog/createDialog";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
+import ImageComponent from "@components/atoms/image";
 
 interface IForm {
   title: string;
   description?: string;
-  users?: IUsers[];
+  members: string[];
 }
 
 interface IProps {
@@ -26,19 +28,36 @@ interface IProps {
 
 const GroupCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const [updatedUsers, setUpdatedUsers] = useState<
+    { username: string; picture: string }[]
+  >([]);
 
+  const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 2, true);
   const { isPending, mutate } = useCreateGroup();
   const form = useForm<IForm>({
     resolver: yupResolver(userGroupSchema),
   });
 
-  const { register, handleSubmit, formState, reset, clearErrors, control } =
-    form;
+  const { register, handleSubmit, formState, reset, clearErrors } = form;
   const { errors } = formState;
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "users",
-  });
+
+  const filteredUsers = getUsers?.pages
+    .map((page) => {
+      return page?.list.filter((user) => {
+        return updatedUsers.every((filteredUser) => {
+          return filteredUser.username !== user.userInfo.userName;
+        });
+      });
+    })[0]
+    .filter((user) => {
+      return user.userRole !== "owner";
+    })
+    .map((item) => {
+      return {
+        label: item.userInfo.userName,
+        value: { username: item.userInfo.userName, picture: item.userInfo.img },
+      };
+    });
 
   const handleReset = () => {
     clearErrors();
@@ -48,20 +67,28 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
   const handleClose = () => {
     handleReset();
     setOpen(false);
+    setUpdatedUsers([])
   };
 
-  const members = fields.map((user) => {
-    return user.userName;
-  });
+  const handleDelete = (username: string) => {
+    setUpdatedUsers((oldValue) => {
+      return [
+        ...oldValue.filter((user) => {
+          return user.username !== username;
+        }),
+      ];
+    });
+  };
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
+    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.")
     mutate({
-      repoId: getRepo.id,
+      repoId: getRepo!.id,
       title: dataForm.title,
       description: dataForm.description,
-      members: fields.map((user) => {
-        return user.userName;
+      members: updatedUsers.map((user) => {
+        return user.username;
       }),
       callBack: () => {
         toast.success("گروه با موفقیت ایجاد شد.");
@@ -81,7 +108,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <Typography className="label"> نام گروه </Typography>
+          <Typography className="form_label"> نام گروه </Typography>
           <FormInput
             placeholder="نام گروه"
             register={{
@@ -95,7 +122,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">توضیحات گروه</Typography>
+          <Typography className="form_label">توضیحات گروه</Typography>
           <TextareaAtom
             placeholder="توضیحات گروه"
             register={{ ...register("description") }}
@@ -106,32 +133,54 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
             </Typography>
           )}
         </div>
-        <div className="flex flex-col gap-2 ">
-          <Typography className="label"> اعضای گروه</Typography>
-          <AddUsers onAdd={append} updatedUsers={fields} />
-          {!!fields.length && (
-            <div className="flex flex-wrap pt-4 gap-2">
-              {fields.map((field, index) => {
-                return (
-                  <ChipMolecule
-                    value={field.userName}
-                    key={field.id}
-                    className="bg-gray-100 justify-between rounded-full border-[1px] h-8 px-3 text-primary w-[100px] max-w-[150px] "
-                    icon={
-                      <div
-                        className="w-4 h-4 bg-white rounded-full"
-                        onClick={() => {
-                          return remove(index);
-                        }}
-                      >
-                        <XIcon className="w-4 h-4 fill-icon-hover" />
-                      </div>
-                    }
-                  />
-                );
-              })}
-            </div>
-          )}
+        <div className="flex flex-col gap-2">
+          <Typography className="form_label"> اعضای گروه</Typography>
+          <SearchableDropdown
+            background="gray-50"
+            options={filteredUsers}
+            handleChange={(val) => {
+              if (val) {
+                setUpdatedUsers((oldValue) => {
+                  return [
+                    ...oldValue,
+                    { username: val.username, picture: val.picture },
+                  ];
+                });
+              }
+            }}
+          />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {updatedUsers.map((item) => {
+            return (
+              <ChipMolecule
+                key={item.username}
+                value={`${item.username}`}
+                className="w-auto border-[1px] border-normal pl-2 text-primary"
+                icon={
+                  item.picture ? (
+                    <ImageComponent
+                      className="w-full h-full rounded-full overflow-hidden"
+                      src={item.picture}
+                      alt={item.picture}
+                    />
+                  ) : (
+                    <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                  )
+                }
+                actionIcon={
+                  <Button
+                    className="bg-transparent p-0"
+                    onClick={() => {
+                      handleDelete(item.username);
+                    }}
+                  >
+                    <XIcon className="h-4 w-4 fill-icon-active" />
+                  </Button>
+                }
+              />
+            );
+          })}
         </div>
       </form>
     </CreateDialog>

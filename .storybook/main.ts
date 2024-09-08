@@ -15,12 +15,24 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@chromatic-com/storybook",
     "@storybook/addon-interactions",
+    "storybook-addon-module-mock",
+    "msw-storybook-addon",
+    "@storybook/addon-a11y",
   ],
   framework: {
     name: "@storybook/nextjs",
     options: {},
   },
-  staticDirs: ["..\\public"],
+
+  core: {
+    builder: "webpack5",
+  },
+
+  features: {
+    experimentalRSC: true,
+  },
+  staticDirs: ["../public"],
+
   webpackFinal: async (config) => {
     config.resolve = {
       ...config.resolve,
@@ -32,13 +44,12 @@ const config: StorybookConfig = {
       },
     };
 
-    config.plugins = [
-      ...(config.plugins || []),
+    config.plugins?.push(
       new webpack.ProvidePlugin({
-        Buffer: ["buffer", "Buffer"],
         process: "process/browser",
-      }),
-    ];
+        Buffer: ["buffer", "Buffer"],
+      })
+    );
 
     return config;
   },

@@ -30,7 +30,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
       dropdownRef.current &&
       !dropdownRef.current.contains(event.target as Node)
     ) {
-      setRepoInfo(null);
+      setRepoInfo(undefined);
     }
   };
 

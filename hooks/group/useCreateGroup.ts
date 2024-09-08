@@ -1,4 +1,5 @@
 import { createGroupAction } from "@actions/group";
+import { ICreateGroup } from "@interface/group.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -15,7 +16,7 @@ const useCreateGroup = () => {
     }) => {
       const { title, repoId, description, members } = values;
       const response = await createGroupAction(repoId, title, description, members);
-      return response;
+      return response as ICreateGroup;;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
@@ -23,7 +24,7 @@ const useCreateGroup = () => {
         queryKey: [`getRepoGroups-${repoId}`],
       });
       callBack?.();
-    },  
+    },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },

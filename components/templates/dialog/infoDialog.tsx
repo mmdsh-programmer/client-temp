@@ -1,5 +1,5 @@
 import React from "react";
-import { Dialog, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
+import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
 import CloseButton from "@components/atoms/button/closeButton";
 import BackButton from "@components/atoms/button/backButton";
 
@@ -21,7 +21,7 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className }: IProps) => {
       size="sm"
       open={true}
       handler={handleClose}
-      className={`${className} flex flex-col !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
+      className={`${className} flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
     >
       <DialogHeader
         placeholder="dialog header"
@@ -30,14 +30,13 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className }: IProps) => {
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
         </div>
-        <Typography className="form__title">{dialogHeader}</Typography >        <div className="hidden xs:block">
+        <Typography className="form__title">{dialogHeader}</Typography>
+        <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />
         </div>
       </DialogHeader>
       <div className="block xs:hidden h-2 w-full bg-secondary" />
-      <DialogBody placeholder="dialog body" className="p-0 h-full">
-        {children}
-      </DialogBody>
+      <>{children}</>
     </Dialog>
   );
 };

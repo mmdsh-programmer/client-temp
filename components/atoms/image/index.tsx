@@ -15,6 +15,7 @@ const ImageComponent = ({alt, src, className}: IProps) => {
       alt={alt}
       width={100}
       height={100}
+      priority
     />
   );
 };

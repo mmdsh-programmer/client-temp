@@ -5,7 +5,7 @@ interface IProps extends InputProps {
   register?: any;
 }
 
-const FormInput = ({ register, ...restProps }: IProps) => {
+const FormInput = ({ register, className, ...restProps }: IProps) => {
   return (
     <Input
       labelProps={{
@@ -16,7 +16,7 @@ const FormInput = ({ register, ...restProps }: IProps) => {
       }}
       type="text"
       {...register}
-      className={`${restProps.className || ""}
+      className={`${className || ""}
         flex items-center !h-12 gap-2 pr-3 pl-2 placeholder:!opacity-100
         !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
         font-normal text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]

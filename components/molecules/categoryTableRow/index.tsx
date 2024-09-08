@@ -27,7 +27,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
     const isChecked = e.target.checked;
     if (isChecked && (getBulkItems as ICategoryMetadata[]).length + 1 > 10) {
       e.target.checked = false;
-      toast.error("نمیتوانید بیش از 10 ایتم را انتخاب کنید");
+      toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
       return;
     }
     setBulkItems((oldValue) => {
@@ -55,6 +55,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
               })}
             />
           ),
+          stopPropagation: true,
         },
         {
           data:
@@ -62,11 +63,12 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
               ? categoryProp.order
               : "--",
           title: String(categoryProp.order) || "--",
+          className: "hidden xl:table-cell"
         },
         {
           data: (
             <div className="flex">
-              <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-[20px] min-h-[20px]" />
+              <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
               <span
                 className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
                 title={categoryProp.name}
@@ -94,10 +96,12 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
           title: categoryProp.updatedAt
             ? FaDateFromTimestamp(+categoryProp.updatedAt)
             : "--",
+            className: "hidden xl:table-cell"
         },
         {
-          data: categoryProp.creator?.userName || "--",
-          title: categoryProp.creator?.userName || "--",
+          data: categoryProp.creator?.name || "--",
+          title: categoryProp.creator?.name || "--",
+          className: "hidden lg:table-cell"
         },
         {
           data: <CategoryMenu category={categoryProp} />,

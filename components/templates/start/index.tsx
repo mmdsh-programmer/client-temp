@@ -4,6 +4,7 @@ import React, { ReactNode } from "react";
 import useGetUser from "@hooks/auth/useGetUser";
 import Error from "@app/error";
 import SpinnerText from "@components/molecules/spinnerText";
+import PanelURl from "../panelUrl";
 
 interface IProps {
   children: ReactNode;
@@ -26,12 +27,15 @@ const Start = ({ children }: IProps) => {
   }
 
   if (isLoading) {
-    return (
-     <SpinnerText text="در حال دریافت اطلاعات"/>
-    );
+    return <SpinnerText text="در حال دریافت اطلاعات" />;
   }
 
-  return children;
+  return (
+    <>
+      <PanelURl />
+      {children}
+    </>
+  );
 };
 
 export default Start;

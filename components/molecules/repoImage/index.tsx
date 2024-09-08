@@ -9,14 +9,19 @@ import {
 } from "@components/atoms/icons";
 import useGetUser from "@hooks/auth/useGetUser";
 import ImageComponent from "@components/atoms/image";
+import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
   repo: IRepo | null;
 }
 
 const RepoImage = ({ repo }: IProps) => {
-  const { data: getUserInfo } = useGetUser();
+  const { data: getUserInfo, isFetching } = useGetUser();
   const imageHash = repo?.imageFileHash;
+
+  if (isFetching) {
+    return <Spinner className="h-5 w-5" color="deep-purple" />;
+  }
 
   if (!imageHash) {
     return <RepoIcon className="w-full h-full" />;
@@ -36,13 +41,13 @@ const RepoImage = ({ repo }: IProps) => {
         return (
           <ImageComponent
             alt="repo-image"
-            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo?.imageFileHash.toLowerCase()}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
+            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo?.imageFileHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
           />
         );
     }
   };
 
-  return generateImage();
+  return imageHash ? generateImage() : <RepoIcon className="w-full h-full" />;
 };
 
 export default RepoImage;

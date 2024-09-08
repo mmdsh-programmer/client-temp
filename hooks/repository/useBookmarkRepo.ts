@@ -21,16 +21,16 @@ const useBookmarkRepo = () => {
         queryKey: [`getRepo-${repoId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`allRepoList-undefined`],
+        queryKey: [`allRepoList`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`bookmarkRepoList-undefined`],
+        queryKey: [`bookmarkRepoList`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false-undefined`],
+        queryKey: [`myRepoList-false`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`accessRepoList-undefined`],
+        queryKey: [`accessRepoList`],
       });
       callBack?.();
     },

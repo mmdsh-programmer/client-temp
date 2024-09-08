@@ -9,17 +9,16 @@ import RepoImage from "../repoImage";
 
 interface IProps {
   repo: IRepo;
-  archived?: boolean;
 }
 
-const RepoCardMode = ({ repo, archived }: IProps) => {
+const RepoCardMode = ({ repo }: IProps) => {
   const getRepoInfo = useRecoilValue(repoInfoAtom);
 
   return (
     <Card
       placeholder="card"
       key={`repo-card-item-${repo.id}`}
-      className="flex flex-col h-auto rounded-lg bg-white border-[1px] border-normal shadow-small"
+      className="flex flex-col h-auto max-h-[85px] rounded-lg bg-white border-[1px] border-normal shadow-small"
     >
       <div className="flex p-4 justify-between items-center">
         <div className="flex items-center gap-3 ">
@@ -30,12 +29,7 @@ const RepoCardMode = ({ repo, archived }: IProps) => {
             {repo.name}
           </Typography>
         </div>
-        <div className="block xs:hidden">
-          <RepoMenu repo={repo} archived={archived} />
-        </div>
-        <div className="hidden xs:block">
-          <RepoMenu repo={repo} archived={archived} />
-        </div>
+        <RepoMenu repo={repo} />
       </div>
       {getRepoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
     </Card>

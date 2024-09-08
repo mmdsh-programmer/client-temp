@@ -50,7 +50,7 @@ const DeleteDialog = ({
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
       >
-        <Typography className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
             title={children as string}
@@ -59,7 +59,7 @@ const DeleteDialog = ({
             {children}
           </span>
           " اطمینان دارید؟
-        </Typography>
+        </div>
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"

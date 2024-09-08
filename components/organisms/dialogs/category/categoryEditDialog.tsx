@@ -9,13 +9,15 @@ import useEditCategory from "@hooks/category/useEditCategory";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { categorySchema } from "./validation.yup";
 
-interface IForm {
+interface IDataForm {
   id?: number;
   name: string;
-  description: string;
+  description?: string;
   parentId?: number;
-  order: number | null;
+  order?: number | null;
 }
 
 interface IProps {
@@ -28,14 +30,17 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
 
   const editCategory = useEditCategory();
 
+  const form = useForm<IDataForm>({
+    resolver: yupResolver(categorySchema),
+  });
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     clearErrors,
     reset,
-    setError,
-  } = useForm<IForm>();
+  } = form;
 
   const handleReset = () => {
     clearErrors();
@@ -47,7 +52,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
-  const onSubmit = async (dataForm: IForm) => {
+  const onSubmit = (dataForm: IDataForm) => {
     if (
       dataForm.description?.trim() === getCategory?.description &&
       dataForm.name.trim() === getCategory?.name &&
@@ -61,8 +66,8 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
     if (!getRepo) return;
     editCategory.mutate({
       repoId: getRepo?.id,
-      categoryId: getCategory?.id,
-      parentId: getCategory?.parentId,
+      categoryId: getCategory?.id || null,
+      parentId: getCategory?.parentId || null,
       name: dataForm.name,
       description: dataForm?.description,
       order: null,
@@ -83,7 +88,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="label">نام دسته‌بندی</Typography>
+          <Typography className="form_label">نام دسته‌بندی</Typography>
           <FormInput
             placeholder="نام دسته بندی"
             register={{
@@ -99,7 +104,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">اولویت دسته‌بندی</Typography>
+          <Typography className="form_label">اولویت دسته‌بندی</Typography>
           <FormInput
             placeholder="اولویت دسته بندی"
             type="number"
@@ -107,6 +112,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("order", {
                 value: getCategory?.order,
+                valueAsNumber: true
               }),
             }}
           />
@@ -117,7 +123,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">توضیحات دسته بندی</Typography>
+          <Typography className="form_label">توضیحات دسته بندی</Typography>
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
             register={{

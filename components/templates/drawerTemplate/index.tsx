@@ -1,5 +1,6 @@
-import React from "react";
-import { Drawer, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { Button, Collapse, Drawer, Typography } from "@material-tailwind/react";
+import { ChevronLeftIcon } from "@components/atoms/icons";
 
 export interface IProps {
   openDrawer: boolean | null;
@@ -8,10 +9,15 @@ export interface IProps {
     text: string;
     icon?: React.JSX.Element;
     onClick: () => void;
+    subMenu?: { text: string; icon?: React.JSX.Element; onClick: () => void }[];
   }[];
 }
 
 const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
+  const [open, setOpen] = useState(false);
+
+  const toggleOpen = () => setOpen((cur) => !cur);
+
   return (
     <Drawer
       placement="bottom"
@@ -27,17 +33,51 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
                ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
       >
         {menuList.map((menuItem, index) => {
-          return (
+          return menuItem.subMenu ? (
+            <div key={`drawer-sub-menu-${index}`}>
+              <Button className="w-full flex items-center justify-between bg-transparent px-0" onClick={toggleOpen}>
+                <Typography className="select_option__text text-primary font-normal ">{menuItem.text}</Typography>
+                <ChevronLeftIcon
+                  className={`h-2 w-2 transition-transform stroke-icon-active ${
+                    open ? "" : "rotate-90"
+                  }`}
+                />
+              </Button>
+              <Collapse open={open}>
+                <ul
+                  className={`w-full
+               ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
+                >
+                  {menuItem.subMenu.map((subItem, idx) => {
+                    return (
+                      <li
+                        key={`drawer-sub-menu-${idx}`}
+                        className={`cursor-pointer py-2 flex`}
+                        onClick={subItem?.onClick}
+                      >
+                        <div className="flex items-center gap-1">
+                          {subItem.icon}
+                          <Typography
+                            className={`select_option__text font-normal`}
+                          >
+                            {subItem.text}
+                          </Typography>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Collapse>
+            </div>
+          ) : (
             <li
-              key={index}
+              key={`drawer-menu-${index}`}
               className={`cursor-pointer py-2 flex`}
               onClick={menuItem?.onClick}
             >
               <div className="flex items-center gap-1">
                 {menuItem.icon}
-                <Typography
-                  className={`select_option__text font-normal`}
-                >
+                <Typography className={`select_option__text font-normal`}>
                   {menuItem.text}
                 </Typography>
               </div>

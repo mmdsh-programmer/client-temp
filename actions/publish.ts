@@ -1,3 +1,5 @@
+"use server";
+
 import { createRepoPublicLink, createRepoPublishLink, deletePublicLink, deletePublishLink } from "@service/clasor";
 import { getMe } from "./auth";
 

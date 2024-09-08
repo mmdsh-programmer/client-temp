@@ -4,7 +4,7 @@ import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useSearchContent = (
-    repoId: number | undefined,
+    repoId: number,
     searchParam: string,
     size: number,
 ) => {
@@ -18,8 +18,7 @@ const useSearchContent = (
         size,
       );
 
-      console.log("----------------------- response ------------------", response)
-      return response?.data as IContentSearchResult;
+      return response as IContentSearchResult;
     },
     initialPageParam: 1,
     retry: false,

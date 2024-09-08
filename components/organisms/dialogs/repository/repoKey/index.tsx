@@ -10,7 +10,7 @@ import RepoKeyCreateDialog from "./repoKeyCreateDialog";
 import RepoKeyList from "./repoKeyList";
 
 interface IProps {
-  repo: IRepo;
+  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -24,9 +24,9 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
     setOpen(false);
   };
 
-  return getCreateRepoKey ? (
+  return getCreateRepoKey && repo ? (
     <RepoKeyCreateDialog repoId={repo.id} setOpen={setCreateRepoKey} />
-  ) : getDeleteRepoKey ? (
+  ) : getDeleteRepoKey && repo ? (
     <RepoKeyDeleteDialog repoId={repo.id} setOpen={setDeleteRepoKey} />
   ) : (
     <InfoDialog dialogHeader="لیست کلید های مخزن" setOpen={handleClose}>
@@ -45,7 +45,7 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
         </Button>
 
         <div className="w-full overflow-auto max-h-[calc(100dvh-200px)] border-[0.5px] border-normal rounded-lg mt-4">
-          <RepoKeyList repoId={repo.id} hasAction />
+          {repo && <RepoKeyList repoId={repo.id} hasAction />}
         </div>
       </div>
     </InfoDialog>

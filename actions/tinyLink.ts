@@ -1,4 +1,6 @@
-import { createTinyLink } from "@service/clasor";
+"use server";
+
+import { createTinyLink } from "@service/tinyLink";
 import { getMe } from "./auth";
 
 export const createTinyLinkAction = async (url: string) => {

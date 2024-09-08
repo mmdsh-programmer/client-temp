@@ -30,8 +30,6 @@
 }
 
 @layer components {
-
-
   .spinner {
     @apply !border-r-purple-normal !border-t-purple-normal;
   }
@@ -80,20 +78,28 @@
     @apply !text-[13px] !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan
   }
 
-  .label {
+  .form_label {
     @apply !text-primary !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan
+  }
+
+  .label {
+    @apply !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan
   }
 
   .label_l2 {
     @apply text-primary !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan
   }
 
+  .label_l4 {
+    @apply text-primary !text-[12px] font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan
+  }
+
   .text__label__button {
     @apply !text-[12px] !leading-[18px] !-tracking-[0.12px] !font-bold !font-iranYekan
-    }
+  }
 
   .warning_text {
-    @apply text-error !text-xs w-full h-5 !font-iranYekan
+    @apply !text-error !text-[11px] w-full h-5 !font-iranYekan
   }
 
   .select_option__text {
@@ -109,9 +115,29 @@
     top: 0;
     width: 100%;
   }
-  
-  .sticky + .category-children {
+
+  .sticky+.category-children {
     padding-top: 102px;
+  }
+
+  .white-list-input.css-hk0rgq-MuiFormControl-root-MuiTextField-root{
+    @apply !border-0 !border-normal !overflow-auto max-h-[150px] !rounded-none
+  }
+
+  .white-list-input .MuiInputBase-root {
+    @apply !rounded-lg hover:!border-normal hover:!outline-0 !border-none !outline-0
+  }
+
+  .white-list-input .MuiInputBase-input {
+    @apply placeholder:font-iranYekan placeholder:text-[14px];
+  }
+
+  .white-list-input .MuiChip-deleteIcon {
+    @apply translate-x-2.5;
+  }
+
+  .white-list-input button[aria-label="Clear"] {
+    @apply translate-x-[7px];
   }
 }
 
@@ -137,4 +163,7 @@
     @apply rounded-b-md py-3 px-3 w-full flex justify-between items-center bg-gray-50
   }
 
+  .rdp__modal.css-1e0sis0{
+    @apply z-[99999]
+  }
 }

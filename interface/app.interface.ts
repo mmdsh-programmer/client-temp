@@ -4,7 +4,7 @@ export interface IServerResult<T> {
   data: T;
   referenceNumber: string;
   timestamp: number;
-  cacheResponse: boolean
+  cacheResponse: boolean;
 }
 
 export interface IUserInfo {
@@ -28,10 +28,11 @@ export type TUserData = Pick<
   | "username"
   | "ssoId"
   | "userId"
+  | "business"
+  | "isClasorAdmin"
 > & {
   access_token: string;
   refresh_token: string;
-  accessTokenExpires: number;
 };
 
 export interface IMyInfo {
@@ -169,4 +170,22 @@ export interface IReportFilter {
   isTemplate: boolean;
   bookmarked: boolean;
   slug?: string;
+}
+
+export interface IClasorError {
+  cacheResponse: boolean;
+  messages: string[];
+  referenceNumber: string;
+  timestamp: number;
+}
+
+export interface IGetToken {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface IActionError {
+  errorCode: number;
+  errorList: string[];
+  originalError?: string;
 }

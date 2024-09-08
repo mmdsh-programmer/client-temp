@@ -1,5 +1,4 @@
 import { moveBulkAction } from "@actions/bulk";
-import { ICategory } from "@interface/category.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -19,7 +18,7 @@ const useMoveBulk = () => {
         parentId,
         children,
       );
-      return response?.data;
+      return response;
     },
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;

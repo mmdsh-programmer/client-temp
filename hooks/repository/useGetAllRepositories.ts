@@ -1,17 +1,21 @@
 import { getAllRepositoryList } from "@actions/repository";
-import { IRepo, IResponse } from "@interface/repo.interface";
+import { IRepo, IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetAllRepositories = (size: number, name: string | undefined, enabled: boolean) => {
+const useGetAllRepositories = (
+  size: number,
+  name: string | undefined,
+  enabled: boolean
+) => {
   return useInfiniteQuery({
-    queryKey: [`allRepoList-${name}`],
+    queryKey: [`allRepoList${name ? `-${name}` : ""}`],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getAllRepositoryList(
         (pageParam - 1) * size,
         size,
         name
       );
-      return response?.data as IResponse<IRepo>;
+      return response as IListResponse<IRepo>;
     },
     initialPageParam: 1,
     retry: false,

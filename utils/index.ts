@@ -1,5 +1,5 @@
 import moment from "moment-jalaali";
-import { ERepoGrouping, ERoles } from "@interface/enums";
+import { ERoles } from "@interface/enums";
 
 export const logger = (key: string, newValue: any, oldValue: any) => {
   if (process.env.NODE_ENV === "development") {
@@ -27,6 +27,50 @@ export const translateRoles = (role?: ERoles) => {
     default:
       return "مهمان";
   }
+};
+
+export const translateVersionStatus = (status: string, state: string) => {
+  let translated;
+  let className;
+  switch (status) {
+    case "private":
+    case "accepted":
+      {
+        (translated = "تایید شده"),
+          (className = "label bg-gray-50 text-success-normal ");
+      }
+      break;
+    case "editing":
+      {
+        (translated = "پیش نویس"),
+          (className = "label text-secondary bg-gray-50");
+      }
+      break;
+    case "pending":
+      translated = "در انتظار تایید";
+      if (state === "draft") {
+        translated = "در انتظار تایید مدیر مخزن";
+      } else if (state === "version") {
+        translated = "در انتظار عمومی شدن";
+      }
+      break;
+    case "rejected":
+      translated = "رد شده";
+      break;
+
+    case "public":
+      {
+        (translated = "عمومی"),
+          (className = "label text-info bg-gray-50");
+      }
+      break;
+    default:
+      translated = status;
+  }
+  return {
+    translated,
+    className: `${className} flex items-center justify-center h-6 !px-2 rounded-full`,
+  };
 };
 
 export const toPersinaDigit = (digits: number | string): string => {

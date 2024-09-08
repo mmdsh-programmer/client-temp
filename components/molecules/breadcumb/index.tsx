@@ -1,15 +1,17 @@
-"use client";
-
 import React from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { repoAtom, repoGrouping } from "@atom/repository";
 import { useRouter } from "next/navigation";
 import { Button, Typography } from "@material-tailwind/react";
+import { selectedDocumentAtom } from "@atom/document";
+import { versionListAtom } from "@atom/version";
 
-const Breadcrumb: React.FC  = () => {
+const Breadcrumb: React.FC = () => {
   const getRepoGroup = useRecoilValue(repoGrouping);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const setShowVersionList = useSetRecoilState(versionListAtom);
+
   const router = useRouter();
 
   const breadcrumbList = getRepo
@@ -19,7 +21,7 @@ const Breadcrumb: React.FC  = () => {
   return (
     <>
       <div className="clasor-breadcrumb flex justify-center items-center bg-transparent">
-        <BreadcrumbIcon className="h-4 w-3 fill-gray-400" />
+        <BreadcrumbIcon className="h-5 w-5 fill-gray-400" />
       </div>
       <div>
         <Button
@@ -34,8 +36,8 @@ const Breadcrumb: React.FC  = () => {
           </Typography>
         </Button>
       </div>
-      <div className="h-4 w-4">
-        <ChevronLeftIcon className="w-3 h-3 stroke-gray-500 mt-[4px] mr-1" />
+      <div className="h-6 w-[14px] flex items-center justify-center">
+        <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
       </div>
       {breadcrumbList.map((breadcrumbItem, index) => {
         return (
@@ -50,9 +52,12 @@ const Breadcrumb: React.FC  = () => {
                 if (index === 0) {
                   router.push("/admin/dashboard");
                 }
+                if (index === 1) {
+                  setShowVersionList(null);
+                }
               }}
             >
-              <div className="flex">
+              <div className="flex items-center">
                 <Typography
                   placeholder={breadcrumbItem}
                   className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
@@ -61,8 +66,8 @@ const Breadcrumb: React.FC  = () => {
                   {breadcrumbItem}
                 </Typography>
                 {index !== breadcrumbList.length - 1 ? (
-                  <div className="h-4 w-4">
-                    <ChevronLeftIcon className="w-3 h-3 stroke-gray-500 mt-[4px] mr-1" />
+                  <div className="h-6 w-[14px] flex items-center justify-center">
+                    <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
                   </div>
                 ) : null}
               </div>

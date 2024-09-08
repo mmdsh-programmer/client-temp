@@ -1,23 +1,16 @@
 "use server";
 
 import {
-  addUserToRepo,
   createGroup,
   deleteGroup,
-  deleteInviteRequest,
-  deleteUser,
-  editUserRole,
   getGroupInfo,
   getRepositoryGroups,
-  getRepositoryInviteRequestsByOwner,
-  getRepositoryUsers,
-  getRoles,
   updateGroup,
 } from "@service/clasor";
 import { getMe } from "./auth";
 
 export const getRepositoryGroupsAction = async (
-  repoId: number | undefined,
+  repoId: number,
   offset: number,
   size: number
 ) => {
@@ -36,7 +29,10 @@ export const getRepositoryGroupsAction = async (
   }
 };
 
-export const getGroupInfoAction = async (repoId?: number, title?: string) => {
+export const getGroupInfoAction = async (
+  repoId: number,
+  title: string
+) => {
   const userInfo = await getMe();
   try {
     const response = await getGroupInfo(userInfo.access_token, repoId, title);
@@ -48,7 +44,7 @@ export const getGroupInfoAction = async (repoId?: number, title?: string) => {
 };
 
 export const createGroupAction = async (
-  repoId: number | undefined,
+  repoId: number,
   title: string,
   description?: string,
   members?: string[]
@@ -69,7 +65,7 @@ export const createGroupAction = async (
 };
 
 export const editGroupAction = async (
-  repoId: number | undefined,
+  repoId: number,
   title: string,
   description?: string,
   members?: string[]
@@ -91,7 +87,7 @@ export const editGroupAction = async (
 };
 
 export const deleteGroupAction = async (
-  repoId: number | undefined,
+  repoId: number,
   title: string
 ) => {
   const userInfo = await getMe();

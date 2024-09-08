@@ -9,20 +9,18 @@ export interface IProps {
   header: string;
   buttonText: string;
   onClick: () => void;
-  listModeHide: boolean;
+  listMode?: boolean;
 }
 
 const HeaderListTemplate = ({
   buttonText,
   header,
   onClick,
-  listModeHide,
+  listMode,
 }: IProps) => {
   return (
     <header className="flex justify-between items-center">
-      <Typography className="title_t1 text-primary">
-        {header}
-      </Typography>
+      <Typography className="title_t1 text-primary">{header}</Typography>
       <div className="flex gap-2">
         <div className="hidden md:flex">
           <DesktopHeaderList buttonText={buttonText} onClick={onClick} />
@@ -33,7 +31,7 @@ const HeaderListTemplate = ({
         <div className="absolute z-[999] bottom-20 left-6 xs:hidden">
           <MobileHeaderList onClick={onClick} />
         </div>
-        {!!listModeHide ? null : <ListMode />}
+        {!!listMode ? <ListMode /> : null}
       </div>
     </header>
   );

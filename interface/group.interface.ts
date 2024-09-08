@@ -1,9 +1,3 @@
-export interface IGroupResult {
-  list: IGetGroups[];
-  offset: number;
-  size: number;
-  total: number;
-}
 export interface ICreateGroup {
   groupParentId: string;
   groupId: string;

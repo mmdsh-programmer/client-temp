@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateKeySchema } from "../validation.yup";
-import InputAtom from "@components/atoms/input";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import forge from "node-forge";
 import copy from "copy-to-clipboard";
@@ -33,6 +32,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   const { register, handleSubmit, formState, reset, clearErrors, setValue } =
     form;
   const { errors } = formState;
+  console.log(errors)
 
   const handleClose = () => {
     reset();

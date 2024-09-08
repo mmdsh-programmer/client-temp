@@ -9,7 +9,7 @@ import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
-  repo: IRepo;
+  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -38,6 +38,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
     setOpen(false);
   };
   const onSubmit = async (dataForm: IForm) => {
+    if (!repo) return;
     mutate({
       repoId: repo.id,
       name: dataForm.name,
@@ -64,7 +65,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
             placeholder="عنوان"
             register={{
               ...register("name", {
-                value: repo.name,
+                value: repo?.name,
               }),
             }}
           />
@@ -79,7 +80,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
           <TextareaAtom
             placeholder="توضیحات"
             register={{
-              ...register("description", { value: repo.description }),
+              ...register("description", { value: repo?.description }),
             }}
           />
           {errors.name && (

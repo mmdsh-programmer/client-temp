@@ -1,5 +1,5 @@
 import { getMyRepositoryList } from "@actions/repository";
-import { IRepo, IResponse } from "@interface/repo.interface";
+import { IRepo, IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetMyRepoList = (
@@ -9,7 +9,7 @@ const useGetMyRepoList = (
   enabled?: boolean
 ) => {
   return useInfiniteQuery({
-    queryKey: [`myRepoList-${archived}-${name}`],
+    queryKey: [`myRepoList-${archived}${name ? `-${name}` : ""}`],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getMyRepositoryList(
         (pageParam - 1) * size,
@@ -17,7 +17,7 @@ const useGetMyRepoList = (
         archived,
         name
       );
-      return response?.data as IResponse<IRepo>;
+      return response as IListResponse<IRepo>;
     },
     initialPageParam: 1,
     retry: false,

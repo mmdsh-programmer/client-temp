@@ -9,6 +9,7 @@ interface IProps {
     rowSpan?: number;
     colSpan?: number;
     onClick?: () => void;
+    stopPropagation?: boolean;
   }[];
   navigateTo?: string;
   onClick?: () => void;
@@ -18,7 +19,7 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
   return (
     <tr
       className="cursor-pointer text-[13px] font-normal text-primary border-b-[1px] border-normal"
-      onClick={() => {
+      onClick={(e) => {
         onClick?.();
         if (navigateTo) {
           router.push(navigateTo);
@@ -30,9 +31,10 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
           <td
             title={row.title}
             key={index}
-            className={`p-4 truncate font-iranYekan ${row.className || ""}`}
+            className={`p-4 truncate font-iranYekan ${row.className || ""}
+              `}
             onClick={(e) => {
-              if (index === tableCell.length - 1) {
+              if (index === tableCell.length - 1 || row.stopPropagation) {
                 e.stopPropagation();
               }
             }}

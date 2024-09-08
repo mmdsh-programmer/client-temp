@@ -7,7 +7,7 @@ const useGetClasorField = () => {
     queryKey: ["clasor-field"],
     queryFn: async ({ signal }) => {
       const response = await getClasorFieldAction();
-      return response?.data as IClasorField[];
+      return response as IClasorField[];
     },
     retry: false,
     refetchOnWindowFocus: false,

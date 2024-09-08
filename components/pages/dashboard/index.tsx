@@ -3,7 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 import RepoCards from "@components/organisms/repoTypesCards";
 import RepoList from "@components/organisms/repoList";
-import RepoMobileCards from "@components/organisms/repoMobileCards";
+import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
 
 const DashboardPage = () => {
   const setRepo = useSetRecoilState(repoAtom);
@@ -16,7 +16,7 @@ const DashboardPage = () => {
     <div className="flex flex-col gap-4 xs:gap-6 ">
       <RepoCards />
       <RepoList />
-      <RepoMobileCards />
+      <RepoTypesMobileView />
     </div>
   );
 };

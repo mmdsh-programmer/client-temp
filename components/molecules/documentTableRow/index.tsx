@@ -20,7 +20,7 @@ const DocumentTableRow = ({ document }: IProps) => {
     const isChecked = e.target.checked;
     if (isChecked && (getBulkItems as IDocumentMetadata[]).length + 1 > 10) {
       e.target.checked = false;
-      toast.error("نمیتوانید بیش از 10 ایتم را انتخاب کنید");
+      toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
       return;
     }
     setBulkItems((oldValue) => {
@@ -83,8 +83,8 @@ const DocumentTableRow = ({ document }: IProps) => {
             : "--",
         },
         {
-          data: document.creator?.userName || "--",
-          title: document.creator?.userName || "--",
+          data: document.creator?.name || "--",
+          title: document.creator?.name || "--",
         },
         { data: <DocumentMenu document={document} /> },
       ]}

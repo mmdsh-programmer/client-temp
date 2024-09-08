@@ -19,7 +19,7 @@ const useAddUser = () => {
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getRepoInviteRequestsByOwner-${repoId}`],
+        queryKey: [`getRepoInviteRequestsByOwner-${repoId}`, repoId],
       });
       callBack?.();
     },

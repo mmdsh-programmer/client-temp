@@ -17,16 +17,18 @@ import {
   imageRepository,
   leaveRepository,
   restoreRepository,
+  transferOwnershipRepository,
 } from "@service/clasor";
 import { getMe } from "./auth";
-import { TUserData } from "@interface/app.interface";
+import { handleActionError } from "@utils/error";
+import { IActionError } from "@interface/app.interface";
 
 export const getAllRepositoryList = async (
   offset: number,
   size: number,
   name?: string
 ) => {
-  const userInfo = (await getMe()) as TUserData;
+  const userInfo = await getMe();
   try {
     const response = await getAllRepositories(
       userInfo.access_token,
@@ -47,7 +49,7 @@ export const getMyRepositoryList = async (
   archived: boolean,
   name?: string
 ) => {
-  const userInfo = (await getMe()) as TUserData;
+  const userInfo = await getMe();
   try {
     const response = await getMyRepositories(
       userInfo.access_token,
@@ -63,7 +65,7 @@ export const getMyRepositoryList = async (
   }
 };
 
-export const getRepositoryAction = async (repoId?: number) => {
+export const getRepositoryAction = async (repoId: number | null) => {
   const userInfo = await getMe();
   try {
     const response = await getRepository(userInfo.access_token, repoId);
@@ -235,8 +237,7 @@ export const getRepoKeysAction = async (
 
     return response;
   } catch (error) {
-    console.log("fucccckkkkk you--------------------------", error);
-    console.log("============ error ==========", error);
+    return handleActionError(error as IActionError);
   }
 };
 
@@ -267,6 +268,21 @@ export const createRepoKeyAction = async (
       repoId,
       name,
       key
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const transferOwnershipRepositoryAction = async (repoId: number, userName: string) => {
+  const userInfo = await getMe();
+  try {
+    const response = await transferOwnershipRepository(
+      userInfo.access_token,
+      repoId,
+      userName
     );
 
     return response;

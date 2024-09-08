@@ -9,11 +9,13 @@ import useCreateCategory from "@hooks/category/useCreateCategory";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
+import { categorySchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   name: string;
-  description: string;
-  order: number | null;
+  description?: string;
+  order?: number | null;
 }
 
 interface IProps {
@@ -26,13 +28,17 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
 
   const createCategory = useCreateCategory();
 
+  const form = useForm<IForm>({
+    resolver: yupResolver(categorySchema),
+  });
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>();
+  } = form;
 
   const handleReset = () => {
     clearErrors();
@@ -48,9 +54,9 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
     if (!getRepo) return;
     createCategory.mutate({
       repoId: getRepo?.id,
-      parentId: getCategory?.id,
+      parentId: getCategory?.id || null,
       name: dataForm.name,
-      description: dataForm?.description,
+      description: dataForm?.description || "",
       order: null,
       callBack: () => {
         toast.success("دسته بندی با موفقیت ایجاد شد.");
@@ -69,7 +75,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="label">نام دسته‌بندی</Typography>
+          <Typography className="form_label">نام دسته‌بندی</Typography>
           <FormInput
             placeholder="نام دسته بندی"
             register={{ ...register("name") }}
@@ -81,7 +87,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">اولویت دسته‌بندی</Typography>
+          <Typography className="form_label">اولویت دسته‌بندی</Typography>
           <FormInput
             type="number"
             min={0}
@@ -95,7 +101,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">توضیحات دسته بندی</Typography>
+          <Typography className="form_label">توضیحات دسته بندی</Typography>
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
             register={{...register("description")}}

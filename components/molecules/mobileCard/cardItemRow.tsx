@@ -4,9 +4,10 @@ import React from "react";
 interface IProps {
   title: string;
   value?: string;
+  className?: string;
 }
 
-const CardItemRow = ({ value, title }: IProps) => {
+const CardItemRow = ({ value, title,className }: IProps) => {
   return (
     <div className="flex items-center h-6 gap-2">
       <Typography className="label text-placeholder">
@@ -15,7 +16,7 @@ const CardItemRow = ({ value, title }: IProps) => {
       <div className="flex-grow flex-shrink-0 pt-1">
         <div className="border-b-[2px] border-dashed border-normal" />
       </div>
-      <Typography className="label text-primary">
+      <Typography className={`${className || ""} label text-primary`}>
         {value || "--"}
       </Typography>
     </div>

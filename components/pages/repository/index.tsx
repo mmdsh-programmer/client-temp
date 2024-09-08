@@ -1,34 +1,30 @@
-"use client";
+"use client"
 
 import React from "react";
 import RepoInfo from "@components/organisms/repoInfo";
-import RepoMobileCards from "@components/organisms/repoMobileCards";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
+import { useRecoilValue } from "recoil";
 import { bulkItems } from "@atom/bulk";
-import CategoryList from "@components/organisms/category/categoryList";
-import { repoAtom } from "@atom/repository";
-import useGetRepo from "@hooks/repository/useGetRepo";
-import SpinnerText from "@components/molecules/spinnerText";
+import CategoryList from "@components/organisms/category";
+import { versionListAtom } from "@atom/version";
+import VersionList from "../version";
 
-interface IProps {
-  repoId: number;
-}
 
-const RepoPage = ({ repoId }: IProps) => {
-  const setRepo = useSetRecoilState(repoAtom);
+const RepoPage = () => {
+  const getShowVersionList = useRecoilValue(versionListAtom);
   const getBulkItems = useRecoilValue(bulkItems);
-
-  const { isLoading } = useGetRepo(repoId, setRepo);
-
-  if (isLoading) {
-    return <SpinnerText text="در حال دریافت اطلاعات" />;
-  }
 
   return (
     <div className="flex flex-col gap-4 xs:gap-6">
-      <RepoInfo />
-      <CategoryList />
-      <RepoMobileCards />
+      {getShowVersionList ? (
+        <VersionList />
+      ) : (
+        <>
+          <RepoInfo />
+          <CategoryList />
+        </>
+      )}
+      <RepoTypesMobileView />
     </div>
   );
 };

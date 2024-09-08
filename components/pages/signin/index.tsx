@@ -21,7 +21,30 @@ const SignInComponent = () => {
       setLoading(true);
       await getUserToken(code, redirect_uri);
       setLoading(false);
-      router.push("/admin/dashboard");
+      const lastPage = localStorage.getItem("CLASOR:LAST_PAGE") || null;
+
+      if (lastPage === null) {
+        const selectedrepoString = window.localStorage.getItem(
+          "CLASOR:SELECTED_REPO"
+        );
+        const selectedRepo = selectedrepoString
+          ? JSON.parse(selectedrepoString)
+          : null;
+        if (selectedRepo) {
+          router.push("/admin/repositories");
+        } else if (window.localStorage.getItem("CLASOR:PANEL_URL")) {
+          const redirectLink = `${
+            window.location.origin
+          }${window.localStorage.getItem("CLASOR:PANEL_URL")}`;
+          window.localStorage.removeItem("CLASOR:PANEL_URL");
+          router.push(redirectLink);
+        } else {
+          router.push("/admin/dashboard");
+        }
+      }
+      if (lastPage) {
+        router.push(lastPage);
+      }
     } catch {
       setError("خطا در دریافت اطلاعات کاربری");
     }
@@ -53,7 +76,9 @@ const SignInComponent = () => {
     return (
       <div className="get-user-info w-screen h-screen flex items-center justify-center bg-slate-50">
         <Spinner className="h-8 w-8" color="purple" />
-        <Typography className="font-bold mr-2 title_t1">در حال دریافت اطلاعات کاربری</Typography>
+        <Typography className="font-bold mr-2 title_t1">
+          در حال دریافت اطلاعات کاربری
+        </Typography>
       </div>
     );
   }

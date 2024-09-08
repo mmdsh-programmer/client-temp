@@ -5,9 +5,8 @@ import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import RepoMenu from "@components/molecules/repoMenu";
-import RenderIf from "@components/renderIf";
+import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
-import MobileCard from "@components/molecules/mobileCard";
 import { useRecoilValue } from "recoil";
 import { repoSearchParamAtom } from "@atom/repository";
 import RepoSearch from "../../molecules/repoSearch";
@@ -16,6 +15,7 @@ import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
+import MobileView from "../repoView/mobileView";
 
 const AllRepoList = () => {
   const getSearchParam = useRecoilValue(repoSearchParamAtom);
@@ -48,6 +48,7 @@ const AllRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
+    isFetching
   } = useMemo(() => {
     if (search) {
       switch (repoType) {
@@ -107,23 +108,6 @@ const AllRepoList = () => {
       ))
     );
 
-  const renderMobileCards = () =>
-    repoList?.pages.map((page) =>
-      page.list.map((repo) => (
-        <MobileCard
-          key={repo.id}
-          name={repo.name}
-          createDate={
-            repo.createDate
-              ? FaDateFromTimestamp(+new Date(repo.createDate))
-              : "--"
-          }
-          creator={repo.owner?.userName}
-          cardAction={<RepoMenu repo={repo} />}
-        />
-      ))
-    );
-
   return (
     <>
       <div className="hidden xs:block">
@@ -152,7 +136,7 @@ const AllRepoList = () => {
                         },
                         { key: "role", value: "نقش من" },
                         { key: "status", value: "وضعیت" },
-                        { key: "action", value: "عملیات" },
+                        { key: "action", value: "عملیات", className: "justify-end" },
                       ]}
                     />
                     <tbody>
@@ -181,27 +165,14 @@ const AllRepoList = () => {
         </div>
       </div>
       <div className="flex flex-col h-full min-h-[calc(100vh-340px)] xs:hidden gap-y-4">
-        {isLoadingAllRepos || isLoading ? (
-          <div className="w-full h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="deep-purple" />
-          </div>
-        ) : listLength || (!search &&listLengthAllRepos) ? (
-          <>
-            {renderMobileCards()}
-            <RenderIf isTrue={hasNextPage}>
-              <div className="m-auto">
-                <LoadMore
-                  isFetchingNextPage={isFetchingNextPage}
-                  fetchNextPage={fetchNextPage}
-                />
-              </div>
-            </RenderIf>
-          </>
-        ) :  (
-          <EmptyList
-            type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
-          />
-        )}
+        <MobileView
+          isLoading={isLoadingAllRepos || isLoading}
+          getRepoList={repoList}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
+        />
       </div>
     </>
   );
