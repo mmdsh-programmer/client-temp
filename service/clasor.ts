@@ -1729,7 +1729,7 @@ export const getVersion = async (
   access_token: string,
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean
@@ -2286,6 +2286,33 @@ export const rejectUserToRepoRequest = async (
         },
         params: {
           requestId,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+///////////////////////// EDITOR //////////////////
+export const saveVersion = async (
+  access_token: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  content: string,
+  outline: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
+      { versionNumber, content, outline },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
         },
       }
     );

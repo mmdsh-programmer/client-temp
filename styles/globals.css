@@ -51,7 +51,7 @@
   }
 
   .form__title, .title_t1 {
-    @apply text-primary !text-[16px] !leading-6 !-tracking-[0.32px] font-medium !font-iranYekan
+    @apply text-primary !text-[16px] !leading-6 !-tracking-[0.32px] !font-medium !font-iranYekan
   }
 
   .title_t2 {

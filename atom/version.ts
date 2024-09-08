@@ -50,3 +50,15 @@ export const compareVersionAtom = atom<{
     },
   ],
 });
+
+export const versionModalListAtom = atom<"SHOW" | "HIDE" | null>({
+  key: "versionModalList",
+  default: null,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("versionModalList", newValue, oldValue);
+      });
+    },
+  ],
+});
