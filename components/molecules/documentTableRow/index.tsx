@@ -49,6 +49,7 @@ const DocumentTableRow = ({ document }: IProps) => {
         {
           data: document.order || document.order === 0 ? document.order : "--",
           title: String(document.order) || "--",
+          className: "hidden xl:table-cell",
         },
         {
           data: (
@@ -81,10 +82,12 @@ const DocumentTableRow = ({ document }: IProps) => {
           title: document.updatedAt
             ? FaDateFromTimestamp(+document.updatedAt)
             : "--",
+          className: "hidden xl:table-cell",
         },
         {
           data: document.creator?.name || "--",
           title: document.creator?.name || "--",
+          className: "hidden lg:table-cell",
         },
         { data: <DocumentMenu document={document} /> },
       ]}
