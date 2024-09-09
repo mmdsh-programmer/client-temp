@@ -39,8 +39,8 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
       loadData={
         selectedDocument?.contentType === EDocumentTypes.classic
           ? ({
-              content: selectedVersion?.content || " ",
-              outline: selectedVersion?.outline || [],
+              content: editorData?.content || " ",
+              outline: editorData?.outline || [],
               auth: {
                 accessToken: userInfo?.access_token,
                 refreshToken: userInfo?.refresh_token,
