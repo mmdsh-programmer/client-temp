@@ -1,11 +1,11 @@
-import { saveVersionAction } from "@actions/editor";
+import { freeDraftVersionAction } from "@actions/editor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
-const useSaveEditor = () => {
+const useFreeDraft = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["saveVersion"],
+    mutationKey: ["freeDraftVersion"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
@@ -17,7 +17,7 @@ const useSaveEditor = () => {
     }) => {
       const { repoId, documentId, versionId, versionNumber, content, outline } =
         values;
-      const response = await saveVersionAction(
+      const response = await freeDraftVersionAction(
         repoId,
         documentId,
         versionId,
@@ -29,7 +29,10 @@ const useSaveEditor = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;
-      toast.success("تغییرات با موفقیت ذخیره شد.");
+      queryClient.invalidateQueries({
+        queryKey: [`version-list-${repoId}-${documentId}`],
+      });
+
       callBack?.();
     },
     onError: (error) => {
@@ -38,4 +41,4 @@ const useSaveEditor = () => {
   });
 };
 
-export default useSaveEditor;
+export default useFreeDraft;

@@ -4,11 +4,21 @@ import TableHead from "@components/molecules/tableHead";
 import EmptyList from "@components/molecules/emptyList";
 import TableCell from "@components/molecules/tableCell";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
-import { IVersionView } from "@components/pages/version";
 import VersionMenu from "@components/molecules/versionMenu";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
 import { LastVersionIcon } from "@components/atoms/icons";
+import { IVersionView } from "../version/versionList";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { versionModalListAtom } from "@atom/version";
+import { IVersion } from "@interface/version.interface";
+import {
+  editorModalAtom,
+  editorModeAtom,
+  editorVersionAtom,
+} from "@atom/editor";
+import { EDocumentTypes } from "@interface/enums";
+import { selectedDocumentAtom } from "@atom/document";
 
 const VersionTableView = ({
   isLoading,
@@ -19,11 +29,34 @@ const VersionTableView = ({
   lastVersion,
   type,
 }: IVersionView) => {
+  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+  const [versionModalList, setVersionModalList] =
+    useRecoilState(versionModalListAtom);
+  const setEditorVersion = useSetRecoilState(editorVersionAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
   const listLength = getVersionList?.[0].length;
+
+  const handleOpenEditor = (value: IVersion) => {
+    if (isLoading) {
+      return;
+    }
+    setEditorVersion(value);
+    setEditorMode("preview");
+    setVersionModalList(false);
+    setEditorModal(true);
+  };
+
+  const handleOpenBoardEditor = (value: IVersion) => {
+    if (isLoading) {
+      return;
+    }
+    window.open(`http://localhost:8080/board/${value.id}`);
+  };
 
   return (
     <div
-      className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+      className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
     >
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
@@ -41,12 +74,17 @@ const VersionTableView = ({
                 {
                   key: "creator",
                   value: "ایجاد کننده",
+                  className: "hidden md:table-cell",
                 },
                 {
                   key: "createDate",
                   value: "تاریخ ایجاد",
                 },
-                { key: "editDate", value: "تاریخ ویرایش" },
+                {
+                  key: "editDate",
+                  value: "تاریخ ویرایش",
+                  className: "hidden xl:table-cell",
+                },
                 {
                   key: "status",
                   value: "وضعیت",
@@ -64,9 +102,22 @@ const VersionTableView = ({
                   return (
                     <TableCell
                       key={`version-table-item-${version.id}`}
+                      onClick={() => {
+                        if (
+                          getSelectedDocument?.contentType !==
+                          EDocumentTypes.board
+                        ) {
+                          handleOpenEditor(version);
+                        } else {
+                          handleOpenBoardEditor(version);
+                        }
+                      }}
                       tableCell={[
                         { data: version.versionNumber },
-                        { data: version.creator?.name },
+                        {
+                          data: version.creator?.name,
+                          className: "hidden md:table-cell",
+                        },
                         {
                           data: FaDateFromTimestamp(
                             +new Date(version.createDate)
@@ -76,6 +127,7 @@ const VersionTableView = ({
                           data: FaDateFromTimestamp(
                             +new Date(version.updateDate)
                           ),
+                          className: "hidden xl:table-cell",
                         },
                         {
                           data: (
@@ -99,9 +151,9 @@ const VersionTableView = ({
                                 <RenderIf
                                   isTrue={version.status === "accepted"}
                                 >
-                                  <div className="label text-info bg-blue-50 flex items-center justify-center h-6 !px-2 rounded-full">
+                                  <Typography className="label text-info bg-blue-50 flex items-center justify-center h-6 !px-2 rounded-full">
                                     عمومی
-                                  </div>
+                                  </Typography>
                                 </RenderIf>
                               </div>
                               <RenderIf

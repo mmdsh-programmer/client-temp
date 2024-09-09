@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IVersion } from "@interface/version.interface";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import MenuTemplate from "@components/templates/menuTemplate";
 import {
   ComparisionIcon,
@@ -28,6 +28,8 @@ import DiffVersionAlert from "../diffVersionAlert";
 import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import { compareVersionAtom } from "@atom/version";
+import { editorModeAtom } from "@atom/editor";
+import Editor from "@components/organisms/dialogs/editor";
 
 interface IProps {
   version?: IVersion;
@@ -39,6 +41,7 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const [editVersionModal, setEditVersionModal] = useState(false);
   const [deleteVersionModal, setDeleteVersionModal] = useState(false);
@@ -108,6 +111,7 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
       icon: <EditIcon className="h-4 w-4" />,
       onClick: () => {
         setEditVersionModal(true);
+        setEditorMode("edit");
       },
     },
     {
@@ -224,6 +228,9 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
             setCompareVersion(null);
           }}
         />
+      )}
+      {editVersionModal && version && (
+        <Editor setOpen={() => setEditVersionModal(false)} />
       )}
     </>
   );

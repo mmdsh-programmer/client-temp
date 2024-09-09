@@ -1,0 +1,74 @@
+import React from "react";
+import { dialog, Typography } from "@material-tailwind/react";
+import CloseButton from "@components/atoms/button/closeButton";
+import BackButton from "@components/atoms/button/backButton";
+import {
+  editorDataAtom,
+  editorModalAtom,
+  editorModeAtom,
+  editorVersionAtom,
+} from "@atom/editor";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { selectedDocumentAtom } from "@atom/document";
+import { repoAtom } from "@atom/repository";
+import useFreeDraft from "@hooks/editor/useFreeDraft";
+import { versionModalListAtom } from "@atom/version";
+
+export interface IProps {
+  dialogHeader?: string;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  disabled: boolean;
+}
+
+const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+  const [getSelectedDocument, setSelectedDocument] =
+    useRecoilState(selectedDocumentAtom);
+  const [version, setVersion] = useRecoilState(editorVersionAtom);
+  const [editorData, setEditorData] = useRecoilState(editorDataAtom);
+  const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
+  const [versionModalList, setVersionModalList] =
+    useRecoilState(versionModalListAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const freeDraftHook = useFreeDraft();
+
+  const handleClose = () => {
+    setOpen(false);
+    if (
+      getRepo &&
+      getSelectedDocument &&
+      version &&
+      ["edit", "temporaryPreview"].includes(editorMode)
+    ) {
+      freeDraftHook.mutate({
+        repoId: getRepo!.id,
+        documentId: getSelectedDocument.id,
+        versionId: version.id,
+        versionNumber: "",
+        content: "",
+        outline: "",
+      });
+    }
+
+    setSelectedDocument(null);
+    setVersionModalList(false);
+
+    setVersion(null);
+    setEditorData(null);
+    setEditorModal(false);
+  };
+
+  return (
+    <>
+      <div className="block xs:hidden">
+        <BackButton onClick={handleClose} />
+      </div>
+      <Typography className="title_t1">{dialogHeader}</Typography>
+      <div className="hidden xs:block">
+        <CloseButton onClose={handleClose} disabled={disabled} />
+      </div>
+    </>
+  );
+};
+
+export default EditorHeader;

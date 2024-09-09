@@ -90,6 +90,10 @@
     @apply text-primary !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan
   }
 
+  .label_l3 {
+    @apply text-primary truncate !text-[13px] font-normal !leading-[18.2px] !-tracking-[0.13px] !font-iranYekan
+  }
+
   .label_l4 {
     @apply text-primary !text-[12px] font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan
   }

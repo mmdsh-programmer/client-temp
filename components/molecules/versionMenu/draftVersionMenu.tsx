@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { IVersion } from "@interface/version.interface";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { compareVersionAtom } from "@atom/version";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import MenuTemplate from "@components/templates/menuTemplate";
-import { ComparisionIcon, ConfirmationVersionIcon, CopyIcon, DeleteIcon, DuplicateIcon, EditIcon, EditVersionIcon, MoreDotIcon, ShareIcon } from "@components/atoms/icons";
+import {
+  ComparisionIcon,
+  ConfirmationVersionIcon,
+  CopyIcon,
+  DeleteIcon,
+  DuplicateIcon,
+  EditIcon,
+  MoreDotIcon,
+  ShareIcon,
+} from "@components/atoms/icons";
 import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
 import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
 import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
@@ -12,10 +21,11 @@ import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
 import { repoAtom } from "@atom/repository";
 import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import VersionEditDialog from "@components/organisms/dialogs/version/versionEditDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
 import DiffVersionAlert from "../diffVersionAlert";
+import Editor from "@components/organisms/dialogs/editor";
+import { editorModeAtom } from "@atom/editor";
 
 interface IProps {
   version?: IVersion;
@@ -27,6 +37,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const [diffVersionModal, setDiffVersionModal] = useState(false);
   const [editVersionModal, setEditVersionModal] = useState(false);
@@ -49,14 +60,14 @@ const DraftVersionMenu = ({ version }: IProps) => {
   }[] = [
     {
       text: "ایجاد نسخه جدید از نسخه",
-      icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active"/>,
+      icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
       onClick: () => {
         setCloneVersion(true);
       },
     },
     {
       text: compareVersion?.version ? "مقایسه با نسخه مورد نظر" : "مقایسه",
-      icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active"/>,
+      icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active" />,
       onClick: () => {
         if (getRepo && getDocument && version && compareVersion?.version) {
           setCompareVersion({
@@ -68,11 +79,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
             },
           });
           setDiffVersionModal(true);
-        } else if (
-          getRepo &&
-          getDocument &&
-          version
-        ) {
+        } else if (getRepo && getDocument && version) {
           setCompareVersion({
             version: {
               data: version,
@@ -98,7 +105,8 @@ const DraftVersionMenu = ({ version }: IProps) => {
       text: "ویرایش",
       icon: <EditIcon className="h-4 w-4" />,
       onClick: () => {
-        setEditVersionModal(true);
+        setEditVersionModal(true)
+        setEditorMode("edit");
       },
     },
     {
@@ -123,7 +131,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
     },
     {
       text: "کپی آدرس اشتراک‌ گذاری",
-      icon: <ShareIcon className="h-4 w-4" />, 
+      icon: <ShareIcon className="h-4 w-4" />,
       onClick: () => {
         if (version) {
           copy(
@@ -135,7 +143,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
     },
     {
       text: "حذف پیش نویس",
-      icon: <DeleteIcon className="h-4 w-4"  />,
+      icon: <DeleteIcon className="h-4 w-4" />,
       onClick: () => {
         setDeleteVersionModal(true);
       },
@@ -179,7 +187,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
         />
       )}
       {editVersionModal && version && (
-        <VersionEditDialog setOpen={() => setEditVersionModal(false)} />
+        <Editor setOpen={() => setEditVersionModal(false)} />
       )}
       {deleteVersionModal && version && (
         <VersionDeleteDialog

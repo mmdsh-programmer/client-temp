@@ -51,8 +51,7 @@ const TableView = ({
                   { key: "creator", value: "نام سازنده", className: "hidden lg:table-cell" },
                   { key: "action", value: "عملیات" },
                 ]}
-              />
-              
+              />              
               <tbody>
                 {getCategoryList?.pages.map((page) => {
                   return page.list.map((item) => {

@@ -14,6 +14,8 @@ import Error from "@components/organisms/error";
 import EditorComponent from "@components/organisms/editor";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { EDocumentTypes } from "@interface/enums";
+import { versionModalListAtom } from "@atom/version";
+import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,6 +29,8 @@ const Editor = ({ setOpen }: IProps) => {
   const setEditorData = useSetRecoilState(editorDataAtom);
   const [version, setVersion] = useRecoilState(editorVersionAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
+  const [versionModalList, setVersionModalList] =
+    useRecoilState(versionModalListAtom);
 
   const classicEditorRef = useRef<IRemoteEditorRef>(null);
   const wordEditorRef = useRef<IRemoteEditorRef>(null);
@@ -50,6 +54,10 @@ const Editor = ({ setOpen }: IProps) => {
       setVersion(data);
     }
   }, [data, isSuccess]);
+
+  useEffect(() => {
+    setVersionModalList(false);
+  }, []);
 
   if (error) {
     return (
@@ -109,14 +117,20 @@ const Editor = ({ setOpen }: IProps) => {
   };
 
   return (
-    <EditorDialog
-      dialogHeader={getSelectedDocument?.name}
-      isPending={isLoading}
-      setOpen={handleClose}
-      editorRef={getEditorConfig().ref}
-    >
-      <EditorComponent getEditorConfig={getEditorConfig} />
-    </EditorDialog>
+    <>
+      {versionModalList ? (
+        <VersionDialogView />
+      ) : (
+        <EditorDialog
+          dialogHeader={getSelectedDocument?.name}
+          isPending={isLoading}
+          setOpen={handleClose}
+          editorRef={getEditorConfig().ref}
+        >
+          <EditorComponent getEditorConfig={getEditorConfig} />
+        </EditorDialog>
+      )}
+    </>
   );
 };
 

@@ -2307,8 +2307,34 @@ export const saveVersion = async (
   outline: string
 ) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<any>>(
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
+      { versionNumber, content, outline },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const freeDraftVersion = async (
+  access_token: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  content: string,
+  outline: string
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/freeDraft`,
       { versionNumber, content, outline },
       {
         headers: {

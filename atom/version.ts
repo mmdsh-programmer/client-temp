@@ -51,7 +51,7 @@ export const compareVersionAtom = atom<{
   ],
 });
 
-export const versionModalListAtom = atom<"SHOW" | "HIDE" | null>({
+export const versionModalListAtom = atom<boolean | null>({
   key: "versionModalList",
   default: null,
   effects: [

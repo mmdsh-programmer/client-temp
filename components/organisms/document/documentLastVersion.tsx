@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedDocumentAtom } from "atom/document";
 import { editorVersionAtom } from "atom/editor";
 import { repoAtom } from "@atom/repository";
 import { versionModalListAtom } from "@atom/version";

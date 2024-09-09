@@ -5,7 +5,7 @@ import BackButton from "@components/atoms/button/backButton";
 
 export interface IProps {
   children: React.ReactNode;
-  dialogHeader: string;
+  dialogHeader?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
 }

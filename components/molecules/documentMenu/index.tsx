@@ -18,7 +18,7 @@ import DocumentCreatePasswordDialog from "@components/organisms/dialogs/document
 import DocumentUpdatePasswordDialog from "@components/organisms/dialogs/document/documentUpdatePasswordDialog";
 import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document/documentDeletePasswordDialog";
 import { versionListAtom } from "@atom/version";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { editorModeAtom } from "@atom/editor";
 import Editor from "@components/organisms/dialogs/editor";
 import DocumentLastVersion from "@components/organisms/document/documentLastVersion";
 
@@ -51,7 +51,6 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
   const [openDocumentActionDrawer, setOpenDocumentActionDrawer] =
     useRecoilState(documentDrawerAtom);
 
-  const setEditorModal = useSetRecoilState(editorModalAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const editOptions = [
