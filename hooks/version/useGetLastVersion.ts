@@ -12,7 +12,7 @@ const useGetLastVersion = (
       const response = await getLastVersionAction(repoId, documentId);
       return response as IVersion;
     },
-    enabled: !!documentId,
+    enabled: !!documentId && !!repoId,
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: Number.POSITIVE_INFINITY,

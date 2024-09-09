@@ -16,6 +16,7 @@ import { IRemoteEditorRef } from "clasor-remote-editor";
 import { EDocumentTypes } from "@interface/enums";
 import { versionModalListAtom } from "@atom/version";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
+import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,19 +42,19 @@ const Editor = ({ setOpen }: IProps) => {
   const { data, isLoading, error, isSuccess } = useGetVersion(
     getRepo!.id,
     getSelectedDocument!.id,
-    version!.id,
-    version!.state || "", // state
+    version?.id,
+    version?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
-    true
+    !!version
   );
 
   useEffect(() => {
-    if (isSuccess) {
+    if (data && isSuccess) {
       setEditorData(data);
       setVersion(data);
     }
-  }, [data, isSuccess]);
+  }, [data]);
 
   useEffect(() => {
     setVersionModalList(false);
@@ -61,7 +62,7 @@ const Editor = ({ setOpen }: IProps) => {
 
   if (error) {
     return (
-      <div className="main w-full h-full text-center bg-slate-50 flex items-center justify-center">
+      <div className="main w-full h-full text-center flex items-center justify-center">
         <Error
           retry={() => {
             return setEditorModal(false);
@@ -118,7 +119,7 @@ const Editor = ({ setOpen }: IProps) => {
 
   return (
     <>
-      {versionModalList ? (
+      {!!versionModalList ? (
         <VersionDialogView />
       ) : (
         <EditorDialog
@@ -127,7 +128,13 @@ const Editor = ({ setOpen }: IProps) => {
           setOpen={handleClose}
           editorRef={getEditorConfig().ref}
         >
-          <EditorComponent getEditorConfig={getEditorConfig} />
+          {isLoading ? (
+            <div className="main w-full h-full text-center flex items-center justify-center">
+              <Spinner className="h-5 w-5 " color="deep-purple" />
+            </div>
+          ) : (
+            <EditorComponent getEditorConfig={getEditorConfig} />
+          )}
         </EditorDialog>
       )}
     </>

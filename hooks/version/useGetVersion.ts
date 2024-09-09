@@ -26,7 +26,7 @@ const useGetVersion = (
       );
       return response as IVersion;
     },
-    enabled: !!enabled,
+    enabled: !!enabled && !!documentId && !!versionId && !!documentId,
     retry: false,
     refetchOnWindowFocus: false,
   });

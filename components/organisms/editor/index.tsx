@@ -54,7 +54,7 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
               podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
               backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
             } as any)
-          : selectedVersion?.content
+          : editorData?.content
       }
     />
   );

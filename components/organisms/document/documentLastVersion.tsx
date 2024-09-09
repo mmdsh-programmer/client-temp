@@ -5,31 +5,33 @@ import { editorVersionAtom } from "atom/editor";
 import { repoAtom } from "@atom/repository";
 import { versionModalListAtom } from "@atom/version";
 import { EDocumentTypes } from "@interface/enums";
-import { IDocumentMetadata } from "@interface/document.interface";
+import { selectedDocumentAtom } from "@atom/document";
 
-interface IProps {
-  document: IDocumentMetadata;
-}
-
-const DocumentLastVersion = ({ document }: IProps) => {
+const DocumentLastVersion = () => {
   const repository = useRecoilValue(repoAtom);
+  const [getSelectedDocument, setSelectedDocument] =
+    useRecoilState(selectedDocumentAtom);
   const setEditorVersion = useSetRecoilState(editorVersionAtom);
   const [getVersionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
 
-  const { data: getLastVersion, isSuccess } = useGetLastVersion(
+  const { data: getLastVersion, error, isSuccess } = useGetLastVersion(
     repository!.id,
-    document!.id
+    getSelectedDocument!.id
   );
 
   useEffect(() => {
-    if (!getLastVersion) {
-      setVersionModalList("SHOW");
+    if (error) {
+      setSelectedDocument(null);
+      setVersionModalList(false);
+    }
+    if (!getLastVersion && isSuccess) {
+      setVersionModalList(true);
     }
     if (
       document?.contentType === EDocumentTypes.board &&
       getLastVersion &&
-      getVersionModalList !== "SHOW"
+      !getVersionModalList
     ) {
       window.open(
         `http://localhost:8080/board/${getLastVersion?.id}`,
@@ -38,7 +40,8 @@ const DocumentLastVersion = ({ document }: IProps) => {
     } else {
       setEditorVersion(getLastVersion || null);
     }
-  });
+  }, [getLastVersion, error]);
+
   return null;
 };
 

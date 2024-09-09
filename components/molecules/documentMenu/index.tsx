@@ -287,7 +287,9 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
       {editContentModal && (
         <Editor setOpen={() => setEditContentModal(false)} />
       )}
-      {document && <DocumentLastVersion document={document} />}
+      {editContentModal && (
+        <DocumentLastVersion />
+      )}
     </>
   );
 };
