@@ -10,9 +10,9 @@ import BookmarkRepoList from "./bookmarkList";
 import { EEmptyList } from "@components/molecules/emptyList";
 import { ERepoGrouping } from "@interface/enums";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
+import ListMode from "@components/molecules/listMode";
 import MyRepoList from "./myRepoList";
 import RenderIf from "@components/atoms/renderIf";
-import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 
 export interface IRepoView {
   isLoading: boolean;
@@ -28,7 +28,7 @@ const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
   const setRepo = useSetRecoilState(repoAtom);
-  const [openCreateRepo, setOpenCreateRepo] = useState(false);
+
 
   useEffect(() => {
     setSearchParam(null);
@@ -40,8 +40,15 @@ const RepoList = () => {
       <HeaderListTemplate
         header="مخزن‌ها"
         buttonText="ایجاد مخزن جدید"
-        onClick={() => setOpenCreateRepo(true)}
-        listMode={getRepoGroup !== ERepoGrouping.DASHBOARD}
+        renderList={() => {
+          return (
+            <>
+              <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
+               <ListMode />
+              </RenderIf>
+            </>
+          )
+        }}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />
@@ -58,9 +65,6 @@ const RepoList = () => {
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.BOOKMARK_REPO}>
         <BookmarkRepoList />
       </RenderIf>
-      {openCreateRepo && (
-        <RepoCreateDialogStepper setOpen={setOpenCreateRepo} />
-      )}
     </div>
   );
 };
