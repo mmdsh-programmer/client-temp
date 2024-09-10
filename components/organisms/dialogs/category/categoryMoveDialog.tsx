@@ -78,7 +78,7 @@ const CategoryMoveDialog = ({ setOpen }: IProps) => {
       dialogHeader="انتقال دسته‌بندی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="min-h-[350px]"
     >
       <MoveSelection target="category" />
     </ConfirmFullHeightDialog>

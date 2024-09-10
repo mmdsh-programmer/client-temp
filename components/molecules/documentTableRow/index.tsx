@@ -38,6 +38,7 @@ const DocumentTableRow = ({ document }: IProps) => {
         {
           data: (
             <Checkbox
+              color="deep-purple"
               crossOrigin=""
               onChange={handleCheckItem}
               checked={getBulkItems.some((bulkItem) => {

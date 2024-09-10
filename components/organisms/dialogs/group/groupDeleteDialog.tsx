@@ -27,7 +27,7 @@ const GroupDeleteDialog = ({ setOpen }: IProps) => {
       title: group?.title,
       callBack: () => {
         toast.error("گروه حذف شد.");
-        handleClose()
+        handleClose();
       },
     });
   };
@@ -38,7 +38,16 @@ const GroupDeleteDialog = ({ setOpen }: IProps) => {
       onSubmit={handleDelete}
       dialogHeader="حذف گروه"
     >
-      {group?.title}
+      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        آیا از حذف"
+        <span
+          title={group?.title}
+          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+        >
+          {group?.title}
+        </span>
+        " اطمینان دارید؟
+      </div>
     </DeleteDialog>
   );
 };

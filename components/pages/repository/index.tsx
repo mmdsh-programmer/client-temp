@@ -8,6 +8,7 @@ import { bulkItems } from "@atom/bulk";
 import CategoryList from "@components/organisms/category";
 import { versionListAtom } from "@atom/version";
 import VersionList from "../version";
+import CategoryBulk from "@components/molecules/categoryBulk";
 
 
 const RepoPage = () => {
@@ -24,7 +25,7 @@ const RepoPage = () => {
           <CategoryList />
         </>
       )}
-      <RepoTypesMobileView />
+       {getBulkItems.length ? <CategoryBulk /> : <RepoTypesMobileView />}
     </div>
   );
 };

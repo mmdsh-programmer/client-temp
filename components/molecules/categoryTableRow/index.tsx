@@ -48,6 +48,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
         {
           data: (
             <Checkbox
+              color="deep-purple"
               crossOrigin=""
               onChange={handleCheckItem}
               checked={getBulkItems.some((bulkItem) => {
@@ -63,7 +64,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
               ? categoryProp.order
               : "--",
           title: String(categoryProp.order) || "--",
-          className: "hidden xl:table-cell"
+          className: "hidden xl:table-cell",
         },
         {
           data: (
@@ -96,12 +97,12 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
           title: categoryProp.updatedAt
             ? FaDateFromTimestamp(+categoryProp.updatedAt)
             : "--",
-            className: "hidden xl:table-cell"
+          className: "hidden xl:table-cell",
         },
         {
           data: categoryProp.creator?.name || "--",
           title: categoryProp.creator?.name || "--",
-          className: "hidden lg:table-cell"
+          className: "hidden lg:table-cell",
         },
         {
           data: <CategoryMenu category={categoryProp} />,

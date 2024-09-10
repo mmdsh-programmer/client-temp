@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
+import { BackIcon, BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { Button, Typography } from "@material-tailwind/react";
 import { categoryMoveDest } from "atom/category";
@@ -41,7 +41,7 @@ const MoveBreadCrumb = () => {
               setBreadCrumb([]);
             }}
           >
-            <BreadcrumbIcon className="h-4 w-4 fill-icon-hover" />
+            <BackIcon className="h-4 w-4 fill-icon-hover" />
           </Button>
           {breadCrumb.map((breadItem, index) => {
             return (
