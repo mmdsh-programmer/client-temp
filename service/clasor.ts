@@ -2309,7 +2309,7 @@ export const saveVersion = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
-      { versionNumber, content, outline },
+      { content, outline, versionNumber },
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -2319,6 +2319,7 @@ export const saveVersion = async (
 
     return response.data.data;
   } catch (error) {
+
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };

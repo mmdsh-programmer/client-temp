@@ -15,6 +15,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import { translateVersionStatus } from "@utils/index";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { versionModalListAtom } from "@atom/version";
+import { EDocumentTypes } from "@interface/enums";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -45,19 +46,22 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = (data: any) => {
     if (selectedVersion && selectedDocument && getRepo) {
-      if (typeof editorData?.content !== "undefined" && editorData?.outline) {
-        const { content, outline } = editorData;
-        saveEditorHook.mutate({
-          content,
-          outline,
-          repoId: getRepo.id,
-          documentId: selectedDocument.id,
-          versionId: selectedVersion.id,
-          versionNumber: selectedVersion.versionNumber,
-        });
-      }
+      saveEditorHook.mutate({
+        content:
+          selectedDocument?.contentType === EDocumentTypes.classic
+            ? data?.content
+            : data,
+        outline:
+          selectedDocument?.contentType === EDocumentTypes.classic
+            ? data?.outline
+            : "[]",
+        repoId: getRepo.id,
+        documentId: selectedDocument.id,
+        versionId: selectedVersion.id,
+        versionNumber: selectedVersion.versionNumber,
+      });
     }
   };
 
@@ -163,8 +167,14 @@ const EditorFooter = ({ editorRef }: IProps) => {
             </CancelButton>
             <LoadingButton
               className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-              onClick={handleSave}
+              onClick={async () => {
+                const value = await editorRef.current?.getData();
+                if (value) {
+                  handleSave(value);
+                }
+              }}
               disabled={saveEditorHook.isPending}
+              // ref={saveBtnRef}
             >
               <Typography className="text__label__button text-white">
                 ذخیره

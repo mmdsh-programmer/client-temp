@@ -11,6 +11,7 @@ import {
 import { repoAtom } from "@atom/repository";
 import { category } from "@atom/category";
 import useGetUser from "@hooks/auth/useGetUser";
+import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
   getEditorConfig: () => {
@@ -29,7 +30,15 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
 
   const timestampRef = useRef(Date.now());
 
-  const { data: userInfo } = useGetUser();
+  const { data: userInfo, isLoading } = useGetUser();
+
+  if (isLoading) {
+    return (
+      <div className="main w-full h-full text-center flex items-center justify-center">
+        <Spinner className="h-5 w-5 " color="deep-purple" />
+      </div>
+    );
+  }
 
   return (
     <RemoteEditor
@@ -39,8 +48,8 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
       loadData={
         selectedDocument?.contentType === EDocumentTypes.classic
           ? ({
-              content: editorData?.content || " ",
-              outline: editorData?.outline || [],
+              content: selectedVersion?.content || " ",
+              outline: selectedVersion?.outline || [],
               auth: {
                 accessToken: userInfo?.access_token,
                 refreshToken: userInfo?.refresh_token,
@@ -54,7 +63,7 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
               podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
               backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
             } as any)
-          : editorData?.content
+          : selectedVersion?.content
       }
     />
   );

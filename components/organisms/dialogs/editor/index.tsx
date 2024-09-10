@@ -113,7 +113,6 @@ const Editor = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedDocument(null);
     setVersion(null);
   };
 

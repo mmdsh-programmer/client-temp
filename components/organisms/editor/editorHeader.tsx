@@ -1,5 +1,5 @@
 import React from "react";
-import { dialog, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import CloseButton from "@components/atoms/button/closeButton";
 import BackButton from "@components/atoms/button/backButton";
 import {
@@ -40,19 +40,17 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
       version &&
       ["edit", "temporaryPreview"].includes(editorMode)
     ) {
-      freeDraftHook.mutate({
-        repoId: getRepo!.id,
-        documentId: getSelectedDocument.id,
-        versionId: version.id,
-        versionNumber: "",
-        content: "",
-        outline: "",
-      });
+      // freeDraftHook.mutate({
+      //   repoId: getRepo!.id,
+      //   documentId: getSelectedDocument.id,
+      //   versionId: version.id,
+      //   versionNumber: "",
+      //   content: "",
+      //   outline: "",
+      // });
     }
 
-    setSelectedDocument(null);
     setVersionModalList(false);
-
     setVersion(null);
     setEditorData(null);
     setEditorModal(false);
