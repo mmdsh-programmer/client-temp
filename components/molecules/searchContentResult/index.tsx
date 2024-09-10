@@ -1,19 +1,20 @@
-import React, { Fragment, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { categorySearchContentParam } from "atom/category";
-import { ResultItem } from "../searchContentItem";
-import { repoAtom } from "@atom/repository";
-import RenderIf from "@components/atoms/renderIf";
-import useSearchContent from "@hooks/content/useSearchContent";
-import { Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "../emptyList";
+import React, { Fragment, useRef, useState } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
+
+import RenderIf from "@components/atoms/renderIf";
+import { ResultItem } from "../searchContentItem";
+import { categorySearchContentParamAtom } from "atom/category";
+import { repoAtom } from "@atom/repository";
+import { useRecoilValue } from "recoil";
+import useSearchContent from "@hooks/content/useSearchContent";
 
 const SearchContentResult = () => {
   const listInnerRef = useRef(null);
   const [disabled, setDisabled] = useState(false);
 
   const getRepo = useRecoilValue(repoAtom);
-  const getSearchParam = useRecoilValue(categorySearchContentParam);
+  const getSearchParam = useRecoilValue(categorySearchContentParamAtom);
   const {
     isLoading,
     data: searchResult,

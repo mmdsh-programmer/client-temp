@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { DatePicker } from "zaman";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { publicRole } from "atom/public";
-import { onDatePickerChangePayload } from "zaman/dist/types";
-import { repoAtom } from "@atom/repository";
-import CreateDialog from "@components/templates/dialog/createDialog";
 import { Checkbox, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+
+import CreateDialog from "@components/templates/dialog/createDialog";
+import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
+import { onDatePickerChangePayload } from "zaman/dist/types";
+import { publicRoleAtom } from "@atom/public";
+import { repoAtom } from "@atom/repository";
 import { repoShareSchema } from "@components/organisms/dialogs/repository/validation.yup";
+import { toast } from "react-toastify";
 import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IData {
   expireTime: number;
@@ -26,7 +27,7 @@ interface IProps {
 const CreateRepoPublicLink = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const [hasPassword, setHasPassword] = useState(false);
-  const getSelectedRoleId = useRecoilValue(publicRole);
+  const getSelectedRoleId = useRecoilValue(publicRoleAtom);
   const createPublicLink = useCreatePublicLink();
 
   const form = useForm<{

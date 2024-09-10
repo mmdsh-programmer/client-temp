@@ -1,26 +1,27 @@
 import { IChildrenFilter, IReportFilter } from "@interface/app.interface";
-import { logger } from "@utils/index";
-import { atom } from "recoil";
 
-export const filterChildren = atom<IChildrenFilter | null>({
-  key: "filterChildren",
+import { atom } from "recoil";
+import { logger } from "@utils/index";
+
+export const filterChildrenAtom = atom<IChildrenFilter | null>({
+  key: "filterChildrenAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("filterChildren", newValue, oldValue);
+        logger("filterChildrenAtom", newValue, oldValue);
       });
     },
   ],
 });
 
-export const filterReport = atom<IReportFilter | null>({
-  key: "filterReport",
+export const filterReportAtom = atom<IReportFilter | null>({
+  key: "filterReportAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("filterReport", newValue, oldValue);
+        logger("filterReportAtom", newValue, oldValue);
       });
     },
   ],

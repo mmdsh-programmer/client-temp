@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+
+import CategoryFilter from "../categoryFilter";
 import { Radio } from "@material-tailwind/react";
 import RepoFilter from "../repoFilter";
-import CategoryFilter from "../categoryFilter";
 import { useSetRecoilState } from "recoil";
-import { filterChildren, filterReport } from "@atom/filter";
 
 const AdvancedFilter = () => {
   const [type, setType] = useState<string>("");
-  const setFilterChildren = useSetRecoilState(filterChildren);
-  const setFilterReport = useSetRecoilState(filterReport);
+  const setFilterChildren = useSetRecoilState(filterChildrenAtom);
+  const setFilterReport = useSetRecoilState(filterReportAtom);
 
   return (
     <div className="flex flex-wrap h-full xs:h-auto justify-between bg-primary xs:bg-gray-50">

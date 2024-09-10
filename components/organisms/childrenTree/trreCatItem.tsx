@@ -1,26 +1,27 @@
-import React, { useState } from "react";
-import {
-  ICategoryTreeItem,
-  IDocumentTreeItem,
-  categoryMoveDest,
-  categoryQueryParams,
-} from "atom/category";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { sort } from "atom/sortParam";
-import { ICategoryMetadata } from "@interface/category.interface";
-import { IDocumentMetadata } from "@interface/document.interface";
-import useGetChildren from "@hooks/category/useGetChildren";
-import { repoAtom } from "@atom/repository";
 import {
   ChevronLeftIcon,
   FolderIcon,
   InvisibleIcon,
 } from "@components/atoms/icons";
 import { Collapse, Radio, Typography } from "@material-tailwind/react";
-import RenderIf from "@components/atoms/renderIf";
+import {
+  ICategoryTreeItem,
+  IDocumentTreeItem,
+  categoryMoveDestAtom,
+  categoryQueryParamsAtom,
+} from "atom/category";
+import React, { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { ICategoryMetadata } from "@interface/category.interface";
+import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
-import { docTemplateFilter } from ".";
+import RenderIf from "@components/atoms/renderIf";
 import TreeDocItem from "@components/molecules/treeDocItem/treeDocItem";
+import { docTemplateFilter } from ".";
+import { repoAtom } from "@atom/repository";
+import { sortAtom } from "atom/sortParam";
+import useGetChildren from "@hooks/category/useGetChildren";
 
 interface IProps {
   catItem: ICategoryTreeItem | IDocumentTreeItem;
@@ -29,10 +30,10 @@ interface IProps {
 
 const TreeCatItem = ({ catItem, move }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const queryParams = useRecoilValue(categoryQueryParams);
-  const getSortParams = useRecoilValue(sort);
+  const queryParams = useRecoilValue(categoryQueryParamsAtom);
+  const getSortParams = useRecoilValue(sortAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDest);
+    useRecoilState(categoryMoveDestAtom);
 
   const [categoryId, setCategoryId] = useState<number>(0);
   const [openCategory, setOpenCategory] = useState<null | number>(null);

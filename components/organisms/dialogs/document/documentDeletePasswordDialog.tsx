@@ -1,16 +1,16 @@
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import FormInput from "@components/atoms/input/formInput";
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { Typography } from "@material-tailwind/react";
+import { categoryAtom } from "@atom/category";
+import { documentDeletePasswordSchema } from "./validation.yup";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
-import { category } from "@atom/category";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { documentDeletePasswordSchema } from "./validation.yup";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { toast } from "react-toastify";
 import useDeleteDocumentPassword from "@hooks/document/useDeleteDocumentPassword";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -23,7 +23,7 @@ interface IDataForm {
 const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
 
-  const getCategory = useRecoilValue(category);
+  const getCategory = useRecoilValue(categoryAtom);
   const document = useRecoilValue(selectedDocumentAtom);
 
   const deletePassword = useDeleteDocumentPassword();

@@ -1,12 +1,12 @@
 import { atom } from "recoil";
 
-export const repoActiveStep = atom<number>({
-  key: "repoActiveStep",
+export const repoActiveStepAtom = atom<number>({
+  key: "repoActiveStepAtom",
   default: 0,
 });
 
-export const documentActiveStep = atom<number>({
-  key: "documentActiveStep",
+export const documentActiveStepAtom = atom<number>({
+  key: "documentActiveStepAtom",
   default: 0,
 });
 

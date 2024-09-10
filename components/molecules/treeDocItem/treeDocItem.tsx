@@ -1,9 +1,10 @@
-import React from "react";
-import { IDocumentTreeItem } from "atom/category";
-import { documentTemplate } from "atom/document";
-import { useRecoilState } from "recoil";
-import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
+import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
+
+import { IDocumentTreeItem } from "atom/category";
+import React from "react";
+import { documentTemplateAtom } from "atom/document";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   docItem: IDocumentTreeItem;
@@ -11,7 +12,7 @@ interface IProps {
 
 const TreeDocItem = ({ docItem }: IProps) => {
   const [getDocumentTemplate, setDocumentTemplate] =
-    useRecoilState(documentTemplate);
+    useRecoilState(documentTemplateAtom);
 
   const handleDocClick = () => {
     setDocumentTemplate((prevState) => {

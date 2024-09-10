@@ -1,6 +1,7 @@
-import { repoAtom } from "@atom/repository";
-import { IRepo } from "@interface/repo.interface";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
+
+import { IRepo } from "@interface/repo.interface";
+import { repoAtom } from "@atom/repository";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 

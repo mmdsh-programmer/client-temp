@@ -1,13 +1,14 @@
-import { editCategoryAction } from "@actions/category";
-import { categoryShow } from "@atom/category";
-import { ICategory } from "@interface/category.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { ICategory } from "@interface/category.interface";
+import { categoryShowAtom } from "@atom/category";
+import { editCategoryAction } from "@actions/category";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 
 const useEditCategory = (move?: boolean) => {
   const queryClient = useQueryClient();
-  const getCategoryShow = useRecoilValue(categoryShow);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
 
   return useMutation({
     mutationKey: ["editCategory"],

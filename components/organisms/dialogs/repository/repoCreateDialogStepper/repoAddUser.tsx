@@ -1,21 +1,22 @@
-import React from "react";
-import { repoActiveStep } from "@atom/stepper";
-import LoadingButton from "@components/molecules/loadingButton";
 import {
   DialogBody,
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
-import { useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
+import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 import RepoShare from "@components/organisms/users";
+import { repoActiveStepAtom } from "@atom/stepper";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   handleClose: () => void;
 }
 
 const RepoAddUser = ({ handleClose }: IProps) => {
-  const setActiveStep = useSetRecoilState(repoActiveStep);
+  const setActiveStep = useSetRecoilState(repoActiveStepAtom);
 
   return (
     <>

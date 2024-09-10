@@ -1,10 +1,11 @@
-import { ERepoGrouping } from "@interface/enums";
 import { IPublicKey, IRepo } from "@interface/repo.interface";
-import { logger } from "@utils/index";
-import { atom } from "recoil";
 
-export const repoGrouping = atom<ERepoGrouping>({
-  key: "repoGrouping",
+import { ERepoGrouping } from "@interface/enums";
+import { atom } from "recoil";
+import { logger } from "@utils/index";
+
+export const repoGroupingAtom = atom<ERepoGrouping>({
+  key: "repoGroupingAtom",
   default: ERepoGrouping.DASHBOARD,
 });
 
@@ -28,8 +29,8 @@ export const repoAtom = atom<IRepo | null>({
   ],
 });
 
-export const repositoryId = atom<number | null>({
-  key: "repositoryId",
+export const repositoryIdAtom = atom<number | null>({
+  key: "repositoryIdAtom",
   default: null,
   effects: [
     ({ onSet }) => {
@@ -62,6 +63,7 @@ export const repoSearchParamAtom = atom<{
   key: "repoSearchParamAtom",
   default: null,
 });
+
 export const deleteRepoKeyAtom = atom<IPublicKey | null>({
   key: "deleteRepoKeyAtom",
   default: null,

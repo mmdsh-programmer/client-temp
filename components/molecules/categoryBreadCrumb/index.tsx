@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
-import { ICategoryMetadata } from "@interface/category.interface";
-import { bulkItems } from "atom/bulk";
-import { category, categoryShow } from "atom/category";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { categoryAtom, categoryShowAtom } from "atom/category";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
+import { ICategoryMetadata } from "@interface/category.interface";
+import { bulkItemsAtom } from "atom/bulk";
 
 const CategoryBreadCrumb = () => {
-  const setCategory = useSetRecoilState(category);
-  const [getCategoryShow, setCategoryShow] = useRecoilState(categoryShow);
-  const setBulkItems = useSetRecoilState(bulkItems);
+  const setCategory = useSetRecoilState(categoryAtom);
+  const [getCategoryShow, setCategoryShow] = useRecoilState(categoryShowAtom);
+  const setBulkItems = useSetRecoilState(bulkItemsAtom);
 
   const [breadCrumb, setBreadCrumb] = useState<ICategoryMetadata[]>([]);
 

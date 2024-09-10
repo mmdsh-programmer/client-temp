@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { repoAtom, repoGrouping, repoSearchParamAtom } from "@atom/repository";
-import { ERepoGrouping } from "@interface/enums";
-import RenderIf from "@components/atoms/renderIf";
-import MyRepoList from "./myRepoList";
-import AccessRepoList from "./accessRepoList";
-import BookmarkRepoList from "./bookmarkList";
-import AllRepoList from "./allRepoList";
-import HeaderListTemplate from "@components/templates/headerListTemplate";
-import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query";
 import { IListResponse, IRepo } from "@interface/repo.interface";
+import React, { useEffect, useState } from "react";
+import { repoAtom, repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import AccessRepoList from "./accessRepoList";
+import AllRepoList from "./allRepoList";
+import BookmarkRepoList from "./bookmarkList";
 import { EEmptyList } from "@components/molecules/emptyList";
+import { ERepoGrouping } from "@interface/enums";
+import HeaderListTemplate from "@components/templates/headerListTemplate";
+import MyRepoList from "./myRepoList";
+import RenderIf from "@components/atoms/renderIf";
+import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 
 export interface IRepoView {
   isLoading: boolean;
@@ -25,7 +26,7 @@ export interface IRepoView {
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-  const getRepoGroup = useRecoilValue(repoGrouping);
+  const getRepoGroup = useRecoilValue(repoGroupingAtom);
   const setRepo = useSetRecoilState(repoAtom);
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
 

@@ -1,13 +1,14 @@
-import { subscribeRepoAction } from "@actions/public";
-import { repoAtom, repoGrouping } from "@atom/repository";
+import { repoAtom, repoGroupingAtom } from "@atom/repository";
+
 import { ERepoGrouping } from "@interface/enums";
-import { useMutation } from "@tanstack/react-query";
+import { subscribeRepoAction } from "@actions/public";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 import { useSetRecoilState } from "recoil";
 
 const useSubscribeRepo = () => {
   const setRepo = useSetRecoilState(repoAtom);
-  const setRepoGroup = useSetRecoilState(repoGrouping);
+  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
 
   return useMutation({
     mutationKey: [`subscribe-repo`],
@@ -35,3 +36,4 @@ const useSubscribeRepo = () => {
 };
 
 export default useSubscribeRepo;
+

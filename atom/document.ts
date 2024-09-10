@@ -1,8 +1,8 @@
-import { IDocumentMetadata } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
 import { IPublicKey } from "@interface/repo.interface";
-import { logger } from "@utils/index";
 import { atom } from "recoil";
+import { logger } from "@utils/index";
 
 interface IDocInfo {
   title: string;
@@ -11,8 +11,8 @@ interface IDocInfo {
 }
 
 // ----------------------------------
-export const documentQueryParams = atom({
-  key: "documentQueryParams",
+export const documentQueryParamsAtom = atom({
+  key: "documentQueryParamsAtom",
   default: {
     limit: 20,
     page: 1,
@@ -21,14 +21,14 @@ export const documentQueryParams = atom({
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("documentQueryParams", newValue, oldValue);
+        logger("documentQueryParamsAtom", newValue, oldValue);
       });
     },
   ],
 });
 
 export const selectedDocumentAtom = atom<IDocumentMetadata | null>({
-  key: "selectedDocument",
+  key: "selectedDocumentAtom",
   default: null,
   effects: [
     ({ onSet }) => {
@@ -39,73 +39,73 @@ export const selectedDocumentAtom = atom<IDocumentMetadata | null>({
   ],
 });
 
-export const publishDocumentId = atom<number>({
-  key: "publishDocumentId",
+export const publishDocumentIdAtom = atom<number>({
+  key: "publishDocumentIdAtom",
   default: 0,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("publishDocumentId", newValue, oldValue);
+        logger("publishDocumentIdAtom", newValue, oldValue);
       });
     },
   ],
 });
 
-export const tempDocTag = atom<number[]>({
-  key: "tempDocTag",
+export const tempDocTagAtom = atom<number[]>({
+  key: "tempDocTagAtom",
   default: [],
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("tempDocTag", newValue, oldValue);
+        logger("tempDocTagAtom", newValue, oldValue);
       });
     },
   ],
 });
 
-export const documentType = atom<EDocumentTypes | null>({
-  key: "documentType",
+export const documentTypeAtom = atom<EDocumentTypes | null>({
+  key: "documentTypeAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("documentType", newValue, oldValue);
+        logger("documentTypeAtom", newValue, oldValue);
       });
     },
   ],
 });
 
-export const documentInfo = atom<IDocInfo | null>({
-  key: "documentInfo",
+export const documentInfoAtom = atom<IDocInfo | null>({
+  key: "documentInfoAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("documentInfo", newValue, oldValue);
+        logger("documentInfoAtom", newValue, oldValue);
       });
     },
   ],
 });
 
-export const documentKey = atom<IPublicKey | null>({
-  key: "documentKey",
+export const documentKeyAtom = atom<IPublicKey | null>({
+  key: "documentKeyAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("documentKey", newValue, oldValue);
+        logger("documentKeyAtom", newValue, oldValue);
       });
     },
   ],
 });
 
-export const documentTemplate = atom<IDocumentMetadata | null>({
-  key: "documentTemplate",
+export const documentTemplateAtom = atom<IDocumentMetadata | null>({
+  key: "documentTemplateAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("documentTemplate", newValue, oldValue);
+        logger("documentTemplateAtom", newValue, oldValue);
       });
     },
   ],

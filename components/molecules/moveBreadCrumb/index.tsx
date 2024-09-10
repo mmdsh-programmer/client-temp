@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
-import { ICategoryMetadata } from "@interface/category.interface";
 import { Button, Typography } from "@material-tailwind/react";
-import { categoryMoveDest } from "atom/category";
+import React, { useEffect, useState } from "react";
+
+import { ICategoryMetadata } from "@interface/category.interface";
+import { categoryMoveDestAtom } from "atom/category";
 import { useRecoilState } from "recoil";
 
 const MoveBreadCrumb = () => {
   const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDest);
+    useRecoilState(categoryMoveDestAtom);
   const [breadCrumb, setBreadCrumb] = useState<ICategoryMetadata[]>([]);
 
   useEffect(() => {

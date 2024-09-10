@@ -1,8 +1,8 @@
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
-import { logger } from "@utils/index";
 import { atom } from "recoil";
+import { logger } from "@utils/index";
 
 export const selectedVersionAtom = atom<IVersion | null>({
   key: "selectedVersionAtom",
@@ -17,12 +17,12 @@ export const selectedVersionAtom = atom<IVersion | null>({
 });
 
 export const versionListAtom = atom<boolean | null>({
-  key: "versionList",
+  key: "versionListAtom",
   default: null,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("versionList", newValue, oldValue);
+        logger("versionListAtom", newValue, oldValue);
       });
     },
   ],

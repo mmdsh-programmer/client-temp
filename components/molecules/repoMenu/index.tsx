@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   ArchiveIcon,
   DeleteIcon,
@@ -11,22 +10,24 @@ import {
   ShareIcon,
   StarIcon,
 } from "@components/atoms/icons";
+import React, { useState } from "react";
+import { repoAtom, repoInfoAtom } from "@atom/repository";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import { Button } from "@material-tailwind/react";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import { EListMode } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
-import RepoDeleteDialog from "@components/organisms/dialogs/repository/repoDeleteDialog";
+import MenuTemplate from "@components/templates/menuTemplate";
 import RepoArchiveDialog from "@components/organisms/dialogs/repository/repoArchiveDialog";
+import RepoBookmarkDialog from "@components/organisms/dialogs/repository/repoBookmarkDialog";
+import RepoDeleteDialog from "@components/organisms/dialogs/repository/repoDeleteDialog";
+import RepoEditDialog from "@components/organisms/dialogs/repository/repoEditDialog";
+import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
 import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRestoreDialog";
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
-import RepoEditDialog from "@components/organisms/dialogs/repository/repoEditDialog";
+import { listModeAtom } from "@atom/app";
 import { useRouter } from "next/navigation";
-import MenuTemplate from "@components/templates/menuTemplate";
-import DrawerTemplate from "@components/templates/drawerTemplate";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { listMode } from "@atom/app";
-import { repoAtom, repoInfoAtom } from "@atom/repository";
-import { EListMode } from "@interface/enums";
-import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
-import { Button } from "@material-tailwind/react";
-import RepoBookmarkDialog from "@components/organisms/dialogs/repository/repoBookmarkDialog";
 
 interface IProps {
   repo?: IRepo;
@@ -36,7 +37,7 @@ interface IProps {
 const RepoMenu = ({ repo, showDrawer }: IProps) => {
   const router = useRouter();
 
-  const mode = useRecoilValue(listMode);
+  const mode = useRecoilValue(listModeAtom);
   const setRepo = useSetRecoilState(repoAtom);
   const setRepoInfo = useSetRecoilState(repoInfoAtom);
 

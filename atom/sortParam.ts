@@ -7,8 +7,8 @@ export interface ISortProps {
   createdAt?: "asc" | "desc";
 }
 
-export const sort = atom<ISortProps>({
-  key: "sort",
+export const sortAtom = atom<ISortProps>({
+  key: "sortAtom",
   default: {
     order: "asc",
     type: "asc",

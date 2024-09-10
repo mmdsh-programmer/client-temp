@@ -1,16 +1,16 @@
+import EditDialog from "@components/templates/dialog/editDialog";
+import FormInput from "@components/atoms/input/formInput";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { Typography } from "@material-tailwind/react";
+import { categoryAtom } from "@atom/category";
+import { categorySchema } from "./validation.yup";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import EditDialog from "@components/templates/dialog/editDialog";
-import { category } from "@atom/category";
 import useEditCategory from "@hooks/category/useEditCategory";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import FormInput from "@components/atoms/input/formInput";
-import { Typography } from "@material-tailwind/react";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { categorySchema } from "./validation.yup";
 
 interface IDataForm {
   id?: number;
@@ -26,7 +26,7 @@ interface IProps {
 
 const CategoryEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(category);
+  const getCategory = useRecoilValue(categoryAtom);
 
   const editCategory = useEditCategory();
 

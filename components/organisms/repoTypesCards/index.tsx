@@ -1,17 +1,18 @@
-import React, { useMemo } from "react";
-import { useRecoilState } from "recoil";
-import { repoGrouping } from "@atom/repository";
 import {
   ArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
   MyFolderIcon,
 } from "@components/atoms/icons";
-import RepoTypeCard from "@components/molecules/repoTypeCard";
+import React, { useMemo } from "react";
+
 import { ERepoGrouping } from "@interface/enums";
+import RepoTypeCard from "@components/molecules/repoTypeCard";
+import { repoGroupingAtom } from "@atom/repository";
+import { useRecoilState } from "recoil";
 
 const RepoTypesCards = () => {
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGrouping);
+  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
 
   const repoTypeData = useMemo(() => [
     {

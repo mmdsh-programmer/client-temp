@@ -1,20 +1,21 @@
-import React from "react";
-import { IDocumentMetadata } from "@interface/document.interface";
-import { bulkItems } from "@atom/bulk";
-import { useRecoilState } from "recoil";
-import { FaDateFromTimestamp } from "@utils/index";
 import { DocIcon, InvisibleIcon } from "@components/atoms/icons";
+
 import { Checkbox } from "@material-tailwind/react";
-import { toast } from "react-toastify";
-import TableCell from "../tableCell";
 import DocumentMenu from "../documentMenu";
+import { FaDateFromTimestamp } from "@utils/index";
+import { IDocumentMetadata } from "@interface/document.interface";
+import React from "react";
+import TableCell from "../tableCell";
+import { bulkItemsAtom } from "@atom/bulk";
+import { toast } from "react-toastify";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   document: IDocumentMetadata;
 }
 
 const DocumentTableRow = ({ document }: IProps) => {
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
+  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;

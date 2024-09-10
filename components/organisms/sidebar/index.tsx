@@ -1,9 +1,3 @@
-import React from "react";
-import { useRouter } from "next/navigation";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { Button, List, ListItem, Typography } from "@material-tailwind/react";
-import { repoGrouping, repoSearchParamAtom } from "@atom/repository";
-import SidebarHeader from "@components/molecules/sidebarHeader";
 import {
   ArchiveIcon,
   DashboardIcon,
@@ -11,11 +5,18 @@ import {
   FolderIcon,
   FolderShareIcon,
 } from "@components/atoms/icons";
+import { Button, List, ListItem, Typography } from "@material-tailwind/react";
+import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { ERepoGrouping } from "@interface/enums";
+import React from "react";
+import SidebarHeader from "@components/molecules/sidebarHeader";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const router = useRouter();
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGrouping);
+  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
 
   const sidebarList = [

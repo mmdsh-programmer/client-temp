@@ -1,15 +1,16 @@
-import React, { useState } from "react";
-import { IRoles } from "@interface/users.interface";
-import { FaDateFromTimestamp, translateRoles } from "@utils/index";
-import { toast } from "react-toastify";
-import copy from "copy-to-clipboard";
-import { IPublicLink } from "@interface/repo.interface";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { CopyIcon, SettingIcon } from "@components/atoms/icons";
-import { openShareAccess, publicRole } from "@atom/public";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { CopyIcon, SettingIcon } from "@components/atoms/icons";
+import { FaDateFromTimestamp, translateRoles } from "@utils/index";
+import React, { useState } from "react";
+import { openShareAccessAtom, publicRoleAtom } from "@atom/public";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import { IPublicLink } from "@interface/repo.interface";
+import { IRoles } from "@interface/users.interface";
 import LinkWrapperMenu from "./linkWrapperMenu";
+import copy from "copy-to-clipboard";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import useCreateTinyLink from "@hooks/tinyLink/useCreateTinyLink";
 
 interface IProps {
@@ -18,8 +19,8 @@ interface IProps {
 
 const LinkWrapper = ({ role }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const setSelectedRole = useSetRecoilState(publicRole);
-  const setOpenShareAccess = useSetRecoilState(openShareAccess);
+  const setSelectedRole = useSetRecoilState(publicRoleAtom);
+  const setOpenShareAccess = useSetRecoilState(openShareAccessAtom);
   const [tinyLink, setTinyLink] = useState<string | null>(null);
 
   const { mutate, isPending } = useCreateTinyLink();

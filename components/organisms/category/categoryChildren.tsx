@@ -1,22 +1,23 @@
-import React from "react";
 import {
   FetchNextPageOptions,
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
-import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
+import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
+import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+
+import { EEmptyList } from "@components/molecules/emptyList";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
-import { EEmptyList } from "@components/molecules/emptyList";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import { sort } from "@atom/sortParam";
-import { categoryQueryParams, categoryShow } from "@atom/category";
-import { filterChildren, filterReport } from "@atom/filter";
 import MobileView from "../categoryView/categoryMobileView";
+import React from "react";
 import TableView from "../categoryView/categoryTableView";
+import { repoAtom } from "@atom/repository";
+import { sortAtom } from "@atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
+import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
+import { useRecoilValue } from "recoil";
 
 export interface ICategoryView {
   isLoading: boolean;
@@ -45,11 +46,11 @@ export interface ICategoryView {
 
 const CategoryChildren = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const getSortParams = useRecoilValue(sort);
-  const getCategoryShow = useRecoilValue(categoryShow);
-  const queryParams = useRecoilValue(categoryQueryParams);
-  const getFilterChildren = useRecoilValue(filterChildren);
-  const getFilterReport = useRecoilValue(filterReport);
+  const getSortParams = useRecoilValue(sortAtom);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
+  const queryParams = useRecoilValue(categoryQueryParamsAtom);
+  const getFilterChildren = useRecoilValue(filterChildrenAtom);
+  const getFilterReport = useRecoilValue(filterReportAtom);
 
   const repoId = getRepo?.id!;
 
