@@ -3,20 +3,20 @@ import type { Meta, StoryObj } from "@storybook/react";
 import CategoryFilter from ".";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
-
-const mockTags = {
-  pages: [
-    {
-      list: [
-        { id: 1, name: "Tag1" },
-        { id: 2, name: "Tag2" },
-        { id: 3, name: "Tag3" },
-      ],
-    },
-  ],
-};
+import { mockTagsResponse, useGetTagsMock } from "@mock/mockData";
 
 const queryClient = new QueryClient();
+
+queryClient.setQueryData([`getTags-412478`, 5], {
+  pages: mockTagsResponse,
+  pageParams: 1,
+});
+
+await queryClient.fetchInfiniteQuery({
+  queryKey: [`getTags-412478`, 5],
+  queryFn: async () => mockTagsResponse,
+  initialPageParam: 1
+});
 
 const meta: Meta<typeof CategoryFilter> = {
   title: "components/Molecules/CategoryFilter",
@@ -52,9 +52,13 @@ export const Default: Story = {
     },
   },
 
+  args: {
+    repoId: 422717,
+    size: 30,
+  },
+
   decorators: [
     (Story) => {
-      queryClient.setQueryData(["getTags-422717", 2], mockTags);
       return <Story />;
     },
   ],

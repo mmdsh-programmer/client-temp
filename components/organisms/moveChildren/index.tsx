@@ -5,11 +5,11 @@ import { categoryMoveDest, categoryQueryParams } from "atom/category";
 import { sort } from "atom/sortParam";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
-import useGetCategoryChildren from "@hooks/category/useGetCategoryChildren";
 import { Spinner, Typography } from "@material-tailwind/react";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { FolderIcon } from "@components/atoms/icons";
+import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 
 interface IProps {
   target: "category" | "document";

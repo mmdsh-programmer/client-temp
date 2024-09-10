@@ -3,7 +3,6 @@ import "../styles/tailwind-output.css";
 import "../styles/globals.css";
 import { withThemeByClassName } from "@storybook/addon-themes";
 
-
 const preview: Preview = {
   parameters: {
     controls: {
@@ -14,15 +13,16 @@ const preview: Preview = {
     },
   },
 
-  decorators: [withThemeByClassName({
+  decorators: [
+    withThemeByClassName({
       themes: {
-          nameOfTheme: 'classNameForTheme',
-          light: '',
-          dark: 'dark',
+        nameOfTheme: "classNameForTheme",
+        light: "",
+        dark: "dark",
       },
-      defaultTheme: 'light',
-  }),
-]
+      defaultTheme: "light",
+    }),
+  ],
 };
 
 export default preview;

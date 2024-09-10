@@ -16,7 +16,7 @@ import { categoryQueryParams, categoryShow } from "@atom/category";
 import { filterChildren, filterReport } from "@atom/filter";
 import MobileView from "../categoryView/categoryMobileView";
 import TableView from "../categoryView/categoryTableView";
-import useGetCategoryChildren from "@hooks/category/useGetCategoryChildren";
+import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 
 export interface ICategoryView {
   isLoading: boolean;

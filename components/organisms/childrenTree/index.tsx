@@ -9,7 +9,7 @@ import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
 import TreeCatItem from "./trreCatItem";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import useGetCategoryChildren from "@hooks/category/useGetCategoryChildren";
+import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 
 interface IProps {
   move?: boolean;
