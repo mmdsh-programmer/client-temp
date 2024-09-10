@@ -20,9 +20,23 @@ export const bulkItemsAtom = atom<IBulkItems>({
 export const bulkMoveAtom = atom<boolean>({
   key: "bulkMoveAtom",
   default: false,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("bulkMoveAtom", newValue, oldValue);
+      });
+    },
+  ],
 });
 
 export const bulkDeleteAtom = atom<boolean>({
   key: "bulkDeleteAtom",
   default: false,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("bulkDeleteAtom", newValue, oldValue);
+      });
+    },
+  ],
 });
