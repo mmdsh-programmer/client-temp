@@ -300,6 +300,27 @@ export const createRepositoryKey = async (
   }
 };
 
+export const getKey = async (
+  access_token: string,
+  repoId: number,
+  keyId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IPublicKey>(
+      `repositories/${repoId}/publicKey/${keyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const getMyRepositories = async (
   access_token: string,
   offset: number,
@@ -2160,7 +2181,9 @@ export const subscribeRepo = async (
   password?: string
 ) => {
   try {
-    const response = await axiosClasorInstance.put<IServerResult<{repository: IRepo}>>(
+    const response = await axiosClasorInstance.put<
+      IServerResult<{ repository: IRepo }>
+    >(
       `repositories/subscribe/${hash}`,
       {
         password,
@@ -2319,7 +2342,6 @@ export const saveVersion = async (
 
     return response.data.data;
   } catch (error) {
-
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
