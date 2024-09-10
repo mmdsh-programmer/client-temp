@@ -2,12 +2,8 @@ import React, { useState } from "react";
 
 import { AddIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
-import DesktopHeaderList from "./desktopHeaderList";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
-import ListMode from "@components/molecules/listMode";
-import MobileHeaderList from "./mobileHeaderList";
 import RepoCreateDialogStepper from "@components/organisms/dialogs/repository/repoCreateDialogStepper";
-import TabletHeaderList from "./tabletHeaderList";
 import { Typography } from "@material-tailwind/react";
 
 export interface IProps {
