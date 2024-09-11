@@ -2,11 +2,12 @@ import { IPublicKey, IRepo } from "@interface/repo.interface";
 
 import { ERepoGrouping } from "@interface/enums";
 import { atom } from "recoil";
-import { logger } from "@utils/index";
+import { logEffect } from "@utils/index";
 
 export const repoGroupingAtom = atom<ERepoGrouping>({
   key: "repoGroupingAtom",
   default: ERepoGrouping.DASHBOARD,
+  effects: [logEffect("repoGroupingAtom")],
 });
 
 export const repoAtom = atom<IRepo | null>({
@@ -14,7 +15,7 @@ export const repoAtom = atom<IRepo | null>({
   default: null,
   effects: [
     ({ onSet }) => {
-      onSet((newValue, oldValue) => {
+      onSet((newValue) => {
         if (newValue) {
           localStorage.setItem(
             "CLASOR:SELECTED_REPO",
@@ -23,37 +24,34 @@ export const repoAtom = atom<IRepo | null>({
         } else {
           localStorage.removeItem("CLASOR:SELECTED_REPO");
         }
-        logger("repo", newValue, oldValue);
       });
     },
+    logEffect("repoAtom"),
   ],
 });
 
 export const repositoryIdAtom = atom<number | null>({
   key: "repositoryIdAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("repo", oldValue, newValue);
-      });
-    },
-  ],
+  effects: [logEffect("repositoryIdAtom")],
 });
 
 export const repoMenuAtom = atom<IRepo | null>({
   key: "repoMenuAtom",
   default: null,
+  effects: [logEffect("repoMenuAtom")],
 });
 
 export const repoInfoAtom = atom<IRepo | undefined>({
   key: "repoInfoAtom",
   default: undefined,
+  effects: [logEffect("repoInfoAtom")],
 });
 
 export const repoActionDrawerAtom = atom<boolean | null>({
   key: "repoActionDrawerAtom",
   default: null,
+  effects: [logEffect("repoActionDrawerAtom")],
 });
 
 export const repoSearchParamAtom = atom<{
@@ -62,14 +60,17 @@ export const repoSearchParamAtom = atom<{
 } | null>({
   key: "repoSearchParamAtom",
   default: null,
+  effects: [logEffect("repoSearchParamAtom")],
 });
 
 export const deleteRepoKeyAtom = atom<IPublicKey | null>({
   key: "deleteRepoKeyAtom",
   default: null,
+  effects: [logEffect("deleteRepoKeyAtom")],
 });
 
 export const createRepoKeyAtom = atom<boolean>({
   key: "createRepoKeyAtom",
   default: false,
+  effects: [logEffect("createRepoKeyAtom")],
 });

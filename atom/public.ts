@@ -1,26 +1,14 @@
 import { atom } from "recoil";
-import { logger } from "@utils/index";
+import { logEffect } from "@utils/index";
 
 export const openShareAccessAtom = atom<boolean | null>({
   key: "openShareAccessAtom",
   default: false,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("openShareAccessAtom", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("openShareAccessAtom")],
 });
 
 export const publicRoleAtom = atom<number | null>({
   key: "publicRoleAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("publicRoleAtom", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("publicRoleAtom")],
 });
