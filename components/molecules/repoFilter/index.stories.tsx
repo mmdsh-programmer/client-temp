@@ -1,11 +1,9 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import RepoFilter from ".";
-import { RecoilRoot } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { filterReport } from "@atom/filter";
-import { EDocumentTypes } from "@interface/enums";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import React from "react";
+import { RecoilRoot } from "recoil";
+import RepoFilter from ".";
 
 const queryClient = new QueryClient();
 

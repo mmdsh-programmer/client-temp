@@ -46,7 +46,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
     isFetchingNextPage,
     isLoading,
   } = useGetChildren(
-    getRepo?.id,
+    getRepo?.id || 0,
     categoryId,
     getSortParams,
     queryParams.limit,

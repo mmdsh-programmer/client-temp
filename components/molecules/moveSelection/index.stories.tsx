@@ -1,9 +1,10 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import MoveSelection from ".";
-import { RecoilRoot } from "recoil";
-import { categoryMoveDest } from "@atom/category";
+
 import { ICategoryMetadata } from "@interface/category.interface";
+import MoveSelection from ".";
+import React from "react";
+import { RecoilRoot } from "recoil";
+import { categoryMoveDestAtom } from "@atom/category";
 
 const mockCategory: ICategoryMetadata = {
     name: "Mock Category",
@@ -31,7 +32,7 @@ const meta: Meta<typeof MoveSelection> = {
     (Story) => (
       <RecoilRoot
         initializeState={({ set }) => {
-          set(categoryMoveDest, mockCategory);
+          set(categoryMoveDestAtom, mockCategory);
         }}
       >
         <div className="w-full p-4">

@@ -98,6 +98,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
       <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
           <Checkbox
+            crossOrigin="anonymous"
             label={
               <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 افزودن رمز عبور
