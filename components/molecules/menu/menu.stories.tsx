@@ -7,12 +7,12 @@ const meta: Meta<typeof MenuComponent> = {
   component: MenuComponent,
   argTypes: {
     variant: {
-      control: { type: 'radio', options: ['small', 'medium', 'large'] },
+      control: { type: "radio", options: ["small", "medium", "large"] },
     },
-    menuList: { 
-      control: 'object',
+    menuList: {
+      control: "object",
     },
-    menuClick: { action: 'menuClick' },
+    menuClick: { action: "menuClick" },
   },
 };
 

@@ -6,10 +6,7 @@ const useArchiveRepo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["archiveRepo"],
-    mutationFn: async (values: {
-      repoId: number;
-      callBack?: () => void;
-    }) => {
+    mutationFn: async (values: { repoId: number; callBack?: () => void }) => {
       const { repoId } = values;
       const response = await archiveRepoAction(repoId);
       return response;

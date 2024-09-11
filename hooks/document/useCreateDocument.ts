@@ -41,7 +41,7 @@ const useCreateDocument = () => {
         description,
         order,
         imageUrl,
-        publicKeyId
+        publicKeyId,
       );
       return response as IDocument;
     },

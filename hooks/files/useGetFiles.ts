@@ -9,7 +9,7 @@ const useGetFiles = (
   offset?: number,
   name?: string,
   order?: string,
-  dataType?: string
+  dataType?: string,
 ) => {
   return useInfiniteQuery({
     queryKey: [`getFiles-${userGroupHash}`, name],
@@ -21,7 +21,7 @@ const useGetFiles = (
         size,
         name,
         order,
-        dataType
+        dataType,
       );
 
       return response?.result as {

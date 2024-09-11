@@ -41,7 +41,7 @@ const RepoUsers = () => {
               return <UserItem key={user.userInfo.ssoId} user={user} />;
             });
           })}
-           <RenderIf isTrue={hasNextPageRepoUsers}>
+          <RenderIf isTrue={hasNextPageRepoUsers}>
             <LoadMore
               fetchNextPage={fetchNextPageRepoUsers}
               isFetchingNextPage={isFetchingNextPageRepoUsers}

@@ -57,9 +57,21 @@ export const WithIcons = Template.bind({});
 WithIcons.args = {
   ...Default.args,
   menuList: [
-    { text: "Home", icon: <span>🏠</span>, onClick: () => alert("Home Clicked") },
-    { text: "Profile", icon: <span>👤</span>, onClick: () => alert("Profile Clicked") },
-    { text: "Settings", icon: <span>⚙️</span>, onClick: () => alert("Settings Clicked") },
+    {
+      text: "Home",
+      icon: <span>🏠</span>,
+      onClick: () => alert("Home Clicked"),
+    },
+    {
+      text: "Profile",
+      icon: <span>👤</span>,
+      onClick: () => alert("Profile Clicked"),
+    },
+    {
+      text: "Settings",
+      icon: <span>⚙️</span>,
+      onClick: () => alert("Settings Clicked"),
+    },
   ],
   icon: "🛠️",
 };

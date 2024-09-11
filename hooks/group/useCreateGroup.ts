@@ -15,8 +15,13 @@ const useCreateGroup = () => {
       callBack?: () => void;
     }) => {
       const { title, repoId, description, members } = values;
-      const response = await createGroupAction(repoId, title, description, members);
-      return response as ICreateGroup;;
+      const response = await createGroupAction(
+        repoId,
+        title,
+        description,
+        members,
+      );
+      return response as ICreateGroup;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;

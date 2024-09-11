@@ -29,7 +29,7 @@ const VersionCloneDialog = ({ setOpen, version }: IProps) => {
   const { data: getVersionInfo, isLoading } = useGetVersion(
     getRepo!.id,
     getDocument!.id,
-    version.id
+    version.id,
   );
   const createVersion = useCreateVersion();
 

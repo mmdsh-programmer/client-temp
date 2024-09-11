@@ -26,7 +26,7 @@ const CategoryBreadCrumb = () => {
       const breadCrumbTemp = [...breadCrumb];
       breadCrumbTemp.splice(
         selectedCategoryIndex + 1,
-        breadCrumb.length - selectedCategoryIndex + 1
+        breadCrumb.length - selectedCategoryIndex + 1,
       );
       setBreadCrumb(breadCrumbTemp);
     }

@@ -68,7 +68,7 @@ export type IClasorDocumentType = {
   content?: string;
   versionNumber: string;
   metadata?: string;
-  fileHash?: { hash: string; fileExtension: string; fileName: string; }[];
+  fileHash?: { hash: string; fileExtension: string; fileName: string }[];
 };
 export interface IMeetingDocumentType {
   projectName: string;
@@ -157,7 +157,6 @@ export interface IWhiteListItem {
 }
 
 export interface IWhiteList {
-  blackList: IWhiteListItem[],
-  whiteList: IWhiteListItem[],
+  blackList: IWhiteListItem[];
+  whiteList: IWhiteListItem[];
 }
-

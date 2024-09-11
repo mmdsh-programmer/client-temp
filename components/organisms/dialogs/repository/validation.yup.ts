@@ -21,7 +21,7 @@ export const repoTagSchema = yup
   })
   .required();
 
-  export const repoShareSchema = yup
+export const repoShareSchema = yup
   .object()
   .shape({
     expireTime: yup.number().required("تاریخ انقضا لینک را وارد کنید"),

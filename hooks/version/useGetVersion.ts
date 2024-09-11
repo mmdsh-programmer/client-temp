@@ -22,7 +22,7 @@ const useGetVersion = (
         versionId,
         state,
         innerDocument,
-        innerOutline
+        innerOutline,
       );
       return response as IVersion;
     },

@@ -6,22 +6,22 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ICategoryMetadata } from "@interface/category.interface";
 
 const mockCategory: ICategoryMetadata = {
-    id: 148957,
-    name: "category ssss",
-    order: 1,
-    createdAt: "1633024800000",
-    updatedAt: "1633024800000",
-    isHidden: false,
-    description: "",
-    repoId: 875422,
-    type: "category",
-    extraDetails: null,
-    creator: null,
-    deletedAt: null,
-    parentId: null,
-    active: false,
-    isTemplate: false,
-    userGroupHash: null
+  id: 148957,
+  name: "category ssss",
+  order: 1,
+  createdAt: "1633024800000",
+  updatedAt: "1633024800000",
+  isHidden: false,
+  description: "",
+  repoId: 875422,
+  type: "category",
+  extraDetails: null,
+  creator: null,
+  deletedAt: null,
+  parentId: null,
+  active: false,
+  isTemplate: false,
+  userGroupHash: null,
 };
 
 const queryClient = new QueryClient();

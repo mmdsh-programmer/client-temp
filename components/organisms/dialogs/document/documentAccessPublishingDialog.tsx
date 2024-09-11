@@ -31,7 +31,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
 
   const { data: userList, isLoading } = useGetWhiteBlackList(
     getRepo!.id,
-    document!.id
+    document!.id,
   );
   const whiteListHook = useAddWhiteList();
   const blackListHook = useAddBlackList();
@@ -71,7 +71,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
       : [];
     console.log(
       "--------------- selected user --------------",
-      serverUsernameArray
+      serverUsernameArray,
     );
 
     listHook.mutate({

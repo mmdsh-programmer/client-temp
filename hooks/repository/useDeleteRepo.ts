@@ -6,10 +6,7 @@ const useDeleteRepo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["deleteRepo"],
-    mutationFn: async (values: {
-      repoId: number;
-      callBack?: () => void;
-    }) => {
+    mutationFn: async (values: { repoId: number; callBack?: () => void }) => {
       const { repoId } = values;
       const response = await deleteRepoAction(repoId);
       return response;

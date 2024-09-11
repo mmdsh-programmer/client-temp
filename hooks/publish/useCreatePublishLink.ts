@@ -15,8 +15,8 @@ const useCreatePublishLink = () => {
       const { repoId, expireTime, password } = values;
       const response = await createRepoPublishLinkAction(
         repoId,
-       expireTime,
-       password
+        expireTime,
+        password,
       );
       return response?.data;
     },

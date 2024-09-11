@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { BackIcon, BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
+import {
+  BackIcon,
+  BreadcrumbIcon,
+  ChevronLeftIcon,
+} from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { Button, Typography } from "@material-tailwind/react";
 import { categoryMoveDest } from "atom/category";
@@ -23,7 +27,7 @@ const MoveBreadCrumb = () => {
       const breadCrumbTemp = [...breadCrumb];
       breadCrumbTemp.splice(
         selectedCategoryIndex + 1,
-        breadCrumb.length - selectedCategoryIndex + 1
+        breadCrumb.length - selectedCategoryIndex + 1,
       );
       setBreadCrumb(breadCrumbTemp);
     }

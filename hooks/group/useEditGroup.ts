@@ -18,7 +18,7 @@ const useEditGroup = () => {
         repoId,
         title,
         description,
-        members
+        members,
       );
       return response;
     },

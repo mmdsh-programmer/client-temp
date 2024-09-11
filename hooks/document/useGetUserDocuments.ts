@@ -11,7 +11,7 @@ const useGetUserDocuments = (
   sortParams: ISortProps,
   size: number,
   filters?: IReportFilter | null,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`repo-${repoId}-children-${JSON.stringify(filters)}`],
@@ -21,11 +21,9 @@ const useGetUserDocuments = (
         sortParams,
         (pageParam - 1) * size,
         size,
-        filters
+        filters,
       );
-      return response as IListResponse<
-        ICategoryMetadata | IDocumentMetadata
-      >;
+      return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,
     retry: false,

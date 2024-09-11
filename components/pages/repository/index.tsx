@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import RepoInfo from "@components/organisms/repoInfo";
@@ -9,7 +9,6 @@ import CategoryList from "@components/organisms/category";
 import { versionListAtom } from "@atom/version";
 import VersionList from "../version";
 import CategoryBulk from "@components/molecules/categoryBulk";
-
 
 const RepoPage = () => {
   const getShowVersionList = useRecoilValue(versionListAtom);
@@ -25,7 +24,7 @@ const RepoPage = () => {
           <CategoryList />
         </>
       )}
-       {getBulkItems.length ? <CategoryBulk /> : <RepoTypesMobileView />}
+      {getBulkItems.length ? <CategoryBulk /> : <RepoTypesMobileView />}
     </div>
   );
 };

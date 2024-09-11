@@ -18,7 +18,7 @@ const DocumentType = ({ isTemplate, setOpen }: IProps) => {
   const { handleNextStep } = useStepperNavigate();
   const { data: getDocumentTypes, isLoading } = useGetClasorField();
   const [type, setType] = useState<EDocumentTypes | null>(
-    EDocumentTypes.classic
+    EDocumentTypes.classic,
   );
 
   const handleSelectType = () => {

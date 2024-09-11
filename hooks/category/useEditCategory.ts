@@ -37,7 +37,7 @@ const useEditCategory = (move?: boolean) => {
         name,
         description,
         order,
-        isHidden
+        isHidden,
       );
       return response as ICategory;
     },
@@ -45,10 +45,7 @@ const useEditCategory = (move?: boolean) => {
       const { callBack, parentId } = values;
 
       queryClient.invalidateQueries({
-        queryKey: [
-          `category-${parentId || "parent"}-children`,
-          undefined,
-        ],
+        queryKey: [`category-${parentId || "parent"}-children`, undefined],
       });
       queryClient.invalidateQueries({
         queryKey: [

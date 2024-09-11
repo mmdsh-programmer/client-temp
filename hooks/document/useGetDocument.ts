@@ -5,7 +5,7 @@ import { IDocumentMetadata } from "@interface/document.interface";
 const useGetDocument = (
   repoId: number,
   documentId: number,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useQuery({
     queryKey: [`document-${documentId}-info`],

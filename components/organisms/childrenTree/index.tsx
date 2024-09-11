@@ -45,7 +45,7 @@ const ChildrenTree = ({ move }: IProps) => {
     undefined,
     move ? "category" : undefined,
     move ? undefined : docTemplateFilter,
-    move ? true : false
+    move ? true : false,
   );
 
   return (

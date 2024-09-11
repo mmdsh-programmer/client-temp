@@ -6,10 +6,10 @@ const meta: Meta<typeof LoadingButton> = {
   title: "Components/Molecules/LoadingButton",
   component: LoadingButton,
   argTypes: {
-    onClick: { action: 'clicked' },
-    loading: { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    className: { control: 'text' },
+    onClick: { action: "clicked" },
+    loading: { control: "boolean" },
+    disabled: { control: "boolean" },
+    className: { control: "text" },
   },
 };
 

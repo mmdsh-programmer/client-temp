@@ -25,7 +25,7 @@ const SignInComponent = () => {
 
       if (lastPage === null) {
         const selectedrepoString = window.localStorage.getItem(
-          "CLASOR:SELECTED_REPO"
+          "CLASOR:SELECTED_REPO",
         );
         const selectedRepo = selectedrepoString
           ? JSON.parse(selectedrepoString)

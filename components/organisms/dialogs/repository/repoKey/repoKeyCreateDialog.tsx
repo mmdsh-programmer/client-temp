@@ -32,7 +32,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   const { register, handleSubmit, formState, reset, clearErrors, setValue } =
     form;
   const { errors } = formState;
-  console.log(errors)
+  console.log(errors);
 
   const handleClose = () => {
     reset();
@@ -43,11 +43,11 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   const stripPemHeaders = (pem: string) => {
     return pem.replace(
       /-{5}BEGIN [ A-Z]+-{5}|-{5}END [ A-Z]+-{5}|\r?\n|\r/g,
-      ""
+      "",
     );
   };
   const generateKey = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
     const { pki } = forge;
@@ -57,7 +57,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
     });
     const publicKeyPem = stripPemHeaders(pki.publicKeyToPem(keypair.publicKey));
     const privateKeyPem = stripPemHeaders(
-      pki.privateKeyToPem(keypair.privateKey)
+      pki.privateKeyToPem(keypair.privateKey),
     );
     setShowPrivateKey(true);
     setValue("publicKey", publicKeyPem);
@@ -67,7 +67,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   };
 
   const clearKeys = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
     reset({

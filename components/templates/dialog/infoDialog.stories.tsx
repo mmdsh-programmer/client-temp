@@ -17,7 +17,9 @@ const Template: StoryFn<IProps> = (args) => {
 
   return (
     <InfoDialog {...args} setOpen={setOpen}>
-      <div className="flex justify-center items-center h-[200px]">لیست تگ ها: </div>
+      <div className="flex justify-center items-center h-[200px]">
+        لیست تگ ها:{" "}
+      </div>
     </InfoDialog>
   );
 };

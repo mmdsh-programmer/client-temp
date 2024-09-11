@@ -1,4 +1,3 @@
-
 import { Meta, StoryObj } from "@storybook/react";
 import ProgressBar from ".";
 import { IReport } from "@interface/repo.interface";

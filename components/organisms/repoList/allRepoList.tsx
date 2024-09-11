@@ -29,17 +29,17 @@ const AllRepoList = () => {
     repoType === ERepoGrouping.ARCHIVE_REPO,
     search,
     repoType === ERepoGrouping.MY_REPO ||
-      repoType === ERepoGrouping.ARCHIVE_REPO
+      repoType === ERepoGrouping.ARCHIVE_REPO,
   );
   const accessRepos = useGetAccessList(
     20,
     search,
-    repoType === ERepoGrouping.ACCESS_REPO
+    repoType === ERepoGrouping.ACCESS_REPO,
   );
   const bookmarkRepos = useGetBookmarkList(
     20,
     search,
-    repoType === ERepoGrouping.BOOKMARK_REPO
+    repoType === ERepoGrouping.BOOKMARK_REPO,
   );
 
   const {
@@ -48,7 +48,7 @@ const AllRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching
+    isFetching,
   } = useMemo(() => {
     if (search) {
       switch (repoType) {
@@ -78,7 +78,7 @@ const AllRepoList = () => {
   const listLength = useMemo(() => repoList?.pages[0]?.total || 0, [repoList]);
   const listLengthAllRepos = useMemo(
     () => allRepos?.data?.pages[0]?.total || 0,
-    [allRepos]
+    [allRepos],
   );
   const isLoadingAllRepos = allRepos?.isLoading;
 
@@ -105,7 +105,7 @@ const AllRepoList = () => {
             { data: <RepoMenu repo={repo} /> },
           ]}
         />
-      ))
+      )),
     );
 
   return (
@@ -136,7 +136,11 @@ const AllRepoList = () => {
                         },
                         { key: "role", value: "نقش من" },
                         { key: "status", value: "وضعیت" },
-                        { key: "action", value: "عملیات", className: "justify-end" },
+                        {
+                          key: "action",
+                          value: "عملیات",
+                          className: "justify-end",
+                        },
                       ]}
                     />
                     <tbody>

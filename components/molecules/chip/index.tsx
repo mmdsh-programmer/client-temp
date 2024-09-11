@@ -14,7 +14,10 @@ const ChipMolecule = ({ className, value, icon, actionIcon }: IProps) => {
       className={`${className || ""} flex gap-2 items-center justify-center rounded-full cursor-pointer`}
     >
       {icon ? <div className="w-8 h-8 ">{icon}</div> : null}
-      <Typography title={value} className="label truncate text-right lowercase ">
+      <Typography
+        title={value}
+        className="label truncate text-right lowercase "
+      >
         {value}
       </Typography>
       {actionIcon}

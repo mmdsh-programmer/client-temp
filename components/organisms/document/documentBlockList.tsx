@@ -33,7 +33,7 @@ const DocumentBlockList = () => {
       type: "unblock",
       callBack: () => {
         toast.success(
-          `کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`
+          `کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`,
         );
       },
     });

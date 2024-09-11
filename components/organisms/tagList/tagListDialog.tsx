@@ -74,7 +74,9 @@ const TagListDialog = ({ setOpen }: IProps) => {
                               value={tag.name}
                               key={tag.id}
                               className="bg-gray-50 h-6 px-2 text-primary max-w-[150px]"
-                              actionIcon={adminRole ? <TagMenu tag={tag} /> : null}
+                              actionIcon={
+                                adminRole ? <TagMenu tag={tag} /> : null
+                              }
                             />
                           </div>
                         );

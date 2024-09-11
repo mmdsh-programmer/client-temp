@@ -9,18 +9,29 @@ import BookmarkRepoList from "./bookmarkList";
 import AllRepoList from "./allRepoList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
-import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query";
+import {
+  FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
 import { IListResponse, IRepo } from "@interface/repo.interface";
 import { EEmptyList } from "@components/molecules/emptyList";
 
 export interface IRepoView {
   isLoading: boolean;
-  getRepoList:  InfiniteData<IListResponse<IRepo>, unknown> | undefined;
+  getRepoList: InfiniteData<IListResponse<IRepo>, unknown> | undefined;
   hasNextPage: boolean;
-  fetchNextPage: (options?: FetchNextPageOptions) => Promise<InfiniteQueryObserverResult<InfiniteData<IListResponse<IRepo>, unknown>, Error>>;
+  fetchNextPage: (
+    options?: FetchNextPageOptions,
+  ) => Promise<
+    InfiniteQueryObserverResult<
+      InfiniteData<IListResponse<IRepo>, unknown>,
+      Error
+    >
+  >;
   isFetchingNextPage: boolean;
   isFetching?: boolean;
-  type: EEmptyList
+  type: EEmptyList;
 }
 
 const RepoList = () => {

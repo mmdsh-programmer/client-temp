@@ -17,7 +17,10 @@ const TableHead = ({ tableHead, className }: IProps) => {
     <thead className={`${className || ""} top-0 z-[9999] bg-tertiary h-10 `}>
       <tr>
         {tableHead.map((head, index) => (
-          <th key={head.key} className={` ${head.className || ""} text-right px-5 py-[6px]`}>
+          <th
+            key={head.key}
+            className={` ${head.className || ""} text-right px-5 py-[6px]`}
+          >
             {head.isSorted ? (
               <div className={`flex items-center`}>
                 <Typography className="table-head py-1 text-secondary">

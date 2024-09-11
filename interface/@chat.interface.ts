@@ -74,7 +74,7 @@ export interface ICreateThread {
           blocked: boolean;
           username: string;
         };
-        metadata: {[key:string]: string};
+        metadata: { [key: string]: string };
         time: number;
         timeMiliSeconds: number;
         timeNanos: number;
@@ -126,7 +126,7 @@ export interface IChatError {
   error: {
     message: string;
     code: number;
-  }
+  };
   message: string;
   uniqueId: string;
 }

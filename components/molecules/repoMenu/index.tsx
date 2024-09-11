@@ -143,12 +143,12 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
           ]
     ).filter(
       (
-        item
+        item,
       ): item is {
         text: string;
         icon: React.JSX.Element;
         onClick: () => void;
-      } => Boolean(item)
+      } => Boolean(item),
     ),
   ];
 

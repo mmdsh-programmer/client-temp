@@ -10,7 +10,7 @@ export const getFileAction = async (
   size: number,
   name?: string,
   order?: string,
-  dataType?: string
+  dataType?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -22,7 +22,7 @@ export const getFileAction = async (
       size,
       name,
       order,
-      dataType
+      dataType,
     );
 
     return response;
@@ -34,7 +34,7 @@ export const getFileAction = async (
 export const renameFileAction = async (
   resourceId: number,
   newName: string,
-  hash: string
+  hash: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -42,7 +42,7 @@ export const renameFileAction = async (
       userInfo.access_token,
       resourceId,
       newName,
-      hash
+      hash,
     );
 
     return response;
@@ -55,7 +55,7 @@ export const deleteFileAction = async (
   repoId: number,
   resourceId: number,
   fileHash: string,
-  type: "private" | "public"
+  type: "private" | "public",
 ) => {
   const userInfo = await getMe();
   try {
@@ -64,7 +64,7 @@ export const deleteFileAction = async (
       repoId,
       resourceId,
       fileHash,
-      type
+      type,
     );
 
     return response;

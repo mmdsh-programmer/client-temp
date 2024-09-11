@@ -2,9 +2,7 @@ import { getUserToRepoRequestsAction } from "@actions/requests";
 import { IAccessRequestResponse } from "@interface/accessRequest.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetUserJoinRepoRequests = (
-  size: number,
-) => {
+const useGetUserJoinRepoRequests = (size: number) => {
   return useInfiniteQuery({
     queryKey: [`userJoinRepoRequests`],
     queryFn: async ({ signal, pageParam }) => {

@@ -19,7 +19,7 @@ const SelectBox = ({
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -43,12 +43,15 @@ const SelectBox = ({
     setSelectedOptions(
       selectedOptions.includes(option)
         ? selectedOptions.filter((selected) => selected !== option)
-        : [...selectedOptions, option]
+        : [...selectedOptions, option],
     );
   };
 
   return (
-    <div ref={dropdownRef} className={`${className || ""} relative inline-block `}>
+    <div
+      ref={dropdownRef}
+      className={`${className || ""} relative inline-block `}
+    >
       <button
         onClick={toggleDropdown}
         className="w-full h-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 flex justify-between font-normal items-center text-left bg-white border-2 border-normal rounded-md focus:outline-none"
@@ -58,7 +61,7 @@ const SelectBox = ({
             ? selectedOptions
                 .map(
                   (selected) =>
-                    options.find((option) => option.value === selected)?.label
+                    options.find((option) => option.value === selected)?.label,
                 )
                 .join(", ")
             : defaultOption}

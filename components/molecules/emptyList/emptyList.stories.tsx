@@ -5,7 +5,6 @@ import EmptyList, { EEmptyList } from ".";
 export default {
   title: "Components/Molecules/EmptyList",
   component: EmptyList,
-
 } as Meta<typeof EmptyList>;
 
 const Template: StoryFn<typeof EmptyList> = (args) => <EmptyList {...args} />;

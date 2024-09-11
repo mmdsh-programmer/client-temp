@@ -11,8 +11,8 @@ const useAddImageToRepo = () => {
       fileHash: string | null;
       callBack?: () => void;
     }) => {
-      const { fileHash ,repoId } = values;
-      const response = await imageRepoAction(repoId,fileHash);
+      const { fileHash, repoId } = values;
+      const response = await imageRepoAction(repoId, fileHash);
       return response;
     },
     onSuccess: (response, values) => {

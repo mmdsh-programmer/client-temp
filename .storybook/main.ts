@@ -48,7 +48,7 @@ const config: StorybookConfig = {
       new webpack.ProvidePlugin({
         process: "process/browser",
         Buffer: ["buffer", "Buffer"],
-      })
+      }),
     );
 
     return config;

@@ -16,7 +16,7 @@ export interface ICategoryCrud {
 }
 
 export interface ICategoryMetadata {
-  id:number;
+  id: number;
   name: string;
   description: string;
   repoId: number;

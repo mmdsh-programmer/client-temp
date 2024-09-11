@@ -1,6 +1,4 @@
-import {
-  getDocumentBlocklistAction,
-} from "@actions/document";
+import { getDocumentBlocklistAction } from "@actions/document";
 import { IListResponse } from "@interface/repo.interface";
 import { IUser } from "@interface/users.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -8,7 +6,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 const useGetDocumentBlocklist = (
   repoId: number,
   documentId: number,
-  size: number
+  size: number,
 ) => {
   return useInfiniteQuery({
     queryKey: [`repo-${repoId}-document-${documentId}-block-list`],
@@ -17,7 +15,7 @@ const useGetDocumentBlocklist = (
         repoId,
         documentId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IUser>;
     },

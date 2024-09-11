@@ -39,7 +39,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 20, true);
   const { data: groupInfo, isFetching } = useGetGroupInfo(
     getRepo!.id,
-    group!.title
+    group!.title,
   );
   const { isPending, mutate } = useEditGroup();
 
@@ -54,8 +54,8 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
     const oldUsers = allUsers?.filter((user) =>
       groupInfo?.members.list.some(
-        (groupUser) => groupUser.preferred_username === user.userInfo.userName
-      )
+        (groupUser) => groupUser.preferred_username === user.userInfo.userName,
+      ),
     );
 
     const updatedUserList = oldUsers?.map((member) => ({
@@ -97,7 +97,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
-    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.")
+    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
     mutate({
       repoId: getRepo!.id,
       title: dataForm.title,

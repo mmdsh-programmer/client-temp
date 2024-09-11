@@ -23,9 +23,7 @@ const RepoTypesMobileView = () => {
           }}
         >
           <MyFolderIcon className="h-6 w-6 " />
-          <Typography className="title_t4">
-            مخزن‌های من
-          </Typography>
+          <Typography className="title_t4">مخزن‌های من</Typography>
         </div>
         <div
           className={`flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "text-primary stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
@@ -34,9 +32,7 @@ const RepoTypesMobileView = () => {
           }}
         >
           <FolderBookmarkIcon className="h-6 w-6 " />
-          <Typography className="title_t4">
-            نشان شده
-          </Typography>
+          <Typography className="title_t4">نشان شده</Typography>
         </div>
         <div
           className={`flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.ACCESS_REPO ? "text-primary stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
@@ -45,9 +41,7 @@ const RepoTypesMobileView = () => {
           }}
         >
           <FolderShareIcon className="h-6 w-6 " />
-          <Typography className="title_t4">
-            اشتراکی
-          </Typography>
+          <Typography className="title_t4">اشتراکی</Typography>
         </div>
         <div
           className={`flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "text-primary stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
@@ -56,9 +50,7 @@ const RepoTypesMobileView = () => {
           }}
         >
           <FolderArchiveIcon className="h-6 w-6 " />
-          <Typography className="title_t4">
-            بایگانی شده
-          </Typography>
+          <Typography className="title_t4">بایگانی شده</Typography>
         </div>
       </div>
     </div>

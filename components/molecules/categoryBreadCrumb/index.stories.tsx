@@ -91,7 +91,6 @@ export const NoCategory: Story = {
     (Story) => {
       const [categoryShow, setCategoryShow] = useRecoilState(categoryShowAtom);
 
-
       React.useEffect(() => {
         setCategoryShow(null);
       }, [categoryShow]);

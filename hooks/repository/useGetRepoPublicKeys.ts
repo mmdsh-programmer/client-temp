@@ -9,7 +9,7 @@ const useGetRepoPublicKeys = (repoId: number, size: number) => {
       const response = await getRepoKeysAction(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IPublicKey>;
     },

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import SelectAtom from '.';
-import type { Meta, StoryObj } from '@storybook/react';
+import React, { useState } from "react";
+import SelectAtom from ".";
+import type { Meta, StoryObj } from "@storybook/react";
 
 interface IProps {
-  options: { value: string, label: string }[];
+  options: { value: string; label: string }[];
   selectedOption?: string;
   setSelectedOption: (option: string) => void;
   defaultOption?: string;
@@ -11,29 +11,29 @@ interface IProps {
 }
 
 const meta: Meta<IProps> = {
-  title: 'Components/Molecules/SelectAtom',
+  title: "Components/Molecules/SelectAtom",
   component: SelectAtom,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     options: {
-      control: 'object',
-      description: 'List of options for the select box',
+      control: "object",
+      description: "List of options for the select box",
     },
     selectedOption: {
-      control: 'text',
-      description: 'Currently selected option',
+      control: "text",
+      description: "Currently selected option",
     },
     setSelectedOption: {
-      action: 'optionSelected',
-      description: 'Callback to update selected option',
+      action: "optionSelected",
+      description: "Callback to update selected option",
     },
     defaultOption: {
-      control: 'text',
-      description: 'Default text when no option is selected',
+      control: "text",
+      description: "Default text when no option is selected",
     },
     className: {
-      control: 'text',
-      description: 'Additional CSS classes to apply',
+      control: "text",
+      description: "Additional CSS classes to apply",
     },
   },
 };
@@ -45,14 +45,22 @@ type Story = StoryObj<IProps>;
 export const Default: Story = {
   args: {
     options: [
-      { value: 'option1', label: 'Option 1' },
-      { value: 'option2', label: 'Option 2' },
-      { value: 'option3', label: 'Option 3' },
+      { value: "option1", label: "Option 1" },
+      { value: "option2", label: "Option 2" },
+      { value: "option3", label: "Option 3" },
     ],
-    defaultOption: 'Select an option...',
+    defaultOption: "Select an option...",
   },
   render: (args) => {
-    const [selectedOption, setSelectedOption] = useState<string | undefined>(undefined);
-    return <SelectAtom {...args} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />;
+    const [selectedOption, setSelectedOption] = useState<string | undefined>(
+      undefined,
+    );
+    return (
+      <SelectAtom
+        {...args}
+        selectedOption={selectedOption}
+        setSelectedOption={setSelectedOption}
+      />
+    );
   },
 };

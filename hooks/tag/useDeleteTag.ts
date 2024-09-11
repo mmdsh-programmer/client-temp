@@ -8,7 +8,7 @@ const useDeleteTag = () => {
     mutationKey: ["deleteTag"],
     mutationFn: async (values: {
       repoId: number;
-      tagId: number
+      tagId: number;
       callBack?: () => void;
     }) => {
       const { repoId, tagId } = values;

@@ -18,7 +18,7 @@ const useCreatePublicLink = () => {
         repoId,
         roleId,
         expireTime,
-        password
+        password,
       );
       return response?.data;
     },

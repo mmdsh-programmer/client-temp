@@ -17,7 +17,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
   const [openCreateDrawer, setOpenCreateDrawer] = useRecoilState(
-    createCatDocDrawerAtom
+    createCatDocDrawerAtom,
   );
 
   const menuList: {

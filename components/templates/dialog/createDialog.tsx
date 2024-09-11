@@ -46,16 +46,20 @@ const CreateDialog = ({
         placeholder="dialog header"
         className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
-      <div className="block xs:hidden">
+        <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
         </div>
         <div className="flex items-center">
           {backToMain ? (
             <div className="hidden xs:block">
-              <BackButton className="!pl-2 !pr-0 !py-0" onClick={handleClose} disabled={isPending} />
+              <BackButton
+                className="!pl-2 !pr-0 !py-0"
+                onClick={handleClose}
+                disabled={isPending}
+              />
             </div>
           ) : null}
-        <Typography className="form__title">{dialogHeader}</Typography>{" "}
+          <Typography className="form__title">{dialogHeader}</Typography>{" "}
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />

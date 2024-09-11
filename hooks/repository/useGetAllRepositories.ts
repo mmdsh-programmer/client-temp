@@ -5,7 +5,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 const useGetAllRepositories = (
   size: number,
   name: string | undefined,
-  enabled: boolean
+  enabled: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`allRepoList${name ? `-${name}` : ""}`],
@@ -13,7 +13,7 @@ const useGetAllRepositories = (
       const response = await getAllRepositoryList(
         (pageParam - 1) * size,
         size,
-        name
+        name,
       );
       return response as IListResponse<IRepo>;
     },

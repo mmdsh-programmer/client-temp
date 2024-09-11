@@ -10,7 +10,7 @@ const useGetRepoUsers = (repoId: number, size: number, enabled: boolean) => {
       const response = await getRepositoryUserList(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IUser>;
     },

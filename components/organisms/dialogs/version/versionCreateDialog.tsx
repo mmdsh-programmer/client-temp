@@ -21,7 +21,7 @@ interface IProps {
 
 const VersionCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom)
+  const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const createVersion = useCreateVersion();
 

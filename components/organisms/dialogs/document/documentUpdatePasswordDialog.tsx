@@ -33,7 +33,8 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentResetPasswordSchema),
   });
-  const { register, handleSubmit, formState, reset, clearErrors, setError } = form;
+  const { register, handleSubmit, formState, reset, clearErrors, setError } =
+    form;
   const { errors } = formState;
 
   const handleClose = () => {
@@ -65,62 +66,62 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
   };
   return (
     <>
-    <ConfirmFullHeightDialog
-      isPending={updatePassword.isPending}
-      onSubmit={handleSubmit(onSubmit)}
-      setOpen={handleClose}
-      dialogHeader="تغییر رمز عبور سند"
-    >
-      <form className="flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-          <Typography className="form_label">رمز عبور سابق</Typography>
-          <FormInput
-            type="password"
-            placeholder="رمز عبور سابق"
-            register={{
-              ...register("oldPassword"),
-            }}
-          />
-          {errors.oldPassword && (
-            <Typography className="warning_text">
-              {errors.oldPassword?.message}
-            </Typography>
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Typography className="form_label">رمز عبور</Typography>
-          <FormInput
-            type="password"
-            placeholder="رمز عبور"
-            register={{
-              ...register("password"),
-            }}
-          />
-          {errors.password && (
-            <Typography className="warning_text">
-              {errors.password?.message}
-            </Typography>
-          )}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Typography className="form_label">تکرار رمز عبور</Typography>
-          <FormInput
-            type="password"
-            placeholder="تکرار رمز عبور"
-            register={{
-              ...register("confirmPassword"),
-            }}
-          />
-          {errors.confirmPassword && (
-            <Typography className="warning_text">
-              {errors.confirmPassword?.message}
-            </Typography>
-          )}
-        </div>
-      </form>
-    </ConfirmFullHeightDialog>
-  </>
-  )
-}
+      <ConfirmFullHeightDialog
+        isPending={updatePassword.isPending}
+        onSubmit={handleSubmit(onSubmit)}
+        setOpen={handleClose}
+        dialogHeader="تغییر رمز عبور سند"
+      >
+        <form className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <Typography className="form_label">رمز عبور سابق</Typography>
+            <FormInput
+              type="password"
+              placeholder="رمز عبور سابق"
+              register={{
+                ...register("oldPassword"),
+              }}
+            />
+            {errors.oldPassword && (
+              <Typography className="warning_text">
+                {errors.oldPassword?.message}
+              </Typography>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Typography className="form_label">رمز عبور</Typography>
+            <FormInput
+              type="password"
+              placeholder="رمز عبور"
+              register={{
+                ...register("password"),
+              }}
+            />
+            {errors.password && (
+              <Typography className="warning_text">
+                {errors.password?.message}
+              </Typography>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <Typography className="form_label">تکرار رمز عبور</Typography>
+            <FormInput
+              type="password"
+              placeholder="تکرار رمز عبور"
+              register={{
+                ...register("confirmPassword"),
+              }}
+            />
+            {errors.confirmPassword && (
+              <Typography className="warning_text">
+                {errors.confirmPassword?.message}
+              </Typography>
+            )}
+          </div>
+        </form>
+      </ConfirmFullHeightDialog>
+    </>
+  );
+};
 
-export default DocumentUpdatePasswordDialog
+export default DocumentUpdatePasswordDialog;

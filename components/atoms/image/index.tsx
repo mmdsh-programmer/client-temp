@@ -2,12 +2,12 @@ import React from "react";
 import Image from "next/image";
 
 interface IProps {
-    src: string;
-    alt: string;
-    className?: string;
+  src: string;
+  alt: string;
+  className?: string;
 }
 
-const ImageComponent = ({alt, src, className}: IProps) => {
+const ImageComponent = ({ alt, src, className }: IProps) => {
   return (
     <Image
       className={`h-full w-full overflow-hidden ${className || ""}`}

@@ -8,8 +8,8 @@ const meta: Meta<typeof SpinnerText> = {
   tags: ["autodocs"],
   argTypes: {
     text: {
-      control: { type: 'text' },
-      description: 'Text to display next to the spinner',
+      control: { type: "text" },
+      description: "Text to display next to the spinner",
     },
   },
 };

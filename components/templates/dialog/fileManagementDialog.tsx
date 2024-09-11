@@ -44,7 +44,7 @@ const fileManagementDialog = ({
       >
         <div className="flex items-center">
           <BackButton onClick={handleClose} />
-          <Typography className="form__title">{dialogHeader}</Typography >
+          <Typography className="form__title">{dialogHeader}</Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />

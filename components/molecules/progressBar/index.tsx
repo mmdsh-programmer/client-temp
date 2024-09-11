@@ -35,7 +35,10 @@ const ProgressBar = ({ report }: IProps) => {
   };
 
   return (
-    <Typography placeholder="progress-bar" className="font-iranYekan text-xs text-primary truncate cursor-default">
+    <Typography
+      placeholder="progress-bar"
+      className="font-iranYekan text-xs text-primary truncate cursor-default"
+    >
       {volumeUnit(usage)} از {volumeUnit(total)}
     </Typography>
   );

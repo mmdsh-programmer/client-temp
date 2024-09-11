@@ -11,7 +11,7 @@ const mockKeyItem: IPublicKey = {
   repoId: 1,
   creatorSSOID: 8756565,
   id: 123456,
-  name: "public key"
+  name: "public key",
 };
 
 export default {

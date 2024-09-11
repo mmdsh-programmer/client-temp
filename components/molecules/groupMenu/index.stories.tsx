@@ -4,11 +4,10 @@ import GroupMenu from ".";
 import { IGetGroups } from "@interface/group.interface";
 import { RecoilRoot } from "recoil";
 
-
 const mockGroup: IGetGroups = {
-    title: "Mock Group",
-    description: "This is a description of the mock group.",
-    path: "147"
+  title: "Mock Group",
+  description: "This is a description of the mock group.",
+  path: "147",
 };
 
 const meta: Meta<typeof GroupMenu> = {

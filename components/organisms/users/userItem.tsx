@@ -68,7 +68,9 @@ const UserItem = ({ user }: IProps) => {
         userName: user.userInfo.userName,
         roleName: value,
         callBack: () => {
-          toast.success(`نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`);
+          toast.success(
+            `نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`,
+          );
         },
       });
     }

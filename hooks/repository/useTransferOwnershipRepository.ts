@@ -12,7 +12,10 @@ const useTranferOwnershipRepository = () => {
       callBack?: () => void;
     }) => {
       const { userName, repoId } = values;
-      const response = await transferOwnershipRepositoryAction(repoId, userName);
+      const response = await transferOwnershipRepositoryAction(
+        repoId,
+        userName,
+      );
       return response;
     },
     onSuccess: (response, values) => {

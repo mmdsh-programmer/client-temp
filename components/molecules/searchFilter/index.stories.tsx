@@ -35,11 +35,6 @@ export const Default: Story = {
   render: () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    return (
-      <SearchFilter
-        open={isOpen}
-        setOpen={setIsOpen}
-      />
-    );
+    return <SearchFilter open={isOpen} setOpen={setIsOpen} />;
   },
 };

@@ -4,7 +4,17 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { compareVersionAtom } from "@atom/version";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import MenuTemplate from "@components/templates/menuTemplate";
-import { ComparisionIcon, ConfirmationVersionIcon, CopyIcon, DeleteIcon, DuplicateIcon, EditIcon, EditVersionIcon, MoreDotIcon, ShareIcon } from "@components/atoms/icons";
+import {
+  ComparisionIcon,
+  ConfirmationVersionIcon,
+  CopyIcon,
+  DeleteIcon,
+  DuplicateIcon,
+  EditIcon,
+  EditVersionIcon,
+  MoreDotIcon,
+  ShareIcon,
+} from "@components/atoms/icons";
 import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
 import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
 import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
@@ -49,14 +59,14 @@ const DraftVersionMenu = ({ version }: IProps) => {
   }[] = [
     {
       text: "ایجاد نسخه جدید از نسخه",
-      icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active"/>,
+      icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
       onClick: () => {
         setCloneVersion(true);
       },
     },
     {
       text: compareVersion?.version ? "مقایسه با نسخه مورد نظر" : "مقایسه",
-      icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active"/>,
+      icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active" />,
       onClick: () => {
         if (getRepo && getDocument && version && compareVersion?.version) {
           setCompareVersion({
@@ -68,11 +78,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
             },
           });
           setDiffVersionModal(true);
-        } else if (
-          getRepo &&
-          getDocument &&
-          version
-        ) {
+        } else if (getRepo && getDocument && version) {
           setCompareVersion({
             version: {
               data: version,
@@ -123,11 +129,11 @@ const DraftVersionMenu = ({ version }: IProps) => {
     },
     {
       text: "کپی آدرس اشتراک‌ گذاری",
-      icon: <ShareIcon className="h-4 w-4" />, 
+      icon: <ShareIcon className="h-4 w-4" />,
       onClick: () => {
         if (version) {
           copy(
-            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`
+            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`,
           );
           toast.success("آدرس کپی شد.");
         }
@@ -135,7 +141,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
     },
     {
       text: "حذف پیش نویس",
-      icon: <DeleteIcon className="h-4 w-4"  />,
+      icon: <DeleteIcon className="h-4 w-4" />,
       onClick: () => {
         setDeleteVersionModal(true);
       },

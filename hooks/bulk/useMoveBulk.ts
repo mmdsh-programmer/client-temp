@@ -13,11 +13,7 @@ const useMoveBulk = () => {
       callBack?: () => void;
     }) => {
       const { repoId, parentId, children } = values;
-      const response = await moveBulkAction(
-        repoId,
-        parentId,
-        children,
-      );
+      const response = await moveBulkAction(repoId, parentId, children);
       return response;
     },
     onSuccess: (response, values) => {

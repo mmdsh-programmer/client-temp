@@ -52,10 +52,14 @@ const EditDialog = ({
         <div className="flex items-center">
           {backToMain ? (
             <div className="hidden xs:block">
-              <BackButton className="!pl-2 !pr-0 !py-0" onClick={handleClose} disabled={isPending} />
+              <BackButton
+                className="!pl-2 !pr-0 !py-0"
+                onClick={handleClose}
+                disabled={isPending}
+              />
             </div>
           ) : null}
-        <Typography className="form__title">{dialogHeader}</Typography>{" "}
+          <Typography className="form__title">{dialogHeader}</Typography>{" "}
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />

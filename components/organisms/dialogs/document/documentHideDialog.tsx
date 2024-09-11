@@ -13,7 +13,7 @@ interface IProps {
 
 const DocumentHideDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom)
+  const document = useRecoilValue(selectedDocumentAtom);
 
   const hideDocument = useEditDocument();
 

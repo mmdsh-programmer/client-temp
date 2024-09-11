@@ -6,7 +6,7 @@ import { getPendingDrafts, getPendingVersion } from "@service/clasor";
 export const getPendingDraftsAction = async (
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -14,7 +14,7 @@ export const getPendingDraftsAction = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -26,7 +26,7 @@ export const getPendingDraftsAction = async (
 export const getPendingVersionAction = async (
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -34,7 +34,7 @@ export const getPendingVersionAction = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
     );
 
     return response;

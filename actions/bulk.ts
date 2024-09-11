@@ -6,7 +6,7 @@ import { getMe } from "./auth";
 export const moveBulkAction = async (
   repoId: number,
   parentId: number | null,
-  children: number[]
+  children: number[],
 ) => {
   const userInfo = await getMe();
   try {
@@ -14,7 +14,7 @@ export const moveBulkAction = async (
       userInfo.access_token,
       repoId,
       parentId,
-      children
+      children,
     );
 
     return response;
@@ -26,7 +26,7 @@ export const moveBulkAction = async (
 export const deleteBulkAction = async (
   repoId: number,
   children: number[],
-  forceDelete?: boolean
+  forceDelete?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -34,7 +34,7 @@ export const deleteBulkAction = async (
       userInfo.access_token,
       repoId,
       children,
-      forceDelete
+      forceDelete,
     );
 
     return response;

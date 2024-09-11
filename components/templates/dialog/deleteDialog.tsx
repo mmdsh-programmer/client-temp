@@ -43,7 +43,7 @@ const DeleteDialog = ({
         placeholder="dialog header"
         className="flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
       >
-         <Typography className="form__title">{dialogHeader}</Typography >
+        <Typography className="form__title">{dialogHeader}</Typography>
         <CloseButton onClose={handleClose} disabled={isPending} />
       </DialogHeader>
       <DialogBody

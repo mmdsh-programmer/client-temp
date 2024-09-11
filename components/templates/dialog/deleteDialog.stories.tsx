@@ -19,9 +19,7 @@ const Template: StoryFn<IProps> = (args) => {
 
   return (
     <DeleteDialog {...args} setOpen={setOpen} isPending={args.isPending}>
-      <div>
-       تگ
-      </div>
+      <div>تگ</div>
     </DeleteDialog>
   );
 };
@@ -40,4 +38,3 @@ LoadingState.args = {
   ...Default.args,
   isPending: true,
 };
-

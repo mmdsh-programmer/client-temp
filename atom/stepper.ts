@@ -9,4 +9,3 @@ export const documentActiveStep = atom<number>({
   key: "documentActiveStep",
   default: 0,
 });
-

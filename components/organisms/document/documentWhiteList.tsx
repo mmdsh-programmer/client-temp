@@ -130,7 +130,9 @@ const DocumentWhiteList = ({
                           removeUser(item.username);
                         }}
                       >
-                        <XIcon className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`} />
+                        <XIcon
+                          className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
+                        />
                       </Button>
                     }
                   />

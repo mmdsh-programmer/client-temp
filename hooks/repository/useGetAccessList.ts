@@ -9,7 +9,7 @@ const useGetAccessList = (size: number, name?: string, enabled?: boolean) => {
       const response = await getAccessRepositoryList(
         (pageParam - 1) * size,
         size,
-        name
+        name,
       );
       return response as IListResponse<IRepo>;
     },

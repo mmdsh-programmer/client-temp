@@ -1,6 +1,6 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import ChipMolecule from "."; 
+import ChipMolecule from ".";
 import { FolderIcon } from "@components/atoms/icons";
 
 const meta: Meta<typeof ChipMolecule> = {
@@ -32,7 +32,7 @@ export const WithIcon: Story = {
 };
 
 WithIcon.args = {
-    value: "Chip with Icon",
-    className: "bg-blue-100 px-4 py-1",
-    icon: <FolderIcon className="h-4 w-4 mr-2 fill-icon-active" />,
-  };
+  value: "Chip with Icon",
+  className: "bg-blue-100 px-4 py-1",
+  icon: <FolderIcon className="h-4 w-4 mr-2 fill-icon-active" />,
+};

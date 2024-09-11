@@ -30,7 +30,7 @@ const mockDocument: IDocumentMetadata = {
   chatThreadId: null,
   isPublish: false,
   publishLinkPassword: null,
-  publishExpireTime: null
+  publishExpireTime: null,
 };
 
 const queryClient = new QueryClient();
@@ -63,13 +63,9 @@ type Story = StoryObj<typeof DocumentMenu>;
 export const Default: Story = {
   render: () => {
     const [showDrawer, setShowDrawer] = useState<boolean>(false);
-    const [openDocumentActionDrawer, setOpenDocumentActionDrawer] = useState<boolean>(false);
+    const [openDocumentActionDrawer, setOpenDocumentActionDrawer] =
+      useState<boolean>(false);
 
-    return (
-      <DocumentMenu
-        document={mockDocument}
-        showDrawer={showDrawer}
-      />
-    );
+    return <DocumentMenu document={mockDocument} showDrawer={showDrawer} />;
   },
 };

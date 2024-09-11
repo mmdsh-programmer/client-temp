@@ -1,6 +1,4 @@
-import {
-  addUserToDocumentBlocklistAction,
-} from "@actions/document";
+import { addUserToDocumentBlocklistAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -20,7 +18,7 @@ const useBlockDocument = () => {
         repoId,
         documentId,
         username,
-        type
+        type,
       );
       return response;
     },

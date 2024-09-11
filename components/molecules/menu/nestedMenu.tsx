@@ -16,12 +16,10 @@ interface IProps {
   className?: string;
   menuName: string;
   subMenuList: {
-    text: string
+    text: string;
     icon?: React.ReactNode;
-    onClick?:
-      | (React.MouseEventHandler<HTMLLIElement> &
-          React.MouseEventHandler<HTMLButtonElement>)
-      ;
+    onClick?: React.MouseEventHandler<HTMLLIElement> &
+      React.MouseEventHandler<HTMLButtonElement>;
   }[];
   menuClick?: () => void;
 }

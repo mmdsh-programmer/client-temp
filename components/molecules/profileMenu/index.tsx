@@ -7,7 +7,7 @@ import { Button } from "@material-tailwind/react";
 import MenuComponent from "../menu";
 import ImageComponent from "@components/atoms/image";
 
-const ProfileMenu: React.FC  = () => {
+const ProfileMenu: React.FC = () => {
   const { data: userData } = useGetUser();
 
   return (

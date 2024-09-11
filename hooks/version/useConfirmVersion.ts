@@ -1,4 +1,4 @@
-import {  confirmVersionAction } from "@actions/version";
+import { confirmVersionAction } from "@actions/version";
 import { IAddVersion } from "@interface/version.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";

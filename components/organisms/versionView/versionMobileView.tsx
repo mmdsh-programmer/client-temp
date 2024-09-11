@@ -37,7 +37,9 @@ const VersionMobileView = ({
                     lastVersion?.id === version.id &&
                     (version.status === "private" ||
                       version.status === "accepted")
-                  ? `${version.versionNumber} (آخرین نسخه)` : version.versionNumber} `}
+                      ? `${version.versionNumber} (آخرین نسخه)`
+                      : version.versionNumber
+                  } `}
                   createDate={
                     version.createDate
                       ? FaDateFromTimestamp(version.createDate)

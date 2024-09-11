@@ -14,9 +14,7 @@ const useRenameFile = () => {
       callBack?: () => void;
     }) => {
       const { resourceId, newName, hash } = values;
-      const response = await renameFileAction(resourceId,
-        newName,
-        hash);
+      const response = await renameFileAction(resourceId, newName, hash);
       return response;
     },
     onSuccess: (response, values) => {

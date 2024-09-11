@@ -57,7 +57,7 @@ const Files = (props: IProps) => {
     fileTablePageSize,
     page * fileTablePageSize,
     name,
-    dataType
+    dataType,
   );
 
   const renameHook = useRenameFile();
@@ -131,11 +131,11 @@ const Files = (props: IProps) => {
               },
               onUploadProgress(progressEvent: any) {
                 const process = Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total
+                  (progressEvent.loaded * 100) / progressEvent.total,
                 );
                 setProcessCount(process);
               },
-            }
+            },
           )
           .then(async (result: any) => {
             if (result.data.data.result.hash) {
@@ -169,11 +169,11 @@ const Files = (props: IProps) => {
             },
             onUploadProgress(progressEvent: any) {
               const process = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
+                (progressEvent.loaded * 100) / progressEvent.total,
               );
               setProcessCount(process);
             },
-          }
+          },
         )
         .then(async (res: any) => {
           if (res.data.data.result.hash) {
@@ -207,7 +207,7 @@ const Files = (props: IProps) => {
       fileExtension === "svg"
     ) {
       setSelectedFile?.(selectedImage);
-      handleClose()
+      handleClose();
     } else {
       toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");
     }

@@ -24,9 +24,8 @@ const mockRepo: IRepo = {
   adminPublicLink: null,
   viewerPublicLink: null,
   writerPublicLink: null,
-  editorPublicLink: null
+  editorPublicLink: null,
 };
-
 
 const queryClient = new QueryClient();
 
@@ -73,7 +72,6 @@ export const Fetching: Story = {
     ),
   ],
 };
-
 
 export const NoImageHash: Story = {
   args: {

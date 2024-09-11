@@ -118,7 +118,7 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
       onClick: () => {
         if (version) {
           copy(
-            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`
+            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`,
           );
           toast.success("آدرس کپی شد.");
         }
@@ -133,12 +133,12 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
     },
   ].filter(
     (
-      item
+      item,
     ): item is {
       text: string;
       icon: React.JSX.Element;
       onClick: () => void;
-    } => Boolean(item)
+    } => Boolean(item),
   );
 
   return (

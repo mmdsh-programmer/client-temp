@@ -4,12 +4,12 @@ import { ERoles } from "@interface/enums";
 export const logger = (key: string, newValue: any, oldValue: any) => {
   if (process.env.NODE_ENV === "development") {
     console.log(
-      `############################################################################  ${key}`
+      `############################################################################  ${key}`,
     );
     console.log("newValue -->", newValue);
     console.log("oldValue -->", oldValue);
     console.log(
-      "####################################################################################"
+      "####################################################################################",
     );
   }
 };
@@ -60,8 +60,7 @@ export const translateVersionStatus = (status: string, state: string) => {
 
     case "public":
       {
-        (translated = "عمومی"),
-          (className = "label text-info bg-gray-50");
+        (translated = "عمومی"), (className = "label text-info bg-gray-50");
       }
       break;
     default:
@@ -87,8 +86,8 @@ export const FaDate = (standardTime: string) => {
     });
     return toPersinaDigit(
       moment(standardTime, "YYYY-MM-DDTHH:mm:ssZ").format(
-        "HH:mm:ss | jDD jMMMM jYYYY"
-      )
+        "HH:mm:ss | jDD jMMMM jYYYY",
+      ),
     );
   } catch {
     return "-";
@@ -101,9 +100,9 @@ export const FaDateFromTimestamp = (timestamp: number) => {
     const standardTime = `${newDate.getFullYear()}-${`0${
       newDate.getMonth() + 1
     }`.slice(-2)}-${`0${newDate.getDate()}`.slice(
-      -2
+      -2,
     )}T${`0${newDate.getHours()}`.slice(-2)}:${`0${newDate.getMinutes()}`.slice(
-      -2
+      -2,
     )}:${`0${newDate.getSeconds()}`.slice(-2)}`;
     return FaDate(standardTime);
   } catch {
@@ -112,13 +111,13 @@ export const FaDateFromTimestamp = (timestamp: number) => {
 };
 
 export const preventNegativeValues = (
-  event: React.KeyboardEvent<HTMLInputElement>
+  event: React.KeyboardEvent<HTMLInputElement>,
 ) => {
   return ["e", "E", "+", "-"].includes(event.key) && event.preventDefault();
 };
 
 export const preventPasteNegative = (
-  event: React.ClipboardEvent<HTMLInputElement>
+  event: React.ClipboardEvent<HTMLInputElement>,
 ) => {
   const { clipboardData } = event;
   const pastedData = Number.parseFloat(clipboardData.getData("text"));

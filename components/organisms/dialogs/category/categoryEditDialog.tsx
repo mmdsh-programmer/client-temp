@@ -112,7 +112,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("order", {
                 value: getCategory?.order,
-                valueAsNumber: true
+                valueAsNumber: true,
               }),
             }}
           />

@@ -8,16 +8,16 @@ const meta: Meta<typeof TableCell> = {
   tags: ["autodocs"],
   argTypes: {
     tableCell: {
-      control: { type: 'object' },
-      description: 'Array of table cell data and properties',
+      control: { type: "object" },
+      description: "Array of table cell data and properties",
     },
     navigateTo: {
-      control: { type: 'text' },
-      description: 'Optional route to navigate to on row click',
+      control: { type: "text" },
+      description: "Optional route to navigate to on row click",
     },
     onClick: {
-      action: 'clicked',
-      description: 'Function to execute on row click',
+      action: "clicked",
+      description: "Function to execute on row click",
     },
   },
   parameters: {

@@ -48,7 +48,7 @@ const ConfirmFullHeightDialog = ({
           <BackButton onClick={handleClose} disabled={isPending} />
         </div>
         <div className="flex items-center">
-        <Typography className="form__title">{dialogHeader}</Typography>{" "}
+          <Typography className="form__title">{dialogHeader}</Typography>{" "}
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />

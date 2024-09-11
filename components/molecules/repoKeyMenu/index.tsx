@@ -14,7 +14,7 @@ interface IProps {
 }
 
 const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
-  const setDeleteKeyModal = useSetRecoilState(deleteRepoKeyAtom)
+  const setDeleteKeyModal = useSetRecoilState(deleteRepoKeyAtom);
   const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
     boolean | null
   >(false);

@@ -6,9 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
-const mockSetOpen: React.Dispatch<React.SetStateAction<boolean>> = (newState) => {
-    console.log("mockSetOpen", newState);
-  };
+const mockSetOpen: React.Dispatch<React.SetStateAction<boolean>> = (
+  newState,
+) => {
+  console.log("mockSetOpen", newState);
+};
 
 const meta: Meta<typeof SearchContent> = {
   title: "components/Molecules/SearchContent",
@@ -36,5 +38,5 @@ export default meta;
 type Story = StoryObj<typeof SearchContent>;
 
 export const Default: Story = {
-    render: () => <SearchContent setOpen={mockSetOpen} />,
-  };
+  render: () => <SearchContent setOpen={mockSetOpen} />,
+};

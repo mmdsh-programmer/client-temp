@@ -1,12 +1,11 @@
-
 import { getContentAction } from "@actions/content";
 import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useSearchContent = (
-    repoId: number,
-    searchParam: string,
-    size: number,
+  repoId: number,
+  searchParam: string,
+  size: number,
 ) => {
   return useInfiniteQuery({
     queryKey: [`repoId-${repoId}-searchContent-${searchParam}`],

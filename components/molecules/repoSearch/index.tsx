@@ -10,7 +10,7 @@ const RepoSearch = () => {
   const [getSearchParam, setSearchParam] = useRecoilState(repoSearchParamAtom);
   const [search, setSearch] = useState<string>("");
   const [repoType, setRepoType] = useState<ERepoGrouping>(
-    ERepoGrouping.ALL_REPO
+    ERepoGrouping.ALL_REPO,
   );
   const repoTypeOptions = [
     { value: ERepoGrouping.ALL_REPO, label: "همه‌ی مخزن‌ها" },

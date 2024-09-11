@@ -18,7 +18,7 @@ const SubscribePage = ({ hash, hasPassword }: IProps) => {
     if (!userInfo) {
       localStorage.setItem(
         "CLASOR:LAST_PAGE",
-        `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`
+        `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`,
       );
     }
   }, []);
@@ -33,7 +33,7 @@ const SubscribePage = ({ hash, hasPassword }: IProps) => {
     <SubscribePasswordRequest hasPassword={hasPassword} hash={hash} />;
   }
 
-  return null
+  return null;
 };
 
 export default SubscribePage;

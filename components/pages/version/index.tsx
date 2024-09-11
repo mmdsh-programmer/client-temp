@@ -24,7 +24,7 @@ export interface IVersionView {
   getVersionList?: IVersion[][];
   hasNextPage: boolean;
   fetchNextPage: (
-    options?: FetchNextPageOptions
+    options?: FetchNextPageOptions,
   ) => Promise<
     InfiniteQueryObserverResult<
       InfiniteData<IVersionMetadata | undefined, unknown>,
@@ -32,7 +32,7 @@ export interface IVersionView {
     >
   >;
   isFetchingNextPage: boolean;
-  lastVersion?: IVersion,
+  lastVersion?: IVersion;
   type: EEmptyList;
 }
 
@@ -52,7 +52,7 @@ const VersionList = () => {
 
   const { data: getLastVersion } = useGetLastVersion(
     getRepo!.id,
-    getSelectedDocument!.id
+    getSelectedDocument!.id,
   );
 
   const order = [

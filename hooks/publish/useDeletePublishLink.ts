@@ -6,10 +6,7 @@ const useDeletePublishLink = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["deletePublishLink"],
-    mutationFn: async (values: {
-      repoId: number;
-      callBack?: () => void;
-    }) => {
+    mutationFn: async (values: { repoId: number; callBack?: () => void }) => {
       const { repoId } = values;
       const response = await deletePublishLinkAction(repoId);
       return response;

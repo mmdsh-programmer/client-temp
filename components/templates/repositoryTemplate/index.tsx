@@ -11,7 +11,6 @@ interface IProps {
 }
 
 const RepositoryTemplate = ({ children }: IProps) => {
-
   return (
     <Start>
       <div className="flex max-w-screen-2xl m-auto">

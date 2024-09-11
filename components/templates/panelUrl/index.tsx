@@ -16,32 +16,32 @@ const PanelURl = () => {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&categoryId=${getCategory?.id}&documentId=${getDocument.id}`
+        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&categoryId=${getCategory?.id}&documentId=${getDocument.id}`,
       );
     } else if (getCategory && getRepo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&categoryId=${getCategory?.id}`
+        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&categoryId=${getCategory?.id}`,
       );
     } else if (getDocument && getRepo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&documentId=${getDocument.id}`
+        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&documentId=${getDocument.id}`,
       );
     } else if (getRepo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}`
+        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}`,
       );
     }
     if (window.location.pathname === "/admin/dashboard") {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}`
+        `${window.location.origin}${window.location.pathname}`,
       );
     }
   }, [getDocument, getCategory, getRepo]);

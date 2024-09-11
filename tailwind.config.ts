@@ -35,10 +35,10 @@ module.exports = withMT({
         error: "#E03E1A",
         success: {
           normal: "#1F7A37",
-          secondary: "#F7FDF8"
+          secondary: "#F7FDF8",
         },
         info: "#0C8CE9",
-        "info-secondary": "#E7F5FD"
+        "info-secondary": "#E7F5FD",
       },
       backgroundColor: {
         primary: "#FFFFFF",
@@ -59,7 +59,7 @@ module.exports = withMT({
         placeholder: "#98A2B3",
         disabled: "#9AA6B1",
         primary_normal: "#7446B2",
-        link: "#0C8CE9"
+        link: "#0C8CE9",
       },
       fontFamily: {
         iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans],
@@ -70,13 +70,13 @@ module.exports = withMT({
         sm: "600px",
         md: "768px",
         lg: "920px",
-        xl:"1214px",
+        xl: "1214px",
         "2xl": "1536px",
       },
       boxShadow: {
         xSmall: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
         small: "0px 1px 2px 0px rgba(145, 158, 171, 0.16)",
-        menu: "0px 10px 20px 0px rgba(0, 0, 0, 0.10)"
+        menu: "0px 10px 20px 0px rgba(0, 0, 0, 0.10)",
       },
       flex: {
         "0": "0 0 auto",
@@ -84,8 +84,8 @@ module.exports = withMT({
         "2": "2 2 auto",
       },
       letterSpacing: {
-        tightest: "0.13px"
-      }
+        tightest: "0.13px",
+      },
     },
   },
   plugins: [require("tailwindcss-rtl")],

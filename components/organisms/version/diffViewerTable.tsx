@@ -17,7 +17,6 @@ const newStyles = {
       fontFamily: "yekan",
       fontSize: "14px",
     },
-
   },
   titleBlock: {
     borderTop: "1px solid #e8e8e8",

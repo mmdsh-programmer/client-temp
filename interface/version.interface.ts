@@ -12,9 +12,9 @@ export interface IVersion {
   content?: string;
   outline?: string;
   postId: number;
-  repoId: number,
-  categoryId: number,
-  documentId: number,
+  repoId: number;
+  categoryId: number;
+  documentId: number;
   dislikeCount: number;
   likeCount: number;
   hash: string;

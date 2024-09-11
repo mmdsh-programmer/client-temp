@@ -40,7 +40,7 @@ const useCreateDocumentTemplate = () => {
         templateId,
         description,
         order,
-        imageUrl
+        imageUrl,
       );
       return response as IDocument;
     },

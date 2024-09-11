@@ -6,7 +6,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 const useGetInviteRequestsByOwner = (
   repoId: number,
   size: number,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`getRepoInviteRequestsByOwner-${repoId}`, repoId],
@@ -14,7 +14,7 @@ const useGetInviteRequestsByOwner = (
       const response = await getRepositoryInviteRequestsAction(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IAccessRequest>;
     },

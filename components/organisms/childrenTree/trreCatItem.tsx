@@ -51,7 +51,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
     queryParams.limit,
     undefined,
     move ? "category" : undefined,
-    move ? undefined : docTemplateFilter
+    move ? undefined : docTemplateFilter,
   );
 
   const handleClick = () => {
@@ -129,7 +129,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
                             move={move}
                           />
                         );
-                      }
+                      },
                     );
                   }
                   return (

@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { listMode } from "@atom/app";
 import { Button } from "@material-tailwind/react";
 
-const ListMode: React.FC  = () => {
+const ListMode: React.FC = () => {
   const [getListMode, setListMode] = useRecoilState(listMode);
   return (
     <>

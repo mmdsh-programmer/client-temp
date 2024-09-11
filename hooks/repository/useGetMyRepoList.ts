@@ -6,7 +6,7 @@ const useGetMyRepoList = (
   size: number,
   archived: boolean,
   name?: string,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`myRepoList-${archived}${name ? `-${name}` : ""}`],
@@ -15,7 +15,7 @@ const useGetMyRepoList = (
         (pageParam - 1) * size,
         size,
         archived,
-        name
+        name,
       );
       return response as IListResponse<IRepo>;
     },

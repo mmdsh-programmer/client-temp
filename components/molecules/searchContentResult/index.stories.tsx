@@ -19,7 +19,7 @@ const categorySearchContentParam = atom({
 const useSearchContent = (
   repoId: string,
   searchParam: string,
-  limit: number
+  limit: number,
 ) => {
   return {
     isLoading: false,
@@ -72,7 +72,7 @@ type Story = StoryObj<typeof SearchContentResult>;
 export const Default: Story = {
   render: () => {
     const [searchParam, setSearchParam] = useRecoilState(
-      categorySearchContentParam
+      categorySearchContentParam,
     );
     const [repo, setRepo] = useRecoilState(repoAtom);
 

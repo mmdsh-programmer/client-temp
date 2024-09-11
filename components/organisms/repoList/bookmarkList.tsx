@@ -28,7 +28,7 @@ const BookmarkRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
-    type: EEmptyList.BOOKMARK_REPO
+    type: EEmptyList.BOOKMARK_REPO,
   };
 
   return (

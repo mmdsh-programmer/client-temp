@@ -9,7 +9,7 @@ const useGetBookmarkList = (size: number, name?: string, enabled?: boolean) => {
       const response = await getBookmarkRepositoryList(
         (pageParam - 1) * size,
         size,
-        name
+        name,
       );
       return response as IListResponse<IRepo>;
     },

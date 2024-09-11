@@ -14,7 +14,7 @@ import { getMe } from "./auth";
 export const getRepositoryUserList = async (
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -22,7 +22,7 @@ export const getRepositoryUserList = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -34,7 +34,7 @@ export const getRepositoryUserList = async (
 export const getRepositoryInviteRequestsAction = async (
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -42,7 +42,7 @@ export const getRepositoryInviteRequestsAction = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -65,7 +65,7 @@ export const getRolesAction = async () => {
 export const addUserToRepoAction = async (
   repoId: number,
   username: string,
-  accessName: string
+  accessName: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -73,7 +73,7 @@ export const addUserToRepoAction = async (
       userInfo.access_token,
       repoId,
       username,
-      accessName
+      accessName,
     );
 
     return response;
@@ -85,7 +85,7 @@ export const addUserToRepoAction = async (
 export const userRoleEditAction = async (
   repoId: number,
   userName: string,
-  roleName: string
+  roleName: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -93,7 +93,7 @@ export const userRoleEditAction = async (
       userInfo.access_token,
       repoId,
       userName,
-      roleName
+      roleName,
     );
 
     return response;
@@ -115,14 +115,14 @@ export const deleteUserAction = async (repoId: number, userName: string) => {
 
 export const deleteInviteRequestAction = async (
   repoId: number,
-  userId: number
+  userId: number,
 ) => {
   const userInfo = await getMe();
   try {
     const response = await deleteInviteRequest(
       userInfo.access_token,
       repoId,
-      userId
+      userId,
     );
 
     return response;

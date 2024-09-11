@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Spinner,
-} from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import useAddUser from "@hooks/user/useAddUser";

@@ -25,5 +25,3 @@ export const Default: Story = {
     showDrawer: false,
   },
 };
-
-

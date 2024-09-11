@@ -15,7 +15,6 @@ import {
 import { getMe } from "./auth";
 import { IFileVersion } from "@interface/version.interface";
 
-
 export const getVersionAction = async (
   repoId: number,
   documentId: number,
@@ -33,7 +32,7 @@ export const getVersionAction = async (
       versionId,
       state,
       innerDocument,
-      innerOutline
+      innerOutline,
     );
 
     return response;
@@ -47,7 +46,7 @@ export const createVersionAction = async (
   documentId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -57,7 +56,7 @@ export const createVersionAction = async (
       documentId,
       versionNumber,
       content,
-      outline
+      outline,
     );
 
     return response;
@@ -70,7 +69,7 @@ export const createFileVersionAction = async (
   repoId: number,
   documentId: number,
   versionNumber: string,
-  fileHash?: IFileVersion
+  fileHash?: IFileVersion,
 ) => {
   const userInfo = await getMe();
   try {
@@ -79,7 +78,7 @@ export const createFileVersionAction = async (
       repoId,
       documentId,
       versionNumber,
-      fileHash
+      fileHash,
     );
 
     return response;
@@ -92,7 +91,7 @@ export const deleteVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  state: string
+  state: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -101,7 +100,7 @@ export const deleteVersionAction = async (
       repoId,
       documentId,
       versionId,
-      state
+      state,
     );
 
     return response;
@@ -131,7 +130,7 @@ export const getLastVersionAction = async (
 export const setLastVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -139,7 +138,7 @@ export const setLastVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
     );
 
     return response;
@@ -151,7 +150,7 @@ export const setLastVersionAction = async (
 export const publicVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -159,7 +158,7 @@ export const publicVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
     );
 
     return response;
@@ -171,7 +170,7 @@ export const publicVersionAction = async (
 export const cancelPublicVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -179,7 +178,7 @@ export const cancelPublicVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
     );
 
     return response;
@@ -191,7 +190,7 @@ export const cancelPublicVersionAction = async (
 export const confirmVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -199,7 +198,7 @@ export const confirmVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
     );
 
     return response;
@@ -211,7 +210,7 @@ export const confirmVersionAction = async (
 export const cancelConfirmVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -219,7 +218,7 @@ export const cancelConfirmVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
     );
 
     return response;
@@ -227,4 +226,3 @@ export const cancelConfirmVersionAction = async (
     console.log("============ error ==========", error);
   }
 };
-

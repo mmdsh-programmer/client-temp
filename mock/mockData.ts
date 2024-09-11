@@ -24,10 +24,14 @@ export const mockTagsResponse: IListResponse<ITag> = {
   list: mockTags,
   total: mockTags.length,
   offset: 0,
-  size: 3
+  size: 3,
 };
 
-export const useGetTagsMock = (repoId: number, size: number, enabled?: boolean) => {
+export const useGetTagsMock = (
+  repoId: number,
+  size: number,
+  enabled?: boolean,
+) => {
   return useInfiniteQuery({
     queryKey: [`getTags-${repoId}`, size],
     queryFn: async () => mockTagsResponse,

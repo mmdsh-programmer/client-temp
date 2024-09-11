@@ -21,7 +21,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
   const accessRoles = repo.roleName === "admin" || repo.roleName === "owner";
   const { data: users, isFetching } = useGetUsers(repo.id, 3, accessRoles);
   const { data: getReport, isFetching: isFetchingReport } = useGetReport(
-    repo.id
+    repo.id,
   );
   const userCount = users?.pages[0]?.total;
 

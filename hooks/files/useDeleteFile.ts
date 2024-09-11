@@ -19,7 +19,7 @@ const useDeleteFile = () => {
         repoId,
         resourceId,
         fileHash,
-        type
+        type,
       );
       return response;
     },

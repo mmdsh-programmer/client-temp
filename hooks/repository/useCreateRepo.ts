@@ -12,7 +12,7 @@ const useCreateRepo = () => {
       callBack?: (result: any) => void;
     }) => {
       const { description, name } = values;
-      const response = await createRepoAction( name, description);
+      const response = await createRepoAction(name, description);
       return response;
     },
     onSuccess: (response, values) => {

@@ -20,7 +20,7 @@ export const getChildrenAction = async (
   size: number,
   title?: string | null,
   type?: "category" | "document",
-  filters?: IChildrenFilter | null
+  filters?: IChildrenFilter | null,
 ) => {
   const userInfo = await getMe();
   try {
@@ -33,7 +33,7 @@ export const getChildrenAction = async (
       size,
       title,
       type,
-      filters
+      filters,
     );
 
     return response;
@@ -49,10 +49,10 @@ export const editCategoryAction = async (
   name: string,
   description: string | undefined,
   order: number | null,
-  isHidden: boolean
+  isHidden: boolean,
 ) => {
   const userInfo = await getMe();
-  
+
   try {
     const response = await editCategory(
       userInfo.access_token,
@@ -62,7 +62,7 @@ export const editCategoryAction = async (
       name,
       description,
       order,
-      isHidden
+      isHidden,
     );
 
     return response;
@@ -76,7 +76,7 @@ export const createCategoryAction = async (
   parentId: number | null,
   name: string,
   description: string,
-  order: number | null
+  order: number | null,
 ) => {
   const userInfo = await getMe();
   try {
@@ -86,7 +86,7 @@ export const createCategoryAction = async (
       parentId,
       name,
       description,
-      order
+      order,
     );
 
     return response;
@@ -98,7 +98,7 @@ export const createCategoryAction = async (
 export const deleteCategoryAction = async (
   repoId: number,
   categoryId: number,
-  forceDelete: boolean
+  forceDelete: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -106,7 +106,7 @@ export const deleteCategoryAction = async (
       userInfo.access_token,
       repoId,
       categoryId,
-      forceDelete
+      forceDelete,
     );
 
     return response;
@@ -119,7 +119,7 @@ export const getCategoryBlocklistAction = async (
   repoId: number,
   categoryId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -128,7 +128,7 @@ export const getCategoryBlocklistAction = async (
       repoId,
       categoryId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -141,7 +141,7 @@ export const addUserToCategoryBlocklistAction = async (
   repoId: number,
   categoryId: number,
   username: string,
-  type: "block" | "unblock"
+  type: "block" | "unblock",
 ) => {
   const userInfo = await getMe();
   try {
@@ -150,7 +150,7 @@ export const addUserToCategoryBlocklistAction = async (
       repoId,
       categoryId,
       username,
-      type
+      type,
     );
 
     return response;

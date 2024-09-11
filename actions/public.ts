@@ -11,7 +11,7 @@ export const createRepoPublicLinkAction = async (
   repoId: number,
   roleId: number,
   expireTime: number,
-  password?: string
+  password?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -20,7 +20,7 @@ export const createRepoPublicLinkAction = async (
       repoId,
       roleId,
       expireTime,
-      password
+      password,
     );
 
     return response;
@@ -31,14 +31,14 @@ export const createRepoPublicLinkAction = async (
 
 export const deletePublicLinkAction = async (
   repoId: number,
-  roleId: number
+  roleId: number,
 ) => {
   const userInfo = await getMe();
   try {
     const response = await deletePublicLink(
       userInfo.access_token,
       repoId,
-      roleId
+      roleId,
     );
 
     return response;

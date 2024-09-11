@@ -18,7 +18,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.version?.document.id!,
     compareVersion?.version?.data.id!,
     compareVersion?.version?.data.state,
-    true
+    true,
   );
 
   const getCompareHook = useGetVersion(
@@ -26,7 +26,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.compare?.document.id!,
     compareVersion?.compare?.data.id!,
     compareVersion?.compare?.data.state,
-    true
+    true,
   );
 
   return (

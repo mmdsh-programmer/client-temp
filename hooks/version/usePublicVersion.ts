@@ -1,4 +1,4 @@
-import {  publicVersionAction } from "@actions/version";
+import { publicVersionAction } from "@actions/version";
 import { IAddVersion } from "@interface/version.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -14,11 +14,7 @@ const usePublicVersion = () => {
       callBack?: () => void;
     }) => {
       const { repoId, documentId, versionId } = values;
-      const response = await publicVersionAction(
-        repoId,
-        documentId,
-        versionId,
-      );
+      const response = await publicVersionAction(repoId, documentId, versionId);
       return response as IAddVersion;
     },
     onSuccess: (response, values) => {

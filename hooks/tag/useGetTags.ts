@@ -10,7 +10,7 @@ const useGetTags = (repoId: number, size: number, enabled?: boolean) => {
       const response = await getRepositoryTagAction(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<ITag>;
     },

@@ -55,7 +55,9 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={bookmarkDocument.isPending}
-      dialogHeader={document?.isBookmarked ? "حذف نشان سند" : "نشان‌دار کردن سند"}
+      dialogHeader={
+        document?.isBookmarked ? "حذف نشان سند" : "نشان‌دار کردن سند"
+      }
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

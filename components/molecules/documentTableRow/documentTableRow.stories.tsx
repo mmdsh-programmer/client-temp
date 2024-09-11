@@ -33,7 +33,7 @@ const mockDocument: IDocumentMetadata = {
   chatThreadId: null,
   isPublish: false,
   publishLinkPassword: null,
-  publishExpireTime: null
+  publishExpireTime: null,
 };
 
 const meta: Meta<typeof DocumentTableRow> = {
@@ -47,11 +47,11 @@ const meta: Meta<typeof DocumentTableRow> = {
   decorators: [
     (Story) => (
       <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <div className="w-full p-4">
-          <Story />
-        </div>
-      </RecoilRoot>
+        <RecoilRoot>
+          <div className="w-full p-4">
+            <Story />
+          </div>
+        </RecoilRoot>
       </QueryClientProvider>
     ),
   ],

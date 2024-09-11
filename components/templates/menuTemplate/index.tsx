@@ -10,15 +10,10 @@ export interface IProps {
     onClick: () => void;
   }[];
   icon?: React.ReactNode;
-  className?: string
+  className?: string;
 }
 
-const MenuTemplate = ({
-  menuList,
-  setOpenDrawer,
-  icon,
-  className
-}: IProps) => {
+const MenuTemplate = ({ menuList, setOpenDrawer, icon, className }: IProps) => {
   return (
     <>
       <div className="hidden xs:flex justify-end">
@@ -26,7 +21,9 @@ const MenuTemplate = ({
       </div>
       <div className="xs:hidden flex">
         <MobileMenu
-          setOpenDrawer={setOpenDrawer} icon={icon} className={className}
+          setOpenDrawer={setOpenDrawer}
+          icon={icon}
+          className={className}
         />
       </div>
     </>

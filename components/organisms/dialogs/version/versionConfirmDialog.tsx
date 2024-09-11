@@ -10,12 +10,12 @@ import { IVersion } from "@interface/version.interface";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  version: IVersion
+  version: IVersion;
 }
 
 const VersionConfirmDialog = ({ version, setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom)
+  const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const confirmVersion = useConfirmVersion();
 
@@ -54,7 +54,7 @@ const VersionConfirmDialog = ({ version, setOpen }: IProps) => {
       setOpen={handleClose}
       className=""
     >
-     آیا از تایید نسخه "
+      آیا از تایید نسخه "
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
         {version?.versionNumber}
       </span>

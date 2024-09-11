@@ -8,12 +8,12 @@ const meta: Meta<typeof StepperComponent> = {
   tags: ["autodocs"],
   argTypes: {
     getActiveStep: {
-      control: { type: 'number' },
-      description: 'The current active step index',
+      control: { type: "number" },
+      description: "The current active step index",
     },
     stepList: {
-      control: { type: 'object' },
-      description: 'Array of step names or labels',
+      control: { type: "object" },
+      description: "Array of step names or labels",
     },
   },
 };

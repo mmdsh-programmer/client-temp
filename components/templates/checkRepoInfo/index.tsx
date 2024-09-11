@@ -29,7 +29,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
   const { error, refetch, isFetching } = useGetRepo(
     repositoryAtomId ? +repositoryAtomId : null,
     setRepository,
-    setRepositoryAtomId
+    setRepositoryAtomId,
   );
 
   useEffect(() => {

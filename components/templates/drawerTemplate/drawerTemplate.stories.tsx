@@ -35,12 +35,12 @@ Default.args = {
     },
     {
       text: "پروفایل",
-      icon: <UserIcon className="h-5 w-5 fill-icon-hover"  />, // Example icon
+      icon: <UserIcon className="h-5 w-5 fill-icon-hover" />, // Example icon
       onClick: () => alert("Profile clicked"),
     },
     {
       text: "تنظیمات",
-      icon: <SettingIcon className="h-5 w-5 stroke-icon-hover"  />,
+      icon: <SettingIcon className="h-5 w-5 stroke-icon-hover" />,
       onClick: () => alert("Settings clicked"),
     },
   ],
@@ -65,4 +65,3 @@ WithoutIcons.args = {
     },
   ],
 };
-

@@ -49,7 +49,7 @@ const InviteToRepo = () => {
     clearErrors();
     reset();
   };
-  
+
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
     mutate({
@@ -58,7 +58,7 @@ const InviteToRepo = () => {
       accesName: role,
       callBack: () => {
         toast.success(`${dataForm.username} با موفقیت به مخرن اضافه شد.`);
-        setRole(ERoles.admin)
+        setRole(ERoles.admin);
         handleReset();
       },
     });
@@ -98,7 +98,9 @@ const InviteToRepo = () => {
           </div>
         </div>
         {errors.username && (
-          <Typography className="warning_text">{errors.username?.message}</Typography>
+          <Typography className="warning_text">
+            {errors.username?.message}
+          </Typography>
         )}
         <Typography className="caption_c2 text-placeholder">
           برای اشتراک‌گذاری با سایر کاربران، نام کاربری و سطوح دسترسی مورد نظر

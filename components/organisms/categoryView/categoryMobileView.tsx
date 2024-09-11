@@ -21,7 +21,6 @@ const MobileView = ({
   isFetching,
   type,
 }: ICategoryView) => {
-
   const listLength = getCategoryList?.pages[0].total;
   return (
     <div className=" px-4 flex-grow flex-shrink-0">

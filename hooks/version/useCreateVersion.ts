@@ -21,7 +21,7 @@ const useCreateVersion = () => {
         documentId,
         versionNumber,
         content,
-        outline
+        outline,
       );
       return response as IAddVersion;
     },

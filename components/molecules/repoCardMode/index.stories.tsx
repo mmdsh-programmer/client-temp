@@ -7,23 +7,23 @@ import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
 
 const mockRepo: IRepo = {
-    name: "874577",
-    id: 1447858,
-    description: "",
-    bookmark: false,
-    createDate: "",
-    lastAccessDate: "",
-    imageFileHash: "",
-    roleName: ERoles.owner,
-    updatedAt: "",
-    userGroupHash: "",
-    isPublish: false,
-    isArchived: false,
-    publishExpireTime: 0,
-    adminPublicLink: null,
-    viewerPublicLink: null,
-    writerPublicLink: null,
-    editorPublicLink: null
+  name: "874577",
+  id: 1447858,
+  description: "",
+  bookmark: false,
+  createDate: "",
+  lastAccessDate: "",
+  imageFileHash: "",
+  roleName: ERoles.owner,
+  updatedAt: "",
+  userGroupHash: "",
+  isPublish: false,
+  isArchived: false,
+  publishExpireTime: 0,
+  adminPublicLink: null,
+  viewerPublicLink: null,
+  writerPublicLink: null,
+  editorPublicLink: null,
 };
 
 const meta: Meta<typeof RepoCardMode> = {

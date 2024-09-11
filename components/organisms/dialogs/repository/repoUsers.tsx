@@ -26,7 +26,7 @@ const RepoUsers = () => {
   const { data: getRepoUsers, isFetching: isFetchingUsers } = useGetUsers(
     repoId,
     10,
-    true
+    true,
   );
 
   const {

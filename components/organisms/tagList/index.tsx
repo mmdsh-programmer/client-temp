@@ -18,11 +18,7 @@ const TagList = () => {
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
   const getRepo = useRecoilValue(repoAtom);
   const repoId = getRepo?.id!;
-  const {
-    data: getTags,
-    isLoading,
-    isFetching,
-  } = useGetTags(repoId, 2, true);
+  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 2, true);
 
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";

@@ -21,7 +21,7 @@ const refreshCookieHeader = async (rToken: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    })
+    }),
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
@@ -78,7 +78,7 @@ export const getUserToken = async (code: string, redirect_uri: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    })
+    }),
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);

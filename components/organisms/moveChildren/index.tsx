@@ -37,7 +37,7 @@ const MoveChildren = ({ target }: IProps) => {
     undefined,
     "category",
     undefined,
-    true
+    true,
   );
 
   const bulkItemsCategories = getBulkItems.filter((item) => {

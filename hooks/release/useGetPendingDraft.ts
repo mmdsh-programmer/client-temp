@@ -10,7 +10,7 @@ const useGetPendingDraft = (repoId: number, size: number) => {
       const response = await getPendingDraftsAction(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IVersion>;
     },

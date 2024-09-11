@@ -15,7 +15,7 @@ queryClient.setQueryData([`getTags-412478`, 5], {
 await queryClient.fetchInfiniteQuery({
   queryKey: [`getTags-412478`, 5],
   queryFn: async () => mockTagsResponse,
-  initialPageParam: 1
+  initialPageParam: 1,
 });
 
 const meta: Meta<typeof CategoryFilter> = {

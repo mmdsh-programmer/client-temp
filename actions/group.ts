@@ -12,7 +12,7 @@ import { getMe } from "./auth";
 export const getRepositoryGroupsAction = async (
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -20,7 +20,7 @@ export const getRepositoryGroupsAction = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -29,10 +29,7 @@ export const getRepositoryGroupsAction = async (
   }
 };
 
-export const getGroupInfoAction = async (
-  repoId: number,
-  title: string
-) => {
+export const getGroupInfoAction = async (repoId: number, title: string) => {
   const userInfo = await getMe();
   try {
     const response = await getGroupInfo(userInfo.access_token, repoId, title);
@@ -47,7 +44,7 @@ export const createGroupAction = async (
   repoId: number,
   title: string,
   description?: string,
-  members?: string[]
+  members?: string[],
 ) => {
   const userInfo = await getMe();
   try {
@@ -68,7 +65,7 @@ export const editGroupAction = async (
   repoId: number,
   title: string,
   description?: string,
-  members?: string[]
+  members?: string[],
 ) => {
   const userInfo = await getMe();
   try {
@@ -77,7 +74,7 @@ export const editGroupAction = async (
       repoId,
       title,
       description,
-      members
+      members,
     );
 
     return response;
@@ -86,10 +83,7 @@ export const editGroupAction = async (
   }
 };
 
-export const deleteGroupAction = async (
-  repoId: number,
-  title: string
-) => {
+export const deleteGroupAction = async (repoId: number, title: string) => {
   const userInfo = await getMe();
   try {
     const response = await deleteGroup(userInfo.access_token, repoId, title);

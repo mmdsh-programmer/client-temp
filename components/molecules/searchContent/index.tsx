@@ -16,7 +16,7 @@ const SearchContent = ({ setOpen }: IProps) => {
   const inputRef = useRef<any>();
   const [search, setSearch] = useState<string>("");
   const [getSearchParam, setSearchParam] = useRecoilState(
-    categorySearchContentParam
+    categorySearchContentParam,
   );
   const debouncedValue = useDebounce<string>(search, 1000);
 
@@ -42,8 +42,7 @@ const SearchContent = ({ setOpen }: IProps) => {
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
       >
-        <div
-        className="flex flex-grow gap-2 w-full max-w-full ml-2 items-center h-10 px-3 border-[1px] border-normal bg-gray-50 rounded-lg ">
+        <div className="flex flex-grow gap-2 w-full max-w-full ml-2 items-center h-10 px-3 border-[1px] border-normal bg-gray-50 rounded-lg ">
           <SearchIcon className="w-5 h-5 stroke-icon-hover" />
           <InputAtom
             ref={inputRef}

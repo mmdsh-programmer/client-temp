@@ -9,19 +9,23 @@ const useAddWhiteList = () => {
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
-      usernameList: string[]
+      usernameList: string[];
       callBack?: () => void;
     }) => {
       const { usernameList, repoId, documentId } = values;
-      const response = await addToDocumentWhiteListAction(repoId, documentId, usernameList);
+      const response = await addToDocumentWhiteListAction(
+        repoId,
+        documentId,
+        usernameList,
+      );
       return response;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [ `repo-${repoId}-document-${documentId}-white-list`],
+        queryKey: [`repo-${repoId}-document-${documentId}-white-list`],
       });
-    
+
       callBack?.();
     },
     onError: (error) => {

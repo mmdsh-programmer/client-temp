@@ -36,9 +36,7 @@ const StepperComponent = ({ getActiveStep, stepList }: IProps) => {
             <div className="absolute -bottom-8 w-max text-center">
               {getActiveStep === index && (
                 <div className="bg-gray-100 px-2 py-1 rounded-xl flex justify-center items-center">
-                  <Typography
-                    className="font-medium text-center text-primary text-xs"
-                  >
+                  <Typography className="font-medium text-center text-primary text-xs">
                     {step}
                   </Typography>
                 </div>

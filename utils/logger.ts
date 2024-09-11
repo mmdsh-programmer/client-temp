@@ -1,4 +1,3 @@
-
 import winston from "winston";
 
 const logFormat = winston.format.combine(
@@ -6,7 +5,7 @@ const logFormat = winston.format.combine(
   winston.format.printf((info) => {
     const { message } = info;
     return message;
-  })
+  }),
 );
 
 const Logger = winston.createLogger({

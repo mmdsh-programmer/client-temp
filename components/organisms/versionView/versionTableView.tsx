@@ -69,12 +69,12 @@ const VersionTableView = ({
                         { data: version.creator?.name },
                         {
                           data: FaDateFromTimestamp(
-                            +new Date(version.createDate)
+                            +new Date(version.createDate),
                           ),
                         },
                         {
                           data: FaDateFromTimestamp(
-                            +new Date(version.updateDate)
+                            +new Date(version.updateDate),
                           ),
                         },
                         {
@@ -85,14 +85,14 @@ const VersionTableView = ({
                                   className={`${
                                     translateVersionStatus(
                                       version.status,
-                                      version.state
+                                      version.state,
                                     ).className
                                   }`}
                                 >
                                   {
                                     translateVersionStatus(
                                       version.status,
-                                      version.state
+                                      version.state,
                                     ).translated
                                   }
                                 </div>

@@ -8,7 +8,7 @@ interface IProps {
   hasNextStep: boolean;
   handlePreviousStep: () => void;
   handleNextStep: () => void;
-  loading?: boolean
+  loading?: boolean;
 }
 
 const DialogStepperFooter = ({
@@ -16,7 +16,7 @@ const DialogStepperFooter = ({
   hasNextStep,
   hasPreviousStep,
   handleNextStep,
-  loading
+  loading,
 }: IProps) => {
   return (
     <DialogFooter
@@ -32,7 +32,7 @@ const DialogStepperFooter = ({
         loading={loading}
       >
         <Typography className="text__label__button text-white">
-          {hasNextStep ? "ادامه" : "ایجاد" }
+          {hasNextStep ? "ادامه" : "ایجاد"}
         </Typography>
       </LoadingButton>
     </DialogFooter>

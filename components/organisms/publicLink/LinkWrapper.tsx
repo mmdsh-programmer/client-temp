@@ -86,7 +86,7 @@ const LinkWrapper = ({ role }: IProps) => {
                     copy(
                       `${subscribeLink}/${readLink()?.link}${
                         readLink()?.hasPassword ? "?hasPassword=true" : ""
-                      }`
+                      }`,
                     );
                     toast.success("لینک مخزن کپی شد");
                   }}
@@ -121,7 +121,7 @@ const LinkWrapper = ({ role }: IProps) => {
                   CopyTinyLink(
                     `${subscribeLink}/${readLink()?.link}${
                       readLink()?.hasPassword ? "?hasPassword=true" : ""
-                    }` || ""
+                    }` || "",
                   );
                 }
               }}

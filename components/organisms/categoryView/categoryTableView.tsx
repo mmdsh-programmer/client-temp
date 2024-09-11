@@ -44,15 +44,28 @@ const TableView = ({
               <TableHead
                 tableHead={[
                   { key: "select", value: "انتخاب", className: "" },
-                  { key: "order", value: "اولویت", isSorted: true, className: "hidden xl:table-cell" },
+                  {
+                    key: "order",
+                    value: "اولویت",
+                    isSorted: true,
+                    className: "hidden xl:table-cell",
+                  },
                   { key: "name", value: "نام دسته", isSorted: true },
                   { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
-                  { key: "editDate", value: "تاریخ ویرایش", className: "hidden xl:table-cell" },
-                  { key: "creator", value: "نام سازنده", className: "hidden lg:table-cell" },
+                  {
+                    key: "editDate",
+                    value: "تاریخ ویرایش",
+                    className: "hidden xl:table-cell",
+                  },
+                  {
+                    key: "creator",
+                    value: "نام سازنده",
+                    className: "hidden lg:table-cell",
+                  },
                   { key: "action", value: "عملیات" },
                 ]}
               />
-              
+
               <tbody>
                 {getCategoryList?.pages.map((page) => {
                   return page.list.map((item) => {

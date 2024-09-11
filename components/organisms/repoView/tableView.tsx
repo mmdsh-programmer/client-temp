@@ -16,9 +16,8 @@ const TableView = ({
   fetchNextPage,
   isFetchingNextPage,
   isFetching,
-  type
+  type,
 }: IRepoView) => {
-
   const listLength = getRepoList?.pages[0].total;
 
   return (

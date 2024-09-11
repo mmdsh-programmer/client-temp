@@ -1,6 +1,4 @@
-import {
-  createDocumentPasswordAction,
-} from "@actions/document";
+import { createDocumentPasswordAction } from "@actions/document";
 import { IDocument } from "@interface/document.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
@@ -21,7 +19,7 @@ const useCreateDocumentPassword = () => {
       const response = await createDocumentPasswordAction(
         repoId,
         documentId,
-        password
+        password,
       );
       return response as IDocument;
     },

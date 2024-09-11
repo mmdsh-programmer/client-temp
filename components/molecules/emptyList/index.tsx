@@ -201,9 +201,7 @@ const EmptyList = ({ type }: IProps) => {
   };
 
   return (
-    <div
-      className="flex flex-col h-full mx-auto justify-center items-center gap-3"
-    >
+    <div className="flex flex-col h-full mx-auto justify-center items-center gap-3">
       <FolderEmptyIcon className="h-16 w-16 stroke-gray-300" />
       {content()}
     </div>

@@ -33,7 +33,9 @@ const RepoImage = ({
   selectedFile,
 }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const [imageType, setImageType] = useState<"default" | "custom">(selectedFile ? "custom": "default");
+  const [imageType, setImageType] = useState<"default" | "custom">(
+    selectedFile ? "custom" : "default",
+  );
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
   const { isPending, mutate } = useAddImageToRepo();
@@ -54,9 +56,9 @@ const RepoImage = ({
   };
 
   const onSubmit = async () => {
-    if ( !getRepo ) return;
+    if (!getRepo) return;
     if (imageType === "default" && !defualtImage) return;
-    if (imageType === "custom" && !selectedFile) return
+    if (imageType === "custom" && !selectedFile) return;
     mutate({
       repoId: getRepo.id,
       fileHash: selectedFile ? selectedFile.hash : defualtImage,

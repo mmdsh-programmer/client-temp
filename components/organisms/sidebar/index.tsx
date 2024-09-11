@@ -83,10 +83,7 @@ const Sidebar = () => {
                   }}
                 >
                   {item.icon}
-                  <Typography
-                    placeholder="sidebar-text"
-                    className="title_t3"
-                  >
+                  <Typography placeholder="sidebar-text" className="title_t3">
                     {item.text}
                   </Typography>
                 </Button>

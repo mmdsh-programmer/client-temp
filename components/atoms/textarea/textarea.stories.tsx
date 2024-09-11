@@ -23,4 +23,3 @@ export const TextareaPrimary: Story = {
     return <Textarea {...args} placeholder="توضیحات خود را وارد کنید" />;
   },
 };
-

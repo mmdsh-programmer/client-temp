@@ -17,11 +17,7 @@ export const ResultItem = ({ data, disabled, onClick }: IProps) => {
   const router = useRouter();
   const [isEnabled, setEnabled] = useState<boolean>(false);
   const setOpen = useSetRecoilState(categorySearchContent);
-  useGetDocument(
-    data.repoId,
-    data.documentId,
-    isEnabled,   
-  );
+  useGetDocument(data.repoId, data.documentId, isEnabled);
 
   const handleDocumentSelect = () => {
     setEnabled(true);

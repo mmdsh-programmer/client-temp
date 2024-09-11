@@ -18,12 +18,12 @@ const useDeleteVersion = () => {
         repoId,
         documentId,
         versionId,
-        state
+        state,
       );
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack,repoId, documentId } = values;
+      const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`get-last-version-document-${documentId}`],
       });

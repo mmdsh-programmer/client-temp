@@ -31,7 +31,7 @@ export const mockTagsResponse: IListResponse<ITag> = {
 export const useGetTagsMock = (
   repoId: number,
   size: number,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`getTags-${repoId}`, size],

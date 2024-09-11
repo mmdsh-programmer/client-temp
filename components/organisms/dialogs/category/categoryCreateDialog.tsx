@@ -104,7 +104,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">توضیحات دسته بندی</Typography>
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
-            register={{...register("description")}}
+            register={{ ...register("description") }}
           />
           {errors.description && (
             <Typography className="warning_text">

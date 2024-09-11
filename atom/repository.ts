@@ -17,7 +17,7 @@ export const repoAtom = atom<IRepo | null>({
         if (newValue) {
           localStorage.setItem(
             "CLASOR:SELECTED_REPO",
-            JSON.stringify(newValue)
+            JSON.stringify(newValue),
           );
         } else {
           localStorage.removeItem("CLASOR:SELECTED_REPO");

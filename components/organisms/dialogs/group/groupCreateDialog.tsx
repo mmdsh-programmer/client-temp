@@ -67,7 +67,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
   const handleClose = () => {
     handleReset();
     setOpen(false);
-    setUpdatedUsers([])
+    setUpdatedUsers([]);
   };
 
   const handleDelete = (username: string) => {
@@ -82,7 +82,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
-    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.")
+    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
     mutate({
       repoId: getRepo!.id,
       title: dataForm.title,

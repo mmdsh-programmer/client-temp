@@ -11,14 +11,14 @@ interface IProps {
 
 const VersionMenu = ({ lastVersion, version }: IProps) => {
   if (
-    version?.status === "editing"
-    || (version?.status === "pending" && version?.state === "draft")
+    version?.status === "editing" ||
+    (version?.status === "pending" && version?.state === "draft")
   ) {
     return <DraftVersionMenu version={version} />;
   }
   if (
-    version?.status === "private"
-    || (version?.status === "pending" && version?.state === "version")
+    version?.status === "private" ||
+    (version?.status === "pending" && version?.state === "version")
   ) {
     return <ConfirmVersionMenu version={version} lastVersion={lastVersion} />;
   }

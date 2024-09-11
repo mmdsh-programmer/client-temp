@@ -10,7 +10,7 @@ const useGetPendingVersion = (repoId: number, size: number) => {
       const response = await getPendingVersionAction(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IVersion>;
     },

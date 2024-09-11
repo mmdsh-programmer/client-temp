@@ -7,23 +7,23 @@ import { IRepo } from "@interface/repo.interface";
 import { ERoles } from "@interface/enums";
 
 const mockRepo: IRepo = {
-    id: 487521,
-    name: " Repository ssss",
-    roleName: ERoles.owner,
-    isArchived: false,
-    isPublish: false,
-    bookmark: false,
-    description: "",
-    createDate: "",
-    lastAccessDate: "",
-    imageFileHash: "",
-    updatedAt: "",
-    userGroupHash: "",
-    publishExpireTime: 0,
-    adminPublicLink: null,
-    viewerPublicLink: null,
-    writerPublicLink: null,
-    editorPublicLink: null
+  id: 487521,
+  name: " Repository ssss",
+  roleName: ERoles.owner,
+  isArchived: false,
+  isPublish: false,
+  bookmark: false,
+  description: "",
+  createDate: "",
+  lastAccessDate: "",
+  imageFileHash: "",
+  updatedAt: "",
+  userGroupHash: "",
+  publishExpireTime: 0,
+  adminPublicLink: null,
+  viewerPublicLink: null,
+  writerPublicLink: null,
+  editorPublicLink: null,
 };
 
 const queryClient = new QueryClient();
@@ -54,14 +54,9 @@ export default meta;
 type Story = StoryObj<typeof RepoMenu>;
 
 export const Default: Story = {
-    render: () => {
-      const [showDrawer, setShowDrawer] = useState<boolean>(false);
-  
-      return (
-        <RepoMenu
-          repo={mockRepo}
-          showDrawer={showDrawer}
-        />
-      );
-    },
-  };
+  render: () => {
+    const [showDrawer, setShowDrawer] = useState<boolean>(false);
+
+    return <RepoMenu repo={mockRepo} showDrawer={showDrawer} />;
+  },
+};

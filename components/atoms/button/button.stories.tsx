@@ -20,7 +20,10 @@ export default meta;
 
 export const CancelButtonStory: StoryObj<typeof CancelButton> = {
   render: (args) => (
-    <CancelButton {...args} onClick={() => console.log("Cancel button clicked")}>
+    <CancelButton
+      {...args}
+      onClick={() => console.log("Cancel button clicked")}
+    >
       انصراف
     </CancelButton>
   ),
@@ -28,7 +31,10 @@ export const CancelButtonStory: StoryObj<typeof CancelButton> = {
 
 export const CloseButtonStory: StoryObj<typeof CloseButton> = {
   render: (args) => (
-    <CloseButton {...args} onClose={() => console.log("Close button clicked")} />
+    <CloseButton
+      {...args}
+      onClose={() => console.log("Close button clicked")}
+    />
   ),
 };
 
@@ -37,4 +43,3 @@ export const BackButtonStory: StoryObj<typeof BackButton> = {
     <BackButton {...args} onClick={() => console.log("Close button clicked")} />
   ),
 };
-

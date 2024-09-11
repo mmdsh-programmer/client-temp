@@ -28,17 +28,15 @@ export default {
   },
 
   decorators: [
-    (Story)=>(
-        <RecoilRoot>
-            <Story />
-        </RecoilRoot>
-    )
-  ]
+    (Story) => (
+      <RecoilRoot>
+        <Story />
+      </RecoilRoot>
+    ),
+  ],
 } as Meta;
 
-const Template: StoryFn<IProps> = (args) => (
-  <HeaderListTemplate {...args} />
-);
+const Template: StoryFn<IProps> = (args) => <HeaderListTemplate {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
@@ -53,5 +51,3 @@ WithoutListMode.args = {
   ...Default.args,
   listModeHide: true,
 };
-
-

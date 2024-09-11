@@ -10,7 +10,7 @@ interface IProps {
   target: "category" | "document";
 }
 
-const MoveSelection = ({target}: IProps) => {
+const MoveSelection = ({ target }: IProps) => {
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDest);
 

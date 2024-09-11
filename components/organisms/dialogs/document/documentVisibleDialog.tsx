@@ -13,7 +13,7 @@ interface IProps {
 
 const DocumentVisibleDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom)
+  const document = useRecoilValue(selectedDocumentAtom);
 
   const visibleDocument = useEditDocument();
 

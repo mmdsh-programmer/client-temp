@@ -82,7 +82,7 @@ const RecoilMock = ({ children }: { children: React.ReactNode }) => {
         },
         compare: null,
       }),
-    [setCompareVersion]
+    [setCompareVersion],
   );
 
   return <RecoilRoot>{children}</RecoilRoot>;

@@ -7,7 +7,7 @@ export const getContentAction = async (
   repoId: number,
   searchParam: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -16,7 +16,7 @@ export const getContentAction = async (
       repoId,
       searchParam,
       offset,
-      size
+      size,
     );
 
     return response;

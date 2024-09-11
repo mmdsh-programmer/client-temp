@@ -54,7 +54,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Dafault: Story = {
-  render: (args) => (
-    <CategoryMenu {...args} category={mockCategory} />
-  ),
+  render: (args) => <CategoryMenu {...args} category={mockCategory} />,
 };

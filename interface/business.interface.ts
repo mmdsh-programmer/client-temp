@@ -75,13 +75,13 @@ export interface IBusinessUserRequest {
     viewerPublicLink?: string;
     writerPublicLink?: string;
   };
-  Applicant:{
-    ssoid :string;
-    fullName:string;
-    userName:string;
-    contactId:string;
-    img :string;
-  }
+  Applicant: {
+    ssoid: string;
+    fullName: string;
+    userName: string;
+    contactId: string;
+    img: string;
+  };
 }
 
 export interface IBusinessUserRequestResponse {

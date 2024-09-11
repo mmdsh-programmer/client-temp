@@ -9,11 +9,15 @@ const useSetLastVersion = () => {
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
-      versionId: number
+      versionId: number;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId,versionId } = values;
-      const response = await setLastVersionAction(repoId, documentId,versionId);
+      const { repoId, documentId, versionId } = values;
+      const response = await setLastVersionAction(
+        repoId,
+        documentId,
+        versionId,
+      );
       return response;
     },
     onSuccess: (response, values) => {

@@ -16,8 +16,11 @@ const useGetChildren = (
   filters?: IChildrenFilter | null,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`category-${categoryId || "parent"}-children${filters ? `-filters=${JSON.stringify(filters)}` : ""
-    }`],
+    queryKey: [
+      `category-${categoryId || "parent"}-children${
+        filters ? `-filters=${JSON.stringify(filters)}` : ""
+      }`,
+    ],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getChildrenAction(
         repoId,
@@ -27,7 +30,7 @@ const useGetChildren = (
         size,
         title,
         type,
-        filters
+        filters,
       );
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },

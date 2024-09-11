@@ -1,12 +1,17 @@
 "use server";
 
-import { createTag, deleteTag, editTag, getRepositoryTags } from "@service/clasor";
+import {
+  createTag,
+  deleteTag,
+  editTag,
+  getRepositoryTags,
+} from "@service/clasor";
 import { getMe } from "./auth";
 
 export const getRepositoryTagAction = async (
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -14,7 +19,7 @@ export const getRepositoryTagAction = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -23,17 +28,10 @@ export const getRepositoryTagAction = async (
   }
 };
 
-export const createTagAction = async (
-  repoId: number,
-  name: string,
-) => {
+export const createTagAction = async (repoId: number, name: string) => {
   const userInfo = await getMe();
   try {
-    const response = await createTag(
-      userInfo.access_token,
-      repoId,
-      name,
-    );
+    const response = await createTag(userInfo.access_token, repoId, name);
 
     return response;
   } catch (error) {
@@ -42,39 +40,27 @@ export const createTagAction = async (
 };
 
 export const editTagAction = async (
-    repoId: number,
-    tagId: number,
-    name: string,
-  ) => {
-    const userInfo = await getMe();
-    try {
-      const response = await editTag(
-        userInfo.access_token,
-        repoId,
-        tagId,
-        name,
-      );
-  
-      return response;
-    } catch (error) {
-      console.log("============ error ==========", error);
-    }
-  };
+  repoId: number,
+  tagId: number,
+  name: string,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await editTag(userInfo.access_token, repoId, tagId, name);
 
-  export const deleteTagAction = async (
-    repoId: number,
-    tagId: number,
-  ) => {
-    const userInfo = await getMe();
-    try {
-      const response = await deleteTag(
-        userInfo.access_token,
-        repoId,
-        tagId,
-      );
-  
-      return response;
-    } catch (error) {
-      console.log("============ error ==========", error);
-    }
-  };
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const deleteTagAction = async (repoId: number, tagId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await deleteTag(userInfo.access_token, repoId, tagId);
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};

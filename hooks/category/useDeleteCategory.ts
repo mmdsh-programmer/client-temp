@@ -13,8 +13,12 @@ const useDeleteCategory = () => {
       forceDelete: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, categoryId,forceDelete } = values;
-      const response = await deleteCategoryAction(repoId, categoryId, forceDelete);
+      const { repoId, categoryId, forceDelete } = values;
+      const response = await deleteCategoryAction(
+        repoId,
+        categoryId,
+        forceDelete,
+      );
       return response;
     },
     onSuccess: (response, values) => {

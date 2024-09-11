@@ -10,7 +10,7 @@ const useGetGroups = (repoId: number, size: number) => {
       const response = await getRepositoryGroupsAction(
         repoId,
         (pageParam - 1) * size,
-        size
+        size,
       );
       return response as IListResponse<IGetGroups>;
     },

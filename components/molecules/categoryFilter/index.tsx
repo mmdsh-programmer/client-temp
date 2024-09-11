@@ -21,9 +21,10 @@ const CategoryFilter = () => {
   const [searchTitle, setSearchTitle] = useState("");
   const setMainFilterChildren = useSetRecoilState(filterChildren);
 
-  const tagOptions = getTags?.pages[0].list.map((tag) => {
-    return { label: tag.name, value: tag.id };
-  }) || [];
+  const tagOptions =
+    getTags?.pages[0].list.map((tag) => {
+      return { label: tag.name, value: tag.id };
+    }) || [];
 
   const handleFilter = () => {
     const mainFilter = {

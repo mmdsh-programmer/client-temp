@@ -17,7 +17,10 @@ const IconTextButton = ({
   onClick,
 }: IProps) => {
   return (
-    <Button className={`${classNameButton || ""} flex justify-center items-center rounded-lg `} onClick={onClick}>
+    <Button
+      className={`${classNameButton || ""} flex justify-center items-center rounded-lg `}
+      onClick={onClick}
+    >
       <>
         {icon}
         <Typography className={classNameText}>{text}</Typography>

@@ -28,7 +28,7 @@ export interface ICategoryView {
     | undefined;
   hasNextPage: boolean;
   fetchNextPage: (
-    options?: FetchNextPageOptions
+    options?: FetchNextPageOptions,
   ) => Promise<
     InfiniteQueryObserverResult<
       InfiniteData<
@@ -70,7 +70,7 @@ const CategoryChildren = () => {
     undefined,
     getFilterChildren,
     false,
-    !getFilterReport
+    !getFilterReport,
   );
 
   const {
@@ -93,8 +93,12 @@ const CategoryChildren = () => {
     isLoading: reportIsLoading || childrenIsLoading,
     getCategoryList: getFilterReport ? reportData : childrenData,
     hasNextPage: getFilterReport ? reportHasNextPage : childrenHasNextPage,
-    fetchNextPage: getFilterReport ? reportFetchNextPage : childrenFetchNextPage,
-    isFetchingNextPage: getFilterReport ? reportIsFetchingNextPage : childrenIsFetchingNextPage,
+    fetchNextPage: getFilterReport
+      ? reportFetchNextPage
+      : childrenFetchNextPage,
+    isFetchingNextPage: getFilterReport
+      ? reportIsFetchingNextPage
+      : childrenIsFetchingNextPage,
     isFetching: getFilterReport ? reportIsFetching : childrenIsFetching,
     type:
       getFilterChildren?.title || !!getFilterReport

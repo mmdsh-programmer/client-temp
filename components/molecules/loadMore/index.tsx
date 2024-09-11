@@ -10,7 +10,7 @@ interface IProps {
   className?: string;
   isFetchingNextPage: boolean;
   fetchNextPage: (
-    options?: FetchNextPageOptions
+    options?: FetchNextPageOptions,
   ) => Promise<InfiniteQueryObserverResult<any, Error>>;
 }
 
@@ -33,9 +33,16 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
       }}
       disabled={isFetchingNextPage}
     >
-      {true ? <div className="spinner" /> :
-      <Typography placeholder="" className="font-iranYekan text-gray-600 text-xs">نمایش موارد بیشتر</Typography>
-      }
+      {true ? (
+        <div className="spinner" />
+      ) : (
+        <Typography
+          placeholder=""
+          className="font-iranYekan text-gray-600 text-xs"
+        >
+          نمایش موارد بیشتر
+        </Typography>
+      )}
     </Button>
   );
 };

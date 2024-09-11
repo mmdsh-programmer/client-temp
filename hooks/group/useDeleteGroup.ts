@@ -8,7 +8,7 @@ const useDeleteGroup = () => {
     mutationKey: ["deleteGroup"],
     mutationFn: async (values: {
       repoId: number;
-      title: string
+      title: string;
       callBack?: () => void;
     }) => {
       const { repoId, title } = values;

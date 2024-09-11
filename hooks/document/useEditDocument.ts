@@ -44,7 +44,7 @@ const useEditDocument = (move?: boolean) => {
         description,
         order,
         isHidden,
-        tagIds
+        tagIds,
       );
       return response as IDocument;
     },
@@ -57,10 +57,7 @@ const useEditDocument = (move?: boolean) => {
         ],
       });
       queryClient.invalidateQueries({
-        queryKey: [
-          `category-${categoryId || "parent"}-children`,
-          undefined,
-        ],
+        queryKey: [`category-${categoryId || "parent"}-children`, undefined],
       });
       callBack?.();
     },

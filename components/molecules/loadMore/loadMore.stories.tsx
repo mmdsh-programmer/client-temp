@@ -6,9 +6,9 @@ const meta: Meta<typeof LoadMore> = {
   title: "Components/Molecules/LoadMore",
   component: LoadMore,
   argTypes: {
-    fetchNextPage: { action: 'fetchNextPage' },
-    isFetchingNextPage: { control: 'boolean' },
-    className: { control: 'text' },
+    fetchNextPage: { action: "fetchNextPage" },
+    isFetchingNextPage: { control: "boolean" },
+    className: { control: "text" },
   },
 };
 
@@ -22,7 +22,8 @@ export const Default: StoryObj<typeof LoadMore> = {
   ...Template,
   args: {
     isFetchingNextPage: false,
-    fetchNextPage: async () => new Promise((resolve) => setTimeout(resolve, 1000)),
+    fetchNextPage: async () =>
+      new Promise((resolve) => setTimeout(resolve, 1000)),
   },
 };
 
@@ -30,7 +31,8 @@ export const Loading: StoryObj<typeof LoadMore> = {
   ...Template,
   args: {
     isFetchingNextPage: true,
-    fetchNextPage: async () => new Promise((resolve) => setTimeout(resolve, 1000)),
+    fetchNextPage: async () =>
+      new Promise((resolve) => setTimeout(resolve, 1000)),
   },
 };
 
@@ -38,7 +40,8 @@ export const Disabled: StoryObj<typeof LoadMore> = {
   ...Template,
   args: {
     isFetchingNextPage: false,
-    fetchNextPage: async () => new Promise((resolve) => setTimeout(resolve, 1000)),
+    fetchNextPage: async () =>
+      new Promise((resolve) => setTimeout(resolve, 1000)),
     className: "opacity-50",
   },
 };

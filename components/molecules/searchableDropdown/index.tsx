@@ -39,14 +39,16 @@ const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
           e.preventDefault();
         }}
       >
-        <div className={`w-full h-10 flex items-center bg-${background} border-2 border-normal rounded-lg px-2`}>
+        <div
+          className={`w-full h-10 flex items-center bg-${background} border-2 border-normal rounded-lg px-2`}
+        >
           <SearchIcon className="h-5 w-5 stroke-icon-hover" />
           <InputAtom
             onChange={(e) => {
               setInputVal(e.target.value);
               searchVal.current = e.target.value;
               const matchingUsers = options?.filter((user) =>
-                user.label.includes(e.target.value)
+                user.label.includes(e.target.value),
               );
               setSelectedItem(matchingUsers);
               {
@@ -93,21 +95,19 @@ const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
               )
             ) : selectedItem?.length ? (
               <ul className="max-h-[200px]">
-                {selectedItem.map(
-                  (option, index) => {
-                    return (
-                      <li
-                        className="cursor-pointer select-none relative p-[6px]"
-                        key={option.label}
-                        onClick={() => handleSelect(option)}
-                      >
-                        <Typography className="select_option__text truncate text-right text-primary ">
-                          {option.label}
-                        </Typography>
-                      </li>
-                    );
-                  }
-                )}
+                {selectedItem.map((option, index) => {
+                  return (
+                    <li
+                      className="cursor-pointer select-none relative p-[6px]"
+                      key={option.label}
+                      onClick={() => handleSelect(option)}
+                    >
+                      <Typography className="select_option__text truncate text-right text-primary ">
+                        {option.label}
+                      </Typography>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <Typography className="select_option__text truncate text-right text-primary ">

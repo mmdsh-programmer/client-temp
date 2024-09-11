@@ -41,7 +41,7 @@ export default class BasicError extends Error {
     public errorCode: number,
     public message: string,
     public errorList?: string[],
-    public originalError?: any
+    public originalError?: any,
   ) {
     super(errorCode in ERRORS ? ERRORS[errorCode].MSG : "");
     Error.captureStackTrace(this, this.constructor);

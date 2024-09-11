@@ -5,9 +5,7 @@ const useGetReport = (repoId: number) => {
   return useQuery({
     queryKey: [`getReport-${repoId}`],
     queryFn: async ({ signal }) => {
-      const response = await getRepositoryReport(
-        repoId,
-      );
+      const response = await getRepositoryReport(repoId);
       return response;
     },
     retry: false,

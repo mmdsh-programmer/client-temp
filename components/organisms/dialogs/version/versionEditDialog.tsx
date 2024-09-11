@@ -20,7 +20,7 @@ interface IProps {
 
 const VersionEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom)
+  const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const createVersion = useCreateVersion();
 
@@ -63,9 +63,7 @@ const VersionEditDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="min-h-[90%] !min-w-[90%]"
     >
-      <Typography variant="h1">
-        ویرایش نسخه
-      </Typography>
+      <Typography variant="h1">ویرایش نسخه</Typography>
     </EditDialog>
   );
 };

@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 const useGetRepo = (
   repoId: number | null,
   setRepo: (repo: IRepo) => void,
-  setRepositoryId: (repoId: null | number) => void
+  setRepositoryId: (repoId: null | number) => void,
 ) => {
   return useQuery({
     queryKey: [`getRepo-${repoId}`],
@@ -16,7 +16,7 @@ const useGetRepo = (
         setRepositoryId(null);
         window.localStorage.setItem(
           "CLASOR:SELECTED_REPO",
-          JSON.stringify(response)
+          JSON.stringify(response),
         );
       }
       return response;

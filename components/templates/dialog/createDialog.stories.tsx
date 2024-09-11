@@ -27,7 +27,6 @@ const Template: StoryFn<IProps> = (args) => {
         <form className="flex flex-col gap-2 ">
           <Typography className="label">نام تگ</Typography>
           <FormInput placeholder="نام تگ" />
-
         </form>
       </div>
     </CreateDialog>

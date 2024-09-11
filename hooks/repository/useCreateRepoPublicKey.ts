@@ -1,6 +1,4 @@
-import {
-  createRepoKeyAction,
-} from "@actions/repository";
+import { createRepoKeyAction } from "@actions/repository";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 

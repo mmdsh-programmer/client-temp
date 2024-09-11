@@ -35,8 +35,13 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
         {menuList.map((menuItem, index) => {
           return menuItem.subMenu ? (
             <div key={`drawer-sub-menu-${index}`}>
-              <Button className="w-full flex items-center justify-between bg-transparent px-0" onClick={toggleOpen}>
-                <Typography className="select_option__text text-primary font-normal ">{menuItem.text}</Typography>
+              <Button
+                className="w-full flex items-center justify-between bg-transparent px-0"
+                onClick={toggleOpen}
+              >
+                <Typography className="select_option__text text-primary font-normal ">
+                  {menuItem.text}
+                </Typography>
                 <ChevronLeftIcon
                   className={`h-2 w-2 transition-transform stroke-icon-active ${
                     open ? "" : "rotate-90"
