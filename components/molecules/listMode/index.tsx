@@ -6,7 +6,7 @@ import React from "react";
 import { listModeAtom } from "@atom/app";
 import { useRecoilState } from "recoil";
 
-const ListMode: React.FC  = () => {
+const ListMode: React.FC = () => {
   const [getListMode, setListMode] = useRecoilState(listModeAtom);
   return (
     <>

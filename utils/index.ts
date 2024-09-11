@@ -14,11 +14,13 @@ const logger = (key: string, newValue: any, oldValue: any) => {
   }
 };
 
-export const logEffect = (atomName) => ({ onSet }) => {
-  onSet((newValue, oldValue) => {
-    logger(atomName, newValue, oldValue);
-  });
-};
+export const logEffect =
+  (atomName) =>
+  ({ onSet }) => {
+    onSet((newValue, oldValue) => {
+      logger(atomName, newValue, oldValue);
+    });
+  };
 
 export const translateRoles = (role?: ERoles) => {
   switch (role) {

@@ -1,8 +1,4 @@
-import {
-  DialogBody,
-  DialogFooter,
-  Typography,
-} from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";

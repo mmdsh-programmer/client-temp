@@ -37,7 +37,8 @@ const useGetChildren = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId && !!categoryId && categoryId !== 0 && categoryId !== null,
+    enabled:
+      !!repoId && !!categoryId && categoryId !== 0 && categoryId !== null,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

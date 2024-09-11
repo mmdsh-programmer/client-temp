@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
-  const getActiveStep= useRecoilValue(documentActiveStepAtom);
+  const getActiveStep = useRecoilValue(documentActiveStepAtom);
   const getRepo = useRecoilValue(repoAtom);
 
   const repoId = getRepo!.id;

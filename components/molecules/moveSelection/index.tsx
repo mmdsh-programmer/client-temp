@@ -11,9 +11,8 @@ interface IProps {
   target: "category" | "document";
 }
 
-const MoveSelection = ({target}: IProps) => {
-  const getCategoryMoveDest =
-    useRecoilValue(categoryMoveDestAtom);
+const MoveSelection = ({ target }: IProps) => {
+  const getCategoryMoveDest = useRecoilValue(categoryMoveDestAtom);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

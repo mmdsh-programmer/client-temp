@@ -19,7 +19,8 @@ const CheckRepoInfo = ({ children }: IProps) => {
   useHandleRepoChange();
 
   const [loading, setLoading] = useState(true);
-  const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryIdAtom);
+  const [repositoryAtomId, setRepositoryAtomId] =
+    useRecoilState(repositoryIdAtom);
 
   const router = useRouter();
   const searchParams = useSearchParams();

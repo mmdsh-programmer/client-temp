@@ -1,4 +1,9 @@
-import { DialogBody, DialogFooter, Spinner, Typography } from "@material-tailwind/react";
+import {
+  DialogBody,
+  DialogFooter,
+  Spinner,
+  Typography,
+} from "@material-tailwind/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import CancelButton from "@components/atoms/button/cancelButton";

@@ -1,7 +1,15 @@
-import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query";
+import {
+  FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
 import { IListResponse, IRepo } from "@interface/repo.interface";
 import React, { useEffect } from "react";
-import { repoAtom, repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import {
+  repoAtom,
+  repoGroupingAtom,
+  repoSearchParamAtom,
+} from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import AccessRepoList from "./accessRepoList";
@@ -37,7 +45,6 @@ const RepoList = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
   const setRepo = useSetRecoilState(repoAtom);
 
-
   useEffect(() => {
     setSearchParam(null);
     setRepo(null);
@@ -52,12 +59,14 @@ const RepoList = () => {
           return (
             <>
               <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
-               <ListMode />
+                <ListMode />
               </RenderIf>
             </>
-          )
+          );
         }}
-        renderDialog={(close: () => void) => <RepoCreateDialogStepper close={close} />}
+        renderDialog={(close: () => void) => (
+          <RepoCreateDialogStepper close={close} />
+        )}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />

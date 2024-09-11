@@ -17,7 +17,7 @@ const SearchContent = ({ setOpen }: IProps) => {
   const inputRef = useRef<any>();
   const [search, setSearch] = useState<string>("");
   const [getSearchParam, setSearchParam] = useRecoilState(
-    categorySearchContentParamAtom
+    categorySearchContentParamAtom,
   );
   const debouncedValue = useDebounce<string>(search, 1000);
 

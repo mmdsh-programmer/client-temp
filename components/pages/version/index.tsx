@@ -88,7 +88,9 @@ const VersionList = () => {
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
-        renderDialog={(close: () => void) => <VersionCreateDialog close={close} />}
+        renderDialog={(close: () => void) => (
+          <VersionCreateDialog close={close} />
+        )}
       />
       <div className="hidden xs:block">
         <VersionTableView {...commonProps} />

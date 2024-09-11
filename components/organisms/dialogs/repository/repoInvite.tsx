@@ -1,7 +1,5 @@
 import React from "react";
-import {
-  Spinner,
-} from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
