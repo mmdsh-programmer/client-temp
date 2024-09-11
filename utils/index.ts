@@ -60,8 +60,7 @@ export const translateVersionStatus = (status: string, state: string) => {
 
     case "public":
       {
-        (translated = "عمومی"),
-          (className = "label text-info bg-gray-50");
+        (translated = "عمومی"), (className = "label text-info bg-gray-50");
       }
       break;
     default:
@@ -144,4 +143,19 @@ export const IsJsonString = (str: string): boolean => {
     return false;
   }
   return true;
+};
+
+export const stripPemHeaders = (pem: string) => {
+  return pem.replace(/-{5}BEGIN [ A-Z]+-{5}|-{5}END [ A-Z]+-{5}|\r?\n|\r/g, "");
+};
+
+export const addPemHeaders = (
+  content: string,
+  type: string = "CERTIFICATE"
+) => {
+  const header = `-----BEGIN ${type}-----\n`;
+  const footer = `\n-----END ${type}-----`;
+  const formattedContent = content.match(/.{1,64}/g)?.join("\n") || content; // Splits content into lines of 64 characters
+
+  return `${header}${formattedContent}${footer}`;
 };

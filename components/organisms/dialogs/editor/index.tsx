@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
@@ -17,6 +17,8 @@ import { EDocumentTypes } from "@interface/enums";
 import { versionModalListAtom } from "@atom/version";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { Spinner } from "@material-tailwind/react";
+import useGetKey from "@hooks/repository/useGetKey";
+import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,6 +34,8 @@ const Editor = ({ setOpen }: IProps) => {
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
+  const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
+  const [decryptedContent, setDecryptedContent] = useState<string | null>(null);
 
   const classicEditorRef = useRef<IRemoteEditorRef>(null);
   const wordEditorRef = useRef<IRemoteEditorRef>(null);
@@ -49,6 +53,17 @@ const Editor = ({ setOpen }: IProps) => {
     !!version
   );
 
+  const {
+    data: keyInfo,
+    isLoading: isLoadingKey,
+    error: keyError,
+  } = useGetKey(
+    getRepo!.id,
+    getSelectedDocument?.publicKeyId
+      ? +getSelectedDocument.publicKeyId
+      : undefined
+  );
+
   useEffect(() => {
     if (data && isSuccess) {
       setEditorData(data);
@@ -60,7 +75,17 @@ const Editor = ({ setOpen }: IProps) => {
     setVersionModalList(false);
   }, []);
 
-  if (error) {
+  const handleDecryption = useCallback((decryptedContent: string) => {
+    setDecryptedContent(decryptedContent);
+    setShowKey(false);
+  }, []);
+
+  const handleClose = () => {
+    setOpen(false);
+    setVersion(null);
+  };
+
+  if (error || keyError) {
     return (
       <div className="main w-full h-full text-center flex items-center justify-center">
         <Error
@@ -111,32 +136,36 @@ const Editor = ({ setOpen }: IProps) => {
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setVersion(null);
-  };
+  if (!!versionModalList) {
+    return <VersionDialogView />;
+  }
+
+  if (showKey && !decryptedContent && version?.content) {
+    return (
+      <EditorKey
+        isPending={isLoading || isLoadingKey}
+        onDecryption={handleDecryption}
+        setOpen={handleClose}
+        encryptedContent={version?.content}
+      />
+    );
+  }
 
   return (
-    <>
-      {!!versionModalList ? (
-        <VersionDialogView />
+    <EditorDialog
+      dialogHeader={getSelectedDocument?.name}
+      isPending={isLoading || isLoadingKey}
+      setOpen={handleClose}
+      editorRef={getEditorConfig().ref}
+    >
+      {isLoading ? (
+        <div className="main w-full h-full text-center flex items-center justify-center">
+          <Spinner className="h-5 w-5 " color="deep-purple" />
+        </div>
       ) : (
-        <EditorDialog
-          dialogHeader={getSelectedDocument?.name}
-          isPending={isLoading}
-          setOpen={handleClose}
-          editorRef={getEditorConfig().ref}
-        >
-          {isLoading ? (
-            <div className="main w-full h-full text-center flex items-center justify-center">
-              <Spinner className="h-5 w-5 " color="deep-purple" />
-            </div>
-          ) : (
-            <EditorComponent getEditorConfig={getEditorConfig} />
-          )}
-        </EditorDialog>
+        <EditorComponent getEditorConfig={getEditorConfig} />
       )}
-    </>
+    </EditorDialog>
   );
 };
 

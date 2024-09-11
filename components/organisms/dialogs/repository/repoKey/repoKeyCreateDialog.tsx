@@ -10,6 +10,7 @@ import forge from "node-forge";
 import copy from "copy-to-clipboard";
 import { Button, Typography } from "@material-tailwind/react";
 import FormInput from "@components/atoms/input/formInput";
+import { stripPemHeaders } from "@utils/index";
 
 interface IProps {
   repoId: number;
@@ -40,12 +41,6 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
     setOpen(false);
   };
 
-  const stripPemHeaders = (pem: string) => {
-    return pem.replace(
-      /-{5}BEGIN [ A-Z]+-{5}|-{5}END [ A-Z]+-{5}|\r?\n|\r/g,
-      ""
-    );
-  };
   const generateKey = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
