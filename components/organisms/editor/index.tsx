@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import {
   editorDataAtom,
+  editorDecryptedContentAtom,
   editorModeAtom,
   editorVersionAtom,
 } from "@atom/editor";
@@ -27,6 +28,7 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
   const selectedVersion = useRecoilValue(editorVersionAtom);
   const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
+  const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
 
   const timestampRef = useRef(Date.now());
 
@@ -40,6 +42,10 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
     );
   }
 
+  const content = selectedDocument?.publicKeyId
+    ? decryptedContent
+    : selectedVersion?.content;
+
   return (
     <RemoteEditor
       url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
@@ -48,7 +54,7 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
       loadData={
         selectedDocument?.contentType === EDocumentTypes.classic
           ? ({
-              content: selectedVersion?.content || " ",
+              content: content || " ",
               outline: selectedVersion?.outline || [],
               auth: {
                 accessToken: userInfo?.access_token,
@@ -63,7 +69,7 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
               podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
               backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
             } as any)
-          : selectedVersion?.content
+          : content
       }
     />
   );

@@ -5,7 +5,6 @@ import { Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { keySchema } from "./validation.yup";
-import { addPemHeaders } from "@utils/index";
 import forge from "node-forge";
 
 interface IForm {
@@ -16,7 +15,7 @@ interface IProps {
   encryptedContent?: string;
   isPending: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onDecryption?: (decryptedContent: string) => void;
+  onDecryption: (decryptedContent: string) => void;
 }
 
 const EditorKey = ({
@@ -34,24 +33,21 @@ const EditorKey = ({
   const decryptData = (key: string) => {
     if (!encryptedContent) return;
 
-    const privateKeyPem = addPemHeaders(key, "PRIVATE KEY");
+    const privateKey = forge.pki.privateKeyFromPem(key);
 
-    const privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
-
-    const encryptedBinary = forge.util.decode64(encryptedContent);
-
-    const decrypted = privateKey.decrypt(encryptedBinary, "RSA-OAEP", {
-      md: forge.md.sha256.create(), // Using SHA-256 hash for decryption
-    });
-
-    return decrypted;
+    return forge.util.decodeUtf8(
+      privateKey.decrypt(forge.util.decode64(encryptedContent), "RSA-OAEP", {
+        md: forge.md.sha256.create(),
+      })
+    );
   };
 
   const onSubmit = (data: IForm) => {
     const content = decryptData(data.privateKey);
-    if (content) {
-      onDecryption?.(content);
-    }
+    onDecryption(content || encryptedContent || "");
+
+    reset({ privateKey: "" });
+    clearErrors();
   };
 
   return (

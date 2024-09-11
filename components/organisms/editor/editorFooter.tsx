@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   editorDataAtom,
   editorModeAtom,
+  editorPublicKeyAtom,
   editorVersionAtom,
 } from "@atom/editor";
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -16,6 +17,7 @@ import { translateVersionStatus } from "@utils/index";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { versionModalListAtom } from "@atom/version";
 import { EDocumentTypes } from "@interface/enums";
+import forge from "node-forge";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -29,6 +31,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
+  const key = useRecoilValue(editorPublicKeyAtom);
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
@@ -46,13 +49,34 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
   };
 
+  const encryptData = (content: string) => {
+    if (!key) return;
+
+    const publicKey = forge.pki.publicKeyFromPem(key)
+
+    return forge.util.encode64(
+      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {
+        md: forge.md.sha256.create(),
+      })
+    )
+  };
+
   const handleSave = (data: any) => {
+    let encryptedContent: string | null = null;
+    const content: string =
+      selectedDocument?.contentType === EDocumentTypes.classic
+        ? data?.content
+        : data;
+
+    if (selectedDocument?.publicKeyId) {
+      encryptedContent = encryptData(content) as string;
+    }
+  
     if (selectedVersion && selectedDocument && getRepo) {
       saveEditorHook.mutate({
-        content:
-          selectedDocument?.contentType === EDocumentTypes.classic
-            ? data?.content
-            : data,
+        content: selectedDocument?.publicKeyId
+          ? (encryptedContent as string)
+          : content,
         outline:
           selectedDocument?.contentType === EDocumentTypes.classic
             ? data?.outline

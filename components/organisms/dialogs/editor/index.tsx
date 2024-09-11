@@ -6,8 +6,10 @@ import { repoAtom } from "@atom/repository";
 import useGetVersion from "@hooks/version/useGetVersion";
 import {
   editorDataAtom,
+  editorDecryptedContentAtom,
   editorModalAtom,
   editorModeAtom,
+  editorPublicKeyAtom,
   editorVersionAtom,
 } from "@atom/editor";
 import Error from "@components/organisms/error";
@@ -35,7 +37,9 @@ const Editor = ({ setOpen }: IProps) => {
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
-  const [decryptedContent, setDecryptedContent] = useState<string | null>(null);
+  const [decryptedContent, setDecryptedContent] = useRecoilState(editorDecryptedContentAtom);
+  const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
+
 
   const classicEditorRef = useRef<IRemoteEditorRef>(null);
   const wordEditorRef = useRef<IRemoteEditorRef>(null);
@@ -57,6 +61,7 @@ const Editor = ({ setOpen }: IProps) => {
     data: keyInfo,
     isLoading: isLoadingKey,
     error: keyError,
+    isSuccess: isSuccessKey
   } = useGetKey(
     getRepo!.id,
     getSelectedDocument?.publicKeyId
@@ -72,17 +77,26 @@ const Editor = ({ setOpen }: IProps) => {
   }, [data]);
 
   useEffect(() => {
+    if (keyInfo && isSuccessKey) {
+      setPublicKey(keyInfo.key);
+    }
+  }, [keyInfo]);
+
+  useEffect(() => {
     setVersionModalList(false);
   }, []);
 
-  const handleDecryption = useCallback((decryptedContent: string) => {
-    setDecryptedContent(decryptedContent);
+  const handleDecryption = useCallback((content: string) => {
+    setDecryptedContent(content);
     setShowKey(false);
   }, []);
 
   const handleClose = () => {
     setOpen(false);
     setVersion(null);
+    setDecryptedContent(null);
+    setShowKey(false);
+    setPublicKey(null);
   };
 
   if (error || keyError) {

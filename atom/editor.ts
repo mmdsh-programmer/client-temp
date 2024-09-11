@@ -100,3 +100,27 @@ export const editorTablastVersionAtom = atom<IVersion | undefined>({
     },
   ],
 });
+
+export const editorDecryptedContentAtom = atom<string | null>({
+  key: "editorDecryptedContent",
+  default: null,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("editorDecryptedContent", newValue, oldValue);
+      });
+    },
+  ],
+});
+
+export const editorPublicKeyAtom = atom<string | null>({
+  key: "editorPublicKey",
+  default: null,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("editorPublicKey", newValue, oldValue);
+      });
+    },
+  ],
+});
