@@ -1,3 +1,5 @@
+"use server";
+
 import { freeDraftVersion, saveVersion } from "@service/clasor";
 import { getMe } from "./auth";
 
