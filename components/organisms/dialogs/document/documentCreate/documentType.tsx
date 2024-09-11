@@ -1,12 +1,13 @@
+import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { documentType } from "@atom/document";
-import useGetClasorField from "@hooks/document/useGetClasorField";
+
+import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
+import SelectAtom from "@components/molecules/select";
+import { documentTypeAtom } from "@atom/document";
+import useGetClasorField from "@hooks/document/useGetClasorField";
 import { useRecoilState } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
-import SelectAtom from "@components/molecules/select";
-import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 
 interface IProps {
   isTemplate: boolean;
@@ -14,7 +15,7 @@ interface IProps {
 }
 
 const DocumentType = ({ isTemplate, setOpen }: IProps) => {
-  const [getDocumentType, setDocumentType] = useRecoilState(documentType);
+  const [getDocumentType, setDocumentType] = useRecoilState(documentTypeAtom);
   const { handleNextStep } = useStepperNavigate();
   const { data: getDocumentTypes, isLoading } = useGetClasorField();
   const [type, setType] = useState<EDocumentTypes | null>(

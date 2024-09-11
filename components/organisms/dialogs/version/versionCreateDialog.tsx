@@ -1,25 +1,25 @@
-import React from "react";
-import { repoAtom } from "@atom/repository";
-import FormInput from "@components/atoms/input/formInput";
 import CreateDialog from "@components/templates/dialog/createDialog";
+import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateVersion from "@hooks/version/useCreateVersion";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
 
 interface IForm {
   name: string;
 }
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  close: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const VersionCreateDialog = ({ setOpen }: IProps) => {
+const VersionCreateDialog = ({ close }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom)
 
@@ -39,7 +39,7 @@ const VersionCreateDialog = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     handleReset();
-    setOpen(false);
+    close(false);
   };
 
   const onSubmit = async (dataForm: IForm) => {

@@ -1,14 +1,15 @@
-import React from "react";
+import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
+
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import DocumentTagList from "@components/organisms/document/documentTagList";
+import React from "react";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import { selectedDocumentAtom, tempDocTag } from "@atom/document";
-import SearchableDropdown from "@components/molecules/searchableDropdown";
-import useGetTags from "@hooks/tag/useGetTags";
-import DocumentTagList from "@components/organisms/document/documentTagList";
 import useEditDocument from "@hooks/document/useEditDocument";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { Spinner } from "@material-tailwind/react";
+import useGetTags from "@hooks/tag/useGetTags";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -17,7 +18,7 @@ interface IProps {
 const DocumentAccessDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
-  const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTag);
+  const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
 
   const repoId = getRepo!.id;
   const adminRole =

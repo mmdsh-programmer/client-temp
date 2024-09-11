@@ -1,17 +1,17 @@
+import CardView from "../repoView/cardView";
+import { EEmptyList } from "@components/molecules/emptyList";
+import { EListMode } from "@interface/enums";
+import { IRepoView } from ".";
+import MobileView from "../repoView/mobileView";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import useGetAccessList from "@hooks/repository/useGetAccessList";
-import { EListMode } from "@interface/enums";
-import { useRecoilValue } from "recoil";
-import { listMode } from "@atom/app";
-import { EEmptyList } from "@components/molecules/emptyList";
-import { IRepoView } from ".";
 import TableView from "../repoView/tableView";
-import MobileView from "../repoView/mobileView";
-import CardView from "../repoView/cardView";
+import { listModeAtom } from "@atom/app";
+import useGetAccessList from "@hooks/repository/useGetAccessList";
+import { useRecoilValue } from "recoil";
 
 const AccessRepoList = () => {
-  const mode = useRecoilValue(listMode);
+  const mode = useRecoilValue(listModeAtom);
   const {
     data: getAccessRepoList,
     hasNextPage,

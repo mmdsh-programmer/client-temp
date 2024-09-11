@@ -1,18 +1,19 @@
 import React, { useRef, useState } from "react";
-import { categoryMoveDest } from "@atom/category";
-import { useRecoilState } from "recoil";
+
 import { Button } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import MoveBreadCrumb from "../moveBreadCrumb";
 import MoveChildren from "@components/organisms/moveChildren";
+import { categoryMoveDestAtom } from "@atom/category";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   target: "category" | "document";
 }
 
 const MoveSelection = ({target}: IProps) => {
-  const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDest);
+  const getCategoryMoveDest =
+    useRecoilValue(categoryMoveDestAtom);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);

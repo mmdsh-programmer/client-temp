@@ -1,15 +1,15 @@
+import CreateDialog from "@components/templates/dialog/createDialog";
+import FormInput from "@components/atoms/input/formInput";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { Typography } from "@material-tailwind/react";
+import { categoryAtom } from "@atom/category";
+import { categorySchema } from "./validation.yup";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import CreateDialog from "@components/templates/dialog/createDialog";
-import { category } from "@atom/category";
 import useCreateCategory from "@hooks/category/useCreateCategory";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import FormInput from "@components/atoms/input/formInput";
-import { Typography } from "@material-tailwind/react";
-import { categorySchema } from "./validation.yup";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
@@ -24,7 +24,7 @@ interface IProps {
 
 const CategoryCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(category);
+  const getCategory = useRecoilValue(categoryAtom);
 
   const createCategory = useCreateCategory();
 

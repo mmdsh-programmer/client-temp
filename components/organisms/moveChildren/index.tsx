@@ -1,14 +1,15 @@
 import React, { Fragment } from "react";
-import { ICategoryMetadata } from "@interface/category.interface";
-import { bulkItems } from "atom/bulk";
-import { categoryMoveDest, categoryQueryParams } from "atom/category";
-import { sort } from "atom/sortParam";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
 import { Spinner, Typography } from "@material-tailwind/react";
+import { categoryMoveDestAtom, categoryQueryParamsAtom } from "atom/category";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { FolderIcon } from "@components/atoms/icons";
+import { ICategoryMetadata } from "@interface/category.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { FolderIcon } from "@components/atoms/icons";
+import { bulkItemsAtom } from "@atom/bulk";
+import { repoAtom } from "@atom/repository";
+import { sortAtom } from "atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 
 interface IProps {
@@ -18,10 +19,10 @@ interface IProps {
 const MoveChildren = ({ target }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDest);
-  const queryParams = useRecoilValue(categoryQueryParams);
-  const getSortParams = useRecoilValue(sort);
-  const getBulkItems = useRecoilValue(bulkItems);
+    useRecoilState(categoryMoveDestAtom);
+  const queryParams = useRecoilValue(categoryQueryParamsAtom);
+  const getSortParams = useRecoilValue(sortAtom);
+  const getBulkItems = useRecoilValue(bulkItemsAtom);
 
   const {
     data: moveChildren,

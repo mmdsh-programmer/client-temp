@@ -1,12 +1,13 @@
-import React from "react";
-import { selectedDocumentAtom, tempDocTag } from "@atom/document";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { XIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import ChipMolecule from "@components/molecules/chip";
 import { ITag } from "@interface/tags.interface";
+import React from "react";
+import { XIcon } from "@components/atoms/icons";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
   tagList?: ITag[];
@@ -15,7 +16,7 @@ interface IProps {
 const DocumentTagList = ({ tagList }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
-  const setTempDocTag = useSetRecoilState(tempDocTag);
+  const setTempDocTag = useSetRecoilState(tempDocTagAtom);
 
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";

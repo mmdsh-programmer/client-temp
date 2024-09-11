@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { category, categoryDrawerAtom } from "@atom/category";
-import DrawerTemplate from "@components/templates/drawerTemplate";
-import MenuTemplate from "@components/templates/menuTemplate";
-import { ICategoryMetadata } from "@interface/category.interface";
+import { categoryAtom, categoryDrawerAtom } from "@atom/category";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import CategoryVisibleDialog from "../../organisms/dialogs/category/categoryVisibleDialog";
-import CategoryEditDialog from "@components/organisms/dialogs/category/categoryEditDialog";
-import CategoryDeleteDialog from "@components/organisms/dialogs/category/categoryDeleteDialog";
-import CategoryCreateDialog from "@components/organisms/dialogs/category/categoryCreateDialog";
-import CategoryHideDialog from "@components/organisms/dialogs/category/categoryHideDialog";
-import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
-import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryMoveDialog";
-import { MoreDotIcon } from "@components/atoms/icons";
+
 import CategoryAccessDialog from "@components/organisms/dialogs/category/categoryAccessDialog";
+import CategoryCreateDialog from "@components/organisms/dialogs/category/categoryCreateDialog";
+import CategoryDeleteDialog from "@components/organisms/dialogs/category/categoryDeleteDialog";
+import CategoryEditDialog from "@components/organisms/dialogs/category/categoryEditDialog";
+import CategoryHideDialog from "@components/organisms/dialogs/category/categoryHideDialog";
+import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryMoveDialog";
+import CategoryVisibleDialog from "../../organisms/dialogs/category/categoryVisibleDialog";
+import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import { ICategoryMetadata } from "@interface/category.interface";
+import MenuTemplate from "@components/templates/menuTemplate";
+import { MoreDotIcon } from "@components/atoms/icons";
 
 interface IProps {
   category?: ICategoryMetadata;
@@ -20,7 +21,7 @@ interface IProps {
 }
 
 const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
-  const setCategory = useSetRecoilState(category);
+  const setCategory = useSetRecoilState(categoryAtom);
   const [editCategoryModal, setEditCategoryModal] = useState(false);
   const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
   const [moveModal, setMoveModal] = useState(false);

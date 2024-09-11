@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Button } from "@material-tailwind/react";
-import { useSetRecoilState } from "recoil";
-import { filterChildren, filterReport } from "@atom/filter";
 import { FilterIcon, SearchIcon } from "@components/atoms/icons";
+import React, { useState } from "react";
+import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+
+import { Button } from "@material-tailwind/react";
 import SearchContent from "@components/molecules/searchContent";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   open: boolean;
@@ -11,8 +12,8 @@ interface IProps {
 }
 
 const SearchFilter = ({ open, setOpen }: IProps) => {
-  const setFilterChildren = useSetRecoilState(filterChildren);
-  const setFilterReport = useSetRecoilState(filterReport);
+  const setFilterChildren = useSetRecoilState(filterChildrenAtom);
+  const setFilterReport = useSetRecoilState(filterReportAtom);
   const [openSearchModal, setOpenSearchModal] = useState(false);
 
   return (

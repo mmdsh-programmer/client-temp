@@ -1,19 +1,20 @@
 import {
-  documentInfo,
-  documentKey,
-  documentTemplate,
-  documentType,
+  documentInfoAtom,
+  documentKeyAtom,
+  documentTemplateAtom,
+  documentTypeAtom,
 } from "@atom/document";
-import { documentActiveStep } from "@atom/stepper";
-import { EDocumentTypes } from "@interface/enums";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
+import { EDocumentTypes } from "@interface/enums";
+import { documentActiveStepAtom } from "@atom/stepper";
+
 const useStepperNavigate = () => {
-  const setActiveStep = useSetRecoilState(documentActiveStep);
-  const setDocumentInfo = useSetRecoilState(documentInfo);
-  const setDocumentTemplate = useSetRecoilState(documentTemplate);
-  const setDocumentKey = useSetRecoilState(documentKey);
-  const [getDocumentType, setDocumentType] = useRecoilState(documentType);
+  const setActiveStep = useSetRecoilState(documentActiveStepAtom);
+  const setDocumentInfo = useSetRecoilState(documentInfoAtom);
+  const setDocumentTemplate = useSetRecoilState(documentTemplateAtom);
+  const setDocumentKey = useSetRecoilState(documentKeyAtom);
+  const [getDocumentType, setDocumentType] = useRecoilState(documentTypeAtom);
 
   const handleNextStep = () => {
     return setActiveStep((cur) => {

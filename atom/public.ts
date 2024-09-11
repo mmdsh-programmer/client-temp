@@ -1,12 +1,14 @@
-import { IRoles } from "@interface/users.interface";
 import { atom } from "recoil";
+import { logEffect } from "@utils/index";
 
-export const openShareAccess = atom<boolean | null>({
-  key: "openShareAccess",
+export const openShareAccessAtom = atom<boolean | null>({
+  key: "openShareAccessAtom",
   default: false,
+  effects: [logEffect("openShareAccessAtom")],
 });
 
-export const publicRole = atom<number | null>({
-  key: "publicRole",
+export const publicRoleAtom = atom<number | null>({
+  key: "publicRoleAtom",
   default: null,
+  effects: [logEffect("publicRoleAtom")],
 });

@@ -1,14 +1,15 @@
-import { editDocumentAction } from "@actions/document";
-import { categoryShow } from "@atom/category";
-import { IDocument } from "@interface/document.interface";
-import { EDocumentTypes } from "@interface/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { EDocumentTypes } from "@interface/enums";
+import { IDocument } from "@interface/document.interface";
+import { categoryShowAtom } from "@atom/category";
+import { editDocumentAction } from "@actions/document";
 import { toast } from "react-toastify";
 import { useRecoilValue } from "recoil";
 
 const useEditDocument = (move?: boolean) => {
   const queryClient = useQueryClient();
-  const getCategoryShow = useRecoilValue(categoryShow);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
 
   return useMutation({
     mutationKey: ["editDocument"],

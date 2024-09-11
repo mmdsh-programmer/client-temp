@@ -2,13 +2,13 @@ import React from "react";
 import {
   Spinner,
 } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import useAddUser from "@hooks/user/useAddUser";
-import useGetRoles from "@hooks/user/useGetRoles";
-import { translateRoles } from "@utils/index";
-import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import { translateRoles } from "@utils/index";
+import useAddUser from "@hooks/user/useAddUser";
+import { useForm } from "react-hook-form";
+import useGetRoles from "@hooks/user/useGetRoles";
+import { useRecoilValue } from "recoil";
 
 interface IForm {
   username: string;
@@ -73,7 +73,7 @@ const RepoInvite = () => {
             className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
             {...register("accessName")}
           >
-            {getRoles?.data.map((item: any) => {
+            {getRoles?.map((item: any) => {
               return (
                 <option
                   key={item.name}

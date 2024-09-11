@@ -1,13 +1,14 @@
-import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import { useForm } from "react-hook-form";
-import useEditDocument from "@hooks/document/useEditDocument";
-import { selectedDocumentAtom } from "@atom/document";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { categoryMoveDest } from "@atom/category";
 import MoveSelection from "@components/molecules/moveSelection";
+import React from "react";
+import { categoryMoveDestAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useEditDocument from "@hooks/document/useEditDocument";
+import { useForm } from "react-hook-form";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -17,7 +18,7 @@ const DocumentMoveDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDest);
+    useRecoilState(categoryMoveDestAtom);
 
   const moveDocument = useEditDocument();
 

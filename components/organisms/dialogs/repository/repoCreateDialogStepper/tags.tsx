@@ -1,18 +1,19 @@
-import React from "react";
-import { repoActiveStep } from "@atom/stepper";
-import LoadingButton from "@components/molecules/loadingButton";
-import useCreateTag from "@hooks/tag/useCreateTag";
-import useGetTags from "@hooks/tag/useGetTags";
 import { DialogBody, DialogFooter, Spinner, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { repoTagSchema } from "../validation.yup";
-import InputAtom from "@components/atoms/input";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
+import InputAtom from "@components/atoms/input";
+import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
+import { repoActiveStepAtom } from "@atom/stepper";
 import { repoAtom } from "@atom/repository";
+import { repoTagSchema } from "../validation.yup";
+import { toast } from "react-toastify";
+import useCreateTag from "@hooks/tag/useCreateTag";
+import { useForm } from "react-hook-form";
+import useGetTags from "@hooks/tag/useGetTags";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   name: string;
@@ -22,7 +23,7 @@ interface IProps {
 }
 
 const Tags = ({ handleClose }: IProps) => {
-  const setActiveStep = useSetRecoilState(repoActiveStep);
+  const setActiveStep = useSetRecoilState(repoActiveStepAtom);
   const getRepo = useRecoilValue(repoAtom);
   const repoId = getRepo!.id;
 

@@ -1,21 +1,20 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { DatePicker } from "zaman";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { publicRole } from "atom/public";
-import { onDatePickerChangePayload } from "zaman/dist/types";
-import { repoAtom } from "@atom/repository";
 import {
   Checkbox,
   DialogBody,
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
+import React, { useState } from "react";
+
+import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
+import { onDatePickerChangePayload } from "zaman/dist/types";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import useCreatePublishLink from "@hooks/publish/useCreatePublishLink";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IData {
   expireTime: number;
@@ -75,6 +74,7 @@ const CreateRepoPublishLink = () => {
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
             <Checkbox
+              crossOrigin="anonymous"
               label={
                 <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                   افزودن رمز عبور

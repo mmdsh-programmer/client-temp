@@ -1,17 +1,18 @@
-import React from "react";
-import { DialogFooter, DialogBody, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import LoadingButton from "@components/molecules/loadingButton";
-import useCreateRepo from "@hooks/repository/useCreateRepo";
-import { useSetRecoilState } from "recoil";
-import { repoActiveStep } from "@atom/stepper";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { repoCreateSchema } from "../validation.yup";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import FormInput from "@components/atoms/input/formInput";
+import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
+import { repoActiveStepAtom } from "@atom/stepper";
 import { repoAtom } from "@atom/repository";
+import { repoCreateSchema } from "../validation.yup";
+import { toast } from "react-toastify";
+import useCreateRepo from "@hooks/repository/useCreateRepo";
+import { useForm } from "react-hook-form";
+import { useSetRecoilState } from "recoil";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   name: string;
@@ -23,7 +24,7 @@ interface IProps {
 }
 
 const RepoCreateDialog = ({ handleClose }: IProps) => {
-  const setActiveStep = useSetRecoilState(repoActiveStep);
+  const setActiveStep = useSetRecoilState(repoActiveStepAtom);
   const setRepo = useSetRecoilState(repoAtom);
 
   const { isPending, mutate } = useCreateRepo();
