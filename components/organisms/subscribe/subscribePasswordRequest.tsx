@@ -1,13 +1,14 @@
+import { Checkbox, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import FormInput from "@components/atoms/input/formInput";
+import { subscribeScheme } from "../dialogs/repository/validation.yup";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
-import { useForm } from "react-hook-form";
-import { subscribeScheme } from "../dialogs/repository/validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
 
 interface IDataForm {
   password: string;
@@ -57,6 +58,7 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
       <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
           <Checkbox
+            crossOrigin="anonymous"
             label={
               <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 نمایش رمز عبور

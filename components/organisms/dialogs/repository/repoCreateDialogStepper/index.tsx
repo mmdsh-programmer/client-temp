@@ -12,9 +12,9 @@ import { repoAtom } from "@atom/repository";
 import { useRecoilState } from "recoil";
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  close: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
+const RepoCreateDialogStepper = ({ close }: IProps) => {
   const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStepAtom);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
   const [selectedFile, setSelectedFile] = useState<IFile | null>(null);
@@ -25,7 +25,7 @@ const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setActiveStep(0);
-    setOpen(false);
+    close(false);
     setRepo(null);
   };
 

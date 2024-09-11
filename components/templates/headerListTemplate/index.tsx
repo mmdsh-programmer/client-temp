@@ -3,19 +3,20 @@ import React, { useState } from "react";
 import { AddIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
-import RepoCreateDialogStepper from "@components/organisms/dialogs/repository/repoCreateDialogStepper";
 import { Typography } from "@material-tailwind/react";
 
 export interface IProps {
   header: string;
   buttonText: string;
   renderList?: () => React.ReactNode;
+  renderDialog?: (close: () => void) => React.ReactNode;
 }
 
 const HeaderListTemplate = ({
   header,
   buttonText,
   renderList,
+  renderDialog,
 }: IProps) => {
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
   return (
@@ -48,9 +49,7 @@ const HeaderListTemplate = ({
         </Button>
         </div>
         {renderList?.()}
-        {openCreateRepo && (
-          <RepoCreateDialogStepper setOpen={setOpenCreateRepo} />
-        )}
+        {openCreateRepo ? renderDialog?.(() => setOpenCreateRepo(false)) : null}
       </div>
     </header>
   );

@@ -1,6 +1,6 @@
 import { FetchNextPageOptions, InfiniteData, InfiniteQueryObserverResult } from "@tanstack/react-query";
 import { IListResponse, IRepo } from "@interface/repo.interface";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { repoAtom, repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
@@ -13,6 +13,7 @@ import HeaderListTemplate from "@components/templates/headerListTemplate";
 import ListMode from "@components/molecules/listMode";
 import MyRepoList from "./myRepoList";
 import RenderIf from "@components/atoms/renderIf";
+import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 
 export interface IRepoView {
   isLoading: boolean;
@@ -49,6 +50,7 @@ const RepoList = () => {
             </>
           )
         }}
+        renderDialog={(close: () => void) => <RepoCreateDialogStepper close={close} />}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />
