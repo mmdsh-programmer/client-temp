@@ -1,7 +1,3 @@
-import React, { useState } from "react";
-import { AddImageIcon } from "@components/atoms/icons";
-import LoadingButton from "@components/molecules/loadingButton";
-import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import {
   Button,
   DialogBody,
@@ -9,13 +5,18 @@ import {
   Radio,
   Typography,
 } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
+import React, { useState } from "react";
+
+import { AddImageIcon } from "@components/atoms/icons";
 import CancelButton from "@components/atoms/button/cancelButton";
-import RepoDefaultImage from "@components/molecules/repoDefaultImage";
 import { IFile } from "cls-file-management";
+import LoadingButton from "@components/molecules/loadingButton";
+import RepoDefaultImage from "@components/molecules/repoDefaultImage";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   handleClose: () => void;
@@ -79,6 +80,7 @@ const RepoImage = ({
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <Radio
+              crossOrigin="anonymous"
               name="default_image"
               color="deep-purple"
               label={
@@ -108,6 +110,7 @@ const RepoImage = ({
           </div>
           <div className="flex flex-col gap-4">
             <Radio
+              crossOrigin="anonymous"
               name="custom_image"
               color="deep-purple"
               label={

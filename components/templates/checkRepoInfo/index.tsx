@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import useGetRepo from "@hooks/repository/useGetRepo";
+import { repoAtom, repositoryIdAtom } from "atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { repoAtom, repositoryId } from "atom/repository";
-import { IRepo } from "interface/repo.interface";
 import { useRouter, useSearchParams } from "next/navigation";
-import useHandleRepoChange from "@hooks/repository/useHandleRepoChange";
-import { Spinner } from "@material-tailwind/react";
+
 import Error from "@components/organisms/error";
+import { IRepo } from "interface/repo.interface";
+import { Spinner } from "@material-tailwind/react";
+import useGetRepo from "@hooks/repository/useGetRepo";
+import useHandleRepoChange from "@hooks/repository/useHandleRepoChange";
 
 interface IProps {
   children: JSX.Element;
@@ -18,7 +19,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
   useHandleRepoChange();
 
   const [loading, setLoading] = useState(true);
-  const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryId);
+  const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryIdAtom);
 
   const router = useRouter();
   const searchParams = useSearchParams();

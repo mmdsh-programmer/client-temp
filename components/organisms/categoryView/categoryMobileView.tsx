@@ -1,16 +1,14 @@
-import React, { useState } from "react";
-import { useRecoilState } from "recoil";
-import { filterChildren } from "@atom/filter";
-import { Spinner } from "@material-tailwind/react";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import EmptyList from "@components/molecules/emptyList";
-import MobileCard from "@components/molecules/mobileCard";
-import { FaDateFromTimestamp } from "@utils/index";
+import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import DocumentMenu from "@components/molecules/documentMenu";
+import EmptyList from "@components/molecules/emptyList";
+import { FaDateFromTimestamp } from "@utils/index";
 import { ICategoryView } from "../category/categoryChildren";
-import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
+import LoadMore from "@components/molecules/loadMore";
+import MobileCard from "@components/molecules/mobileCard";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import { Spinner } from "@material-tailwind/react";
 
 const MobileView = ({
   isLoading,

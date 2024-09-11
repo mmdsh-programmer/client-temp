@@ -1,15 +1,16 @@
-import React from "react";
-import { categoryQueryParams } from "@atom/category";
-import { repoAtom } from "@atom/repository";
-import { sort } from "@atom/sortParam";
-import { IChildrenFilter } from "@interface/app.interface";
-import { Spinner } from "@material-tailwind/react";
-import { useRecoilValue } from "recoil";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import TreeCatItem from "./trreCatItem";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import { IChildrenFilter } from "@interface/app.interface";
+import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import { Spinner } from "@material-tailwind/react";
+import TreeCatItem from "./trreCatItem";
+import { categoryQueryParamsAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
+import { sortAtom } from "@atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   move?: boolean;
@@ -28,8 +29,8 @@ export const docTemplateFilter: IChildrenFilter = {
 
 const ChildrenTree = ({ move }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const queryParams = useRecoilValue(categoryQueryParams);
-  const getSortParams = useRecoilValue(sort);
+  const queryParams = useRecoilValue(categoryQueryParamsAtom);
+  const getSortParams = useRecoilValue(sortAtom);
 
   const {
     data: categoryChildren,

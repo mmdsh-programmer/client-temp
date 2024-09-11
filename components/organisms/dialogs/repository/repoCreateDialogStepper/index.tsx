@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { repoActiveStep } from "@atom/stepper";
-import StepperDialog from "@components/templates/dialog/stepperDialog";
-import { useRecoilState } from "recoil";
-import RepoCreate from "./repoCreate";
-import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/tags";
-import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
-import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
-import { repoAtom } from "@atom/repository";
+
 import Files from "./files";
 import { IFile } from "cls-file-management";
+import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
+import RepoCreate from "./repoCreate";
+import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
+import StepperDialog from "@components/templates/dialog/stepperDialog";
+import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/tags";
+import { repoActiveStepAtom } from "@atom/stepper";
+import { repoAtom } from "@atom/repository";
+import { useRecoilState } from "recoil";
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  close: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
-  const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStep);
+const RepoCreateDialogStepper = ({ close }: IProps) => {
+  const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStepAtom);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
   const [selectedFile, setSelectedFile] = useState<IFile | null>(null);
 
@@ -24,7 +25,7 @@ const RepoCreateDialogStepper = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setActiveStep(0);
-    setOpen(false);
+    close(false);
     setRepo(null);
   };
 

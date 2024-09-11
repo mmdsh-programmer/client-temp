@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import SelectBox from "@components/molecules/selectBox";
-import { Typography } from "@material-tailwind/react";
-import { filterChildren } from "@atom/filter";
+
 import { EDocumentTypes } from "@interface/enums";
-import useGetTags from "@hooks/tag/useGetTags";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
+import SelectBox from "@components/molecules/selectBox";
+import { Typography } from "@material-tailwind/react";
+import { filterChildrenAtom } from "@atom/filter";
+import { repoAtom } from "@atom/repository";
+import useGetTags from "@hooks/tag/useGetTags";
 
 const CategoryFilter = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -19,7 +20,7 @@ const CategoryFilter = () => {
   const [tags, setTags] = useState<number[]>([]);
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
-  const setMainFilterChildren = useSetRecoilState(filterChildren);
+  const setMainFilterChildren = useSetRecoilState(filterChildrenAtom);
 
   const tagOptions =
     getTags?.pages[0].list.map((tag) => {

@@ -1,17 +1,18 @@
-import React from "react";
-import { repoGrouping } from "@atom/repository";
 import {
   FolderArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
   MyFolderIcon,
 } from "@components/atoms/icons";
+
 import { ERepoGrouping } from "@interface/enums";
-import { useRecoilState } from "recoil";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { repoGroupingAtom } from "@atom/repository";
+import { useRecoilState } from "recoil";
 
 const RepoTypesMobileView = () => {
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGrouping);
+  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
 
   return (
     <div className="w-full px-4 absolute bottom-0 xs:hidden min-h-16 h-16 bg-primary border-normal">

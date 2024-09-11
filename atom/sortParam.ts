@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { logEffect } from "@utils/index";
 
 export interface ISortProps {
   order?: "asc" | "desc";
@@ -7,12 +8,13 @@ export interface ISortProps {
   createdAt?: "asc" | "desc";
 }
 
-export const sort = atom<ISortProps>({
-  key: "sort",
+export const sortAtom = atom<ISortProps>({
+  key: "sortAtom",
   default: {
     order: "asc",
     type: "asc",
     name: "asc",
     createdAt: "asc",
   },
+  effects: [logEffect("sortAtom")],
 });

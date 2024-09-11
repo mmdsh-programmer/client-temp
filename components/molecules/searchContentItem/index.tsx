@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+
 import { DocIcon } from "@components/atoms/icons";
-import useGetDocument from "@hooks/document/useGetDocument";
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
-import { categorySearchContent } from "atom/category";
+import { categorySearchContentAtom } from "atom/category";
+import useGetDocument from "@hooks/document/useGetDocument";
 import { useRouter } from "next/router";
 import { useSetRecoilState } from "recoil";
-import { Button } from "@material-tailwind/react";
 
 interface IProps {
   data: IContentSearchListItem;
@@ -16,8 +16,12 @@ interface IProps {
 export const ResultItem = ({ data, disabled, onClick }: IProps) => {
   const router = useRouter();
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  const setOpen = useSetRecoilState(categorySearchContent);
-  useGetDocument(data.repoId, data.documentId, isEnabled);
+  const setOpen = useSetRecoilState(categorySearchContentAtom);
+  useGetDocument(
+    data.repoId,
+    data.documentId,
+    isEnabled,   
+  );
 
   const handleDocumentSelect = () => {
     setEnabled(true);

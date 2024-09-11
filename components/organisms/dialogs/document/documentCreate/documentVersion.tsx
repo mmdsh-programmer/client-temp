@@ -1,25 +1,26 @@
-import React from "react";
-import { EDocumentTypes } from "@interface/enums";
 import { DialogBody, Typography } from "@material-tailwind/react";
-import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { category } from "@atom/category";
 import {
-  documentInfo,
-  documentKey,
-  documentTemplate,
-  documentType,
+  documentInfoAtom,
+  documentKeyAtom,
+  documentTemplateAtom,
+  documentTypeAtom,
 } from "@atom/document";
-import { useForm } from "react-hook-form";
+
+import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
+import { EDocumentTypes } from "@interface/enums";
+import FormInput from "@components/atoms/input/formInput";
+import { IDocument } from "@interface/document.interface";
+import React from "react";
+import { categoryAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateDocument from "@hooks/document/useCreateDocument";
-import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
 import useCreateDocumentTemplate from "@hooks/document/useCreateDocumentTemplate";
-import { IDocument } from "@interface/document.interface";
-import FormInput from "@components/atoms/input/formInput";
-import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
+import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
 import useCreateVersion from "@hooks/version/useCreateVersion";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 
 interface IProps {
   isTemplate: boolean;
@@ -32,11 +33,11 @@ interface IForm {
 
 const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const { handlePrevStep, close } = useStepperNavigate();
-  const getDocumentType = useRecoilValue(documentType);
-  const getDocumentInfo = useRecoilValue(documentInfo);
-  const getDocumentTemplate = useRecoilValue(documentTemplate);
-  const getDocumentKey = useRecoilValue(documentKey);
-  const getCategory = useRecoilValue(category);
+  const getDocumentType = useRecoilValue(documentTypeAtom);
+  const getDocumentInfo = useRecoilValue(documentInfoAtom);
+  const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
+  const getDocumentKey = useRecoilValue(documentKeyAtom);
+  const getCategory = useRecoilValue(categoryAtom);
   const getRepo = useRecoilValue(repoAtom);
   const createDocumentHook = useCreateDocument();
   const createVersionHook = useCreateVersion();

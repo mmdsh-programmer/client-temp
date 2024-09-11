@@ -1,14 +1,15 @@
-import React from "react";
+import { bulkItemsAtom, bulkMoveAtom } from "@atom/bulk";
+import { categoryAtom, categoryMoveDestAtom } from "@atom/category";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import { useForm } from "react-hook-form";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { category, categoryMoveDest } from "@atom/category";
-import { bulkItems, bulkMove } from "@atom/bulk";
-import useMoveBulk from "@hooks/bulk/useMoveBulk";
-import useEditCategory from "@hooks/category/useEditCategory";
 import MoveSelection from "@components/molecules/moveSelection";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import useEditCategory from "@hooks/category/useEditCategory";
+import { useForm } from "react-hook-form";
+import useMoveBulk from "@hooks/bulk/useMoveBulk";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -16,11 +17,11 @@ interface IProps {
 
 const CategoryMoveDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(category);
-  const [getBulkMove, setBulkMove] = useRecoilState(bulkMove);
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
+  const getCategory = useRecoilValue(categoryAtom);
+  const [getBulkMove, setBulkMove] = useRecoilState(bulkMoveAtom);
+  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDest);
+    useRecoilState(categoryMoveDestAtom);
 
   const moveBulkHook = useMoveBulk();
   const moveCategory = useEditCategory(true);

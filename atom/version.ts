@@ -1,31 +1,19 @@
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
-import { logger } from "@utils/index";
 import { atom } from "recoil";
+import { logEffect } from "@utils/index";
 
 export const selectedVersionAtom = atom<IVersion | null>({
   key: "selectedVersionAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("selectedVersionAtom", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("selectedVersionAtom")],
 });
 
 export const versionListAtom = atom<boolean | null>({
-  key: "versionList",
+  key: "versionListAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("versionList", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("versionListAtom")],
 });
 
 export const compareVersionAtom = atom<{
@@ -42,11 +30,5 @@ export const compareVersionAtom = atom<{
 } | null>({
   key: "compareVersionAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("compareVersionAtom", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("compareVersionAtom")],
 });

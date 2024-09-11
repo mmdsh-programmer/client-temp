@@ -1,13 +1,13 @@
-import { getChildrenAction } from "@actions/category";
-import { ISortProps } from "@atom/sortParam";
-import { IChildrenFilter } from "@interface/app.interface";
 import { ICategoryMetadata } from "@interface/category.interface";
+import { IChildrenFilter } from "@interface/app.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
+import { ISortProps } from "@atom/sortParam";
+import { getChildrenAction } from "@actions/category";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetChildren = (
-  repoId: number | undefined,
+  repoId: number,
   categoryId: number | undefined | null,
   sortParams: ISortProps,
   size: number,
@@ -37,7 +37,7 @@ const useGetChildren = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!categoryId && categoryId !== 0 && categoryId !== null,
+    enabled: !!repoId && !!categoryId && categoryId !== 0 && categoryId !== null,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

@@ -1,8 +1,9 @@
+import React, { Suspense } from "react";
+
 import SignInComponent from "@components/pages/signin";
-import React from "react";
 
 const Signin = () => {
-  return <SignInComponent />;
+  return <Suspense><SignInComponent /></Suspense>;
 };
 
 export default Signin;

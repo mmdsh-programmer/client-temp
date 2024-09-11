@@ -1,22 +1,23 @@
-import React from "react";
-import { ICategoryMetadata } from "@interface/category.interface";
+import { FolderIcon, InvisibleIcon } from "@components/atoms/icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { categoryShow } from "@atom/category";
-import { bulkItems } from "@atom/bulk";
-import { toast } from "react-toastify";
+
+import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { Checkbox } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
-import { FolderIcon, InvisibleIcon } from "@components/atoms/icons";
+import { ICategoryMetadata } from "@interface/category.interface";
+import React from "react";
 import TableCell from "@components/molecules/tableCell";
-import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
+import { bulkItemsAtom } from "@atom/bulk";
+import { categoryShowAtom } from "@atom/category";
+import { toast } from "react-toastify";
 
 interface IProps {
   category: ICategoryMetadata;
 }
 
 const CategoryTableRow = ({ category: categoryProp }: IProps) => {
-  const setCategoryParent = useSetRecoilState(categoryShow);
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
+  const setCategoryParent = useSetRecoilState(categoryShowAtom);
+  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
 
   const handleRowClick = (selectedCategory: ICategoryMetadata) => {
     setCategoryParent(selectedCategory);

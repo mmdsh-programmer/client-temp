@@ -1,14 +1,14 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { documentActiveStep } from "@atom/stepper";
-import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import StepperDialog from "@components/templates/dialog/stepperDialog";
-import DocumentType from "@components/organisms/dialogs/document/documentCreate/documentType";
-import DocumentInfo from "@components/organisms/dialogs/document/documentCreate/documentInfo";
-import DocumentVersion from "@components/organisms/dialogs/document/documentCreate/documentVersion";
-import DocumentTemplate from "@components/organisms/dialogs/document/documentCreate/documentTemplate";
-import { repoAtom } from "@atom/repository";
 import DocumentEncryption from "./documentEncryption";
+import DocumentInfo from "@components/organisms/dialogs/document/documentCreate/documentInfo";
+import DocumentTemplate from "@components/organisms/dialogs/document/documentCreate/documentTemplate";
+import DocumentType from "@components/organisms/dialogs/document/documentCreate/documentType";
+import DocumentVersion from "@components/organisms/dialogs/document/documentCreate/documentVersion";
+import React from "react";
+import StepperDialog from "@components/templates/dialog/stepperDialog";
+import { documentActiveStepAtom } from "@atom/stepper";
+import { repoAtom } from "@atom/repository";
+import { useRecoilValue } from "recoil";
+import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 
 interface IProps {
   isTemplate: boolean;
@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
-  const getActiveStep = useRecoilValue(documentActiveStep);
+  const getActiveStep= useRecoilValue(documentActiveStepAtom);
   const getRepo = useRecoilValue(repoAtom);
 
   const repoId = getRepo!.id;

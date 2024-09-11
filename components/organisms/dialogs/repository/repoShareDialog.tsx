@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import { DialogBody } from "@material-tailwind/react";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { createGroupAtom, deleteGroupAtom, editGroupAtom } from "@atom/group";
-import GroupCreateDialog from "@components/organisms/dialogs/group/groupCreateDialog";
-import { IRepo } from "@interface/repo.interface";
-import GroupEditDialog from "@components/organisms/dialogs/group/groupEditDialog";
-import GroupDeleteDialog from "@components/organisms/dialogs/group/groupDeleteDialog";
-import GroupMenu from "@components/molecules/groupMenu";
-import { repoAtom } from "@atom/repository";
-import { openShareAccess } from "@atom/public";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
 import CreateRepoPublicLink from "@components/organisms/publicLink/createRepoPublicLink";
-import InfoDialog from "@components/templates/dialog/infoDialog";
-import Users from "@components/organisms/users";
+import { DialogBody } from "@material-tailwind/react";
+import GroupCreateDialog from "@components/organisms/dialogs/group/groupCreateDialog";
+import GroupDeleteDialog from "@components/organisms/dialogs/group/groupDeleteDialog";
+import GroupEditDialog from "@components/organisms/dialogs/group/groupEditDialog";
+import GroupMenu from "@components/molecules/groupMenu";
 import Groups from "@components/organisms/group";
+import { IRepo } from "@interface/repo.interface";
+import InfoDialog from "@components/templates/dialog/infoDialog";
 import PublicLink from "@components/organisms/publicLink";
 import Publish from "@components/organisms/publish";
 import TabComponent from "@components/molecules/tab";
+import Users from "@components/organisms/users";
+import { openShareAccessAtom } from "@atom/public";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
   repo?: IRepo;
@@ -39,7 +40,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   const [getDeleteGroupModal, setDeleteGroupModal] =
     useRecoilState(deleteGroupAtom);
   const [getOpenShareAccess, setOpenShareAccess] =
-    useRecoilState(openShareAccess);
+    useRecoilState(openShareAccessAtom);
 
   const handleClose = () => {
     setOpen(false);

@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
-import { categoryShow } from "atom/category";
+import { categoryShowAtom } from "atom/category";
 import { repoAtom } from "atom/repository";
-import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "atom/document";
+import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 const PanelURl = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryShow);
+  const getCategory = useRecoilValue(categoryShowAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
   useEffect(() => {

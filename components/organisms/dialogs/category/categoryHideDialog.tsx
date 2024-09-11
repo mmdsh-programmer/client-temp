@@ -1,11 +1,11 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import { category } from "@atom/category";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
+import React from "react";
+import { categoryAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -13,7 +13,7 @@ interface IProps {
 
 const CategoryHideDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(category);
+  const getCategory = useRecoilValue(categoryAtom);
 
   const editCategory = useEditCategory();
 

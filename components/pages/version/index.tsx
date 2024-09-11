@@ -1,23 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
-import { IVersionMetadata } from "@interface/document.interface";
-import { EEmptyList } from "@components/molecules/emptyList";
-import VersionTableView from "@components/organisms/versionView/versionTableView";
-import VersionMobileView from "@components/organisms/versionView/versionMobileView";
-import HeaderListTemplate from "@components/templates/headerListTemplate";
-import VersionCreateDialog from "@components/organisms/dialogs/version/versionCreateDialog";
-import useGetVersionList from "@hooks/version/useGetVersionList";
 import {
   FetchNextPageOptions,
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
+import React, { useState } from "react";
+
+import { EEmptyList } from "@components/molecules/emptyList";
+import HeaderListTemplate from "@components/templates/headerListTemplate";
 import { IVersion } from "@interface/version.interface";
+import { IVersionMetadata } from "@interface/document.interface";
+import VersionCreateDialog from "@components/organisms/dialogs/version/versionCreateDialog";
+import VersionMobileView from "@components/organisms/versionView/versionMobileView";
+import VersionTableView from "@components/organisms/versionView/versionTableView";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import useGetVersionList from "@hooks/version/useGetVersionList";
+import { useRecoilValue } from "recoil";
 
 export interface IVersionView {
   isLoading: boolean;
@@ -39,8 +40,6 @@ export interface IVersionView {
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-
-  const [openCreateVersion, setOpenCreateVersion] = useState(false);
 
   const {
     data: versionList,
@@ -89,7 +88,7 @@ const VersionList = () => {
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
-        onClick={() => setOpenCreateVersion(true)}
+        renderDialog={(close: () => void) => <VersionCreateDialog close={close} />}
       />
       <div className="hidden xs:block">
         <VersionTableView {...commonProps} />
@@ -97,9 +96,6 @@ const VersionList = () => {
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
         <VersionMobileView {...commonProps} />
       </div>
-      {openCreateVersion && (
-        <VersionCreateDialog setOpen={setOpenCreateVersion} />
-      )}
     </div>
   );
 };

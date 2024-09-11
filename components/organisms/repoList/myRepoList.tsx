@@ -1,21 +1,21 @@
-import React from "react";
-import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
-import RenderIf from "@components/atoms/renderIf";
-import { EListMode } from "@interface/enums";
-import { useRecoilValue } from "recoil";
-import { listMode } from "@atom/app";
-import { EEmptyList } from "@components/molecules/emptyList";
-import { IRepoView } from ".";
-import TableView from "../repoView/tableView";
-import MobileView from "../repoView/mobileView";
 import CardView from "../repoView/cardView";
+import { EEmptyList } from "@components/molecules/emptyList";
+import { EListMode } from "@interface/enums";
+import { IRepoView } from ".";
+import MobileView from "../repoView/mobileView";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import TableView from "../repoView/tableView";
+import { listModeAtom } from "@atom/app";
+import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   archived: boolean;
 }
 
 const MyRepoList = ({ archived }: IProps) => {
-  const mode = useRecoilValue(listMode);
+  const mode = useRecoilValue(listModeAtom);
   const {
     data: getMyRepoList,
     hasNextPage,

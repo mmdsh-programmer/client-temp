@@ -1,10 +1,10 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import { category } from "@atom/category";
+import React from "react";
+import { categoryAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -12,7 +12,7 @@ interface IProps {
 
 const CategoryDeleteDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(category);
+  const getCategory = useRecoilValue(categoryAtom);
 
   const deleteCategory = useDeleteCategory();
 

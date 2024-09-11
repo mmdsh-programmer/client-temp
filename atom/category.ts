@@ -1,7 +1,7 @@
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
-import { logger } from "@utils/index";
 import { atom } from "recoil";
+import { logEffect } from "@utils/index";
 
 export interface ICategoryTreeItem extends ICategoryMetadata {
   parent?: number;
@@ -19,76 +19,72 @@ export interface CategoryChildrenQueryParams {
   total: number;
 }
 
-// ----------------------------------
-export const categoryQueryParams = atom<CategoryChildrenQueryParams>({
-  key: "categoryQueryParams",
+export const categoryQueryParamsAtom = atom<CategoryChildrenQueryParams>({
+  key: "categoryQueryParamsAtom",
   default: {
     limit: 10,
     page: 1,
     total: 0,
   },
+  effects: [logEffect("categoryQueryParamsAtom")],
 });
 
-export const category = atom<ICategoryMetadata | null>({
-  key: "category",
+export const categoryAtom = atom<ICategoryMetadata | null>({
+  key: "categoryAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("category", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("categoryAtom")],
 });
 
-export const categoryShow = atom<ICategoryMetadata | null>({
-  key: "categoryShow",
+export const categoryShowAtom = atom<ICategoryMetadata | null>({
+  key: "categoryShowAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("categoryShow", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("categoryShowAtom")],
 });
 
-export const categoryBreadCrumb = atom<ICategoryMetadata[]>({
-  key: "categoryBreadcrumb",
+export const categoryBreadCrumbAtom = atom<ICategoryMetadata[]>({
+  key: "categoryBreadCrumbAtom",
   default: [],
+  effects: [logEffect("categoryBreadCrumbAtom")],
 });
 
-export const categoryMoveDest = atom<ICategoryMetadata | null>({
-  key: "categoryMoveDest",
+export const categoryMoveDestAtom = atom<ICategoryMetadata | null>({
+  key: "categoryMoveDestAtom",
   default: null,
+  effects: [logEffect("categoryMoveDestAtom")],
 });
 
-export const categorySearchContent = atom<boolean>({
-  key: "categorySearchContent",
+export const categorySearchContentAtom = atom<boolean>({
+  key: "categorySearchContentAtom",
   default: false,
+  effects: [logEffect("categorySearchContentAtom")],
 });
 
-export const categorySearchContentParam = atom<string>({
-  key: "categorySearchContentParam",
+export const categorySearchContentParamAtom = atom<string>({
+  key: "categorySearchContentParamAtom",
   default: "",
+  effects: [logEffect("categorySearchContentParamAtom")],
 });
 
 export const categoryViewModeAtom = atom<"table" | "tree">({
-  key: "categoryViewMode",
+  key: "categoryViewModeAtom",
   default: "table",
+  effects: [logEffect("categoryViewModeAtom")],
 });
 
-export const childrenSearch = atom<string | null>({
-  key: "childrenSearch",
+export const childrenSearchAtom = atom<string | null>({
+  key: "childrenSearchAtom",
   default: null,
+  effects: [logEffect("childrenSearchAtom")],
 });
 
 export const createCatDocDrawerAtom = atom<boolean | null>({
   key: "createCatDocDrawerAtom",
   default: null,
+  effects: [logEffect("createCatDocDrawerAtom")],
 });
 
 export const categoryDrawerAtom = atom<boolean | null>({
   key: "categoryDrawerAtom",
   default: null,
+  effects: [logEffect("categoryDrawerAtom")],
 });

@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { categorySearchContentParam } from "atom/category";
-import { useRecoilState } from "recoil";
-import { SearchIcon } from "@components/atoms/icons";
-import useDebounce from "@hooks/custom/useDebounce";
+
 import { DialogBody } from "@material-tailwind/react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import InputAtom from "@components/atoms/input";
 import SearchContentResult from "../searchContentResult";
+import { SearchIcon } from "@components/atoms/icons";
+import { categorySearchContentParamAtom } from "atom/category";
+import useDebounce from "@hooks/custom/useDebounce";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +17,7 @@ const SearchContent = ({ setOpen }: IProps) => {
   const inputRef = useRef<any>();
   const [search, setSearch] = useState<string>("");
   const [getSearchParam, setSearchParam] = useRecoilState(
-    categorySearchContentParam,
+    categorySearchContentParamAtom
   );
   const debouncedValue = useDebounce<string>(search, 1000);
 

@@ -1,7 +1,7 @@
-import moment from "moment-jalaali";
 import { ERoles } from "@interface/enums";
+import moment from "moment-jalaali";
 
-export const logger = (key: string, newValue: any, oldValue: any) => {
+const logger = (key: string, newValue: any, oldValue: any) => {
   if (process.env.NODE_ENV === "development") {
     console.log(
       `############################################################################  ${key}`,
@@ -12,6 +12,12 @@ export const logger = (key: string, newValue: any, oldValue: any) => {
       "####################################################################################",
     );
   }
+};
+
+export const logEffect = (atomName) => ({ onSet }) => {
+  onSet((newValue, oldValue) => {
+    logger(atomName, newValue, oldValue);
+  });
 };
 
 export const translateRoles = (role?: ERoles) => {

@@ -1,12 +1,13 @@
-import React from "react";
 import { CardIcon, MoreLineIcon } from "@components/atoms/icons";
-import { EListMode } from "@interface/enums";
-import { useRecoilState } from "recoil";
-import { listMode } from "@atom/app";
-import { Button } from "@material-tailwind/react";
 
-const ListMode: React.FC = () => {
-  const [getListMode, setListMode] = useRecoilState(listMode);
+import { Button } from "@material-tailwind/react";
+import { EListMode } from "@interface/enums";
+import React from "react";
+import { listModeAtom } from "@atom/app";
+import { useRecoilState } from "recoil";
+
+const ListMode: React.FC  = () => {
+  const [getListMode, setListMode] = useRecoilState(listModeAtom);
   return (
     <>
       <Button
