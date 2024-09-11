@@ -55,7 +55,16 @@ const VersionDeleteDialog = ({ version, setOpen }: IProps) => {
       setOpen={handleClose}
       className=""
     >
-      {version?.versionNumber}
+      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        آیا از حذف"
+        <span
+          title={version.versionNumber}
+          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+        >
+          {version.versionNumber}
+        </span>
+        " اطمینان دارید؟
+      </div>
     </DeleteDialog>
   );
 };

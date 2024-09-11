@@ -1,5 +1,6 @@
 "use client"
 
+import CategoryBulk from "@components/molecules/categoryBulk";
 import CategoryList from "@components/organisms/category";
 import React from "react";
 import RepoInfo from "@components/organisms/repoInfo";
@@ -21,7 +22,7 @@ const RepoPage = () => {
           <CategoryList />
         </>
       )}
-      <RepoTypesMobileView />
+       {getBulkItems.length ? <CategoryBulk /> : <RepoTypesMobileView />}
     </div>
   );
 };

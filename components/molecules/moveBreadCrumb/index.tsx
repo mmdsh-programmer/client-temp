@@ -1,7 +1,8 @@
-import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 
+import { BackIcon } from "@components/atoms/icons";
+import { ChevronLeftIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { categoryMoveDestAtom } from "atom/category";
 import { useRecoilState } from "recoil";
@@ -42,7 +43,7 @@ const MoveBreadCrumb = () => {
               setBreadCrumb([]);
             }}
           >
-            <BreadcrumbIcon className="h-4 w-4 fill-icon-hover" />
+            <BackIcon className="h-4 w-4 fill-icon-hover" />
           </Button>
           {breadCrumb.map((breadItem, index) => {
             return (

@@ -44,7 +44,18 @@ const DocumentDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className=""
     >
-      {document?.name}
+      {
+        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+          آیا از حذف"
+          <span
+            title={document?.name}
+            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          >
+            {document?.name}
+          </span>
+          " اطمینان دارید؟
+        </div>
+      }
     </DeleteDialog>
   );
 };
