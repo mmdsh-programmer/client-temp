@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { keySchema } from "./validation.yup";
 import forge from "node-forge";
+import { toast } from "react-toastify";
 
 interface IForm {
   privateKey: string;
@@ -27,25 +28,41 @@ const EditorKey = ({
   const form = useForm<IForm>({
     resolver: yupResolver(keySchema),
   });
-  const { register, handleSubmit, formState, reset, clearErrors } = form;
+  const { register, handleSubmit, formState, reset, clearErrors, setError } =
+    form;
   const { errors } = formState;
 
   const decryptData = (key: string) => {
-    if (!encryptedContent) return;
+    if (!encryptedContent) {
+      toast.error("مشکلی در دریافت محتوای رمزگذاری شده به وجود آمد.");
+      return;
+    }
 
-    const privateKey = forge.pki.privateKeyFromPem(key);
+    try {
+      const privateKey = forge.pki.privateKeyFromPem(key);
 
-    return forge.util.decodeUtf8(
-      privateKey.decrypt(forge.util.decode64(encryptedContent), "RSA-OAEP", {
-        md: forge.md.sha256.create(),
-      })
-    );
+      return forge.util.decodeUtf8(
+        privateKey.decrypt(forge.util.decode64(encryptedContent), "RSA-OAEP", {
+          md: forge.md.sha256.create(),
+        })
+      );
+    } catch {
+      setError("privateKey", {
+        message: "کلید خصوصی وارد شده اشتباه است",
+      });
+      return;
+    }
   };
 
   const onSubmit = (data: IForm) => {
     const content = decryptData(data.privateKey);
-    onDecryption(content || encryptedContent || "");
+    if (!content) {
+      return setError("privateKey", {
+        message: "کلید خصوصی وارد شده اشتباه است",
+      });
+    }
 
+    onDecryption(content);
     reset({ privateKey: "" });
     clearErrors();
   };
