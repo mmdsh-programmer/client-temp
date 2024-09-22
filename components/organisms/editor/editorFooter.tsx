@@ -8,13 +8,13 @@ import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
 import { Button, Checkbox, Typography } from "@material-tailwind/react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { translateVersionStatus } from "@utils/index";
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import { versionModalListAtom } from "@atom/version";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { EDocumentTypes } from "@interface/enums";
 import { toast } from "react-toastify";
 import { IVersion } from "@interface/version.interface";
@@ -29,6 +29,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
   const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
+  const setVersion = useSetRecoilState(selectedVersionAtom);
 
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
@@ -64,6 +65,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         state: "draft",
       } as IVersion;
       setVersionData(item);
+      setVersion(item);
     }
     setEditorMode(editorMode === "edit" ? "preview" : "edit");
     if (

@@ -46,11 +46,13 @@ const Editor = ({ setOpen }: IProps) => {
   );
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
-  const classicEditorRef = useRef<IRemoteEditorRef>(null);
-  const wordEditorRef = useRef<IRemoteEditorRef>(null);
-  const excelEditorRef = useRef<IRemoteEditorRef>(null);
-  const flowchartEditorRef = useRef<IRemoteEditorRef>(null);
-  const latexEditorRef = useRef<IRemoteEditorRef>(null);
+  const editorRefs = {
+    clasor: useRef<IRemoteEditorRef>(null),
+    word: useRef<IRemoteEditorRef>(null),
+    excel: useRef<IRemoteEditorRef>(null),
+    flowchart: useRef<IRemoteEditorRef>(null),
+    latex: useRef<IRemoteEditorRef>(null),
+  };
 
   const {
     data: getLastVersion,
@@ -80,12 +82,32 @@ const Editor = ({ setOpen }: IProps) => {
       : undefined
   );
 
+  const getEditorConfig = (): {
+    url: string;
+    ref: React.RefObject<IRemoteEditorRef>;
+  } => {
+    const editors = {
+      [EDocumentTypes.classic]: process.env
+        .NEXT_PUBLIC_CLASSIC_EDITOR as string,
+      [EDocumentTypes.word]: process.env.NEXT_PUBLIC_WORD_EDITOR as string,
+      [EDocumentTypes.latex]: process.env.NEXT_PUBLIC_LATEX_EDITOR as string,
+      [EDocumentTypes.excel]: process.env.NEXT_PUBLIC_EXCEL_EDITOR as string,
+      [EDocumentTypes.flowchart]: process.env
+        .NEXT_PUBLIC_FLOWCHART_EDITOR as string,
+    };
+    const contentType =
+      getSelectedDocument?.contentType || EDocumentTypes.classic;
+    return {
+      url: editors[contentType],
+      ref: editorRefs[contentType],
+    };
+  };
+
   useEffect(() => {
     if (error) {
       setSelectedDocument(null);
       setVersionModalList(false);
-    }
-    if (!getLastVersion && isSuccess) {
+    } else if (!getLastVersion && isSuccess) {
       setVersionModalList(true);
     }
     if (
@@ -111,10 +133,6 @@ const Editor = ({ setOpen }: IProps) => {
       setPublicKey(keyInfo.key);
     }
   }, [keyInfo]);
-
-  useEffect(() => {
-    setVersionModalList(false);
-  }, []);
 
   const handleDecryption = useCallback((content: string) => {
     setDecryptedContent(content);
@@ -143,60 +161,6 @@ const Editor = ({ setOpen }: IProps) => {
     );
   }
 
-  const getEditorConfig = (): {
-    url: string;
-    ref: React.RefObject<IRemoteEditorRef>;
-  } => {
-    switch (getSelectedDocument?.contentType) {
-      case EDocumentTypes.classic:
-        return {
-          url: process.env.NEXT_PUBLIC_CLASSIC_EDITOR as string,
-          ref: classicEditorRef,
-        };
-      case EDocumentTypes.word:
-        return {
-          url: process.env.NEXT_PUBLIC_WORD_EDITOR as string,
-          ref: wordEditorRef,
-        };
-      case EDocumentTypes.latex:
-        return {
-          url: process.env.NEXT_PUBLIC_LATEX_EDITOR as string,
-          ref: latexEditorRef,
-        };
-      case EDocumentTypes.excel:
-        return {
-          url: process.env.NEXT_PUBLIC_EXCEL_EDITOR as string,
-          ref: excelEditorRef,
-        };
-      case EDocumentTypes.flowchart:
-        return {
-          url: process.env.NEXT_PUBLIC_FLOWCHART_EDITOR as string,
-          ref: flowchartEditorRef,
-        };
-      default:
-        return {
-          url: process.env.NEXT_PUBLIC_CLASSIC_EDITOR as string,
-          ref: classicEditorRef,
-        };
-    }
-  };
-
-  if (error) {
-    return (
-      <div className="main w-full h-full text-center flex items-center justify-center">
-        <Error
-          retry={() => {
-            return setEditorModal(false);
-          }}
-          error="باز کردن سند با خطا مواجه شد."
-        />
-      </div>
-    );
-  }
-  if (!!versionModalList) {
-    return <VersionDialogView />;
-  }
-
   if (showKey && !decryptedContent && getVersionData?.content) {
     return (
       <EditorKey
@@ -209,20 +173,12 @@ const Editor = ({ setOpen }: IProps) => {
   }
 
   return (
-    <EditorDialog
-      dialogHeader={getSelectedDocument?.name}
-      isPending={isLoading || isLoadingKey}
-      setOpen={handleClose}
-      editorRef={getEditorConfig().ref}
-    >
-      {isLoading ? (
-        <div className="main w-full h-full text-center flex items-center justify-center">
-          <Spinner className="h-5 w-5 " color="deep-purple" />
-        </div>
+    <>
+      {!!versionModalList ? (
+        <VersionDialogView />
       ) : (
         <BlockDraft>
           <>
-            <BlockDraftDialog editorRef={getEditorConfig().ref} />
             <EditorDialog
               dialogHeader={getSelectedDocument?.name}
               isPending={isLoading}
@@ -234,16 +190,19 @@ const Editor = ({ setOpen }: IProps) => {
                   <Spinner className="h-5 w-5 " color="deep-purple" />
                 </div>
               ) : (
-                <EditorComponent
-                  version={data}
-                  getEditorConfig={getEditorConfig}
-                />
+                <>
+                  <BlockDraftDialog editorRef={getEditorConfig().ref} onClose={handleClose}/>
+                  <EditorComponent
+                    version={data}
+                    getEditorConfig={getEditorConfig}
+                  />
+                </>
               )}
             </EditorDialog>
           </>
         </BlockDraft>
       )}
-    </EditorDialog>
+    </>
   );
 };
 

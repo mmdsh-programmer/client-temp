@@ -2383,6 +2383,7 @@ export const createBlockVersion = async (
   try {
     const response = await axiosClasorInstance.post<IServerResult<IBLockDocument>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/block`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${access_token}`,

@@ -16,7 +16,6 @@ import {
 } from "@tanstack/react-query";
 import { IVersion } from "@interface/version.interface";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import VersionMenu from "@components/molecules/versionMenu";
 
 export interface IVersionView {
   isLoading: boolean;
@@ -31,7 +30,7 @@ export interface IVersionView {
     >
   >;
   isFetchingNextPage: boolean;
-  lastVersion?: IVersion,
+  lastVersion?: IVersion;
   type: EEmptyList;
 }
 
@@ -99,7 +98,7 @@ const VersionList = () => {
       </div>
       {openCreateVersion ? (
         <VersionCreateDialog setOpen={setOpenCreateVersion} />
-      ): null}
+      ) : null}
     </div>
   );
 };

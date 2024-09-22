@@ -283,14 +283,14 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
           setOpen={() => setDeletePasswordDocumentModal(false)}
         />
       )}
-      {editContentModal && (
+      {editContentModal ? (
         <Editor
           setOpen={() => {
             setEditContentModal(false);
             setDocument(null);
           }}
         />
-      )}
+      ): null}
     </>
   );
 };

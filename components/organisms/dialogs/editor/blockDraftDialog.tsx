@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { repoAtom } from "@atom/repository";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
@@ -15,15 +14,14 @@ const timeout = 5 * 60; // seconds
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
+  onClose: () => void;
 }
 
-const BlockDraftDialog = ({ editorRef }: IProps) => {
+const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const repository = useRecoilValue(repoAtom);
-  const [selectedDocument, setSelectedDocument] =
-    useRecoilState(selectedDocumentAtom);
-  const [version, setVersion] = useRecoilState(selectedVersionAtom);
+  const selectedDocument = useRecoilValue(selectedDocumentAtom);
+  const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const setEditorData = useSetRecoilState(editorDataAtom);
 
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);
 
@@ -47,42 +45,37 @@ const BlockDraftDialog = ({ editorRef }: IProps) => {
   };
 
   const handleFreeDraft = async () => {
-    if (!freeDraftHook.isPending && version && repository && selectedDocument) {
+    if (editorData && repository && selectedDocument) {
       const value = (await editorRef.current?.getData()) as any;
-      try {
-        freeDraftHook.mutate({
-          content:
-            selectedDocument?.contentType === EDocumentTypes.classic
-              ? value?.content
-              : value,
-          outline:
-            selectedDocument?.contentType === EDocumentTypes.classic
-              ? value?.outline
-              : "[]",
-          repoId: repository.id,
-          documentId: selectedDocument.id,
-          versionId: version.id,
-          versionNumber: version?.versionNumber,
-          callBack: () => {
-            setShowFreeDraftModal(false);
-            stopWorker();
-            setSelectedDocument(null);
-            setEditorData(null);
-            setVersion(null);
-          },
-        });
-      } catch {
-        //
-      }
+
+      freeDraftHook.mutate({
+        content:
+          selectedDocument?.contentType === EDocumentTypes.classic
+            ? value?.content
+            : value,
+        outline:
+          selectedDocument?.contentType === EDocumentTypes.classic
+            ? value?.outline
+            : "[]",
+        repoId: repository.id,
+        documentId: selectedDocument.id,
+        versionId: editorData.id,
+        versionNumber: editorData?.versionNumber,
+        callBack: () => {
+          setShowFreeDraftModal(false);
+          stopWorker();
+          onClose();
+        },
+      });
     }
   };
 
   const handleBlockDraft = () => {
-    if (repository && selectedDocument && version && editorMode === "edit") {
+    if (repository && selectedDocument && editorData && editorMode === "edit") {
       const data = {
         repoId: repository.id,
         documentId: selectedDocument.id,
-        versionId: version.id,
+        versionId: editorData.id,
       };
       stopWorker();
       setShowFreeDraftModal(false);
@@ -100,7 +93,7 @@ const BlockDraftDialog = ({ editorRef }: IProps) => {
     return () => {
       stopWorker();
     };
-  }, [editorMode, version]);
+  }, [editorMode, editorData]);
 
   useEffect(() => {
     if (editorMode === "edit") {
@@ -117,7 +110,8 @@ const BlockDraftDialog = ({ editorRef }: IProps) => {
   return (
     <RenderIf isTrue={showFreeDraftModal}>
       <FreeDraftDialog
-        isLoading={freeDraftHook.isPending}
+        onCloseLoading={freeDraftHook.isPending}
+        onResumeLoading={createBlockHook.isPending}
         onClose={handleFreeDraft}
         onResume={handleBlockDraft}
       />

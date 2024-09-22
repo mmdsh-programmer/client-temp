@@ -34,7 +34,7 @@ const BlockDraft = ({ children }: IProps) => {
   }, [editorData?.id]);
 
   return (
-    <div className={`version-list__container h-[90vh] w-[95vw] max-w-full relative modal-box flex flex-col cursor-default p-0`}>
+    <div className={`version-list__container h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0`}>
       {children}
     </div>
   );
