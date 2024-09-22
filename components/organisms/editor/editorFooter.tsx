@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { editorDataAtom, editorModeAtom } from "@atom/editor";
+import {
+  editorDataAtom,
+  editorModeAtom,
+  editorPublicKeyAtom,
+} from "@atom/editor";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
@@ -14,6 +18,7 @@ import { versionModalListAtom } from "@atom/version";
 import { EDocumentTypes } from "@interface/enums";
 import { toast } from "react-toastify";
 import { IVersion } from "@interface/version.interface";
+import forge from "node-forge";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -27,6 +32,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
+  const key = useRecoilValue(editorPublicKeyAtom);
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
@@ -70,13 +76,34 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
   };
 
+  const encryptData = (content: string) => {
+    if (!key) return;
+
+    const publicKey = forge.pki.publicKeyFromPem(key)
+
+    return forge.util.encode64(
+      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {
+        md: forge.md.sha256.create(),
+      })
+    )
+  };
+
   const handleSave = (data: any) => {
+    let encryptedContent: string | null = null;
+    const content: string =
+      selectedDocument?.contentType === EDocumentTypes.classic
+        ? data?.content
+        : data;
+
+    if (selectedDocument?.publicKeyId) {
+      encryptedContent = encryptData(content) as string;
+    }
+  
     if (getVersionData && selectedDocument && getRepo) {
       saveEditorHook.mutate({
-        content:
-          selectedDocument?.contentType === EDocumentTypes.classic
-            ? data?.content
-            : data,
+        content: selectedDocument?.publicKeyId
+          ? (encryptedContent as string)
+          : content,
         outline:
           selectedDocument?.contentType === EDocumentTypes.classic
             ? data?.outline

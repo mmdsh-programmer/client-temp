@@ -11,6 +11,7 @@ import {
   getAccessRepositories,
   getAllRepositories,
   getBookmarkRepositories,
+  getKey,
   getMyRepositories,
   getRepository,
   getRepositoryKeys,
@@ -268,6 +269,24 @@ export const createRepoKeyAction = async (
       repoId,
       name,
       key
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const getKeyAction = async (
+  repoId: number,
+  keyId: number,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getKey(
+      userInfo.access_token,
+      repoId,
+      keyId,
     );
 
     return response;

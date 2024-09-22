@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
@@ -7,8 +7,10 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import {
   editorChatDrawerAtom,
   editorDataAtom,
+  editorDecryptedContentAtom,
   editorModalAtom,
   editorModeAtom,
+  editorPublicKeyAtom,
 } from "@atom/editor";
 import Error from "@components/organisms/error";
 import EditorComponent from "@components/organisms/editor";
@@ -20,6 +22,8 @@ import { Spinner } from "@material-tailwind/react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "./blockDraftDialog";
+import useGetKey from "@hooks/repository/useGetKey";
+import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,8 +39,12 @@ const Editor = ({ setOpen }: IProps) => {
   const setChatDrawer = useSetRecoilState(editorChatDrawerAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
-  const setSelectedVersion =
-    useSetRecoilState(selectedVersionAtom);
+  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
+  const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
+  const [decryptedContent, setDecryptedContent] = useRecoilState(
+    editorDecryptedContentAtom
+  );
+  const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
   const classicEditorRef = useRef<IRemoteEditorRef>(null);
   const wordEditorRef = useRef<IRemoteEditorRef>(null);
@@ -58,6 +66,18 @@ const Editor = ({ setOpen }: IProps) => {
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
     true
+  );
+
+  const {
+    data: keyInfo,
+    isLoading: isLoadingKey,
+    error: keyError,
+    isSuccess: isSuccessKey,
+  } = useGetKey(
+    getRepo!.id,
+    getSelectedDocument?.publicKeyId
+      ? +getSelectedDocument.publicKeyId
+      : undefined
   );
 
   useEffect(() => {
@@ -86,11 +106,42 @@ const Editor = ({ setOpen }: IProps) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (keyInfo && isSuccessKey) {
+      setPublicKey(keyInfo.key);
+    }
+  }, [keyInfo]);
+
+  useEffect(() => {
+    setVersionModalList(false);
+  }, []);
+
+  const handleDecryption = useCallback((content: string) => {
+    setDecryptedContent(content);
+    setShowKey(false);
+  }, []);
+
   const handleClose = () => {
     setOpen(false);
+    setDecryptedContent(null);
+    setShowKey(false);
+    setPublicKey(null);
     setSelectedVersion(null);
     setChatDrawer(false);
   };
+
+  if (error || keyError) {
+    return (
+      <div className="main w-full h-full text-center flex items-center justify-center">
+        <Error
+          retry={() => {
+            return setEditorModal(false);
+          }}
+          error="باز کردن سند با خطا مواجه شد."
+        />
+      </div>
+    );
+  }
 
   const getEditorConfig = (): {
     url: string;
@@ -142,11 +193,32 @@ const Editor = ({ setOpen }: IProps) => {
       </div>
     );
   }
+  if (!!versionModalList) {
+    return <VersionDialogView />;
+  }
+
+  if (showKey && !decryptedContent && getVersionData?.content) {
+    return (
+      <EditorKey
+        isPending={isLoading || isLoadingKey}
+        onDecryption={handleDecryption}
+        setOpen={handleClose}
+        encryptedContent={getVersionData?.content}
+      />
+    );
+  }
 
   return (
-    <>
-      {!!versionModalList ? (
-        <VersionDialogView />
+    <EditorDialog
+      dialogHeader={getSelectedDocument?.name}
+      isPending={isLoading || isLoadingKey}
+      setOpen={handleClose}
+      editorRef={getEditorConfig().ref}
+    >
+      {isLoading ? (
+        <div className="main w-full h-full text-center flex items-center justify-center">
+          <Spinner className="h-5 w-5 " color="deep-purple" />
+        </div>
       ) : (
         <BlockDraft>
           <>
@@ -171,7 +243,7 @@ const Editor = ({ setOpen }: IProps) => {
           </>
         </BlockDraft>
       )}
-    </>
+    </EditorDialog>
   );
 };
 

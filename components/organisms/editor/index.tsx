@@ -3,7 +3,12 @@ import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import { EDocumentTypes } from "@interface/enums";
 import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
-import { editorChatDrawerAtom, editorModeAtom } from "@atom/editor";
+import {
+  editorChatDrawerAtom,
+  editorDataAtom,
+  editorDecryptedContentAtom,
+  editorModeAtom,
+} from "@atom/editor";
 import { repoAtom } from "@atom/repository";
 import { category } from "@atom/category";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -24,8 +29,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(category);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
+  const selectedVersion = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const chatDrawer = useRecoilValue(editorChatDrawerAtom);
+  const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
 
   const timestampRef = useRef(Date.now());
 
@@ -38,6 +45,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       </div>
     );
   }
+
+  const content = selectedDocument?.publicKeyId
+    ? decryptedContent
+    : selectedVersion?.content;
 
   return (
     <div className="flex h-full">
@@ -63,7 +74,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
                 podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
                 backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
               } as any)
-            : version?.content
+            : content
         }
       />
       {editorMode === "preview" && version ? <FloatingButtons version={version} /> : null}

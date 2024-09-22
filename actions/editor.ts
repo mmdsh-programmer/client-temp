@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { createBlockVersion, freeDraftVersion, saveVersion } from "@service/clasor";
 import { getMe } from "./auth";
