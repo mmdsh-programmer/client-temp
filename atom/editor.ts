@@ -1,5 +1,5 @@
 import { logger } from "@utils/index";
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 import { ITab, IVersion } from "interface/version.interface";
 
 export const editorModalAtom = atom<boolean>({
@@ -14,17 +14,17 @@ export const editorModalAtom = atom<boolean>({
   ],
 });
 
-export const editorVersionAtom = atom<IVersion | null>({
-  key: "editorVersion",
-  default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorVersion", newValue, oldValue);
-      });
-    },
-  ],
-});
+// export const editorVersionAtom = atom<IVersion | null>({
+//   key: "editorVersion",
+//   default: null,
+//   effects: [
+//     ({ onSet }) => {
+//       onSet((newValue, oldValue) => {
+//         logger("editorVersion", newValue, oldValue);
+//       });
+//     },
+//   ],
+// });
 
 export const editorModeAtom = atom<"edit" | "preview" | "temporaryPreview">({
   key: "editorMode",
@@ -50,28 +50,13 @@ export const editorDataAtom = atom<IVersion | null>({
   ],
 });
 
-export const editorTrackChangeAtom = selector({
-  key: "trackChange",
-  get: ({ get }) => {
-    const editorData = get(editorDataAtom);
-    const selectedVersion = get(editorVersionAtom);
-    const editorMode = get(editorModeAtom);
-    if (editorData && selectedVersion && editorMode === "edit") {
-      const { content: orginal } = editorData;
-      const { content: modified } = selectedVersion;
-      return orginal !== modified;
-    }
-    return false;
-  },
-});
-
-export const editorScreenMode = atom<boolean>({
-  key: "editorScreen",
+export const editorChatDrawerAtom = atom<boolean>({
+  key: "editorChatDrawerAtom",
   default: false,
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("editorScreenMode", newValue, oldValue);
+        logger("editorChatDrawerAtom", newValue, oldValue);
       });
     },
   ],

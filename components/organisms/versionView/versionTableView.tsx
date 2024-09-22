@@ -10,12 +10,12 @@ import LoadMore from "@components/molecules/loadMore";
 import { LastVersionIcon } from "@components/atoms/icons";
 import { IVersionView } from "../version/versionList";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { versionModalListAtom } from "@atom/version";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { IVersion } from "@interface/version.interface";
 import {
+  editorDataAtom,
   editorModalAtom,
   editorModeAtom,
-  editorVersionAtom,
 } from "@atom/editor";
 import { EDocumentTypes } from "@interface/enums";
 import { selectedDocumentAtom } from "@atom/document";
@@ -32,7 +32,8 @@ const VersionTableView = ({
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
-  const setEditorVersion = useSetRecoilState(editorVersionAtom);
+  const setEditorData = useSetRecoilState(editorDataAtom);
+  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const listLength = getVersionList?.[0].length;
@@ -41,10 +42,11 @@ const VersionTableView = ({
     if (isLoading) {
       return;
     }
-    setEditorVersion(value);
+    setEditorData(value);
     setEditorMode("preview");
     setVersionModalList(false);
     setEditorModal(true);
+    setSelectedVersion(value)
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {

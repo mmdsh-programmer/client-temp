@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const useSaveEditor = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["saveVersion"],
+    mutationKey: ["update-version-content"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
@@ -29,7 +29,6 @@ const useSaveEditor = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;
-      toast.success("تغییرات با موفقیت ذخیره شد.");
       callBack?.();
     },
     onError: (error) => {

@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  editorDataAtom,
-  editorModeAtom,
-  editorVersionAtom,
-} from "@atom/editor";
+import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
@@ -16,6 +12,8 @@ import { translateVersionStatus } from "@utils/index";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { versionModalListAtom } from "@atom/version";
 import { EDocumentTypes } from "@interface/enums";
+import { toast } from "react-toastify";
+import { IVersion } from "@interface/version.interface";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -24,9 +22,9 @@ export interface IProps {
 const EditorFooter = ({ editorRef }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const selectedVersion = useRecoilValue(editorVersionAtom);
-  const editorData = useRecoilValue(editorDataAtom);
   const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
+  const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
+
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
 
@@ -38,16 +36,42 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const saveEditorHook = useSaveEditor();
 
   const renderTitle = () => {
-    if (!selectedVersion) {
+    if (!getVersionData) {
       return "_";
-    } else {
-      return `${selectedVersion.versionNumber}${`(${translateVersionStatus(selectedVersion.status, selectedVersion.state).translated}
-           ${selectedVersion.status === "accepted" ? "-عمومی" : ""})`}`;
+    }
+    if (editorMode === "preview") {
+      return `${getVersionData.versionNumber}
+      ${` (${translateVersionStatus(
+        getVersionData.status,
+        getVersionData.state
+      ).translated} ${getVersionData.status === "accepted" ? "-عمومی" : ""})`}`;
+    }
+
+    return `${getVersionData.versionNumber} (پیش نویس)`;
+  };
+
+  const handleChangeEditorMode = () => {
+    if (getVersionData?.id) {
+      const item = {
+        ...getVersionData,
+        id: getVersionData.draftId ?? getVersionData.id,
+        state: "draft",
+      } as IVersion;
+      setVersionData(item);
+    }
+    setEditorMode(editorMode === "edit" ? "preview" : "edit");
+    if (
+      selectedDocument?.contentType === EDocumentTypes.word ||
+      selectedDocument?.contentType === EDocumentTypes.flowchart ||
+      selectedDocument?.contentType === EDocumentTypes.classic ||
+      selectedDocument?.contentType === EDocumentTypes.latex
+    ) {
+      editorRef.current?.setMode(editorMode === "edit" ? "preview" : "edit");
     }
   };
 
   const handleSave = (data: any) => {
-    if (selectedVersion && selectedDocument && getRepo) {
+    if (getVersionData && selectedDocument && getRepo) {
       saveEditorHook.mutate({
         content:
           selectedDocument?.contentType === EDocumentTypes.classic
@@ -59,8 +83,11 @@ const EditorFooter = ({ editorRef }: IProps) => {
             : "[]",
         repoId: getRepo.id,
         documentId: selectedDocument.id,
-        versionId: selectedVersion.id,
-        versionNumber: selectedVersion.versionNumber,
+        versionId: getVersionData.id,
+        versionNumber: getVersionData.versionNumber,
+        callBack: () => {
+          toast.success("تغییرات با موفقیت ذخیره شد.");
+        },
       });
     }
   };
@@ -114,19 +141,26 @@ const EditorFooter = ({ editorRef }: IProps) => {
   return (
     <>
       {editorMode === "preview" ? (
-        <CancelButton
-          onClick={() => {
-            editorRef.current?.setMode("edit");
-            setEditorMode("edit");
-          }}
-        >
-          ویرایش
-        </CancelButton>
+        <div className="w-full flex justify-between items-center gap-2">
+          <Button
+            className="w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+            title={renderTitle()}
+            onClick={() => {
+              setVersionModalList(true);
+            }}
+          >
+            <Typography className="label_l3 text-primary">
+              {renderTitle()}
+            </Typography>
+            <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+          </Button>
+          <CancelButton onClick={handleChangeEditorMode}>ویرایش</CancelButton>
+        </div>
       ) : (
-        <div className="w-full flex justify-between items-center">
-          <div className="flex gap-5 ">
+        <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
+          <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
             <Button
-              className="w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+              className="w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
               title={renderTitle()}
               onClick={() => {
                 setVersionModalList(true);
@@ -137,21 +171,22 @@ const EditorFooter = ({ editorRef }: IProps) => {
               </Typography>
               <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
             </Button>
-            <div className="border-r-[1px] border-r-normal" />
+            <div className="!hidden xs:!block border-r-[1px] border-r-normal" />
             <Checkbox
               crossOrigin=""
               label={
                 <Typography className="title_t3">ذخیره‌سازی خودکار</Typography>
               }
+              className=""
               color="deep-purple"
               checked={checked}
               onChange={handleAutoSaveCheckbox}
               containerProps={{
-                className: "-mr-3",
+                className: "-mr-3 ",
               }}
             />
           </div>
-          <div className="flex w-full xs:w-auto gap-2 xs:gap-3">
+          <div className="flex w-full md:w-auto gap-2 xs:gap-3">
             <CancelButton
               onClick={() => {
                 editorRef.current?.setMode(
@@ -161,12 +196,13 @@ const EditorFooter = ({ editorRef }: IProps) => {
                   editorMode === "edit" ? "temporaryPreview" : "edit"
                 );
               }}
+              className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
               disabled={saveEditorHook.isPending}
             >
               {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
             </CancelButton>
             <LoadingButton
-              className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
               onClick={async () => {
                 const value = await editorRef.current?.getData();
                 if (value) {
@@ -174,7 +210,6 @@ const EditorFooter = ({ editorRef }: IProps) => {
                 }
               }}
               disabled={saveEditorHook.isPending}
-              // ref={saveBtnRef}
             >
               <Typography className="text__label__button text-white">
                 ذخیره

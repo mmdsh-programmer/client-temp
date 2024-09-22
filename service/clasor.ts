@@ -19,6 +19,7 @@ import {
   IDocumentMetadata,
   IWhiteList,
 } from "@interface/document.interface";
+import { IBLockDocument } from "@interface/editor.interface";
 import { EDocumentTypes } from "@interface/enums";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
@@ -2319,7 +2320,7 @@ export const saveVersion = async (
 
     return response.data.data;
   } catch (error) {
-
+    console.log("-------------------------error -----------------",    error)
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
@@ -2346,6 +2347,29 @@ export const freeDraftVersion = async (
 
     return response.data.data;
   } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createBlockVersion = async (
+  access_token: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IBLockDocument>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/block`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    console.log("-------------------------error -----------------",    error)
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };

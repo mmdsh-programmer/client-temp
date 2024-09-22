@@ -10,6 +10,7 @@ import {
   DuplicateIcon,
   EditIcon,
   EditVersionIcon,
+  GlobeIcon,
   LastVersionIcon,
   MoreDotIcon,
   ShareIcon,
@@ -122,6 +123,7 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
           return "لغو درخواست عمومی شدن نسخه";
         }
       })(),
+      icon: <GlobeIcon className="h-4 w-4" />,
       onClick: () => {
         if (version?.status === "private" && adminOrOwner) {
           setVersionPublicModal(true);

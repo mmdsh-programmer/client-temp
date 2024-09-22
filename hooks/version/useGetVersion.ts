@@ -9,11 +9,11 @@ const useGetVersion = (
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useQuery({
     queryKey: [
-      `version-${versionId}-state-${state}-innerDocument-${!!innerDocument}-innerOutline-${!!innerOutline}`,
+      `document-${documentId}-version-${versionId}-state-${state}-innerDocument-${!!innerDocument}-innerOutline-${!!innerOutline}`,
     ],
     queryFn: async ({ signal }) => {
       const response = await getVersionAction(
@@ -26,9 +26,10 @@ const useGetVersion = (
       );
       return response as IVersion;
     },
-    enabled: !!enabled && !!documentId && !!versionId && !!documentId,
+    enabled: !!repoId && !!documentId && !!versionId && !!enabled,
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 0,
   });
 };
 

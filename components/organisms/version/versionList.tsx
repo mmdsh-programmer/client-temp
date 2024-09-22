@@ -16,6 +16,7 @@ import {
 } from "@tanstack/react-query";
 import { IVersion } from "@interface/version.interface";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import VersionMenu from "@components/molecules/versionMenu";
 
 export interface IVersionView {
   isLoading: boolean;
@@ -82,6 +83,7 @@ const VersionList = () => {
     lastVersion: getLastVersion,
     type: EEmptyList.VERSION,
   };
+
   return (
     <div className="p-4 xs:p-0 flex flex-col gap-4 xs:gap-6">
       <HeaderListTemplate
@@ -95,9 +97,9 @@ const VersionList = () => {
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
         <VersionMobileView {...commonProps} />
       </div>
-      {openCreateVersion && (
+      {openCreateVersion ? (
         <VersionCreateDialog setOpen={setOpenCreateVersion} />
-      )}
+      ): null}
     </div>
   );
 };

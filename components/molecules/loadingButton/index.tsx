@@ -6,7 +6,8 @@ interface IProps {
   children: React.ReactNode;
   className?: string;
   onClick: () => void;
-  disabled?: boolean
+  disabled?: boolean;
+  ref?: any;
 }
 
 const LoadingButton = ({
@@ -14,12 +15,22 @@ const LoadingButton = ({
   children,
   className,
   onClick,
-  disabled
+  disabled,
+  ref,
 }: IProps) => {
   return (
-    <Button placeholder="" variant="text" className={`${className || "" } flex justify-center items-center w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg`} onClick={onClick} disabled={disabled} >
+    <Button
+      placeholder=""
+      variant="text"
+      className={`${className || ""} flex justify-center items-center w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg`}
+      onClick={onClick}
+      disabled={disabled}
+      ref={ref}
+    >
       <>
-        {loading && <Spinner className="w-5 h-5 ml-3 text-red-900/80" color="red" />}
+        {loading && (
+          <Spinner className="w-5 h-5 ml-3 text-red-900/80" color="red" />
+        )}
         {children}
       </>
     </Button>

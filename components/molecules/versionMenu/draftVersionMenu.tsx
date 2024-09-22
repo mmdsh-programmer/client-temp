@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { IVersion } from "@interface/version.interface";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { compareVersionAtom } from "@atom/version";
+import {
+  compareVersionAtom,
+  selectedVersionAtom,
+  versionDrawerAtom,
+} from "@atom/version";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import MenuTemplate from "@components/templates/menuTemplate";
 import {
@@ -30,11 +34,13 @@ import { editorModeAtom } from "@atom/editor";
 interface IProps {
   version?: IVersion;
   lastVersion?: IVersion;
+  showDrawer?: boolean;
 }
 
-const DraftVersionMenu = ({ version }: IProps) => {
+const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const setVersion = useSetRecoilState(selectedVersionAtom);
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
@@ -46,9 +52,8 @@ const DraftVersionMenu = ({ version }: IProps) => {
   const [versionConfirmModal, setVersionConfirmModal] = useState(false);
   const [versionCancelConfirmModal, setVersionCancelConfirmModal] =
     useState(false);
-  const [openVersionActionDrawer, setOpenVersionActionDrawer] = useState<
-    boolean | null
-  >(false);
+  const [openVersionActionDrawer, setOpenVersionActionDrawer] =
+    useRecoilState(versionDrawerAtom);
 
   const adminOrOwner =
     getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
@@ -105,7 +110,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
       text: "ویرایش",
       icon: <EditIcon className="h-4 w-4" />,
       onClick: () => {
-        setEditVersionModal(true)
+        setEditVersionModal(true);
         setEditorMode("edit");
       },
     },
@@ -120,7 +125,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
             ? "عدم تایید نسخه"
             : "لغوارسال درخواست تایید نسخه";
       })(),
-      icon: <ConfirmationVersionIcon className="h-4 w-4" />,
+      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
         if (version?.status === "editing" && adminOrOwner) {
           setVersionConfirmModal(true);
@@ -152,22 +157,30 @@ const DraftVersionMenu = ({ version }: IProps) => {
 
   return (
     <>
-      <MenuTemplate
-        setOpenDrawer={() => {
-          setOpenVersionActionDrawer(true);
-        }}
-        menuList={menuList}
-        icon={
-          <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-            <MoreDotIcon className="w-4 h-4" />
-          </div>
-        }
-      />
-      <DrawerTemplate
-        openDrawer={openVersionActionDrawer}
-        setOpenDrawer={setOpenVersionActionDrawer}
-        menuList={menuList}
-      />
+      {!!showDrawer ? (
+        <div className="xs:hidden flex">
+          <DrawerTemplate
+            openDrawer={openVersionActionDrawer}
+            setOpenDrawer={setOpenVersionActionDrawer}
+            menuList={menuList}
+          />
+        </div>
+      ) : (
+        <MenuTemplate
+          setOpenDrawer={() => {
+            setOpenVersionActionDrawer(true);
+            if (version) {
+              setVersion(version);
+            }
+          }}
+          menuList={menuList}
+          icon={
+            <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+              <MoreDotIcon className="w-4 h-4" />
+            </div>
+          }
+        />
+      )}
       {versionConfirmModal && version && (
         <VersionConfirmDialog
           version={version}

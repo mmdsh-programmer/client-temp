@@ -11,9 +11,9 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { versionModalListAtom } from "@atom/version";
 import { IVersion } from "@interface/version.interface";
 import {
+  editorDataAtom,
   editorModalAtom,
   editorModeAtom,
-  editorVersionAtom,
 } from "@atom/editor";
 import { selectedDocumentAtom } from "@atom/document";
 import { EDocumentTypes } from "@interface/enums";
@@ -30,7 +30,7 @@ const VersionMobileView = ({
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
-  const setEditorVersion = useSetRecoilState(editorVersionAtom);
+  const setEditorData = useSetRecoilState(editorDataAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const listLength = getVersionList?.[0].length;
@@ -39,7 +39,7 @@ const VersionMobileView = ({
     if (isLoading) {
       return;
     }
-    setEditorVersion(value);
+    setEditorData(value);
     setEditorMode("preview");
     setVersionModalList(false);
     setEditorModal(true);
@@ -60,12 +60,13 @@ const VersionMobileView = ({
         </div>
       ) : listLength ? (
         <div
-          className={`flex flex-col gap-3 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
+          className={`flex flex-col gap-3 rounded-lg`}
         >
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
                 <div
+                  className=""
                   key={version.id}
                   onClick={() => {
                     if (
@@ -102,6 +103,7 @@ const VersionMobileView = ({
                         lastVersion={lastVersion}
                       />
                     }
+                    className={`${versionModalList ? "border-[1px] border-normal" : ""}`}
                   />
                 </div>
               );

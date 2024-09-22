@@ -5,9 +5,10 @@ import { IVersion } from "@interface/version.interface";
 const useGetLastVersion = (
   repoId: number,
   documentId: number,
+  enabled?: boolean
 ) => {
   return useQuery({
-    queryKey: [`get-last-version-document-${documentId}`],
+    queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
     queryFn: async ({ signal }) => {
       const response = await getLastVersionAction(repoId, documentId);
       return response as IVersion;
@@ -15,7 +16,6 @@ const useGetLastVersion = (
     enabled: !!documentId && !!repoId,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: Number.POSITIVE_INFINITY,
   });
 };
 

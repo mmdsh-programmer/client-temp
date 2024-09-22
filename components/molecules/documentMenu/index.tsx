@@ -20,7 +20,6 @@ import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document
 import { versionListAtom } from "@atom/version";
 import { editorModeAtom } from "@atom/editor";
 import Editor from "@components/organisms/dialogs/editor";
-import DocumentLastVersion from "@components/organisms/document/documentLastVersion";
 
 interface IProps {
   document?: IDocumentMetadata;
@@ -285,10 +284,12 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
         />
       )}
       {editContentModal && (
-        <Editor setOpen={() => setEditContentModal(false)} />
-      )}
-      {editContentModal && (
-        <DocumentLastVersion />
+        <Editor
+          setOpen={() => {
+            setEditContentModal(false);
+            setDocument(null);
+          }}
+        />
       )}
     </>
   );

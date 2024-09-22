@@ -24,7 +24,7 @@ const EditorDialog = ({
   setOpen,
   className,
   editorRef,
-  isPending
+  isPending,
 }: IProps) => {
 
   const handleClose = () => {
@@ -54,7 +54,7 @@ const EditorDialog = ({
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] "
       >
         <EditorFooter editorRef={editorRef} />
       </DialogFooter>

@@ -62,3 +62,15 @@ export const versionModalListAtom = atom<boolean | null>({
     },
   ],
 });
+
+export const versionDrawerAtom = atom<boolean | null>({
+  key: "versionDrawerAtom",
+  default: null,
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        logger("versionDrawerAtom", newValue, oldValue);
+      });
+    },
+  ],
+});

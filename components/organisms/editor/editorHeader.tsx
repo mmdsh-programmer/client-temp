@@ -6,7 +6,6 @@ import {
   editorDataAtom,
   editorModalAtom,
   editorModeAtom,
-  editorVersionAtom,
 } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
@@ -24,7 +23,6 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
-  const [version, setVersion] = useRecoilState(editorVersionAtom);
   const [editorData, setEditorData] = useRecoilState(editorDataAtom);
   const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
   const [versionModalList, setVersionModalList] =
@@ -37,21 +35,21 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
     if (
       getRepo &&
       getSelectedDocument &&
-      version &&
+      editorData &&
       ["edit", "temporaryPreview"].includes(editorMode)
     ) {
-      // freeDraftHook.mutate({
-      //   repoId: getRepo!.id,
-      //   documentId: getSelectedDocument.id,
-      //   versionId: version.id,
-      //   versionNumber: "",
-      //   content: "",
-      //   outline: "",
-      // });
+      freeDraftHook.mutate({
+        repoId: getRepo!.id,
+        documentId: getSelectedDocument.id,
+        versionId: editorData.id,
+        versionNumber: "",
+        content: "",
+        outline: "",
+      });
     }
 
     setVersionModalList(false);
-    setVersion(null);
+    // setVersion(null);
     setEditorData(null);
     setEditorModal(false);
   };

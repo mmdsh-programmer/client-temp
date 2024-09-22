@@ -3,30 +3,29 @@ import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import { EDocumentTypes } from "@interface/enums";
 import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
-import {
-  editorDataAtom,
-  editorModeAtom,
-  editorVersionAtom,
-} from "@atom/editor";
+import { editorChatDrawerAtom, editorModeAtom } from "@atom/editor";
 import { repoAtom } from "@atom/repository";
 import { category } from "@atom/category";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@material-tailwind/react";
+import FloatingButtons from "./floatingButtons";
+import { IVersion } from "@interface/version.interface";
+import ChatDrawer from "../like&comment/chatDrawer";
 
 interface IProps {
   getEditorConfig: () => {
     url: string;
     ref: React.RefObject<IRemoteEditorRef>;
   };
+  version?: IVersion;
 }
 
-const EditorComponent = ({ getEditorConfig }: IProps) => {
+const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(category);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const selectedVersion = useRecoilValue(editorVersionAtom);
-  const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
+  const chatDrawer = useRecoilValue(editorChatDrawerAtom);
 
   const timestampRef = useRef(Date.now());
 
@@ -41,31 +40,35 @@ const EditorComponent = ({ getEditorConfig }: IProps) => {
   }
 
   return (
-    <RemoteEditor
-      url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
-      editorMode={editorMode}
-      ref={getEditorConfig().ref}
-      loadData={
-        selectedDocument?.contentType === EDocumentTypes.classic
-          ? ({
-              content: selectedVersion?.content || " ",
-              outline: selectedVersion?.outline || [],
-              auth: {
-                accessToken: userInfo?.access_token,
-                refreshToken: userInfo?.refresh_token,
-                url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
-              },
-              publicUserGroupHash: getRepo?.userGroupHash || undefined,
-              privateUserGroupHash:
-                selectedCategory?.userGroupHash || undefined,
-              repositoryId: getRepo?.id || undefined,
-              resourceId: selectedCategory?.id || undefined,
-              podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-              backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
-            } as any)
-          : selectedVersion?.content
-      }
-    />
+    <div className="flex h-full">
+      <RemoteEditor
+        url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
+        editorMode={editorMode}
+        ref={getEditorConfig().ref}
+        loadData={
+          selectedDocument?.contentType === EDocumentTypes.classic
+            ? ({
+                content: version?.content || " ",
+                outline: version?.outline || [],
+                auth: {
+                  accessToken: userInfo?.access_token,
+                  refreshToken: userInfo?.refresh_token,
+                  url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
+                },
+                publicUserGroupHash: getRepo?.userGroupHash || undefined,
+                privateUserGroupHash:
+                  selectedCategory?.userGroupHash || undefined,
+                repositoryId: getRepo?.id || undefined,
+                resourceId: selectedCategory?.id || undefined,
+                podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
+                backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
+              } as any)
+            : version?.content
+        }
+      />
+      {editorMode === "preview" && version ? <FloatingButtons version={version} /> : null}
+      {chatDrawer ? <ChatDrawer /> : null}
+    </div>
   );
 };
 
