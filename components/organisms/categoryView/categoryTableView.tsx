@@ -10,8 +10,8 @@ import DocumentTableRow from "@components/molecules/documentTableRow";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import { ICategoryView } from "../category/categoryChildren";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
-import AdvancedFilter from "@components/molecules/advancedFilter";
 import SearchFilter from "@components/molecules/searchFilter";
+import AdvancedFilter from "@components/molecules/advancedFilter";
 
 const TableView = ({
   isLoading,
@@ -64,8 +64,7 @@ const TableView = ({
                   },
                   { key: "action", value: "عملیات" },
                 ]}
-              />
-
+              />              
               <tbody>
                 {getCategoryList?.pages.map((page) => {
                   return page.list.map((item) => {

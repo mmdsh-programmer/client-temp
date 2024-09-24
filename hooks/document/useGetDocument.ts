@@ -15,7 +15,7 @@ const useGetDocument = (
     },
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: Number.POSITIVE_INFINITY,
+    enabled: !!repoId && !!documentId && !!enabled,
   });
 };
 

@@ -11,6 +11,7 @@ import {
   getAccessRepositories,
   getAllRepositories,
   getBookmarkRepositories,
+  getKey,
   getMyRepositories,
   getRepository,
   getRepositoryKeys,
@@ -279,10 +280,25 @@ export const createRepoKeyAction = async (
   }
 };
 
-export const transferOwnershipRepositoryAction = async (
+export const getKeyAction = async (
   repoId: number,
-  userName: string,
+  keyId: number,
 ) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getKey(
+      userInfo.access_token,
+      repoId,
+      keyId,
+    );
+
+    return response;
+  } catch (error) {
+    console.log("============ error ==========", error);
+  }
+};
+
+export const transferOwnershipRepositoryAction = async (repoId: number, userName: string) => {
   const userInfo = await getMe();
   try {
     const response = await transferOwnershipRepository(

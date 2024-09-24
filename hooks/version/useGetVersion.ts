@@ -5,7 +5,7 @@ import { IVersion } from "@interface/version.interface";
 const useGetVersion = (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
@@ -13,7 +13,7 @@ const useGetVersion = (
 ) => {
   return useQuery({
     queryKey: [
-      `version-${versionId}-state-${state}-innerDocument-${!!innerDocument}-innerOutline-${!!innerOutline}`,
+      `document-${documentId}-version-${versionId}-state-${state}-innerDocument-${!!innerDocument}-innerOutline-${!!innerOutline}`,
     ],
     queryFn: async ({ signal }) => {
       const response = await getVersionAction(
@@ -29,6 +29,7 @@ const useGetVersion = (
     enabled: !!repoId && !!documentId && !!versionId && !!enabled,
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 0,
   });
 };
 

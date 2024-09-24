@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { bulkItems } from "@atom/bulk";
+import { bulkItemsAtom } from "@atom/bulk";
 import { useRecoilState } from "recoil";
 import { Button, Typography } from "@material-tailwind/react";
 import {
@@ -12,7 +12,7 @@ import BulkDeleteDialog from "@components/organisms/dialogs/bulk/bulkDeleteDialo
 import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryMoveDialog";
 
 const CategoryBulk = () => {
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
+  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openMoveDialog, setOpenMoveDialog] = useState<boolean | null>(null);
   return (

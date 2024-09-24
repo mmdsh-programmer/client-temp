@@ -18,6 +18,8 @@ import DocumentCreatePasswordDialog from "@components/organisms/dialogs/document
 import DocumentUpdatePasswordDialog from "@components/organisms/dialogs/document/documentUpdatePasswordDialog";
 import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document/documentDeletePasswordDialog";
 import { versionListAtom } from "@atom/version";
+import { editorModeAtom } from "@atom/editor";
+import Editor from "@components/organisms/dialogs/editor";
 
 interface IProps {
   document?: IDocumentMetadata;
@@ -48,11 +50,14 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
   const [openDocumentActionDrawer, setOpenDocumentActionDrawer] =
     useRecoilState(documentDrawerAtom);
 
+  const setEditorMode = useSetRecoilState(editorModeAtom);
+
   const editOptions = [
     {
       text: "ویرایش محتوا",
       onClick: () => {
         setEditContentModal(true);
+        setEditorMode("preview");
         if (document) {
           setDocument(document);
         }
@@ -278,6 +283,14 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
           setOpen={() => setDeletePasswordDocumentModal(false)}
         />
       )}
+      {editContentModal ? (
+        <Editor
+          setOpen={() => {
+            setEditContentModal(false);
+            setDocument(null);
+          }}
+        />
+      ): null}
     </>
   );
 };

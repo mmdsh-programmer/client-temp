@@ -9,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
-import { deleteTagAtom, editTagAtom } from "@atom/tag";
+import { deleteTagAtom, editTagAtom, tagDrawerAtom } from "@atom/tag";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 import TagEditDialog from "../dialogs/tag/tagEditDialog";
 import TagDeleteDialog from "../dialogs/tag/tagDeleteDialog";
@@ -25,6 +25,7 @@ const TagListDialog = ({ setOpen }: IProps) => {
   const repoId = getRepo?.id!;
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
+  const openTagActionDrawer = useRecoilValue(tagDrawerAtom);
 
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
 
@@ -118,7 +119,7 @@ const TagListDialog = ({ setOpen }: IProps) => {
               )}
             </div>
           </DialogBody>
-          <TagMenu showDrawer={true} />
+          {openTagActionDrawer ? <TagMenu showDrawer={true} /> : null}
         </InfoDialog>
       )}
     </>

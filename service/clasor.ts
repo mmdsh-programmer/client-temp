@@ -19,6 +19,7 @@ import {
   IDocumentMetadata,
   IWhiteList,
 } from "@interface/document.interface";
+import { IBLockDocument } from "@interface/editor.interface";
 import { EDocumentTypes } from "@interface/enums";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
@@ -295,6 +296,27 @@ export const createRepositoryKey = async (
     );
 
     return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getKey = async (
+  access_token: string,
+  repoId: number,
+  keyId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IPublicKey>(
+      `repositories/${repoId}/publicKey/${keyId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -1729,7 +1751,7 @@ export const getVersion = async (
   access_token: string,
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
@@ -2294,6 +2316,84 @@ export const rejectUserToRepoRequest = async (
 
     return response.data.data;
   } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+///////////////////////// EDITOR //////////////////
+export const saveVersion = async (
+  access_token: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  content: string,
+  outline: string
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
+      { content, outline, versionNumber },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    console.log("-------------------------error -----------------",    error)
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const freeDraftVersion = async (
+  access_token: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  content: string,
+  outline: string
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/freeDraft`,
+      { versionNumber, content, outline },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createBlockVersion = async (
+  access_token: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IBLockDocument>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/block`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    console.log("-------------------------error -----------------",    error)
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };

@@ -50,18 +50,15 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
-    const { pki } = forge;
-    const keypair = pki.rsa.generateKeyPair({
-      bits: 2048,
-      e: 0x1_00_01,
-    });
-    const publicKeyPem = stripPemHeaders(pki.publicKeyToPem(keypair.publicKey));
-    const privateKeyPem = stripPemHeaders(
-      pki.privateKeyToPem(keypair.privateKey),
-    );
+    const rsa = forge.pki.rsa;
+    const keypair = rsa.generateKeyPair({ bits: 2048, workers: -1 });
+
     setShowPrivateKey(true);
+    const publicKeyPem = forge.pki.publicKeyToPem(keypair.publicKey);
+    const privateKeyPem = forge.pki.privateKeyToPem(keypair.privateKey);
     setValue("publicKey", publicKeyPem);
     setValue("privateKey", privateKeyPem);
+  
     copy(privateKeyPem);
     toast.success("کلید خصوصی با موفقیت کپی شد");
   };

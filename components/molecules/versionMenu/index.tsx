@@ -7,14 +7,15 @@ import ConfirmVersionMenu from "./confirmVersionMenu";
 interface IProps {
   version?: IVersion;
   lastVersion?: IVersion;
+  showDrawer?: boolean;
 }
 
-const VersionMenu = ({ lastVersion, version }: IProps) => {
+const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
   if (
     version?.status === "editing" ||
     (version?.status === "pending" && version?.state === "draft")
   ) {
-    return <DraftVersionMenu version={version} />;
+    return <DraftVersionMenu version={version} showDrawer={showDrawer} />;
   }
   if (
     version?.status === "private" ||

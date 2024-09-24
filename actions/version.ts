@@ -18,7 +18,7 @@ import { IFileVersion } from "@interface/version.interface";
 export const getVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,

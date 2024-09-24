@@ -24,7 +24,7 @@ const useCancelConfirmVersion = () => {
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`get-last-version-document-${documentId}`],
+        queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`version-list-${repoId}-${documentId}`],

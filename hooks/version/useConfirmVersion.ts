@@ -22,9 +22,12 @@ const useConfirmVersion = () => {
       return response as IAddVersion;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId, documentId } = values;
+      const { callBack, repoId, documentId, versionId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`get-last-version-document-${documentId}`],
+        queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`document-${documentId}-version-${versionId}-state-version-innerDocument-true-innerOutline-true`],
       });
       queryClient.invalidateQueries({
         queryKey: [`version-list-${repoId}-${documentId}`],

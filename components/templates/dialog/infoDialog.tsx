@@ -5,7 +5,7 @@ import BackButton from "@components/atoms/button/backButton";
 
 export interface IProps {
   children: React.ReactNode;
-  dialogHeader: string;
+  dialogHeader?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
 }
@@ -25,15 +25,15 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className }: IProps) => {
     >
       <DialogHeader
         placeholder="dialog header"
-        className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
-        <div className="block xs:hidden">
-          <BackButton onClick={handleClose} />
+        <div className="flex items-center">
+          <div className="block xs:hidden">
+            <BackButton onClick={handleClose} />
+          </div>
+          <Typography className="form__title">{dialogHeader}</Typography>
         </div>
-        <Typography className="form__title">{dialogHeader}</Typography>
-        <div className="hidden xs:block">
-          <CloseButton onClose={handleClose} />
-        </div>
+        <CloseButton onClose={handleClose} />
       </DialogHeader>
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <>{children}</>

@@ -139,6 +139,7 @@ export interface IDocumentMetadata {
   publishLinkPassword: string | null;
   publishExpireTime: number | null;
   versions?: IVersionMetadata;
+  publicKeyId?: string;
 }
 
 export interface IVersionMetadata {

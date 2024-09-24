@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { IVersion } from "@interface/version.interface";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { compareVersionAtom } from "@atom/version";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  compareVersionAtom,
+  selectedVersionAtom,
+  versionDrawerAtom,
+} from "@atom/version";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import MenuTemplate from "@components/templates/menuTemplate";
 import {
@@ -11,7 +15,6 @@ import {
   DeleteIcon,
   DuplicateIcon,
   EditIcon,
-  EditVersionIcon,
   MoreDotIcon,
   ShareIcon,
 } from "@components/atoms/icons";
@@ -22,21 +25,25 @@ import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
 import { repoAtom } from "@atom/repository";
 import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import VersionEditDialog from "@components/organisms/dialogs/version/versionEditDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
 import DiffVersionAlert from "../diffVersionAlert";
+import Editor from "@components/organisms/dialogs/editor";
+import { editorModeAtom } from "@atom/editor";
 
 interface IProps {
   version?: IVersion;
   lastVersion?: IVersion;
+  showDrawer?: boolean;
 }
 
-const DraftVersionMenu = ({ version }: IProps) => {
+const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const setVersion = useSetRecoilState(selectedVersionAtom);
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const [diffVersionModal, setDiffVersionModal] = useState(false);
   const [editVersionModal, setEditVersionModal] = useState(false);
@@ -45,9 +52,8 @@ const DraftVersionMenu = ({ version }: IProps) => {
   const [versionConfirmModal, setVersionConfirmModal] = useState(false);
   const [versionCancelConfirmModal, setVersionCancelConfirmModal] =
     useState(false);
-  const [openVersionActionDrawer, setOpenVersionActionDrawer] = useState<
-    boolean | null
-  >(false);
+  const [openVersionActionDrawer, setOpenVersionActionDrawer] =
+    useRecoilState(versionDrawerAtom);
 
   const adminOrOwner =
     getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
@@ -105,6 +111,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
       icon: <EditIcon className="h-4 w-4" />,
       onClick: () => {
         setEditVersionModal(true);
+        setEditorMode("edit");
       },
     },
     {
@@ -118,7 +125,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
             ? "عدم تایید نسخه"
             : "لغوارسال درخواست تایید نسخه";
       })(),
-      icon: <ConfirmationVersionIcon className="h-4 w-4" />,
+      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
         if (version?.status === "editing" && adminOrOwner) {
           setVersionConfirmModal(true);
@@ -150,22 +157,30 @@ const DraftVersionMenu = ({ version }: IProps) => {
 
   return (
     <>
-      <MenuTemplate
-        setOpenDrawer={() => {
-          setOpenVersionActionDrawer(true);
-        }}
-        menuList={menuList}
-        icon={
-          <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-            <MoreDotIcon className="w-4 h-4" />
-          </div>
-        }
-      />
-      <DrawerTemplate
-        openDrawer={openVersionActionDrawer}
-        setOpenDrawer={setOpenVersionActionDrawer}
-        menuList={menuList}
-      />
+      {!!showDrawer ? (
+        <div className="xs:hidden flex">
+          <DrawerTemplate
+            openDrawer={openVersionActionDrawer}
+            setOpenDrawer={setOpenVersionActionDrawer}
+            menuList={menuList}
+          />
+        </div>
+      ) : (
+        <MenuTemplate
+          setOpenDrawer={() => {
+            setOpenVersionActionDrawer(true);
+            if (version) {
+              setVersion(version);
+            }
+          }}
+          menuList={menuList}
+          icon={
+            <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+              <MoreDotIcon className="w-4 h-4" />
+            </div>
+          }
+        />
+      )}
       {versionConfirmModal && version && (
         <VersionConfirmDialog
           version={version}
@@ -185,7 +200,7 @@ const DraftVersionMenu = ({ version }: IProps) => {
         />
       )}
       {editVersionModal && version && (
-        <VersionEditDialog setOpen={() => setEditVersionModal(false)} />
+        <Editor setOpen={() => setEditVersionModal(false)} />
       )}
       {deleteVersionModal && version && (
         <VersionDeleteDialog
