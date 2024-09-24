@@ -14,18 +14,6 @@ export const editorModalAtom = atom<boolean>({
   ],
 });
 
-// export const editorVersionAtom = atom<IVersion | null>({
-//   key: "editorVersion",
-//   default: null,
-//   effects: [
-//     ({ onSet }) => {
-//       onSet((newValue, oldValue) => {
-//         logger("editorVersion", newValue, oldValue);
-//       });
-//     },
-//   ],
-// });
-
 export const editorModeAtom = atom<"edit" | "preview" | "temporaryPreview">({
   key: "editorMode",
   default: "preview",
@@ -57,30 +45,6 @@ export const editorChatDrawerAtom = atom<boolean>({
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
         logger("editorChatDrawerAtom", newValue, oldValue);
-      });
-    },
-  ],
-});
-
-export const editorTabDataAtom = atom<ITab | null>({
-  key: "editorTabData",
-  default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorTabData", newValue, oldValue);
-      });
-    },
-  ],
-});
-
-export const editorTablastVersionAtom = atom<IVersion | undefined>({
-  key: "editorTabLastVersion",
-  default: undefined,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorTabLastVersion", newValue, oldValue);
       });
     },
   ],

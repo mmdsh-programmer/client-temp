@@ -10,7 +10,6 @@ import EditorFooter from "@components/organisms/editor/editorFooter";
 import EditorHeader from "@components/organisms/editor/editorHeader";
 
 export interface IProps {
-  isPending: boolean;
   children: React.ReactNode;
   dialogHeader?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,7 +23,6 @@ const EditorDialog = ({
   setOpen,
   className,
   editorRef,
-  isPending,
 }: IProps) => {
 
   const handleClose = () => {
@@ -43,7 +41,7 @@ const EditorDialog = ({
         placeholder="dialog header"
         className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
-        <EditorHeader dialogHeader={dialogHeader} setOpen={handleClose} disabled={isPending} />
+        <EditorHeader dialogHeader={dialogHeader} setOpen={handleClose} />
       </DialogHeader>
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <DialogBody

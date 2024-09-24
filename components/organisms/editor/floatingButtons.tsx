@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  ConfirmationVersionIcon,
-  DislikeIcon,
-  GlobeIcon,
-  LikeIcon,
-} from "@components/atoms/icons";
+import { ConfirmationVersionIcon, GlobeIcon } from "@components/atoms/icons";
 import RenderIf from "@components/atoms/renderIf";
 import { EDraftStatus } from "@interface/enums";
 import { Button } from "@material-tailwind/react";
@@ -15,9 +10,10 @@ import LikeAndComment from "../like&comment";
 
 interface IProps {
   version?: IVersion;
+  className?: string;
 }
 
-const FloatingButtons = ({ version }: IProps) => {
+const FloatingButtons = ({ version, className }: IProps) => {
   const [versionConfirmModal, setVersionConfirmModal] = useState(false);
   const [versionPublicModal, setVersionPublicModal] = useState(false);
 
@@ -37,7 +33,7 @@ const FloatingButtons = ({ version }: IProps) => {
 
   return (
     <>
-      <div className="absolute bottom-[5px] xs:bottom-[30px] right-[33%] xs:right-[50%] p-2 flex items-center gap-2 rounded-full shadow-xl bg-[#222]">
+      <div className={`${className || ""} absolute right-[33%] xs:right-[50%] p-2 flex items-center gap-2 rounded-full shadow-xl bg-[#222]`}>
         <RenderIf isTrue={renderAcceptVersion}>
           <Button
             className="w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700"

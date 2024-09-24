@@ -10,8 +10,8 @@ import DocumentTableRow from "@components/molecules/documentTableRow";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import { ICategoryView } from "../category/categoryChildren";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
-import AdvancedFilter from "@components/molecules/AdvancedFilter";
 import SearchFilter from "@components/molecules/searchFilter";
+import AdvancedFilter from "@components/molecules/advancedFilter";
 
 const TableView = ({
   isLoading,

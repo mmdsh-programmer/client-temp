@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import EditorDialog from "@components/templates/dialog/editorDialog";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import { repoAtom } from "@atom/repository";
@@ -21,16 +20,15 @@ import VersionDialogView from "@components/organisms/versionView/versionDialogVi
 import { Spinner } from "@material-tailwind/react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import BlockDraft from "@components/organisms/editor/blockDraft";
-import BlockDraftDialog from "./blockDraftDialog";
 import useGetKey from "@hooks/repository/useGetKey";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
-import FloatingButtons from "@components/organisms/editor/floatingButtons";
+import { useSearchParams } from "next/navigation";
+import EditorHeader from "../editor/editorHeader";
+import EditorFooter from "../editor/editorFooter";
+import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
+import FloatingButtons from "../editor/floatingButtons";
 
-interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Editor = ({ setOpen }: IProps) => {
+const EditorTab = () => {
   const getRepo = useRecoilValue(repoAtom);
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
@@ -47,6 +45,10 @@ const Editor = ({ setOpen }: IProps) => {
   );
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
+  const searchParams = useSearchParams();
+  const versionId = searchParams.get("versionId");
+  const versionState = searchParams.get("versionState");
+
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
     word: useRef<IRemoteEditorRef>(null),
@@ -61,13 +63,18 @@ const Editor = ({ setOpen }: IProps) => {
     isSuccess: lastVersionIsSuccess,
   } = useGetLastVersion(getRepo!.id, getSelectedDocument!.id, !getVersionData);
 
+  const vId = versionId || getVersionData?.id || getLastVersion?.id;
+  const vState =
+    versionState ||
+    (getVersionData ? getVersionData.state : getLastVersion?.state);
+
   const { data, isLoading, error, isSuccess } = useGetVersion(
     getRepo!.id,
     getSelectedDocument!.id,
-    getVersionData ? getVersionData.id : getLastVersion?.id,
-    getVersionData ? getVersionData.state : getLastVersion?.state, // state
+    +vId!,
+    vState as "draft" | "version" | "public" | undefined,
     editorMode === "preview", // innerDocument
-    editorMode === "preview", // innerDocument,
+    editorMode === "preview", // innerDocument
     true
   );
 
@@ -141,12 +148,12 @@ const Editor = ({ setOpen }: IProps) => {
   }, []);
 
   const handleClose = () => {
-    setOpen(false);
     setDecryptedContent(null);
     setShowKey(false);
     setPublicKey(null);
     setSelectedVersion(null);
     setChatDrawer(false);
+    window.close();
   };
 
   if (error || keyError) {
@@ -180,31 +187,31 @@ const Editor = ({ setOpen }: IProps) => {
       ) : (
         <BlockDraft>
           <>
-            <EditorDialog
-              dialogHeader={getSelectedDocument?.name}
-              setOpen={handleClose}
-              editorRef={getEditorConfig().ref}
-            >
-              {isLoading ? (
-                <div className="main w-full h-full text-center flex items-center justify-center">
-                  <Spinner className="h-5 w-5 " color="deep-purple" />
-                </div>
-              ) : (
-                <>
-                  <BlockDraftDialog
-                    editorRef={getEditorConfig().ref}
-                    onClose={handleClose}
-                  />
-                  <EditorComponent
-                    version={data}
-                    getEditorConfig={getEditorConfig}
-                  />
-                  {editorMode === "preview" && data ? (
-                    <FloatingButtons version={data} className=" bottom-[5px] xs:bottom-[30px] " />
-                  ) : null}
-                </>
-              )}
-            </EditorDialog>
+            <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
+              <EditorHeader dialogHeader={getSelectedDocument?.name} />
+            </div>
+            {isLoading ? (
+              <div className="w-full h-full text-center flex items-center justify-center bg-primary">
+                <Spinner className="h-5 w-5 " color="deep-purple" />
+              </div>
+            ) : (
+              <div className="flex-grow p-0 overflow-auto">
+                <BlockDraftDialog
+                  editorRef={getEditorConfig().ref}
+                  onClose={handleClose}
+                />
+                <EditorComponent
+                  version={data}
+                  getEditorConfig={getEditorConfig}
+                />
+                {editorMode === "preview" && data ? (
+                  <FloatingButtons version={data} className=" bottom-[100px] xs:bottom-[100px] " />
+                ) : null}
+              </div>
+            )}
+            <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
+              <EditorFooter editorRef={getEditorConfig().ref} />
+            </div>
           </>
         </BlockDraft>
       )}
@@ -212,4 +219,4 @@ const Editor = ({ setOpen }: IProps) => {
   );
 };
 
-export default Editor;
+export default EditorTab;

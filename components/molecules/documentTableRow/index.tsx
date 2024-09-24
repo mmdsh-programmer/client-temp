@@ -1,20 +1,57 @@
 import React from "react";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { bulkItems } from "@atom/bulk";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { FaDateFromTimestamp } from "@utils/index";
 import { DocIcon, InvisibleIcon } from "@components/atoms/icons";
 import { Checkbox } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import TableCell from "../tableCell";
 import DocumentMenu from "../documentMenu";
+import { repoAtom } from "@atom/repository";
+import { category } from "@atom/category";
+import { selectedDocumentAtom } from "@atom/document";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
 
 interface IProps {
   document: IDocumentMetadata;
 }
 
 const DocumentTableRow = ({ document }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+  const selectedCat = useRecoilValue(category);
+  const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
+
+  const handleRowClick = () => {
+    if (document.contentType === "file") {
+      setDocument(document);
+      setEditorModal(true);
+      setEditorMode("preview");
+      return;
+    }
+    const path = selectedCat
+      ? `edit?repoId=${document.repoId}&categoryId=${
+          selectedCat.id
+        }&documentId=${document.id}&repoGroupHash=${
+          getRepo?.userGroupHash
+        }&catGroupHash=${selectedCat.userGroupHash}&type=${
+          document?.contentType
+        }${
+          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+        }`
+      : `edit?repoId=${document.repoId}&documentId=${
+          document.id
+        }&repoGroupHash=${getRepo?.userGroupHash}&type=${
+          document?.contentType
+        }${
+          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+        }`;
+
+    window.open(path, "_blank");
+  };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
@@ -34,6 +71,7 @@ const DocumentTableRow = ({ document }: IProps) => {
   return (
     <TableCell
       key={`document-table-item-${document.id}`}
+      onClick={handleRowClick}
       tableCell={[
         {
           data: (
@@ -45,6 +83,7 @@ const DocumentTableRow = ({ document }: IProps) => {
               })}
             />
           ),
+          stopPropagation: true,
         },
         {
           data: document.order || document.order === 0 ? document.order : "--",

@@ -2,11 +2,7 @@ import React from "react";
 import { Typography } from "@material-tailwind/react";
 import CloseButton from "@components/atoms/button/closeButton";
 import BackButton from "@components/atoms/button/backButton";
-import {
-  editorDataAtom,
-  editorModalAtom,
-  editorModeAtom,
-} from "@atom/editor";
+import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import { repoAtom } from "@atom/repository";
@@ -15,23 +11,21 @@ import { versionModalListAtom } from "@atom/version";
 
 export interface IProps {
   dialogHeader?: string;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  disabled: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  disabled?: boolean;
 }
 
 const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const [getSelectedDocument, setSelectedDocument] =
-    useRecoilState(selectedDocumentAtom);
+  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const [editorData, setEditorData] = useRecoilState(editorDataAtom);
-  const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
+  const editorMode = useRecoilValue(editorModeAtom);
+  const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const freeDraftHook = useFreeDraft();
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen?.(false);
     if (
       getRepo &&
       getSelectedDocument &&
@@ -49,12 +43,11 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
     }
 
     setVersionModalList(false);
-    // setVersion(null);
     setEditorData(null);
     setEditorModal(false);
   };
 
-  return (
+  return disabled ? (
     <>
       <div className="block xs:hidden">
         <BackButton onClick={handleClose} />
@@ -64,6 +57,8 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
         <CloseButton onClose={handleClose} disabled={disabled} />
       </div>
     </>
+  ) : (
+    <Typography className="title_t1">{dialogHeader}</Typography>
   );
 };
 

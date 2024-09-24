@@ -13,7 +13,6 @@ import { repoAtom } from "@atom/repository";
 import { category } from "@atom/category";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@material-tailwind/react";
-import FloatingButtons from "./floatingButtons";
 import { IVersion } from "@interface/version.interface";
 import ChatDrawer from "../like&comment/chatDrawer";
 
@@ -77,7 +76,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             : content
         }
       />
-      {editorMode === "preview" && version ? <FloatingButtons version={version} /> : null}
       {chatDrawer ? <ChatDrawer /> : null}
     </div>
   );

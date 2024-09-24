@@ -1,8 +1,8 @@
 import React from "react";
 import RepoPage from "@components/pages/repository";
 import RepositoryTemplate from "@components/templates/repositoryTemplate";
-const Repositories = () => {
 
+const Repositories = () => {
   return (
     <RepositoryTemplate>
       <RepoPage />
