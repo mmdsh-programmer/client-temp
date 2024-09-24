@@ -10,7 +10,7 @@ import {
   editorModeAtom,
 } from "@atom/editor";
 import { repoAtom } from "@atom/repository";
-import { category } from "@atom/category";
+import { categoryAtom } from "@atom/category";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@material-tailwind/react";
 import { IVersion } from "@interface/version.interface";
@@ -26,7 +26,7 @@ interface IProps {
 
 const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const selectedCategory = useRecoilValue(category);
+  const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const selectedVersion = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);

@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { repoAtom, repositoryId } from "@atom/repository";
+import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useGetRepo from "@hooks/repository/useGetRepo";
 import { selectedDocumentAtom } from "@atom/document";
@@ -13,7 +13,7 @@ import Error from "@components/organisms/error";
 import { Spinner, Typography } from "@material-tailwind/react";
 
 const EditPage = () => {
-  const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryId);
+  const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryIdAtom);
   const setRepository = useSetRecoilState(repoAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
 
