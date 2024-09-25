@@ -1,12 +1,11 @@
-import { bulkItems } from "atom/bulk";
-import { category } from "atom/category";
+import { bulkItemsAtom } from "@atom/bulk";
+import { categoryAtom } from "@atom/category";
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import useDeleteBulk from "@hooks/bulk/useDeleteBulk";
 import { useForm } from "react-hook-form";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import { Typography } from "@material-tailwind/react";
+import DeleteDialog from "@components/templates/dialog/deleteDialog";           
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,8 +15,8 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
   const bulkDeleteHook = useDeleteBulk();
 
   const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(category);
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItems);
+  const [getCategory, setCategory] = useRecoilState(categoryAtom);
+  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
 
   const { handleSubmit, clearErrors, reset } = useForm();
 

@@ -96,7 +96,6 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
         return;
       }
 
-      
       setLoading(true);
 
       await addUserHook.mutateAsync();
@@ -217,21 +216,20 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
           </Typography>
           {fileInfo?.map((info, index) => {
             return (
-              fileInfo[index].file && (
-                <FileUploaderInput
-                  uploadUrl={`${process.env.NEXT_PUBLIC_PODSPACE_API}usergroups/${process.env.NEXT_PUBLIC_USERGROUP}/files`}
-                  onSuccess={onUploadSuccess}
-                  onDeleteFile={(file) => {
-                    handleDeleteFile(file);
-                  }}
-                  uniqueId={info.id}
-                  file={info.file}
-                  errorMessage={fileInfo[index].errorMessage}
-                  ref={(ref) => {
-                    if (fileInfo[index]) fileInfo[index].inputFile = ref;
-                  }}
-                />
-              )
+              <FileUploaderInput
+                key={info.id}
+                uploadUrl={`${process.env.NEXT_PUBLIC_PODSPACE_API}usergroups/${process.env.NEXT_PUBLIC_USERGROUP}/files`}
+                onSuccess={onUploadSuccess}
+                onDeleteFile={(file) => {
+                  handleDeleteFile(file);
+                }}
+                uniqueId={info.id}
+                file={info.file}
+                errorMessage={fileInfo[index].errorMessage}
+                ref={(ref) => {
+                  if (fileInfo[index]) fileInfo[index].inputFile = ref;
+                }}
+              />
             );
           })}
         </div>
