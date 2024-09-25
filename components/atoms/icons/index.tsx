@@ -2049,6 +2049,26 @@ export const QuestionIcon = (props: IProps) => {
   );
 };
 
+export const ReloadIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+      />
+    </svg>
+  );
+};
+
 export const RepoIcon = (props: IProps) => {
   const { className } = props;
   return (
@@ -2617,21 +2637,21 @@ export const StepperIcon = (props: IProps) => {
 };
 
 export const TickIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, fill } = props;
   return (
     <svg
       className={className}
       viewBox="0 0 24 25"
-      fill="none"
+      fill={fill}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M0 12.5C0 5.87258 5.37258 0.5 12 0.5C18.6274 0.5 24 5.87258 24 12.5C24 19.1274 18.6274 24.5 12 24.5C5.37258 24.5 0 19.1274 0 12.5Z"
-        fill="#7446B2"
+        fill={fill}
       />
       <path
         d="M17.3853 8.41155L10.3047 16.9867C9.83335 17.5576 8.93517 17.4747 8.57625 16.8272L6.60499 13.2712C6.18297 12.5099 7.12541 11.7275 7.79607 12.2824L9.50011 13.6922C9.70138 13.8587 9.99446 13.852 10.1879 13.6764L16.7032 7.76071C17.1374 7.36643 17.7588 7.95927 17.3853 8.41155Z"
-        fill="white"
+        fill={fill}
       />
     </svg>
   );
