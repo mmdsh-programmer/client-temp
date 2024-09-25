@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  Typography,
-} from "@material-tailwind/react";
+import { Button,Dialog, DialogFooter, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
 
@@ -34,7 +27,7 @@ const fileManagementDialog = ({
     <Dialog
       placeholder=""
       size="sm"
-      open={true}
+      open
       handler={handleClose}
       className={dialogClassName || ""}
     >

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Dialog,
-  DialogFooter,
-  DialogBody,
-  DialogHeader,
-  Typography,
-} from "@material-tailwind/react";
+import { Dialog, DialogFooter, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -38,7 +32,7 @@ const EditDialog = ({
     <Dialog
       placeholder=""
       size="sm"
-      open={true}
+      open
       handler={handleClose}
       className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
     >

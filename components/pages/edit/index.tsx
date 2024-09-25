@@ -62,7 +62,9 @@ const EditPage = () => {
   if (repoError) {
     return (
       <Error
-        error={{ message: "خطا در دریافت اطلاعات مخزن" }}
+        error={
+          { message: "خطا در دریافت اطلاعات مخزن" }
+        }
         retry={refetch}
       />
     );

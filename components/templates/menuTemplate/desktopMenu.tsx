@@ -24,7 +24,7 @@ const DesktopMenu = ({ menuList, icon, className }: IProps) => {
         className={`${className || ""} rounded-lg bg-transparent p-1 shadow-none flex justify-center hover:shadow-none items-center`}
         placeholder="menu-button"
       >
-        {icon ? icon : <MoreDotIcon className="w-4 h-4 " />}
+        {icon || <MoreDotIcon className="w-4 h-4 " />}
       </Button>
     </MenuComponent>
   );
