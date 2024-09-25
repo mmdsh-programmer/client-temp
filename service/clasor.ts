@@ -2160,7 +2160,9 @@ export const subscribeRepo = async (
   password?: string
 ) => {
   try {
-    const response = await axiosClasorInstance.put<IServerResult<{repository: IRepo}>>(
+    const response = await axiosClasorInstance.put<
+      IServerResult<{ repository: IRepo }>
+    >(
       `repositories/subscribe/${hash}`,
       {
         password,
@@ -2286,6 +2288,47 @@ export const rejectUserToRepoRequest = async (
         },
         params: {
           requestId,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+///////////////////////// FEEDBACK /////////////////////
+export const sendFeedback = async (
+  access_token: string,
+  content: string,
+  fileHashList: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `feedback`,
+      { message: content, fileHash: fileHashList },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const addUserToFeedbackGroupHash = async (access_token: string) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<{isAddUser: boolean}>>(
+      `feedback/addUser`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
         },
       }
     );

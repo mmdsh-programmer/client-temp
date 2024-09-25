@@ -4,9 +4,11 @@ import Breadcrumb from "@components/molecules/breadcumb";
 import ProfileMenu from "@components/molecules/profileMenu";
 import { Button } from "@material-tailwind/react";
 import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
+import FeedbackDialog from "../dialogs/feedback";
 
 const Header = () => {
   const [openRequestDialog, setOpenRequestDialog] = useState(false);
+  const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false);
 
   return (
     <>
@@ -26,6 +28,7 @@ const Header = () => {
               <AlertIcon className=" h-4 w-4" />
             </Button>
             <Button
+              onClick={() => setOpenFeedbackDialog(true)}
               className="rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
             >
               <ThemeIcon className=" h-4 w-4" />
@@ -37,6 +40,9 @@ const Header = () => {
       <hr className="" />
       {openRequestDialog && (
         <UserJoinToRepoRequests setOpen={() => setOpenRequestDialog(false)} />
+      )}
+      {openFeedbackDialog && (
+        <FeedbackDialog setOpen={() => setOpenFeedbackDialog(false)} />
       )}
     </>
   );
