@@ -15,7 +15,7 @@ interface IProps {
   children: JSX.Element;
 }
 
-const CheckRepoInfo = ({ children }: IProps) => {
+const CheckRepoInfo: React.FC<IProps> = ({ children }: IProps) => {
   useHandleRepoChange();
 
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
       </div>
     );
   }
-  return { children };
+  return <>{children}</>;
 };
 
 export default CheckRepoInfo;
