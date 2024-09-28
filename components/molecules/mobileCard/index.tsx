@@ -15,7 +15,7 @@ interface IProps {
   className?: string;
 }
 
-const MobileCard = ({
+const   MobileCard = ({
   name,
   createDate,
   creator,

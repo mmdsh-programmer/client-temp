@@ -21,6 +21,7 @@ export enum EEmptyList {
   WHITE_LIST = "white_list",
   BLACK_LIST = "black_list",
   JOIN_REPO_REQUESTS = "join_repo_requests",
+  FEEDBACK = "feedback",
 }
 
 interface IProps {
@@ -195,6 +196,17 @@ const EmptyList = ({ type }: IProps) => {
             شما در حال حاضر درخواست دعوت به مخزنی ندارید.
           </Typography>
         );
+        case EEmptyList.FEEDBACK:
+          return (
+            <div className="flex flex-col items-center justify-center">
+              <Typography
+                placeholder="empty-message"
+                className="title_t3 text-primary"
+              >
+                شما در حال حاضر لیست بازخوردی ندارید.
+              </Typography>
+            </div>
+          );
       default:
         return null;
     }

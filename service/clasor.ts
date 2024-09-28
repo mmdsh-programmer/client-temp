@@ -12,6 +12,7 @@ import {
   IUserInfo,
 } from "@interface/app.interface";
 import { ICategory, ICategoryMetadata } from "@interface/category.interface";
+import { IClasorReport } from "@interface/clasorReport";
 import { IContentSearchResult } from "@interface/contentSearch.interface";
 import {
   IClasorField,
@@ -28,6 +29,7 @@ import {
   IGetGroups,
   IUpdateGroup,
 } from "@interface/group.interface";
+import { IOfferResponse } from "@interface/offer.interface";
 import {
   IPublicKey,
   IRepo,
@@ -2425,7 +2427,9 @@ export const sendFeedback = async (
 
 export const addUserToFeedbackGroupHash = async (access_token: string) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<{isAddUser: boolean}>>(
+    const response = await axiosClasorInstance.post<
+      IServerResult<{ isAddUser: boolean }>
+    >(
       `feedback/addUser`,
       {},
       {
@@ -2434,6 +2438,48 @@ export const addUserToFeedbackGroupHash = async (access_token: string) => {
         },
       }
     );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+//////////////////////////// ADMIN PANEL //////////////////////////////
+
+export const getAdminPanelReport = async (access_token: string) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IClasorReport>
+    >(`admin/clasorReport`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getAdminPanelFeedback = async (
+  access_token: string,
+  top: number,
+  skip: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IOfferResponse>
+    >(`admin/feedback?top=${top}&skip=${skip}`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        top,
+        skip,
+      },
+    });
 
     return response.data.data;
   } catch (error) {

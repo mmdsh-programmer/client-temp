@@ -69,7 +69,7 @@
     "max-classes-per-file": "off",
     "react/jsx-props-no-spreading": "off",
     "implicit-arrow-linebreak": ["error", "below"],
-    "camelcase": "off",
+    "camelcase": 1,
     "react/function-component-definition": [
       "error",
       {
@@ -92,7 +92,7 @@
     "unicorn/no-null": "off",
     "unicorn/explicit-length-check": "off",
     "unicorn/filename-case": [
-      "error",
+      "warning",
       {
         "case": "camelCase"
       }

@@ -1,31 +1,34 @@
-import {
-  ArchiveIcon,
+import { ArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
-  MyFolderIcon,
+  MyFolderIcon 
 } from "@components/atoms/icons";
 import React, { useMemo } from "react";
 
 import { ERepoGrouping } from "@interface/enums";
 import RepoTypeCard from "@components/molecules/repoTypeCard";
 import { repoGroupingAtom } from "@atom/repository";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 
 const RepoTypesCards = () => {
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
+  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
 
-  const repoTypeData = useMemo(
-    () => [
+  const repoTypeData = useMemo(() => {
+    return [
       {
         cardTitle: "مخزن‌های من",
         icon: <MyFolderIcon className="h-full w-full stroke-icon-active" />,
-        onClick: () => setRepoGroup(ERepoGrouping.MY_REPO),
+        onClick: () => {
+          return setRepoGroup(ERepoGrouping.MY_REPO);
+        },
         repoNumber: 0,
       },
       {
         cardTitle: "مخزن‌های اشتراکی",
         icon: <FolderShareIcon className="h-full w-full stroke-icon-active" />,
-        onClick: () => setRepoGroup(ERepoGrouping.ACCESS_REPO),
+        onClick: () => {
+          return setRepoGroup(ERepoGrouping.ACCESS_REPO);
+        },
         repoNumber: 0,
       },
       {
@@ -33,30 +36,35 @@ const RepoTypesCards = () => {
         icon: (
           <FolderBookmarkIcon className="h-full w-full stroke-icon-active" />
         ),
-        onClick: () => setRepoGroup(ERepoGrouping.BOOKMARK_REPO),
+        onClick: () => {
+          return setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
+        },
         repoNumber: 0,
       },
       {
         cardTitle: "مخزن‌های بایگانی‌شده",
         icon: <ArchiveIcon className="h-full w-full stroke-icon-active" />,
-        onClick: () => setRepoGroup(ERepoGrouping.ARCHIVE_REPO),
+        onClick: () => {
+          return setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
+        },
         repoNumber: 0,
       },
-    ],
-    [setRepoGroup],
-  );
+    ];
+  }, [setRepoGroup]);
 
   return (
     <div className="hidden xs:flex gap-4 flex-wrap min-w-full">
-      {repoTypeData.map((item) => (
-        <RepoTypeCard
-          key={item.cardTitle}
-          cardTitle={item.cardTitle}
-          icon={item.icon}
-          repoNumber={item.repoNumber}
-          onClick={item.onClick}
-        />
-      ))}
+      {repoTypeData.map((item) => {
+        return (
+          <RepoTypeCard
+            key={item.cardTitle}
+            cardTitle={item.cardTitle}
+            icon={item.icon}
+            repoNumber={item.repoNumber}
+            onClick={item.onClick}
+          />
+        );
+      })}
     </div>
   );
 };
