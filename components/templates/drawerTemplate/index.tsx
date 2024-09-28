@@ -16,7 +16,11 @@ export interface IProps {
 const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
   const [open, setOpen] = useState(false);
 
-  const toggleOpen = () => setOpen((cur) => !cur);
+  const toggleOpen = () => {
+    return setOpen((cur) => {
+      return !cur;
+    });
+  };
 
   return (
     <Drawer
@@ -34,7 +38,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
       >
         {menuList.map((menuItem, index) => {
           return menuItem.subMenu ? (
-            <div key={`drawer-sub-menu-${index}`}>
+            <div key={`drawer-sub-menu-${menuItem.text}`}>
               <Button
                 className="w-full flex items-center justify-between bg-transparent px-0"
                 onClick={toggleOpen}
@@ -49,21 +53,18 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
                 />
               </Button>
               <Collapse open={open}>
-                <ul
-                  className={`w-full
-               ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
-                >
-                  {menuItem.subMenu.map((subItem, idx) => {
+                <ul className="w-full ml-4 font-iranYekan text-primary overflow-hidden p-[2px]">
+                  {menuItem.subMenu.map((subItem) => {
                     return (
                       <li
-                        key={`drawer-sub-menu-${idx}`}
-                        className={`cursor-pointer py-2 flex`}
+                        key={`drawer-sub-menu-${subItem.text}`}
+                        className="cursor-pointer py-2 flex"
                         onClick={subItem?.onClick}
                       >
                         <div className="flex items-center gap-1">
                           {subItem.icon}
                           <Typography
-                            className={`select_option__text font-normal`}
+                            className="select_option__text font-normal"
                           >
                             {subItem.text}
                           </Typography>
@@ -76,13 +77,13 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
             </div>
           ) : (
             <li
-              key={`drawer-menu-${index}`}
-              className={`cursor-pointer py-2 flex`}
+              key={`drawer-menu-${menuItem.text}`}
+              className="cursor-pointer py-2 flex"
               onClick={menuItem?.onClick}
             >
               <div className="flex items-center gap-1">
                 {menuItem.icon}
-                <Typography className={`select_option__text font-normal`}>
+                <Typography className="select_option__text font-normal">
                   {menuItem.text}
                 </Typography>
               </div>

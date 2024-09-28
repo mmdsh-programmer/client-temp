@@ -19,7 +19,7 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className }: IProps) => {
     <Dialog
       placeholder=""
       size="sm"
-      open={true}
+      open
       handler={handleClose}
       className={`${className} flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
     >
@@ -36,7 +36,7 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className }: IProps) => {
         <CloseButton onClose={handleClose} />
       </DialogHeader>
       <div className="block xs:hidden h-2 w-full bg-secondary" />
-      <>{children}</>
+      {children}
     </Dialog>
   );
 };

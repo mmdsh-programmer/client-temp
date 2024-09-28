@@ -1,75 +1,39 @@
-import { logger } from "@utils/index";
 import { atom } from "recoil";
-import { ITab, IVersion } from "interface/version.interface";
+import { IVersion } from "interface/version.interface";
+import { logEffect } from "@utils/index";
 
 export const editorModalAtom = atom<boolean>({
-  key: "editorModal",
+  key: "editorModalAtom",
   default: false,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorModal", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("editorModalAtom")],
 });
 
 export const editorModeAtom = atom<"edit" | "preview" | "temporaryPreview">({
-  key: "editorMode",
+  key: "editorModeAtom",
   default: "preview",
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorMode", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("editorModeAtom")],
 });
 
 export const editorDataAtom = atom<IVersion | null>({
-  key: "editorData",
+  key: "editorDataAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorData", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("editorDataAtom")],
 });
 
 export const editorChatDrawerAtom = atom<boolean>({
   key: "editorChatDrawerAtom",
   default: false,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorChatDrawerAtom", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("editorChatDrawerAtom")],
 });
 
 export const editorDecryptedContentAtom = atom<string | null>({
-  key: "editorDecryptedContent",
+  key: "editorDecryptedContentAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorDecryptedContent", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("editorDecryptedContentAtom")],
 });
 
 export const editorPublicKeyAtom = atom<string | null>({
-  key: "editorPublicKey",
+  key: "editorPublicKeyAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("editorPublicKey", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("editorPublicKeyAtom")],
 });

@@ -12,11 +12,7 @@ import { IVersionView } from "../version/versionList";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { IVersion } from "@interface/version.interface";
-import {
-  editorDataAtom,
-  editorModalAtom,
-  editorModeAtom,
-} from "@atom/editor";
+import { editorDataAtom, editorModalAtom, editorModeAtom} from "@atom/editor";
 import { EDocumentTypes } from "@interface/enums";
 import { selectedDocumentAtom } from "@atom/document";
 
@@ -60,6 +56,7 @@ const VersionTableView = ({
     <div
       className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
     >
+      {/* eslint-disable-no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Dialog,
-  DialogFooter,
-  DialogBody,
-  DialogHeader,
-  Typography,
-} from "@material-tailwind/react";
+import { Dialog, DialogFooter, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -35,7 +29,7 @@ const DeleteDialog = ({
     <Dialog
       placeholder=""
       size="sm"
-      open={true}
+      open
       handler={handleClose}
       className={`${className} rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0`}
     >

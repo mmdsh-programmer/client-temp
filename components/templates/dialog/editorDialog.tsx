@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Dialog,
-  DialogFooter,
-  DialogBody,
-  DialogHeader,
-} from "@material-tailwind/react";
+import { Dialog, DialogFooter, DialogBody, DialogHeader } from "@material-tailwind/react";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import EditorFooter from "@components/organisms/editor/editorFooter";
 import EditorHeader from "@components/organisms/editor/editorHeader";
@@ -33,7 +28,7 @@ const EditorDialog = ({
     <Dialog
       placeholder=""
       size="sm"
-      open={true}
+      open
       handler={handleClose}
       className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] bg-primary rounded-none xs:rounded-lg `}
     >
