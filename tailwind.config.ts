@@ -1,14 +1,15 @@
-const withMT = require("@material-tailwind/react/utils/withMT");
+/* eslint-disable import/no-import-module-exports */
 import { fontFamily } from "tailwindcss/defaultTheme";
+
+import withMT from "@material-tailwind/react/utils/withMT";
 
 module.exports = withMT({
   content: [
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: ["class", '[data-mode="dark"]'],
-  theme: {
-    extend: {
+  darkMode: ["class", "[data-mode=\"dark\"]"],
+  theme: {extend: {
       colors: {
         gray: {
           50: "#F6F7F8", // cancel background
@@ -29,9 +30,7 @@ module.exports = withMT({
           active: "#181C20",
           hover: "#667585",
         },
-        critical: {
-          normal: "#E03E1A",
-        },
+        critical: { normal: "#E03E1A" },
         error: "#E03E1A",
         success: {
           normal: "#1F7A37",
@@ -46,12 +45,8 @@ module.exports = withMT({
         tertiary: "#F2F2F7",
       },
 
-      borderColor: {
-        normal: "#EEF0F2",
-      },
-      iconColor: {
-        active: "#181C20",
-      },
+      borderColor: {normal: "#EEF0F2",},
+      iconColor: {active: "#181C20",},
       textColor: {
         primary: "#0C0E10",
         secondary: "#667585",
@@ -61,9 +56,7 @@ module.exports = withMT({
         primary_normal: "#7446B2",
         link: "#0C8CE9",
       },
-      fontFamily: {
-        iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans],
-      },
+      fontFamily: {iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans],},
       screens: {
         mobile: "300",
         xs: "480px",
@@ -83,10 +76,8 @@ module.exports = withMT({
         "1": "1 1 auto",
         "2": "2 2 auto",
       },
-      letterSpacing: {
-        tightest: "0.13px",
-      },
-    },
-  },
+      letterSpacing: {tightest: "0.13px",},
+    },},
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, global-require, import/no-extraneous-dependencies
   plugins: [require("tailwindcss-rtl")],
 });

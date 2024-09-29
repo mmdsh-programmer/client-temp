@@ -35,7 +35,8 @@ const RepoUsers = () => {
       {isLoadingInviteToRepoRequests || isLoadingRepoUsers ? (
         <Spinner className="h-0 w-0" />
       ) : (
-        <div className="flex flex-col !h-[370px] xs:!h-[250px] overflow-auto overflow-y-auto">
+        <div className={`flex flex-col overflow-auto overflow-y-auto
+        ${window.location.pathname === "/admin/dashboard" ? "!h-[250px] xs:!h-[168px]" : "!h-[370px] xs:!h-[250px]" }`}>
           {getRepoUsers?.pages.map((page) => {
             return page.list.map((user) => {
               return <UserItem key={user.userInfo.ssoId} user={user} />;

@@ -21,6 +21,9 @@ const useEditRepo = () => {
       queryClient.invalidateQueries({
         queryKey: [`myRepoList-false`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`getRepo-${repoId}`],
+      });
       callBack?.();
     },
     onError: (error) => {

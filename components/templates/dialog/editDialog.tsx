@@ -34,7 +34,7 @@ const EditDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
+      className={`${className} flex flex-col shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
     >
       <DialogHeader
         placeholder="dialog header"
@@ -53,7 +53,7 @@ const EditDialog = ({
               />
             </div>
           ) : null}
-          <Typography className="form__title">{dialogHeader}</Typography>{" "}
+          <Typography className="form__title">{dialogHeader}</Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
@@ -62,7 +62,7 @@ const EditDialog = ({
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="flex-grow px-5 py-3 xs:p-6 overflow-auto"
       >
         {children}
       </DialogBody>

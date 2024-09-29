@@ -1,6 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import RepoDefaultImage from ".";
+import RepoDefaultImage from "../repoAttachImage/repoAttachDefaultImage";
 import { RecoilRoot } from "recoil";
 
 const meta: Meta<typeof RepoDefaultImage> = {

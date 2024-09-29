@@ -1,41 +1,53 @@
 import React from "react";
+import { IRepo } from "@interface/repo.interface";
 import {
   RepoBlueIcon,
+  RepoIcon,
   RepoPurpleIcon,
   RepoRedIcon,
   RepoYellowIcon,
 } from "@components/atoms/icons";
-import { Button } from "@material-tailwind/react";
+import useGetUser from "@hooks/auth/useGetUser";
+import ImageComponent from "@components/atoms/image";
+import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
-  onClick: (name: string) => void;
-  disabled?: boolean;
+  repo: IRepo | null;
 }
 
-const RepoDefaultImage = ({ onClick, disabled }: IProps) => {
-  const imageGroup = [
-    { icon: <RepoPurpleIcon />, name: "purple" },
-    { icon: <RepoRedIcon />, name: "red" },
-    { icon: <RepoBlueIcon />, name: "blue" },
-    { icon: <RepoYellowIcon />, name: "yellow" },
-  ];
-  return (
-    <div className="flex w-full gap-2">
-      {imageGroup.map((image) => {
+const RepoDefaultImage = ({ repo }: IProps) => {
+  const { data: getUserInfo, isFetching } = useGetUser();
+  const imageHash = repo?.imageFileHash;
+
+  if (isFetching) {
+    return <Spinner className="h-5 w-5" color="deep-purple" />;
+  }
+
+  if (!imageHash) {
+    return <RepoIcon className="w-full h-full" />;
+  }
+
+  const generateImage = () => {
+    switch (imageHash) {
+      case "red":
+        return <RepoRedIcon className="w-full h-full" />;
+      case "blue":
+        return <RepoBlueIcon className="w-full h-full" />;
+      case "purple":
+        return <RepoPurpleIcon className="w-full h-full" />;
+      case "yellow":
+        return <RepoYellowIcon className="w-full h-full" />;
+      default:
         return (
-          <Button
-            placeholder="button"
-            key={image.name}
-            className="flex focus:bg-secondary focus:outline-2 focus:outline-gray-200 justify-center items-center rounded-lg border-[1px] border-normal bg-primary w-[82px] h-[82px]"
-            onClick={() => onClick(image.name)}
-            disabled={disabled}
-          >
-            {image.icon}
-          </Button>
+          <ImageComponent
+            alt="repo-image"
+            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo?.imageFileHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
+          />
         );
-      })}
-    </div>
-  );
+    }
+  };
+
+  return imageHash ? generateImage() : <RepoIcon className="w-full h-full" />;
 };
 
 export default RepoDefaultImage;

@@ -1,6 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import RepoImage from ".";
+import RepoImage from "../repoDefaultImage";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { IRepo } from "@interface/repo.interface";

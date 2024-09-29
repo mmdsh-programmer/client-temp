@@ -11,6 +11,7 @@ const useGetRepo = (
     queryKey: [`getRepo-${repoId}`],
     queryFn: async ({ signal }) => {
       const response = await getRepositoryAction(repoId);
+      console.log("---------------- get repo ----------------", response)
       if (response) {
         setRepo(response);
         setRepositoryId(null);

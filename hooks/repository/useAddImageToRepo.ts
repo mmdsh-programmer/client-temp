@@ -20,6 +20,9 @@ const useAddImageToRepo = () => {
       queryClient.invalidateQueries({
         queryKey: [`getRepo-${repoId}`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`myRepoList-false`],
+      });
       callBack?.();
     },
     onError: (error) => {

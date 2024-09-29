@@ -18,7 +18,7 @@ const RepoAddUser = ({ handleClose }: IProps) => {
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="flex-grow px-5 py-3 xs:p-6 overflow-auto"
       >
         <RepoShare />
       </DialogBody>
