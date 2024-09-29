@@ -36,13 +36,7 @@ export const compareVersionAtom = atom<{
 export const versionModalListAtom = atom<boolean | null>({
   key: "versionModalList",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("versionModalList", newValue, oldValue);
-      });
-    },
-  ],
+  effects: [logEffect("versionModalList")],
 });
 
 export const versionDrawerAtom = atom<boolean | null>({
@@ -51,7 +45,7 @@ export const versionDrawerAtom = atom<boolean | null>({
   effects: [
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
-        logger("versionDrawerAtom", newValue, oldValue);
+        logEffect("versionDrawerAtom");
       });
     },
   ],

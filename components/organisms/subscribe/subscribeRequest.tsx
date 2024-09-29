@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import SpinnerText from "@components/molecules/spinnerText";
-import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+
 import Error from "../error";
+import SpinnerText from "@components/molecules/spinnerText";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
 
 interface IProps {
   hash: string;
@@ -39,6 +40,7 @@ const SubscribeRequest = ({ hash }: IProps) => {
       />
     );
   }
+  return null;
 };
 
 export default SubscribeRequest;

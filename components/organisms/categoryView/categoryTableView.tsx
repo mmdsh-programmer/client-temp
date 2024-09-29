@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { Spinner } from "@material-tailwind/react";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import TableHead from "@components/molecules/tableHead";
-import { ICategoryMetadata } from "@interface/category.interface";
-import { IDocumentMetadata } from "@interface/document.interface";
-import EmptyList from "@components/molecules/emptyList";
-import DocumentTableRow from "@components/molecules/documentTableRow";
+
+import AdvancedFilter from "@components/molecules/@advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
-import { ICategoryView } from "../category/categoryChildren";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
+import DocumentTableRow from "@components/molecules/documentTableRow";
+import EmptyList from "@components/molecules/emptyList";
+import { ICategoryMetadata } from "@interface/category.interface";
+import { ICategoryView } from "../category/categoryChildren";
+import { IDocumentMetadata } from "@interface/document.interface";
+import LoadMore from "@components/molecules/loadMore";
+import RenderIf from "@components/atoms/renderIf";
 import SearchFilter from "@components/molecules/searchFilter";
-import AdvancedFilter from "@components/molecules/advancedFilter";
+import { Spinner } from "@material-tailwind/react";
+import TableHead from "@components/molecules/tableHead";
 
 const TableView = ({
   isLoading,

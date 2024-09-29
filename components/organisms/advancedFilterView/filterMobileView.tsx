@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import SearchFilter from "@components/molecules/searchFilter";
+
+import AdvancedFilter from "@components/molecules/@advancedFilter";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import AdvancedFilter from "@components/molecules/advancedFilter";
+import SearchFilter from "@components/molecules/searchFilter";
 
 const FilterMobileView = () => {
   const [openFilter, setOpenFilter] = useState(false);

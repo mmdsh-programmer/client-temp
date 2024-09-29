@@ -1,17 +1,18 @@
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
+import { EDocumentTypes } from "@interface/enums";
+import { editorDataAtom } from "atom/editor";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
 import { useEffect } from "react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { editorVersionAtom } from "atom/editor";
-import { repoAtom } from "@atom/repository";
 import { versionModalListAtom } from "@atom/version";
-import { EDocumentTypes } from "@interface/enums";
-import { selectedDocumentAtom } from "@atom/document";
 
 const DocumentLastVersion = () => {
   const repository = useRecoilValue(repoAtom);
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
-  const setEditorVersion = useSetRecoilState(editorVersionAtom);
+  const setEditorVersion = useSetRecoilState(editorDataAtom);
   const [getVersionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
 

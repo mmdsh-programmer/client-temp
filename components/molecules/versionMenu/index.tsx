@@ -1,8 +1,8 @@
-import React from "react";
-import { IVersion } from "@interface/version.interface";
-import DraftVersionMenu from "./draftVersionMenu";
-import PublicVersionMenu from "./publicVersionMenu";
 import ConfirmVersionMenu from "./confirmVersionMenu";
+import DraftVersionMenu from "./draftVersionMenu";
+import { IVersion } from "@interface/version.interface";
+import PublicVersionMenu from "./publicVersionMenu";
+import React from "react";
 
 interface IProps {
   version?: IVersion;
@@ -29,7 +29,8 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     version?.status === "public"
   ) {
     return <PublicVersionMenu version={version} lastVersion={lastVersion} />;
-  }
+  } 
+  return null;
 };
 
 export default VersionMenu;
