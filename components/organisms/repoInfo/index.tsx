@@ -7,7 +7,7 @@ import RepoMenu from "@components/molecules/repoMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import TagList from "../tagList";
 import { Typography } from "@material-tailwind/react";
-import RepoImage from "@components/molecules/repoImage";
+import RepoImage from "@components/molecules/repoDefaultImage";
 
 const RepoInfo = () => {
   const getRepo = useRecoilValue(repoAtom);

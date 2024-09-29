@@ -48,10 +48,16 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
       name: dataForm.name,
       description: dataForm.description,
       callBack: (result) => {
-        toast.success("مخزن با موفقیت ایجاد شد.");
-        handleReset();
-        setActiveStep(1);
-        setRepo(result.data);
+        if (result.id) {
+          toast.success("مخزن با موفقیت ایجاد شد.");
+          setRepo(result);
+          setTimeout(() => {
+            handleReset();
+            setActiveStep(1);
+          }, 100);
+        } else {
+          toast.error("ساخت مخزن با خطا مواجه شد.");
+        }
       },
     });
   };

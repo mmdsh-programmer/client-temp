@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
@@ -5,7 +6,9 @@ import useRenameFile from "@hooks/files/useRenameFile";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { ClasorFileManagement, IFile } from "cls-file-management";
+import {
+ ClasorFileManagement, IFile 
+} from "cls-file-management";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
@@ -13,14 +16,11 @@ import FileManagementDialog from "@components/templates/dialog/fileManagementDia
 
 const fileTablePageSize = 20;
 interface IProps {
-  setSelectedFile?: (file: IFile | null) => void;
+  setSelectedFile?: (file?: string) => void;
   userGroupHash: string;
   resourceId: number;
-  type: "private" | "public";
   handleClose: () => void;
-  cropMode?: boolean;
-  hasPreview?: boolean;
-  cardMode?: boolean;
+  type: "private" | "public";
 }
 
 const Files = (props: IProps) => {
@@ -30,9 +30,6 @@ const Files = (props: IProps) => {
     resourceId,
     type,
     handleClose,
-    cropMode,
-    hasPreview,
-    cardMode,
   } = props;
   const getRepo = useRecoilValue(repoAtom);
   const [page, setPage] = useState<number>(0);
@@ -44,11 +41,12 @@ const Files = (props: IProps) => {
   const [selectedImage, setSelectedImage] = useState<IFile | null>(null);
 
   const queryClient = useQueryClient();
-  const { data: userInfo } = useGetUser();
+  const {
+ data: userInfo, refetch: refetchUser 
+} = useGetUser();
   const {
     data: files,
     isFetching,
-    isLoading: isLoadingFiles,
     refetch,
     fetchNextPage,
   } = useGetFiles(
@@ -57,7 +55,7 @@ const Files = (props: IProps) => {
     fileTablePageSize,
     page * fileTablePageSize,
     name,
-    dataType,
+    dataType
   );
 
   const renameHook = useRenameFile();
@@ -115,6 +113,7 @@ const Files = (props: IProps) => {
 
   const handleUploadFile = async (item: any, showCropper: boolean) => {
     setProcessCount(0);
+    refetchUser();
     setIsLoading(true);
     if (showCropper) {
       try {
@@ -131,19 +130,17 @@ const Files = (props: IProps) => {
               },
               onUploadProgress(progressEvent: any) {
                 const process = Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total,
+                  (progressEvent.loaded * 100) / progressEvent.total
                 );
                 setProcessCount(process);
               },
-            },
+            }
           )
           .then(async (result: any) => {
             if (result.data.data.result.hash) {
               await onSuccess();
             }
-            queryClient.invalidateQueries({
-              queryKey: [`getReport-${resourceId}`],
-            });
+            queryClient.invalidateQueries({queryKey: [`getReport-${resourceId}`],});
           });
       } catch {
         setIsLoading(false);
@@ -169,22 +166,20 @@ const Files = (props: IProps) => {
             },
             onUploadProgress(progressEvent: any) {
               const process = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total,
+                (progressEvent.loaded * 100) / progressEvent.total
               );
               setProcessCount(process);
             },
-          },
+          }
         )
         .then(async (res: any) => {
           if (res.data.data.result.hash) {
             onSuccess();
             setIsLoading(false);
           }
-          queryClient.invalidateQueries({
-            queryKey: [`getReport-${resourceId}`],
-          });
+          queryClient.invalidateQueries({queryKey: [`getReport-${resourceId}`],});
         })
-        .catch((error: any) => {
+        .catch(() => {
           toast.error("خطا در بارگذاری فایل");
           setIsError(true);
           setIsLoading(false);
@@ -206,7 +201,7 @@ const Files = (props: IProps) => {
       fileExtension === "jfif" ||
       fileExtension === "svg"
     ) {
-      setSelectedFile?.(selectedImage);
+      setSelectedFile?.(selectedImage?.hash);
       handleClose();
     } else {
       toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");

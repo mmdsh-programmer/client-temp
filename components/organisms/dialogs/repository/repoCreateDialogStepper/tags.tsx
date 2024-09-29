@@ -5,7 +5,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
@@ -37,7 +36,7 @@ const Tags = ({ handleClose }: IProps) => {
     data: tagList,
     isLoading,
     isFetching,
-  } = useGetTags(repoId, 10, isSuccess);
+  } = useGetTags(repoId, 10, true);
 
   const {
     register,

@@ -20,6 +20,9 @@ const useCreateRepo = () => {
       queryClient.invalidateQueries({
         queryKey: [`myRepoList-false`, `allRepoList`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`allRepoList`],
+      });
       callBack?.(response);
     },
     onError: (error) => {

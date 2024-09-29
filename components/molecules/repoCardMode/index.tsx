@@ -5,7 +5,7 @@ import RepoMenu from "@components/molecules/repoMenu";
 import RepoCardMoreInfo from "./repoCardMoreInfo";
 import { useRecoilValue } from "recoil";
 import { repoInfoAtom } from "@atom/repository";
-import RepoImage from "../repoImage";
+import RepoImage from "../repoDefaultImage";
 
 interface IProps {
   repo: IRepo;

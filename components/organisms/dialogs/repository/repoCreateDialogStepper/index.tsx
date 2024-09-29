@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-
 import Files from "./files";
-import { IFile } from "cls-file-management";
 import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
 import RepoCreate from "./repoCreate";
 import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
@@ -17,7 +15,7 @@ interface IProps {
 const RepoCreateDialogStepper = ({ close }: IProps) => {
   const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStepAtom);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
-  const [selectedFile, setSelectedFile] = useState<IFile | null>(null);
+  const [selectedFile, setSelectedFile] = useState<string | undefined>();
 
   const [openFileManagement, setOpenFileManagement] = useState(false);
 
@@ -33,13 +31,13 @@ const RepoCreateDialogStepper = ({ close }: IProps) => {
     if (getActiveStep === 0) {
       return <RepoCreate handleClose={handleClose} />;
     }
-    if (getActiveStep === 1) {
+    if (getActiveStep === 1 && getRepo) {
       return <RepoAddUser handleClose={handleClose} />;
     }
-    if (getActiveStep === 2) {
+    if (getActiveStep === 2 && getRepo) {
       return <Tags handleClose={handleClose} />;
     }
-    if (getActiveStep === 3) {
+    if (getActiveStep === 3 && getRepo) {
       return (
         <RepoImage
           setOpenFileManagement={setOpenFileManagement}
