@@ -87,7 +87,7 @@
     "unicorn/no-null": "off",
     "unicorn/explicit-length-check": "off",
     "unicorn/filename-case": [
-      "warning",
+      "error",
       {
         "case": "camelCase"
       }
