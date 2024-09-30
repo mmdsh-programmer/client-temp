@@ -1,12 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import LoadingButton from "@components/molecules/loadingButton";
-import { getUserToken, login } from "@actions/auth";
+import React, {
+ useEffect, useState 
+} from "react";
+import {
+ Spinner, Typography 
+} from "@material-tailwind/react";
+import {
+ getUserToken, login 
+} from "@actions/auth";
+import {
+ useRouter, useSearchParams 
+} from "next/navigation";
+
 import { ClasorLogo } from "@components/atoms/icons";
+import LoadingButton from "@components/molecules/loadingButton";
 import { useDebouncedCallback } from "use-debounce";
-import { Spinner, Typography } from "@material-tailwind/react";
 
 const SignInComponent = () => {
   const searchParams = useSearchParams();

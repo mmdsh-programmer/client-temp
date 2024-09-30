@@ -1,17 +1,20 @@
 "use client";
 
 import React, { ReactNode } from "react";
-import useGetUser from "@hooks/auth/useGetUser";
+
 import Error from "@app/error";
-import SpinnerText from "@components/molecules/spinnerText";
 import PanelURl from "../panelUrl";
+import SpinnerText from "@components/molecules/spinnerText";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   children: ReactNode;
 }
 
 const Start = ({ children }: IProps) => {
-  const { isLoading, isError, error, refetch } = useGetUser();
+  const {
+ isLoading, isError, error, refetch 
+} = useGetUser();
 
   if (isError) {
     return (

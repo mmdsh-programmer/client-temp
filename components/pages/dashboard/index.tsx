@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
+
 import RepoCards from "@components/organisms/repoTypesCards";
 import RepoList from "@components/organisms/repoList";
 import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
+import { repoAtom } from "@atom/repository";
+import { useSetRecoilState } from "recoil";
 
 const DashboardPage = () => {
   const setRepo = useSetRecoilState(repoAtom);

@@ -1,7 +1,7 @@
-import React from "react";
-import MenuComponent from "@components/molecules/menu";
 import { Button } from "@material-tailwind/react";
+import MenuComponent from "@components/molecules/menu";
 import { MoreDotIcon } from "@components/atoms/icons";
+import React from "react";
 
 interface IProps {
   menuList: {
@@ -13,7 +13,9 @@ interface IProps {
   className?: string;
 }
 
-const DesktopMenu = ({ menuList, icon, className }: IProps) => {
+const DesktopMenu = ({
+ menuList, icon, className 
+}: IProps) => {
   return (
     <MenuComponent
       variant="small"

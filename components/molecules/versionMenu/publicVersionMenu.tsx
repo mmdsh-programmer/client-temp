@@ -1,8 +1,3 @@
-import React, { useState } from "react";
-import { IVersion } from "@interface/version.interface";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import DrawerTemplate from "@components/templates/drawerTemplate";
-import MenuTemplate from "@components/templates/menuTemplate";
 import {
   ComparisionIcon,
   CopyIcon,
@@ -13,26 +8,36 @@ import {
   MoreDotIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
-import copy from "copy-to-clipboard";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
-import { EVersionStatus } from "@interface/enums";
+import React, { useState } from "react";
+import {
+ useRecoilState, useRecoilValue, useSetRecoilState 
+} from "recoil";
+
 import DiffVersionAlert from "../diffVersionAlert";
 import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
-import { selectedDocumentAtom } from "@atom/document";
-import { compareVersionAtom } from "@atom/version";
-import { editorModeAtom } from "@atom/editor";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import { EVersionStatus } from "@interface/enums";
 import Editor from "@components/organisms/dialogs/editor";
+import { IVersion } from "@interface/version.interface";
+import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
+import MenuTemplate from "@components/templates/menuTemplate";
+import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
+import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
+import { compareVersionAtom } from "@atom/version";
+import copy from "copy-to-clipboard";
+import { editorModeAtom } from "@atom/editor";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 
 interface IProps {
   version?: IVersion;
   lastVersion?: IVersion;
 }
 
-const VersionMenu = ({ version, lastVersion }: IProps) => {
+const VersionMenu = ({
+ version, lastVersion 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [compareVersion, setCompareVersion] =
@@ -122,7 +127,7 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
       onClick: () => {
         if (version) {
           copy(
-            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`,
+            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`
           );
           toast.success("آدرس کپی شد.");
         }
@@ -137,12 +142,14 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
     },
   ].filter(
     (
-      item,
+      item
     ): item is {
       text: string;
       icon: React.JSX.Element;
       onClick: () => void;
-    } => Boolean(item),
+    } => {
+      return Boolean(item);
+    }
   );
 
   return (
@@ -169,19 +176,25 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
       {cloneVersion && version && (
         <VersionCloneDialog
           version={version}
-          setOpen={() => setCloneVersion(false)}
+          setOpen={() => {
+            return setCloneVersion(false);
+          }}
         />
       )}
       {deleteVersionModal && version && (
         <VersionDeleteDialog
           version={version}
-          setOpen={() => setDeleteVersionModal(false)}
+          setOpen={() => {
+            return setDeleteVersionModal(false);
+          }}
         />
       )}
       {lastVersionModal && version && (
         <LastVersionDialog
           version={version}
-          setOpen={() => setLastVersionModal(false)}
+          setOpen={() => {
+            return setLastVersionModal(false);
+          }}
         />
       )}
       {compareVersion?.version && !compareVersion.compare && (
@@ -196,7 +209,11 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
         />
       )}
       {editVersionModal && version && (
-        <Editor setOpen={() => setEditVersionModal(false)} />
+        <Editor
+          setOpen={() => {
+            return setEditVersionModal(false);
+          }}
+        />
       )}
     </>
   );

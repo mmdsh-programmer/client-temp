@@ -1,5 +1,9 @@
+import {
+ useMutation,
+ useQueryClient
+} from "@tanstack/react-query";
+
 import { freeDraftVersionAction } from "@actions/editor";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 const useFreeDraft = () => {
@@ -15,8 +19,9 @@ const useFreeDraft = () => {
       outline: string;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, versionId, versionNumber, content, outline } =
-        values;
+      const {
+        repoId, documentId, versionId, versionNumber, content, outline
+      } = values;
       const response = await freeDraftVersionAction(
         repoId,
         documentId,
@@ -28,10 +33,10 @@ const useFreeDraft = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId, documentId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`version-list-${repoId}-${documentId}`],
-      });
+      const {
+ callBack, repoId, documentId 
+} = values;
+      queryClient.invalidateQueries({queryKey: [`version-list-${repoId}-${documentId}`],});
 
       callBack?.();
     },

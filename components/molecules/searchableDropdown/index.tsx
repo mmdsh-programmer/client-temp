@@ -1,6 +1,13 @@
-import React, { useRef, useState } from "react";
+import {
+ ChevronLeftIcon,
+ SearchIcon
+} from "@components/atoms/icons";
+import React, {
+ useRef,
+ useState
+} from "react";
+
 import InputAtom from "@components/atoms/input";
-import { ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
@@ -9,7 +16,9 @@ interface IProps {
   background?: string;
 }
 
-const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
+const SearchableDropdown = ({
+ options, handleChange, background 
+}: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchVal = useRef("");
@@ -30,10 +39,9 @@ const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
   };
 
   return (
-    <>
-      <div
+    <div
         ref={dropdownRef}
-        className={`w-full relative inline-block`}
+        className="w-full relative inline-block"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -48,7 +56,7 @@ const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
               setInputVal(e.target.value);
               searchVal.current = e.target.value;
               const matchingUsers = options?.filter((user) =>
-                user.label.includes(e.target.value),
+                {return user.label.includes(e.target.value);},
               );
               setSelectedItem(matchingUsers);
               {
@@ -100,7 +108,8 @@ const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
                     <li
                       className="cursor-pointer select-none relative p-[6px]"
                       key={option.label}
-                      onClick={() => handleSelect(option)}
+                      onClick={() => 
+{return handleSelect(option);}}
                     >
                       <Typography className="select_option__text truncate text-right text-primary ">
                         {option.label}
@@ -117,7 +126,6 @@ const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
           </div>
         )}
       </div>
-    </>
   );
 };
 

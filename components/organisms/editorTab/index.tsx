@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
-import { repoAtom } from "@atom/repository";
-import useGetVersion from "@hooks/version/useGetVersion";
+import React, {
+ useCallback,
+ useEffect,
+ useRef,
+ useState
+} from "react";
 import {
   editorChatDrawerAtom,
   editorDataAtom,
@@ -11,22 +12,34 @@ import {
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
-import Error from "@components/organisms/error";
-import EditorComponent from "@components/organisms/editor";
-import { IRemoteEditorRef } from "clasor-remote-editor";
-import { EDocumentTypes } from "@interface/enums";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import VersionDialogView from "@components/organisms/versionView/versionDialogView";
-import { Spinner } from "@material-tailwind/react";
-import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import {
+ selectedVersionAtom,
+ versionModalListAtom
+} from "@atom/version";
+import {
+ useRecoilState,
+ useRecoilValue,
+ useSetRecoilState
+} from "recoil";
+
 import BlockDraft from "@components/organisms/editor/blockDraft";
-import useGetKey from "@hooks/repository/useGetKey";
-import EditorKey from "@components/organisms/dialogs/editor/editorKey";
-import { useSearchParams } from "next/navigation";
-import EditorHeader from "../editor/editorHeader";
-import EditorFooter from "../editor/editorFooter";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
+import { EDocumentTypes } from "@interface/enums";
+import EditorComponent from "@components/organisms/editor";
+import EditorFooter from "../editor/editorFooter";
+import EditorHeader from "../editor/editorHeader";
+import EditorKey from "@components/organisms/dialogs/editor/editorKey";
+import Error from "@components/organisms/error";
 import FloatingButtons from "../editor/floatingButtons";
+import { IRemoteEditorRef } from "clasor-remote-editor";
+import { Spinner } from "@material-tailwind/react";
+import VersionDialogView from "@components/organisms/versionView/versionDialogView";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import useGetKey from "@hooks/repository/useGetKey";
+import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import useGetVersion from "@hooks/version/useGetVersion";
+import { useSearchParams } from "next/navigation";
 
 const EditorTab = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -57,18 +70,16 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const {
-    data: getLastVersion,
-    error: lastVersionError,
-    isSuccess: lastVersionIsSuccess,
-  } = useGetLastVersion(getRepo!.id, getSelectedDocument!.id, !getVersionData);
+  const {data: getLastVersion,} = useGetLastVersion(getRepo!.id, getSelectedDocument!.id, !getVersionData);
 
   const vId = versionId || getVersionData?.id || getLastVersion?.id;
   const vState =
     versionState ||
     (getVersionData ? getVersionData.state : getLastVersion?.state);
 
-  const { data, isLoading, error, isSuccess } = useGetVersion(
+  const {
+ data, isLoading, error, isSuccess 
+} = useGetVersion(
     getRepo!.id,
     getSelectedDocument!.id,
     +vId!,
@@ -163,7 +174,7 @@ const EditorTab = () => {
           retry={() => {
             return setEditorModal(false);
           }}
-          error="باز کردن سند با خطا مواجه شد."
+          error={{ message: "باز کردن سند با خطا مواجه شد."  }}
         />
       </div>
     );
@@ -180,11 +191,10 @@ const EditorTab = () => {
     );
   }
 
+  if(versionModalList){
+    return(<VersionDialogView />);
+  }
   return (
-    <>
-      {!!versionModalList ? (
-        <VersionDialogView />
-      ) : (
         <BlockDraft>
           <>
             <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
@@ -214,8 +224,6 @@ const EditorTab = () => {
             </div>
           </>
         </BlockDraft>
-      )}
-    </>
   );
 };
 

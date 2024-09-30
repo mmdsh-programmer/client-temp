@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+import {
+ filterChildrenAtom, filterReportAtom 
+} from "@atom/filter";
 
 import CategoryFilter from "../categoryFilter";
 import { Radio } from "@material-tailwind/react";
@@ -15,12 +17,8 @@ const AdvancedFilter = () => {
     <div className="flex flex-wrap h-full xs:h-auto justify-between bg-primary xs:bg-gray-50">
       <div className="flex flex-wrap gap-5 py-4 px-5 items-start">
         <Radio
-          labelProps={{
-            className: "text-[13px] truncate",
-          }}
-          containerProps={{
-            className: "p-0 ml-2",
-          }}
+          labelProps={{className: "text-[13px] truncate",}}
+          containerProps={{className: "p-0 ml-2",}}
           className="radio !hover:shadow-none "
           color="deep-purple"
           name="type"
@@ -34,12 +32,8 @@ const AdvancedFilter = () => {
           checked={type === "category"}
         />
         <Radio
-          labelProps={{
-            className: "text-[13px] truncate",
-          }}
-          containerProps={{
-            className: "p-0 ml-2",
-          }}
+          labelProps={{className: "text-[13px] truncate",}}
+          containerProps={{className: "p-0 ml-2",}}
           className="!hover:shadow-none"
           color="deep-purple"
           name="type"

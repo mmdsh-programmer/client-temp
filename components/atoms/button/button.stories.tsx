@@ -1,45 +1,46 @@
-import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type {
+ Meta, StoryObj 
+} from "@storybook/react";
+
+import BackButton from "./backButton";
 import CancelButton from "./cancelButton";
 import CloseButton from "./closeButton";
-import BackButton from "./backButton";
+import React from "react";
 
 const meta: Meta = {
   title: "components/Atoms/Button",
   component: CancelButton,
 
   parameters: {
-    backgrounds: {
-      default: "dark",
-    },
+    backgrounds: {default: "dark",},
     layout: "centered",
   },
 };
 
 export default meta;
 
-export const CancelButtonStory: StoryObj<typeof CancelButton> = {
-  render: (args) => (
+export const CancelButtonStory: StoryObj<typeof CancelButton> = {render: (args) => 
+{return (
     <CancelButton
       {...args}
-      onClick={() => console.log("Cancel button clicked")}
+      onClick={() => 
+{return console.log("Cancel button clicked");}}
     >
       انصراف
     </CancelButton>
-  ),
-};
+  );},};
 
-export const CloseButtonStory: StoryObj<typeof CloseButton> = {
-  render: (args) => (
+export const CloseButtonStory: StoryObj<typeof CloseButton> = {render: (args) => 
+{return (
     <CloseButton
       {...args}
-      onClose={() => console.log("Close button clicked")}
+      onClose={() => 
+{return console.log("Close button clicked");}}
     />
-  ),
-};
+  );},};
 
-export const BackButtonStory: StoryObj<typeof BackButton> = {
-  render: (args) => (
-    <BackButton {...args} onClick={() => console.log("Close button clicked")} />
-  ),
-};
+export const BackButtonStory: StoryObj<typeof BackButton> = {render: (args) => 
+{return (
+    <BackButton {...args} onClick={() => 
+{return console.log("Close button clicked");}} />
+  );},};

@@ -1,12 +1,12 @@
+import CreateDialog from "@components/templates/dialog/createDialog";
+import FormInput from "@components/atoms/input/formInput";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
-import CreateDialog from "@components/templates/dialog/createDialog";
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IForm {
   name: string;
@@ -25,7 +25,6 @@ const TagCreateDialog = ({ setOpen }: IProps) => {
     formState: { errors },
     clearErrors,
     reset,
-    setValue,
   } = useForm<IForm>();
 
   const handleReset = () => {
@@ -52,7 +51,7 @@ const TagCreateDialog = ({ setOpen }: IProps) => {
   return (
     <CreateDialog
       isPending={createTag.isPending}
-      dialogHeader={"ساخت تگ"}
+      dialogHeader="ساخت تگ"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "

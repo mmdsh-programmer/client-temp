@@ -1,7 +1,10 @@
-import React from "react";
+import {
+ DialogFooter, Typography 
+} from "@material-tailwind/react";
+
 import CancelButton from "@components/atoms/button/cancelButton";
-import { DialogFooter, Typography } from "@material-tailwind/react";
 import LoadingButton from "../loadingButton";
+import React from "react";
 
 interface IProps {
   hasPreviousStep: boolean;

@@ -1,7 +1,8 @@
-import { ArchiveIcon,
+import {
+  ArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
-  MyFolderIcon 
+  MyFolderIcon
 } from "@components/atoms/icons";
 import React, { useMemo } from "react";
 

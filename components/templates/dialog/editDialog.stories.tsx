@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
 import EditDialog, { IProps } from "./editDialog";
+import {
+ Meta,
+ StoryFn
+} from "@storybook/react/*";
+import React, { useState } from "react";
+
+import FormInput from "@components/atoms/input/formInput";
+import { Typography } from "@material-tailwind/react";
 
 export default {
   title: "Components/Templates/EditDialog", // The folder structure in Storybook
@@ -15,10 +19,11 @@ export default {
 } as Meta;
 
 const Template: StoryFn<IProps> = (args) => {
-  const [open, setOpen] = useState(true); // Control dialog visibility
+  const [, setOpen] = useState(true); // Control dialog visibility
 
+  const { isPending } = args;
   return (
-    <EditDialog {...args} setOpen={setOpen} isPending={args.isPending}>
+    <EditDialog {...args} setOpen={setOpen} isPending={isPending}>
       <div>
         <form className="flex flex-col gap-2 ">
           <Typography className="label">نام تگ</Typography>
@@ -35,7 +40,8 @@ Default.args = {
   dialogHeader: "ویرایش تگ",
   isPending: false,
   backToMain: true,
-  onSubmit: async () => alert("Submit clicked!"), // Example submit handler
+  onSubmit: async () => 
+{return alert("Submit clicked!");}, // Example submit handler
 };
 
 // Story with loading state

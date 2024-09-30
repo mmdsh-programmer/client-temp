@@ -1,15 +1,19 @@
-import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
-import InfoDialog from "@components/templates/dialog/infoDialog";
-import { DialogBody } from "@material-tailwind/react";
-import VersionList from "../version/versionList";
 import {
   selectedVersionAtom,
   versionDrawerAtom,
   versionModalListAtom,
 } from "@atom/version";
+import {
+ useRecoilValue,
+ useSetRecoilState
+} from "recoil";
+
+import { DialogBody } from "@material-tailwind/react";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import React from "react";
+import VersionList from "../version/versionList";
 import VersionMenu from "@components/molecules/versionMenu";
+import { selectedDocumentAtom } from "@atom/document";
 
 const VersionDialogView = () => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
@@ -29,7 +33,7 @@ const VersionDialogView = () => {
         <VersionList />
       </DialogBody>
       {openVersionActionDrawer && getSelectedVersion ? (
-        <VersionMenu version={getSelectedVersion} showDrawer={true} />
+        <VersionMenu version={getSelectedVersion} showDrawer />
       ) : null}
     </InfoDialog>
   );

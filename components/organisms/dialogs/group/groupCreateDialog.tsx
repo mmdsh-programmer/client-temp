@@ -1,20 +1,25 @@
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
 import React, { useState } from "react";
-import { repoAtom } from "@atom/repository";
+import {
+ UserIcon, XIcon 
+} from "@components/atoms/icons";
+
+import ChipMolecule from "@components/molecules/chip";
+import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
+import ImageComponent from "@components/atoms/image";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import useCreateGroup from "@hooks/group/useCreateGroup";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
-import { Button, Typography } from "@material-tailwind/react";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { userGroupSchema } from "./validation.yup";
-import ChipMolecule from "@components/molecules/chip";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import CreateDialog from "@components/templates/dialog/createDialog";
-import SearchableDropdown from "@components/molecules/searchableDropdown";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import ImageComponent from "@components/atoms/image";
+import { useRecoilValue } from "recoil";
+import { userGroupSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
@@ -32,13 +37,15 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     { username: string; picture: string }[]
   >([]);
 
-  const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 2, true);
-  const { isPending, mutate } = useCreateGroup();
-  const form = useForm<IForm>({
-    resolver: yupResolver(userGroupSchema),
-  });
+  const { data: getUsers } = useGetRepoUsers(getRepo!.id, 2, true);
+  const {
+ isPending, mutate 
+} = useCreateGroup();
+  const form = useForm<IForm>({resolver: yupResolver(userGroupSchema),});
 
-  const { register, handleSubmit, formState, reset, clearErrors } = form;
+  const {
+ register, handleSubmit, formState, reset, clearErrors 
+} = form;
   const { errors } = formState;
 
   const filteredUsers = getUsers?.pages
@@ -55,7 +62,9 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     .map((item) => {
       return {
         label: item.userInfo.userName,
-        value: { username: item.userInfo.userName, picture: item.userInfo.img },
+        value: {
+ username: item.userInfo.userName, picture: item.userInfo.img 
+},
       };
     });
 
@@ -100,7 +109,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
   return (
     <CreateDialog
       isPending={isPending}
-      dialogHeader={"ایجاد گروه"}
+      dialogHeader="ایجاد گروه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="xs:!min-w-[450px] xs:!max-w-[450px]"
@@ -111,9 +120,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label"> نام گروه </Typography>
           <FormInput
             placeholder="نام گروه"
-            register={{
-              ...register("title"),
-            }}
+            register={{...register("title"),}}
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -143,7 +150,9 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                 setUpdatedUsers((oldValue) => {
                   return [
                     ...oldValue,
-                    { username: val.username, picture: val.picture },
+                    {
+ username: val.username, picture: val.picture 
+},
                   ];
                 });
               }

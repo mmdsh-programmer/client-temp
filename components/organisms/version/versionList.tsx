@@ -3,12 +3,12 @@ import {
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
-import React, { useState } from "react";
 
 import { EEmptyList } from "@components/molecules/emptyList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import { IVersion } from "@interface/version.interface";
 import { IVersionMetadata } from "@interface/document.interface";
+import React from "react";
 import VersionCreateDialog from "@components/organisms/dialogs/version/versionCreateDialog";
 import VersionMobileView from "@components/organisms/versionView/versionMobileView";
 import VersionTableView from "@components/organisms/versionView/versionTableView";
@@ -38,8 +38,6 @@ export interface IVersionView {
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-
-  const [openCreateVersion, setOpenCreateVersion] = useState(false);
 
   const {
     data: versionList,
@@ -90,9 +88,10 @@ const VersionList = () => {
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
-        renderDialog={(close: () => void) => (
+        renderDialog={(close: () => void) => 
+        {return (
           <VersionCreateDialog close={close} />
-        )}
+        );}}
       />
       <div className="hidden xs:block">
         <VersionTableView {...commonProps} />

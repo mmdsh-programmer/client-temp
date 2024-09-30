@@ -1,9 +1,12 @@
-import React from "react";
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
+
 import { AddIcon } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
 import GroupList from "./groupList";
-import { useSetRecoilState } from "recoil";
+import React from "react";
 import { createGroupAtom } from "@atom/group";
+import { useSetRecoilState } from "recoil";
 
 const Groups = () => {
   const setCreateGroupModal = useSetRecoilState(createGroupAtom);

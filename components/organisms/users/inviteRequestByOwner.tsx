@@ -1,17 +1,23 @@
-import React from "react";
-import ImageComponent from "@components/atoms/image";
+import {
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
+
 import { ERoles } from "@interface/enums";
-import { translateRoles } from "@utils/index";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import { Spinner, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
 import { IAccessRequest } from "@interface/accessRequest.interface";
+import ImageComponent from "@components/atoms/image";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import { translateRoles } from "@utils/index";
 import useDeleteInviteRequest from "@hooks/user/useDeleteInviteRequest";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   user: IAccessRequest;
 }
+
+
 
 const InviteRequestByOwner = ({ user }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
@@ -28,6 +34,35 @@ const InviteRequestByOwner = ({ user }: IProps) => {
         toast.success(`کاربر ${name} با موفقیت حذف شد.`);
       },
     });
+  };
+
+  const renderUserRoleSection = () => {
+    if (user.role === ERoles.owner) {
+      return (
+        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
+          <Typography className="select_option__text text-primary">
+            {translateRoles(user.role)}
+          </Typography>
+        </div>
+      );
+    } if (deleteInviteRequest.isPending) {
+      return (
+        <div className="w-5">
+          <Spinner className="h-4 w-4" color="deep-purple" />
+        </div>
+      );
+    } 
+      return (
+        <div
+          className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+          onClick={handleChange}
+        >
+          <Typography className="select_option__text text-primary">
+            حذف کاربر
+          </Typography>
+        </div>
+      );
+    
   };
 
   return (
@@ -47,26 +82,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
         )}
       </div>
       <Typography className="title_t3 flex-grow text-hint">{name}</Typography>
-      {user.role === ERoles.owner ? (
-        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
-          <Typography className="select_option__text text-primary">
-            {translateRoles(user.role)}
-          </Typography>
-        </div>
-      ) : deleteInviteRequest.isPending ? (
-        <div className="w-5">
-          <Spinner className="h-4 w-4" color="deep-purple" />
-        </div>
-      ) : (
-        <div
-          className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
-          onClick={handleChange}
-        >
-          <Typography className="select_option__text text-primary">
-            حذف کاربر
-          </Typography>
-        </div>
-      )}
+      {renderUserRoleSection()}
     </div>
   );
 };

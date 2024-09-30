@@ -11,8 +11,14 @@ import {
   StarIcon,
 } from "@components/atoms/icons";
 import React, { useState } from "react";
-import { repoAtom, repoInfoAtom } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+ repoAtom,
+ repoInfoAtom
+} from "@atom/repository";
+import {
+ useRecoilValue,
+ useSetRecoilState
+} from "recoil";
 
 import { Button } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
@@ -34,7 +40,9 @@ interface IProps {
   showDrawer?: boolean;
 }
 
-const RepoMenu = ({ repo, showDrawer }: IProps) => {
+const RepoMenu = ({
+ repo, showDrawer 
+}: IProps) => {
   const router = useRouter();
 
   const mode = useRecoilValue(listModeAtom);
@@ -54,104 +62,103 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
 
   const adminRole = repo?.roleName === "owner" || repo?.roleName === "admin";
 
-  const menuList = [
-    ...(repo?.isArchived
-      ? [
-          {
-            text: "حذف",
-            icon: <DeleteIcon className="w-4 h-4" />,
-            onClick: () => {
-              setDeleteRepoModal(true);
-              setOpenRepoActionDrawer(false);
-            },
+  const menuList = (() => {
+    if (repo?.isArchived) {
+      return [
+        {
+          text: "حذف",
+          icon: <DeleteIcon className="w-4 h-4" />,
+          onClick: () => {
+            setDeleteRepoModal(true);
+            setOpenRepoActionDrawer(false);
           },
-          {
-            text: "بازگردانی",
-            icon: <RestoreIcon className="w-4 h-4" />,
-            onClick: () => setRestoreRepoModal(true),
+        },
+        {
+          text: "بازگردانی",
+          icon: <RestoreIcon className="w-4 h-4" />,
+          onClick: () => { return setRestoreRepoModal(true); },
+        },
+      ];
+    } if (adminRole) {
+      return [
+        {
+          text: "اطلاعات پوشه",
+          icon: <FolderInfoIcon className="w-4 h-4" />,
+          onClick: () => {
+            if (mode === EListMode.card) {
+              setRepoInfo(repo);
+            } else {
+              router.push(`/admin/repositories?repoId=${repo.id}`);
+            }
           },
-        ]
-      : adminRole
-        ? [
-            {
-              text: "اطلاعات پوشه",
-              icon: <FolderInfoIcon className="w-4 h-4" />,
-              onClick: () => {
-                if (mode === EListMode.card) {
-                  setRepoInfo(repo);
-                } else {
-                  router.push(`/admin/repositories?repoId=${repo.id}`);
-                }
-              },
-            },
-            {
-              text: "ویرایش",
-              icon: <EditIcon className="w-4 h-4" />,
-              onClick: () => setEditRepoModal(true),
-            },
-            {
-              text: "بایگانی",
-              icon: <ArchiveIcon className="w-4 h-4 stroke-black" />,
-              onClick: () => {
-                setArchiveRepoModal(true);
-                setOpenRepoActionDrawer(false);
-              },
-            },
-            {
-              text: "اشتراک گذاری",
-              icon: <ShareIcon className="w-4 h-4" />,
-              onClick: () => {
-                setShareRepoModal(true);
-                setRepo(repo);
-              },
-            },
-            repo?.isPublish && {
-              text: "مخزن منتشرشده",
-              icon: <PublishIcon className="w-4 h-4 stroke-black" />,
-              onClick: () => {},
-            },
-            {
-              text: "لیست کلید های مخزن",
-              icon: <KeyIcon className="w-4 h-4 stroke-1" />,
-              onClick: () => setRepoKeyModal(true),
-            },
-            {
-              text: "حذف",
-              icon: <DeleteIcon className="w-4 h-4" />,
-              onClick: () => {
-                setDeleteRepoModal(true);
-                setOpenRepoActionDrawer(false);
-              },
-            },
-          ]
-        : [
-            {
-              text: "اطلاعات پوشه",
-              icon: <FolderInfoIcon className="w-4 h-4" />,
-              onClick: () => {
-                if (mode === EListMode.card) {
-                  setRepoInfo(repo);
-                } else {
-                  router.push(`/admin/repositories?repoId=${repo?.id}`);
-                }
-              },
-            },
-            repo?.isPublish && {
-              text: "مخزن منتشرشده",
-              icon: <PublishIcon className="w-4 h-4 stroke-black" />,
-              onClick: () => {},
-            },
-          ]
-    ).filter(
-      (
-        item,
-      ): item is {
-        text: string;
-        icon: React.JSX.Element;
-        onClick: () => void;
-      } => Boolean(item),
-    ),
-  ];
+        },
+        {
+          text: "ویرایش",
+          icon: <EditIcon className="w-4 h-4" />,
+          onClick: () => { return setEditRepoModal(true); },
+        },
+        {
+          text: "بایگانی",
+          icon: <ArchiveIcon className="w-4 h-4 stroke-black" />,
+          onClick: () => {
+            setArchiveRepoModal(true);
+            setOpenRepoActionDrawer(false);
+          },
+        },
+        {
+          text: "اشتراک گذاری",
+          icon: <ShareIcon className="w-4 h-4" />,
+          onClick: () => {
+            setShareRepoModal(true);
+            setRepo(repo);
+          },
+        },
+        repo?.isPublish && {
+          text: "مخزن منتشرشده",
+          icon: <PublishIcon className="w-4 h-4 stroke-black" />,
+          onClick: () => {},
+        },
+        {
+          text: "لیست کلید های مخزن",
+          icon: <KeyIcon className="w-4 h-4 stroke-1" />,
+          onClick: () => { return setRepoKeyModal(true); },
+        },
+        {
+          text: "حذف",
+          icon: <DeleteIcon className="w-4 h-4" />,
+          onClick: () => {
+            setDeleteRepoModal(true);
+            setOpenRepoActionDrawer(false);
+          },
+        },
+      ];
+    } 
+      return [
+        {
+          text: "اطلاعات پوشه",
+          icon: <FolderInfoIcon className="w-4 h-4" />,
+          onClick: () => {
+            if (mode === EListMode.card) {
+              setRepoInfo(repo);
+            } else {
+              router.push(`/admin/repositories?repoId=${repo?.id}`);
+            }
+          },
+        },
+        repo?.isPublish && {
+          text: "مخزن منتشرشده",
+          icon: <PublishIcon className="w-4 h-4 stroke-black" />,
+          onClick: () => {},
+        },
+      ];
+    
+  })().filter(
+    (item): item is {
+      text: string;
+      icon: React.JSX.Element;
+      onClick: () => void;
+    } => { return Boolean(item); },
+  );
 
   return (
     <>
@@ -190,25 +197,25 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
         menuList={menuList}
       />
 
-      {editRepoModal && (
+      {editRepoModal ? (
         <RepoEditDialog repo={repo} setOpen={setEditRepoModal} />
-      )}
-      {deleteRepoModal && (
+      ) : null}
+      {deleteRepoModal ? (
         <RepoDeleteDialog repo={repo} setOpen={setDeleteRepoModal} />
-      )}
-      {archiveRepoModal && (
+      ) : null}
+      {archiveRepoModal ? (
         <RepoArchiveDialog repo={repo} setOpen={setArchiveRepoModal} />
-      )}
-      {restoreRepoModal && (
+      ) : null}
+      {restoreRepoModal ? (
         <RepoRestoreDialog repo={repo} setOpen={setRestoreRepoModal} />
-      )}
-      {shareRepoModal && (
-        <RepoShareDialog repo={repo} setOpen={setShareRepoModal} />
-      )}
-      {bookmarkRepoModal && (
+      ) : null}
+      {shareRepoModal ? (
+        <RepoShareDialog setOpen={setShareRepoModal} />
+      ) : null}
+      {bookmarkRepoModal ? (
         <RepoBookmarkDialog repo={repo} setOpen={setBookmarkRepoModal} />
-      )}
-      {repoKeyModal && <RepoKeyDialog repo={repo} setOpen={setRepoKeyModal} />}
+      ) : null}
+      {repoKeyModal ? <RepoKeyDialog repo={repo} setOpen={setRepoKeyModal} /> : null}
     </>
   );
 };

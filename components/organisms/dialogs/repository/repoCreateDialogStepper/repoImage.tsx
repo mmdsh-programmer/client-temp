@@ -1,14 +1,18 @@
+import {
+ DialogBody,
+ DialogFooter,
+ Typography
+} from "@material-tailwind/react";
 import React, { useState } from "react";
-import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+
 import CancelButton from "@components/atoms/button/cancelButton";
-import { IFile } from "cls-file-management";
 import LoadingButton from "@components/molecules/loadingButton";
+import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
 
 interface IProps {
   handleClose: () => void;
@@ -31,10 +35,11 @@ const RepoImage = ({
   );
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
-  const { isPending, mutate } = useAddImageToRepo();
+  const {
+ isPending, mutate 
+} = useAddImageToRepo();
   const {
     handleSubmit,
-    formState: { errors },
     clearErrors,
     reset,
   } = useForm<IForm>();

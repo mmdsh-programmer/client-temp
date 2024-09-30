@@ -1,11 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+ useEffect,
+ useRef,
+ useState
+} from "react";
+
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
 
+interface IOption {
+  label: string;
+  value: string | number; // Assuming value can be either string or number
+  className?: string;
+}
+
 interface IProps {
-  options?: { label: string; value: any; className?: string }[];
+  options?: IOption[];
   selectedOption?: string | null;
-  setSelectedOption: (options: string | any) => void;
+  setSelectedOption: (option: string | number) => void; // Updated type here
   defaultOption?: string;
   className?: string;
 }
@@ -40,7 +51,7 @@ const SelectAtom = ({
     };
   }, []);
 
-  const handleOptionChange = (option: string) => {
+  const handleOptionChange = (option: string | number) => {
     setSelectedOption(option);
     setIsOpen(false);
   };
@@ -48,7 +59,7 @@ const SelectAtom = ({
   return (
     <div
       ref={dropdownRef}
-      className={` relative inline-block`}
+      className=" relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -62,7 +73,9 @@ const SelectAtom = ({
         bg-transparent  rounded-md focus:outline-none`}
       >
         {selectedOption
-          ? options?.find((option) => option.value === selectedOption)?.label
+          ? options?.find((option) => {
+              return option.value === selectedOption;
+            })?.label
           : defaultOption}
         <ChevronLeftIcon
           className={`w-2 h-2 stroke-icon-active transform transition-transform ${
@@ -77,22 +90,24 @@ const SelectAtom = ({
             role="listbox"
             aria-labelledby="listbox-label"
           >
-            {options?.map((option) => (
-              <li
-                title={option.label}
-                key={option.value}
-                className="cursor-pointer select-none relative p-[6px]"
-                onClick={() => {
-                  handleOptionChange(option.value);
-                }}
-              >
-                <Typography
-                  className={`${option.className || ""} select_option__text truncate text-right text-primary`}
+            {options?.map((option) => {
+              return (
+                <li
+                  title={option.label}
+                  key={option.value}
+                  className="cursor-pointer select-none relative p-[6px]"
+                  onClick={() => {
+                    handleOptionChange(option.value);
+                  }}
                 >
-                  {option.label}
-                </Typography>
-              </li>
-            ))}
+                  <Typography
+                    className={`${option.className || ""} select_option__text truncate text-right text-primary`}
+                  >
+                    {option.label}
+                  </Typography>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

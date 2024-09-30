@@ -1,20 +1,22 @@
 import React, { useRef } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
-import { EDocumentTypes } from "@interface/enums";
-import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
 import {
   editorChatDrawerAtom,
   editorDataAtom,
   editorDecryptedContentAtom,
   editorModeAtom,
 } from "@atom/editor";
-import { repoAtom } from "@atom/repository";
-import { categoryAtom } from "@atom/category";
-import useGetUser from "@hooks/auth/useGetUser";
-import { Spinner } from "@material-tailwind/react";
-import { IVersion } from "@interface/version.interface";
+
 import ChatDrawer from "../like&comment/chatDrawer";
+import { EDocumentTypes } from "@interface/enums";
+import { IClassicData } from "clasor-remote-editor/dist/interface";
+import { IVersion } from "@interface/version.interface";
+import { Spinner } from "@material-tailwind/react";
+import { categoryAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   getEditorConfig: () => {
@@ -24,7 +26,9 @@ interface IProps {
   version?: IVersion;
 }
 
-const EditorComponent = ({ getEditorConfig, version }: IProps) => {
+const EditorComponent = ({
+ getEditorConfig, version 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
@@ -35,7 +39,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   const timestampRef = useRef(Date.now());
 
-  const { data: userInfo, isLoading } = useGetUser();
+  const {
+ data: userInfo, isLoading 
+} = useGetUser();
 
   if (isLoading) {
     return (
@@ -72,7 +78,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
                 resourceId: selectedCategory?.id || undefined,
                 podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
                 backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
-              } as any)
+              } as IClassicData)
             : content
         }
       />

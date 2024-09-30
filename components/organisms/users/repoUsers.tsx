@@ -1,20 +1,19 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import useGetInviteRequestsByOwner from "@hooks/user/useGetInviteRequestsByOwner";
-import UserItem from "./userItem";
 import InviteRequestByOwner from "./inviteRequestByOwner";
-import { Spinner } from "@material-tailwind/react";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
+import { Spinner } from "@material-tailwind/react";
+import UserItem from "./userItem";
+import { repoAtom } from "@atom/repository";
+import useGetInviteRequestsByOwner from "@hooks/user/useGetInviteRequestsByOwner";
+import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
+import { useRecoilValue } from "recoil";
 
 const RepoUsers = () => {
   const getRepo = useRecoilValue(repoAtom);
   const repoId = getRepo!.id;
   const {
     data: getRepoUsers,
-    isFetching: isFetchingRepoUsers,
     isLoading: isLoadingRepoUsers,
     hasNextPage: hasNextPageRepoUsers,
     isFetchingNextPage: isFetchingNextPageRepoUsers,
@@ -23,7 +22,6 @@ const RepoUsers = () => {
 
   const {
     data: getInviteToRepoRequests,
-    isFetching: isFetchingInviteToRepoRequests,
     isLoading: isLoadingInviteToRepoRequests,
     hasNextPage,
     isFetchingNextPage,

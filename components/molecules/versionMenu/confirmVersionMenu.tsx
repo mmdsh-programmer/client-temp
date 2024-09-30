@@ -1,43 +1,48 @@
-import React, { useState } from "react";
-import { IVersion } from "@interface/version.interface";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import MenuTemplate from "@components/templates/menuTemplate";
 import {
   ComparisionIcon,
-  ConfirmationVersionIcon,
   CopyIcon,
   DeleteIcon,
   DuplicateIcon,
   EditIcon,
-  EditVersionIcon,
   GlobeIcon,
   LastVersionIcon,
   MoreDotIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
-import copy from "copy-to-clipboard";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
-import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
-import DrawerTemplate from "@components/templates/drawerTemplate";
-import { EVersionStatus } from "@interface/enums";
-import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
+import React, { useState } from "react";
+import {
+ useRecoilState,
+ useRecoilValue,
+ useSetRecoilState
+} from "recoil";
+
 import DiffVersionAlert from "../diffVersionAlert";
 import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
-import { selectedDocumentAtom } from "@atom/document";
-import { compareVersionAtom } from "@atom/version";
-import { editorModeAtom } from "@atom/editor";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import { EVersionStatus } from "@interface/enums";
 import Editor from "@components/organisms/dialogs/editor";
+import { IVersion } from "@interface/version.interface";
+import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
+import MenuTemplate from "@components/templates/menuTemplate";
+import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
+import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
+import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
+import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
+import { compareVersionAtom } from "@atom/version";
+import copy from "copy-to-clipboard";
+import { editorModeAtom } from "@atom/editor";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 
 interface IProps {
   version?: IVersion;
   lastVersion?: IVersion;
 }
 
-const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
+const ConfirmVersionMenu = ({
+ version, lastVersion 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [compareVersion, setCompareVersion] =
@@ -119,9 +124,9 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
       text: (() => {
         if (version?.status === "private" && adminOrOwner) {
           return "ارسال درخواست عمومی شدن";
-        } else {
+        } 
           return "لغو درخواست عمومی شدن نسخه";
-        }
+        
       })(),
       icon: <GlobeIcon className="h-4 w-4" />,
       onClick: () => {
@@ -169,7 +174,8 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
       text: string;
       icon: React.JSX.Element;
       onClick: () => void;
-    } => Boolean(item),
+    } => 
+{return Boolean(item);},
   );
 
   return (
@@ -193,31 +199,36 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
       {versionPublicModal && version && (
         <VersionPublicDialog
           version={version}
-          setOpen={() => setVersionPublicModal(false)}
+          setOpen={() => 
+{return setVersionPublicModal(false);}}
         />
       )}
       {versionCancelPublicModal && version && (
         <VersionCancelPublicDialog
           version={version}
-          setOpen={() => setVersionCancelPublicModal(false)}
+          setOpen={() => 
+{return setVersionCancelPublicModal(false);}}
         />
       )}
       {cloneVersion && version && (
         <VersionCloneDialog
           version={version}
-          setOpen={() => setCloneVersion(false)}
+          setOpen={() => 
+{return setCloneVersion(false);}}
         />
       )}
       {deleteVersionModal && version && (
         <VersionDeleteDialog
           version={version}
-          setOpen={() => setDeleteVersionModal(false)}
+          setOpen={() => 
+{return setDeleteVersionModal(false);}}
         />
       )}
       {lastVersionModal && version && (
         <LastVersionDialog
           version={version}
-          setOpen={() => setLastVersionModal(false)}
+          setOpen={() => 
+{return setLastVersionModal(false);}}
         />
       )}
       {compareVersion?.version && !compareVersion.compare && (
@@ -232,7 +243,8 @@ const ConfirmVersionMenu = ({ version, lastVersion }: IProps) => {
         />
       )}
       {editVersionModal && version && (
-        <Editor setOpen={() => setEditVersionModal(false)} />
+        <Editor setOpen={() => 
+{return setEditVersionModal(false);}} />
       )}
     </>
   );

@@ -5,9 +5,15 @@ import {
   FolderIcon,
   FolderShareIcon,
 } from "@components/atoms/icons";
-import { Button, List, ListItem, Typography } from "@material-tailwind/react";
-import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+ Button, List, ListItem, Typography 
+} from "@material-tailwind/react";
+import {
+ repoGroupingAtom, repoSearchParamAtom 
+} from "@atom/repository";
+import {
+ useRecoilState, useSetRecoilState 
+} from "recoil";
 
 import { ERepoGrouping } from "@interface/enums";
 import React from "react";

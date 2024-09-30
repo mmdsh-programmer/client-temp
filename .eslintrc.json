@@ -97,6 +97,8 @@
     "unicorn/no-array-for-each": "off",
     "unicorn/prefer-add-event-listener": "off",
     "unicorn/expiring-todo-comments": "off",
-    "jsx-a11y/control-has-associated-label": "off"
+    "jsx-a11y/control-has-associated-label": "off",
+    "import/no-cycle": "off",
+    "jsx-a11y/no-static-element-interactions": "off"
   }
 }

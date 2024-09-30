@@ -1,4 +1,6 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+ useRecoilState, useRecoilValue, useSetRecoilState 
+} from "recoil";
 
 import { EDocumentTypes } from "@interface/enums";
 import { editorDataAtom } from "atom/editor";
@@ -16,7 +18,9 @@ const DocumentLastVersion = () => {
   const [getVersionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
 
-  const { data: getLastVersion, error, isSuccess } = useGetLastVersion(
+  const {
+ data: getLastVersion, error, isSuccess 
+} = useGetLastVersion(
     repository!.id,
     getSelectedDocument!.id
   );

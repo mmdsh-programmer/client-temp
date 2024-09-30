@@ -1,15 +1,20 @@
+import {
+ Button, Spinner, Typography 
+} from "@material-tailwind/react";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import {
+ UserIcon, XIcon 
+} from "@components/atoms/icons";
+
+import ChipMolecule from "@components/molecules/chip";
+import ImageComponent from "@components/atoms/image";
 import React from "react";
-import { selectedDocumentAtom } from "@atom/document";
 import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useBlockDocument from "@hooks/document/useBlockDocument";
 import useGetDocumentBlocklist from "@hooks/document/useGetDocumentBlocklist";
 import { useRecoilValue } from "recoil";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import ImageComponent from "@components/atoms/image";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
-import useBlockDocument from "@hooks/document/useBlockDocument";
-import { toast } from "react-toastify";
-import ChipMolecule from "@components/molecules/chip";
 
 const DocumentBlockList = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -29,7 +34,7 @@ const DocumentBlockList = () => {
     blockDocument.mutate({
       repoId: getRepo.id,
       documentId: document.id,
-      username: username,
+      username,
       type: "unblock",
       callBack: () => {
         toast.success(

@@ -1,23 +1,31 @@
-import React from "react";
-import { DeleteIcon, EditIcon } from "@components/atoms/icons";
-import { ITag } from "@interface/tags.interface";
-import MenuTemplate from "@components/templates/menuTemplate";
-import DrawerTemplate from "@components/templates/drawerTemplate";
 import {
+ DeleteIcon,
+ EditIcon
+} from "@components/atoms/icons";
+import {
+  deleteTagAtom,
+  editTagAtom,
   selectedTagAtom,
   tagDrawerAtom,
-  editTagAtom,
-  deleteTagAtom,
 } from "@atom/tag";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+ useRecoilState,
+ useSetRecoilState
+} from "recoil";
+
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import { ITag } from "@interface/tags.interface";
+import MenuTemplate from "@components/templates/menuTemplate";
+import React from "react";
 
 interface IProps {
   tag?: ITag;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   showDrawer?: boolean;
 }
 
-const TagMenu = ({ tag, setOpen, showDrawer }: IProps) => {
+const TagMenu = ({
+ tag, showDrawer 
+}: IProps) => {
   const setEditTagModal = useSetRecoilState(editTagAtom);
   const setDeleteTagModal = useSetRecoilState(deleteTagAtom);
   const [openTagActionDrawer, setOpenTagActionDrawer] =
@@ -49,7 +57,7 @@ const TagMenu = ({ tag, setOpen, showDrawer }: IProps) => {
     },
   ];
 
-  return !!showDrawer ? (
+  return showDrawer ? (
     <div className="xs:hidden flex">
       <DrawerTemplate
         openDrawer={openTagActionDrawer}

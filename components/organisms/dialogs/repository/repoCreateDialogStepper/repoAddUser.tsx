@@ -1,4 +1,6 @@
-import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+import {
+ DialogBody, DialogFooter, Typography 
+} from "@material-tailwind/react";
 
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -29,7 +31,8 @@ const RepoAddUser = ({ handleClose }: IProps) => {
         <CancelButton onClick={handleClose}>انصراف</CancelButton>
         <LoadingButton
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-          onClick={() => setActiveStep(2)}
+          onClick={() => 
+{return setActiveStep(2);}}
         >
           <Typography className="text__label__button text-white">
             ادامه

@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { IWhiteListItem } from "@interface/document.interface";
+import {
+ Button,
+ Typography
+} from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { Button, Typography } from "@material-tailwind/react";
-import ImageComponent from "@components/atoms/image";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import FormInput from "@components/atoms/input/formInput";
+import React, {
+ useEffect,
+ useState
+} from "react";
+import {
+ UserIcon,
+ XIcon
+} from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
+import FormInput from "@components/atoms/input/formInput";
 import { IUserList } from "../dialogs/document/documentAccessPublishingDialog";
+import { IWhiteListItem } from "@interface/document.interface";
+import ImageComponent from "@components/atoms/image";
 
 interface IProps {
   blackList?: IWhiteListItem[];
@@ -37,7 +47,7 @@ const DocumentBlackList = ({
     }
   };
 
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
@@ -61,8 +71,7 @@ const DocumentBlackList = ({
   }, []);
 
   return (
-    <>
-      <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5">
         <FormInput
           placeholder="نام کاربری را وارد کنید..."
           onKeyDown={handleSpaceClick}
@@ -114,7 +123,6 @@ const DocumentBlackList = ({
           </div>
         </div>
       </div>
-    </>
   );
 };
 

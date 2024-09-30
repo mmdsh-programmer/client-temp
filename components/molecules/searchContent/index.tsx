@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+ useEffect,
+ useState
+} from "react";
+import {
+ useRecoilState, useRecoilValue 
+} from "recoil";
 
 import { DialogBody } from "@material-tailwind/react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
@@ -6,15 +12,16 @@ import InputAtom from "@components/atoms/input";
 import SearchContentResult from "../searchContentResult";
 import { SearchIcon } from "@components/atoms/icons";
 import { categorySearchContentParamAtom } from "atom/category";
+import { repoAtom } from "@atom/repository";
 import useDebounce from "@hooks/custom/useDebounce";
-import { useRecoilState } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchContent = ({ setOpen }: IProps) => {
-  const inputRef = useRef<any>();
+  const getRepo = useRecoilValue(repoAtom);
+  
   const [search, setSearch] = useState<string>("");
   const [getSearchParam, setSearchParam] = useRecoilState(
     categorySearchContentParamAtom,
@@ -33,10 +40,6 @@ const SearchContent = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
-  if (!open) {
-    return null;
-  }
-
   return (
     <InfoDialog dialogHeader="جست و جو در محتوا" setOpen={handleClose}>
       <DialogBody
@@ -46,7 +49,6 @@ const SearchContent = ({ setOpen }: IProps) => {
         <div className="flex flex-grow gap-2 w-full max-w-full ml-2 items-center h-10 px-3 border-[1px] border-normal bg-gray-50 rounded-lg ">
           <SearchIcon className="w-5 h-5 stroke-icon-hover" />
           <InputAtom
-            ref={inputRef}
             type="text"
             className=" outline-none overflow-hidden !border-none !focus:border-none !w-auto"
             placeholder="جست و جو در محتوا "
@@ -62,7 +64,7 @@ const SearchContent = ({ setOpen }: IProps) => {
             defaultValue={getSearchParam}
           />
         </div>
-        <SearchContentResult />
+        {getRepo ? <SearchContentResult repoId={getRepo.id}/> : null}
       </DialogBody>
     </InfoDialog>
   );

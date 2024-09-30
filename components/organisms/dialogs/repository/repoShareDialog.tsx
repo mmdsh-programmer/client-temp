@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { createGroupAtom, deleteGroupAtom, editGroupAtom } from "@atom/group";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+ createGroupAtom,
+ deleteGroupAtom,
+ editGroupAtom
+} from "@atom/group";
+import {
+ useRecoilState,
+ useSetRecoilState
+} from "recoil";
 
 import CreateRepoPublicLink from "@components/organisms/publicLink/createRepoPublicLink";
 import { DialogBody } from "@material-tailwind/react";
@@ -9,7 +16,6 @@ import GroupDeleteDialog from "@components/organisms/dialogs/group/groupDeleteDi
 import GroupEditDialog from "@components/organisms/dialogs/group/groupEditDialog";
 import GroupMenu from "@components/molecules/groupMenu";
 import Groups from "@components/organisms/group";
-import { IRepo } from "@interface/repo.interface";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import PublicLink from "@components/organisms/publicLink";
 import Publish from "@components/organisms/publish";
@@ -19,7 +25,6 @@ import { openShareAccessAtom } from "@atom/public";
 import { repoAtom } from "@atom/repository";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -50,10 +55,18 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   };
 
   const tabList = [
-    { tabTitle: ETabs.USERS, tabContent: <Users /> },
-    { tabTitle: ETabs.GROUPS, tabContent: <Groups /> },
-    { tabTitle: ETabs.LINK, tabContent: <PublicLink /> },
-    { tabTitle: ETabs.PUBLISH, tabContent: <Publish /> },
+    {
+ tabTitle: ETabs.USERS, tabContent: <Users /> 
+},
+    {
+ tabTitle: ETabs.GROUPS, tabContent: <Groups /> 
+},
+    {
+ tabTitle: ETabs.LINK, tabContent: <PublicLink /> 
+},
+    {
+ tabTitle: ETabs.PUBLISH, tabContent: <Publish /> 
+},
   ];
 
   if (getOpenShareAccess) {
@@ -70,11 +83,10 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   }
 
   return (
-    <>
-      <InfoDialog
+    <InfoDialog
         dialogHeader="اشتراک گذاری"
         setOpen={handleClose}
-        className={`xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg `}
+        className="xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
       >
         <DialogBody placeholder="dialog body" className="p-0 h-full">
           <div className="flex flex-col gap-4 p-4 xs:p-6">
@@ -85,9 +97,8 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
             />
           </div>
         </DialogBody>
-        <GroupMenu showDrawer={true} />
+        <GroupMenu showDrawer />
       </InfoDialog>
-    </>
   );
 };
 

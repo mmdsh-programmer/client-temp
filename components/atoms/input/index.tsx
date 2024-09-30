@@ -1,19 +1,23 @@
+import {
+ Input,
+ InputProps
+} from "@material-tailwind/react";
+
 import React from "react";
-import { Input, InputProps } from "@material-tailwind/react";
+import { UseFormRegister } from "react-hook-form";
 
 interface IProps extends InputProps {
-  register?: any;
+  register?: ReturnType<UseFormRegister<any>>;
 }
 
-const InputAtom = ({ register, className, ...restProps }: IProps) => {
+const InputAtom = ({
+ register, className, ...restProps 
+}: IProps) => {
   return (
     <Input
-      labelProps={{
-        className: "before:content-none after:content-none",
-      }}
-      containerProps={{
-        className: "!min-w-0 flex-grow h-auto",
-      }}
+      crossOrigin=""
+      labelProps={{className: "before:content-none after:content-none",}}
+      containerProps={{className: "!min-w-0 flex-grow h-auto",}}
       type="text"
       {...register}
       className={`${className || ""}

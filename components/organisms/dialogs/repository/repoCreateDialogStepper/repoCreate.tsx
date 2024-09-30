@@ -1,4 +1,6 @@
-import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+import {
+ DialogBody, DialogFooter, Typography 
+} from "@material-tailwind/react";
 
 import CancelButton from "@components/atoms/button/cancelButton";
 import FormInput from "@components/atoms/input/formInput";
@@ -27,16 +29,16 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
   const setActiveStep = useSetRecoilState(repoActiveStepAtom);
   const setRepo = useSetRecoilState(repoAtom);
 
-  const { isPending, mutate } = useCreateRepo();
+  const {
+ isPending, mutate 
+} = useCreateRepo();
   const {
     register,
     handleSubmit,
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({
-    resolver: yupResolver(repoCreateSchema),
-  });
+  } = useForm<IForm>({resolver: yupResolver(repoCreateSchema),});
 
   const handleReset = () => {
     clearErrors();
@@ -86,9 +88,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
             <Typography className="label">توضیحات مخزن</Typography>
             <TextareaAtom
               placeholder="توضیحات مخزن"
-              register={{
-                ...register("description"),
-              }}
+              register={{...register("description"),}}
             />
             {errors.description && (
               <Typography className="warning_text">

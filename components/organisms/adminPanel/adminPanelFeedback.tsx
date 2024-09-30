@@ -1,14 +1,15 @@
-import React from "react";
-import useGetAdminFeedback from "@hooks/admin/useGetAdminFeedback";
 import {
   FetchNextPageOptions,
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
-import { IOfferResponse } from "@interface/offer.interface";
-import AdminTableView from "./adminTableView";
+
 import AdminMobileView from "./adminMobileView";
+import AdminTableView from "./adminTableView";
 import Error from "../error";
+import { IOfferResponse } from "@interface/offer.interface";
+import React from "react";
+import useGetAdminFeedback from "@hooks/admin/useGetAdminFeedback";
 
 export interface IFeedbackView {
   isLoading: boolean;
@@ -30,7 +31,6 @@ const AdminPanelFeedback = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
     refetch,
     error,
   } = useGetAdminFeedback(10);
@@ -50,7 +50,7 @@ const AdminPanelFeedback = () => {
           retry={() => {
             return refetch();
           }}
-          error="خطا در دریافت اطلاعات"
+          error={{ message: "خطا در دریافت اطلاعات" }}
         />
       </div>
     );

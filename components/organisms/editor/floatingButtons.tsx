@@ -1,19 +1,24 @@
+import {
+ ConfirmationVersionIcon, GlobeIcon 
+} from "@components/atoms/icons";
 import React, { useState } from "react";
-import { ConfirmationVersionIcon, GlobeIcon } from "@components/atoms/icons";
-import RenderIf from "@components/atoms/renderIf";
-import { EDraftStatus } from "@interface/enums";
+
 import { Button } from "@material-tailwind/react";
-import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
-import VersionPublicDialog from "../dialogs/version/versionPublicDialog";
+import { EDraftStatus } from "@interface/enums";
 import { IVersion } from "@interface/version.interface";
 import LikeAndComment from "../like&comment";
+import RenderIf from "@components/atoms/renderIf";
+import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
+import VersionPublicDialog from "../dialogs/version/versionPublicDialog";
 
 interface IProps {
   version?: IVersion;
   className?: string;
 }
 
-const FloatingButtons = ({ version, className }: IProps) => {
+const FloatingButtons = ({
+ version, className 
+}: IProps) => {
   const [versionConfirmModal, setVersionConfirmModal] = useState(false);
   const [versionPublicModal, setVersionPublicModal] = useState(false);
 
@@ -61,14 +66,16 @@ const FloatingButtons = ({ version, className }: IProps) => {
       {versionConfirmModal && version ? (
         <VersionConfirmDialog
           version={version}
-          setOpen={() => setVersionConfirmModal(false)}
+          setOpen={() => 
+{return setVersionConfirmModal(false);}}
         />
       ) : null}
 
       {versionPublicModal && version ? (
         <VersionPublicDialog
           version={version}
-          setOpen={() => setVersionPublicModal(false)}
+          setOpen={() => 
+{return setVersionPublicModal(false);}}
         />
       ) : null}
     </>

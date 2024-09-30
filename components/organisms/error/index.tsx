@@ -1,14 +1,19 @@
-import React from "react";
+import {
+ Button,
+ Typography
+} from "@material-tailwind/react";
+
 import { FolderEmptyIcon } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
+import React from "react";
 
 interface IProps {
-  error: any;
+  error: { message: string };
   retry?: () => void;
 }
 
-const Error = ({ error, retry }: IProps) => {
-  console.log("hhhaaayyaaaaaa", error);
+const Error = ({
+ error, retry 
+}: IProps) => {
   return (
     <div className="flex flex-col h-full mx-auto justify-center items-center gap-3 my-2">
       <FolderEmptyIcon className="h-16 w-16 stroke-gray-300" />

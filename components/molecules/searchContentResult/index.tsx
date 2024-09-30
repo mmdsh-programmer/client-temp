@@ -1,30 +1,38 @@
 import EmptyList, { EEmptyList } from "../emptyList";
-import React, { Fragment, useRef, useState } from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
+import React, {
+ Fragment,
+ useRef,
+ useState
+} from "react";
+import {
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
 
 import RenderIf from "@components/atoms/renderIf";
 import { ResultItem } from "../searchContentItem";
 import { categorySearchContentParamAtom } from "atom/category";
-import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import useSearchContent from "@hooks/content/useSearchContent";
 
-const SearchContentResult = () => {
+const SearchContentResult = ({ repoId }: { repoId: number }) => {
   const listInnerRef = useRef(null);
-  const [disabled, setDisabled] = useState(false);
+  const [, setDisabled] = useState(false);
 
-  const getRepo = useRecoilValue(repoAtom);
+
   const getSearchParam = useRecoilValue(categorySearchContentParamAtom);
   const {
     isLoading,
     data: searchResult,
     isFetchingNextPage,
     fetchNextPage,
-  } = useSearchContent(getRepo?.id!, getSearchParam, 15);
+  } = useSearchContent(repoId, getSearchParam, 15);
 
   const onScroll = () => {
     if (listInnerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
+      const {
+ scrollTop, scrollHeight, clientHeight 
+} = listInnerRef.current;
       if (scrollTop + clientHeight + 30 > scrollHeight && !isFetchingNextPage) {
         fetchNextPage();
       }
@@ -48,16 +56,15 @@ const SearchContentResult = () => {
         </div>
       ) : (
         <ul className="flex flex-col gap-2" role="menu">
-          {searchResult?.pages.map((page, index) => {
+          {searchResult?.pages.map((page) => {
             return (
-              <Fragment key={`fragment-${index}`}>
+              <Fragment key={`fragment-${page.offset}`}>
                 {page.total ? (
-                  page.list.map((resultItem, pageIndex) => {
+                  page.list.map((resultItem) => {
                     return (
                       <ResultItem
-                        key={`content-search-${pageIndex}`}
+                        key={`content-search-${resultItem.versionId}`}
                         data={resultItem}
-                        disabled={disabled}
                         onClick={() => {
                           setDisabled(true);
                         }}

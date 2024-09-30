@@ -1,23 +1,33 @@
 import React, { Fragment } from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
-import { categoryMoveDestAtom, categoryQueryParamsAtom } from "atom/category";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
+import {
+ categoryMoveDestAtom,
+ categoryQueryParamsAtom
+} from "atom/category";
+import {
+ useRecoilState,
+ useRecoilValue
+} from "recoil";
 
 import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { bulkItemsAtom } from "@atom/bulk";
-import { repoAtom } from "@atom/repository";
 import { sortAtom } from "atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 
 interface IProps {
   target: "category" | "document";
+  repoId: number;
 }
 
-const MoveChildren = ({ target }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+const MoveChildren = ({
+ target, repoId 
+}: IProps) => {
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
   const queryParams = useRecoilValue(categoryQueryParamsAtom);
@@ -31,7 +41,7 @@ const MoveChildren = ({ target }: IProps) => {
     isFetchingNextPage,
     isLoading,
   } = useGetCategoryChildren(
-    getRepo?.id!,
+    repoId,
     getCategoryMoveDest?.id,
     getSortParams,
     queryParams.limit,
@@ -52,9 +62,9 @@ const MoveChildren = ({ target }: IProps) => {
           <Spinner className="h-4 w-4" color="deep-purple" />
         </div>
       ) : (
-        moveChildren?.pages.map((page, index) => {
+        moveChildren?.pages.map((page) => {
           return (
-            <Fragment key={`fragment-${index}`}>
+            <Fragment key={page.offset}>
               {page.list.length ? (
                 page.list.map((subItem) => {
                   if (

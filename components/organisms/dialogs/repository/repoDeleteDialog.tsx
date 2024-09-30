@@ -1,16 +1,16 @@
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import FormInput from "@components/atoms/input/formInput";
+import { IRepo } from "@interface/repo.interface";
 import React from "react";
+import { Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
+import { repoDeleteSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useDeleteRepo from "@hooks/repository/useDeleteRepo";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import { IRepo } from "@interface/repo.interface";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { repoDeleteSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
@@ -21,10 +21,14 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
+const RepoDeleteDialog = ({
+ repo, setOpen 
+}: IProps) => {
   const router = useRouter();
   const setRepo = useSetRecoilState(repoAtom);
-  const { isPending, mutate } = useDeleteRepo();
+  const {
+ isPending, mutate 
+} = useDeleteRepo();
 
   const {
     register,
@@ -32,9 +36,7 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({
-    resolver: yupResolver(repoDeleteSchema),
-  });
+  } = useForm<IForm>({resolver: yupResolver(repoDeleteSchema),});
 
   const handleClose = () => {
     setOpen(false);
@@ -84,9 +86,7 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
           </Typography>
           <FormInput
             placeholder="عنوان"
-            register={{
-              ...register("name"),
-            }}
+            register={{...register("name"),}}
           />
           {errors.name && (
             <Typography className="warning_text">

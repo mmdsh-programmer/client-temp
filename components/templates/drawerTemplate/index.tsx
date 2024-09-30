@@ -1,5 +1,11 @@
+import {
+ Button,
+ Collapse,
+ Drawer,
+ Typography
+} from "@material-tailwind/react";
 import React, { useState } from "react";
-import { Button, Collapse, Drawer, Typography } from "@material-tailwind/react";
+
 import { ChevronLeftIcon } from "@components/atoms/icons";
 
 export interface IProps {
@@ -13,7 +19,9 @@ export interface IProps {
   }[];
 }
 
-const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
+const DrawerComponent = ({
+ menuList, openDrawer, setOpenDrawer 
+}: IProps) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -36,7 +44,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
         className={`w-full
                ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
       >
-        {menuList.map((menuItem, index) => {
+        {menuList.map((menuItem) => {
           return menuItem.subMenu ? (
             <div key={`drawer-sub-menu-${menuItem.text}`}>
               <Button
@@ -63,9 +71,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
                       >
                         <div className="flex items-center gap-1">
                           {subItem.icon}
-                          <Typography
-                            className="select_option__text font-normal"
-                          >
+                          <Typography className="select_option__text font-normal">
                             {subItem.text}
                           </Typography>
                         </div>

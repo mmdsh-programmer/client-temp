@@ -1,9 +1,14 @@
-import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import { ResultItem } from ".";
-import { RecoilRoot } from "recoil";
+import type {
+ Meta, StoryObj 
+} from "@storybook/react";
+import {
+ QueryClient, QueryClientProvider 
+} from "@tanstack/react-query";
+
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React from "react";
+import { RecoilRoot } from "recoil";
+import { ResultItem } from ".";
 
 const queryClient = new QueryClient();
 
@@ -11,7 +16,8 @@ const meta: Meta<typeof ResultItem> = {
   title: "components/Molecules/ResultItem",
   component: ResultItem,
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <div className="w-full max-w-md mx-auto p-4">
@@ -19,7 +25,7 @@ const meta: Meta<typeof ResultItem> = {
           </div>
         </RecoilRoot>
       </QueryClientProvider>
-    ),
+    );},
   ],
 };
 
@@ -36,18 +42,16 @@ const mockData: IContentSearchListItem = {
   versionName: "version name",
 };
 
-export const Default: Story = {
-  args: {
+export const Default: Story = {args: {
     data: mockData,
     disabled: false,
-    onClick: () => console.log("Document clicked"),
-  },
-};
+    onClick: () => 
+{return console.log("Document clicked");},
+  },};
 
-export const Disabled: Story = {
-  args: {
+export const Disabled: Story = {args: {
     data: mockData,
     disabled: true,
-    onClick: () => console.log("This should not be clickable"),
-  },
-};
+    onClick: () => 
+{return console.log("This should not be clickable");},
+  },};

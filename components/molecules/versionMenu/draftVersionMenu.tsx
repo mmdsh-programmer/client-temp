@@ -1,13 +1,3 @@
-import React, { useState } from "react";
-import { IVersion } from "@interface/version.interface";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import {
-  compareVersionAtom,
-  selectedVersionAtom,
-  versionDrawerAtom,
-} from "@atom/version";
-import DrawerTemplate from "@components/templates/drawerTemplate";
-import MenuTemplate from "@components/templates/menuTemplate";
 import {
   ComparisionIcon,
   ConfirmationVersionIcon,
@@ -18,26 +8,40 @@ import {
   MoreDotIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
+import React, { useState } from "react";
+import {
+  compareVersionAtom,
+  selectedVersionAtom,
+  versionDrawerAtom,
+} from "@atom/version";
+import {
+ useRecoilState, useRecoilValue, useSetRecoilState 
+} from "recoil";
+
+import DiffVersionAlert from "../diffVersionAlert";
+import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import Editor from "@components/organisms/dialogs/editor";
+import { IVersion } from "@interface/version.interface";
+import MenuTemplate from "@components/templates/menuTemplate";
 import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
+import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
+import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
 import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
 import copy from "copy-to-clipboard";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import { selectedDocumentAtom } from "@atom/document";
-import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
-import DiffVersionAlert from "../diffVersionAlert";
-import Editor from "@components/organisms/dialogs/editor";
 import { editorModeAtom } from "@atom/editor";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 
 interface IProps {
   version?: IVersion;
-  lastVersion?: IVersion;
   showDrawer?: boolean;
 }
 
-const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
+const DraftVersionMenu = ({
+ version, showDrawer 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const setVersion = useSetRecoilState(selectedVersionAtom);
@@ -120,10 +124,8 @@ const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
           return adminOrOwner
             ? "تایید نسخه"
             : "ارسال درخواست تایید نسخه به مدیر";
-        } else
-          return adminOrOwner
-            ? "عدم تایید نسخه"
-            : "لغوارسال درخواست تایید نسخه";
+        }
+        return adminOrOwner ? "عدم تایید نسخه" : "لغوارسال درخواست تایید نسخه";
       })(),
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
@@ -140,7 +142,7 @@ const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
       onClick: () => {
         if (version) {
           copy(
-            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`,
+            `${window.location.href}&versionId=${version.id}&versionState=${version.state}`
           );
           toast.success("آدرس کپی شد.");
         }
@@ -157,7 +159,7 @@ const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
 
   return (
     <>
-      {!!showDrawer ? (
+      {showDrawer ? (
         <div className="xs:hidden flex">
           <DrawerTemplate
             openDrawer={openVersionActionDrawer}
@@ -184,28 +186,40 @@ const DraftVersionMenu = ({ version, showDrawer }: IProps) => {
       {versionConfirmModal && version && (
         <VersionConfirmDialog
           version={version}
-          setOpen={() => setVersionConfirmModal(false)}
+          setOpen={() => {
+            return setVersionConfirmModal(false);
+          }}
         />
       )}
       {versionCancelConfirmModal && version && (
         <VersionCancelConfirmDialog
           version={version}
-          setOpen={() => setVersionCancelConfirmModal(false)}
+          setOpen={() => {
+            return setVersionCancelConfirmModal(false);
+          }}
         />
       )}
       {cloneVersion && version && (
         <VersionCloneDialog
           version={version}
-          setOpen={() => setCloneVersion(false)}
+          setOpen={() => {
+            return setCloneVersion(false);
+          }}
         />
       )}
       {editVersionModal && version && (
-        <Editor setOpen={() => setEditVersionModal(false)} />
+        <Editor
+          setOpen={() => {
+            return setEditVersionModal(false);
+          }}
+        />
       )}
       {deleteVersionModal && version && (
         <VersionDeleteDialog
           version={version}
-          setOpen={() => setDeleteVersionModal(false)}
+          setOpen={() => {
+            return setDeleteVersionModal(false);
+          }}
         />
       )}
       {compareVersion?.version && !compareVersion.compare && (

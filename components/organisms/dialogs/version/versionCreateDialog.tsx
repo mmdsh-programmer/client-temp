@@ -25,11 +25,11 @@ const VersionCreateDialog = ({ close }: IProps) => {
 
   const createVersion = useCreateVersion();
 
-  const form = useForm<IForm>({
-    resolver: yupResolver(versionSchema),
-  });
+  const form = useForm<IForm>({resolver: yupResolver(versionSchema),});
 
-  const { register, handleSubmit, reset, clearErrors, formState } = form;
+  const {
+ register, handleSubmit, reset, clearErrors, formState 
+} = form;
   const { errors } = formState;
 
   const handleReset = () => {
@@ -59,7 +59,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
   return (
     <CreateDialog
       isPending={createVersion.isPending}
-      dialogHeader={"ایجاد نسخه"}
+      dialogHeader="ایجاد نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

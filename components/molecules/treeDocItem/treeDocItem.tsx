@@ -1,5 +1,9 @@
-import { Button, Typography } from "@material-tailwind/react";
-import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
+import {
+ DocIcon, InvisibleIcon, TickIcon 
+} from "@components/atoms/icons";
 
 import { IDocumentTreeItem } from "atom/category";
 import React from "react";

@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import RepoMenu from "@components/molecules/repoMenu";
 import { FaDateFromTimestamp } from "@utils/index";
+import React from "react";
+import RepoImage from "@components/molecules/repoDefaultImage";
+import RepoMenu from "@components/molecules/repoMenu";
 import TagList from "../tagList";
 import { Typography } from "@material-tailwind/react";
-import RepoImage from "@components/molecules/repoDefaultImage";
+import { repoAtom } from "@atom/repository";
+import { useRecoilValue } from "recoil";
 
 const RepoInfo = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -33,7 +33,7 @@ const RepoInfo = () => {
               {getRepo?.description}
             </Typography>
             <div className="mt-2 sm:mt-4 md:mt-2 lg:mt-4">
-              <TagList />
+              {getRepo ? <TagList repoId={getRepo.id}/> : null}
             </div>
           </div>
         </div>

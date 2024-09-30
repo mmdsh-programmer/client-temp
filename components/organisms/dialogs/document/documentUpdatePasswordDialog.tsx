@@ -30,10 +30,10 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
 
   const updatePassword = useUpdateDocumentPassword();
 
-  const form = useForm<IDataForm>({
-    resolver: yupResolver(documentResetPasswordSchema),
-  });
-  const { register, handleSubmit, formState, reset, clearErrors, setError } =
+  const form = useForm<IDataForm>({resolver: yupResolver(documentResetPasswordSchema),});
+  const {
+ register, handleSubmit, formState, reset, clearErrors, setError 
+} =
     form;
   const { errors } = formState;
 
@@ -45,9 +45,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = (dataForm: IDataForm) => {
     if (dataForm.password !== dataForm.confirmPassword) {
-      setError("confirmPassword", {
-        message: "تکرار رمز عبور با رمز عبور یکسان نیست",
-      });
+      setError("confirmPassword", {message: "تکرار رمز عبور با رمز عبور یکسان نیست",});
 
       return;
     }
@@ -65,7 +63,6 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
     });
   };
   return (
-    <>
       <ConfirmFullHeightDialog
         isPending={updatePassword.isPending}
         onSubmit={handleSubmit(onSubmit)}
@@ -78,9 +75,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             <FormInput
               type="password"
               placeholder="رمز عبور سابق"
-              register={{
-                ...register("oldPassword"),
-              }}
+              register={{...register("oldPassword"),}}
             />
             {errors.oldPassword && (
               <Typography className="warning_text">
@@ -93,9 +88,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             <FormInput
               type="password"
               placeholder="رمز عبور"
-              register={{
-                ...register("password"),
-              }}
+              register={{...register("password"),}}
             />
             {errors.password && (
               <Typography className="warning_text">
@@ -108,9 +101,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             <FormInput
               type="password"
               placeholder="تکرار رمز عبور"
-              register={{
-                ...register("confirmPassword"),
-              }}
+              register={{...register("confirmPassword"),}}
             />
             {errors.confirmPassword && (
               <Typography className="warning_text">
@@ -120,7 +111,6 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
           </div>
         </form>
       </ConfirmFullHeightDialog>
-    </>
   );
 };
 

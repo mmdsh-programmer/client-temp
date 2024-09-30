@@ -1,26 +1,52 @@
-import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
 import MenuTemplate, { IProps } from ".";
+import {
+ Meta,
+ StoryFn
+} from "@storybook/react/*";
+
+import React from "react";
 
 // Mock components for storybook, as the actual components may rely on specific contexts or states
-const DesktopMenu = ({ menuList, icon, className }: any) => (
-  <div className={`desktop-menu ${className}`}>
-    <div>{icon}</div>
-    <ul>
-      {menuList.map((menuItem: any, index: number) => (
-        <li key={index} onClick={menuItem.onClick}>
-          {menuItem.icon} {menuItem.text}
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+type MenuItem = {
+  text: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+};
 
-const MobileMenu = ({ setOpenDrawer, icon, className }: any) => (
-  <button onClick={setOpenDrawer} className={`mobile-menu ${className}`}>
-    {icon} Open Drawer
-  </button>
-);
+export const DesktopMenu = ({
+ menuList, icon, className 
+}: {
+  menuList: MenuItem[], icon: string, className: string
+}) => {
+  return (
+    <div className={`desktop-menu ${className}`}>
+      <div>{icon}</div>
+      <ul>
+        {menuList.map((menuItem: MenuItem) => {
+          return (
+            <li key={menuItem.text} onClick={menuItem.onClick}>
+              {menuItem.icon} {menuItem.text}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+};
+
+export const MobileMenu = ({
+ setOpenDrawer, icon, className 
+}: {
+  setOpenDrawer: () => void;
+  icon: string;
+  className: string;
+}) => {
+  return (
+    <button onClick={setOpenDrawer} className={`mobile-menu ${className}`}>
+      {icon} Open Drawer
+    </button>
+  );
+};
 
 export default {
   title: "Components/Templates/MenuTemplate",
@@ -33,18 +59,37 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<IProps> = (args) => <MenuTemplate {...args} />;
+const Template: StoryFn<IProps> = (args) => {
+  return <MenuTemplate {...args} />;
+};
 
 export const Default = Template.bind({});
 Default.args = {
   menuList: [
-    { text: "Home", onClick: () => alert("Home Clicked") },
-    { text: "Profile", onClick: () => alert("Profile Clicked") },
-    { text: "Settings", onClick: () => alert("Settings Clicked") },
+    {
+      text: "Home",
+      onClick: () => {
+        return alert("Home Clicked");
+      },
+    },
+    {
+      text: "Profile",
+      onClick: () => {
+        return alert("Profile Clicked");
+      },
+    },
+    {
+      text: "Settings",
+      onClick: () => {
+        return alert("Settings Clicked");
+      },
+    },
   ],
   icon: "🔍",
   className: "",
-  setOpenDrawer: () => console.log("Drawer opened"),
+  setOpenDrawer: () => {
+    return console.log("Drawer opened");
+  },
 };
 
 export const WithCustomClass = Template.bind({});
@@ -60,17 +105,23 @@ WithIcons.args = {
     {
       text: "Home",
       icon: <span>🏠</span>,
-      onClick: () => alert("Home Clicked"),
+      onClick: () => {
+        return alert("Home Clicked");
+      },
     },
     {
       text: "Profile",
       icon: <span>👤</span>,
-      onClick: () => alert("Profile Clicked"),
+      onClick: () => {
+        return alert("Profile Clicked");
+      },
     },
     {
       text: "Settings",
       icon: <span>⚙️</span>,
-      onClick: () => alert("Settings Clicked"),
+      onClick: () => {
+        return alert("Settings Clicked");
+      },
     },
   ],
   icon: "🛠️",

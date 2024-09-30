@@ -1,18 +1,21 @@
-import React, { ChangeEvent, useRef, useState } from "react";
+import FileUploaderInput, {IFileUploaderInput,} from "@components/organisms/fileUploader";
+import React, {
+ ChangeEvent,
+ useRef,
+ useState
+} from "react";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { feedBackSchema } from "./validation.yup";
-import { Typography } from "@material-tailwind/react";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import FileUploaderInput, {
-  IFileUploaderInput,
-} from "@components/organisms/fileUploader";
-import { UploadIcon } from "@components/atoms/icons";
 import { IPodspaceResult } from "@interface/app.interface";
-import useSendFeedback from "@hooks/feedback/useSendFeedback";
-import useAddUserToFeedbackGroupHash from "@hooks/feedback/useAddUserToFeedbackGroupHash";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { Typography } from "@material-tailwind/react";
+import { UploadIcon } from "@components/atoms/icons";
+import { feedBackSchema } from "./validation.yup";
 import { toast } from "react-toastify";
+import useAddUserToFeedbackGroupHash from "@hooks/feedback/useAddUserToFeedbackGroupHash";
+import { useForm } from "react-hook-form";
+import useSendFeedback from "@hooks/feedback/useSendFeedback";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export interface IFileDetail {
   errorMessage?: string;
@@ -37,9 +40,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     content: string;
     fileHashList?: string[];
   }>({
-    defaultValues: {
-      fileHashList: [],
-    },
+    defaultValues: {fileHashList: [],},
     resolver: yupResolver(feedBackSchema),
   });
   const {
@@ -48,8 +49,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     setValue,
     formState,
     getValues,
-    reset,
-    clearErrors,
+    reset
   } = form;
   const { errors } = formState;
 
@@ -127,12 +127,12 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
   };
 
   const handleDeleteFile = (file: File) => {
-    const name = file.name;
+    const {name} = file;
     fileIndex.current -= 1;
     setFileInfo((oldValue) => {
       if (oldValue === null) return [];
-      return oldValue.filter((file) => {
-        return file.file?.name !== name;
+      return oldValue.filter((fileResult) => {
+        return fileResult.file?.name !== name;
       });
     });
   };
@@ -202,7 +202,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
               </div>
               <input
                 type="file"
-                id={`input-file`}
+                id="input-file"
                 className="hidden"
                 onChange={handleFileChange}
                 accept="image/*"

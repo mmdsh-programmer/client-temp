@@ -1,6 +1,6 @@
-import React from "react";
 import DesktopMenu from "./desktopMenu";
 import MobileMenu from "./mobileMenu";
+import React from "react";
 
 export interface IProps {
   setOpenDrawer: () => void;
@@ -13,7 +13,9 @@ export interface IProps {
   className?: string;
 }
 
-const MenuTemplate = ({ menuList, setOpenDrawer, icon, className }: IProps) => {
+const MenuTemplate = ({
+ menuList, setOpenDrawer, icon, className 
+}: IProps) => {
   return (
     <>
       <div className="hidden xs:flex justify-end">

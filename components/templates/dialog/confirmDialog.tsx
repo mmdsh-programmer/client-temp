@@ -1,9 +1,12 @@
-import React from "react";
-import { Dialog, DialogFooter, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
-import LoadingButton from "@components/molecules/loadingButton";
-import CloseButton from "@components/atoms/button/closeButton";
-import CancelButton from "@components/atoms/button/cancelButton";
+import {
+ Dialog, DialogBody, DialogFooter, DialogHeader, Typography 
+} from "@material-tailwind/react";
+
 import BackButton from "@components/atoms/button/backButton";
+import CancelButton from "@components/atoms/button/cancelButton";
+import CloseButton from "@components/atoms/button/closeButton";
+import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 
 interface IProps {
   isPending: boolean;

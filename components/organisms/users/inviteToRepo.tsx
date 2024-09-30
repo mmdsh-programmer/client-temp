@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import useAddUser from "@hooks/user/useAddUser";
-import useGetRoles from "@hooks/user/useGetRoles";
-import { translateRoles } from "@utils/index";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import InputAtom from "@components/atoms/input";
+import {
+ Spinner, Typography 
+} from "@material-tailwind/react";
+
 import { ERoles } from "@interface/enums";
+import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
 import SelectAtom from "@components/molecules/select";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import { translateRoles } from "@utils/index";
+import useAddUser from "@hooks/user/useAddUser";
+import { useForm } from "react-hook-form";
+import useGetRoles from "@hooks/user/useGetRoles";
+import { useRecoilValue } from "recoil";
 import { userSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   username: string;
@@ -20,13 +23,17 @@ interface IForm {
 
 const InviteToRepo = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const [role, setRole] = useState<string>(ERoles.admin);
-  const { isPending, mutate } = useAddUser();
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const [role, setRole] = useState<ERoles>(ERoles.admin);
+  const {
+ isPending, mutate 
+} = useAddUser();
+  const {
+ data: getRoles, isFetching: isFetchingRoles 
+} = useGetRoles();
 
   const rolesOption = getRoles
-    ?.filter((role) => {
-      return role.name !== ERoles.owner && role.name !== ERoles.default;
+    ?.filter((roleItem) => {
+      return roleItem.name !== ERoles.owner && roleItem.name !== ERoles.default;
     })
     .map((item) => {
       return {
@@ -41,9 +48,7 @@ const InviteToRepo = () => {
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({
-    resolver: yupResolver(userSchema),
-  });
+  } = useForm<IForm>({ resolver: yupResolver(userSchema) });
 
   const handleReset = () => {
     clearErrors();
@@ -84,7 +89,9 @@ const InviteToRepo = () => {
               defaultOption={rolesOption?.[0].label}
               options={rolesOption}
               selectedOption={role}
-              setSelectedOption={setRole}
+              setSelectedOption={(value) => {
+                return setRole(value as ERoles);
+              }}
             />
             <LoadingButton
               loading={isPending}

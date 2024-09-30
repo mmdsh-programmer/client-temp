@@ -1,10 +1,15 @@
+import {
+ AlertIcon, LogoMobileIcon, ThemeIcon 
+} from "@components/atoms/icons";
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
 import React, { useState } from "react";
-import { AlertIcon, LogoMobileIcon, ThemeIcon } from "@components/atoms/icons";
+
 import Breadcrumb from "@components/molecules/breadcumb";
-import ProfileMenu from "@components/molecules/profileMenu";
-import { Button, Typography } from "@material-tailwind/react";
-import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
 import FeedbackDialog from "../dialogs/feedback";
+import ProfileMenu from "@components/molecules/profileMenu";
+import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRouter } from "next/navigation";
 
@@ -65,10 +70,12 @@ const Header = () => {
       </div>
       <hr className="" />
       {openRequestDialog && (
-        <UserJoinToRepoRequests setOpen={() => setOpenRequestDialog(false)} />
+        <UserJoinToRepoRequests setOpen={() => 
+{return setOpenRequestDialog(false);}} />
       )}
       {openFeedbackDialog && (
-        <FeedbackDialog setOpen={() => setOpenFeedbackDialog(false)} />
+        <FeedbackDialog setOpen={() => 
+{return setOpenFeedbackDialog(false);}} />
       )}
     </>
   );

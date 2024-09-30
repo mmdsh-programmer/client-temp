@@ -1,20 +1,24 @@
-import React from "react";
-import { toast } from "react-toastify";
-import useRestoreRepo from "@hooks/repository/useRestoreRepo";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { IRepo } from "@interface/repo.interface";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { toast } from "react-toastify";
+import useRestoreRepo from "@hooks/repository/useRestoreRepo";
 
 interface IProps {
   repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoRestoreDialog = ({ repo, setOpen }: IProps) => {
-  const { isPending, mutate } = useRestoreRepo();
+const RepoRestoreDialog = ({
+ repo, setOpen 
+}: IProps) => {
+  const {
+ isPending, mutate 
+} = useRestoreRepo();
 
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
   const handleSubmit = async () => {
     if (!repo) return;
@@ -30,7 +34,7 @@ const RepoRestoreDialog = ({ repo, setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={isPending}
-      dialogHeader={"بازگردانی مخزن"}
+      dialogHeader="بازگردانی مخزن"
       onSubmit={handleSubmit}
       setOpen={handleClose}
       className=""

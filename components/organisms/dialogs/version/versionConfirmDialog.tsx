@@ -1,19 +1,21 @@
-import { repoAtom } from "@atom/repository";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
-import useConfirmVersion from "@hooks/version/useConfirmVersion";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { IVersion } from "@interface/version.interface";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useConfirmVersion from "@hooks/version/useConfirmVersion";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   version: IVersion;
 }
 
-const VersionConfirmDialog = ({ version, setOpen }: IProps) => {
+const VersionConfirmDialog = ({
+ version, setOpen 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
@@ -21,8 +23,9 @@ const VersionConfirmDialog = ({ version, setOpen }: IProps) => {
 
   const form = useForm();
 
-  const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const {
+    handleSubmit, reset, clearErrors 
+  } = form;
 
   const handleReset = () => {
     clearErrors();
@@ -49,7 +52,7 @@ const VersionConfirmDialog = ({ version, setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={confirmVersion.isPending}
-      dialogHeader={"تایید نسخه"}
+      dialogHeader="تایید نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

@@ -1,18 +1,23 @@
 "use client";
 
 import React, { useEffect } from "react";
-import useGetUser from "@hooks/auth/useGetUser";
+
 import SpinnerText from "@components/molecules/spinnerText";
-import SubscribeRequest from "@components/organisms/subscribe/subscribeRequest";
 import SubscribePasswordRequest from "@components/organisms/subscribe/subscribePasswordRequest";
+import SubscribeRequest from "@components/organisms/subscribe/subscribeRequest";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   hash: string;
   hasPassword?: string;
 }
 
-const SubscribePage = ({ hash, hasPassword }: IProps) => {
-  const { data: userInfo, isLoading } = useGetUser();
+const SubscribePage = ({
+ hash, hasPassword 
+}: IProps) => {
+  const {
+ data: userInfo, isLoading 
+} = useGetUser();
 
   useEffect(() => {
     if (!userInfo) {
@@ -29,7 +34,7 @@ const SubscribePage = ({ hash, hasPassword }: IProps) => {
 
   if (hash && !hasPassword) {
     return <SubscribeRequest hash={hash} />;
-  } else if (hash && hasPassword) {
+  } if (hash && hasPassword) {
     <SubscribePasswordRequest hasPassword={hasPassword} hash={hash} />;
   }
 

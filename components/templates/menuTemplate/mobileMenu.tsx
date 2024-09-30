@@ -1,6 +1,6 @@
-import React from "react";
-import { MoreDotIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
+import { MoreDotIcon } from "@components/atoms/icons";
+import React from "react";
 
 interface IProps {
   setOpenDrawer: () => void;
@@ -8,7 +8,9 @@ interface IProps {
   className?: string;
 }
 
-const MobileMenu = ({ setOpenDrawer, icon, className }: IProps) => {
+const MobileMenu = ({
+ setOpenDrawer, icon, className 
+}: IProps) => {
   return (
     <div className="flex gap-x-2 justify-end">
       <Button

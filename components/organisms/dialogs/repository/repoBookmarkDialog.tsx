@@ -1,20 +1,24 @@
-import React from "react";
-import { IRepo } from "@interface/repo.interface";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
+import { IRepo } from "@interface/repo.interface";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
+import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
 
 interface IProps {
   repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
-  const { isPending, mutate } = useBookmarkRepo();
+const RepoBookmarkDialog = ({
+ repo, setOpen 
+}: IProps) => {
+  const {
+ isPending, mutate 
+} = useBookmarkRepo();
 
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
   const handleSubmit = async () => {
     if (!repo) return;

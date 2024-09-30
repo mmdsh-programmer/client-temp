@@ -1,10 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, {
+ useRef,
+ useState
+} from "react";
 
 import { Button } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import MoveBreadCrumb from "../moveBreadCrumb";
 import MoveChildren from "@components/organisms/moveChildren";
 import { categoryMoveDestAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 
 interface IProps {
@@ -13,7 +17,7 @@ interface IProps {
 
 const MoveSelection = ({ target }: IProps) => {
   const getCategoryMoveDest = useRecoilValue(categoryMoveDestAtom);
-
+  const getRepo = useRecoilValue(repoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +28,7 @@ const MoveSelection = ({ target }: IProps) => {
   return (
     <div
       ref={dropdownRef}
-      className={`w-full relative inline-block`}
+      className="w-full relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -47,7 +51,7 @@ const MoveSelection = ({ target }: IProps) => {
       {isOpen && (
         <div className="absolute z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
           <MoveBreadCrumb />
-          <MoveChildren target={target} />
+          {getRepo ? <MoveChildren target={target} repoId={getRepo.id} /> : null}
         </div>
       )}
     </div>

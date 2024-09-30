@@ -1,19 +1,20 @@
+import {
+ Input, InputProps 
+} from "@material-tailwind/react";
+
 import React from "react";
-import { Input, InputProps } from "@material-tailwind/react";
 
 interface IProps extends InputProps {
   register?: any;
 }
 
-const FormInput = ({ register, className, ...restProps }: IProps) => {
+const FormInput = ({
+ register, className, ...restProps 
+}: IProps) => {
   return (
     <Input
-      labelProps={{
-        className: "before:content-none after:content-none",
-      }}
-      containerProps={{
-        className: "min-w-0 !h-12",
-      }}
+      labelProps={{className: "before:content-none after:content-none",}}
+      containerProps={{className: "min-w-0 !h-12",}}
       type="text"
       {...register}
       className={`${className || ""}

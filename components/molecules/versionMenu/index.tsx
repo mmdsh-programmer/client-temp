@@ -10,7 +10,9 @@ interface IProps {
   showDrawer?: boolean;
 }
 
-const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
+const VersionMenu = ({
+ lastVersion, version, showDrawer 
+}: IProps) => {
   if (
     version?.status === "editing" ||
     (version?.status === "pending" && version?.state === "draft")
@@ -29,7 +31,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     version?.status === "public"
   ) {
     return <PublicVersionMenu version={version} lastVersion={lastVersion} />;
-  } 
+  }
   return null;
 };
 

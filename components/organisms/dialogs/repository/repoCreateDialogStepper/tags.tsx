@@ -4,7 +4,11 @@ import {
   Spinner,
   Typography,
 } from "@material-tailwind/react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+ useRecoilValue,
+ useSetRecoilState
+} from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
@@ -31,7 +35,9 @@ const Tags = ({ handleClose }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const repoId = getRepo!.id;
 
-  const { isPending, mutate, isSuccess } = useCreateTag();
+  const {
+ isPending, mutate 
+} = useCreateTag();
   const {
     data: tagList,
     isLoading,
@@ -41,12 +47,9 @@ const Tags = ({ handleClose }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({
-    resolver: yupResolver(repoTagSchema),
-  });
+  } = useForm<IForm>({resolver: yupResolver(repoTagSchema),});
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
@@ -115,7 +118,8 @@ const Tags = ({ handleClose }: IProps) => {
         </CancelButton>
         <LoadingButton
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-          onClick={() => setActiveStep(3)}
+          onClick={() => 
+{return setActiveStep(3);}}
         >
           <Typography className="text__label__button text-white">
             ادامه

@@ -1,9 +1,9 @@
-import { deleteRepoKeyAtom } from "@atom/repository";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import useDeleteRepoPublicKey from "@hooks/repository/useDeleteRepoPublicKey";
 import { IPublicKey } from "@interface/repo.interface";
 import React from "react";
+import { deleteRepoKeyAtom } from "@atom/repository";
 import { toast } from "react-toastify";
+import useDeleteRepoPublicKey from "@hooks/repository/useDeleteRepoPublicKey";
 import { useRecoilValue } from "recoil";
 
 interface IProps {
@@ -11,7 +11,9 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<IPublicKey | null>>;
 }
 
-const RepoKeyDeleteDialog = ({ setOpen, repoId }: IProps) => {
+const RepoKeyDeleteDialog = ({
+ setOpen, repoId 
+}: IProps) => {
   const getDeleteRepoKey = useRecoilValue(deleteRepoKeyAtom);
 
   const deleteRepoKeyHook = useDeleteRepoPublicKey();

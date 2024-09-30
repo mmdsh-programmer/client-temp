@@ -1,11 +1,12 @@
-import React from "react";
 import {
   Tab,
-  TabsHeader,
   TabPanel,
-  TabsBody,
   Tabs,
+  TabsBody,
+  TabsHeader,
 } from "@material-tailwind/react";
+
+import React from "react";
 
 interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
@@ -13,28 +14,32 @@ interface IProps {
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const TabComponent = ({ tabList, activeTab, setActiveTab }: IProps) => {
+const TabComponent = ({
+ tabList, activeTab, setActiveTab 
+}: IProps) => {
   return (
     <Tabs value={activeTab}>
       <TabsHeader
         className="flex items-center p-[2px] rounded-lg bg-secondary"
-        indicatorProps={{
-          className: "",
-        }}
+        indicatorProps={{ className: "" }}
         placeholder="tabs-header"
       >
-        {tabList.map((tab) => (
-          <Tab
-            key={tab.tabTitle}
-            value={tab.tabTitle}
-            onClick={() => setActiveTab(tab.tabTitle)}
-            className={`flex font-iranYekan h-9 p-2 text-secondary text-[12px] leading-[18px] -tracking-[0.12px] font-medium `}
-            placeholder="tab"
-            activeClassName="!text-primary p-2 rounded-lg shadow-small"
-          >
-            {tab.tabTitle}
-          </Tab>
-        ))}
+        {tabList.map((tab) => {
+          return (
+            <Tab
+              key={tab.tabTitle}
+              value={tab.tabTitle}
+              onClick={() => {
+                return setActiveTab(tab.tabTitle);
+              }}
+              className="flex font-iranYekan h-9 p-2 text-secondary text-[12px] leading-[18px] -tracking-[0.12px] font-medium "
+              placeholder="tab"
+              activeClassName="!text-primary p-2 rounded-lg shadow-small"
+            >
+              {tab.tabTitle}
+            </Tab>
+          );
+        })}
       </TabsHeader>
       <TabsBody placeholder="tab-body" className="">
         {tabList.map((tab) => {

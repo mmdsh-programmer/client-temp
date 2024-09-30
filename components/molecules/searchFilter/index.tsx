@@ -1,6 +1,10 @@
-import { FilterIcon, SearchIcon } from "@components/atoms/icons";
+import {
+ FilterIcon, SearchIcon 
+} from "@components/atoms/icons";
 import React, { useState } from "react";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+import {
+ filterChildrenAtom, filterReportAtom 
+} from "@atom/filter";
 
 import { Button } from "@material-tailwind/react";
 import SearchContent from "@components/molecules/searchContent";
@@ -11,7 +15,9 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchFilter = ({ open, setOpen }: IProps) => {
+const SearchFilter = ({
+ open, setOpen 
+}: IProps) => {
   const setFilterChildren = useSetRecoilState(filterChildrenAtom);
   const setFilterReport = useSetRecoilState(filterReportAtom);
   const [openSearchModal, setOpenSearchModal] = useState(false);

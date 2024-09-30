@@ -1,14 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+ useEffect,
+ useRef,
+ useState
+} from "react";
+import {
+ editorDataAtom,
+ editorModeAtom
+} from "@atom/editor";
+
+import FreeDraftDialog from "@components/templates/dialog/freeDraftDialog";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import RenderIf from "@components/atoms/renderIf";
 import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
-import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
-import { EDocumentTypes } from "@interface/enums";
-import RenderIf from "@components/atoms/renderIf";
-import FreeDraftDialog from "@components/templates/dialog/freeDraftDialog";
+import { useRecoilValue } from "recoil";
 
 const timeout = 5 * 60; // seconds
 
@@ -17,7 +24,9 @@ interface IProps {
   onClose: () => void;
 }
 
-const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
+const BlockDraftDialog = ({
+ editorRef, onClose 
+}: IProps) => {
   const repository = useRecoilValue(repoAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const editorData = useRecoilValue(editorDataAtom);
@@ -46,17 +55,14 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
 
   const handleFreeDraft = async () => {
     if (editorData && repository && selectedDocument) {
-      const value = (await editorRef.current?.getData()) as any;
+      const value = (await editorRef.current?.getData()) as unknown as  ({ content: string; outline: string } | string);
+
+      const content = typeof value === "string" ? value : value.content;
+      const outline = typeof value === "string" ? "[]" : value.outline;
 
       freeDraftHook.mutate({
-        content:
-          selectedDocument?.contentType === EDocumentTypes.classic
-            ? value?.content
-            : value,
-        outline:
-          selectedDocument?.contentType === EDocumentTypes.classic
-            ? value?.outline
-            : "[]",
+        content,
+        outline,
         repoId: repository.id,
         documentId: selectedDocument.id,
         versionId: editorData.id,

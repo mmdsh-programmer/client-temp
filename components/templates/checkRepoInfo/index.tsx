@@ -1,9 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { repoAtom, repositoryIdAtom } from "atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { useRouter, useSearchParams } from "next/navigation";
+import React, {
+ useEffect,
+ useState
+} from "react";
+import {
+ repoAtom,
+ repositoryIdAtom
+} from "atom/repository";
+import {
+ useRecoilState,
+ useSetRecoilState
+} from "recoil";
+import {
+ useRouter,
+ useSearchParams
+} from "next/navigation";
 
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
@@ -12,10 +24,10 @@ import useGetRepo from "@hooks/repository/useGetRepo";
 import useHandleRepoChange from "@hooks/repository/useHandleRepoChange";
 
 interface IProps {
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
-const CheckRepoInfo: React.FC<IProps> = ({ children }: IProps) => {
+const CheckRepoInfo = ({ children }: IProps) => {
   useHandleRepoChange();
 
   const [loading, setLoading] = useState(true);
@@ -28,7 +40,9 @@ const CheckRepoInfo: React.FC<IProps> = ({ children }: IProps) => {
 
   const setRepository = useSetRecoilState(repoAtom);
 
-  const { error, refetch, isFetching } = useGetRepo(
+  const {
+ error, refetch, isFetching 
+} = useGetRepo(
     repositoryAtomId ? +repositoryAtomId : null,
     setRepository,
     setRepositoryAtomId
@@ -69,7 +83,7 @@ const CheckRepoInfo: React.FC<IProps> = ({ children }: IProps) => {
       </div>
     );
   }
-  return <>{children}</>;
+  return <div className="check-repo-info">{children}</div>;
 };
 
 export default CheckRepoInfo;

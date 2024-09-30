@@ -14,12 +14,14 @@ interface IProps {
   navigateTo?: string;
   onClick?: () => void;
 }
-const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
+const TableCell = ({
+ tableCell, navigateTo, onClick 
+}: IProps) => {
   const router = useRouter();
   return (
     <tr
       className="cursor-pointer text-[13px] font-normal text-primary border-b-[1px] border-normal"
-      onClick={(e) => {
+      onClick={() => {
         onClick?.();
         if (navigateTo) {
           router.push(navigateTo);
@@ -30,7 +32,7 @@ const TableCell = ({ tableCell, navigateTo, onClick }: IProps) => {
         return (
           <td
             title={row.title}
-            key={index}
+            key={JSON.stringify(row)}
             className={`p-4 truncate font-iranYekan ${row.className || ""}
               `}
             onClick={(e) => {

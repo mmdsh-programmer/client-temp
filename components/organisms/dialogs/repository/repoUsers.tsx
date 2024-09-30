@@ -1,14 +1,19 @@
+import {
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
+
+import { IRoles } from "@interface/users.interface";
+import ImageComponent from "@components/atoms/image";
 import React from "react";
+import { UserIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
+import { translateRoles } from "@utils/index";
+import { useForm } from "react-hook-form";
 import useGetInviteRequests from "@hooks/user/useGetInviteRequestsByOwner";
+import useGetRoles from "@hooks/user/useGetRoles";
 import useGetUsers from "@hooks/user/useGetRepoUsers";
 import { useRecoilValue } from "recoil";
-import { Spinner, Typography } from "@material-tailwind/react";
-import ImageComponent from "@components/atoms/image";
-import { UserIcon } from "@components/atoms/icons";
-import useGetRoles from "@hooks/user/useGetRoles";
-import { useForm } from "react-hook-form";
-import { translateRoles } from "@utils/index";
 
 interface IForm {
   userName: string;
@@ -18,24 +23,22 @@ interface IForm {
 const RepoUsers = () => {
   const getRepo = useRecoilValue(repoAtom);
   const repoId = getRepo!.id;
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const {data: getRoles} = useGetRoles();
 
-  const { data: getInviteRequests, isFetching: isFetchingInviteRequests } =
+  const {
+ data: getInviteRequests, isFetching: isFetchingInviteRequests 
+} =
     useGetInviteRequests(repoId, 10, true);
 
-  const { data: getRepoUsers, isFetching: isFetchingUsers } = useGetUsers(
+  const {
+ data: getRepoUsers, isFetching: isFetchingUsers 
+} = useGetUsers(
     repoId,
     10,
     true,
   );
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    clearErrors,
-    reset,
-  } = useForm<IForm>();
+  const {register,} = useForm<IForm>();
 
   return (
     <div className="flex flex-col w-full">
@@ -74,7 +77,7 @@ const RepoUsers = () => {
                     className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
                     {...register("roleName")}
                   >
-                    {getRoles?.map((item: any) => {
+                    {getRoles?.map((item: IRoles) => {
                       return item.name !== "owner" ? (
                         <option
                           key={item.name}
@@ -116,11 +119,9 @@ const RepoUsers = () => {
                   <select
                     id="user-create-role"
                     className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
-                    {...register("roleName", {
-                      value: user.role,
-                    })}
+                    {...register("roleName", {value: user.role,})}
                   >
-                    {getRoles?.map((item: any) => {
+                    {getRoles?.map((item: IRoles) => {
                       return (
                         <option
                           key={item.name}

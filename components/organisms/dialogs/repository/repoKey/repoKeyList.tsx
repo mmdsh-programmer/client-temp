@@ -1,15 +1,16 @@
-import { TickIcon } from "@components/atoms/icons";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import Error from "@components/organisms/error";
+import { IPublicKey } from "@interface/repo.interface";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
 import RepoKeyMenu from "@components/molecules/repoKeyMenu";
+import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
-import Error from "@components/organisms/error";
-import RenderIf from "@components/atoms/renderIf";
+import { TickIcon } from "@components/atoms/icons";
 import useGetRepoPublicKeys from "@hooks/repository/useGetRepoPublicKeys";
-import { IPublicKey } from "@interface/repo.interface";
-import { Spinner } from "@material-tailwind/react";
-import React from "react";
 
 interface IProps {
   repoId: number;
@@ -39,13 +40,23 @@ const RepoKeyList = ({
 
   const tableHead = hasAction
     ? [
-        { key: "keyName", value: "نام کلید" },
-        { key: "keyValue", value: "کلید" },
-        { key: "action", value: "عملیات" },
+        {
+ key: "keyName", value: "نام کلید" 
+},
+        {
+ key: "keyValue", value: "کلید" 
+},
+        {
+ key: "action", value: "عملیات" 
+},
       ]
     : [
-        { key: "keyName", value: "نام کلید" },
-        { key: "keyValue", value: "کلید" },
+        {
+ key: "keyName", value: "نام کلید" 
+},
+        {
+ key: "keyValue", value: "کلید" 
+},
       ];
 
   const itemCount = publicKeyList?.pages[0]?.list.length;
@@ -77,24 +88,27 @@ const RepoKeyList = ({
                   hasAction
                     ? [
                         { data: key.name },
-                        { data: key.key, className: "max-w-28" },
+                        {
+ data: key.key, className: "max-w-28" 
+},
                         { data: <RepoKeyMenu keyItem={key} /> },
                       ]
                     : [
-                        {
-                          data: (
+                        {data: (
                             <span className="flex items-center">
                               {selectedKeyId === key.id ? (
                                 <TickIcon className="h-4 w-4 ml-2" />
                               ) : null}
                               {key.name}
                             </span>
-                          ),
-                        },
-                        { data: key.key, className: "max-w-28" },
+                          ),},
+                        {
+ data: key.key, className: "max-w-28" 
+},
                       ]
                 }
-                onClick={() => handleKeySelect(key)}
+                onClick={() => 
+{return handleKeySelect(key);}}
               />
             );
           });

@@ -1,7 +1,13 @@
-import { Button, Typography } from "@material-tailwind/react";
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+ selectedDocumentAtom, tempDocTagAtom 
+} from "@atom/document";
+import {
+ useRecoilValue, useSetRecoilState 
+} from "recoil";
 
 import ChipMolecule from "@components/molecules/chip";
 import { ITag } from "@interface/tags.interface";
@@ -51,7 +57,8 @@ const DocumentTagList = ({ tagList }: IProps) => {
                     adminRole ? (
                       <Button
                         className="p-0 bg-transparent"
-                        onClick={() => handleDelete(tag)}
+                        onClick={() => 
+{return handleDelete(tag);}}
                       >
                         <XIcon className="h-4 w-4 fill-icon-active" />
                       </Button>

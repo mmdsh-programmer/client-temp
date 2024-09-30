@@ -1,16 +1,23 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { repoAtom, repositoryIdAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import useGetRepo from "@hooks/repository/useGetRepo";
-import { selectedDocumentAtom } from "@atom/document";
-import useGetDocument from "@hooks/document/useGetDocument";
-import useGetUser from "@hooks/auth/useGetUser";
+import {
+ Spinner, Typography 
+} from "@material-tailwind/react";
+import {
+ repoAtom, repositoryIdAtom 
+} from "@atom/repository";
+import {
+ useRecoilState, useSetRecoilState 
+} from "recoil";
+
 import EditorTab from "@components/organisms/editorTab";
 import Error from "@components/organisms/error";
-import { Spinner, Typography } from "@material-tailwind/react";
+import { selectedDocumentAtom } from "@atom/document";
+import useGetDocument from "@hooks/document/useGetDocument";
+import useGetRepo from "@hooks/repository/useGetRepo";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useSearchParams } from "next/navigation";
 
 const EditPage = () => {
   const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryIdAtom);

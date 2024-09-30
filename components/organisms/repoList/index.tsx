@@ -3,14 +3,18 @@ import {
   InfiniteData,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
-import { IListResponse, IRepo } from "@interface/repo.interface";
+import {
+ IListResponse, IRepo 
+} from "@interface/repo.interface";
 import React, { useEffect } from "react";
 import {
   repoAtom,
   repoGroupingAtom,
   repoSearchParamAtom,
 } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+ useRecoilValue, useSetRecoilState 
+} from "recoil";
 
 import AccessRepoList from "./accessRepoList";
 import AllRepoList from "./allRepoList";
@@ -57,16 +61,15 @@ const RepoList = () => {
         buttonText="ایجاد مخزن جدید"
         renderList={() => {
           return (
-            <>
-              <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
+            <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
                 <ListMode />
               </RenderIf>
-            </>
           );
         }}
-        renderDialog={(close: () => void) => (
+        renderDialog={(close: () => void) => 
+{return (
           <RepoCreateDialogStepper close={close} />
-        )}
+        );}}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />
@@ -75,7 +78,7 @@ const RepoList = () => {
         <MyRepoList archived={false} />
       </RenderIf>
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.ARCHIVE_REPO}>
-        <MyRepoList archived={true} />
+        <MyRepoList archived />
       </RenderIf>
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.ACCESS_REPO}>
         <AccessRepoList />

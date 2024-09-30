@@ -2,21 +2,17 @@ import React, { useState } from "react";
 
 import { DocIcon } from "@components/atoms/icons";
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
-import { categorySearchContentAtom } from "atom/category";
 import useGetDocument from "@hooks/document/useGetDocument";
-import { useRouter } from "next/router";
-import { useSetRecoilState } from "recoil";
 
 interface IProps {
   data: IContentSearchListItem;
-  disabled?: boolean;
   onClick?: () => void;
 }
 
-export const ResultItem = ({ data, disabled, onClick }: IProps) => {
-  const router = useRouter();
+export const ResultItem = ({
+ data, onClick 
+}: IProps) => {
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  const setOpen = useSetRecoilState(categorySearchContentAtom);
   useGetDocument(data.repoId, data.documentId, isEnabled);
 
   const handleDocumentSelect = () => {

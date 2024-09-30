@@ -1,7 +1,7 @@
+import InputAtom from "@components/atoms/input";
+import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import LoadingButton from "@components/molecules/loadingButton";
-import InputAtom from "@components/atoms/input";
 
 const ChatDrawer = () => {
   return (

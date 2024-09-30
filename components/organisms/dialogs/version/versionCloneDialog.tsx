@@ -1,17 +1,20 @@
+import {
+ Spinner, Typography 
+} from "@material-tailwind/react";
+
+import CreateDialog from "@components/templates/dialog/createDialog";
+import FormInput from "@components/atoms/input/formInput";
+import { IVersion } from "@interface/version.interface";
 import React from "react";
 import { repoAtom } from "@atom/repository";
-import FormInput from "@components/atoms/input/formInput";
-import CreateDialog from "@components/templates/dialog/createDialog";
-import { Spinner, Typography } from "@material-tailwind/react";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
+import useGetVersion from "@hooks/version/useGetVersion";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateVersion from "@hooks/version/useCreateVersion";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
-import { IVersion } from "@interface/version.interface";
-import useGetVersion from "@hooks/version/useGetVersion";
 
 interface IForm {
   name: string;
@@ -22,22 +25,26 @@ interface IProps {
   version: IVersion;
 }
 
-const VersionCloneDialog = ({ setOpen, version }: IProps) => {
+const VersionCloneDialog = ({
+ setOpen, version 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
-  const { data: getVersionInfo, isLoading } = useGetVersion(
+  const {
+ data: getVersionInfo, isLoading 
+} = useGetVersion(
     getRepo!.id,
     getDocument!.id,
     version.id,
   );
   const createVersion = useCreateVersion();
 
-  const form = useForm<IForm>({
-    resolver: yupResolver(versionSchema),
-  });
+  const form = useForm<IForm>({resolver: yupResolver(versionSchema),});
 
-  const { register, handleSubmit, reset, clearErrors, formState } = form;
+  const {
+ register, handleSubmit, reset, clearErrors, formState 
+} = form;
   const { errors } = formState;
 
   const handleReset = () => {
@@ -67,7 +74,7 @@ const VersionCloneDialog = ({ setOpen, version }: IProps) => {
   return (
     <CreateDialog
       isPending={createVersion.isPending}
-      dialogHeader={"ایجاد نسخه جدید از این نسخه"}
+      dialogHeader="ایجاد نسخه جدید از این نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

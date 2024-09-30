@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import useEditRepo from "@hooks/repository/useEditRepo";
-import { IRepo } from "@interface/repo.interface";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+
 import EditDialog from "@components/templates/dialog/editDialog";
-import FormInput from "@components/atoms/input/formInput";
-import { Typography } from "@material-tailwind/react";
-import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
 import Files from "./repoCreateDialogStepper/files";
+import FormInput from "@components/atoms/input/formInput";
+import { IRepo } from "@interface/repo.interface";
+import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { Typography } from "@material-tailwind/react";
+import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
+import useEditRepo from "@hooks/repository/useEditRepo";
+import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -22,7 +23,9 @@ interface IForm {
   description: string;
 }
 
-const RepoEditDialog = ({ repo, setOpen }: IProps) => {
+const RepoEditDialog = ({
+ repo, setOpen 
+}: IProps) => {
   const [openFileManagement, setOpenFileManagement] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | undefined>(
     repo?.imageFileHash
@@ -32,8 +35,10 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
   );
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
-  const { data: getUserInfo, isFetching } = useGetUser();
-  const { isPending, mutate } = useEditRepo();
+  const { data: getUserInfo } = useGetUser();
+  const {
+ isPending, mutate 
+} = useEditRepo();
   const attachImageToRepo = useAddImageToRepo();
 
   const {
@@ -83,9 +88,8 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
     }
   };
 
-  return (
-    <>
-      {openFileManagement && repo ? (
+  if(openFileManagement && repo){
+      return (
         <Files
           userGroupHash={repo.userGroupHash}
           resourceId={repo.id}
@@ -95,10 +99,12 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
           }}
           setSelectedFile={setSelectedFile}
         />
-      ) : (
+      );
+  }
+  return (
         <EditDialog
           isPending={isPending}
-          dialogHeader={"ویرایش مخزن"}
+          dialogHeader="ویرایش مخزن"
           onSubmit={handleSubmit(onSubmit)}
           setOpen={handleClose}
           className="!h-screen xs:!h-[600px] max-w-full w-full m-0"
@@ -108,11 +114,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
               <Typography className="label">عنوان مخزن</Typography>
               <FormInput
                 placeholder="عنوان"
-                register={{
-                  ...register("name", {
-                    value: repo?.name,
-                  }),
-                }}
+                register={{...register("name", {value: repo?.name,}),}}
               />
               {errors.name && (
                 <Typography className="warning_text">
@@ -124,9 +126,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
               <Typography className="label">توضیحات مخزن</Typography>
               <TextareaAtom
                 placeholder="توضیحات"
-                register={{
-                  ...register("description", { value: repo?.description }),
-                }}
+                register={{...register("description", { value: repo?.description }),}}
               />
               {errors.name && (
                 <Typography className="warning_text">
@@ -147,8 +147,6 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
             />
           </form>
         </EditDialog>
-      )}
-    </>
   );
 };
 

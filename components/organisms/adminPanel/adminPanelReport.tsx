@@ -1,15 +1,16 @@
-import React from "react";
-import useGetAdminReport from "@hooks/admin/useGetAdminReport";
 import {
   DocIcon,
   FolderIcon,
   StorageIcon,
   UserGroupIcon,
 } from "@components/atoms/icons";
+
+import React from "react";
 import ReportCard from "@components/molecules/reportCard";
+import useGetAdminReport from "@hooks/admin/useGetAdminReport";
 
 const AdminPanelReport = () => {
-  const { data: getReport, isLoading } = useGetAdminReport();
+  const { data: getReport } = useGetAdminReport();
 
   const unUsed =
     getReport?.podSpaceStatus?.storageLimit &&
@@ -23,8 +24,14 @@ const AdminPanelReport = () => {
       title: "مخزن‌ها",
       icon: <FolderIcon className="w-[18px] h-[18px] stroke-purple-normal " />,
       description: [
-        { label: "تعداد کل مخزن‌ها", value: getReport?.repoCount || 0 },
-        { label: "تعداد کل سوپر مخزن‌ها", value: 0 },
+        {
+          label: "تعداد کل مخزن‌ها",
+          value: getReport?.repoCount || 0,
+        },
+        {
+          label: "تعداد کل سوپر مخزن‌ها",
+          value: 0,
+        },
       ],
     },
     {
@@ -65,18 +72,36 @@ const AdminPanelReport = () => {
         <UserGroupIcon className="w-[18px] h-[18px] stroke-purple-normal" />
       ),
       description: [
-        { label: "کاربران فعال", value: 0 },
-        { label: "کاربران غیر فعال", value: 0 },
-        { label: "مجموع کاربران", value: 0 },
+        {
+          label: "کاربران فعال",
+          value: 0,
+        },
+        {
+          label: "کاربران غیر فعال",
+          value: 0,
+        },
+        {
+          label: "مجموع کاربران",
+          value: 0,
+        },
       ],
     },
     {
       title: "تعداد اسناد",
       icon: <DocIcon className="w-[18px] h-[18px] fill-purple-normal" />,
       description: [
-        { label: "اسناد عمومی", value: 0 },
-        { label: "پیش نویس‌ها", value: 0 },
-        { label: "مجموع اسناد", value: 0 },
+        {
+          label: "اسناد عمومی",
+          value: 0,
+        },
+        {
+          label: "پیش نویس‌ها",
+          value: 0,
+        },
+        {
+          label: "مجموع اسناد",
+          value: 0,
+        },
       ],
     },
   ];
@@ -85,7 +110,11 @@ const AdminPanelReport = () => {
     <div className="!m-4 xs:!m-0 h-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
       {reportList.map((item) => {
         return (
-        <ReportCard title={item.title} icon={item.icon} description={item.description} />
+          <ReportCard
+            title={item.title}
+            icon={item.icon}
+            description={item.description}
+          />
         );
       })}
     </div>

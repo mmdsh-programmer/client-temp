@@ -1,5 +1,9 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
+import {
+ Checkbox, Typography 
+} from "@material-tailwind/react";
+import React, {
+ useEffect, useState 
+} from "react";
 
 import CreateDialog from "@components/templates/dialog/createDialog";
 import { DatePicker } from "zaman";
@@ -34,9 +38,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
     expireTime: number;
     roleId: number;
     password?: string;
-  }>({
-    resolver: yupResolver(repoShareSchema),
-  });
+  }>({resolver: yupResolver(repoShareSchema),});
 
   const {
     register,
@@ -109,9 +111,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
             onChange={() => {
               setHasPassword(!hasPassword);
             }}
-            containerProps={{
-              className: "-mr-3",
-            }}
+            containerProps={{className: "-mr-3",}}
           />
           {hasPassword && (
             <>
