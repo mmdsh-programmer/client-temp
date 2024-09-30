@@ -16,16 +16,17 @@ const meta: Meta<typeof ResultItem> = {
   title: "components/Molecules/ResultItem",
   component: ResultItem,
   decorators: [
-    (Story) => 
-{return (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="w-full max-w-md mx-auto p-4">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    );},
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="w-full max-w-md mx-auto p-4">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 
@@ -44,14 +45,14 @@ const mockData: IContentSearchListItem = {
 
 export const Default: Story = {args: {
     data: mockData,
-    disabled: false,
-    onClick: () => 
-{return console.log("Document clicked");},
+    onClick: () => {
+      return console.log("Document clicked");
+    },
   },};
 
 export const Disabled: Story = {args: {
     data: mockData,
-    disabled: true,
-    onClick: () => 
-{return console.log("This should not be clickable");},
+    onClick: () => {
+      return console.log("This should not be clickable");
+    },
   },};

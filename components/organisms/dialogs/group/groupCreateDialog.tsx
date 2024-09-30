@@ -1,9 +1,11 @@
 import {
- Button, Typography 
+ Button,
+ Typography
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import {
- UserIcon, XIcon 
+ UserIcon,
+ XIcon
 } from "@components/atoms/icons";
 
 import ChipMolecule from "@components/molecules/chip";
@@ -41,7 +43,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
   const {
  isPending, mutate 
 } = useCreateGroup();
-  const form = useForm<IForm>({resolver: yupResolver(userGroupSchema),});
+  const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
 
   const {
  register, handleSubmit, formState, reset, clearErrors 
@@ -62,9 +64,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     .map((item) => {
       return {
         label: item.userInfo.userName,
-        value: {
- username: item.userInfo.userName, picture: item.userInfo.img 
-},
+        value: item.userInfo.img,
       };
     });
 
@@ -120,7 +120,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label"> نام گروه </Typography>
           <FormInput
             placeholder="نام گروه"
-            register={{...register("title"),}}
+            register={{ ...register("title") }}
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -151,8 +151,9 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                   return [
                     ...oldValue,
                     {
- username: val.username, picture: val.picture 
-},
+                      username: val.label,
+                      picture: `${val.value}`,
+                    },
                   ];
                 });
               }

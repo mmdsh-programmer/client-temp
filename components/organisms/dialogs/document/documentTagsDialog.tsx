@@ -1,5 +1,11 @@
-import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { useRecoilState, useRecoilValue } from "recoil";
+import {
+ selectedDocumentAtom,
+ tempDocTagAtom
+} from "@atom/document";
+import {
+ useRecoilState,
+ useRecoilValue
+} from "recoil";
 
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import DocumentTagList from "@components/organisms/document/documentTagList";
@@ -24,7 +30,9 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
 
-  const { data: getTags, isFetching, isLoading } = useGetTags(repoId, 30, true);
+  const {
+ data: getTags, isLoading 
+} = useGetTags(repoId, 30, true);
 
   const editDocument = useEditDocument();
 
@@ -61,7 +69,7 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
       contentType: document.contentType,
       tagIds: getTempDocTag,
       callBack: () => {
-        toast.success(`تگ‌ها با موفقیت به سند اضافه شدند.`);
+        toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },
     });
   };
@@ -83,11 +91,12 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
               <div className="flex-grow">
                 <SearchableDropdown
                   options={updatedAvailableTags}
-                  handleChange={(val) =>
-                    setTempDocTag((oldValue) => {
-                      return [...oldValue, val];
-                    })
-                  }
+                  handleChange={(val) => {
+                    return setTempDocTag((oldValue) => {
+                      const newValue = new Set([...oldValue, +val.value]);
+                      return Array.from(newValue);
+                    });
+                  }}
                 />
               </div>
             </div>

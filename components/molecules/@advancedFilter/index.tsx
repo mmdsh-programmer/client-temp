@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
- filterChildrenAtom, filterReportAtom 
+ filterChildrenAtom,
+ filterReportAtom
 } from "@atom/filter";
 
 import CategoryFilter from "../categoryFilter";
@@ -12,6 +13,16 @@ const AdvancedFilter = () => {
   const [type, setType] = useState<string>("");
   const setFilterChildren = useSetRecoilState(filterChildrenAtom);
   const setFilterReport = useSetRecoilState(filterReportAtom);
+
+  const renderFilter = () => {
+    if (type === "category") {
+      return <CategoryFilter />;
+    } if (type === "repo") {
+      return <RepoFilter />;
+    } 
+      return null;
+    
+  };
 
   return (
     <div className="flex flex-wrap h-full xs:h-auto justify-between bg-primary xs:bg-gray-50">
@@ -47,11 +58,7 @@ const AdvancedFilter = () => {
           checked={type === "repo"}
         />
       </div>
-      {type === "category" ? (
-        <CategoryFilter />
-      ) : type === "repo" ? (
-        <RepoFilter />
-      ) : null}
+      {renderFilter()}
     </div>
   );
 };

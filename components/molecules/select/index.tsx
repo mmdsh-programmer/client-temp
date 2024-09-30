@@ -7,7 +7,7 @@ import React, {
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
 
-interface IOption {
+export interface IOption {
   label: string;
   value: string | number; // Assuming value can be either string or number
   className?: string;
@@ -15,9 +15,9 @@ interface IOption {
 
 interface IProps {
   options?: IOption[];
-  selectedOption?: string | null;
-  setSelectedOption: (option: string | number) => void; // Updated type here
-  defaultOption?: string;
+  selectedOption?: IOption;
+  setSelectedOption: (option: IOption) => void; // Updated type here
+  defaultOption?: IOption;
   className?: string;
 }
 
@@ -51,7 +51,7 @@ const SelectAtom = ({
     };
   }, []);
 
-  const handleOptionChange = (option: string | number) => {
+  const handleOptionChange = (option: IOption) => {
     setSelectedOption(option);
     setIsOpen(false);
   };
@@ -72,11 +72,7 @@ const SelectAtom = ({
          truncate text-[13px] text-primary font-iranYekan font-normal gap-x-2
         bg-transparent  rounded-md focus:outline-none`}
       >
-        {selectedOption
-          ? options?.find((option) => {
-              return option.value === selectedOption;
-            })?.label
-          : defaultOption}
+        {selectedOption?.value ?? defaultOption?.value}
         <ChevronLeftIcon
           className={`w-2 h-2 stroke-icon-active transform transition-transform ${
             isOpen ? "rotate-90" : "-rotate-90"
@@ -97,7 +93,7 @@ const SelectAtom = ({
                   key={option.value}
                   className="cursor-pointer select-none relative p-[6px]"
                   onClick={() => {
-                    handleOptionChange(option.value);
+                    handleOptionChange(option);
                   }}
                 >
                   <Typography

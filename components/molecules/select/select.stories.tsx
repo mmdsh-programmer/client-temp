@@ -1,12 +1,15 @@
+import type {
+ Meta,
+ StoryObj
+} from "@storybook/react";
 import React, { useState } from "react";
-import SelectAtom from ".";
-import type { Meta, StoryObj } from "@storybook/react";
+import SelectAtom, { IOption } from ".";
 
 interface IProps {
-  options: { value: string; label: string }[];
-  selectedOption?: string;
-  setSelectedOption: (option: string) => void;
-  defaultOption?: string;
+  options: IOption[];
+  selectedOption?: IOption;
+  setSelectedOption: (option: IOption) => void;
+  defaultOption?: IOption;
   className?: string;
 }
 
@@ -45,15 +48,27 @@ type Story = StoryObj<IProps>;
 export const Default: Story = {
   args: {
     options: [
-      { value: "option1", label: "Option 1" },
-      { value: "option2", label: "Option 2" },
-      { value: "option3", label: "Option 3" },
+      {
+        value: "option1",
+        label: "Option 1",
+      },
+      {
+        value: "option2",
+        label: "Option 2",
+      },
+      {
+        value: "option3",
+        label: "Option 3",
+      },
     ],
-    defaultOption: "Select an option...",
+    defaultOption: {
+      value: "option1",
+      label: "Option 1",
+    },
   },
   render: (args) => {
-    const [selectedOption, setSelectedOption] = useState<string | undefined>(
-      undefined,
+    const [selectedOption, setSelectedOption] = useState<IOption | undefined>(
+      undefined
     );
     return (
       <SelectAtom

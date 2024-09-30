@@ -4,10 +4,9 @@ import {
 } from "@material-tailwind/react";
 
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
 
 interface IProps extends InputProps {
-  register?: ReturnType<UseFormRegister<any>>;
+  register?: any;
 }
 
 const InputAtom = ({
@@ -15,7 +14,6 @@ const InputAtom = ({
 }: IProps) => {
   return (
     <Input
-      crossOrigin=""
       labelProps={{className: "before:content-none after:content-none",}}
       containerProps={{className: "!min-w-0 flex-grow h-auto",}}
       type="text"

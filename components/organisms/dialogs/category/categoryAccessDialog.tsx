@@ -1,15 +1,19 @@
+import {
+ DialogBody,
+ Typography
+} from "@material-tailwind/react";
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
-import { DialogBody, Typography } from "@material-tailwind/react";
-import SearchableDropdown from "@components/molecules/searchableDropdown";
-import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import LoadingButton from "@components/molecules/loadingButton";
-import InfoDialog from "@components/templates/dialog/infoDialog";
-import useBlockDocument from "@hooks/document/useBlockDocument";
+
 import DocumentBlockList from "@components/organisms/document/documentBlockList";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import LoadingButton from "@components/molecules/loadingButton";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useBlockDocument from "@hooks/document/useBlockDocument";
+import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -22,11 +26,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
   const [value, setValue] = useState("");
 
   const repoId = getRepo!.id;
-  const {
-    data: getRepoUsers,
-    isFetching: isFetchingRepoUsers,
-    isLoading: isLoadingRepoUsers,
-  } = useGetRepoUsers(repoId, 20, true);
+  const { data: getRepoUsers } = useGetRepoUsers(repoId, 20, true);
 
   const blockDocument = useBlockDocument();
 
@@ -71,7 +71,9 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
             <div className="flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
-                handleChange={(val) => setValue(val)}
+                handleChange={(val) => {
+                  return setValue(`${val.value}`);
+                }}
               />
             </div>
             <LoadingButton

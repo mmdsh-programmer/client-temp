@@ -1,9 +1,13 @@
-import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
+import {
+ DialogBody,
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
 import React, { useState } from "react";
+import SelectAtom, { IOption } from "@components/molecules/select";
 
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
-import SelectAtom from "@components/molecules/select";
 import { documentTypeAtom } from "@atom/document";
 import useGetClasorField from "@hooks/document/useGetClasorField";
 import { useRecoilState } from "recoil";
@@ -14,16 +18,21 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DocumentType = ({ isTemplate, setOpen }: IProps) => {
+const DocumentType = ({
+ isTemplate, setOpen 
+}: IProps) => {
   const [getDocumentType, setDocumentType] = useRecoilState(documentTypeAtom);
   const { handleNextStep } = useStepperNavigate();
-  const { data: getDocumentTypes, isLoading } = useGetClasorField();
-  const [type, setType] = useState<EDocumentTypes | null>(
-    EDocumentTypes.classic,
-  );
+  const {
+ data: getDocumentTypes, isLoading 
+} = useGetClasorField();
+  const [type, setType] = useState<IOption>({
+    label: "clasor",
+    value: EDocumentTypes.classic,
+  });
 
   const handleSelectType = () => {
-    setDocumentType(type);
+    setDocumentType(type.value as EDocumentTypes);
     handleNextStep();
   };
 
@@ -46,6 +55,12 @@ const DocumentType = ({ isTemplate, setOpen }: IProps) => {
           };
         });
 
+  const defaultOption = getDocumentType
+    ? {
+        label: getDocumentType,
+        value: getDocumentType,
+      }
+    : typeOptions?.[0];
   return (
     <>
       <DialogBody
@@ -58,26 +73,26 @@ const DocumentType = ({ isTemplate, setOpen }: IProps) => {
               <Spinner className="h-5 w-5" color="deep-purple" />
             </div>
           ) : (
-            <>
-              <div className="flex flex-col gap-2">
-                <Typography className="form_label">نوع سند</Typography>
-                <SelectAtom
-                  className="w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
-                  defaultOption={getDocumentType || typeOptions?.[0].label}
-                  options={typeOptions}
-                  selectedOption={type as string}
-                  setSelectedOption={setType}
-                />
-              </div>
-            </>
+            <div className="flex flex-col gap-2">
+              <Typography className="form_label">نوع سند</Typography>
+              <SelectAtom
+                className="w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
+                defaultOption={defaultOption}
+                options={typeOptions}
+                selectedOption={type}
+                setSelectedOption={setType}
+              />
+            </div>
           )}
         </form>
       </DialogBody>
       <DialogStepperFooter
-        hasNextStep={true}
+        hasNextStep
         hasPreviousStep={false}
         handleNextStep={handleSelectType}
-        handlePreviousStep={() => setOpen(false)}
+        handlePreviousStep={() => {
+          return setOpen(false);
+        }}
       />
     </>
   );

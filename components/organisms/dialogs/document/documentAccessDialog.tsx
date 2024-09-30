@@ -1,16 +1,19 @@
+import {
+ DialogBody,
+ Typography
+} from "@material-tailwind/react";
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
-import SearchableDropdown from "@components/molecules/searchableDropdown";
-import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import useBlockDocument from "@hooks/document/useBlockDocument";
+
 import DocumentBlockList from "@components/organisms/document/documentBlockList";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import LoadingButton from "@components/molecules/loadingButton";
-import { DialogBody, Typography } from "@material-tailwind/react";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useBlockDocument from "@hooks/document/useBlockDocument";
+import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -68,7 +71,9 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
             <div className="flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
-                handleChange={(val) => setValue(val)}
+                handleChange={(val) => {
+                  return setValue(`${val.value}`);
+                }}
               />
             </div>
             <LoadingButton

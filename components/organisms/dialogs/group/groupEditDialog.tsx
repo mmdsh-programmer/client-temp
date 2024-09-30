@@ -1,22 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import {
+ Button,
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
+import React, {
+ useEffect,
+ useState
+} from "react";
+import {
+ UserIcon,
+ XIcon
+} from "@components/atoms/icons";
+
+import ChipMolecule from "@components/molecules/chip";
 import EditDialog from "@components/templates/dialog/editDialog";
+import FormInput from "@components/atoms/input/formInput";
+import ImageComponent from "@components/atoms/image";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import TextareaAtom from "@components/atoms/textarea/textarea";
 import { repoAtom } from "@atom/repository";
+import { selectedGroupAtom } from "@atom/group";
+import { toast } from "react-toastify";
 import useEditGroup from "@hooks/group/useEditGroup";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import FormInput from "@components/atoms/input/formInput";
-import { selectedGroupAtom } from "@atom/group";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import ChipMolecule from "@components/molecules/chip";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import { userGroupSchema } from "./validation.yup";
 import useGetGroupInfo from "@hooks/group/useGetGroupInfo";
-import { yupResolver } from "@hookform/resolvers/yup";
-import SearchableDropdown from "@components/molecules/searchableDropdown";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import ImageComponent from "@components/atoms/image";
+import { useRecoilValue } from "recoil";
+import { userGroupSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
@@ -36,32 +47,42 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
     { username: string; picture: string }[] | undefined
   >([]);
 
-  const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 20, true);
-  const { data: groupInfo, isFetching } = useGetGroupInfo(
+  const {
+ data: getUsers, isLoading 
+} = useGetRepoUsers(getRepo!.id, 20, true);
+  const {
+ data: groupInfo, isFetching 
+} = useGetGroupInfo(
     getRepo!.id,
-    group!.title,
+    group!.title
   );
-  const { isPending, mutate } = useEditGroup();
+  const {
+ isPending, mutate 
+} = useEditGroup();
 
-  const form = useForm<IForm>({
-    resolver: yupResolver(userGroupSchema),
-  });
-  const { reset, clearErrors, handleSubmit, register, formState } = form;
+  const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
+  const {
+ reset, clearErrors, handleSubmit, register, formState 
+} = form;
   const { errors } = formState;
 
   useEffect(() => {
-    const allUsers = getUsers?.pages.flatMap((page) => page?.list || []);
+    const allUsers = getUsers?.pages.flatMap((page) => {
+      return page?.list || [];
+    });
 
-    const oldUsers = allUsers?.filter((user) =>
-      groupInfo?.members.list.some(
-        (groupUser) => groupUser.preferred_username === user.userInfo.userName,
-      ),
-    );
+    const oldUsers = allUsers?.filter((user) => {
+      return groupInfo?.members.list.some((groupUser) => {
+        return groupUser.preferred_username === user.userInfo.userName;
+      });
+    });
 
-    const updatedUserList = oldUsers?.map((member) => ({
-      username: member.userInfo.userName,
-      picture: member.userInfo.img,
-    }));
+    const updatedUserList = oldUsers?.map((member) => {
+      return {
+        username: member.userInfo.userName,
+        picture: member.userInfo.img,
+      };
+    });
 
     setUpdatedUsers(updatedUserList);
   }, [getUsers, groupInfo]);
@@ -80,7 +101,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
     .map((item) => {
       return {
         label: item.userInfo.userName,
-        value: { username: item.userInfo.userName, picture: item.userInfo.img },
+        value: item.userInfo.img,
       };
     });
 
@@ -114,13 +135,14 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
   const handleDelete = (username: string) => {
     setUpdatedUsers((oldValue) => {
-      if (!oldValue) {
+      if (!oldValue?.length) {
         return [];
       }
+      const newUsers = oldValue.filter((user) => {
+        return user.username !== username;
+      });
       return [
-        ...oldValue?.filter((user) => {
-          return user.username !== username;
-        }),
+        ...newUsers
       ];
     });
   };
@@ -128,7 +150,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   return (
     <EditDialog
       isPending={isPending}
-      dialogHeader={"ویرایش گروه"}
+      dialogHeader="ویرایش گروه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="xs:!min-w-[450px] xs:!max-w-[450px]"
@@ -138,9 +160,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label"> نام گروه </Typography>
           <FormInput
             placeholder="نام گروه"
-            register={{
-              ...register("title", { value: group?.title }),
-            }}
+            register={{ ...register("title", { value: group?.title }) }}
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -152,9 +172,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">توضیحات گروه</Typography>
           <TextareaAtom
             placeholder="توضیحات گروه"
-            register={{
-              ...register("description", { value: group?.description }),
-            }}
+            register={{...register("description", { value: group?.description }),}}
           />
           {errors.description && (
             <Typography className="warning_text">
@@ -175,7 +193,10 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                   }
                   return [
                     ...oldValue,
-                    { username: val.username, picture: val.picture },
+                    {
+                      username: val.label,
+                      picture: `${val.value}`,
+                    },
                   ];
                 });
               }
