@@ -6,7 +6,7 @@ import MobileCard from "@components/molecules/mobileCard";
 import RepoMenu from "@components/molecules/repoMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import RenderIf from "@components/atoms/renderIf";
-import { IRepoView } from "../repoList";
+import { IRepoView } from "@interface/repo.interface";
 
 const MobileView = ({
   isLoading,
@@ -19,6 +19,7 @@ const MobileView = ({
   const listLength = getRepoList?.pages[0].total;
   return (
     <>
+       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

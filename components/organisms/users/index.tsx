@@ -2,11 +2,15 @@ import React from "react";
 import InviteToRepo from "./inviteToRepo";
 import RepoUsers from "./repoUsers";
 
-const Users = () => {
+interface IProps {
+  createRepoDialog?: boolean;
+}
+
+const Users = ({ createRepoDialog }: IProps) => {
   return (
     <>
       <InviteToRepo />
-      <RepoUsers />
+      <RepoUsers createRepoDialog={createRepoDialog} />
     </>
   );
 };

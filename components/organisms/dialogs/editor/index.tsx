@@ -12,12 +12,10 @@ import {
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
-import Error from "@components/organisms/error";
 import EditorComponent from "@components/organisms/editor";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { EDocumentTypes } from "@interface/enums";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { Spinner } from "@material-tailwind/react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import BlockDraft from "@components/organisms/editor/blockDraft";
@@ -25,6 +23,8 @@ import BlockDraftDialog from "./blockDraftDialog";
 import useGetKey from "@hooks/repository/useGetKey";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import FloatingButtons from "@components/organisms/editor/floatingButtons";
+import { toast } from "react-toastify";
+import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -55,13 +55,10 @@ const Editor = ({ setOpen }: IProps) => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const {
-    data: getLastVersion,
-    error: lastVersionError,
-    isSuccess: lastVersionIsSuccess,
-  } = useGetLastVersion(getRepo!.id, getSelectedDocument!.id, !getVersionData);
+  const { data: getLastVersion, isSuccess: lastVersionIsSuccess } =
+    useGetLastVersion(getRepo!.id, getSelectedDocument!.id, !getVersionData);
 
-  const { data, isLoading, error, isSuccess } = useGetVersion(
+  const { data, isFetching, error, isSuccess } = useGetVersion(
     getRepo!.id,
     getSelectedDocument!.id,
     getVersionData ? getVersionData.id : getLastVersion?.id,
@@ -98,18 +95,15 @@ const Editor = ({ setOpen }: IProps) => {
     };
     const contentType =
       getSelectedDocument?.contentType || EDocumentTypes.classic;
-    return {
-      url: editors[contentType],
-      ref: editorRefs[contentType],
-    };
+    return { url: editors[contentType], ref: editorRefs[contentType] };
   };
 
   useEffect(() => {
     if (error) {
       setSelectedDocument(null);
       setVersionModalList(false);
-    } else if (!getLastVersion && isSuccess) {
-      setVersionModalList(true);
+    } else if (!getVersionData) {
+      // setVersionModalList(true);
     }
     if (
       document?.contentType === EDocumentTypes.board &&
@@ -121,13 +115,13 @@ const Editor = ({ setOpen }: IProps) => {
         "_blank"
       );
     }
-  }, [getLastVersion]);
+  }, [lastVersionIsSuccess]);
 
   useEffect(() => {
     if (data && isSuccess) {
       setVersionData(data);
     }
-  }, [data]);
+  }, [isSuccess]);
 
   useEffect(() => {
     if (keyInfo && isSuccessKey) {
@@ -147,25 +141,20 @@ const Editor = ({ setOpen }: IProps) => {
     setPublicKey(null);
     setSelectedVersion(null);
     setChatDrawer(false);
+    setEditorModal(false);
+    setVersionModalList(false);
   };
 
   if (error || keyError) {
-    return (
-      <div className="main w-full h-full text-center flex items-center justify-center">
-        <Error
-          retry={() => {
-            return setEditorModal(false);
-          }}
-          error="باز کردن سند با خطا مواجه شد."
-        />
-      </div>
-    );
+    toast.warn("باز کردن سند با خطا مواجه شد.");
+    handleClose();
+    return null;
   }
 
   if (showKey && !decryptedContent && getVersionData?.content) {
     return (
       <EditorKey
-        isPending={isLoading || isLoadingKey}
+        isPending={isFetching || isLoadingKey}
         onDecryption={handleDecryption}
         setOpen={handleClose}
         encryptedContent={getVersionData?.content}
@@ -173,42 +162,39 @@ const Editor = ({ setOpen }: IProps) => {
     );
   }
 
+  if (versionModalList) {
+    return <VersionDialogView />;
+  }
+
   return (
-    <>
-      {!!versionModalList ? (
-        <VersionDialogView />
-      ) : (
-        <BlockDraft>
+    <EditorDialog
+      dialogHeader={getSelectedDocument?.name}
+      setOpen={handleClose}
+      editorRef={getEditorConfig().ref}
+    >
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {isFetching ? (
+        <div className="main w-full h-full text-center flex items-center justify-center">
+          <Spinner className="h-5 w-5 " color="deep-purple" />
+        </div>
+      ) : data && isSuccess ? (
+        <BlockDraft version={data}>
           <>
-            <EditorDialog
-              dialogHeader={getSelectedDocument?.name}
-              setOpen={handleClose}
+            <BlockDraftDialog
               editorRef={getEditorConfig().ref}
-            >
-              {isLoading ? (
-                <div className="main w-full h-full text-center flex items-center justify-center">
-                  <Spinner className="h-5 w-5 " color="deep-purple" />
-                </div>
-              ) : (
-                <>
-                  <BlockDraftDialog
-                    editorRef={getEditorConfig().ref}
-                    onClose={handleClose}
-                  />
-                  <EditorComponent
-                    version={data}
-                    getEditorConfig={getEditorConfig}
-                  />
-                  {editorMode === "preview" && data ? (
-                    <FloatingButtons version={data} className=" bottom-[5px] xs:bottom-[30px] " />
-                  ) : null}
-                </>
-              )}
-            </EditorDialog>
+              onClose={handleClose}
+            />
+            <EditorComponent version={data} getEditorConfig={getEditorConfig} />
+            {editorMode === "preview" ? (
+              <FloatingButtons
+                version={data}
+                className=" bottom-[5px] xs:bottom-[30px] "
+              />
+            ) : null}
           </>
         </BlockDraft>
-      )}
-    </>
+      ) : null}
+    </EditorDialog>
   );
 };
 

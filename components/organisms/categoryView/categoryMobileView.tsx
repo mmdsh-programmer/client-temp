@@ -3,12 +3,12 @@ import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import DocumentMenu from "@components/molecules/documentMenu";
 import EmptyList from "@components/molecules/emptyList";
 import { FaDateFromTimestamp } from "@utils/index";
-import { ICategoryView } from "../category/categoryChildren";
 import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
+import { ICategoryView } from "@interface/category.interface";
 
 const MobileView = ({
   isLoading,
@@ -16,7 +16,6 @@ const MobileView = ({
   hasNextPage,
   fetchNextPage,
   isFetchingNextPage,
-  isFetching,
   type,
 }: ICategoryView) => {
   const listLength = getCategoryList?.pages[0].total;
@@ -25,6 +24,7 @@ const MobileView = ({
       <div className="flex flex-col">
         <CategoryBreadCrumb />
       </div>
+       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

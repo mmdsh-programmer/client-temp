@@ -1,20 +1,19 @@
+import React, { useState } from "react";
 import {
   Checkbox,
   DialogBody,
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
-
 import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import { onDatePickerChangePayload } from "zaman/dist/types";
-import { repoAtom } from "@atom/repository";
+import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreatePublishLink from "@hooks/publish/useCreatePublishLink";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 interface IData {
   expireTime: number;
@@ -22,6 +21,7 @@ interface IData {
 }
 
 const CreateRepoPublishLink = () => {
+  const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
   const getRepo = useRecoilValue(repoAtom);
   const [hasPassword, setHasPassword] = useState(false);
   const createPublishLink = useCreatePublishLink();
@@ -59,6 +59,7 @@ const CreateRepoPublishLink = () => {
       expireTime: data.expireTime,
       password: hasPassword ? data.password : undefined,
       callBack: () => {
+        setRepositoryAtomId(getRepo.id);
         handleReset();
         toast.success(" انتشار مخزن با موفقيت انجام شد.");
       },
@@ -85,9 +86,7 @@ const CreateRepoPublishLink = () => {
               onChange={() => {
                 setHasPassword(!hasPassword);
               }}
-              containerProps={{
-                className: "-mr-3",
-              }}
+              containerProps={{className: "-mr-3",}}
             />
             {hasPassword && (
               <>

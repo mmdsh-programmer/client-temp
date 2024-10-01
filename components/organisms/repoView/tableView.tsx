@@ -7,7 +7,7 @@ import TableCell from "@components/molecules/tableCell";
 import RepoMenu from "@components/molecules/repoMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import RenderIf from "@components/atoms/renderIf";
-import { IRepoView } from "../repoList";
+import { IRepoView } from "@interface/repo.interface";
 
 const TableView = ({
   isLoading,
@@ -22,8 +22,9 @@ const TableView = ({
 
   return (
     <div
-      className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+      className="p-5 flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small"
     >
+      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading || isFetching ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
@@ -33,21 +34,15 @@ const TableView = ({
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
-                {
-                  key: "name",
+                {key: "name",
                   value: "نام مخزن",
-                  isSorted: true,
-                },
-                {
-                  key: "createDate",
+                  isSorted: true,},
+                {key: "createDate",
                   value: "تاریخ ایجاد",
-                  isSorted: true,
-                },
-                {
-                  key: "action",
+                  isSorted: true,},
+                {key: "action",
                   value: "عملیات",
-                  className: "flex justify-end ml-4 ",
-                },
+                  className: "flex justify-end ml-4 ",},
               ]}
             />
             <tbody>
@@ -63,12 +58,8 @@ const TableView = ({
                       }
                       tableCell={[
                         { data: repo.name },
-                        {
-                          data: FaDateFromTimestamp(+new Date(repo.createDate)),
-                        },
-                        {
-                          data: <RepoMenu repo={repo} />,
-                        },
+                        {data: FaDateFromTimestamp(+new Date(repo.createDate)),},
+                        {data: <RepoMenu repo={repo} />,},
                       ]}
                     />
                   );

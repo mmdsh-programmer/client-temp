@@ -27,7 +27,7 @@ export const AddIcon = (props: IProps) => {
 };
 
 export const AddImageIcon = (props: IProps) => {
-  const { className, fill } = props;
+  const { className } = props;
   return (
     <svg
       className={className}
@@ -146,7 +146,7 @@ export const ArchiveIcon = (props: IProps) => {
 };
 
 export const ArrowDownIcon = (props: IProps) => {
-  const { className, stroke } = props;
+  const { className } = props;
   return (
     <svg
       className={className}
@@ -1744,6 +1744,61 @@ export const LastVersionIcon = (props: IProps) => {
   );
 };
 
+export const LeaveRepoIcon = (props: IProps) => {
+  const { className, stroke } = props;
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10.8333 17.5H4.375C3.33917 17.5 2.5 16.6608 2.5 15.625V6.78333C2.5 6.53 2.55167 6.27917 2.65083 6.04667L3.68 3.63833C3.97583 2.94833 4.65333 2.5 5.40417 2.5H14.595C15.3458 2.5 16.0242 2.94833 16.3192 3.63833L17.3483 6.04667C17.4483 6.28 17.5 6.53 17.5 6.78333V10"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.8359 13.3333L17.5033 15.0007L15.8359 16.668"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.5021 15.001H12.5"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.9987 2.5V6.6625"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.4908 6.66667H2.5"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 14.1667H6.66667"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
 export const LikeIcon = (props: IProps) => {
   const { className } = props;
   return (
@@ -1968,47 +2023,89 @@ export const PublishIcon = (props: IProps) => {
   return (
     <svg
       className={className}
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M13 21H5.25C4.007 21 3 19.993 3 18.75V8.14C3 7.836 3.062 7.535 3.181 7.256L4.416 4.366C4.771 3.538 5.584 3 6.485 3H17.514C18.415 3 19.229 3.538 19.583 4.366L20.818 7.256C20.938 7.536 21 7.836 21 8.14V12"
+        d="M11.6667 16.6667H4.27083C3.2925 16.6667 2.5 15.8742 2.5 14.8958V6.54583C2.5 6.30667 2.54833 6.06917 2.6425 5.85L3.615 3.575C3.89333 2.92333 4.53417 2.5 5.24333 2.5H13.9242C14.6333 2.5 15.2733 2.92333 15.5525 3.575L16.525 5.85C16.6183 6.07 16.6667 6.30667 16.6667 6.54583V10"
         stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M19.0039 16L21.0047 18.0008L19.0039 20.0017"
+        d="M9.58464 2.5V6.2"
         stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M21.0025 18.0012H15"
+        d="M16.6302 6.19999H2.53516"
         stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M12 3V7.995"
+        d="M14.1667 17.5C11.8658 17.5 10 15.6342 10 13.3334C10 11.0325 11.8658 9.16669 14.1667 9.16669C16.4683 9.16669 18.3333 11.0325 18.3333 13.3334C18.3333 15.6342 16.4683 17.5 14.1667 17.5"
         stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M20.989 8H3"
+        d="M14.1667 11.4817V12.1017"
         stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M6 17H8"
+        d="M14.1667 14.565V15.185"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.5663 12.4075L13.103 12.7133"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.2428 13.9533L15.7703 14.2592"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.5663 14.2592L13.103 13.9533"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.2428 12.7133L15.7703 12.4075"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.1686 12.0983C14.8511 12.0983 15.4036 12.6517 15.4036 13.3333C15.4036 14.015 14.8511 14.5683 14.1686 14.5683C13.4861 14.5683 12.9336 14.0158 12.9336 13.3333C12.9336 12.6508 13.4861 12.0983 14.1686 12.0983"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5 13.3334H6.66667"
         stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
@@ -2741,7 +2838,7 @@ export const KeyIcon = (props: IProps) => {
       <path
         fill="currentColor;"
         d="M21 18h-6v-3h-1.7c-1.1 2.4-3.6 4-6.3 4c-3.9 0-7-3.1-7-7s3.1-7 7-7c2.7 0 5.2 1.6 6.3 4H24v6h-3zm-4-2h2v-3h3v-2H11.9l-.2-.7C11 8.3 9.1 7 7 7c-2.8 0-5 2.2-5 5s2.2 5 5 5c2.1 0 4-1.3 4.7-3.3l.2-.7H17zM7 15c-1.7 0-3-1.3-3-3s1.3-3 3-3s3 1.3 3 3s-1.3 3-3 3m0-4c-.6 0-1 .4-1 1s.4 1 1 1s1-.4 1-1s-.4-1-1-1"
-      ></path>
+      />
     </svg>
   );
 };

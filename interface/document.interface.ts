@@ -1,5 +1,5 @@
 import { EDocumentTypes } from "./enums";
-import { IVersion } from "./version.interface";
+import { IVersion, IVersionMetadata } from "./version.interface";
 
 export interface IDocumentList {
   contentType: EDocumentTypes;
@@ -8,6 +8,7 @@ export interface IDocumentList {
   deletedAt: string | null;
   description: string;
   id: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata: any;
   tags: number[];
   title: string;
@@ -140,13 +141,6 @@ export interface IDocumentMetadata {
   publishExpireTime: number | null;
   versions?: IVersionMetadata;
   publicKeyId?: string;
-}
-
-export interface IVersionMetadata {
-  list: IVersion[];
-  offset: number;
-  size: number;
-  total: number;
 }
 
 export interface IWhiteListItem {

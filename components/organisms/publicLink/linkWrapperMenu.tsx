@@ -1,30 +1,31 @@
 import React from "react";
 import { IRoles } from "@interface/users.interface";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { DeleteIcon } from "@components/atoms/icons";
 import { Button, Spinner } from "@material-tailwind/react";
 import useDeletePublicLink from "@hooks/public/useDeletePublicLink";
 import { toast } from "react-toastify";
+import { IRepo } from "@interface/repo.interface";
 
 interface IProps {
   role: IRoles;
 }
 
 const LinkWrapperMenu = ({ role }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const deletePublicLinkHook = useDeletePublicLink();
 
   const handleRemovePublicLink = () => {
     if (!getRepo) return;
 
-    deletePublicLinkHook.mutate({
-      repoId: getRepo?.id,
+    deletePublicLinkHook.mutate({repoId: getRepo?.id,
       roleId: role.id,
-      callBack: () => {
+      callBack: (name?: string) => {
+        setRepo({ ...(getRepo as IRepo), [`${name}PublicLink`]: null });
+
         toast.success("لینک مورد نظر با موفقیت حذف شد");
-      },
-    });
+      },});
   };
 
   return (
@@ -35,9 +36,7 @@ const LinkWrapperMenu = ({ role }: IProps) => {
       {deletePublicLinkHook.isPending ? (
         <Spinner color="deep-purple" />
       ) : (
-        <>
-          <DeleteIcon className="h-5 w-5" />
-        </>
+        <DeleteIcon className="h-5 w-5" />
       )}
     </Button>
   );

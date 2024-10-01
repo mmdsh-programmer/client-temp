@@ -69,7 +69,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/molecules/repoMenu/repoMenuList.tsط"  ],
   "exclude": [
     "node_modules"
   ]

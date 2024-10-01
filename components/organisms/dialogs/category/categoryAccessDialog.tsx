@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
 import { DialogBody, Typography } from "@material-tailwind/react";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
 import LoadingButton from "@components/molecules/loadingButton";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import useBlockDocument from "@hooks/document/useBlockDocument";
-import DocumentBlockList from "@components/organisms/document/documentBlockList";
+import { categoryAtom } from "@atom/category";
+import useBlockCategory from "@hooks/category/useBlockCategory";
+import CategoryBlockList from "@components/organisms/category/categoryBlocklist";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -17,28 +17,20 @@ interface IProps {
 
 const CategoryAccessDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const category = useRecoilValue(categoryAtom);
 
   const [value, setValue] = useState("");
 
-  const repoId = getRepo!.id;
-  const {
-    data: getRepoUsers,
-    isFetching: isFetchingRepoUsers,
-    isLoading: isLoadingRepoUsers,
-  } = useGetRepoUsers(repoId, 20, true);
+  const {data: getRepoUsers} = useGetRepoUsers(getRepo!.id, 20, true);
 
-  const blockDocument = useBlockDocument();
+  const blockCatgory = useBlockCategory();
 
   const filteredUsers = getRepoUsers?.pages[0].list
     .filter((item) => {
       return item.userRole !== "owner";
     })
     .map((user) => {
-      return {
-        label: user.userInfo.userName,
-        value: user.userInfo.userName,
-      };
+      return { label: user.userInfo.userName, value: user.userInfo.userName };
     });
 
   const handleClose = () => {
@@ -46,22 +38,22 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
   };
 
   const handleBlock = () => {
-    if (!getRepo || !document) return;
+    if (!getRepo || !category) return;
     if (!value) return;
-    blockDocument.mutate({
+    blockCatgory.mutate({
       repoId: getRepo.id,
-      documentId: document.id,
+      categoryId: category.id,
       username: value,
       type: "block",
       callBack: () => {
-        toast.success(`کاربر ${value} با موفقیت از سند بلاک شد.`);
+        toast.success(`کاربر ${value} با موفقیت از دسته‌بندی بلاک شد.`);
       },
     });
   };
 
   return (
     <InfoDialog
-      dialogHeader="محدودیت دسترسی در پنل"
+      dialogHeader="محدودیت دسترسی روی دسته‌بندی"
       setOpen={handleClose}
       className="min-h-[350px]"
     >
@@ -71,13 +63,15 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
             <div className="flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
-                handleChange={(val) => setValue(val)}
+                handleChange={(val) => {
+                  return setValue(val);
+                }}
               />
             </div>
             <LoadingButton
               className="!h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
               onClick={handleBlock}
-              loading={blockDocument.isPending}
+              loading={blockCatgory.isPending}
               disabled={!value}
             >
               <Typography className="text__label__button text-white">
@@ -85,7 +79,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
               </Typography>
             </LoadingButton>
           </div>
-          <DocumentBlockList />
+          <CategoryBlockList />
         </form>
       </DialogBody>
     </InfoDialog>

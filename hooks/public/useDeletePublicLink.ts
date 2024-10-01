@@ -1,4 +1,5 @@
 import { deletePublicLinkAction } from "@actions/public";
+import { IRoles } from "@interface/users.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -9,18 +10,27 @@ const useDeletePublicLink = () => {
     mutationFn: async (values: {
       repoId: number;
       roleId: number;
-      callBack?: () => void;
+      callBack?: (roleName?: string) => void;
     }) => {
       const { repoId, roleId } = values;
       const response = await deletePublicLinkAction(repoId, roleId);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`getRepo-${repoId}`],
+      const { callBack, repoId, roleId } = values;
+      const allRoles = queryClient.getQueryData(["getRoles"]) as IRoles[];
+
+      const findRole = allRoles.find((role) => {
+        return role.id === roleId;
       });
-      callBack?.();
+
+      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
+
+      callBack?.(findRole?.name);
     },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");

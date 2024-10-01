@@ -6,15 +6,12 @@ import EmptyList from "@components/molecules/emptyList";
 import VersionMenu from "@components/molecules/versionMenu";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
-import { IVersionView } from "../version/versionList";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { versionModalListAtom } from "@atom/version";
-import { IVersion } from "@interface/version.interface";
-import {
-  editorDataAtom,
+import { IVersion, IVersionView } from "@interface/version.interface";
+import {editorDataAtom,
   editorModalAtom,
-  editorModeAtom,
-} from "@atom/editor";
+  editorModeAtom,} from "@atom/editor";
 import { selectedDocumentAtom } from "@atom/document";
 import { EDocumentTypes } from "@interface/enums";
 
@@ -32,7 +29,7 @@ const VersionMobileView = ({
     useRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+  // const setEditorModal = useSetRecoilState(editorModalAtom);
   const listLength = getVersionList?.[0].length;
 
   const handleOpenEditor = (value: IVersion) => {
@@ -42,7 +39,7 @@ const VersionMobileView = ({
     setEditorData(value);
     setEditorMode("preview");
     setVersionModalList(false);
-    setEditorModal(true);
+    // setEditorModal(true);
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {
@@ -54,17 +51,19 @@ const VersionMobileView = ({
 
   return (
     <div className="px-0 xs:px-4 flex-grow flex-shrink-0">
+      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
         <div
-          className={`flex flex-col gap-3 rounded-lg`}
+          className="flex flex-col gap-3 rounded-lg"
         >
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
+                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                 <div
                   className=""
                   key={version.id}

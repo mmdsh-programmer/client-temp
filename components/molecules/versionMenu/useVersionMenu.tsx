@@ -1,0 +1,191 @@
+import React from "react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { compareVersionAtom, selectedVersionAtom } from "@atom/version";
+import { IVersion } from "@interface/version.interface";
+import {
+  ComparisionIcon,
+  ConfirmationVersionIcon,
+  CopyIcon,
+  DeleteIcon,
+  DuplicateIcon,
+  EditIcon,
+  GlobeIcon,
+  LastVersionIcon,
+  ShareIcon,
+} from "@components/atoms/icons";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import copy from "copy-to-clipboard";
+import { toast } from "react-toastify";
+
+interface MenuItem {
+  text: string;
+  icon?: JSX.Element;
+  onClick: () => void;
+}
+
+type ModalType = {
+  compare: boolean;
+  delete: boolean;
+  edit: boolean;
+  clone: boolean;
+  confirm: boolean;
+  cancelConfirm: boolean;
+  public: boolean;
+  cancelPublic: boolean;
+  lastVersion: boolean;
+};
+
+const useVersionMenuList = (
+  version: IVersion | undefined,
+  lastVersion: IVersion | undefined,
+  toggleModal: (modalName: keyof ModalType, value: boolean) => void
+): MenuItem[] => {
+  const getRepo = useRecoilValue(repoAtom);
+  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const [getVersion, setVersion] = useRecoilState(selectedVersionAtom);
+  const [compareVersion, setCompareVersion] =
+    useRecoilState(compareVersionAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
+
+  const adminOrOwner =
+    getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+
+  const defaultOptions = (otherOption: MenuItem[]) => {
+    return [
+      {text: "ایجاد نسخه جدید از نسخه",
+        icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
+        onClick: () => {
+          toggleModal("clone", true);
+          if (version) {
+            setVersion(version);
+          }
+        },},
+      {text: "ویرایش",
+        icon: <EditIcon className="h-4 w-4" />,
+        onClick: () => {
+          toggleModal("edit", true);
+          if (version) {
+            setVersion(version);
+            setEditorMode("edit");
+            setEditorModal(true);
+          }
+        },},
+      {text: compareVersion?.version ? "مقایسه با نسخه مورد نظر" : "مقایسه",
+        icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active" />,
+        onClick: () => {
+          if (getRepo && getDocument && version && compareVersion?.version) {
+            setCompareVersion({...compareVersion,
+              compare: { data: version, repo: getRepo, document: getDocument },});
+            toggleModal("compare", true);
+          } else if (getRepo && getDocument && version) {
+            setCompareVersion({version: { data: version, repo: getRepo, document: getDocument },
+              compare: null,});
+          }
+        },},
+      ...otherOption,
+      {text: "کپی هش فایل",
+        icon: <CopyIcon className="h-4 w-4 fill-icon-active stroke-[1.5]" />,
+        onClick: () => {
+          const hash = version?.hash || getVersion?.hash;
+          if (hash) {
+            copy(hash);
+            toast.success("هش مربوط به پیش نویس کپی شد.");
+          }
+        },},
+      {text: "کپی آدرس اشتراک‌ گذاری",
+        icon: <ShareIcon className="h-4 w-4" />,
+        onClick: () => {
+          const selectedVersion = version || getVersion;
+          if (selectedVersion) {
+            copy(
+              `${window.location.href}&versionId=${selectedVersion.id}&versionState=${selectedVersion.state}`
+            );
+            toast.success("آدرس کپی شد.");
+          }
+        },},
+      {text: version?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه",
+        icon: <DeleteIcon className="h-4 w-4" />,
+        onClick: () => {
+          toggleModal("delete", true);
+          if (version) {
+            setVersion(version);
+          }
+        },},
+    ];
+  };
+
+  const draftVersionOption = [
+    {text: (() => {
+        if (version?.status === "editing") {
+          return adminOrOwner
+            ? "تایید نسخه"
+            : "ارسال درخواست تایید نسخه به مدیر";
+        }
+        return adminOrOwner ? "عدم تایید نسخه" : "لغوارسال درخواست تایید نسخه";
+      })(),
+      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
+      onClick: () => {
+        if (version?.status === "editing" && adminOrOwner) {
+          setVersion(version);
+          toggleModal("confirm", true);
+        } else if (version?.status === "pending" && adminOrOwner) {
+          setVersion(version);
+          toggleModal("cancelConfirm", true);
+        }
+      },},
+  ];
+
+  const privateVersionOption = [
+    {text: (() => {
+        if (version?.status === "private" && adminOrOwner) {
+          return "ارسال درخواست عمومی شدن";
+        }
+        return "لغو درخواست عمومی شدن نسخه";
+      })(),
+      icon: <GlobeIcon className="h-4 w-4" />,
+      onClick: () => {
+        if (version?.status === "private" && adminOrOwner) {
+          toggleModal("public", true);
+        } else if (version?.status === "pending" && adminOrOwner) {
+          toggleModal("cancelPublic", true);
+        }
+      },},
+    version?.id !== lastVersion?.id
+      ? {text: "انتخاب به عنوان آخرین نسخه",
+          icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+          onClick: () => {
+            toggleModal("lastVersion", true);
+          },}
+      : null,
+  ].filter(Boolean) as MenuItem[];
+
+  const publicVersionOption = [
+    version?.id !== lastVersion?.id
+      ? {text: "انتخاب به عنوان آخرین نسخه",
+          icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+          onClick: () => {
+            toggleModal("lastVersion", true);
+          },}
+      : null,
+  ].filter(Boolean) as MenuItem[];
+
+  if (
+    version?.status === "editing" ||
+    (version?.status === "pending" && version?.state === "draft")
+  ) {
+    return defaultOptions(draftVersionOption) as MenuItem[];
+  }
+  if (
+    version?.status === "private" ||
+    (version?.status === "pending" && version?.state === "version")
+  ) {
+    return defaultOptions(privateVersionOption) as MenuItem[];
+  }
+
+  return defaultOptions(publicVersionOption) as MenuItem[];
+};
+
+export default useVersionMenuList;

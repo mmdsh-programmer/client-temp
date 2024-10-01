@@ -4,17 +4,13 @@ import { IVersion } from "@interface/version.interface";
 import { atom } from "recoil";
 import { logEffect } from "@utils/index";
 
-export const selectedVersionAtom = atom<IVersion | null>({
-  key: "selectedVersionAtom",
+export const selectedVersionAtom = atom<IVersion | null>({key: "selectedVersionAtom",
   default: null,
-  effects: [logEffect("selectedVersionAtom")],
-});
+  effects: [logEffect("selectedVersionAtom")],});
 
-export const versionListAtom = atom<boolean | null>({
-  key: "versionListAtom",
+export const versionListAtom = atom<boolean | null>({key: "versionListAtom",
   default: null,
-  effects: [logEffect("versionListAtom")],
-});
+  effects: [logEffect("versionListAtom")],});
 
 export const compareVersionAtom = atom<{
   version: {
@@ -27,32 +23,14 @@ export const compareVersionAtom = atom<{
     document: IDocumentMetadata;
     repo: IRepo;
   } | null;
-} | null>({
-  key: "compareVersionAtom",
+} | null>({key: "compareVersionAtom",
   default: null,
-  effects: [logEffect("compareVersionAtom")],
-});
+  effects: [logEffect("compareVersionAtom")],});
 
-export const versionModalListAtom = atom<boolean | null>({
-  key: "versionModalList",
+export const versionModalListAtom = atom<boolean | null>({key: "versionModalList",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("versionModalList", newValue, oldValue);
-      });
-    },
-  ],
-});
+  effects: [logEffect("versionModalList")],});
 
-export const versionDrawerAtom = atom<boolean | null>({
-  key: "versionDrawerAtom",
+export const versionDrawerAtom = atom<boolean | null>({key: "versionDrawerAtom",
   default: null,
-  effects: [
-    ({ onSet }) => {
-      onSet((newValue, oldValue) => {
-        logger("versionDrawerAtom", newValue, oldValue);
-      });
-    },
-  ],
-});
+  effects: [logEffect("versionDrawerAtom")],});

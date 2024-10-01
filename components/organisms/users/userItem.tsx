@@ -20,8 +20,7 @@ interface IProps {
 
 const UserItem = ({ user }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
   const transferOwnership = useTranferOwnershipRepository();
@@ -31,37 +30,34 @@ const UserItem = ({ user }: IProps) => {
       return role.name !== ERoles.owner && role.name !== ERoles.default;
     })
     .map((item) => {
-      return {
-        label: translateRoles(item.name),
-        value: item.name,
-      };
+      return { label: translateRoles(item.name), value: item.name };
     }) as {
     label: string;
     value: ERoles | string;
     className?: string;
   }[];
 
-  const userOptions = rolesOption.concat([
-    { label: "انتقال مالکیت", value: "transferOwnership" },
-    { label: "حذف کاربر", value: "delete", className: "!text-error" },
-  ]);
+  const userOptions = rolesOption.concat(
+    getRepo?.roleName === ERoles.owner
+      ? [
+          { label: "انتقال مالکیت", value: "transferOwnership" },
+          { label: "حذف کاربر", value: "delete", className: "!text-error" },
+        ]
+      : [{ label: "حذف کاربر", value: "delete", className: "!text-error" }]
+  );
 
   const handleChange = (value: string | ERoles) => {
     if (!getRepo) return;
     if (value === "delete") {
-      deleteUser.mutate({
-        repoId: getRepo.id,
+      deleteUser.mutate({repoId: getRepo.id,
         userName: user.userInfo.userName,
         callBack: () => {
           toast.success(`کاربر ${user.userInfo.userName} با موفقیت حذف شد.`);
-        },
-      });
+        },});
     } else if (value === "transferOwnership") {
-      transferOwnership.mutate({
-        repoId: getRepo.id,
+      transferOwnership.mutate({repoId: getRepo.id,
         userName: user.userInfo.userName,
-        callBack: () => {},
-      });
+        callBack: () => {},});
     } else {
       editRole.mutate({
         repoId: getRepo.id,
@@ -69,7 +65,7 @@ const UserItem = ({ user }: IProps) => {
         roleName: value,
         callBack: () => {
           toast.success(
-            `نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`,
+            `نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`
           );
         },
       });
@@ -95,6 +91,7 @@ const UserItem = ({ user }: IProps) => {
       <Typography className="title_t3 flex-grow text-primary ">
         {user.userInfo.name}
       </Typography>
+      {/* eslint-disable-next-line no-nested-ternary */}
       {user.userRole === ERoles.owner ? (
         <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
           <Typography className="select_option__text text-primary">

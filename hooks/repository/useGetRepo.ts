@@ -6,25 +6,25 @@ const useGetRepo = (
   repoId: number | null,
   setRepo: (repo: IRepo) => void,
   setRepositoryId: (repoId: null | number) => void,
+  enabled?: boolean
 ) => {
   return useQuery({
     queryKey: [`getRepo-${repoId}`],
     queryFn: async ({ signal }) => {
       const response = await getRepositoryAction(repoId);
-      console.log("---------------- get repo ----------------", response)
       if (response) {
         setRepo(response);
         setRepositoryId(null);
         window.localStorage.setItem(
           "CLASOR:SELECTED_REPO",
-          JSON.stringify(response),
+          JSON.stringify(response)
         );
+        return response;
       }
-      return response;
     },
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId,
+    enabled: !!repoId && !!enabled,
   });
 };
 

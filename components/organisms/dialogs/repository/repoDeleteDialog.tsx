@@ -21,10 +21,10 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
+const RepoDeleteDialog = ({repo, setOpen}: IProps) => {
   const router = useRouter();
   const setRepo = useSetRecoilState(repoAtom);
-  const { isPending, mutate } = useDeleteRepo();
+  const {isPending, mutate} = useDeleteRepo();
 
   const {
     register,
@@ -32,9 +32,7 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({
-    resolver: yupResolver(repoDeleteSchema),
-  });
+  } = useForm<IForm>({resolver: yupResolver(repoDeleteSchema),});
 
   const handleClose = () => {
     setOpen(false);
@@ -44,18 +42,16 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
 
   const onSubmit = async () => {
     if (!repo) return;
-    mutate({
-      repoId: repo.id,
+    mutate({repoId: repo.id,
       callBack: () => {
-        localStorage.removeItem("CLASOR:SELECTED_REPO");
+        setRepo(null);
+        router.push("dashboard");
         window.setTimeout(() => {
-          setRepo(null);
-          router.push("dashboard");
+          localStorage.removeItem("CLASOR:SELECTED_REPO");
         }, 100);
         toast.success("مخزن با موفقیت حذف شد.");
         handleClose();
-      },
-    });
+      },});
   };
 
   return (
@@ -64,7 +60,7 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       dialogHeader="حذف مخزن"
       setOpen={handleClose}
-      className=""
+      className="!-mb-[50vh] xs:!mb-0"
     >
       <form className="flex flex-col gap-5">
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
@@ -84,9 +80,7 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
           </Typography>
           <FormInput
             placeholder="عنوان"
-            register={{
-              ...register("name"),
-            }}
+            register={{...register("name"),}}
           />
           {errors.name && (
             <Typography className="warning_text">

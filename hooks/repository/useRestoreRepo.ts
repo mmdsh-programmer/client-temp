@@ -12,10 +12,9 @@ const useRestoreRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`, `myRepoList-true`],
-      });
+      const { callBack } = values;
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       callBack?.();
     },
     onError: (error) => {

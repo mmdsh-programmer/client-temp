@@ -21,7 +21,7 @@ const useCreateCategory = () => {
         parentId,
         name,
         description,
-        order,
+        order
       );
       return response as ICategory;
     },

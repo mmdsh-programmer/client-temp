@@ -13,28 +13,38 @@ const RepoArchiveDialog = ({ repo, setOpen }: IProps) => {
   const { isPending, mutate } = useArchiveRepo();
 
   const handleClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
   const handleSubmit = async () => {
     if (!repo) return;
-    mutate({
-      repoId: repo.id,
+    mutate({repoId: repo.id,
       callBack: () => {
         toast.success("مخزن با موفقیت بایگانی شد.");
         handleClose();
-      },
-    });
+      },});
   };
 
   return (
     <DeleteDialog
       isPending={isPending}
-      dialogHeader={"آرشیو مخزن"}
+      dialogHeader="آرشیو مخزن"
       onSubmit={handleSubmit}
       setOpen={handleClose}
       className=""
+      isArchive
     >
-      {repo?.name}
+      <form className="flex flex-col gap-5">
+        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+          آیا از آرشیو"
+          <span
+            title={repo?.name}
+            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          >
+            {repo?.name}
+          </span>
+          " اطمینان دارید؟
+        </div>
+      </form>
     </DeleteDialog>
   );
 };

@@ -1,3 +1,10 @@
+import { EEmptyList } from "@components/molecules/emptyList";
+import {FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult,} from "@tanstack/react-query";
+import { IListResponse } from "./repo.interface";
+import { IDocumentMetadata } from "./document.interface";
+
 export interface ICategory {
   id: number;
   name: string;
@@ -38,4 +45,29 @@ export interface ICategoryMetadata {
   active: boolean;
   isTemplate: boolean;
   userGroupHash: string | null;
+}
+
+export interface ICategoryView {
+  isLoading: boolean;
+  getCategoryList:
+    | InfiniteData<
+        IListResponse<ICategoryMetadata | IDocumentMetadata>,
+        unknown
+      >
+    | undefined;
+  hasNextPage: boolean;
+  fetchNextPage: (
+    options?: FetchNextPageOptions,
+  ) => Promise<
+    InfiniteQueryObserverResult<
+      InfiniteData<
+        IListResponse<ICategoryMetadata | IDocumentMetadata>,
+        unknown
+      >,
+      Error
+    >
+  >;
+  isFetchingNextPage: boolean;
+  isFetching: boolean;
+  type: EEmptyList;
 }

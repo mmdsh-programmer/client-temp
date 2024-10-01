@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
 

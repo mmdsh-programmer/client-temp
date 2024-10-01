@@ -59,7 +59,7 @@
     ],
     "object-curly-newline": [
       "error",
-      { "minProperties": 2 }
+      { "minProperties": 5 }
     ],
     "max-classes-per-file": "off",
     "react/jsx-props-no-spreading": "off",
@@ -87,7 +87,7 @@
     "unicorn/no-null": "off",
     "unicorn/explicit-length-check": "off",
     "unicorn/filename-case": [
-      "warning",
+      1,
       {
         "case": "camelCase"
       }

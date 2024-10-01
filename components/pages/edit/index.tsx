@@ -2,48 +2,30 @@
 
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { repoAtom, repositoryIdAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import useGetRepo from "@hooks/repository/useGetRepo";
+import { repoAtom } from "@atom/repository";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetUser from "@hooks/auth/useGetUser";
 import EditorTab from "@components/organisms/editorTab";
-import Error from "@components/organisms/error";
 import { Spinner, Typography } from "@material-tailwind/react";
 
 const EditPage = () => {
-  const [repositoryAtomId, setRepositoryAtomId] = useRecoilState(repositoryIdAtom);
-  const setRepository = useSetRecoilState(repoAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const getRepo = useRecoilValue(repoAtom);
+  const [getSelectedDocument, setDocument] =
+    useRecoilState(selectedDocumentAtom);
 
   const searchParams = useSearchParams();
-  const repoId = searchParams.get("repoId");
   const documentId = searchParams.get("documentId");
 
   const { isFetching } = useGetUser();
 
   const {
-    error: repoError,
-    refetch,
-    isFetching: isFetchingRepo,
-  } = useGetRepo(
-    repositoryAtomId ? +repositoryAtomId : null,
-    setRepository,
-    setRepositoryAtomId
-  );
-
-  useEffect(() => {
-    if (repoId) {
-      setRepositoryAtomId(+repoId);
-    }
-  }, [repoId]);
-
-  const {
     data: getDocument,
-    isLoading: isLoadingDocument,
+    isFetching: isFetchingDocument,
     error,
-  } = useGetDocument(+repoId!, +documentId!, true);
+    isSuccess,
+  } = useGetDocument(getRepo!.id, +documentId!, true);
 
   useEffect(() => {
     if (getDocument) {
@@ -51,28 +33,17 @@ const EditPage = () => {
     }
   }, [getDocument]);
 
-  if (!repoId || !documentId) {
+  if (!documentId) {
     return (
-      <div className="get-user-info w-full h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-full h-screen flex items-center justify-center">
         <h1 className="font-bold ml-2">سند مورد نظر پیدا نشد</h1>
       </div>
     );
   }
 
-  if (repoError) {
+  if (isFetching || isFetchingDocument) {
     return (
-      <Error
-        error={
-          { message: "خطا در دریافت اطلاعات مخزن" }
-        }
-        retry={refetch}
-      />
-    );
-  }
-
-  if (isFetching || isFetchingRepo || isLoadingDocument) {
-    return (
-      <div className="get-user-info w-full h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-full h-screen flex items-center justify-center">
         <Typography className="font-bold ml-2">لطفا صبر کنید</Typography>
         <Spinner className="h-5 w-5 " color="deep-purple" />
       </div>
@@ -81,7 +52,7 @@ const EditPage = () => {
 
   if (error) {
     return (
-      <div className="get-user-info w-full h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-full h-screen flex items-center justify-center">
         <Typography className="font-bold ml-2 flex flex-col items-center">
           نسخه ای در سند مورد نظر پیدا نشد
         </Typography>
@@ -89,7 +60,11 @@ const EditPage = () => {
     );
   }
 
-  return <EditorTab />;
+  if (getSelectedDocument) {
+    return <EditorTab />;
+  }
+
+  return null;
 };
 
 export default EditPage;

@@ -1,44 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
-import { IVersionMetadata } from "@interface/document.interface";
 import { EEmptyList } from "@components/molecules/emptyList";
 import VersionTableView from "@components/organisms/versionView/versionTableView";
-import VersionMobileView from "@components/organisms/versionView/versionMobileView";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
-import VersionCreateDialog from "@components/organisms/dialogs/version/versionCreateDialog";
 import useGetVersionList from "@hooks/version/useGetVersionList";
-import {
-  FetchNextPageOptions,
-  InfiniteData,
-  InfiniteQueryObserverResult,
-} from "@tanstack/react-query";
-import { IVersion } from "@interface/version.interface";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
-
-export interface IVersionView {
-  isLoading: boolean;
-  getVersionList?: IVersion[][];
-  hasNextPage: boolean;
-  fetchNextPage: (
-    options?: FetchNextPageOptions
-  ) => Promise<
-    InfiniteQueryObserverResult<
-      InfiniteData<IVersionMetadata | undefined, unknown>,
-      Error
-    >
-  >;
-  isFetchingNextPage: boolean;
-  lastVersion?: IVersion;
-  type: EEmptyList;
-}
+import { IVersionView } from "@interface/version.interface";
+import VersionMobileView from "../versionView/versionMobileView";
+import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
+import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
+import VersionMenu from "@components/molecules/versionMenu";
 
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-
-  const [openCreateVersion, setOpenCreateVersion] = useState(false);
+  const openVersionActionDrawer = useRecoilValue(versionDrawerAtom);
+  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
 
   const {
     data: versionList,
@@ -88,7 +67,9 @@ const VersionList = () => {
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
-        onClick={() => setOpenCreateVersion(true)}
+        renderDialog={(close: () => void) => {
+          return <VersionCreateDialog close={close} />;
+        }}
       />
       <div className="hidden xs:block">
         <VersionTableView {...commonProps} />
@@ -96,8 +77,8 @@ const VersionList = () => {
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
         <VersionMobileView {...commonProps} />
       </div>
-      {openCreateVersion ? (
-        <VersionCreateDialog setOpen={setOpenCreateVersion} />
+      {openVersionActionDrawer && getSelectedVersion ? (
+        <VersionMenu version={getSelectedVersion} showDrawer />
       ) : null}
     </div>
   );

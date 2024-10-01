@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { repoAtom, repositoryIdAtom } from "atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
 import { Spinner } from "@material-tailwind/react";
@@ -26,12 +25,13 @@ const CheckRepoInfo: React.FC<IProps> = ({ children }: IProps) => {
   const searchParams = useSearchParams();
   const repoId = searchParams.get("repoId");
 
-  const setRepository = useSetRecoilState(repoAtom);
+  const [getRepo, setRepository] = useRecoilState(repoAtom);
 
-  const { error, refetch, isFetching } = useGetRepo(
+  const { error, refetch } = useGetRepo(
     repositoryAtomId ? +repositoryAtomId : null,
     setRepository,
-    setRepositoryAtomId
+    setRepositoryAtomId,
+    true
   );
 
   useEffect(() => {
@@ -62,14 +62,17 @@ const CheckRepoInfo: React.FC<IProps> = ({ children }: IProps) => {
     );
   }
 
-  if (loading || isFetching) {
+  if (loading) {
     return (
       <div className="w-full h-full flex-col flex justify-center items-center">
         <Spinner className="h-10 w-10" color="deep-purple" />
       </div>
     );
   }
-  return <>{children}</>;
+
+  if (getRepo) {
+    return <div>{children}</div>;
+  }
 };
 
 export default CheckRepoInfo;

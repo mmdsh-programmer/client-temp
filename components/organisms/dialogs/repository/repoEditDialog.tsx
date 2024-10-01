@@ -11,6 +11,8 @@ import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAtt
 import Files from "./repoCreateDialogStepper/files";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
   repo?: IRepo;
@@ -23,6 +25,7 @@ interface IForm {
 }
 
 const RepoEditDialog = ({ repo, setOpen }: IProps) => {
+  const setRepo = useSetRecoilState(repoAtom);
   const [openFileManagement, setOpenFileManagement] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | undefined>(
     repo?.imageFileHash
@@ -32,7 +35,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
   );
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
-  const { data: getUserInfo, isFetching } = useGetUser();
+  const { data: getUserInfo } = useGetUser();
   const { isPending, mutate } = useEditRepo();
   const attachImageToRepo = useAddImageToRepo();
 
@@ -60,95 +63,94 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!repo) return;
-    mutate({
-      repoId: repo.id,
-      name: dataForm.name,
-      description: dataForm.description,
-      callBack: () => {
-        toast.success("مخزن با موفقیت به روز رسانی شد.");
-        handleClose();
-      },
-    });
-    if (selectedFile) {
-      if (imageType === "default" && !defualtImage) return;
-      if (imageType === "custom" && !selectedFile) return;
-      attachImageToRepo.mutate({
+    if (
+      dataForm.name !== repo.name ||
+      dataForm.description !== repo.description
+    ) {
+      mutate({
         repoId: repo.id,
-        fileHash: selectedFile || defualtImage,
+        name: dataForm.name,
+        description: dataForm.description,
         callBack: () => {
-          toast.success("عکس با موفقیت به مخزن اضافه شد.");
+          setRepo({...(repo),
+            name: dataForm.name,
+            description: dataForm.description});
+          toast.success("مخزن با موفقیت به روز رسانی شد.");
           handleClose();
         },
       });
     }
+
+    if ((selectedFile && selectedFile !== repo.imageFileHash) || defualtImage) {
+      if (imageType === "default" && !defualtImage) return;
+      if (imageType === "custom" && !selectedFile) return;
+      attachImageToRepo.mutate({repoId: repo.id,
+        fileHash: selectedFile || defualtImage,
+        callBack: () => {
+          setRepo({...(repo),
+            imageFileHash: selectedFile || defualtImage || ""});
+          toast.success("عکس با موفقیت به مخزن اضافه شد.");
+          handleClose();
+        },});
+    }
   };
 
-  return (
-    <>
-      {openFileManagement && repo ? (
-        <Files
-          userGroupHash={repo.userGroupHash}
-          resourceId={repo.id}
-          type="public"
-          handleClose={() => {
-            setOpenFileManagement(false);
-          }}
-          setSelectedFile={setSelectedFile}
+  return openFileManagement && repo ? (
+    <Files
+      userGroupHash={repo.userGroupHash}
+      resourceId={repo.id}
+      type="public"
+      handleClose={() => {
+        setOpenFileManagement(false);
+      }}
+      setSelectedFile={setSelectedFile}
+    />
+  ) : (
+    <EditDialog
+      isPending={isPending || attachImageToRepo.isPending}
+      dialogHeader="ویرایش مخزن"
+      onSubmit={handleSubmit(onSubmit)}
+      setOpen={handleClose}
+      className="!h-screen xs:!h-[600px] max-w-full w-full m-0"
+    >
+      <form className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <Typography className="label">عنوان مخزن</Typography>
+          <FormInput
+            placeholder="عنوان"
+            register={{ ...register("name", { value: repo?.name }) }}
+          />
+          {errors.name && (
+            <Typography className="warning_text">
+              {errors.name?.message}
+            </Typography>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Typography className="label">توضیحات مخزن</Typography>
+          <TextareaAtom
+            placeholder="توضیحات"
+            register={{...register("description", { value: repo?.description }),}}
+          />
+          {errors.name && (
+            <Typography className="warning_text">
+              {errors.description?.message}
+            </Typography>
+          )}
+        </div>
+        <RepoAttachCustomImage
+          imageType={imageType}
+          setImageType={setImageType}
+          setOpenFileManagement={setOpenFileManagement}
+          onSelect={handleSelect}
+          imageSrc={
+            repo?.imageFileHash
+              ? `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${selectedFile}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`
+              : undefined
+          }
         />
-      ) : (
-        <EditDialog
-          isPending={isPending}
-          dialogHeader={"ویرایش مخزن"}
-          onSubmit={handleSubmit(onSubmit)}
-          setOpen={handleClose}
-          className="!h-screen xs:!h-[600px] max-w-full w-full m-0"
-        >
-          <form className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
-              <Typography className="label">عنوان مخزن</Typography>
-              <FormInput
-                placeholder="عنوان"
-                register={{
-                  ...register("name", {
-                    value: repo?.name,
-                  }),
-                }}
-              />
-              {errors.name && (
-                <Typography className="warning_text">
-                  {errors.name?.message}
-                </Typography>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography className="label">توضیحات مخزن</Typography>
-              <TextareaAtom
-                placeholder="توضیحات"
-                register={{
-                  ...register("description", { value: repo?.description }),
-                }}
-              />
-              {errors.name && (
-                <Typography className="warning_text">
-                  {errors.description?.message}
-                </Typography>
-              )}
-            </div>
-            <RepoAttachCustomImage
-              imageType={imageType}
-              setImageType={setImageType}
-              setOpenFileManagement={setOpenFileManagement}
-              onSelect={handleSelect}
-              imageSrc={
-                repo?.imageFileHash
-                  ? `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo?.imageFileHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`
-                  : undefined
-              }
-            />
-          </form>
-        </EditDialog>
-      )}
-    </>
+      </form>
+    </EditDialog>
   );
 };
 

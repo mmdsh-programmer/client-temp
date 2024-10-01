@@ -5,10 +5,10 @@ import CategoryBulk from "@components/molecules/categoryBulk";
 import CategoryList from "@components/organisms/category";
 import RepoInfo from "@components/organisms/repoInfo";
 import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
-import VersionList from "../version";
 import { bulkItemsAtom } from "@atom/bulk";
 import { useRecoilValue } from "recoil";
 import { versionListAtom } from "@atom/version";
+import VersionPage from "../version";
 
 const RepoPage = () => {
   const getShowVersionList = useRecoilValue(versionListAtom);
@@ -16,7 +16,7 @@ const RepoPage = () => {
   return (
     <div className="flex flex-col gap-4 xs:gap-6">
       {getShowVersionList ? (
-        <VersionList />
+        <VersionPage />
       ) : (
         <>
           <RepoInfo />

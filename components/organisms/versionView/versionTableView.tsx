@@ -8,10 +8,9 @@ import VersionMenu from "@components/molecules/versionMenu";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
 import { LastVersionIcon } from "@components/atoms/icons";
-import { IVersionView } from "../version/versionList";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { IVersion } from "@interface/version.interface";
+import { IVersion, IVersionView } from "@interface/version.interface";
 import { editorDataAtom, editorModalAtom, editorModeAtom} from "@atom/editor";
 import { EDocumentTypes } from "@interface/enums";
 import { selectedDocumentAtom } from "@atom/document";
@@ -42,7 +41,7 @@ const VersionTableView = ({
     setEditorMode("preview");
     setVersionModalList(false);
     setEditorModal(true);
-    setSelectedVersion(value)
+    setSelectedVersion(value);
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {
@@ -56,7 +55,7 @@ const VersionTableView = ({
     <div
       className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
     >
-      {/* eslint-disable-no-nested-ternary */}
+       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
@@ -66,33 +65,21 @@ const VersionTableView = ({
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
-                {
-                  key: "name",
-                  value: "نام نسخه",
-                },
-                {
-                  key: "creator",
+                {key: "name",
+                  value: "نام نسخه",},
+                {key: "creator",
                   value: "ایجاد کننده",
-                  className: "hidden md:table-cell",
-                },
-                {
-                  key: "createDate",
-                  value: "تاریخ ایجاد",
-                },
-                {
-                  key: "editDate",
+                  className: "hidden md:table-cell",},
+                {key: "createDate",
+                  value: "تاریخ ایجاد",},
+                {key: "editDate",
                   value: "تاریخ ویرایش",
-                  className: "hidden xl:table-cell",
-                },
-                {
-                  key: "status",
-                  value: "وضعیت",
-                },
-                {
-                  key: "action",
+                  className: "hidden xl:table-cell",},
+                {key: "status",
+                  value: "وضعیت",},
+                {key: "action",
                   value: "عملیات",
-                  className: "flex !justify-end ml-4 ",
-                },
+                  className: "flex !justify-end ml-4 ",},
               ]}
             />
             <tbody>
@@ -113,23 +100,16 @@ const VersionTableView = ({
                       }}
                       tableCell={[
                         { data: version.versionNumber },
-                        {
-                          data: version.creator?.name,
-                          className: "hidden md:table-cell",
-                        },
-                        {
-                          data: FaDateFromTimestamp(
+                        {data: version.creator?.name,
+                          className: "hidden md:table-cell",},
+                        {data: FaDateFromTimestamp(
                             +new Date(version.createDate),
-                          ),
-                        },
-                        {
-                          data: FaDateFromTimestamp(
+                          ),},
+                        {data: FaDateFromTimestamp(
                             +new Date(version.updateDate),
                           ),
-                          className: "hidden xl:table-cell",
-                        },
-                        {
-                          data: (
+                          className: "hidden xl:table-cell",},
+                        {data: (
                             <div className="flex items-center flex-wrap gap-2">
                               <div className="flex flex-wrap gap-1">
                                 <div
@@ -171,17 +151,15 @@ const VersionTableView = ({
                                 </>
                               </RenderIf>
                             </div>
-                          ),
-                        },
-                        {
-                          data: (
+                          ),},
+                        {data: (
                             <VersionMenu
                               version={version}
                               lastVersion={lastVersion}
+                              showDrawer={false}
                             />
                           ),
-                          className: "justify-end",
-                        },
+                          className: "justify-end",},
                       ]}
                     />
                   );

@@ -2,13 +2,13 @@ import React from "react";
 import CardView from "../repoView/cardView";
 import { EEmptyList } from "@components/molecules/emptyList";
 import { EListMode } from "@interface/enums";
-import { IRepoView } from ".";
 import MobileView from "../repoView/mobileView";
 import RenderIf from "@components/atoms/renderIf";
 import TableView from "../repoView/tableView";
 import { listModeAtom } from "@atom/app";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import { useRecoilValue } from "recoil";
+import { IRepoView } from "@interface/repo.interface";
 
 interface IProps {
   archived: boolean;
@@ -22,7 +22,6 @@ const MyRepoList = ({ archived }: IProps) => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
   } = useGetMyRepoList(20, archived, undefined, true);
 
   const commonProps: IRepoView = {

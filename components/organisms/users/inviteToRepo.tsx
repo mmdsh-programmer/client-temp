@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
+import {Spinner, Typography} from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import useAddUser from "@hooks/user/useAddUser";
@@ -13,6 +13,7 @@ import LoadingButton from "@components/molecules/loadingButton";
 import SelectAtom from "@components/molecules/select";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { userSchema } from "./validation.yup";
+import { IRoles } from "@interface/users.interface";
 
 interface IForm {
   username: string;
@@ -21,18 +22,16 @@ interface IForm {
 const InviteToRepo = () => {
   const getRepo = useRecoilValue(repoAtom);
   const [role, setRole] = useState<string>(ERoles.admin);
-  const { isPending, mutate } = useAddUser();
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const {isPending, mutate} = useAddUser();
+  const {data: getRoles, isFetching: isFetchingRoles} = useGetRoles();
 
   const rolesOption = getRoles
-    ?.filter((role) => {
-      return role.name !== ERoles.owner && role.name !== ERoles.default;
+    ?.filter((roleItem: IRoles) => {
+      return roleItem.name !== ERoles.owner && roleItem.name !== ERoles.default;
     })
     .map((item) => {
-      return {
-        label: translateRoles(item.name),
-        value: item.name,
-      };
+      return {label: translateRoles(item.name),
+        value: item.name,};
     });
 
   const {
@@ -41,9 +40,7 @@ const InviteToRepo = () => {
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({
-    resolver: yupResolver(userSchema),
-  });
+  } = useForm<IForm>({resolver: yupResolver(userSchema),});
 
   const handleReset = () => {
     clearErrors();
