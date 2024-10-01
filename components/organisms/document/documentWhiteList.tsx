@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { selectedDocumentAtom } from "@atom/document";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import useAddWhiteList from "@hooks/document/useAddWhiteList";
-import { IWhiteListItem } from "@interface/document.interface";
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { Button, Typography } from "@material-tailwind/react";
-import ImageComponent from "@components/atoms/image";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import { toast } from "react-toastify";
-import FormInput from "@components/atoms/input/formInput";
+import React, {
+ useEffect, useState 
+} from "react";
+import {
+ UserIcon, XIcon 
+} from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
+import FormInput from "@components/atoms/input/formInput";
 import { IUserList } from "../dialogs/document/documentAccessPublishingDialog";
+import { IWhiteListItem } from "@interface/document.interface";
+import ImageComponent from "@components/atoms/image";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useAddWhiteList from "@hooks/document/useAddWhiteList";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   whiteList?: IWhiteListItem[];
@@ -91,8 +98,7 @@ const DocumentWhiteList = ({
   }, []);
 
   return (
-    <>
-      <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5">
         <FormInput
           placeholder="نام کاربری را وارد کنید..."
           onKeyDown={handleSpaceClick}
@@ -144,7 +150,6 @@ const DocumentWhiteList = ({
           </div>
         </div>
       </div>
-    </>
   );
 };
 

@@ -1,7 +1,9 @@
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import { AddIcon } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 
 export interface IProps {
@@ -54,7 +56,8 @@ const HeaderListTemplate = ({
           </Button>
         </div>
         {renderList?.()}
-        {openCreateRepo ? renderDialog?.(() => setOpenCreateRepo(false)) : null}
+        {openCreateRepo ? renderDialog?.(() => 
+{return setOpenCreateRepo(false);}) : null}
       </div>
     </header>
   );

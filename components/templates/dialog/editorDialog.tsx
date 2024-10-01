@@ -1,8 +1,11 @@
-import React from "react";
-import { Dialog, DialogFooter, DialogBody, DialogHeader } from "@material-tailwind/react";
-import { IRemoteEditorRef } from "clasor-remote-editor";
+import {
+ Dialog, DialogBody, DialogFooter, DialogHeader 
+} from "@material-tailwind/react";
+
 import EditorFooter from "@components/organisms/editor/editorFooter";
 import EditorHeader from "@components/organisms/editor/editorHeader";
+import { IRemoteEditorRef } from "clasor-remote-editor";
+import React from "react";
 
 export interface IProps {
   children: React.ReactNode;

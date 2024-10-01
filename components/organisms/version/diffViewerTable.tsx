@@ -1,23 +1,20 @@
-import React from "react";
 import ReactDiffViewer, { DiffMethod } from "react-diff-viewer-continued";
+
+import React from "react";
+import { compareVersionAtom } from "atom/version";
 import { translateVersionStatus } from "utils";
 import { useRecoilValue } from "recoil";
-import { compareVersionAtom } from "atom/version";
 
 const newStyles = {
-  variables: {
-    light: {
+  variables: {light: {
       diffViewerTitleBackground: "#f7f7f7",
       diffViewerTitleColor: "#570df8",
       diffViewerTitleBorderColor: "#e8e8e8",
-    },
-  },
-  line: {
-    ".css-o1u8iu-content-text": {
+    },},
+  line: {".css-o1u8iu-content-text": {
       fontFamily: "yekan",
       fontSize: "14px",
-    },
-  },
+    },},
   titleBlock: {
     borderTop: "1px solid #e8e8e8",
     borderRight: "1px solid #e8e8e8",
@@ -29,7 +26,9 @@ declare interface IProps {
   newValue: string;
 }
 
-const DiffViewerTable = ({ oldValue, newValue }: IProps) => {
+const DiffViewerTable = ({
+ oldValue, newValue 
+}: IProps) => {
   const compareVersionValue = useRecoilValue(compareVersionAtom);
 
   return (

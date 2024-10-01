@@ -3,13 +3,17 @@ import {
  filterChildrenAtom,
  filterReportAtom
 } from "@atom/filter";
+import {
+ useRecoilValue, useSetRecoilState 
+} from "recoil";
 
 import CategoryFilter from "../categoryFilter";
 import { Radio } from "@material-tailwind/react";
 import RepoFilter from "../repoFilter";
-import { useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 const AdvancedFilter = () => {
+  const getRepo = useRecoilValue(repoAtom);
   const [type, setType] = useState<string>("");
   const setFilterChildren = useSetRecoilState(filterChildrenAtom);
   const setFilterReport = useSetRecoilState(filterReportAtom);
@@ -17,8 +21,8 @@ const AdvancedFilter = () => {
   const renderFilter = () => {
     if (type === "category") {
       return <CategoryFilter />;
-    } if (type === "repo") {
-      return <RepoFilter />;
+    } if (type === "repo" && getRepo) {
+      return <RepoFilter repoId={getRepo.id} />;
     } 
       return null;
     

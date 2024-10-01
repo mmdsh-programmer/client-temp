@@ -1,29 +1,30 @@
 import React, { useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import { EDocumentTypes } from "@interface/enums";
+import { IOption } from "../select";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
 import SelectBox from "@components/molecules/selectBox";
 import { Typography } from "@material-tailwind/react";
 import { filterReportAtom } from "@atom/filter";
-import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
+import {useSetRecoilState} from "recoil";
 
-const RepoFilter = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const repoId = getRepo?.id!;
-  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 30, true);
+const RepoFilter = ({ repoId }: { repoId: number }) => {
+
+  const { data: getTags } = useGetTags(repoId, 30, true);
 
   const [documentType, setDocumentType] = useState<EDocumentTypes[]>([]);
   const [tags, setTags] = useState<number[]>([]);
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
-  const [documentAddress, setDocumentAddress] = useState("");
   const setMainFilter = useSetRecoilState(filterReportAtom);
 
   const tagOptions = getTags?.pages[0].list.map((tag) => {
-    return { label: tag.name, value: tag.id };
+    return {
+      label: tag.name,
+      value: tag.id,
+    };
   });
 
   const handleFilter = () => {
@@ -46,14 +47,25 @@ const RepoFilter = () => {
             <InputAtom
               className="!h-12 xs:!h-10 flex-grow placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
               placeholder="جستجو در عنوان"
-              onChange={(e) => setSearchTitle(e.target.value)}
+              onChange={(e) => {
+                return setSearchTitle(e.target.value);
+              }}
             />
           </div>
           <SelectBox
             options={[
-              { label: "کلاسور", value: "clasor" },
-              { label: "اکسل", value: "excel" },
-              { label: "فایل", value: "file" },
+              {
+                label: "کلاسور",
+                value: "clasor",
+              },
+              {
+                label: "اکسل",
+                value: "excel",
+              },
+              {
+                label: "فایل",
+                value: "file",
+              },
             ]}
             defaultOption="نوع محتوا"
             className="h-12 xs:!h-10  sm:col-span-auto md:col-span-auto lg:col-span-auto"
@@ -61,7 +73,7 @@ const RepoFilter = () => {
             setSelectedOptions={setDocumentType}
           />
           <SelectBox
-            options={tagOptions as any[]}
+            options={tagOptions as IOption[]}
             className="h-12 xs:!h-10  sm:col-span-auto md:col-span-auto lg:col-span-auto"
             selectedOptions={tags}
             setSelectedOptions={setTags}
@@ -69,8 +81,14 @@ const RepoFilter = () => {
           />
           <SelectBox
             options={[
-              { label: "نمونه سند", value: "template" },
-              { label: "نشان شده", value: "bookmark" },
+              {
+                label: "نمونه سند",
+                value: "template",
+              },
+              {
+                label: "نشان شده",
+                value: "bookmark",
+              },
             ]}
             className="h-12 xs:!h-10 min-w-[150px] max-w-full sm:col-span-auto md:col-span-auto lg:col-span-auto"
             selectedOptions={moreFilter}

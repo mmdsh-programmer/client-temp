@@ -1,11 +1,16 @@
+import {
+ editorDataAtom, editorModalAtom, editorModeAtom 
+} from "@atom/editor";
+import {
+ useRecoilState, useRecoilValue, useSetRecoilState 
+} from "recoil";
+
+import BackButton from "@components/atoms/button/backButton";
+import CloseButton from "@components/atoms/button/closeButton";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import CloseButton from "@components/atoms/button/closeButton";
-import BackButton from "@components/atoms/button/backButton";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
 import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import { versionModalListAtom } from "@atom/version";
 
@@ -15,7 +20,9 @@ export interface IProps {
   disabled?: boolean;
 }
 
-const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
+const EditorHeader = ({
+ dialogHeader, setOpen, disabled 
+}: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const [editorData, setEditorData] = useRecoilState(editorDataAtom);

@@ -1,19 +1,30 @@
-import React from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
-import TableHead from "@components/molecules/tableHead";
-import EmptyList from "@components/molecules/emptyList";
-import TableCell from "@components/molecules/tableCell";
-import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
-import VersionMenu from "@components/molecules/versionMenu";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import { LastVersionIcon } from "@components/atoms/icons";
-import { IVersionView } from "../version/versionList";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { IVersion } from "@interface/version.interface";
-import { editorDataAtom, editorModalAtom, editorModeAtom} from "@atom/editor";
+import {
+ FaDateFromTimestamp, translateVersionStatus 
+} from "@utils/index";
+import {
+ Spinner, Typography 
+} from "@material-tailwind/react";
+import {
+ editorDataAtom, editorModalAtom, editorModeAtom 
+} from "@atom/editor";
+import {
+ selectedVersionAtom, versionModalListAtom 
+} from "@atom/version";
+import {
+ useRecoilState, useRecoilValue, useSetRecoilState 
+} from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
+import EmptyList from "@components/molecules/emptyList";
+import { IVersion } from "@interface/version.interface";
+import { IVersionView } from "../version/versionList";
+import { LastVersionIcon } from "@components/atoms/icons";
+import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import TableCell from "@components/molecules/tableCell";
+import TableHead from "@components/molecules/tableHead";
+import VersionMenu from "@components/molecules/versionMenu";
 import { selectedDocumentAtom } from "@atom/document";
 
 const VersionTableView = ({
@@ -42,7 +53,7 @@ const VersionTableView = ({
     setEditorMode("preview");
     setVersionModalList(false);
     setEditorModal(true);
-    setSelectedVersion(value)
+    setSelectedVersion(value);
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {
@@ -117,19 +128,16 @@ const VersionTableView = ({
                           data: version.creator?.name,
                           className: "hidden md:table-cell",
                         },
-                        {
-                          data: FaDateFromTimestamp(
+                        {data: FaDateFromTimestamp(
                             +new Date(version.createDate),
-                          ),
-                        },
+                          ),},
                         {
                           data: FaDateFromTimestamp(
                             +new Date(version.updateDate),
                           ),
                           className: "hidden xl:table-cell",
                         },
-                        {
-                          data: (
+                        {data: (
                             <div className="flex items-center flex-wrap gap-2">
                               <div className="flex flex-wrap gap-1">
                                 <div
@@ -171,8 +179,7 @@ const VersionTableView = ({
                                 </>
                               </RenderIf>
                             </div>
-                          ),
-                        },
+                          ),},
                         {
                           data: (
                             <VersionMenu

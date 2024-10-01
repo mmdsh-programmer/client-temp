@@ -1,4 +1,6 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
+import {
+ Checkbox, Typography 
+} from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
@@ -19,17 +21,19 @@ interface IProps {
   hasPassword: string;
 }
 
-const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
+const SubscribePasswordRequest = ({
+ hash, hasPassword 
+}: IProps) => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const subscribeHook = useSubscribeRepo();
 
-  const form = useForm<IDataForm>({
-    resolver: yupResolver(subscribeScheme),
-  });
+  const form = useForm<IDataForm>({resolver: yupResolver(subscribeScheme),});
 
-  const { register, handleSubmit, formState } = form;
+  const {
+ register, handleSubmit, formState 
+} = form;
   const { errors } = formState;
 
   const close = () => {
@@ -69,12 +73,9 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
             onChange={() => {
               setShowPassword(!showPassword);
             }}
-            containerProps={{
-              className: "-mr-3",
-            }}
+            containerProps={{className: "-mr-3",}}
           />
-          <>
-            <Typography className="label">رمز عبور</Typography>
+          <Typography className="label">رمز عبور</Typography>
             <FormInput
               type={showPassword ? "text" : "password"}
               register={{ ...register("password") }}
@@ -84,7 +85,6 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
                 {errors.password?.message}
               </Typography>
             )}
-          </>
         </div>
       </form>
     </ConfirmFullHeightDialog>

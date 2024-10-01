@@ -1,10 +1,14 @@
 import HeaderListTemplate, { IProps } from ".";
-import { Meta, StoryFn } from "@storybook/react";
+import {
+ Meta,
+ StoryFn
+} from "@storybook/react/*";
 
 import React from "react";
 import { RecoilRoot } from "recoil";
 
-const ListMode = () => <div>List Mode</div>;
+const ListMode = () => 
+{return <div>List Mode</div>;};
 
 export default {
   title: "Components/Templates/HeaderListTemplate",
@@ -16,21 +20,24 @@ export default {
   },
 
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <RecoilRoot>
         <Story />
       </RecoilRoot>
-    ),
+    );},
   ],
 } as Meta;
 
-const Template: StoryFn<IProps> = (args) => <HeaderListTemplate {...args} />;
+const Template: StoryFn<IProps> = (args) => 
+{return <HeaderListTemplate {...args} />;};
 
 export const Default = Template.bind({});
 Default.args = {
   header: "لیست مخزن ها",
   buttonText: "ایجاد مخزن جدید",
-  renderList: () => <ListMode />,
+  renderList: () => 
+{return <ListMode />;},
 };
 
 export const WithoutListMode = Template.bind({});

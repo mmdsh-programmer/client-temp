@@ -1,14 +1,14 @@
+import EditDialog from "@components/templates/dialog/editDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
 import { Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateVersion from "@hooks/version/useCreateVersion";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
-import EditDialog from "@components/templates/dialog/editDialog";
 
 interface IForm {
   name: string;
@@ -24,12 +24,11 @@ const VersionEditDialog = ({ setOpen }: IProps) => {
 
   const createVersion = useCreateVersion();
 
-  const form = useForm<IForm>({
-    resolver: yupResolver(versionSchema),
-  });
+  const form = useForm<IForm>({resolver: yupResolver(versionSchema),});
 
-  const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const {
+  handleSubmit, reset, clearErrors 
+} = form;
 
   const handleReset = () => {
     clearErrors();
@@ -58,7 +57,7 @@ const VersionEditDialog = ({ setOpen }: IProps) => {
   return (
     <EditDialog
       isPending={createVersion.isPending}
-      dialogHeader={"ویرایش نسخه"}
+      dialogHeader="ویرایش نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="min-h-[90%] !min-w-[90%]"

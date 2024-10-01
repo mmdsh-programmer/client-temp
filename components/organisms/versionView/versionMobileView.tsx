@@ -1,22 +1,30 @@
-import React from "react";
-import { Spinner } from "@material-tailwind/react";
-import MobileCard from "@components/molecules/mobileCard";
-import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
-import EmptyList from "@components/molecules/emptyList";
-import VersionMenu from "@components/molecules/versionMenu";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import { IVersionView } from "../version/versionList";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { versionModalListAtom } from "@atom/version";
-import { IVersion } from "@interface/version.interface";
+import {
+ FaDateFromTimestamp,
+ translateVersionStatus
+} from "@utils/index";
 import {
   editorDataAtom,
   editorModalAtom,
   editorModeAtom,
 } from "@atom/editor";
-import { selectedDocumentAtom } from "@atom/document";
+import {
+ useRecoilState,
+ useRecoilValue,
+ useSetRecoilState
+} from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
+import EmptyList from "@components/molecules/emptyList";
+import { IVersion } from "@interface/version.interface";
+import { IVersionView } from "../version/versionList";
+import LoadMore from "@components/molecules/loadMore";
+import MobileCard from "@components/molecules/mobileCard";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import { Spinner } from "@material-tailwind/react";
+import VersionMenu from "@components/molecules/versionMenu";
+import { selectedDocumentAtom } from "@atom/document";
+import { versionModalListAtom } from "@atom/version";
 
 const VersionMobileView = ({
   isLoading,
@@ -60,7 +68,7 @@ const VersionMobileView = ({
         </div>
       ) : listLength ? (
         <div
-          className={`flex flex-col gap-3 rounded-lg`}
+          className="flex flex-col gap-3 rounded-lg"
         >
           {getVersionList.map((list) => {
             return list.map((version) => {

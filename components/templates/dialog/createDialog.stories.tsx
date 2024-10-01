@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
 import CreateDialog, { IProps } from "./createDialog"; // Adjust the import path accordingly
-import LoadingButton from "@components/molecules/loadingButton"; // Ensure you have the proper paths for these components
-import CloseButton from "@components/atoms/button/closeButton";
-import CancelButton from "@components/atoms/button/cancelButton";
-import BackButton from "@components/atoms/button/backButton";
-import { Typography } from "@material-tailwind/react";
+import {
+ Meta,
+ StoryFn
+} from "@storybook/react/*";
+import React, { useState } from "react";
+
 import FormInput from "@components/atoms/input/formInput";
+import { Typography } from "@material-tailwind/react";
 
 export default {
   title: "Components/Templates/CreateDialog", // The folder structure in Storybook
@@ -19,10 +19,10 @@ export default {
 } as Meta;
 
 const Template: StoryFn<IProps> = (args) => {
-  const [open, setOpen] = useState(true); // Control dialog visibility
-
+  const [, setOpen] = useState(true); // Control dialog visibility
+  const { isPending } = args;
   return (
-    <CreateDialog {...args} setOpen={setOpen} isPending={args.isPending}>
+    <CreateDialog {...args} setOpen={setOpen} isPending={isPending}>
       <div>
         <form className="flex flex-col gap-2 ">
           <Typography className="label">نام تگ</Typography>
@@ -39,7 +39,8 @@ Default.args = {
   dialogHeader: "ایجاد تگ",
   isPending: false,
   backToMain: true,
-  onSubmit: async () => alert("Submit clicked!"), // Example submit handler
+  onSubmit: async () => 
+{return alert("Submit clicked!");}, // Example submit handler
 };
 
 // Story with loading state

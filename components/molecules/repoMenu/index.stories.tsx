@@ -1,10 +1,17 @@
+import type {
+ Meta,
+ StoryObj
+} from "@storybook/react";
+import {
+ QueryClient,
+ QueryClientProvider
+} from "@tanstack/react-query";
 import React, { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
-import RepoMenu from ".";
-import { RecoilRoot } from "recoil";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { IRepo } from "@interface/repo.interface";
+
 import { ERoles } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import { RecoilRoot } from "recoil";
+import RepoMenu from ".";
 
 const mockRepo: IRepo = {
   id: 487521,
@@ -31,13 +38,10 @@ const queryClient = new QueryClient();
 const meta: Meta<typeof RepoMenu> = {
   title: "components/Molecules/RepoMenu",
   component: RepoMenu,
-  parameters: {
-    nextjs: {
-      appDirectory: true,
-    },
-  },
+  parameters: {nextjs: {appDirectory: true,},},
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <div className="flex w-full items-center justify-center bg-gray-50">
@@ -45,7 +49,7 @@ const meta: Meta<typeof RepoMenu> = {
           </div>
         </RecoilRoot>
       </QueryClientProvider>
-    ),
+    );},
   ],
 };
 
@@ -53,10 +57,8 @@ export default meta;
 
 type Story = StoryObj<typeof RepoMenu>;
 
-export const Default: Story = {
-  render: () => {
-    const [showDrawer, setShowDrawer] = useState<boolean>(false);
+export const Default: Story = {render: () => {
+    const [showDrawer,] = useState<boolean>(false);
 
     return <RepoMenu repo={mockRepo} showDrawer={showDrawer} />;
-  },
-};
+  },};

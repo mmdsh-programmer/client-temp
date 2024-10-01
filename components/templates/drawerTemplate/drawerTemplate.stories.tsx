@@ -7,7 +7,7 @@ import {
 import {
  Meta,
  StoryFn
-} from "@storybook/react";
+} from "@storybook/react/*";
 import React, { useState } from "react";
 
 export default {

@@ -1,5 +1,5 @@
-import React from 'react'
-import { Typography } from '@material-tailwind/react';
+import React from "react";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
     title: string;
@@ -10,7 +10,9 @@ interface IProps {
     }[];
 }
 
-const ReportCard = ({title, icon, description}: IProps) => {
+const ReportCard = ({
+title, icon, description
+}: IProps) => {
   return (
     <div
     key={title}
@@ -40,7 +42,7 @@ const ReportCard = ({title, icon, description}: IProps) => {
     </div>
     <div />
   </div>
-  )
-}
+  );
+};
 
-export default ReportCard
+export default ReportCard;

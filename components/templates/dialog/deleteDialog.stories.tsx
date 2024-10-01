@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
 import DeleteDialog, { IProps } from "./deleteDialog"; // Adjust the import path accordingly
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
+import {
+ Meta,
+ StoryFn
+} from "@storybook/react/*";
+import React, { useState } from "react";
 
 export default {
   title: "Components/Templates/DeleteDialog", // The folder structure in Storybook
@@ -15,10 +16,11 @@ export default {
 } as Meta;
 
 const Template: StoryFn<IProps> = (args) => {
-  const [open, setOpen] = useState(true); // Control dialog visibility
+  const [, setOpen] = useState(true); // Control dialog visibility
 
+  const { isPending } = args;
   return (
-    <DeleteDialog {...args} setOpen={setOpen} isPending={args.isPending}>
+    <DeleteDialog {...args} setOpen={setOpen} isPending={isPending}>
       <div>تگ</div>
     </DeleteDialog>
   );
@@ -29,7 +31,8 @@ export const Default = Template.bind({});
 Default.args = {
   dialogHeader: "حذف تگ",
   isPending: false,
-  onSubmit: async () => alert("Submit clicked!"), // Example submit handler
+  onSubmit: async () => 
+{return alert("Submit clicked!");}, // Example submit handler
 };
 
 // Story with loading state

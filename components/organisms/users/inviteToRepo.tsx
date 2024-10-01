@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import SelectAtom, { IOption } from "@components/molecules/select";
 import {
- Spinner, Typography 
+ Spinner,
+ Typography
 } from "@material-tailwind/react";
 
 import { ERoles } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
-import SelectAtom from "@components/molecules/select";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
@@ -23,7 +24,10 @@ interface IForm {
 
 const InviteToRepo = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const [role, setRole] = useState<ERoles>(ERoles.admin);
+  const [role, setRole] = useState<IOption>({
+    label: translateRoles(ERoles.admin),
+    value: ERoles.admin,
+  });
   const {
  isPending, mutate 
 } = useAddUser();
@@ -60,10 +64,13 @@ const InviteToRepo = () => {
     mutate({
       repoId: getRepo?.id,
       username: dataForm.username,
-      accesName: role,
+      accesName: role.value as ERoles,
       callBack: () => {
         toast.success(`${dataForm.username} با موفقیت به مخرن اضافه شد.`);
-        setRole(ERoles.admin);
+        setRole({
+          label: translateRoles(ERoles.admin),
+          value: ERoles.admin,
+        });
         handleReset();
       },
     });
@@ -86,11 +93,14 @@ const InviteToRepo = () => {
             />
             <SelectAtom
               className="w-auto"
-              defaultOption={rolesOption?.[0].label}
+              defaultOption={rolesOption?.[0]}
               options={rolesOption}
               selectedOption={role}
               setSelectedOption={(value) => {
-                return setRole(value as ERoles);
+                return setRole({
+                  label: value.label,
+                  value: value.value,
+                });
               }}
             />
             <LoadingButton

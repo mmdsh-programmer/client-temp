@@ -1,19 +1,24 @@
+import {
+ CopyIcon, DeleteIcon, MoreDotIcon 
+} from "@components/atoms/icons";
 import React, { useState } from "react";
-import { CopyIcon, DeleteIcon, MoreDotIcon } from "@components/atoms/icons";
+
+import DrawerTemplate from "@components/templates/drawerTemplate";
 import { IPublicKey } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
-import DrawerTemplate from "@components/templates/drawerTemplate";
 import copy from "copy-to-clipboard";
+import { deleteRepoKeyAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
-import { deleteRepoKeyAtom } from "@atom/repository";
 
 interface IProps {
   keyItem: IPublicKey;
   isList?: boolean;
 }
 
-const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
+const RepoKeyMenu = ({
+ keyItem, isList 
+}: IProps) => {
   const setDeleteKeyModal = useSetRecoilState(deleteRepoKeyAtom);
   const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
     boolean | null

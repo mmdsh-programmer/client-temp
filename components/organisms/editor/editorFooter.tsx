@@ -1,24 +1,33 @@
-import React, { useEffect, useRef, useState } from "react";
+import {
+ Button, Checkbox, Typography 
+} from "@material-tailwind/react";
+import React, {
+ useEffect, useRef, useState 
+} from "react";
 import {
   editorDataAtom,
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
+import {
+ selectedVersionAtom, versionModalListAtom 
+} from "@atom/version";
+import {
+ useRecoilState, useRecoilValue, useSetRecoilState 
+} from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
-import LoadingButton from "@components/molecules/loadingButton";
-import useSaveEditor from "@hooks/editor/useSaveEditor";
-import { Button, Checkbox, Typography } from "@material-tailwind/react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { ChevronLeftIcon } from "@components/atoms/icons";
+import { EDocumentTypes } from "@interface/enums";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import { IVersion } from "@interface/version.interface";
+import LoadingButton from "@components/molecules/loadingButton";
+import forge from "node-forge";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import { translateVersionStatus } from "@utils/index";
-import { ChevronLeftIcon } from "@components/atoms/icons";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { EDocumentTypes } from "@interface/enums";
 import { toast } from "react-toastify";
-import { IVersion } from "@interface/version.interface";
-import forge from "node-forge";
+import { translateVersionStatus } from "@utils/index";
+import useSaveEditor from "@hooks/editor/useSaveEditor";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -81,13 +90,11 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const encryptData = (content: string) => {
     if (!key) return;
 
-    const publicKey = forge.pki.publicKeyFromPem(key)
+    const publicKey = forge.pki.publicKeyFromPem(key);
 
     return forge.util.encode64(
-      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {
-        md: forge.md.sha256.create(),
-      })
-    )
+      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {md: forge.md.sha256.create(),})
+    );
   };
 
   const handleSave = (data: any) => {
@@ -143,9 +150,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   const stopWorker = () => {
-    autoSaveRef.current?.postMessage({
-      action: "STOP",
-    });
+    autoSaveRef.current?.postMessage({action: "STOP",});
     autoSaveRef.current?.terminate();
     autoSaveRef.current = undefined;
   };
@@ -210,9 +215,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
               color="deep-purple"
               checked={checked}
               onChange={handleAutoSaveCheckbox}
-              containerProps={{
-                className: "-mr-3 ",
-              }}
+              containerProps={{className: "-mr-3 ",}}
             />
           </div>
           <div className="flex w-full md:w-auto gap-2 xs:gap-3">

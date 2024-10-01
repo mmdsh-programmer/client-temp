@@ -1,5 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type {
+ Meta, StoryObj 
+} from "@storybook/react";
+import {
+ QueryClient, QueryClientProvider 
+} from "@tanstack/react-query";
 
 import React from "react";
 import { RecoilRoot } from "recoil";
@@ -10,13 +14,10 @@ const queryClient = new QueryClient();
 const meta: Meta<typeof RepoFilter> = {
   title: "components/Molecules/RepoFilter",
   component: RepoFilter,
-  parameters: {
-    nextjs: {
-      appDirectory: true,
-    },
-  },
+  parameters: {nextjs: {appDirectory: true,},},
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <div className="w-full p-4">
@@ -24,7 +25,7 @@ const meta: Meta<typeof RepoFilter> = {
           </div>
         </RecoilRoot>
       </QueryClientProvider>
-    ),
+    );},
   ],
 };
 
@@ -32,6 +33,4 @@ export default meta;
 
 type Story = StoryObj<typeof RepoFilter>;
 
-export const Default: Story = {
-  args: {},
-};
+export const Default: Story = {args: {},};

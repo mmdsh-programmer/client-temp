@@ -1,8 +1,12 @@
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import RepoKeyMenu from ".";
-import { RecoilRoot } from "recoil";
+import {
+ Meta,
+ StoryObj
+} from "@storybook/react/*";
+
 import { IPublicKey } from "@interface/repo.interface";
+import React from "react";
+import { RecoilRoot } from "recoil";
+import RepoKeyMenu from ".";
 
 const mockKeyItem: IPublicKey = {
   key: "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEArDQxkzsh1...",
@@ -18,11 +22,12 @@ export default {
   title: "Components/Molecules/RepoKeyMenu",
   component: RepoKeyMenu,
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <RecoilRoot>
         <Story />
       </RecoilRoot>
-    ),
+    );},
   ],
   args: {
     keyItem: mockKeyItem,
@@ -30,12 +35,7 @@ export default {
   },
 } as Meta<typeof RepoKeyMenu>;
 
-export const Default: StoryObj<typeof RepoKeyMenu> = {
-  render: (args) => <RepoKeyMenu {...args} />,
-};
+export const Default: StoryObj<typeof RepoKeyMenu> = {render: (args) => 
+{return <RepoKeyMenu {...args} />;},};
 
-export const ListMode: StoryObj<typeof RepoKeyMenu> = {
-  args: {
-    isList: true,
-  },
-};
+export const ListMode: StoryObj<typeof RepoKeyMenu> = {args: {isList: true,},};

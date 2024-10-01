@@ -1,8 +1,11 @@
-import React from "react";
-import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
-import StepperComponent from "@components/molecules/stepper";
+import {
+ Dialog, DialogHeader, Typography 
+} from "@material-tailwind/react";
+
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
+import React from "react";
+import StepperComponent from "@components/molecules/stepper";
 
 interface IProps {
   dialogHeader: string;

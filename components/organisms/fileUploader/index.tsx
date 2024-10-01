@@ -1,3 +1,9 @@
+import {
+ Button, Typography 
+} from "@material-tailwind/react";
+import {
+ DeleteIcon, ReloadIcon, TickIcon 
+} from "@components/atoms/icons";
 import React, {
   Ref,
   useEffect,
@@ -5,9 +11,8 @@ import React, {
   useRef,
   useState,
 } from "react";
+
 import useGetUser from "@hooks/auth/useGetUser";
-import { DeleteIcon, ReloadIcon, TickIcon } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
 
 interface IProps {
   uploadUrl: string;
@@ -47,7 +52,9 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
   const [progress, setProgress] = useState<number>(0);
   const [failed, setFailed] = useState<string | null>(null);
 
-  const { data: userInfo, refetch } = useGetUser();
+  const {
+ data: userInfo, refetch 
+} = useGetUser();
   const onProgress = (e: any) => {
     const contentLength = e.lengthComputable
       ? e.total
@@ -89,7 +96,9 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
 
     xhrRef.current.addEventListener("readystatechange", () => {
       if (xhrRef.current) {
-        const { readyState, status } = xhrRef.current;
+        const {
+ readyState, status 
+} = xhrRef.current;
         if (readyState === 4) {
           if (status === 200) {
             const { response } = xhrRef.current;
@@ -154,7 +163,7 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
           `}
       >
         <div
-          className={`absolute inset-0 h-full rounded-lg`}
+          className="absolute inset-0 h-full rounded-lg"
           style={{
             backgroundColor: progress > 0 ? "#00f71b52" : "transparent",
             width: `${progress}%`,
@@ -172,7 +181,8 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
         ) : (
           <Button
             className="bg-transparent p-0"
-            onClick={() => onDeleteFile?.(file)}
+            onClick={() => 
+{return onDeleteFile?.(file);}}
             disabled={progress > 0}
           >
             <DeleteIcon className="h-5 w-5 fill-icon-hover" />

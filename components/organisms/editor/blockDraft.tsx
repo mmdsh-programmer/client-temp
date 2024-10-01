@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "atom/editor";
+import {
+ editorDataAtom, editorModalAtom, editorModeAtom 
+} from "atom/editor";
+import {
+ useRecoilState, useRecoilValue 
+} from "recoil";
+
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "atom/document";
 import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 
 interface IProps {
@@ -34,7 +39,7 @@ const BlockDraft = ({ children }: IProps) => {
   }, [editorData?.id]);
 
   return (
-    <div className={`version-list__container h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0`}>
+    <div className="version-list__container h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0">
       {children}
     </div>
   );

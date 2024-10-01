@@ -1,17 +1,21 @@
+import SelectAtom, { IOption } from "@components/molecules/select";
+import {
+ Spinner,
+ Typography
+} from "@material-tailwind/react";
+
+import { ERoles } from "@interface/enums";
+import { IUser } from "@interface/users.interface";
+import ImageComponent from "@components/atoms/image";
 import React from "react";
 import { UserIcon } from "@components/atoms/icons";
-import ImageComponent from "@components/atoms/image";
-import { IUser } from "@interface/users.interface";
-import { ERoles } from "@interface/enums";
-import { translateRoles } from "@utils/index";
-import useGetRoles from "@hooks/user/useGetRoles";
-import useEditUserRole from "@hooks/user/useEditUserRole";
 import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import { Spinner, Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
+import { translateRoles } from "@utils/index";
 import useDeleteUser from "@hooks/user/useDeleteUser";
-import SelectAtom from "@components/molecules/select";
+import useEditUserRole from "@hooks/user/useEditUserRole";
+import useGetRoles from "@hooks/user/useGetRoles";
+import { useRecoilValue } from "recoil";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
 
 interface IProps {
@@ -21,7 +25,7 @@ interface IProps {
 const UserItem = ({ user }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
 
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
   const transferOwnership = useTranferOwnershipRepository();
@@ -42,13 +46,20 @@ const UserItem = ({ user }: IProps) => {
   }[];
 
   const userOptions = rolesOption.concat([
-    { label: "انتقال مالکیت", value: "transferOwnership" },
-    { label: "حذف کاربر", value: "delete", className: "!text-error" },
+    {
+      label: "انتقال مالکیت",
+      value: "transferOwnership",
+    },
+    {
+      label: "حذف کاربر",
+      value: "delete",
+      className: "!text-error",
+    },
   ]);
 
-  const handleChange = (value: string | ERoles) => {
+  const handleChange = (value: IOption) => {
     if (!getRepo) return;
-    if (value === "delete") {
+    if (value.value === "delete") {
       deleteUser.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
@@ -56,7 +67,7 @@ const UserItem = ({ user }: IProps) => {
           toast.success(`کاربر ${user.userInfo.userName} با موفقیت حذف شد.`);
         },
       });
-    } else if (value === "transferOwnership") {
+    } else if (value.value === "transferOwnership") {
       transferOwnership.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
@@ -66,14 +77,48 @@ const UserItem = ({ user }: IProps) => {
       editRole.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
-        roleName: value,
+        roleName: value.value as string,
         callBack: () => {
           toast.success(
-            `نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`,
+            `نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`
           );
         },
       });
     }
+  };
+
+  const renderUserRole = () => {
+    if (user.userRole === ERoles.owner) {
+      return (
+        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
+          <Typography className="select_option__text text-primary">
+            {translateRoles(user.userRole)}
+          </Typography>
+        </div>
+      );
+    } if (editRole.isPending || deleteUser.isPending) {
+      return (
+        <div className="w-5">
+          <Spinner className="h-4 w-4" color="deep-purple" />
+        </div>
+      );
+    } 
+      return (
+        <SelectAtom
+          className="!w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+          defaultOption={{
+            label: translateRoles(user.userRole),
+            value: user.userRole,
+          }}
+          options={userOptions}
+          selectedOption={{
+            label: user.userRole,
+            value: user.userRole
+          }}
+          setSelectedOption={handleChange}
+        />
+      );
+    
   };
 
   return (
@@ -95,25 +140,7 @@ const UserItem = ({ user }: IProps) => {
       <Typography className="title_t3 flex-grow text-primary ">
         {user.userInfo.name}
       </Typography>
-      {user.userRole === ERoles.owner ? (
-        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
-          <Typography className="select_option__text text-primary">
-            {translateRoles(user.userRole)}
-          </Typography>
-        </div>
-      ) : editRole.isPending || deleteUser.isPending ? (
-        <div className="w-5">
-          <Spinner className="h-4 w-4" color="deep-purple" />
-        </div>
-      ) : (
-        <SelectAtom
-          className="!w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
-          defaultOption={translateRoles(user.userRole)}
-          options={userOptions}
-          selectedOption={user.userRole}
-          setSelectedOption={handleChange}
-        />
-      )}
+      {renderUserRole()}
     </div>
   );
 };
