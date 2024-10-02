@@ -1,10 +1,11 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import RepoCardMode from ".";
-import { RecoilRoot } from "recoil";
-import { IRepo } from "@interface/repo.interface";
-import { repoAtom } from "@atom/repository";
+
 import { ERoles } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import React from "react";
+import { RecoilRoot } from "recoil";
+import RepoCardMode from ".";
+import { repoAtom } from "@atom/repository";
 
 const mockRepo: IRepo = {
   name: "874577",
@@ -30,7 +31,8 @@ const meta: Meta<typeof RepoCardMode> = {
   title: "components/Molecules/RepoCardMode",
   component: RepoCardMode,
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <RecoilRoot
         initializeState={({ set }) => {
           set(repoAtom, mockRepo);
@@ -40,7 +42,7 @@ const meta: Meta<typeof RepoCardMode> = {
           <Story />
         </div>
       </RecoilRoot>
-    ),
+    );},
   ],
 };
 

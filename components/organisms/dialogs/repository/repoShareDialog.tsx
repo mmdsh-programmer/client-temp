@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createGroupAtom, deleteGroupAtom, editGroupAtom } from "@atom/group";
 import { useRecoilState, useSetRecoilState } from "recoil";
+
 import CreateRepoPublicLink from "@components/organisms/publicLink/createRepoPublicLink";
 import { DialogBody } from "@material-tailwind/react";
 import GroupCreateDialog from "@components/organisms/dialogs/group/groupCreateDialog";
@@ -82,7 +83,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="اشتراک گذاری"
       setOpen={handleClose}
-      className={`xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg `}
+      className="xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
     >
       <DialogBody placeholder="dialog body" className="p-0 h-full">
         <div className="flex flex-col gap-4 p-4 xs:p-6">
@@ -93,7 +94,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
           />
         </div>
       </DialogBody>
-      <GroupMenu showDrawer={true} />
+      <GroupMenu showDrawer />
     </InfoDialog>
   );
 };
