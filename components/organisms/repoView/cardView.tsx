@@ -4,8 +4,8 @@ import LoadMore from "@components/molecules/loadMore";
 import EmptyList from "@components/molecules/emptyList";
 import RepoCardMode from "@components/molecules/repoCardMode";
 import RenderIf from "@components/atoms/renderIf";
-import { IRepoView } from "../repoList";
 import RepoMenu from "@components/molecules/repoMenu";
+import { IRepoView } from "@interface/repo.interface";
 
 const CardView = ({
   isLoading,

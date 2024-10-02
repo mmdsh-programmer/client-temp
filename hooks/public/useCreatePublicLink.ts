@@ -5,29 +5,33 @@ import { toast } from "react-toastify";
 const useCreatePublicLink = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`repo-public`],
+    mutationKey: ["repo-public-link"],
     mutationFn: async (values: {
       repoId: number;
       roleId: number;
       expireTime: number;
       password?: string;
-      callBack?: () => void;
+      callBack?: (result) => void;
     }) => {
-      const { repoId, roleId, expireTime, password } = values;
+      const {
+ repoId, roleId, expireTime, password 
+} = values;
       const response = await createRepoPublicLinkAction(
         repoId,
         roleId,
         expireTime,
-        password,
+        password
       );
-      return response?.data;
+      return response;
     },
-    onSuccess: (response, values) => {
+    onSuccess: async (response, values) => {
       const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`getRepo-${repoId}`],
-      });
-      callBack?.();
+      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
+      callBack?.(response);
     },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");

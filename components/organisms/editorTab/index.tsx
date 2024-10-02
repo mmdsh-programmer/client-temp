@@ -1,27 +1,13 @@
-import React, {
- useCallback,
- useEffect,
- useRef,
- useState
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   editorChatDrawerAtom,
   editorDataAtom,
   editorDecryptedContentAtom,
-  editorModalAtom,
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
-import {
- selectedVersionAtom,
- versionModalListAtom
-} from "@atom/version";
-import {
- useRecoilState,
- useRecoilValue,
- useSetRecoilState
-} from "recoil";
-
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
@@ -29,7 +15,6 @@ import EditorComponent from "@components/organisms/editor";
 import EditorFooter from "../editor/editorFooter";
 import EditorHeader from "../editor/editorHeader";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
-import Error from "@components/organisms/error";
 import FloatingButtons from "../editor/floatingButtons";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@material-tailwind/react";
@@ -40,13 +25,13 @@ import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 
 const EditorTab = () => {
   const getRepo = useRecoilValue(repoAtom);
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
   const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
   const setChatDrawer = useSetRecoilState(editorChatDrawerAtom);
   const [versionModalList, setVersionModalList] =
@@ -70,16 +55,18 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const {data: getLastVersion,} = useGetLastVersion(getRepo!.id, getSelectedDocument!.id, !getVersionData);
+  const { data: getLastVersion } = useGetLastVersion(
+    getRepo!.id,
+    getSelectedDocument!.id,
+    !getVersionData
+  );
 
   const vId = versionId || getVersionData?.id || getLastVersion?.id;
   const vState =
     versionState ||
     (getVersionData ? getVersionData.state : getLastVersion?.state);
 
-  const {
- data, isLoading, error, isSuccess 
-} = useGetVersion(
+  const { data, isFetching, error, isSuccess } = useGetVersion(
     getRepo!.id,
     getSelectedDocument!.id,
     +vId!,
@@ -168,22 +155,15 @@ const EditorTab = () => {
   };
 
   if (error || keyError) {
-    return (
-      <div className="main w-full h-full text-center flex items-center justify-center">
-        <Error
-          retry={() => {
-            return setEditorModal(false);
-          }}
-          error={{ message: "باز کردن سند با خطا مواجه شد."  }}
-        />
-      </div>
-    );
+    toast.warn("باز کردن سند با خطا مواجه شد.");
+    handleClose();
+    return null;
   }
 
   if (showKey && !decryptedContent && getVersionData?.content) {
     return (
       <EditorKey
-        isPending={isLoading || isLoadingKey}
+        isPending={isFetching || isLoadingKey}
         onDecryption={handleDecryption}
         setOpen={handleClose}
         encryptedContent={getVersionData?.content}
@@ -191,40 +171,40 @@ const EditorTab = () => {
     );
   }
 
-  if(versionModalList){
-    return(<VersionDialogView />);
+  if (versionModalList) {
+    return <VersionDialogView />;
   }
-  return (
-        <BlockDraft>
-          <>
-            <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
-              <EditorHeader dialogHeader={getSelectedDocument?.name} />
-            </div>
-            {isLoading ? (
-              <div className="w-full h-full text-center flex items-center justify-center bg-primary">
-                <Spinner className="h-5 w-5 " color="deep-purple" />
-              </div>
-            ) : (
-              <div className="flex-grow p-0 overflow-auto">
-                <BlockDraftDialog
-                  editorRef={getEditorConfig().ref}
-                  onClose={handleClose}
-                />
-                <EditorComponent
-                  version={data}
-                  getEditorConfig={getEditorConfig}
-                />
-                {editorMode === "preview" && data ? (
-                  <FloatingButtons version={data} className=" bottom-[100px] xs:bottom-[100px] " />
-                ) : null}
-              </div>
-            )}
-            <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
-              <EditorFooter editorRef={getEditorConfig().ref} />
-            </div>
-          </>
-        </BlockDraft>
-  );
+
+  // eslint-disable-next-line no-nested-ternary
+  return isFetching ? (
+    <div className="w-full h-full text-center flex items-center justify-center bg-primary">
+      <Spinner className="h-5 w-5 " color="deep-purple" />
+    </div>
+  ) : data ? (
+    <div className="h-screen flex-grow p-0 overflow-auto">
+      <BlockDraft version={data}>
+        <>
+          <BlockDraftDialog
+            editorRef={getEditorConfig().ref}
+            onClose={handleClose}
+          />
+          <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
+            <EditorHeader dialogHeader={getSelectedDocument?.name} />
+          </div>
+          <EditorComponent version={data} getEditorConfig={getEditorConfig} />
+          <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
+            <EditorFooter editorRef={getEditorConfig().ref} />
+          </div>
+          {editorMode === "preview" && data ? (
+            <FloatingButtons
+              version={data}
+              className=" bottom-[100px] xs:bottom-[100px] "
+            />
+          ) : null}
+        </>
+      </BlockDraft>
+    </div>
+  ) : null;
 };
 
 export default EditorTab;

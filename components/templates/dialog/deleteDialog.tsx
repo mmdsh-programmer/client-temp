@@ -1,11 +1,14 @@
+import React from "react";
 import {
- Dialog, DialogBody, DialogFooter, DialogHeader, Typography 
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
 } from "@material-tailwind/react";
-
 import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import React from "react";
 
 export interface IProps {
   isPending: boolean;
@@ -14,6 +17,7 @@ export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: () => void;
   className?: string;
+  isArchive?: boolean;
 }
 
 const DeleteDialog = ({
@@ -23,6 +27,7 @@ const DeleteDialog = ({
   setOpen,
   onSubmit,
   className,
+  isArchive,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -62,7 +67,7 @@ const DeleteDialog = ({
           loading={isPending}
         >
           <Typography className="text__label__button text-white">
-            حذف
+            {isArchive ? "آرشیو" : "حذف"}
           </Typography>
         </LoadingButton>
       </DialogFooter>

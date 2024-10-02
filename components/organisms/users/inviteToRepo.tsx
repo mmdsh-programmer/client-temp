@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-import {
- Spinner,
- Typography
-} from "@material-tailwind/react";
-
+import { Spinner, Typography } from "@material-tailwind/react";
 import { ERoles } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -28,22 +24,15 @@ const InviteToRepo = () => {
     label: translateRoles(ERoles.admin),
     value: ERoles.admin,
   });
-  const {
- isPending, mutate 
-} = useAddUser();
-  const {
- data: getRoles, isFetching: isFetchingRoles 
-} = useGetRoles();
+  const { isPending, mutate } = useAddUser();
+  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
 
   const rolesOption = getRoles
     ?.filter((roleItem) => {
       return roleItem.name !== ERoles.owner && roleItem.name !== ERoles.default;
     })
     .map((item) => {
-      return {
-        label: translateRoles(item.name),
-        value: item.name,
-      };
+      return { label: translateRoles(item.name), value: item.name };
     });
 
   const {

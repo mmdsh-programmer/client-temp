@@ -1,40 +1,29 @@
-import {
-  selectedVersionAtom,
-  versionDrawerAtom,
-  versionModalListAtom,
-} from "@atom/version";
-import {
- useRecoilValue,
- useSetRecoilState
-} from "recoil";
-
-import { DialogBody } from "@material-tailwind/react";
-import InfoDialog from "@components/templates/dialog/infoDialog";
 import React from "react";
-import VersionList from "../version/versionList";
-import VersionMenu from "@components/molecules/versionMenu";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import { DialogBody } from "@material-tailwind/react";
+import VersionList from "../version/versionList";
+import { versionModalListAtom } from "@atom/version";
+import { editorModalAtom } from "@atom/editor";
 
 const VersionDialogView = () => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const openVersionActionDrawer = useRecoilValue(versionDrawerAtom);
-  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
 
   return (
     <InfoDialog
       dialogHeader={getSelectedDocument?.name}
       setOpen={() => {
         setVersionModalList(false);
+        setEditorModal(true);
       }}
       className="!min-w-[95%] !min-h-[95%]"
     >
       <DialogBody placeholder="dialog body" className="p-0 xs:p-6 h-full">
         <VersionList />
       </DialogBody>
-      {openVersionActionDrawer && getSelectedVersion ? (
-        <VersionMenu version={getSelectedVersion} showDrawer />
-      ) : null}
     </InfoDialog>
   );
 };

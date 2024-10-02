@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const useAddImageToRepo = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`imageRepo`],
+    mutationKey: ["imageRepo"],
     mutationFn: async (values: {
       repoId: number;
       fileHash: string | null;
@@ -17,12 +17,11 @@ const useAddImageToRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`getRepo-${repoId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`],
-      });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
       callBack?.();
     },
     onError: (error) => {

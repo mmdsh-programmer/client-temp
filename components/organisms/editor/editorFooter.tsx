@@ -1,21 +1,12 @@
-import {
- Button, Checkbox, Typography 
-} from "@material-tailwind/react";
-import React, {
- useEffect, useRef, useState 
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import {
   editorDataAtom,
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
-import {
- selectedVersionAtom, versionModalListAtom 
-} from "@atom/version";
-import {
- useRecoilState, useRecoilValue, useSetRecoilState 
-} from "recoil";
-
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { EDocumentTypes } from "@interface/enums";
@@ -39,9 +30,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
   const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
   const setVersion = useSetRecoilState(selectedVersionAtom);
-
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
+  const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const key = useRecoilValue(editorPublicKeyAtom);
 
   const [checked, setChecked] = useState(false);
@@ -57,10 +46,10 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
     if (editorMode === "preview") {
       return `${getVersionData.versionNumber}
-      ${` (${translateVersionStatus(
-        getVersionData.status,
-        getVersionData.state
-      ).translated} ${getVersionData.status === "accepted" ? "-عمومی" : ""})`}`;
+      ${` (${
+        translateVersionStatus(getVersionData.status, getVersionData.state)
+          .translated
+      } ${getVersionData.status === "accepted" ? "-عمومی" : ""})`}`;
     }
 
     return `${getVersionData.versionNumber} (پیش نویس)`;
@@ -93,10 +82,13 @@ const EditorFooter = ({ editorRef }: IProps) => {
     const publicKey = forge.pki.publicKeyFromPem(key);
 
     return forge.util.encode64(
-      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {md: forge.md.sha256.create(),})
+      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {
+        md: forge.md.sha256.create(),
+      })
     );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = (data: any) => {
     let encryptedContent: string | null = null;
     const content: string =
@@ -107,7 +99,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     if (selectedDocument?.publicKeyId) {
       encryptedContent = encryptData(content) as string;
     }
-  
+
     if (getVersionData && selectedDocument && getRepo) {
       saveEditorHook.mutate({
         content: selectedDocument?.publicKeyId
@@ -134,10 +126,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         new URL("../../../hooks/worker/autoSave.worker.ts", import.meta.url)
       );
 
-      autoSaveRef.current?.postMessage({
-        action: "START",
-        time,
-      });
+      autoSaveRef.current?.postMessage({ action: "START", time });
       if (autoSaveRef.current) {
         autoSaveRef.current.onmessage = (event) => {
           const action = (event.data as string[]) || [];
@@ -150,7 +139,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   const stopWorker = () => {
-    autoSaveRef.current?.postMessage({action: "STOP",});
+    autoSaveRef.current?.postMessage({ action: "STOP" });
     autoSaveRef.current?.terminate();
     autoSaveRef.current = undefined;
   };
@@ -172,85 +161,81 @@ const EditorFooter = ({ editorRef }: IProps) => {
     };
   }, []);
 
-  return (
-    <>
-      {editorMode === "preview" ? (
-        <div className="w-full flex justify-between items-center gap-2">
-          <Button
-            className="w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
-            title={renderTitle()}
-            onClick={() => {
-              setVersionModalList(true);
-            }}
-          >
-            <Typography className="label_l3 text-primary">
-              {renderTitle()}
+  return editorMode === "preview" ? (
+    <div className="w-full flex justify-between items-center gap-2">
+      <Button
+        className="w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+        title={renderTitle()}
+        onClick={() => {
+          setVersionModalList(true);
+        }}
+      >
+        <Typography className="label_l3 text-primary">
+          {renderTitle()}
+        </Typography>
+        <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+      </Button>
+      <CancelButton onClick={handleChangeEditorMode}>ویرایش</CancelButton>
+    </div>
+  ) : (
+    <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
+      <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
+        <Button
+          className="w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+          title={renderTitle()}
+          onClick={() => {
+            setVersionModalList(true);
+          }}
+        >
+          <Typography className="label_l3 text-primary">
+            {renderTitle()}
+          </Typography>
+          <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+        </Button>
+        <div className="!hidden xs:!block border-r-[1px] border-r-normal" />
+        <Checkbox
+          crossOrigin=""
+          label={
+            <Typography className="title_t3 truncate">
+              ذخیره‌سازی خودکار
             </Typography>
-            <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
-          </Button>
-          <CancelButton onClick={handleChangeEditorMode}>ویرایش</CancelButton>
-        </div>
-      ) : (
-        <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
-          <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
-            <Button
-              className="w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
-              title={renderTitle()}
-              onClick={() => {
-                setVersionModalList(true);
-              }}
-            >
-              <Typography className="label_l3 text-primary">
-                {renderTitle()}
-              </Typography>
-              <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
-            </Button>
-            <div className="!hidden xs:!block border-r-[1px] border-r-normal" />
-            <Checkbox
-              crossOrigin=""
-              label={
-                <Typography className="title_t3">ذخیره‌سازی خودکار</Typography>
-              }
-              className=""
-              color="deep-purple"
-              checked={checked}
-              onChange={handleAutoSaveCheckbox}
-              containerProps={{className: "-mr-3 ",}}
-            />
-          </div>
-          <div className="flex w-full md:w-auto gap-2 xs:gap-3">
-            <CancelButton
-              onClick={() => {
-                editorRef.current?.setMode(
-                  editorMode === "edit" ? "temporaryPreview" : "edit"
-                );
-                setEditorMode(
-                  editorMode === "edit" ? "temporaryPreview" : "edit"
-                );
-              }}
-              className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
-              disabled={saveEditorHook.isPending}
-            >
-              {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
-            </CancelButton>
-            <LoadingButton
-              className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-              onClick={async () => {
-                const value = await editorRef.current?.getData();
-                if (value) {
-                  handleSave(value);
-                }
-              }}
-              disabled={saveEditorHook.isPending}
-            >
-              <Typography className="text__label__button text-white">
-                ذخیره
-              </Typography>
-            </LoadingButton>
-          </div>
-        </div>
-      )}
-    </>
+          }
+          className=""
+          color="deep-purple"
+          checked={checked}
+          onChange={handleAutoSaveCheckbox}
+          containerProps={{ className: "-mr-3 " }}
+        />
+      </div>
+      <div className="flex w-full md:w-auto gap-2 xs:gap-3">
+        <CancelButton
+          onClick={() => {
+            editorRef.current?.setMode(
+              editorMode === "edit" ? "temporaryPreview" : "edit"
+            );
+            setEditorMode(editorMode === "edit" ? "temporaryPreview" : "edit");
+          }}
+          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
+          disabled={saveEditorHook.isPending}
+        >
+          {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
+        </CancelButton>
+        <LoadingButton
+          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          onClick={async () => {
+            const value = await editorRef.current?.getData();
+            if (value) {
+              handleSave(value);
+            }
+          }}
+          disabled={saveEditorHook.isPending}
+        >
+          <Typography className="text__label__button text-white">
+            ذخیره
+          </Typography>
+        </LoadingButton>
+      </div>
+    </div>
   );
 };
 

@@ -1,12 +1,10 @@
+import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
 import { FaDateFromTimestamp } from "@utils/index";
-import { IRepo } from "@interface/repo.interface";
-import { IRepoView } from "../repoList";
+import { IRepo, IRepoView } from "@interface/repo.interface";
 import { InfiniteData } from "@tanstack/react-query";
 import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
 import { Spinner } from "@material-tailwind/react";
@@ -23,32 +21,32 @@ const renderContent = (
   type: string
 ) => {
   if (isLoading) {
-      return (
-        <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
-        </div>
-      );
-    } if (listLength) {
-      return list?.pages.map((page) => {
-        return page.list.map((repo) => {
-          return (
-            <MobileCard
-              key={repo.id}
-              name={repo.name}
-              createDate={
-                repo.createDate
-                  ? FaDateFromTimestamp(+new Date(repo.createDate))
-                  : "--"
-              }
-              creator={repo.owner?.userName}
-              cardAction={<RepoMenu repo={repo} />}
-            />
-          );
-        });
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Spinner className="h-8 w-8" color="deep-purple" />
+      </div>
+    );
+  }
+  if (listLength) {
+    return list?.pages.map((page) => {
+      return page.list.map((repo) => {
+        return (
+          <MobileCard
+            key={repo.id}
+            name={repo.name}
+            createDate={
+              repo.createDate
+                ? FaDateFromTimestamp(+new Date(repo.createDate))
+                : "--"
+            }
+            creator={repo.owner?.userName}
+            cardAction={<RepoMenu repo={repo} />}
+          />
+        );
       });
-    } 
-    return <EmptyList type={type as EEmptyList} />;
-  
+    });
+  }
+  return <EmptyList type={type as EEmptyList} />;
 };
 
 const MobileView = ({

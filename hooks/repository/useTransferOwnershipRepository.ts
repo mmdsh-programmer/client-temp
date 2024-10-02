@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const useTranferOwnershipRepository = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`transferOwnershipRepo`],
+    mutationKey: ["transferOwnershipRepo"],
     mutationFn: async (values: {
       repoId: number;
       userName: string;
@@ -20,21 +20,11 @@ const useTranferOwnershipRepository = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`getRepo-${repoId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`allRepoList`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`bookmarkRepoList`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`accessRepoList`],
-      });
+      queryClient.invalidateQueries({queryKey: [`getRepo-${repoId}`],});
+      queryClient.invalidateQueries({queryKey: ["allRepoList"],});
+      queryClient.invalidateQueries({queryKey: ["bookmarkRepoList"],});
+      queryClient.invalidateQueries({queryKey: ["myRepoList-false"],});
+      queryClient.invalidateQueries({queryKey: ["accessRepoList"],});
       callBack?.();
     },
     onError: (error) => {

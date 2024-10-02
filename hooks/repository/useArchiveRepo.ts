@@ -1,5 +1,5 @@
 import { archiveRepoAction } from "@actions/repository";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 const useArchiveRepo = () => {
@@ -12,10 +12,10 @@ const useArchiveRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`],
-      });
+      const { callBack } = values;
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
       callBack?.();
     },
     onError: (error) => {

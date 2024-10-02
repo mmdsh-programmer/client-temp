@@ -1,25 +1,12 @@
-import {
- FaDateFromTimestamp,
- translateVersionStatus
-} from "@utils/index";
-import {
-  editorDataAtom,
-  editorModalAtom,
-  editorModeAtom,
-} from "@atom/editor";
-import {
- useRecoilState,
- useRecoilValue,
- useSetRecoilState
-} from "recoil";
-
+import React from "react";
+import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
+import { editorDataAtom, editorModeAtom } from "@atom/editor";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
-import { IVersion } from "@interface/version.interface";
-import { IVersionView } from "../version/versionList";
+import { IVersion, IVersionView } from "@interface/version.interface";
 import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import VersionMenu from "@components/molecules/versionMenu";
@@ -40,7 +27,7 @@ const VersionMobileView = ({
     useRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+
   const listLength = getVersionList?.[0].length;
 
   const handleOpenEditor = (value: IVersion) => {
@@ -50,7 +37,6 @@ const VersionMobileView = ({
     setEditorData(value);
     setEditorMode("preview");
     setVersionModalList(false);
-    setEditorModal(true);
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {
@@ -62,17 +48,17 @@ const VersionMobileView = ({
 
   return (
     <div className="px-0 xs:px-4 flex-grow flex-shrink-0">
+      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div
-          className="flex flex-col gap-3 rounded-lg"
-        >
+        <div className="flex flex-col gap-3 rounded-lg">
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
+                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                 <div
                   className=""
                   key={version.id}

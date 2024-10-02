@@ -6,6 +6,7 @@ import Editor from "@components/organisms/dialogs/editor";
 
 const VersionPage = () => {
   const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
+
   return (
     <>
       <VersionList />

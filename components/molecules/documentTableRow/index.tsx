@@ -28,7 +28,7 @@ const DocumentTableRow = ({ document }: IProps) => {
   const handleRowClick = () => {
     if (document.contentType === "file") {
       setDocument(document);
-      setEditorModal(true);
+      // setEditorModal(true);
       setEditorMode("preview");
       return;
     }

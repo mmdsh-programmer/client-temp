@@ -1,26 +1,14 @@
-import {
- FaDateFromTimestamp, translateVersionStatus 
-} from "@utils/index";
-import {
- Spinner, Typography 
-} from "@material-tailwind/react";
-import {
- editorDataAtom, editorModalAtom, editorModeAtom 
-} from "@atom/editor";
-import {
- selectedVersionAtom, versionModalListAtom 
-} from "@atom/version";
-import {
- useRecoilState, useRecoilValue, useSetRecoilState 
-} from "recoil";
-
+import React from "react";
+import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
+import { Spinner, Typography } from "@material-tailwind/react";
+import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
-import { IVersion } from "@interface/version.interface";
-import { IVersionView } from "../version/versionList";
+import { IVersion, IVersionView } from "@interface/version.interface";
 import { LastVersionIcon } from "@components/atoms/icons";
 import LoadMore from "@components/molecules/loadMore";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
@@ -67,7 +55,7 @@ const VersionTableView = ({
     <div
       className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
     >
-      {/* eslint-disable-no-nested-ternary */}
+      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
@@ -77,28 +65,19 @@ const VersionTableView = ({
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
-                {
-                  key: "name",
-                  value: "نام نسخه",
-                },
+                { key: "name", value: "نام نسخه" },
                 {
                   key: "creator",
                   value: "ایجاد کننده",
                   className: "hidden md:table-cell",
                 },
-                {
-                  key: "createDate",
-                  value: "تاریخ ایجاد",
-                },
+                { key: "createDate", value: "تاریخ ایجاد" },
                 {
                   key: "editDate",
                   value: "تاریخ ویرایش",
                   className: "hidden xl:table-cell",
                 },
-                {
-                  key: "status",
-                  value: "وضعیت",
-                },
+                { key: "status", value: "وضعیت" },
                 {
                   key: "action",
                   value: "عملیات",
@@ -128,30 +107,33 @@ const VersionTableView = ({
                           data: version.creator?.name,
                           className: "hidden md:table-cell",
                         },
-                        {data: FaDateFromTimestamp(
-                            +new Date(version.createDate),
-                          ),},
                         {
                           data: FaDateFromTimestamp(
-                            +new Date(version.updateDate),
+                            +new Date(version.createDate)
+                          ),
+                        },
+                        {
+                          data: FaDateFromTimestamp(
+                            +new Date(version.updateDate)
                           ),
                           className: "hidden xl:table-cell",
                         },
-                        {data: (
+                        {
+                          data: (
                             <div className="flex items-center flex-wrap gap-2">
                               <div className="flex flex-wrap gap-1">
                                 <div
                                   className={`${
                                     translateVersionStatus(
                                       version.status,
-                                      version.state,
+                                      version.state
                                     ).className
                                   }`}
                                 >
                                   {
                                     translateVersionStatus(
                                       version.status,
-                                      version.state,
+                                      version.state
                                     ).translated
                                   }
                                 </div>
@@ -179,12 +161,14 @@ const VersionTableView = ({
                                 </>
                               </RenderIf>
                             </div>
-                          ),},
+                          ),
+                        },
                         {
                           data: (
                             <VersionMenu
                               version={version}
                               lastVersion={lastVersion}
+                              showDrawer={false}
                             />
                           ),
                           className: "justify-end",

@@ -1,43 +1,23 @@
-import {
-  FetchNextPageOptions,
-  InfiniteData,
-  InfiniteQueryObserverResult,
-} from "@tanstack/react-query";
-
-import { EEmptyList } from "@components/molecules/emptyList";
-import HeaderListTemplate from "@components/templates/headerListTemplate";
-import { IVersion } from "@interface/version.interface";
-import { IVersionMetadata } from "@interface/document.interface";
 import React from "react";
-import VersionCreateDialog from "@components/organisms/dialogs/version/versionCreateDialog";
-import VersionMobileView from "@components/organisms/versionView/versionMobileView";
-import VersionTableView from "@components/organisms/versionView/versionTableView";
 import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import useGetVersionList from "@hooks/version/useGetVersionList";
 import { useRecoilValue } from "recoil";
-
-export interface IVersionView {
-  isLoading: boolean;
-  getVersionList?: IVersion[][];
-  hasNextPage: boolean;
-  fetchNextPage: (
-    options?: FetchNextPageOptions
-  ) => Promise<
-    InfiniteQueryObserverResult<
-      InfiniteData<IVersionMetadata | undefined, unknown>,
-      Error
-    >
-  >;
-  isFetchingNextPage: boolean;
-  lastVersion?: IVersion;
-  type: EEmptyList;
-}
+import { selectedDocumentAtom } from "@atom/document";
+import { EEmptyList } from "@components/molecules/emptyList";
+import VersionTableView from "@components/organisms/versionView/versionTableView";
+import HeaderListTemplate from "@components/templates/headerListTemplate";
+import useGetVersionList from "@hooks/version/useGetVersionList";
+import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import { IVersionView } from "@interface/version.interface";
+import VersionMobileView from "../versionView/versionMobileView";
+import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
+import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
+import VersionMenu from "@components/molecules/versionMenu";
 
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+  const openVersionActionDrawer = useRecoilValue(versionDrawerAtom);
+  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
 
   const {
     data: versionList,
@@ -84,14 +64,12 @@ const VersionList = () => {
 
   return (
     <div className="p-4 xs:p-0 flex flex-col gap-4 xs:gap-6">
-
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
-        renderDialog={(close: () => void) => 
-        {return (
-          <VersionCreateDialog close={close} />
-        );}}
+        renderDialog={(close: () => void) => {
+          return <VersionCreateDialog close={close} />;
+        }}
       />
       <div className="hidden xs:block">
         <VersionTableView {...commonProps} />
@@ -99,6 +77,9 @@ const VersionList = () => {
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
         <VersionMobileView {...commonProps} />
       </div>
+      {openVersionActionDrawer && getSelectedVersion ? (
+        <VersionMenu version={getSelectedVersion} showDrawer />
+      ) : null}
     </div>
   );
 };

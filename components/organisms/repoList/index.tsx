@@ -1,48 +1,19 @@
-import {
-  FetchNextPageOptions,
-  InfiniteData,
-  InfiniteQueryObserverResult,
-} from "@tanstack/react-query";
-import {
- IListResponse, IRepo 
-} from "@interface/repo.interface";
 import React, { useEffect } from "react";
 import {
   repoAtom,
   repoGroupingAtom,
   repoSearchParamAtom,
 } from "@atom/repository";
-import {
- useRecoilValue, useSetRecoilState 
-} from "recoil";
-
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import AccessRepoList from "./accessRepoList";
 import AllRepoList from "./allRepoList";
 import BookmarkRepoList from "./bookmarkList";
-import { EEmptyList } from "@components/molecules/emptyList";
+import MyRepoList from "./myRepoList";
 import { ERepoGrouping } from "@interface/enums";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import ListMode from "@components/molecules/listMode";
-import MyRepoList from "./myRepoList";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
-
-export interface IRepoView {
-  isLoading: boolean;
-  getRepoList: InfiniteData<IListResponse<IRepo>, unknown> | undefined;
-  hasNextPage: boolean;
-  fetchNextPage: (
-    options?: FetchNextPageOptions,
-  ) => Promise<
-    InfiniteQueryObserverResult<
-      InfiniteData<IListResponse<IRepo>, unknown>,
-      Error
-    >
-  >;
-  isFetchingNextPage: boolean;
-  isFetching?: boolean;
-  type: EEmptyList;
-}
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
@@ -62,14 +33,13 @@ const RepoList = () => {
         renderList={() => {
           return (
             <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
-                <ListMode />
-              </RenderIf>
+              <ListMode />
+            </RenderIf>
           );
         }}
-        renderDialog={(close: () => void) => 
-{return (
-          <RepoCreateDialogStepper close={close} />
-        );}}
+        renderDialog={(close: () => void) => {
+          return <RepoCreateDialogStepper close={close} />;
+        }}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <AllRepoList />

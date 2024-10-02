@@ -1,13 +1,9 @@
+import React from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-import {
- Spinner,
- Typography
-} from "@material-tailwind/react";
-
+import { Spinner, Typography } from "@material-tailwind/react";
 import { ERoles } from "@interface/enums";
 import { IUser } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
-import React from "react";
 import { UserIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -24,7 +20,6 @@ interface IProps {
 
 const UserItem = ({ user }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-
   const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
@@ -35,10 +30,7 @@ const UserItem = ({ user }: IProps) => {
       return role.name !== ERoles.owner && role.name !== ERoles.default;
     })
     .map((item) => {
-      return {
-        label: translateRoles(item.name),
-        value: item.name,
-      };
+      return { label: translateRoles(item.name), value: item.name };
     }) as {
     label: string;
     value: ERoles | string;
@@ -96,29 +88,29 @@ const UserItem = ({ user }: IProps) => {
           </Typography>
         </div>
       );
-    } if (editRole.isPending || deleteUser.isPending) {
+    }
+    if (editRole.isPending || deleteUser.isPending) {
       return (
         <div className="w-5">
           <Spinner className="h-4 w-4" color="deep-purple" />
         </div>
       );
-    } 
-      return (
-        <SelectAtom
-          className="!w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
-          defaultOption={{
-            label: translateRoles(user.userRole),
-            value: user.userRole,
-          }}
-          options={userOptions}
-          selectedOption={{
-            label: user.userRole,
-            value: user.userRole
-          }}
-          setSelectedOption={handleChange}
-        />
-      );
-    
+    }
+    return (
+      <SelectAtom
+        className="!w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+        defaultOption={{
+          label: translateRoles(user.userRole),
+          value: user.userRole,
+        }}
+        options={userOptions}
+        selectedOption={{
+          label: user.userRole,
+          value: user.userRole,
+        }}
+        setSelectedOption={handleChange}
+      />
+    );
   };
 
   return (

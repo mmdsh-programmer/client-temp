@@ -1,8 +1,5 @@
-import {
- Button, Typography 
-} from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { Button, Typography } from "@material-tailwind/react";
 import { AddIcon } from "@components/atoms/icons";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 
@@ -20,6 +17,7 @@ const HeaderListTemplate = ({
   renderDialog,
 }: IProps) => {
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
+
   return (
     <header className="flex justify-between items-center">
       <Typography className="title_t1 text-primary">{header}</Typography>
@@ -31,7 +29,7 @@ const HeaderListTemplate = ({
             classNameText="text-white text-[13px] leading-[19.5px] -tracking-[0.13px] font-medium !px-2  font-iranYekan"
             classNameButton="rounded-lg h-9 !px-[6px] bg-purple-normal "
             onClick={() => {
-              return setOpenCreateRepo(true);
+              setOpenCreateRepo(true);
             }}
           />
         </div>
@@ -39,7 +37,7 @@ const HeaderListTemplate = ({
           <Button
             className="rounded-lg h-9 w-9 p-0 bg-purple-normal "
             onClick={() => {
-              return setOpenCreateRepo(true);
+              setOpenCreateRepo(true);
             }}
           >
             <AddIcon className="h-5 w-5 stroke-white" />
@@ -49,15 +47,18 @@ const HeaderListTemplate = ({
           <Button
             className=" h-[54px] w-[54px] z-[99] p-0 bg-purple-normal rounded-full "
             onClick={() => {
-              return setOpenCreateRepo(true);
+              setOpenCreateRepo(true);
             }}
           >
             <AddIcon className="h-6 w-6 stroke-white" />
           </Button>
         </div>
         {renderList?.()}
-        {openCreateRepo ? renderDialog?.(() => 
-{return setOpenCreateRepo(false);}) : null}
+        {openCreateRepo
+          ? renderDialog?.(() => {
+              return setOpenCreateRepo(false);
+            })
+          : null}
       </div>
     </header>
   );

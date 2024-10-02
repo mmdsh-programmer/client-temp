@@ -7,6 +7,7 @@ import useAddUser from "@hooks/user/useAddUser";
 import { useForm } from "react-hook-form";
 import useGetRoles from "@hooks/user/useGetRoles";
 import { useRecoilValue } from "recoil";
+import { IRoles } from "@interface/users.interface";
 
 interface IForm {
   username: string;
@@ -15,8 +16,12 @@ interface IForm {
 
 const RepoInvite = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const { isPending, mutate } = useAddUser();
-  const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
+  const {
+ isPending, mutate 
+} = useAddUser();
+  const {
+ data: getRoles, isFetching: isFetchingRoles 
+} = useGetRoles();
 
   const {
     register,
@@ -71,7 +76,7 @@ const RepoInvite = () => {
             className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
             {...register("accessName")}
           >
-            {getRoles?.map((item: any) => {
+            {getRoles?.map((item: IRoles) => {
               return (
                 <option
                   key={item.name}

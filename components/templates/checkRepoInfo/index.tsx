@@ -1,22 +1,9 @@
 "use client";
 
-import React, {
- useEffect,
- useState
-} from "react";
-import {
- repoAtom,
- repositoryIdAtom
-} from "atom/repository";
-import {
- useRecoilState,
- useSetRecoilState
-} from "recoil";
-import {
- useRouter,
- useSearchParams
-} from "next/navigation";
-
+import React, { useEffect, useState } from "react";
+import { repoAtom, repositoryIdAtom } from "atom/repository";
+import { useRecoilState } from "recoil";
+import { useRouter, useSearchParams } from "next/navigation";
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
 import { Spinner } from "@material-tailwind/react";
@@ -38,14 +25,13 @@ const CheckRepoInfo = ({ children }: IProps) => {
   const searchParams = useSearchParams();
   const repoId = searchParams.get("repoId");
 
-  const setRepository = useSetRecoilState(repoAtom);
+  const [getRepo, setRepository] = useRecoilState(repoAtom);
 
-  const {
- error, refetch, isFetching 
-} = useGetRepo(
+  const { error, refetch, isFetching } = useGetRepo(
     repositoryAtomId ? +repositoryAtomId : null,
     setRepository,
-    setRepositoryAtomId
+    setRepositoryAtomId,
+    true
   );
 
   useEffect(() => {
@@ -83,7 +69,10 @@ const CheckRepoInfo = ({ children }: IProps) => {
       </div>
     );
   }
-  return <div className="check-repo-info">{children}</div>;
+
+  if (getRepo) {
+    return <div className="check-repo-info">{children}</div>;
+  }
 };
 
 export default CheckRepoInfo;

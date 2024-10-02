@@ -48,13 +48,12 @@ const EditorHeader = ({
         outline: "",
       });
     }
-
     setVersionModalList(false);
     setEditorData(null);
     setEditorModal(false);
   };
 
-  return disabled ? (
+  return !disabled ? (
     <>
       <div className="block xs:hidden">
         <BackButton onClick={handleClose} />

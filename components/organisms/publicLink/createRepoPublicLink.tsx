@@ -1,10 +1,5 @@
-import {
- Checkbox, Typography 
-} from "@material-tailwind/react";
-import React, {
- useEffect, useState 
-} from "react";
-
+import React, { useEffect, useState } from "react";
+import { Checkbox, Typography } from "@material-tailwind/react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
@@ -15,8 +10,9 @@ import { repoShareSchema } from "@components/organisms/dialogs/repository/valida
 import { toast } from "react-toastify";
 import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { IRepo } from "@interface/repo.interface";
 
 interface IData {
   expireTime: number;
@@ -29,7 +25,7 @@ interface IProps {
 }
 
 const CreateRepoPublicLink = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const [hasPassword, setHasPassword] = useState(false);
   const getSelectedRoleId = useRecoilValue(publicRoleAtom);
   const createPublicLink = useCreatePublicLink();
@@ -38,7 +34,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
     expireTime: number;
     roleId: number;
     password?: string;
-  }>({resolver: yupResolver(repoShareSchema),});
+  }>({ resolver: yupResolver(repoShareSchema) });
 
   const {
     register,
@@ -69,19 +65,20 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = (data: IData) => {
-    if (!getRepo) {
+    if (!getRepo || !getSelectedRoleId) {
       return null;
     }
-
     createPublicLink.mutate({
       repoId: getRepo.id,
-      roleId: data.roleId,
+      roleId: getSelectedRoleId,
       expireTime: data.expireTime,
       password: hasPassword ? data.password : undefined,
-      callBack: () => {
-        handleOpen();
+      callBack: (result) => {
+        const objKey = Object.keys(result)[0];
+        setRepo({ ...(getRepo as IRepo), [`${objKey}`]: result[objKey] });
         handleReset();
         toast.success("لينك انتشار برای مخزن با موفقيت ايجاد شد.");
+        handleOpen();
       },
     });
   };
@@ -111,7 +108,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
             onChange={() => {
               setHasPassword(!hasPassword);
             }}
-            containerProps={{className: "-mr-3",}}
+            containerProps={{ className: "-mr-3" }}
           />
           {hasPassword && (
             <>

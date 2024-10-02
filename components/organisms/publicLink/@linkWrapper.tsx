@@ -1,26 +1,9 @@
-import {
- Button,
- Spinner,
- Typography
-} from "@material-tailwind/react";
-import {
- CopyIcon,
- SettingIcon
-} from "@components/atoms/icons";
-import {
- FaDateFromTimestamp,
- translateRoles
-} from "@utils/index";
 import React, { useState } from "react";
-import {
- openShareAccessAtom,
- publicRoleAtom
-} from "@atom/public";
-import {
- useRecoilValue,
- useSetRecoilState
-} from "recoil";
-
+import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { CopyIcon, SettingIcon } from "@components/atoms/icons";
+import { FaDateFromTimestamp, translateRoles } from "@utils/index";
+import { openShareAccessAtom, publicRoleAtom } from "@atom/public";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { IPublicLink } from "@interface/repo.interface";
 import { IRoles } from "@interface/users.interface";
 import LinkWrapperMenu from "./linkWrapperMenu";
@@ -39,9 +22,7 @@ const LinkWrapper = ({ role }: IProps) => {
   const setOpenShareAccess = useSetRecoilState(openShareAccessAtom);
   const [tinyLink, setTinyLink] = useState<string | null>(null);
 
-  const {
- mutate, isPending 
-} = useCreateTinyLink();
+  const { mutate, isPending } = useCreateTinyLink();
 
   const subscribeLink = `${window.location.origin}/subscribe`;
 
@@ -105,7 +86,7 @@ const LinkWrapper = ({ role }: IProps) => {
                     copy(
                       `${subscribeLink}/${readLink()?.link}${
                         readLink()?.hasPassword ? "?hasPassword=true" : ""
-                      }`,
+                      }`
                     );
                     toast.success("لینک مخزن کپی شد");
                   }}
@@ -140,7 +121,7 @@ const LinkWrapper = ({ role }: IProps) => {
                   CopyTinyLink(
                     `${subscribeLink}/${readLink()?.link}${
                       readLink()?.hasPassword ? "?hasPassword=true" : ""
-                    }` || "",
+                    }` || ""
                   );
                 }
               }}

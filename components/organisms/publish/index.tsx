@@ -1,6 +1,6 @@
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
+import { repoAtom, repositoryIdAtom } from "@atom/repository";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import CreateRepoPublishLink from "./createRepoPublishLink";
 import { Typography } from "@material-tailwind/react";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -8,17 +8,17 @@ import useDeletePublishLink from "@hooks/publish/useDeletePublishLink";
 import { toast } from "react-toastify";
 
 const Publish = () => {
+  const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
   const getRepo = useRecoilValue(repoAtom);
   const deletePublishLink = useDeletePublishLink();
 
   const handleDelete = () => {
     if (!getRepo) return;
-    deletePublishLink.mutate({
-      repoId: getRepo?.id,
+    deletePublishLink.mutate({repoId: getRepo?.id,
       callBack: () => {
+        setRepositoryAtomId(getRepo.id);
         toast.success("درخواست شما برای لغو انتشار مخزن با موفقیت انجام شد.");
-      },
-    });
+      },});
   };
 
   return (

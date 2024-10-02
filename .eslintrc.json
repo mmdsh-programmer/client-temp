@@ -57,10 +57,7 @@
       2,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
     ],
-    "object-curly-newline": [
-      "error",
-      { "minProperties": 2 }
-    ],
+    "object-curly-newline": "off",
     "max-classes-per-file": "off",
     "react/jsx-props-no-spreading": "off",
     "implicit-arrow-linebreak": ["error", "below"],
@@ -87,7 +84,7 @@
     "unicorn/no-null": "off",
     "unicorn/explicit-length-check": "off",
     "unicorn/filename-case": [
-      "error",
+      1,
       {
         "case": "camelCase"
       }

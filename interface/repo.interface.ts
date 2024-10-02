@@ -1,4 +1,10 @@
+import { EEmptyList } from "@components/molecules/emptyList";
 import { ERoles } from "./enums";
+import {
+  FetchNextPageOptions,
+  InfiniteData,
+  InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
 
 export interface IRepo {
   id: number;
@@ -80,4 +86,21 @@ export interface IPublicKey {
   updatedAt: string | null;
   repoId: number;
   creatorSSOID: number;
+}
+
+export interface IRepoView {
+  isLoading: boolean;
+  getRepoList: InfiniteData<IListResponse<IRepo>, unknown> | undefined;
+  hasNextPage: boolean;
+  fetchNextPage: (
+    options?: FetchNextPageOptions,
+  ) => Promise<
+    InfiniteQueryObserverResult<
+      InfiniteData<IListResponse<IRepo>, unknown>,
+      Error
+    >
+  >;
+  isFetchingNextPage: boolean;
+  isFetching?: boolean;
+  type: EEmptyList;
 }

@@ -1,7 +1,7 @@
+import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IRepo } from "@interface/repo.interface";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { repoDeleteSchema } from "./validation.yup";
@@ -21,14 +21,10 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoDeleteDialog = ({
- repo, setOpen 
-}: IProps) => {
+const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
   const router = useRouter();
   const setRepo = useSetRecoilState(repoAtom);
-  const {
- isPending, mutate 
-} = useDeleteRepo();
+  const { isPending, mutate } = useDeleteRepo();
 
   const {
     register,
@@ -36,7 +32,7 @@ const RepoDeleteDialog = ({
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>({resolver: yupResolver(repoDeleteSchema),});
+  } = useForm<IForm>({ resolver: yupResolver(repoDeleteSchema) });
 
   const handleClose = () => {
     setOpen(false);
@@ -49,10 +45,10 @@ const RepoDeleteDialog = ({
     mutate({
       repoId: repo.id,
       callBack: () => {
-        localStorage.removeItem("CLASOR:SELECTED_REPO");
+        setRepo(null);
+        router.push("dashboard");
         window.setTimeout(() => {
-          setRepo(null);
-          router.push("dashboard");
+          localStorage.removeItem("CLASOR:SELECTED_REPO");
         }, 100);
         toast.success("مخزن با موفقیت حذف شد.");
         handleClose();
@@ -66,7 +62,7 @@ const RepoDeleteDialog = ({
       onSubmit={handleSubmit(onSubmit)}
       dialogHeader="حذف مخزن"
       setOpen={handleClose}
-      className=""
+      className="!-mb-[50vh] xs:!mb-0"
     >
       <form className="flex flex-col gap-5">
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
@@ -84,10 +80,7 @@ const RepoDeleteDialog = ({
             برای تایید "<strong>{repo?.name}</strong>" را در کادر پایین تایپ
             نمایید!
           </Typography>
-          <FormInput
-            placeholder="عنوان"
-            register={{...register("name"),}}
-          />
+          <FormInput placeholder="عنوان" register={{ ...register("name") }} />
           {errors.name && (
             <Typography className="warning_text">
               {errors.name?.message}

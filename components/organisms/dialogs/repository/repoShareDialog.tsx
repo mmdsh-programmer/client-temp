@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import {
- createGroupAtom,
- deleteGroupAtom,
- editGroupAtom
-} from "@atom/group";
-import {
- useRecoilState,
- useSetRecoilState
-} from "recoil";
-
+import { createGroupAtom, deleteGroupAtom, editGroupAtom } from "@atom/group";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import CreateRepoPublicLink from "@components/organisms/publicLink/createRepoPublicLink";
 import { DialogBody } from "@material-tailwind/react";
 import GroupCreateDialog from "@components/organisms/dialogs/group/groupCreateDialog";
@@ -56,17 +48,21 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
 
   const tabList = [
     {
- tabTitle: ETabs.USERS, tabContent: <Users /> 
-},
+      tabTitle: ETabs.USERS,
+      tabContent: <Users />,
+    },
     {
- tabTitle: ETabs.GROUPS, tabContent: <Groups /> 
-},
+      tabTitle: ETabs.GROUPS,
+      tabContent: <Groups />,
+    },
     {
- tabTitle: ETabs.LINK, tabContent: <PublicLink /> 
-},
+      tabTitle: ETabs.LINK,
+      tabContent: <PublicLink />,
+    },
     {
- tabTitle: ETabs.PUBLISH, tabContent: <Publish /> 
-},
+      tabTitle: ETabs.PUBLISH,
+      tabContent: <Publish />,
+    },
   ];
 
   if (getOpenShareAccess) {
@@ -84,21 +80,21 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
 
   return (
     <InfoDialog
-        dialogHeader="اشتراک گذاری"
-        setOpen={handleClose}
-        className="xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
-      >
-        <DialogBody placeholder="dialog body" className="p-0 h-full">
-          <div className="flex flex-col gap-4 p-4 xs:p-6">
-            <TabComponent
-              tabList={tabList}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-            />
-          </div>
-        </DialogBody>
-        <GroupMenu showDrawer />
-      </InfoDialog>
+      dialogHeader="اشتراک گذاری"
+      setOpen={handleClose}
+      className={`xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg `}
+    >
+      <DialogBody placeholder="dialog body" className="p-0 h-full">
+        <div className="flex flex-col gap-4 p-4 xs:p-6">
+          <TabComponent
+            tabList={tabList}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        </div>
+      </DialogBody>
+      <GroupMenu showDrawer={true} />
+    </InfoDialog>
   );
 };
 

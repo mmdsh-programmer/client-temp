@@ -4,22 +4,9 @@ import MenuTemplate from "@components/templates/menuTemplate";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { documentDrawerAtom, selectedDocumentAtom } from "@atom/document";
-import DocumentDeleteDialog from "@components/organisms/dialogs/document/documentDeleteDialog";
-import DocumentEditDialog from "@components/organisms/dialogs/document/documentEditDialog";
-import DocumentHideDialog from "@components/organisms/dialogs/document/documentHideDialog";
-import DocumentVisibleDialog from "@components/organisms/dialogs/document/documentVisibleDialog";
-import DocumentMoveDialog from "@components/organisms/dialogs/document/documentMoveDialog";
 import { MoreDotIcon } from "@components/atoms/icons";
-import DocumentBookmarkDialog from "@components/organisms/dialogs/document/documentBookmarkDialog";
-import DocumentAccessDialog from "@components/organisms/dialogs/document/documentAccessDialog";
-import DocumentTagsDialog from "@components/organisms/dialogs/document/documentTagsDialog";
-import DocumentAccessPublishingDialog from "@components/organisms/dialogs/document/documentAccessPublishingDialog";
-import DocumentCreatePasswordDialog from "@components/organisms/dialogs/document/documentCreatePasswordDialog";
-import DocumentUpdatePasswordDialog from "@components/organisms/dialogs/document/documentUpdatePasswordDialog";
-import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document/documentDeletePasswordDialog";
-import { versionListAtom } from "@atom/version";
-import { editorModeAtom } from "@atom/editor";
-import Editor from "@components/organisms/dialogs/editor";
+import DocumentDialogs from "../documentDialogs";
+import useDocumentMenuList from "./useDocumentMenuList";
 
 interface IProps {
   document?: IDocumentMetadata;
@@ -28,180 +15,37 @@ interface IProps {
 
 const DocumentMenu = ({ document, showDrawer }: IProps) => {
   const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setShowVersionList = useSetRecoilState(versionListAtom);
-  const [editDocumentModal, setEditDocumentModal] = useState(false);
-  const [deleteDocumentModal, setDeleteDocumentModal] = useState(false);
-  const [moveModal, setMoveModal] = useState(false);
-  const [hideModal, setHideModal] = useState(false);
-  const [visibleModal, setVisibleModal] = useState(false);
-  const [editContentModal, setEditContentModal] = useState(false);
-  const [documentTagsModal, setDocumentTagsModal] = useState(false);
-  const [documentAccessModal, setDocumentAccessModal] = useState(false);
-  const [bookmarkDocumentModal, setBookmarkDocumentModal] = useState(false);
-  const [createPasswordDocumentModal, setCreatePasswordDocumentModal] =
-    useState(false);
-  const [updatePasswordDocumentModal, setUpdatePasswordDocumentModal] =
-    useState(false);
-  const [deletePasswordDocumentModal, setDeletePasswordDocumentModal] =
-    useState(false);
-  const [documentAccessPublishingModal, setDocumentAccessPublishingModal] =
-    useState(false);
 
   const [openDocumentActionDrawer, setOpenDocumentActionDrawer] =
     useRecoilState(documentDrawerAtom);
 
-  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const [modals, setModals] = useState({
+    editDocument: false,
+    deleteDocument: false,
+    move: false,
+    hide: false,
+    visible: false,
+    editContent: false,
+    documentTags: false,
+    documentAccess: false,
+    bookmarkDocument: false,
+    createPassword: false,
+    updatePassword: false,
+    deletePassword: false,
+    documentAccessPublishing: false,
+  });
 
-  const editOptions = [
-    {
-      text: "ویرایش محتوا",
-      onClick: () => {
-        setEditContentModal(true);
-        setEditorMode("preview");
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "ویرایش سند",
-      onClick: () => {
-        setEditDocumentModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "تگ های سند",
-      onClick: () => {
-        setDocumentTagsModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-  ];
+  const toggleModal = (modalName: keyof typeof modals, value: boolean) => {
+    setModals((prev) => {
+      return { ...prev, [modalName]: value };
+    });
+  };
 
-  const publishDocOptions = [
-    {
-      text: document?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
-      onClick: () => {
-        document?.isHidden ? setVisibleModal(true) : setHideModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "محدودیت کاربران",
-      onClick: () => {
-        setDocumentAccessPublishingModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    ...(document?.hasPassword
-      ? [
-          {
-            text: "ویرایش رمز عبور",
-            onClick: () => {
-              setUpdatePasswordDocumentModal(true);
-              if (document) {
-                setDocument(document);
-              }
-            },
-          },
-          {
-            text: "حذف رمز عبور",
-            onClick: () => {
-              setDeletePasswordDocumentModal(true);
-              if (document) {
-                setDocument(document);
-              }
-            },
-          },
-        ]
-      : [
-          {
-            text: "اعمال رمز عبور",
-            onClick: () => {
-              setCreatePasswordDocumentModal(true);
-              if (document) {
-                setDocument(document);
-              }
-            },
-          },
-        ]),
-  ];
-
-  const menuList: {
-    text: string;
-    icon?: React.JSX.Element;
-    onClick: () => void;
-    subMenu?: { text: string; icon?: React.JSX.Element; onClick: () => void }[];
-  }[] = [
-    {
-      text: "ویرایش",
-      subMenu: editOptions,
-      onClick: () => {},
-    },
-    {
-      text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
-      onClick: () => {
-        setBookmarkDocumentModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "انتقال",
-      onClick: () => {
-        setMoveModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "نسخه های سند",
-      onClick: () => {
-        setShowVersionList(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "محدودیت دسترسی در پنل",
-      onClick: () => {
-        setDocumentAccessModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-    {
-      text: "محدودیت در انتشار",
-      subMenu: publishDocOptions,
-      onClick: () => {},
-    },
-    {
-      text: "حذف سند",
-      onClick: () => {
-        setDeleteDocumentModal(true);
-        if (document) {
-          setDocument(document);
-        }
-      },
-    },
-  ];
+  const menuList = useDocumentMenuList({ document, toggleModal });
 
   return (
     <>
-      {!!showDrawer ? (
+      {showDrawer ? (
         <div className="xs:hidden flex">
           <DrawerTemplate
             openDrawer={openDocumentActionDrawer}
@@ -223,74 +67,13 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
           }
         />
       )}
-      {deleteDocumentModal && (
-        <DocumentDeleteDialog
-          setOpen={() => {
-            setDeleteDocumentModal(false);
-          }}
-        />
-      )}
-      {editDocumentModal && (
-        <DocumentEditDialog
-          setOpen={() => {
-            setEditDocumentModal(false);
-          }}
-        />
-      )}
-      {hideModal && (
-        <DocumentHideDialog
-          setOpen={() => {
-            setHideModal(false);
-          }}
-        />
-      )}
-      {visibleModal && (
-        <DocumentVisibleDialog
-          setOpen={() => {
-            setVisibleModal(false);
-          }}
-        />
-      )}
-      {moveModal && <DocumentMoveDialog setOpen={() => setMoveModal(false)} />}
-      {bookmarkDocumentModal && (
-        <DocumentBookmarkDialog
-          setOpen={() => setBookmarkDocumentModal(false)}
-        />
-      )}
-      {documentAccessModal && (
-        <DocumentAccessDialog setOpen={() => setDocumentAccessModal(false)} />
-      )}
-      {documentTagsModal && (
-        <DocumentTagsDialog setOpen={() => setDocumentTagsModal(false)} />
-      )}
-      {documentAccessPublishingModal && (
-        <DocumentAccessPublishingDialog
-          setOpen={() => setDocumentAccessPublishingModal(false)}
-        />
-      )}
-      {createPasswordDocumentModal && (
-        <DocumentCreatePasswordDialog
-          setOpen={() => setCreatePasswordDocumentModal(false)}
-        />
-      )}
-      {updatePasswordDocumentModal && (
-        <DocumentUpdatePasswordDialog
-          setOpen={() => setUpdatePasswordDocumentModal(false)}
-        />
-      )}
-      {deletePasswordDocumentModal && (
-        <DocumentDeletePasswordDialog
-          setOpen={() => setDeletePasswordDocumentModal(false)}
-        />
-      )}
-      {editContentModal ? (
-        <Editor
-          setOpen={() => {
-            setEditContentModal(false);
-            setDocument(null);
-          }}
-        />
-      ): null}
+      <DocumentDialogs
+        modalsState={modals}
+        toggleModal={(modalName, value) => {
+          toggleModal(modalName as keyof typeof modals, value);
+          setDocument(null);
+        }}
+      />
     </>
   );
 };

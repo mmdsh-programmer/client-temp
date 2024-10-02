@@ -19,13 +19,10 @@ import { useRecoilValue } from "recoil";
 const DocumentBlockList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
-  const repoId = getRepo!.id;
 
-  const {
-    data: getDocumentBlockList,
+  const {data: getDocumentBlockList,
     isFetching,
-    isLoading,
-  } = useGetDocumentBlocklist(repoId, document!.id, 20);
+    isLoading,} = useGetDocumentBlocklist(getRepo!.id, document!.id, 20);
   const blockDocument = useBlockDocument();
 
   const handleDelete = (username: string) => {

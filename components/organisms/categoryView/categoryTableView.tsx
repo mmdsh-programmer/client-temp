@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-
 import AdvancedFilter from "@components/molecules/@advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
 import DocumentTableRow from "@components/molecules/documentTableRow";
 import EmptyList from "@components/molecules/emptyList";
-import { ICategoryMetadata } from "@interface/category.interface";
-import { ICategoryView } from "../category/categoryChildren";
+import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
@@ -20,7 +18,6 @@ const TableView = ({
   hasNextPage,
   fetchNextPage,
   isFetchingNextPage,
-  isFetching,
   type,
 }: ICategoryView) => {
   const [openFilter, setOpenFilter] = useState(false);
@@ -34,6 +31,7 @@ const TableView = ({
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />
       </div>
       {openFilter ? <AdvancedFilter /> : null}
+      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
@@ -45,24 +43,18 @@ const TableView = ({
               <TableHead
                 tableHead={[
                   { key: "select", value: "انتخاب", className: "" },
-                  {
-                    key: "order",
+                  {key: "order",
                     value: "اولویت",
                     isSorted: true,
-                    className: "hidden xl:table-cell",
-                  },
+                    className: "hidden xl:table-cell",},
                   { key: "name", value: "نام دسته", isSorted: true },
                   { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
-                  {
-                    key: "editDate",
+                  {key: "editDate",
                     value: "تاریخ ویرایش",
-                    className: "hidden xl:table-cell",
-                  },
-                  {
-                    key: "creator",
+                    className: "hidden xl:table-cell",},
+                  {key: "creator",
                     value: "نام سازنده",
-                    className: "hidden lg:table-cell",
-                  },
+                    className: "hidden lg:table-cell",},
                   { key: "action", value: "عملیات" },
                 ]}
               />              

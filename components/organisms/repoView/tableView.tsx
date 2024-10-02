@@ -1,13 +1,13 @@
+import React from "react";
 import EmptyList from "@components/molecules/emptyList";
 import { FaDateFromTimestamp } from "@utils/index";
-import { IRepoView } from "../repoList";
 import LoadMore from "@components/molecules/loadMore";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
 import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
+import { IRepoView } from "@interface/repo.interface";
 
 const TableView = ({
   isLoading,
@@ -35,21 +35,15 @@ const TableView = ({
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
-                {
-                  key: "name",
+                {key: "name",
                   value: "نام مخزن",
-                  isSorted: true,
-                },
-                {
-                  key: "createDate",
+                  isSorted: true,},
+                {key: "createDate",
                   value: "تاریخ ایجاد",
-                  isSorted: true,
-                },
-                {
-                  key: "action",
+                  isSorted: true,},
+                {key: "action",
                   value: "عملیات",
-                  className: "flex justify-end ml-4 ",
-                },
+                  className: "flex justify-end ml-4 ",},
               ]}
             />
             <tbody>

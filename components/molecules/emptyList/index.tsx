@@ -1,5 +1,5 @@
-import { FolderEmptyIcon } from "@components/atoms/icons";
 import React from "react";
+import { FolderEmptyIcon } from "@components/atoms/icons";
 import { Typography } from "@material-tailwind/react";
 
 export enum EEmptyList {
@@ -196,17 +196,17 @@ const EmptyList = ({ type }: IProps) => {
             شما در حال حاضر درخواست دعوت به مخزنی ندارید.
           </Typography>
         );
-        case EEmptyList.FEEDBACK:
-          return (
-            <div className="flex flex-col items-center justify-center">
-              <Typography
-                placeholder="empty-message"
-                className="title_t3 text-primary"
-              >
-                شما در حال حاضر لیست بازخوردی ندارید.
-              </Typography>
-            </div>
-          );
+      case EEmptyList.FEEDBACK:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              شما در حال حاضر لیست بازخوردی ندارید.
+            </Typography>
+          </div>
+        );
       default:
         return null;
     }
