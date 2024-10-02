@@ -1,7 +1,8 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AdvancedFilter from "@components/molecules/@advancedFilter";
+
+import AdvancedFilter from "@components/molecules/advancedFilter";
+import React from "react";
 import { RecoilRoot } from "recoil";
 
 const queryClient = new QueryClient();

@@ -1,10 +1,11 @@
+import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import React, { useState } from "react";
-import AdvancedFilter from "@components/molecules/@advancedFilter";
+
+import AdvancedFilter from "@components/molecules/advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
 import DocumentTableRow from "@components/molecules/documentTableRow";
 import EmptyList from "@components/molecules/emptyList";
-import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import AdvancedFilter from "@components/molecules/@advancedFilter";
+import AdvancedFilter from "@components/molecules/advancedFilter";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import SearchFilter from "@components/molecules/searchFilter";
 
