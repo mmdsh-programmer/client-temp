@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import ChipMolecule from ".";
 import { FolderIcon } from "@components/atoms/icons";
 
@@ -19,7 +19,9 @@ export default meta;
 type Story = StoryObj<typeof ChipMolecule>;
 
 export const Default: Story = {
-  render: (args) => <ChipMolecule {...args} />,
+  render: (args) => {
+    return <ChipMolecule {...args} />;
+  },
 };
 
 Default.args = {
@@ -28,7 +30,9 @@ Default.args = {
 };
 
 export const WithIcon: Story = {
-  render: (args) => <ChipMolecule {...args} />,
+  render: (args) => {
+    return <ChipMolecule {...args} />;
+  },
 };
 
 WithIcon.args = {

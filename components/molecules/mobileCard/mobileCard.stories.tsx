@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import MobileCard from ".";
 import { MoreDotIcon, RepoIcon } from "@components/atoms/icons";
 
@@ -18,7 +18,9 @@ const meta: Meta<typeof MobileCard> = {
 export default meta;
 
 const Template: StoryObj<typeof MobileCard> = {
-  render: (args) => <MobileCard {...args} />,
+  render: (args) => {
+    return <MobileCard {...args} />;
+  },
 };
 
 export const Basic: StoryObj<typeof MobileCard> = {

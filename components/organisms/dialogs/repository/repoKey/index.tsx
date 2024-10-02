@@ -24,6 +24,7 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
     setOpen(false);
   };
 
+  // eslint-disable-next-line no-nested-ternary
   return getCreateRepoKey && repo ? (
     <RepoKeyCreateDialog repoId={repo.id} setOpen={setCreateRepoKey} />
   ) : getDeleteRepoKey && repo ? (
@@ -43,7 +44,6 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
             ایجاد کلید
           </Typography>
         </Button>
-
         <div className="w-full overflow-auto max-h-[calc(100dvh-200px)] border-[0.5px] border-normal rounded-lg mt-4">
           {repo && <RepoKeyList repoId={repo.id} hasAction />}
         </div>

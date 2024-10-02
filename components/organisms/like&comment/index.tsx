@@ -11,7 +11,7 @@ const LikeAndComment = () => {
       <Button
         className="w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700"
         onClick={() => {
-          setChatDrawer(!getChatDrawer)
+          setChatDrawer(!getChatDrawer);
         }}
       >
         <ChatIcon className="h-5 w-5 " />

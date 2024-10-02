@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React from "react";
 
 interface IProps {
@@ -163,7 +164,7 @@ export const ArrowDownIcon = (props: IProps) => {
 };
 
 export const ArrowRightIcon = (props: IProps) => {
-  const { className, stroke } = props;
+  const { className } = props;
   return (
     <svg
       className={className}
@@ -273,7 +274,7 @@ export const CardIcon = (props: IProps) => {
 };
 
 export const ChatIcon = (props: IProps) => {
-  const { className, stroke } = props;
+  const { className } = props;
   return (
     <svg
       className={className}
@@ -1166,12 +1167,10 @@ export const FolderBookmarkIcon = (props: IProps) => {
   );
 };
 
-export const FolderEmptyIcon = (props: IProps) => {
-  const { className } = props;
+export const FolderEmptyIcon = ({ className }: IProps) => {
   return (
     <svg
-      width="200"
-      height="150"
+      className={className}
       viewBox="0 0 200 150"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -2873,7 +2872,7 @@ export const ThemeIcon = (props: IProps) => {
 };
 
 export const UploadIcon = (props: IProps) => {
-  const { className, fill } = props;
+  const { className } = props;
   return (
     <svg
       className={className}
@@ -2912,7 +2911,7 @@ export const UserIcon = (props: IProps) => {
 };
 
 export const UserGroupIcon = (props: IProps) => {
-  const { className, fill } = props;
+  const { className } = props;
   return (
     <svg
       className={className}

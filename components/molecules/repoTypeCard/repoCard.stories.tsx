@@ -23,9 +23,6 @@ export const ArchiveRepo: Story = {
     cardTitle: "مخزن های بایگانی",
   },
   render: function Render(args) {
-    function onClick() {
-      console.log("=============== clicked ================");
-    }
     return (
       <div dir="rtl">
         <RepoCard
@@ -45,28 +42,30 @@ export const ArchiveRepo: Story = {
                 height="9"
                 rx="2"
                 stroke="#1B1B1D"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M10 15H14"
                 stroke="#1B1B1D"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
               <path
                 d="M20 12V7.45C20 6.34543 19.1046 5.45 18 5.45H13.0291C12.6981 5.45 12.3886 5.2862 12.2024 5.01253L11.1307 3.43747C10.9445 3.1638 10.6349 3 10.3039 3H6C4.89543 3 4 3.89543 4 5V12"
                 stroke="#1B1B1D"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           }
           cardTitle="مخزن‌های بایگانی"
-          onClick={onClick}
+          onClick={() => {
+            return console.log("=============== clicked ================");
+          }}
         />
       </div>
     );

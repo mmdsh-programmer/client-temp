@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
+import type { Meta, StoryFn } from "@storybook/react";
 import EmptyList, { EEmptyList } from ".";
 
 export default {
@@ -7,7 +7,9 @@ export default {
   component: EmptyList,
 } as Meta<typeof EmptyList>;
 
-const Template: StoryFn<typeof EmptyList> = (args) => <EmptyList {...args} />;
+const Template: StoryFn<typeof EmptyList> = (args) => {
+  return <EmptyList {...args} />;
+};
 
 export const Dashboard = Template.bind({});
 Dashboard.args = {

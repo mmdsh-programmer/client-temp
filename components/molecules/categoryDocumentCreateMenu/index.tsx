@@ -17,7 +17,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
   const [openCreateDrawer, setOpenCreateDrawer] = useRecoilState(
-    createCatDocDrawerAtom,
+    createCatDocDrawerAtom
   );
 
   const menuList: {
@@ -47,7 +47,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
 
   return (
     <>
-      {!!showDrawer ? (
+      {showDrawer ? (
         <div className="xs:hidden flex">
           <DrawerTemplate
             openDrawer={openCreateDrawer}
@@ -91,25 +91,29 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
           </div>
         </>
       )}
-      {createCategoryModal && (
+      {createCategoryModal ? (
         <CategoryCreateDialog
           setOpen={() => {
             setCreateCategoryModal(false);
           }}
         />
-      )}
-      {createDocumentModal && (
+      ) : null}
+      {createDocumentModal ? (
         <DocumentCreate
           isTemplate={false}
-          setOpen={() => setCreateDocumentModal(false)}
+          setOpen={() => {
+            return setCreateDocumentModal(false);
+          }}
         />
-      )}
-      {createTemplateModal && (
+      ) : null}
+      {createTemplateModal ? (
         <DocumentCreate
-          isTemplate={true}
-          setOpen={() => setCreateTemplateModal(false)}
+          isTemplate
+          setOpen={() => {
+            return setCreateTemplateModal(false);
+          }}
         />
-      )}
+      ) : null}
     </>
   );
 };

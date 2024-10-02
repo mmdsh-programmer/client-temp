@@ -15,15 +15,17 @@ const meta: Meta<typeof Breadcrumb> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex w-full items-center justify-center !font-iranYekan">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex w-full items-center justify-center !font-iranYekan">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 

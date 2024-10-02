@@ -21,8 +21,7 @@ const VersionCancelPublicDialog = ({ version, setOpen }: IProps) => {
 
   const form = useForm();
 
-  const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const { handleSubmit, reset, clearErrors } = form;
 
   const handleReset = () => {
     clearErrors();
@@ -49,7 +48,7 @@ const VersionCancelPublicDialog = ({ version, setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={cancelPublicVersion.isPending}
-      dialogHeader={"لغو تایید نسخه"}
+      dialogHeader="لغو تایید نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

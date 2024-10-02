@@ -12,7 +12,7 @@ const StepperComponent = ({ getActiveStep, stepList }: IProps) => {
     <Stepper
       activeStep={getActiveStep}
       placeholder="stepper"
-      lineClassName={`bg-transparent !border-b-gray-300 border-b-2 border-dashed`}
+      lineClassName="bg-transparent !border-b-gray-300 border-b-2 border-dashed"
       activeLineClassName="!bg-transparent border-b-0"
     >
       {stepList.map((step, index) => {

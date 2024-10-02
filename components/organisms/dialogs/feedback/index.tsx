@@ -1,10 +1,7 @@
-import FileUploaderInput, {IFileUploaderInput,} from "@components/organisms/fileUploader";
-import React, {
- ChangeEvent,
- useRef,
- useState
-} from "react";
-
+import React, { ChangeEvent, useRef, useState } from "react";
+import FileUploaderInput, {
+  IFileUploaderInput,
+} from "@components/organisms/fileUploader";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { IPodspaceResult } from "@interface/app.interface";
 import TextareaAtom from "@components/atoms/textarea/textarea";
@@ -40,17 +37,11 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     content: string;
     fileHashList?: string[];
   }>({
-    defaultValues: {fileHashList: [],},
+    defaultValues: { fileHashList: [] },
     resolver: yupResolver(feedBackSchema),
   });
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState,
-    getValues,
-    reset
-  } = form;
+  const { register, handleSubmit, setValue, formState, getValues, reset } =
+    form;
   const { errors } = formState;
 
   const handleClose = () => {
@@ -127,7 +118,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
   };
 
   const handleDeleteFile = (file: File) => {
-    const {name} = file;
+    const { name } = file;
     fileIndex.current -= 1;
     setFileInfo((oldValue) => {
       if (oldValue === null) return [];

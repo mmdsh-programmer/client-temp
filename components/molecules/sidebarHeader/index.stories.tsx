@@ -24,7 +24,7 @@ export const ArchiveFolder: Story = {
       "flex justify-between items-center p-2 rounded-md bg-tertiary w-[215px] border-2 border-gray-200",
     classNameTitle: "text-primary font-medium text-sm",
   },
-  render: function Render(args) {
+  render: function Render() {
     return (
       <div dir="rtl">
         <SiderbarHeader />

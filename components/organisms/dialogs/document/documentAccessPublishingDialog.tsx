@@ -31,15 +31,15 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
 
   const { data: userList, isLoading } = useGetWhiteBlackList(
     getRepo!.id,
-    document!.id,
+    document!.id
   );
   const whiteListHook = useAddWhiteList();
   const blackListHook = useAddBlackList();
 
   const listHook = type === "black-list" ? blackListHook : whiteListHook;
-  const users = userList?.blackList.length
-    ? userList.blackList
-    : userList?.whiteList;
+  // const users = userList?.blackList.length
+  //   ? userList.blackList
+  //   : userList?.whiteList;
 
   const handleClose = () => {
     setOpen(false);
@@ -69,10 +69,6 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
           return userItem.username;
         })
       : [];
-    console.log(
-      "--------------- selected user --------------",
-      serverUsernameArray,
-    );
 
     listHook.mutate({
       repoId: getRepo.id,
@@ -93,74 +89,76 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
     }
   }, [userList]);
 
-  return (
-    <>
-      {alert ? (
-        <WhiteBlackAlertDialog type={type} onClose={() => setAlert(false)} />
-      ) : (
-        <ConfirmFullHeightDialog
-          isPending={listHook.isPending}
-          onSubmit={handleSubmit}
-          setOpen={handleClose}
-          dialogHeader="محدودیت کاربران در پابلیش سند"
-          className="!min-h-[500px]"
-        >
-          <div className="flex flex-col gap-5">
-            <div className="flex gap-5">
-              <Radio
-                labelProps={{
-                  className: "text-[13px]",
-                }}
-                containerProps={{
-                  className: "p-0 ml-2",
-                }}
-                className="radio !hover:shadow-none"
-                color="deep-purple"
-                name="type"
-                label="لیست سفید"
-                crossOrigin=""
-                onChange={() => {
-                  setType("white-list");
-                }}
-                checked={type === "white-list"}
-                value="white-list"
-              />
-              <Radio
-                labelProps={{
-                  className: "text-[13px] ",
-                }}
-                containerProps={{
-                  className: "p-0 ml-2",
-                }}
-                className="!hover:shadow-none"
-                color="deep-purple"
-                name="type"
-                label="لیست سیاه"
-                crossOrigin=""
-                checked={type === "black-list"}
-                onChange={handleTypeChange}
-                value="black-list"
-              />
-            </div>
-            {isLoading ? (
-              <Spinner className="w-6 h-6" color="deep-purple" />
-            ) : type === "white-list" ? (
-              <DocumentWhiteList
-                whiteList={userList?.whiteList}
-                selectedUserList={selectedUserList}
-                setSelectedUserList={setSelectedUserList}
-              />
-            ) : (
-              <DocumentBlackList
-                blackList={userList?.blackList}
-                selectedUserList={selectedUserList}
-                setSelectedUserList={setSelectedUserList}
-              />
-            )}
-          </div>
-        </ConfirmFullHeightDialog>
-      )}
-    </>
+  return alert ? (
+    <WhiteBlackAlertDialog
+      type={type}
+      onClose={() => {
+        return setAlert(false);
+      }}
+    />
+  ) : (
+    <ConfirmFullHeightDialog
+      isPending={listHook.isPending}
+      onSubmit={handleSubmit}
+      setOpen={handleClose}
+      dialogHeader="محدودیت کاربران در پابلیش سند"
+      className="!min-h-[500px]"
+    >
+      <div className="flex flex-col gap-5">
+        <div className="flex gap-5">
+          <Radio
+            labelProps={{
+              className: "text-[13px]",
+            }}
+            containerProps={{
+              className: "p-0 ml-2",
+            }}
+            className="radio !hover:shadow-none"
+            color="deep-purple"
+            name="type"
+            label="لیست سفید"
+            crossOrigin=""
+            onChange={() => {
+              setType("white-list");
+            }}
+            checked={type === "white-list"}
+            value="white-list"
+          />
+          <Radio
+            labelProps={{
+              className: "text-[13px] ",
+            }}
+            containerProps={{
+              className: "p-0 ml-2",
+            }}
+            className="!hover:shadow-none"
+            color="deep-purple"
+            name="type"
+            label="لیست سیاه"
+            crossOrigin=""
+            checked={type === "black-list"}
+            onChange={handleTypeChange}
+            value="black-list"
+          />
+        </div>
+        {/* eslint-disable-next-line no-nested-ternary */}
+        {isLoading ? (
+          <Spinner className="w-6 h-6" color="deep-purple" />
+        ) : type === "white-list" ? (
+          <DocumentWhiteList
+            whiteList={userList?.whiteList}
+            selectedUserList={selectedUserList}
+            setSelectedUserList={setSelectedUserList}
+          />
+        ) : (
+          <DocumentBlackList
+            blackList={userList?.blackList}
+            selectedUserList={selectedUserList}
+            setSelectedUserList={setSelectedUserList}
+          />
+        )}
+      </div>
+    </ConfirmFullHeightDialog>
   );
 };
 

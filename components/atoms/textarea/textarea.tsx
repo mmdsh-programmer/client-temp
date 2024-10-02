@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Textarea, TextareaProps } from "@material-tailwind/react";
 

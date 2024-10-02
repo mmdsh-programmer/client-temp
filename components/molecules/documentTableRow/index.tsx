@@ -11,7 +11,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { editorModeAtom } from "@atom/editor";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -22,13 +22,11 @@ const DocumentTableRow = ({ document }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCat = useRecoilValue(categoryAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const handleRowClick = () => {
     if (document.contentType === "file") {
       setDocument(document);
-      // setEditorModal(true);
       setEditorMode("preview");
       return;
     }

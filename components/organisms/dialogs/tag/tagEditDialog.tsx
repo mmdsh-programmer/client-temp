@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import InputAtom from "@components/atoms/input/formInput";
 import EditDialog from "@components/templates/dialog/editDialog";
 import { selectedTagAtom } from "@atom/tag";
 import { Typography } from "@material-tailwind/react";
@@ -13,7 +12,6 @@ import FormInput from "@components/atoms/input/formInput";
 interface IForm {
   name: string;
 }
-
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
@@ -54,7 +52,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
   return (
     <EditDialog
       isPending={isPending}
-      dialogHeader={"ویرایش تگ"}
+      dialogHeader="ویرایش تگ"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

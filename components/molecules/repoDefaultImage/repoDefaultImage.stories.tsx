@@ -7,13 +7,15 @@ const meta: Meta<typeof RepoDefaultImage> = {
   title: "components/Molecules/RepoDefaultImage",
   component: RepoDefaultImage,
   decorators: [
-    (Story) => (
-      <RecoilRoot>
-        <div className="w-full p-4">
-          <Story />
-        </div>
-      </RecoilRoot>
-    ),
+    (Story) => {
+      return (
+        <RecoilRoot>
+          <div className="w-full p-4">
+            <Story />
+          </div>
+        </RecoilRoot>
+      );
+    },
   ],
 };
 
@@ -23,13 +25,17 @@ type Story = StoryObj<typeof RepoDefaultImage>;
 
 export const Default: Story = {
   args: {
-    onClick: (name: string) => console.log(`Clicked on ${name}`),
+    onClick: (name: string) => {
+      return console.log(`Clicked on ${name}`);
+    },
   },
 };
 
 export const Disabled: Story = {
   args: {
-    onClick: (name: string) => console.log(`Clicked on ${name}`),
+    onClick: (name: string) => {
+      return console.log(`Clicked on ${name}`);
+    },
     disabled: true,
   },
 };

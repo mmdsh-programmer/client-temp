@@ -27,7 +27,9 @@ const RepoAttachDefaultImage = ({ onClick, disabled }: IProps) => {
             placeholder="button"
             key={image.name}
             className="flex focus:bg-secondary focus:outline-2 focus:outline-gray-200 justify-center items-center rounded-lg border-[1px] border-normal bg-primary w-[82px] h-[82px]"
-            onClick={() => onClick(image.name)}
+            onClick={() => {
+              return onClick(image.name);
+            }}
             disabled={disabled}
           >
             {image.icon}

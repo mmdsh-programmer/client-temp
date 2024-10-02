@@ -5,7 +5,6 @@ import IconTextButton from "./iconTextButton";
 const meta: Meta<typeof IconTextButton> = {
   title: "components/Molecules/IconTextButton",
   component: IconTextButton,
-
   parameters: {
     backgrounds: {
       default: "dark",
@@ -25,13 +24,9 @@ export const Example: Story = {
     classNameText: "text-white text-sm font-medium",
   },
   render: function Render(args) {
-    function onClick() {
-      console.log("=============== clicked ================");
-    }
     return (
       <IconTextButton
         {...args}
-        onClick={onClick}
         text="ایجاد فایل جدید"
         icon={
           <svg
@@ -44,9 +39,9 @@ export const Example: Story = {
             <path
               d="M6 12H12M12 12H18M12 12V18M12 12V6"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
         }

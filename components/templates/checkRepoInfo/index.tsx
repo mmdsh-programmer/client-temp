@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { repoAtom, repositoryIdAtom } from "atom/repository";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRouter, useSearchParams } from "next/navigation";
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
@@ -25,7 +25,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
   const searchParams = useSearchParams();
   const repoId = searchParams.get("repoId");
 
-  const [getRepo, setRepository] = useRecoilState(repoAtom);
+  const setRepository = useSetRecoilState(repoAtom);
 
   const { error, refetch, isFetching } = useGetRepo(
     repositoryAtomId ? +repositoryAtomId : null,
@@ -70,9 +70,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
     );
   }
 
-  if (getRepo) {
-    return <div className="check-repo-info">{children}</div>;
-  }
+  return <div className="check-repo-info">{children}</div>;
 };
 
 export default CheckRepoInfo;

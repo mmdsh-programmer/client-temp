@@ -13,7 +13,9 @@ const DiffVersionAlert = () => {
         className=" shadow-lg w-auto "
         color="deep-purple"
         open={!!compareVersion?.version}
-        onClose={() => setCompareVersion(null)}
+        onClose={() => {
+          return setCompareVersion(null);
+        }}
       >
         <Typography>{`نسخه ${compareVersion?.version?.data.versionNumber} برای مقایسه انتخاب شده است`}</Typography>
       </Alert>

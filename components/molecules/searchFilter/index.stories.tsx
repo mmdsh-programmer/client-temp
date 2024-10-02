@@ -15,15 +15,17 @@ const meta: Meta<typeof SearchFilter> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 

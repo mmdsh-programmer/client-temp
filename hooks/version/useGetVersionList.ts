@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getDocumentAction } from "@actions/document";
-import { IVersionMetadata } from "@interface/document.interface";
-import { IVersion } from "@interface/version.interface";
+import { IVersion, IVersionMetadata } from "@interface/version.interface";
 
 const useGetVersionList = (
   repoId: number,
@@ -10,7 +9,7 @@ const useGetVersionList = (
 ) => {
   return useInfiniteQuery({
     queryKey: [`version-list-${repoId}-${documentId}`],
-    queryFn: async ({ signal, pageParam }) => {
+    queryFn: async ({ pageParam }) => {
       const response = await getDocumentAction(
         repoId,
         documentId,

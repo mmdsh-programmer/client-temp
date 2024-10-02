@@ -18,8 +18,8 @@ const DocumentTemplate = () => {
         </div>
       </DialogBody>
       <DialogStepperFooter
-        hasNextStep={true}
-        hasPreviousStep={true}
+        hasNextStep
+        hasPreviousStep
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePrevStep}
       />

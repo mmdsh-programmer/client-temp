@@ -10,8 +10,8 @@ interface IProps {
   className?: string;
   isFetchingNextPage: boolean;
   fetchNextPage: (
-    options?: FetchNextPageOptions,
-  ) => Promise<InfiniteQueryObserverResult<any, Error>>;
+    options?: FetchNextPageOptions
+  ) => Promise<InfiniteQueryObserverResult<unknown, Error>>;
 }
 
 const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
@@ -33,7 +33,7 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
       }}
       disabled={isFetchingNextPage}
     >
-      {true ? (
+      {isFetchingNextPage ? (
         <div className="spinner" />
       ) : (
         <Typography

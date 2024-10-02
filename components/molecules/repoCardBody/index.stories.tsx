@@ -7,11 +7,13 @@ const meta: Meta<typeof RepoCardBody> = {
   title: "components/Molecules/RepoCardBody",
   component: RepoCardBody,
   decorators: [
-    (Story) => (
-      <div className="">
-        <Story />
-      </div>
-    ),
+    (Story) => {
+      return (
+        <div className="">
+          <Story />
+        </div>
+      );
+    },
   ],
 };
 

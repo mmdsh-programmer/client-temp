@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from "react";
 import {
   Menu,
@@ -6,7 +7,6 @@ import {
   MenuList,
   Typography,
 } from "@material-tailwind/react";
-import { placement } from "@material-tailwind/react/types/components/menu";
 import NestedMenu from "./nestedMenu";
 
 interface IProps {
@@ -22,16 +22,9 @@ interface IProps {
       | undefined;
     subMenu?: { text: string; icon?: React.JSX.Element; onClick: () => void }[];
   }[];
-  menuClick?: () => void;
 }
 
-const MenuComponent = ({
-  variant,
-  children,
-  menuList,
-  className,
-  menuClick,
-}: IProps) => {
+const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
   return (
     <Menu placement="bottom">
       <MenuHandler>{children}</MenuHandler>

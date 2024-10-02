@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { Checkbox, Typography } from "@material-tailwind/react";
-import { useEffect, useRef, useState } from "react";
 
 interface IProps {
   options: any[];
@@ -42,8 +43,10 @@ const SelectBox = ({
   const handleOptionChange = (option: string) => {
     setSelectedOptions(
       selectedOptions.includes(option)
-        ? selectedOptions.filter((selected) => selected !== option)
-        : [...selectedOptions, option],
+        ? selectedOptions.filter((selected) => {
+            return selected !== option;
+          })
+        : [...selectedOptions, option]
     );
   };
 
@@ -59,15 +62,18 @@ const SelectBox = ({
         <span className="max-w-min truncate">
           {selectedOptions.length > 0
             ? selectedOptions
-                .map(
-                  (selected) =>
-                    options.find((option) => option.value === selected)?.label,
-                )
+                .map((selected) => {
+                  return options.find((option) => {
+                    return option.value === selected;
+                  })?.label;
+                })
                 .join(", ")
             : defaultOption}
         </span>
         {selectedOptions
-          ? options?.find((option) => option.value === selectedOptions)?.label
+          ? options?.find((option) => {
+              return option.value === selectedOptions;
+            })?.label
           : defaultOption}
         <ChevronLeftIcon
           className={`w-2 h-2 stroke-icon-active transform transition-transform ${
@@ -82,30 +88,36 @@ const SelectBox = ({
             role="listbox"
             aria-labelledby="listbox-label"
           >
-            {options.map((option) => (
-              <li
-                key={option.value}
-                className="cursor-pointer select-none relative p-[6px]"
-                onClick={() => handleOptionChange(option.value)}
-              >
-                <div className="flex items-center">
-                  <Checkbox
-                    containerProps={{
-                      className: "p-1",
-                    }}
-                    placeholder="checkbox"
-                    className=" p-0"
-                    checked={selectedOptions.includes(option.value)}
-                    onChange={() => handleOptionChange(option.value)}
-                    color="deep-purple"
-                    crossOrigin=""
-                  />
-                  <Typography className="select_option__text truncate text-right text-primary ">
-                    {option.label}
-                  </Typography>
-                </div>
-              </li>
-            ))}
+            {options.map((option) => {
+              return (
+                <li
+                  key={option.value}
+                  className="cursor-pointer select-none relative p-[6px]"
+                  onClick={() => {
+                    return handleOptionChange(option.value);
+                  }}
+                >
+                  <div className="flex items-center">
+                    <Checkbox
+                      containerProps={{
+                        className: "p-1",
+                      }}
+                      placeholder="checkbox"
+                      className=" p-0"
+                      checked={selectedOptions.includes(option.value)}
+                      onChange={() => {
+                        return handleOptionChange(option.value);
+                      }}
+                      color="deep-purple"
+                      crossOrigin=""
+                    />
+                    <Typography className="select_option__text truncate text-right text-primary ">
+                      {option.label}
+                    </Typography>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

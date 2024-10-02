@@ -1,8 +1,7 @@
+import React from "react";
 import { DialogBody, Typography } from "@material-tailwind/react";
-
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { documentInfoAtom } from "@atom/document";
 import { documentInfoSchema } from "../validation.yup";
@@ -93,8 +92,8 @@ const DocumentInfo = () => {
         </form>
       </DialogBody>
       <DialogStepperFooter
-        hasNextStep={true}
-        hasPreviousStep={true}
+        hasNextStep
+        hasPreviousStep
         handleNextStep={handleSubmit(onSubmit)}
         handlePreviousStep={handlePrevStep}
       />

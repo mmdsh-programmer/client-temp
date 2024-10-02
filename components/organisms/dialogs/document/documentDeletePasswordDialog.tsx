@@ -1,6 +1,6 @@
+import React from "react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { categoryAtom } from "@atom/category";
 import { documentDeletePasswordSchema } from "./validation.yup";
@@ -31,8 +31,7 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentDeletePasswordSchema),
   });
-  const { register, handleSubmit, formState, reset, clearErrors, setError } =
-    form;
+  const { register, handleSubmit, formState, reset, clearErrors } = form;
   const { errors } = formState;
 
   const handleClose = () => {
@@ -53,33 +52,32 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
       },
     });
   };
+
   return (
-    <>
-      <ConfirmFullHeightDialog
-        isPending={deletePassword.isPending}
-        onSubmit={handleSubmit(onSubmit)}
-        setOpen={handleClose}
-        dialogHeader="حذف رمز عبور سند"
-      >
-        <form className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <Typography className="form_label">رمز عبور سابق</Typography>
-            <FormInput
-              type="password"
-              placeholder="رمز عبور سابق"
-              register={{
-                ...register("oldPassword"),
-              }}
-            />
-            {errors.oldPassword && (
-              <Typography className="warning_text">
-                {errors.oldPassword?.message}
-              </Typography>
-            )}
-          </div>
-        </form>
-      </ConfirmFullHeightDialog>
-    </>
+    <ConfirmFullHeightDialog
+      isPending={deletePassword.isPending}
+      onSubmit={handleSubmit(onSubmit)}
+      setOpen={handleClose}
+      dialogHeader="حذف رمز عبور سند"
+    >
+      <form className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <Typography className="form_label">رمز عبور سابق</Typography>
+          <FormInput
+            type="password"
+            placeholder="رمز عبور سابق"
+            register={{
+              ...register("oldPassword"),
+            }}
+          />
+          {errors.oldPassword && (
+            <Typography className="warning_text">
+              {errors.oldPassword?.message}
+            </Typography>
+          )}
+        </div>
+      </form>
+    </ConfirmFullHeightDialog>
   );
 };
 

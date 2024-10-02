@@ -1,14 +1,7 @@
-import {
- Button, Typography 
-} from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import React, {
- useEffect, useState 
-} from "react";
-import {
- UserIcon, XIcon 
-} from "@components/atoms/icons";
-
+import { UserIcon, XIcon } from "@components/atoms/icons";
 import ChipMolecule from "@components/molecules/chip";
 import FormInput from "@components/atoms/input/formInput";
 import { IUserList } from "../dialogs/document/documentAccessPublishingDialog";
@@ -34,7 +27,7 @@ const DocumentWhiteList = ({
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const [inputValue, setInputValue] = useState("");
-  const [selectedUser, setSelectedUser] = useState<IWhiteListItem | null>(null);
+  const [selectedUser] = useState<IWhiteListItem | null>(null);
   const whiteListHook = useAddWhiteList();
 
   const handleSpaceClick = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -53,6 +46,7 @@ const DocumentWhiteList = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleInputChange = (event: any) => {
     setInputValue(event.target.value);
   };
@@ -64,6 +58,7 @@ const DocumentWhiteList = ({
     setSelectedUserList(updatedUserList);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleRemoveUser = () => {
     if (!whiteList?.length) return;
     if (!getRepo || !document) return;
@@ -99,57 +94,57 @@ const DocumentWhiteList = ({
 
   return (
     <div className="flex flex-col gap-5">
-        <FormInput
-          placeholder="نام کاربری را وارد کنید..."
-          onKeyDown={handleSpaceClick}
-          value={inputValue}
-          onChange={handleInputChange}
-        />
-        <Typography className="title_t4 text-secondary ">
-          لیست سفید سند
-        </Typography>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap gap-2">
-            {selectedUserList?.length ? (
-              selectedUserList.map((item) => {
-                return (
-                  <ChipMolecule
-                    key={item.username}
-                    value={item.name || item.username}
-                    className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+      <FormInput
+        placeholder="نام کاربری را وارد کنید..."
+        onKeyDown={handleSpaceClick}
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <Typography className="title_t4 text-secondary ">
+        لیست سفید سند
+      </Typography>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-wrap gap-2">
+          {selectedUserList?.length ? (
+            selectedUserList.map((item) => {
+              return (
+                <ChipMolecule
+                  key={item.username}
+                  value={item.name || item.username}
+                  className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
                          w-auto pl-2 border-[1px] border-normal`}
-                    icon={
-                      item.picture ? (
-                        <ImageComponent
-                          className="w-full h-full rounded-full overflow-hidden"
-                          src={item.picture}
-                          alt={item.picture}
-                        />
-                      ) : (
-                        <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
-                      )
-                    }
-                    actionIcon={
-                      <Button
-                        className="bg-transparent p-0"
-                        onClick={() => {
-                          removeUser(item.username);
-                        }}
-                      >
-                        <XIcon
-                          className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
-                        />
-                      </Button>
-                    }
-                  />
-                );
-              })
-            ) : (
-              <EmptyList type={EEmptyList.WHITE_LIST} />
-            )}
-          </div>
+                  icon={
+                    item.picture ? (
+                      <ImageComponent
+                        className="w-full h-full rounded-full overflow-hidden"
+                        src={item.picture}
+                        alt={item.picture}
+                      />
+                    ) : (
+                      <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                    )
+                  }
+                  actionIcon={
+                    <Button
+                      className="bg-transparent p-0"
+                      onClick={() => {
+                        removeUser(item.username);
+                      }}
+                    >
+                      <XIcon
+                        className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
+                      />
+                    </Button>
+                  }
+                />
+              );
+            })
+          ) : (
+            <EmptyList type={EEmptyList.WHITE_LIST} />
+          )}
         </div>
       </div>
+    </div>
   );
 };
 

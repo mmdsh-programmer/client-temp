@@ -1,11 +1,5 @@
-import React, {
- useEffect,
- useState
-} from "react";
-import {
- useRecoilState, useRecoilValue 
-} from "recoil";
-
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { DialogBody } from "@material-tailwind/react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import InputAtom from "@components/atoms/input";
@@ -21,10 +15,10 @@ interface IProps {
 
 const SearchContent = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  
+
   const [search, setSearch] = useState<string>("");
   const [getSearchParam, setSearchParam] = useRecoilState(
-    categorySearchContentParamAtom,
+    categorySearchContentParamAtom
   );
   const debouncedValue = useDebounce<string>(search, 1000);
 
@@ -64,7 +58,7 @@ const SearchContent = ({ setOpen }: IProps) => {
             defaultValue={getSearchParam}
           />
         </div>
-        {getRepo ? <SearchContentResult repoId={getRepo.id}/> : null}
+        {getRepo ? <SearchContentResult repoId={getRepo.id} /> : null}
       </DialogBody>
     </InfoDialog>
   );

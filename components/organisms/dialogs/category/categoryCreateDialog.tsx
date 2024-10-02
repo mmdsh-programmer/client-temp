@@ -1,6 +1,6 @@
+import React from "react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categoryAtom } from "@atom/category";
@@ -34,7 +34,6 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors },
     clearErrors,
     reset,
@@ -68,7 +67,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
   return (
     <CreateDialog
       isPending={createCategory.isPending}
-      dialogHeader={"ساخت دسته بندی"}
+      dialogHeader="ساخت دسته بندی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

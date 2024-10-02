@@ -8,7 +8,6 @@ import {
   MenuList,
   Typography,
 } from "@material-tailwind/react";
-import { placement } from "@material-tailwind/react/types/components/menu";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 
 interface IProps {
@@ -21,16 +20,9 @@ interface IProps {
     onClick?: React.MouseEventHandler<HTMLLIElement> &
       React.MouseEventHandler<HTMLButtonElement>;
   }[];
-  menuClick?: () => void;
 }
 
-const NestedMenu = ({
-  variant,
-  menuName,
-  subMenuList,
-  className,
-  menuClick,
-}: IProps) => {
+const NestedMenu = ({ variant, menuName, subMenuList, className }: IProps) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <Menu
@@ -52,6 +44,7 @@ const NestedMenu = ({
       </MenuHandler>
       <MenuList
         className={`${
+          // eslint-disable-next-line no-nested-ternary
           variant === "small"
             ? "w-[180px]"
             : variant === "medium"
@@ -63,6 +56,7 @@ const NestedMenu = ({
         {subMenuList.map((menuItem, index) => {
           return (
             <MenuItem
+              // eslint-disable-next-line react/no-array-index-key
               key={`sub-menu-${index}`}
               placeholder="menu-item"
               className={`${variant === "small" ? "p-2" : "p-3"}`}

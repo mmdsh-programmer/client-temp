@@ -42,7 +42,7 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
     },
   ];
 
-  return !!showDrawer ? (
+  return showDrawer ? (
     <div className="xs:hidden flex">
       <DrawerTemplate
         openDrawer={getGroupDrawer}

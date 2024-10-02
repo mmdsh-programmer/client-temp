@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import InfoDialog, { IProps } from "./infoDialog"; // Adjust the import path accordingly
+import type { Meta, StoryFn } from "@storybook/react";
+import InfoDialog, { IProps } from "./infoDialog";
 
 export default {
-  title: "Components/Templates/InfoDialog", // The folder structure in Storybook
+  title: "Components/Templates/InfoDialog",
   component: InfoDialog,
   argTypes: {
     dialogHeader: { control: "text" },
@@ -13,7 +13,7 @@ export default {
 } as Meta;
 
 const Template: StoryFn<IProps> = (args) => {
-  const [open, setOpen] = useState(true); // Control dialog visibility
+  const [, setOpen] = useState(true);
 
   return (
     <InfoDialog {...args} setOpen={setOpen}>
@@ -24,7 +24,6 @@ const Template: StoryFn<IProps> = (args) => {
   );
 };
 
-// Default story
 export const Default = Template.bind({});
 Default.args = {
   dialogHeader: "لیست تگ ها",

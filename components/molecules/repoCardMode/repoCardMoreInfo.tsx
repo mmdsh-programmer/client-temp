@@ -21,7 +21,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
   const accessRoles = repo.roleName === "admin" || repo.roleName === "owner";
   const { data: users, isFetching } = useGetUsers(repo.id, 3, accessRoles);
   const { data: getReport, isFetching: isFetchingReport } = useGetReport(
-    repo.id,
+    repo.id
   );
   const userCount = users?.pages[0]?.total;
 
@@ -44,7 +44,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
   return (
     <div
       ref={dropdownRef}
-      className={`relative inline-block`}
+      className="relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();

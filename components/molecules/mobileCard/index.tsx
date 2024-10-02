@@ -7,8 +7,8 @@ interface IProps {
   createDate?: string;
   creator?: string;
   status?: {
-    translated: any;
-    className: any;
+    translated: string;
+    className: string;
   };
   cardAction?: React.JSX.Element;
   icon?: React.ReactNode;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import LoadingButton from ".";
 
 const meta: Meta<typeof LoadingButton> = {
@@ -16,7 +16,9 @@ const meta: Meta<typeof LoadingButton> = {
 export default meta;
 
 const Template: StoryObj<typeof LoadingButton> = {
-  render: (args) => <LoadingButton {...args} />,
+  render: (args) => {
+    return <LoadingButton {...args} />;
+  },
 };
 
 export const Default: StoryObj<typeof LoadingButton> = {

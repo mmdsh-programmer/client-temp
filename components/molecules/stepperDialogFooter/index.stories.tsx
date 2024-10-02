@@ -15,15 +15,17 @@ const meta: Meta<typeof DialogStepperFooter> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 
@@ -42,13 +44,15 @@ export const Default: Story = {
     const handleNextStep = () => {
       console.log("Next step");
       setLoading(true);
-      setTimeout(() => setLoading(false), 2000);
+      setTimeout(() => {
+        return setLoading(false);
+      }, 2000);
     };
 
     return (
       <DialogStepperFooter
-        hasPreviousStep={true}
-        hasNextStep={true}
+        hasPreviousStep
+        hasNextStep
         handlePreviousStep={handlePreviousStep}
         handleNextStep={handleNextStep}
         loading={loading}

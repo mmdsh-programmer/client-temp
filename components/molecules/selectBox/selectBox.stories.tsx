@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import SelectBox from ".";
 
 const meta: Meta<typeof SelectBox> = {
@@ -29,11 +29,13 @@ const meta: Meta<typeof SelectBox> = {
     },
   },
   decorators: [
-    (Story) => (
-      <div className="flex w-full items-center justify-center !font-iranYekan">
-        <Story />
-      </div>
-    ),
+    (Story) => {
+      return (
+        <div className="flex w-full items-center justify-center !font-iranYekan">
+          <Story />
+        </div>
+      );
+    },
   ],
 };
 

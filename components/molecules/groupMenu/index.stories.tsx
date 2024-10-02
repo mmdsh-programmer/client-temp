@@ -14,13 +14,15 @@ const meta: Meta<typeof GroupMenu> = {
   title: "components/Molecules/GroupMenu",
   component: GroupMenu,
   decorators: [
-    (Story) => (
-      <RecoilRoot>
-        <div className="w-full p-4">
-          <Story />
-        </div>
-      </RecoilRoot>
-    ),
+    (Story) => {
+      return (
+        <RecoilRoot>
+          <div className="w-full p-4">
+            <Story />
+          </div>
+        </RecoilRoot>
+      );
+    },
   ],
 };
 

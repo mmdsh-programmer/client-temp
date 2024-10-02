@@ -1,7 +1,7 @@
+import React from "react";
 import { DialogBody } from "@material-tailwind/react";
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { IPublicKey } from "@interface/repo.interface";
-import React from "react";
 import RepoKeyList from "../../repository/repoKey/repoKeyList";
 import { documentKeyAtom } from "@atom/document";
 import { useRecoilState } from "recoil";
@@ -39,8 +39,8 @@ const DocumentEncryption = ({ repoId }: IProps) => {
         </div>
       </DialogBody>
       <DialogStepperFooter
-        hasNextStep={true}
-        hasPreviousStep={true}
+        hasNextStep
+        hasPreviousStep
         handleNextStep={handleNextStep}
         handlePreviousStep={handlePrevStep}
       />

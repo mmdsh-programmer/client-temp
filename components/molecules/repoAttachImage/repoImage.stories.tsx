@@ -4,7 +4,6 @@ import RepoImage from "../repoDefaultImage";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { IRepo } from "@interface/repo.interface";
-import { Spinner } from "@material-tailwind/react";
 import { ERoles } from "@interface/enums";
 
 const mockRepo: IRepo = {
@@ -38,15 +37,17 @@ const meta: Meta<typeof RepoImage> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex w-[300px] items-center justify-center bg-gray-50">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex w-[300px] items-center justify-center bg-gray-50">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 
@@ -65,11 +66,13 @@ export const Fetching: Story = {
     repo: null,
   },
   decorators: [
-    (Story) => (
-      <div className="flex w-full items-center justify-center bg-gray-50">
-        <Story />
-      </div>
-    ),
+    (Story) => {
+      return (
+        <div className="flex w-full items-center justify-center bg-gray-50">
+          <Story />
+        </div>
+      );
+    },
   ],
 };
 

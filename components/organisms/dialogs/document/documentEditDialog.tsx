@@ -81,7 +81,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
   return (
     <EditDialog
       isPending={editDocument.isPending}
-      dialogHeader={"ویرایش سند"}
+      dialogHeader="ویرایش سند"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

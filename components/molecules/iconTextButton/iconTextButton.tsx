@@ -6,6 +6,7 @@ interface IProps {
   classNameButton?: string;
   text: string;
   icon: JSX.Element | React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: () => any;
 }
 

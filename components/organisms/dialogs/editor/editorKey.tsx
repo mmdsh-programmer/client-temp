@@ -50,7 +50,6 @@ const EditorKey = ({
       setError("privateKey", {
         message: "کلید خصوصی وارد شده اشتباه است",
       });
-      return;
     }
   };
 

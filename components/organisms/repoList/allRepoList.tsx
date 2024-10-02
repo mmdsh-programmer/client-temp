@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useMemo } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import TableHead from "@components/molecules/tableHead";
@@ -29,17 +30,17 @@ const AllRepoList = () => {
     repoType === ERepoGrouping.ARCHIVE_REPO,
     search,
     repoType === ERepoGrouping.MY_REPO ||
-      repoType === ERepoGrouping.ARCHIVE_REPO,
+      repoType === ERepoGrouping.ARCHIVE_REPO
   );
   const accessRepos = useGetAccessList(
     20,
     search,
-    repoType === ERepoGrouping.ACCESS_REPO,
+    repoType === ERepoGrouping.ACCESS_REPO
   );
   const bookmarkRepos = useGetBookmarkList(
     20,
     search,
-    repoType === ERepoGrouping.BOOKMARK_REPO,
+    repoType === ERepoGrouping.BOOKMARK_REPO
   );
 
   const {
@@ -48,7 +49,6 @@ const AllRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
   } = useMemo(() => {
     if (search) {
       switch (repoType) {
@@ -75,38 +75,42 @@ const AllRepoList = () => {
     bookmarkRepos,
   ]);
 
-  const listLength = useMemo(() => repoList?.pages[0]?.total || 0, [repoList]);
-  const listLengthAllRepos = useMemo(
-    () => allRepos?.data?.pages[0]?.total || 0,
-    [allRepos],
-  );
+  const listLength = useMemo(() => {
+    return repoList?.pages[0]?.total || 0;
+  }, [repoList]);
+  const listLengthAllRepos = useMemo(() => {
+    return allRepos?.data?.pages[0]?.total || 0;
+  }, [allRepos]);
   const isLoadingAllRepos = allRepos?.isLoading;
 
-  const renderTableRows = () =>
-    repoList?.pages.map((page) =>
-      page.list.map((repo) => (
-        <TableCell
-          key={`repo-table-item-${repo.id}`}
-          navigateTo={
-            !repo.isArchived
-              ? `/admin/repositories?repoId=${repo.id}`
-              : undefined
-          }
-          tableCell={[
-            { data: repo.name },
-            { data: FaDateFromTimestamp(+new Date(repo.createDate)) },
-            { data: translateRoles(repo.roleName) },
-            {
-              data: repo.isArchived ? "غیرفعال" : "فعال",
-              className: repo.isArchived
-                ? "text-critical-normal"
-                : "text-success-normal",
-            },
-            { data: <RepoMenu repo={repo} /> },
-          ]}
-        />
-      )),
-    );
+  const renderTableRows = () => {
+    return repoList?.pages.map((page) => {
+      return page.list.map((repo) => {
+        return (
+          <TableCell
+            key={`repo-table-item-${repo.id}`}
+            navigateTo={
+              !repo.isArchived
+                ? `/admin/repositories?repoId=${repo.id}`
+                : undefined
+            }
+            tableCell={[
+              { data: repo.name },
+              { data: FaDateFromTimestamp(+new Date(repo.createDate)) },
+              { data: translateRoles(repo.roleName) },
+              {
+                data: repo.isArchived ? "غیرفعال" : "فعال",
+                className: repo.isArchived
+                  ? "text-critical-normal"
+                  : "text-success-normal",
+              },
+              { data: <RepoMenu repo={repo} /> },
+            ]}
+          />
+        );
+      });
+    });
+  };
 
   return (
     <>

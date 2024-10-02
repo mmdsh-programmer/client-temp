@@ -2,8 +2,7 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import CategoryBreadCrumb from ".";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RecoilRoot, useRecoilState } from "recoil";
-import { RecoilState, atom } from "recoil";
+import { RecoilRoot, useRecoilState, atom } from "recoil";
 import { ICategoryMetadata } from "@interface/category.interface";
 
 const mockCategory: ICategoryMetadata = {
@@ -39,15 +38,17 @@ const meta: Meta<typeof CategoryBreadCrumb> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 

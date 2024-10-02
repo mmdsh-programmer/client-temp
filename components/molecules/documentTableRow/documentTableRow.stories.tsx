@@ -45,15 +45,17 @@ const meta: Meta<typeof DocumentTableRow> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="w-full p-4">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="w-full p-4">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 
@@ -62,5 +64,7 @@ export default meta;
 type Story = StoryObj<typeof DocumentTableRow>;
 
 export const Default: Story = {
-  render: () => <DocumentTableRow document={mockDocument} />,
+  render: () => {
+    return <DocumentTableRow document={mockDocument} />;
+  },
 };

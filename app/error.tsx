@@ -3,7 +3,7 @@
 import React from "react";
 
 interface IProps {
-  error: any;
+  error: Error;
   reset: () => void;
 }
 

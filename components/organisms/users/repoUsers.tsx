@@ -30,7 +30,7 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetInviteRequestsByOwner(repoId, 10, true);
+  } = useGetInviteRequestsByOwner(repoId, 10);
 
   return (
     <div className="overflow-y-auto">

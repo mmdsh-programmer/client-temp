@@ -3,18 +3,19 @@ import type { Meta, StoryObj } from "@storybook/react";
 import CategoryFilter from ".";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RecoilRoot } from "recoil";
-import { mockTagsResponse, useGetTagsMock } from "@mock/mockData";
+import { mockTagsResponse } from "@mock/mockData";
 
 const queryClient = new QueryClient();
 
-queryClient.setQueryData([`getTags-412478`, 5], {
+queryClient.setQueryData(["getTags-412478", 5], {
   pages: mockTagsResponse,
   pageParams: 1,
 });
 
 await queryClient.fetchInfiniteQuery({
-  queryKey: [`getTags-412478`, 5],
-  queryFn: async () => mockTagsResponse,
+  queryKey: ["getTags-412478", 5],
+  queryFn: async () => 
+{return mockTagsResponse;},
   initialPageParam: 1,
 });
 
@@ -27,7 +28,8 @@ const meta: Meta<typeof CategoryFilter> = {
     },
   },
   decorators: [
-    (Story) => (
+    (Story) => 
+{return (
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
           <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
@@ -35,7 +37,7 @@ const meta: Meta<typeof CategoryFilter> = {
           </div>
         </RecoilRoot>
       </QueryClientProvider>
-    ),
+    );},
   ],
 };
 

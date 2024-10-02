@@ -32,7 +32,8 @@ const TableCell = ({
         return (
           <td
             title={row.title}
-            key={JSON.stringify(row)}
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${row.title}-${index}`}
             className={`p-4 truncate font-iranYekan ${row.className || ""}
               `}
             onClick={(e) => {

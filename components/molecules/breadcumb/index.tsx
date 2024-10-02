@@ -1,16 +1,14 @@
+import React from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
-import React from "react";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useRouter } from "next/navigation";
 import { versionListAtom } from "@atom/version";
 
 const Breadcrumb: React.FC = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const getRepo = useRecoilValue(repoAtom);
   const setShowVersionList = useSetRecoilState(versionListAtom);
 
   const router = useRouter();
@@ -43,7 +41,7 @@ const Breadcrumb: React.FC = () => {
       {breadcrumbList.map((breadcrumbItem, index) => {
         return (
           <div
-            key={index}
+            key={breadcrumbItem}
             className={`${index === 1 ? "block xs:hidden sm:!block md:!hidden lg:!block " : ""}`}
           >
             <Button

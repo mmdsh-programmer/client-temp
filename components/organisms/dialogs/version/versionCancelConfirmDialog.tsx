@@ -1,5 +1,5 @@
-import { repoAtom } from "@atom/repository";
 import React from "react";
+import { repoAtom } from "@atom/repository";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
@@ -21,8 +21,7 @@ const VersionCancelConfirmDialog = ({ version, setOpen }: IProps) => {
 
   const form = useForm();
 
-  const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const { handleSubmit, reset, clearErrors } = form;
 
   const handleReset = () => {
     clearErrors();
@@ -49,7 +48,7 @@ const VersionCancelConfirmDialog = ({ version, setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={cancelConfirmVersion.isPending}
-      dialogHeader={"لغو تایید نسخه"}
+      dialogHeader="لغو تایید نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

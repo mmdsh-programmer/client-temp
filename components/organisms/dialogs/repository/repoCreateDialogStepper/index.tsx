@@ -48,29 +48,25 @@ const RepoCreateDialogStepper = ({ close }: IProps) => {
     }
   };
 
-  return (
-    <>
-      {openFileManagement && getRepo ? (
-        <Files
-          userGroupHash={getRepo.userGroupHash}
-          resourceId={getRepo.id}
-          type="public"
-          handleClose={() => {
-            setOpenFileManagement(false);
-          }}
-          setSelectedFile={setSelectedFile}
-        />
-      ) : (
-        <StepperDialog
-          dialogHeader="ایجاد مخزن"
-          stepList={steplist}
-          handleClose={handleClose}
-          activeStep={getActiveStep}
-        >
-          {handleStepperContent()}
-        </StepperDialog>
-      )}
-    </>
+  return openFileManagement && getRepo ? (
+    <Files
+      userGroupHash={getRepo.userGroupHash}
+      resourceId={getRepo.id}
+      type="public"
+      handleClose={() => {
+        setOpenFileManagement(false);
+      }}
+      setSelectedFile={setSelectedFile}
+    />
+  ) : (
+    <StepperDialog
+      dialogHeader="ایجاد مخزن"
+      stepList={steplist}
+      handleClose={handleClose}
+      activeStep={getActiveStep}
+    >
+      {handleStepperContent()}
+    </StepperDialog>
   );
 };
 

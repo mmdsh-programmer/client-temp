@@ -24,8 +24,9 @@ const AdminTableView = ({
   return (
     <>
       <div
-        className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+        className="p-5 flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small"
       >
+        {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading || isFetching ? (
           <div className="w-full h-full flex justify-center items-center">
             <Spinner className="h-8 w-8" color="deep-purple" />

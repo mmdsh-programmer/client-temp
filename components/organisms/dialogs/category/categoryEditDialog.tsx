@@ -1,6 +1,6 @@
+import React from "react";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categoryAtom } from "@atom/category";
@@ -81,7 +81,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
   return (
     <EditDialog
       isPending={editCategory.isPending}
-      dialogHeader={"ویرایش دسته بندی"}
+      dialogHeader="ویرایش دسته بندی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

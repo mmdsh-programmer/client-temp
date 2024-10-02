@@ -1,3 +1,4 @@
+import React from "react";
 import { DialogBody, Typography } from "@material-tailwind/react";
 import {
   documentInfoAtom,
@@ -5,12 +6,10 @@ import {
   documentTemplateAtom,
   documentTypeAtom,
 } from "@atom/document";
-
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
 import FormInput from "@components/atoms/input/formInput";
 import { IDocument } from "@interface/document.interface";
-import React from "react";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -154,7 +153,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
       </DialogBody>
       <DialogStepperFooter
         hasNextStep={false}
-        hasPreviousStep={true}
+        hasPreviousStep
         handleNextStep={handleSubmit(onSubmit)}
         handlePreviousStep={handlePrevStep}
         loading={isLoading}

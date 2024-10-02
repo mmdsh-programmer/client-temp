@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import { EDocumentTypes } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -12,11 +11,10 @@ import useGetTags from "@hooks/tag/useGetTags";
 
 const CategoryFilter = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const repoId = getRepo?.id!;
-  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 30, true);
-
+  const repoId = getRepo!.id;
+  const { data: getTags } = useGetTags(repoId, 30, true);
   const [documentType, setDocumentType] = useState<EDocumentTypes[]>([]);
-  const [type, setType] = useState<any[]>([]);
+  const [type, setType] = useState<string[]>([]);
   const [tags, setTags] = useState<number[]>([]);
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
@@ -50,7 +48,9 @@ const CategoryFilter = () => {
           <InputAtom
             className="flex-grow !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
             placeholder="جستجو در عنوان"
-            onChange={(e) => setSearchTitle(e.target.value)}
+            onChange={(e) => {
+              return setSearchTitle(e.target.value);
+            }}
           />
           <div className="flex-grow min-w-[150px]">
             <SelectBox
@@ -79,7 +79,7 @@ const CategoryFilter = () => {
               setSelectedOptions={setDocumentType}
             />
             <SelectBox
-              options={tagOptions as any[]}
+              options={tagOptions}
               className="h-12 xs:!h-10 flex-grow"
               selectedOptions={tags}
               setSelectedOptions={setTags}

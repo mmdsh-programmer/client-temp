@@ -1,8 +1,7 @@
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-
 import { ICategoryMetadata } from "@interface/category.interface";
 import MoveSelection from ".";
-import React from "react";
 import { RecoilRoot } from "recoil";
 import { categoryMoveDestAtom } from "@atom/category";
 
@@ -28,17 +27,19 @@ const meta: Meta<typeof MoveSelection> = {
   title: "components/Molecules/MoveSelection",
   component: MoveSelection,
   decorators: [
-    (Story) => (
-      <RecoilRoot
-        initializeState={({ set }) => {
-          set(categoryMoveDestAtom, mockCategory);
-        }}
-      >
-        <div className="w-full p-4">
-          <Story />
-        </div>
-      </RecoilRoot>
-    ),
+    (Story) => {
+      return (
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(categoryMoveDestAtom, mockCategory);
+          }}
+        >
+          <div className="w-full p-4">
+            <Story />
+          </div>
+        </RecoilRoot>
+      );
+    },
   ],
 };
 

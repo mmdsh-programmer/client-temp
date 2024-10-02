@@ -7,7 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 
 const mockSetOpen: React.Dispatch<React.SetStateAction<boolean>> = (
-  newState,
+  newState
 ) => {
   console.log("mockSetOpen", newState);
 };
@@ -21,15 +21,17 @@ const meta: Meta<typeof SearchContent> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="w-full h-full bg-gray-50">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="w-full h-full bg-gray-50">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 
@@ -38,5 +40,7 @@ export default meta;
 type Story = StoryObj<typeof SearchContent>;
 
 export const Default: Story = {
-  render: () => <SearchContent setOpen={mockSetOpen} />,
+  render: () => {
+    return <SearchContent setOpen={mockSetOpen} />;
+  },
 };

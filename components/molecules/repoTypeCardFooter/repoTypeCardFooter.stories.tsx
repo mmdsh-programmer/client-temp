@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import RepoTypeCardFooter from ".";
 import { QuestionIcon } from "@components/atoms/icons";
 
@@ -15,11 +15,13 @@ export default {
     icon: { control: { type: "object" } },
   },
   decorators: [
-    (Story) => (
-      <div className="flex w-full items-center !justify-center !font-iranYekan">
-        <Story />
-      </div>
-    ),
+    (Story) => {
+      return (
+        <div className="flex w-full items-center !justify-center !font-iranYekan">
+          <Story />
+        </div>
+      );
+    },
   ],
 } as Meta<typeof RepoTypeCardFooter>;
 

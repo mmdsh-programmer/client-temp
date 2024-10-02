@@ -1,8 +1,6 @@
-import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-
-import { BackIcon } from "@components/atoms/icons";
-import { ChevronLeftIcon } from "@components/atoms/icons";
+import { Button, Typography } from "@material-tailwind/react";
+import { BackIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { categoryMoveDestAtom } from "atom/category";
 import { useRecoilState } from "recoil";
@@ -25,7 +23,7 @@ const MoveBreadCrumb = () => {
       const breadCrumbTemp = [...breadCrumb];
       breadCrumbTemp.splice(
         selectedCategoryIndex + 1,
-        breadCrumb.length - selectedCategoryIndex + 1,
+        breadCrumb.length - selectedCategoryIndex + 1
       );
       setBreadCrumb(breadCrumbTemp);
     }
@@ -55,6 +53,7 @@ const MoveBreadCrumb = () => {
                     setCategoryMoveDest(breadItem);
                   }}
                 >
+                   {/* eslint-disable-next-line no-nested-ternary */}
                   {breadCrumb.length > 2 ? (
                     index === 0 || index === breadCrumb.length - 1 ? (
                       <Typography className="caption_c1 text-primary">

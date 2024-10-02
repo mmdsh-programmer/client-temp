@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 interface IProps {
   children: JSX.Element;
   isTrue: boolean;

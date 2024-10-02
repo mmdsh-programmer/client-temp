@@ -28,7 +28,7 @@ const RepoUsers = () => {
   const {
  data: getInviteRequests, isFetching: isFetchingInviteRequests 
 } =
-    useGetInviteRequests(repoId, 10, true);
+    useGetInviteRequests(repoId, 10);
 
   const {
  data: getRepoUsers, isFetching: isFetchingUsers 

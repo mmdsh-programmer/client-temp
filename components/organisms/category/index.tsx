@@ -21,9 +21,9 @@ const CategoryList = () => {
         </div>
         <CategoryChildren />
       </div>
-      <CategoryDocumentCreateMenu showDrawer={true} />
-      <CategoryMenu showDrawer={true} />
-      <DocumentMenu showDrawer={true} />
+      <CategoryDocumentCreateMenu showDrawer />
+      <CategoryMenu showDrawer />
+      <DocumentMenu showDrawer />
     </>
   );
 };

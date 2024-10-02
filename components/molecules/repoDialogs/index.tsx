@@ -72,7 +72,6 @@ const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
       ): null}
       {modals.share ? (
         <RepoShareDialog
-          repo={repo}
           setOpen={() => {
             return setModalState("share", false);
           }}

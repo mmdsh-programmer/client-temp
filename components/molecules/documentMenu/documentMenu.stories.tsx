@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import DocumentMenu from ".";
 import { RecoilRoot } from "recoil";
@@ -44,15 +44,17 @@ const meta: Meta<typeof DocumentMenu> = {
     },
   },
   decorators: [
-    (Story) => (
-      <QueryClientProvider client={queryClient}>
-        <RecoilRoot>
-          <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
-            <Story />
-          </div>
-        </RecoilRoot>
-      </QueryClientProvider>
-    ),
+    (Story) => {
+      return (
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <div className="flex w-full items-center justify-center !font-iranYekan bg-gray-50 p-4">
+              <Story />
+            </div>
+          </RecoilRoot>
+        </QueryClientProvider>
+      );
+    },
   ],
 };
 
@@ -62,10 +64,6 @@ type Story = StoryObj<typeof DocumentMenu>;
 
 export const Default: Story = {
   render: () => {
-    const [showDrawer, setShowDrawer] = useState<boolean>(false);
-    const [openDocumentActionDrawer, setOpenDocumentActionDrawer] =
-      useState<boolean>(false);
-
-    return <DocumentMenu document={mockDocument} showDrawer={showDrawer} />;
+    return <DocumentMenu document={mockDocument} showDrawer />;
   },
 };
