@@ -1,10 +1,8 @@
 // #################################################
 // WARNING THIS LOGIC SHOULD USE ONLY IN SERVER SIDE
 // #################################################
-import crypto from "crypto";
 
-const { CRYPTO_SECRET_KEY, CRYPTO_INIT_VECTOR_KEY, CRYPTO_ALGORITM } =
-  process.env;
+import crypto from "crypto";
 
 const secretKey_in_bytes = Buffer.from(process.env.CRYPTO_SECRET_KEY!, "hex");
 const initVectorKey_in_bytes = Buffer.from(

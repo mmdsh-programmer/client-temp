@@ -1,7 +1,9 @@
-import React from "react";
-import Start from "../start";
-import Sidebar from "@components/organisms/sidebar";
+"use client";
+
 import Header from "@components/organisms/header";
+import React from "react";
+import Sidebar from "@components/organisms/sidebar";
+import Start from "../start";
 
 interface IProps {
   children: React.ReactNode;

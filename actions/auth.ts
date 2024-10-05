@@ -1,8 +1,5 @@
 "use server";
 
-import { cookies } from "next/dist/client/components/headers";
-import { redirect } from "next/navigation";
-import jwt from "jsonwebtoken";
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   getToken,
@@ -10,6 +7,10 @@ import {
   renewToken,
   userInfo,
 } from "@service/clasor";
+
+import { cookies } from "next/dist/client/components/headers";
+import jwt from "jsonwebtoken";
+import { redirect } from "next/navigation";
 
 const { JWT_SECRET_KEY, SECURE } = process.env;
 
@@ -42,26 +43,33 @@ const refreshCookieHeader = async (rToken: string) => {
 };
 
 export const getMe = async () => {
-  const encodedToken = cookies().get("token")?.value;
-  if (!encodedToken) {
-    redirect("/signin");
-  }
+  try{
+    const encodedToken = cookies().get("token")?.value;
+      if (!encodedToken) {
+        redirect("/signin");
+      }
 
-  const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
-  const tokenInfo = JSON.parse(decryptKey(payload)) as {
-    access_token: string;
-    refresh_token: string;
-  };
+      const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
+      const tokenInfo = JSON.parse(decryptKey(payload)) as {
+        access_token: string;
+        refresh_token: string;
+      };
+      try {
 
-  try {
-    const userData = await userInfo(tokenInfo.access_token);
-    return {
-      ...userData,
-      access_token: tokenInfo.access_token,
-      refresh_token: tokenInfo.refresh_token,
-    };
-  } catch {
-    return refreshCookieHeader(tokenInfo.refresh_token);
+      
+        const userData = await userInfo(tokenInfo.access_token);
+        return {
+          ...userData,
+          access_token: tokenInfo.access_token,
+          refresh_token: tokenInfo.refresh_token,
+        };
+      } catch {
+        return refreshCookieHeader(tokenInfo.refresh_token);
+      }
+  } catch(error) {
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> error");
+      console.log(error);
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> error");
   }
 };
 
@@ -70,8 +78,8 @@ export const login = async (redirectUrl: string) => {
   redirect(response.data.url);
 };
 
-export const getUserToken = async (code: string, redirect_uri: string) => {
-  const response = await getToken(code, redirect_uri);
+export const getUserToken = async (code: string, redirectUrl: string) => {
+  const response = await getToken(code, redirectUrl);
   const { accessToken, refreshToken } = response;
 
   const encryptedData = encryptKey(

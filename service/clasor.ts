@@ -1,8 +1,20 @@
-import { ISortProps } from "@atom/sortParam";
+import {
+  AuthorizationError,
+  ForbiddenError,
+  InputError,
+  NotFoundError,
+  ServerError,
+} from "@utils/error";
 import {
   IAccessRequest,
   IAccessRequestResponse,
 } from "@interface/accessRequest.interface";
+import {
+  IAddVersion,
+  IFileVersion,
+  IVersion,
+} from "@interface/version.interface";
+import { ICategory, ICategoryMetadata } from "@interface/category.interface";
 import {
   IChildrenFilter,
   IClasorError,
@@ -11,47 +23,36 @@ import {
   IServerResult,
   IUserInfo,
 } from "@interface/app.interface";
-import { ICategory, ICategoryMetadata } from "@interface/category.interface";
-import { IClasorReport } from "@interface/clasorReport";
-import { IContentSearchResult } from "@interface/contentSearch.interface";
 import {
   IClasorField,
   IDocument,
   IDocumentMetadata,
   IWhiteList,
 } from "@interface/document.interface";
-import { IBLockDocument } from "@interface/editor.interface";
-import { EDocumentTypes } from "@interface/enums";
-import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   ICreateGroup,
   IGetGroup,
   IGetGroups,
   IUpdateGroup,
 } from "@interface/group.interface";
-import { IOfferResponse } from "@interface/offer.interface";
+import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
+  IListResponse,
   IPublicKey,
   IRepo,
   IReport,
-  IListResponse,
 } from "@interface/repo.interface";
-import { ITag } from "@interface/tags.interface";
 import { IRoles, IUser } from "@interface/users.interface";
-import {
-  IAddVersion,
-  IFileVersion,
-  IVersion,
-} from "@interface/version.interface";
-import {
-  AuthorizationError,
-  ForbiddenError,
-  InputError,
-  NotFoundError,
-  ServerError,
-} from "@utils/error";
-import Logger from "@utils/logger";
 import axios, { AxiosError, isAxiosError } from "axios";
+
+import { EDocumentTypes } from "@interface/enums";
+import { IBLockDocument } from "@interface/editor.interface";
+import { IClasorReport } from "@interface/clasorReport";
+import { IContentSearchResult } from "@interface/contentSearch.interface";
+import { IOfferResponse } from "@interface/offer.interface";
+import { ISortProps } from "@atom/sortParam";
+import { ITag } from "@interface/tags.interface";
+import Logger from "@utils/logger";
 import qs from "qs";
 
 const { CLASOR } = process.env;
@@ -109,7 +110,6 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   }
 };
 
-/////////////////////// AUTH ///////////////////
 export const handleRedirect = async (redirectUrl: string) => {
   try {
     const response = await axiosClasorInstance.get(
@@ -122,11 +122,11 @@ export const handleRedirect = async (redirectUrl: string) => {
   }
 };
 
-export const getToken = async (code: string, redirect_uri: string) => {
+export const getToken = async (code: string, redirectUrl: string) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
       "auth/login",
-      { code: code, redirectUrl: redirect_uri }
+      { code, redirectUrl }
     );
 
     return response.data.data;
@@ -167,7 +167,7 @@ export const renewToken = async (refresh_token: string) => {
   }
 };
 
-////////////////////////// INFO /////////////////////////
+/// /////////////////////// INFO /////////////////////////
 export const getMyInfo = async (access_token: string) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<any>>(
@@ -185,7 +185,7 @@ export const getMyInfo = async (access_token: string) => {
   }
 };
 
-///////////////////////// REPORT //////////////////////
+/// ////////////////////// REPORT //////////////////////
 export const getReport = async (access_token: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IReport>>(
@@ -203,7 +203,7 @@ export const getReport = async (access_token: string, repoId: number) => {
   }
 };
 
-////////////////////// REPOSITORY /////////////////////////
+/// /////////////////// REPOSITORY /////////////////////////
 export const getAllRepositories = async (
   access_token: string,
   offset: number,
@@ -625,7 +625,7 @@ export const transferOwnershipRepository = async (
   }
 };
 
-////////////////////////// USERS ///////////////////////
+/// /////////////////////// USERS ///////////////////////
 export const getRepositoryUsers = async (
   access_token: string,
   repoId: number,
@@ -787,7 +787,7 @@ export const deleteInviteRequest = async (
   }
 };
 
-///////////////////////////// GROUPS ///////////////////////
+/// ////////////////////////// GROUPS ///////////////////////
 export const getRepositoryGroups = async (
   access_token: string,
   repoId: number,
@@ -906,7 +906,7 @@ export const deleteGroup = async (
   }
 };
 
-/////////////////////////// TAGS /////////////////////
+/// //////////////////////// TAGS /////////////////////
 export const getRepositoryTags = async (
   access_token: string,
   repoId: number,
@@ -998,7 +998,7 @@ export const deleteTag = async (
   }
 };
 
-////////////////////// CATEGORY ////////////////////////
+/// /////////////////// CATEGORY ////////////////////////
 export const getChildren = async (
   access_token: string,
   repoId: number,
@@ -1209,7 +1209,7 @@ export const addUserToCategoryBlocklist = async (
   }
 };
 
-//////////////////////// CONTENT ///////////////////////
+/// ///////////////////// CONTENT ///////////////////////
 export const getContent = async (
   access_token: string,
   repoId: number,
@@ -1239,7 +1239,7 @@ export const getContent = async (
   }
 };
 
-////////////////////////////// REPORT ////////////////////
+/// /////////////////////////// REPORT ////////////////////
 export const getUserDocument = async (
   access_token: string,
   repoId: number,
@@ -1305,7 +1305,7 @@ export const getUserDocument = async (
   }
 };
 
-/////////////////////// BULK ////////////////////
+/// //////////////////// BULK ////////////////////
 export const moveBulk = async (
   access_token: string,
   repoId: number,
@@ -1358,7 +1358,7 @@ export const deleteBulk = async (
   }
 };
 
-///////////////////////// DOCUMENT ///////////////////////
+/// ////////////////////// DOCUMENT ///////////////////////
 export const getDocument = async (
   access_token: string,
   repoId: number,
@@ -1392,7 +1392,7 @@ export const getClasorField = async (access_token: string) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IClasorField[]>
-    >(`clasorFields`, {
+    >("clasorFields", {
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
@@ -1748,7 +1748,7 @@ export const deleteDocumentPassword = async (
   }
 };
 
-///////////////////// VERSION //////////////////
+/// ////////////////// VERSION //////////////////
 export const getVersion = async (
   access_token: string,
   repoId: number,
@@ -1988,7 +1988,7 @@ export const cancelConfirmVersion = async (
   }
 };
 
-///////////////////// FILES ///////////////////////////
+/// ////////////////// FILES ///////////////////////////
 export const getResourceFiles = async (
   access_token: string,
   resourceId: number,
@@ -2075,7 +2075,7 @@ export const deleteFile = async (
   }
 };
 
-/////////////////////////// RELEASE DOCS //////////////////////////
+/// //////////////////////// RELEASE DOCS //////////////////////////
 export const getPendingDrafts = async (
   access_token: string,
   repoId: number,
@@ -2126,7 +2126,7 @@ export const getPendingVersion = async (
   }
 };
 
-///////////////////////// PUBLIC LINK ///////////////////
+/// ////////////////////// PUBLIC LINK ///////////////////
 export const createRepoPublicLink = async (
   access_token: string,
   repoId: number,
@@ -2203,7 +2203,7 @@ export const subscribeRepo = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-/////////////////////////// PUBLISH /////////////////////
+/// //////////////////////// PUBLISH /////////////////////
 export const createRepoPublishLink = async (
   access_token: string,
   repoId: number,
@@ -2249,7 +2249,7 @@ export const deletePublishLink = async (
   }
 };
 
-//////////////////////// REQUESTS ///////////////////
+/// ///////////////////// REQUESTS ///////////////////
 export const getUserToRepoRequests = async (
   access_token: string,
   offset: number,
@@ -2322,7 +2322,7 @@ export const rejectUserToRepoRequest = async (
   }
 };
 
-///////////////////////// EDITOR //////////////////
+/// ////////////////////// EDITOR //////////////////
 export const saveVersion = async (
   access_token: string,
   repoId: number,
@@ -2401,7 +2401,7 @@ export const createBlockVersion = async (
   }
 };
 
-//////////////////////////////// FEEDBACK ////////////////////////////////
+/// ///////////////////////////// FEEDBACK ////////////////////////////////
 
 export const sendFeedback = async (
   access_token: string,
@@ -2410,7 +2410,7 @@ export const sendFeedback = async (
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
-      `feedback`,
+      "feedback",
       { message: content, fileHash: fileHashList },
       {
         headers: {
@@ -2430,7 +2430,7 @@ export const addUserToFeedbackGroupHash = async (access_token: string) => {
     const response = await axiosClasorInstance.post<
       IServerResult<{ isAddUser: boolean }>
     >(
-      `feedback/addUser`,
+      "feedback/addUser",
       {},
       {
         headers: {
@@ -2445,13 +2445,13 @@ export const addUserToFeedbackGroupHash = async (access_token: string) => {
   }
 };
 
-//////////////////////////// ADMIN PANEL //////////////////////////////
+/// ///////////////////////// ADMIN PANEL //////////////////////////////
 
 export const getAdminPanelReport = async (access_token: string) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IClasorReport>
-    >(`admin/clasorReport`, {
+    >("admin/clasorReport", {
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
