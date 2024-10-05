@@ -70,6 +70,7 @@ export const getMe = async () => {
       console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> error");
       console.log(error);
       console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> error");
+      throw error;
   }
 };
 
