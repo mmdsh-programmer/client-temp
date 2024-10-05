@@ -1,0 +1,69 @@
+stages:
+  - prerequisites
+  - build
+  - push
+  - update
+
+Create npmrc file:
+  stage: prerequisites
+  tags: 
+    - ${DEV_RUNNER_TAG}
+  script:
+    - echo "unsafe-perm=true" > .npmrc
+    - echo "registry = http:$DEV_NPM_PROXY" >> .npmrc
+    - echo "$DEV_NPM_PROXY:_auth = $DEV_NPM_TOKEN" >> .npmrc
+    - echo "always-auth=true" >> .npmrc
+    - cat .npmrc
+  artifacts:
+    paths:
+    - .npmrc
+
+
+Build Docker Image :
+  stage: build
+  tags:
+    - ${DEV_RUNNER_TAG}
+  before_script:
+    - curl -vvv --insecure -u $DEV_NEXUS_USER:$DEV_NEXUS_PASS  $DEV_RAW_REPO/$DEV_ENV_PATH  -o .env
+    - cat .env
+  script:
+    - sed -i 's+https:\/\/registry\.npmjs\.org+http:\/\/nrp.devpod.ir:8081\/repository\/nodejs-proxy+g' package-lock.json 
+    - docker build -t $DEV_REGISTRY/$DEV_BUSINESS/$PROJECT_NAME:$IMAGE_TAG . --no-cache
+  needs: ["Create npmrc file"]
+  dependencies:
+    - Create npmrc file
+  retry: 2
+
+
+Transfer Docker Image :
+  stage: push
+  tags:
+    - ${DEV_RUNNER_TAG}
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - docker login $DEV_REGISTRY -u $DEV_NEXUS_USER  -p $DEV_NEXUS_PASS
+    - docker push $DEV_REGISTRY/$DEV_BUSINESS/$PROJECT_NAME:$IMAGE_TAG
+    - docker rmi  $DEV_REGISTRY/$DEV_BUSINESS/$PROJECT_NAME:$IMAGE_TAG
+    - docker image prune -f --filter label=stage=builder
+  needs: ["Build Docker Image"]
+  dependencies:
+    - Build Docker Image
+
+###############################CD###############################
+
+Update App Image:
+  variables:
+    GIT_STRATEGY: none
+  stage: update
+  tags:
+    - ${DEV_k8s_RUNNER_TAG}
+  before_script:
+    - kubectl config set-cluster k8s --server="${DEV_PLATFORM_ADDRESS}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${DEV_CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials "${DEV_PLATFORM_USER}" --token="${DEV_PLATFORM_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user="${DEV_PLATFORM_USER}"
+    - kubectl config use-context default
+  script:
+    - kubectl -n "${DEV_NAMESPACE}"  rollout restart deployment "${DEV_DEPLOYMENT}" 
+

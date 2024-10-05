@@ -1,0 +1,9 @@
+.git/
+.dockerignore
+node_modules
+Dockerfile
+Jenkinsfile
+Jenkinsfile-Prod
+.gitlab-ci.yml
+.gitlab-ci.d
+README.md

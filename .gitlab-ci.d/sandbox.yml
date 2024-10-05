@@ -1,0 +1,53 @@
+stages:
+  - prerequisites
+  - build_sandbox
+  - update
+
+Create npmrc file:
+  stage: prerequisites
+  tags:
+    - ${SAND_RUNNER_TAG}
+  only:
+    - sandbox
+  script:
+    - echo "unsafe-perm=true" > .npmrc
+    - echo "registry = http:$SAND_NPM_PROXY" >> .npmrc
+    - echo "$SAND_NPM_PROXY:_auth = $SAND_NPM_TOKEN" >> .npmrc
+    - echo "always-auth=true" >> .npmrc
+  artifacts:
+    paths:
+      - .npmrc
+
+Build and Transfer Docker Image:
+  stage: build_sandbox
+  tags:
+    - ${SAND_RUNNER_TAG}
+  only:
+    - sandbox
+  before_script:
+    - curl -vvv --insecure -u $DEV_NEXUS_USER:$DEV_NEXUS_PASS  $DEV_RAW_REPO/sandbox/client/.env  -o .env
+    - cat .env
+    - ls -la
+  script:
+    - sed -i 's+https:\/\/registry\.npmjs\.org+https:\/\/nrs.sandpod.ir\/repository\/nodejs-proxy+g' package-lock.json 
+    - docker build -t $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG .
+    - docker login $SAND_REGISTRY -u $SAND_HARBOR_USER  -p $SAND_HARBOR_PASS
+    - docker push $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG
+    - docker rmi  $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG
+    - docker image prune -f --filter label=stage=builder
+###############################CD###############################
+
+Update App Image:
+  variables:
+    GIT_STRATEGY: none
+  stage: update
+  tags:
+    - ${SAND_k8s_RUNNER_TAG}
+  before_script:
+    - kubectl config set-cluster k8s --server="${SAND_PLATFORM_ADDRESS}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${SAND_CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials "${SAND_PLATFORM_USER}" --token="${SAND_PLATFORM_TOKEN}"
+    - kubectl config set-context default --cluster=k8s --user="${SAND_PLATFORM_USER}"
+    - kubectl config use-context default
+  script:
+    - kubectl -n "${SAND_NAMESPACE}"  rollout restart deployment "${SAND_DEPLOYMENT}"
