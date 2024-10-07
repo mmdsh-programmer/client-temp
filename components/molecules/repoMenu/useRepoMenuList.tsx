@@ -48,7 +48,7 @@ const useMenuList = (
 
   const ownerAdminActions = () => {
     return [
-      window.location.pathname === "dashboard" &&
+      window.location.pathname === "/admin/dashboard" &&
         createMenuItem(
           "اطلاعات پوشه",
           <FolderInfoIcon className="w-4 h-4" />,
@@ -99,7 +99,7 @@ const useMenuList = (
         "بایگانی",
         <ArchiveIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
-          setModalState("restore", true);
+          setModalState("archive", true);
           setOpenRepoActionDrawer(false);
         }
       ),

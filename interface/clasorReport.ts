@@ -1,6 +1,7 @@
 export interface IClasorReport {
   podSpaceStatus: IPodSpaceStatus | null;
   repoCount: number;
+  documentCount: number;
 }
 
 interface IPodSpaceStatus {

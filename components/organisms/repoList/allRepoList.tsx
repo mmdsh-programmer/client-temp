@@ -104,7 +104,7 @@ const AllRepoList = () => {
                   ? "text-critical-normal"
                   : "text-success-normal",
               },
-              { data: <RepoMenu repo={repo} /> },
+              { data: <RepoMenu repo={repo} />, stopPropagation: true },
             ]}
           />
         );

@@ -4,18 +4,17 @@ import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
+import { useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
   repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoBookmarkDialog = ({
- repo, setOpen 
-}: IProps) => {
-  const {
- isPending, mutate 
-} = useBookmarkRepo();
+const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
+  const setRepo = useSetRecoilState(repoAtom);
+  const { isPending, mutate } = useBookmarkRepo();
 
   const handleClose = () => {
     setOpen(false);
@@ -27,6 +26,10 @@ const RepoBookmarkDialog = ({
         repoId: repo.id,
         callBack: () => {
           toast.success("مخزن مورد نظر به نشان شده ها اضافه شد.");
+          setRepo({
+            ...repo,
+            bookmark: true,
+          });
           handleClose();
         },
       });
@@ -36,6 +39,10 @@ const RepoBookmarkDialog = ({
         detach: true,
         callBack: () => {
           toast.success("مخزن مورد نظر از نشان شده ها حذف شد.");
+          setRepo({
+            ...repo,
+            bookmark: false,
+          });
           handleClose();
         },
       });
