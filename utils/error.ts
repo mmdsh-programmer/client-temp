@@ -119,3 +119,8 @@ export const handleActionError = (error: IActionError) => {
       throw new ServerError(messages);
   }
 };
+
+export const handleRouteError = (error: IActionError) => {
+  const message = error.errorList?.[0] ?? "";
+  return Response.json({ message }, { status:  error.errorCode ?? 500 });
+};
