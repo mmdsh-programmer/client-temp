@@ -1,12 +1,7 @@
-import {
- Button, Typography 
-} from "@material-tailwind/react";
-import {
- DocIcon, InvisibleIcon, TickIcon 
-} from "@components/atoms/icons";
-
-import { IDocumentTreeItem } from "atom/category";
 import React from "react";
+import { Button, Typography } from "@material-tailwind/react";
+import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
+import { IDocumentTreeItem } from "atom/category";
 import { documentTemplateAtom } from "atom/document";
 import { useRecoilState } from "recoil";
 
@@ -34,7 +29,7 @@ const TreeDocItem = ({ docItem }: IProps) => {
         >
           <div className="flex">
             {getDocumentTemplate?.id === docItem.id ? (
-              <TickIcon className="stroke-gray-300 w-5 h-5 flex-none" />
+              <TickIcon className="fill-purple-normal w-5 h-5 flex-none" />
             ) : null}
             <DocIcon className="fill-gray-300 w-5 h-5 flex-none" />
             {docItem.isHidden && (

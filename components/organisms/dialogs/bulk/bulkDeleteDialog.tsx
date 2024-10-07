@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import useDeleteBulk from "@hooks/bulk/useDeleteBulk";
 import { useForm } from "react-hook-form";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";           
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,7 +45,7 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
   return (
     <DeleteDialog
       isPending={bulkDeleteHook.isPending}
-      dialogHeader="حذف دسته بندی"
+      dialogHeader="حذف موارد انتخاب‌ شده"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
     >

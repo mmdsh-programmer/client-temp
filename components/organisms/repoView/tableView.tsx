@@ -35,15 +35,13 @@ const TableView = ({
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
-                {key: "name",
-                  value: "نام مخزن",
-                  isSorted: true,},
-                {key: "createDate",
-                  value: "تاریخ ایجاد",
-                  isSorted: true,},
-                {key: "action",
+                { key: "name", value: "نام مخزن", isSorted: true },
+                { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
+                {
+                  key: "action",
                   value: "عملیات",
-                  className: "flex justify-end ml-4 ",},
+                  className: "flex justify-end ml-4 ",
+                },
               ]}
             />
             <tbody>
@@ -59,8 +57,13 @@ const TableView = ({
                       }
                       tableCell={[
                         { data: repo.name },
-                        { data: FaDateFromTimestamp(+new Date(repo.createDate)) },
-                        { data: <RepoMenu repo={repo} /> },
+                        {
+                          data: FaDateFromTimestamp(+new Date(repo.createDate)),
+                        },
+                        {
+                          data: <RepoMenu repo={repo} />,
+                          stopPropagation: true,
+                        },
                       ]}
                     />
                   );

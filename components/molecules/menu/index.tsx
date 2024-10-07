@@ -16,6 +16,7 @@ interface IProps {
   menuList: {
     text: string;
     icon?: React.ReactNode;
+    className?: string;
     onClick?:
       | (React.MouseEventHandler<HTMLLIElement> &
           React.MouseEventHandler<HTMLButtonElement>)
@@ -44,14 +45,15 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
             <MenuItem
               key={`menu-${index}`}
               placeholder="menu-item"
-              className={`${variant === "small" ? "p-2" : "p-3"}`}
+              className="p-2"
               onClick={menuItem.onClick}
             >
-              <div className="flex">
+              <div className="flex items-center gap-2">
                 {menuItem.icon}
                 <Typography
                   placeholder="menu-item-text"
-                  className={`font-iranYekan ${variant === "small" ? " font-light text-[12px] mr-2" : "font-medium text-base mb-1"}`}
+                  className={`font-iranYekan ${menuItem.className || ""}
+                     ${variant === "small" ? " font-light text-[12px] mr-2" : "font-medium text-base mb-1"}`}
                 >
                   {menuItem.text}
                 </Typography>

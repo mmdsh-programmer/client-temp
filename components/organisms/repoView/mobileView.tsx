@@ -8,6 +8,8 @@ import MobileCard from "@components/molecules/mobileCard";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
 import { Spinner } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface IListResponse<T> {
   total: number;
@@ -18,7 +20,8 @@ const renderContent = (
   isLoading: boolean,
   listLength: number,
   list: InfiniteData<IListResponse<IRepo>> | undefined,
-  type: string
+  type: string,
+  router: AppRouterInstance
 ) => {
   if (isLoading) {
     return (
@@ -34,13 +37,20 @@ const renderContent = (
           <MobileCard
             key={repo.id}
             name={repo.name}
-            createDate={
-              repo.createDate
-                ? FaDateFromTimestamp(+new Date(repo.createDate))
-                : "--"
-            }
-            creator={repo.owner?.userName}
+            description={[
+              {
+                title: "تاریخ ایجاد",
+                value: FaDateFromTimestamp(+new Date(repo.createDate)) || "--",
+              },
+              { title: "سازنده", value: repo.owner?.userName || "--" },
+            ]}
             cardAction={<RepoMenu repo={repo} />}
+            onClick={() => {
+              return (
+                !repo.isArchived &&
+                router.push(`/admin/repositories?repoId=${repo.id}`)
+              );
+            }}
           />
         );
       });
@@ -57,10 +67,12 @@ const MobileView = ({
   isFetchingNextPage,
   type,
 }: IRepoView) => {
+  const router = useRouter();
   const listLength = getRepoList?.pages[0].total ?? 0;
+
   return (
     <>
-      {renderContent(isLoading, listLength, getRepoList, type)}
+      {renderContent(isLoading, listLength, getRepoList, type, router)}
       <RenderIf isTrue={!!hasNextPage}>
         <div className="m-auto">
           <LoadMore

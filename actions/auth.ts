@@ -4,6 +4,7 @@ import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   getToken,
   handleRedirect,
+  logout,
   renewToken,
   userInfo,
 } from "@service/clasor";
@@ -22,7 +23,7 @@ const refreshCookieHeader = async (rToken: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    }),
+    })
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
@@ -87,7 +88,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    }),
+    })
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
@@ -100,4 +101,11 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
   });
 
   return { ...response };
+};
+
+export const logoutAction = async () => {
+  const userData = await getMe();
+  const response = await logout(userData.access_token, userData.refresh_token);
+  cookies().delete("token");
+  return response;
 };
