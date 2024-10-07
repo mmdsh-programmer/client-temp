@@ -127,7 +127,7 @@ const DocumentTableRow = ({ document }: IProps) => {
           title: document.creator?.name || "--",
           className: "hidden lg:table-cell",
         },
-        { data: <DocumentMenu document={document} /> },
+        { data: <DocumentMenu document={document} />, stopPropagation: true },
       ]}
     />
   );

@@ -169,7 +169,7 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
           </Button>
         ) : progress && progress === 100 ? (
           <Button className="bg-transparent p-0">
-            <TickIcon className="h-5 w-5 fill-[#249e00] stroke-white" />
+            <TickIcon className="h-5 w-5 fill-[#249e00]" />
           </Button>
         ) : (
           <Button

@@ -7,6 +7,7 @@ import {
   IChildrenFilter,
   IClasorError,
   IGetToken,
+  IMyInfo,
   IReportFilter,
   IServerResult,
   IUserInfo,
@@ -167,10 +168,25 @@ export const renewToken = async (refresh_token: string) => {
   }
 };
 
+export const logout = async (access_token: string, refresh_token: string) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
+      "auth/logout",
+      {
+        refreshToken: refresh_token,
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 ////////////////////////// INFO /////////////////////////
 export const getMyInfo = async (access_token: string) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<any>>(
+    const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>(
       "myInfo",
       {
         headers: {

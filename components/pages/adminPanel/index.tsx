@@ -4,7 +4,7 @@ import AdminPanelReport from "@components/organisms/adminPanel/adminPanelReport"
 
 const AdminPanelPage = () => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-0 xs:gap-6">
       <AdminPanelReport />
       <AdminPanelFeedback />
     </div>

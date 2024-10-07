@@ -16,7 +16,7 @@ const Error = ({
 }: IProps) => {
   return (
     <div className="flex flex-col h-full mx-auto justify-center items-center gap-3 my-2">
-      <FolderEmptyIcon className="h-16 w-16 stroke-gray-300" />
+      <FolderEmptyIcon />
       <div className="flex flex-col gap-1">
         <Typography className="title_t3 text-primary">
           {error?.message || "خطای نامشخصی رخ داد"}

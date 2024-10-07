@@ -96,14 +96,14 @@ const RepoKeyList = ({
                           data: key.key,
                           className: "max-w-28",
                         },
-                        { data: <RepoKeyMenu keyItem={key} /> },
+                        { data: <RepoKeyMenu keyItem={key} />,  stopPropagation: true, },
                       ]
                     : [
                         {
                           data: (
                             <span className="flex items-center">
                               {selectedKeyId === key.id ? (
-                                <TickIcon className="h-4 w-4 ml-2" />
+                                <TickIcon className="h-4 w-4 fill-purple-normal ml-2" />
                               ) : null}
                               {key.name}
                             </span>

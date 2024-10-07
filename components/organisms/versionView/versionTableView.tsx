@@ -31,6 +31,7 @@ const VersionTableView = ({
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
+  
   const listLength = getVersionList?.[0].length;
 
   const handleOpenEditor = (value: IVersion) => {
@@ -171,6 +172,7 @@ const VersionTableView = ({
                               showDrawer={false}
                             />
                           ),
+                          stopPropagation: true,
                           className: "justify-end",
                         },
                       ]}
