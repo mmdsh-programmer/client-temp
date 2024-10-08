@@ -8,7 +8,7 @@ const useGetInviteRequestsByOwner = (
   size: number,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`getRepoInviteRequestsByOwner-${repoId}`, repoId],
+    queryKey: [`getRepoInviteRequestsByOwner-${repoId}`],
     queryFn: async ({ pageParam }) => {
       const response = await getRepositoryInviteRequestsAction(
         repoId,
@@ -19,7 +19,7 @@ const useGetInviteRequestsByOwner = (
     },
     initialPageParam: 1,
     retry: false,
-    enabled: !!(repoId && !Number.isNaN(repoId)),
+    enabled: !!repoId,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

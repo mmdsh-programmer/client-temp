@@ -26,7 +26,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
     >
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6 overflow-auto"
+        className="flex-grow px-5 py-3 xs:p-6 overflow-auto h-[450px]"
       >
         {isLoading ? (
           <Spinner className="w-6 h-6" color="deep-purple" />
@@ -42,7 +42,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
                     >
                       <div className="flex flex-grow gap-1">
                         <Typography
-                          className="label_l2 text-primary truncate w-auto max-w-[90px] cursor-pointer"
+                          className="label_l2 text-primary truncate w-auto max-w-[50px] xs:max-w-[90px] cursor-pointer"
                           title={request.repoName}
                         >
                           {request.repoName}

@@ -3,7 +3,7 @@ import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
-import { categoryAtom } from "@atom/category";
+import { categoryShowAtom } from "@atom/category";
 import { categorySchema } from "./validation.yup";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -24,7 +24,7 @@ interface IProps {
 
 const CategoryCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
+  const getCategory = useRecoilValue(categoryShowAtom);
 
   const createCategory = useCreateCategory();
 

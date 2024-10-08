@@ -3,28 +3,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 import RepoImage from "../repoDefaultImage";
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { IRepo } from "@interface/repo.interface";
-import { ERoles } from "@interface/enums";
-
-const mockRepo: IRepo = {
-  id: 475785,
-  imageFileHash: "red",
-  name: "Mock Repository",
-  description: "",
-  bookmark: false,
-  createDate: "",
-  lastAccessDate: "",
-  roleName: ERoles.owner,
-  updatedAt: "",
-  userGroupHash: "",
-  isPublish: false,
-  isArchived: false,
-  publishExpireTime: 0,
-  adminPublicLink: null,
-  viewerPublicLink: null,
-  writerPublicLink: null,
-  editorPublicLink: null,
-};
 
 const queryClient = new QueryClient();
 
@@ -57,13 +35,13 @@ type Story = StoryObj<typeof RepoImage>;
 
 export const Default: Story = {
   args: {
-    repo: mockRepo,
+    imageHash: "red",
   },
 };
 
 export const Fetching: Story = {
   args: {
-    repo: null,
+    imageHash: "red",
   },
   decorators: [
     (Story) => {
@@ -78,9 +56,6 @@ export const Fetching: Story = {
 
 export const NoImageHash: Story = {
   args: {
-    repo: {
-      ...mockRepo,
-      imageFileHash: "",
-    },
+    imageHash: "red",
   },
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import { IRepo } from "@interface/repo.interface";
 import {
   RepoBlueIcon,
   RepoIcon,
@@ -12,12 +11,11 @@ import ImageComponent from "@components/atoms/image";
 import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
-  repo: IRepo | null;
+  imageHash?: string;
 }
 
-const RepoDefaultImage = ({ repo }: IProps) => {
+const RepoDefaultImage = ({ imageHash }: IProps) => {
   const { data: getUserInfo, isFetching } = useGetUser();
-  const imageHash = repo?.imageFileHash;
 
   if (isFetching) {
     return <Spinner className="h-5 w-5" color="deep-purple" />;
@@ -41,7 +39,7 @@ const RepoDefaultImage = ({ repo }: IProps) => {
         return (
           <ImageComponent
             alt="repo-image"
-            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo?.imageFileHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
+            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${imageHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
           />
         );
     }

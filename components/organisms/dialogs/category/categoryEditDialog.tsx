@@ -72,6 +72,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
       description: dataForm?.description,
       order: null,
       isHidden: false,
+      currentParentId: null,
       callBack: () => {
         toast.success("دسته بندی با موفقیت به روز رسانی شد.");
         handleClose();

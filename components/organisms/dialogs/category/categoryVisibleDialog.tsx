@@ -35,6 +35,7 @@ const CategoryVisibleDialog = ({ setOpen }: IProps) => {
       description: getCategory?.description,
       order: null,
       isHidden: false,
+      currentParentId: null,
       callBack: () => {
         toast.success("دسته بندی قابل رویت است.");
         handleClose();
