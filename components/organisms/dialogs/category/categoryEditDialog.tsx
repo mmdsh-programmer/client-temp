@@ -66,7 +66,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
     if (!getRepo) return;
     editCategory.mutate({
       repoId: getRepo?.id,
-      categoryId: getCategory?.id || null,
+      categoryId: 854796,
       parentId: getCategory?.parentId || null,
       name: dataForm.name,
       description: dataForm?.description,

@@ -5,6 +5,7 @@ import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const useGetCategoryChildren = (
   repoId: number,
@@ -15,7 +16,7 @@ const useGetCategoryChildren = (
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
   forMove?: boolean,
-  enabled = true,
+  enabled = true
 ) => {
   return useInfiniteQuery({
     queryKey: [
@@ -33,8 +34,9 @@ const useGetCategoryChildren = (
         size,
         title,
         type,
-        filters,
+        filters
       );
+
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,

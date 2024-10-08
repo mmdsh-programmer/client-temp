@@ -21,24 +21,21 @@ export const getVersionAction = async (
   versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
-  innerOutline?: boolean,
+  innerOutline?: boolean
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await getVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-      state,
-      innerDocument,
-      innerOutline,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId,
+    state,
+    innerDocument,
+    innerOutline
+  );
+
+  return response;
 };
 
 export const createVersionAction = async (
@@ -46,183 +43,156 @@ export const createVersionAction = async (
   documentId: number,
   versionNumber: string,
   content: string,
-  outline: string,
+  outline: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await createVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionNumber,
-      content,
-      outline,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await createVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionNumber,
+    content,
+    outline
+  );
+
+  return response;
 };
 
 export const createFileVersionAction = async (
   repoId: number,
   documentId: number,
   versionNumber: string,
-  fileHash?: IFileVersion,
+  fileHash?: IFileVersion
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await createFileVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionNumber,
-      fileHash,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await createFileVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionNumber,
+    fileHash
+  );
+
+  return response;
 };
 
 export const deleteVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  state: string,
+  state: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await deleteVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-      state,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await deleteVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId,
+    state
+  );
+
+  return response;
 };
 
 export const getLastVersionAction = async (
   repoId: number,
-  documentId: number,
+  documentId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await getLastVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getLastVersion(
+    userInfo.access_token,
+    repoId,
+    documentId
+  );
+
+  return response;
 };
 
 export const setLastVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await setLastVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await setLastVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId
+  );
+
+  return response;
 };
 
 export const publicVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await publicVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await publicVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId
+  );
+
+  return response;
 };
 
 export const cancelPublicVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await cancelPublicVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await cancelPublicVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId
+  );
+
+  return response;
 };
 
 export const confirmVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await confirmVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await confirmVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId
+  );
+
+  return response;
 };
 
 export const cancelConfirmVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number,
+  versionId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await cancelConfirmVersion(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      versionId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await cancelConfirmVersion(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    versionId
+  );
+
+  return response;
 };

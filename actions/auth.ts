@@ -23,7 +23,7 @@ const refreshCookieHeader = async (rToken: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    }),
+    })
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
@@ -44,29 +44,29 @@ const refreshCookieHeader = async (rToken: string) => {
 };
 
 export const getMe = async () => {
-    const encodedToken = cookies().get("token")?.value;
-      if (!encodedToken) {
-        redirect("/signin");
-      }
+  const encodedToken = cookies().get("token")?.value;
+  if (!encodedToken) {
+    redirect("/signin");
+  }
 
-      const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
-      const tokenInfo = JSON.parse(decryptKey(payload)) as {
-        access_token: string;
-        refresh_token: string;
-      };
-      try {
-        const userData = await userInfo(`${tokenInfo.access_token}`);
-        return {
-          ...userData,
-          access_token: tokenInfo.access_token,
-          refresh_token: tokenInfo.refresh_token,
-        };
-      } catch (error: unknown) {
-        if ((error as IActionError)?.errorCode === 401) {
-          return refreshCookieHeader(tokenInfo.refresh_token);
-        }
-        throw error;
-      }
+  const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
+  const tokenInfo = JSON.parse(decryptKey(payload)) as {
+    access_token: string;
+    refresh_token: string;
+  };
+  try {
+    const userData = await userInfo(`${tokenInfo.access_token}`);
+    return {
+      ...userData,
+      access_token: tokenInfo.access_token,
+      refresh_token: tokenInfo.refresh_token,
+    };
+  } catch (error: unknown) {
+    if ((error as IActionError)?.errorCode === 401) {
+      return refreshCookieHeader(tokenInfo.refresh_token);
+    }
+    throw error;
+  }
 };
 
 export const login = async (redirectUrl: string) => {
@@ -82,7 +82,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    }),
+    })
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);

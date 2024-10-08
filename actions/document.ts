@@ -25,35 +25,29 @@ import { IReportFilter } from "@interface/app.interface";
 
 export const getClasorFieldAction = async () => {
   const userInfo = await getMe();
-  try {
-    const response = await getClasorField(userInfo.access_token);
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getClasorField(userInfo.access_token);
+
+  return response;
 };
 
 export const getDocumentAction = async (
   repoId: number,
   documentId: number,
   offset?: number,
-  size?: number,
+  size?: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await getDocument(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      offset,
-      size,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getDocument(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    offset,
+    size
+  );
+
+  return response;
 };
 
 export const createDocumentAction = async (
@@ -65,27 +59,24 @@ export const createDocumentAction = async (
   description?: string,
   order?: number,
   imageUrl?: string,
-  publicKeyId?: string,
+  publicKeyId?: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await createDocument(
-      userInfo.access_token,
-      repoId,
-      categoryId,
-      title,
-      contentType,
-      isTemplate,
-      description,
-      order,
-      imageUrl,
-      publicKeyId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await createDocument(
+    userInfo.access_token,
+    repoId,
+    categoryId,
+    title,
+    contentType,
+    isTemplate,
+    description,
+    order,
+    imageUrl,
+    publicKeyId
+  );
+
+  return response;
 };
 
 export const createDocumentTemplateAction = async (
@@ -97,27 +88,24 @@ export const createDocumentTemplateAction = async (
   templateId: number,
   description?: string,
   order?: number,
-  imageUrl?: string,
+  imageUrl?: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await createDocumentTemplate(
-      userInfo.access_token,
-      repoId,
-      categoryId,
-      title,
-      contentType,
-      versionNumber,
-      templateId,
-      description,
-      order,
-      imageUrl,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await createDocumentTemplate(
+    userInfo.access_token,
+    repoId,
+    categoryId,
+    title,
+    contentType,
+    versionNumber,
+    templateId,
+    description,
+    order,
+    imageUrl
+  );
+
+  return response;
 };
 
 export const editDocumentAction = async (
@@ -129,45 +117,39 @@ export const editDocumentAction = async (
   description?: string,
   order?: number | null,
   isHidden?: boolean,
-  tagIds?: number[],
+  tagIds?: number[]
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await editDocument(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      categoryId,
-      title,
-      contentType,
-      description,
-      order,
-      isHidden,
-      tagIds,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await editDocument(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    categoryId,
+    title,
+    contentType,
+    description,
+    order,
+    isHidden,
+    tagIds
+  );
+
+  return response;
 };
 
 export const deleteDocumentAction = async (
   repoId: number,
-  documentId: number,
+  documentId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await deleteDocument(
-      userInfo.access_token,
-      repoId,
-      documentId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await deleteDocument(
+    userInfo.access_token,
+    repoId,
+    documentId
+  );
+
+  return response;
 };
 
 export const getUserDocumentAction = async (
@@ -175,205 +157,175 @@ export const getUserDocumentAction = async (
   sortParams: ISortProps,
   offset: number,
   size: number,
-  filters?: IReportFilter | null,
+  filters?: IReportFilter | null
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await getUserDocument(
-      userInfo.access_token,
-      repoId,
-      sortParams,
-      offset,
-      size,
-      filters,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getUserDocument(
+    userInfo.access_token,
+    repoId,
+    sortParams,
+    offset,
+    size,
+    filters
+  );
+
+  return response;
 };
 
 export const bookmarkDocumentAction = async (
   repoId: number,
   documentId: number,
-  detach?: boolean,
+  detach?: boolean
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await bookmarkDocument(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      detach,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await bookmarkDocument(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    detach
+  );
+
+  return response;
 };
 
 export const getDocumentBlocklistAction = async (
   repoId: number,
   documentId: number,
   offset: number,
-  size: number,
+  size: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await getDocumentBlocklist(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      offset,
-      size,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getDocumentBlocklist(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    offset,
+    size
+  );
+
+  return response;
 };
 
 export const addUserToDocumentBlocklistAction = async (
   repoId: number,
   documentId: number,
   username: string,
-  type: "block" | "unblock",
+  type: "block" | "unblock"
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await addUserToDocumentBlocklist(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      username,
-      type,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await addUserToDocumentBlocklist(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    username,
+    type
+  );
+
+  return response;
 };
 
 export const getDocumentWhiteBlackListAction = async (
   repoId: number,
-  documentId: number,
+  documentId: number
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await getDocumentWhiteBlackList(
-      userInfo.access_token,
-      repoId,
-      documentId,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await getDocumentWhiteBlackList(
+    userInfo.access_token,
+    repoId,
+    documentId
+  );
+
+  return response;
 };
 
 export const addToDocumentBlackListAction = async (
   repoId: number,
   documentId: number,
-  usernameList: string[],
+  usernameList: string[]
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await addToDocumentBlackList(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      usernameList,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await addToDocumentBlackList(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    usernameList
+  );
+
+  return response;
 };
 
 export const addToDocumentWhiteListAction = async (
   repoId: number,
   documentId: number,
-  usernameList: string[],
+  usernameList: string[]
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await addToDocumentWhiteList(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      usernameList,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await addToDocumentWhiteList(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    usernameList
+  );
+
+  return response;
 };
 
 export const createDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  password: string,
+  password: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await createDocumentPassword(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      password,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await createDocumentPassword(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    password
+  );
+
+  return response;
 };
 
 export const updateDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
   oldPassword: string,
-  newPassword: string,
+  newPassword: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await updateDocumentPassword(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      oldPassword,
-      newPassword,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await updateDocumentPassword(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    oldPassword,
+    newPassword
+  );
+
+  return response;
 };
 
 export const deleteDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  oldPassword: string,
+  oldPassword: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await deleteDocumentPassword(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      oldPassword,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await deleteDocumentPassword(
+    userInfo.access_token,
+    repoId,
+    documentId,
+    oldPassword
+  );
+
+  return response;
 };

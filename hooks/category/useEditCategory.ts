@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { ICategory } from "@interface/category.interface";
 import { categoryShowAtom } from "@atom/category";
 import { editCategoryAction } from "@actions/category";
@@ -38,7 +37,7 @@ const useEditCategory = (move?: boolean) => {
         name,
         description,
         order,
-        isHidden,
+        isHidden
       );
       return response as ICategory;
     },

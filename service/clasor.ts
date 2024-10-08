@@ -99,11 +99,11 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
       case 401:
         throw new AuthorizationError(message);
       case 403:
-        throw new ForbiddenError(message);
+        throw new ForbiddenError(message, error);
       case 404:
-        throw new NotFoundError(message);
+        throw new NotFoundError(message, error);
       default:
-        throw new ServerError(message);
+        throw new ServerError(message, error);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
