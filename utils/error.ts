@@ -1,4 +1,5 @@
 import { IActionError } from "@interface/app.interface";
+import { NextResponse } from "next/server";
 
 export const ERRORS: Record<
   number,
@@ -122,5 +123,5 @@ export const handleActionError = (error: IActionError) => {
 
 export const handleRouteError = (error: IActionError) => {
   const message = error.errorList?.[0] ?? "";
-  return Response.json({ message }, { status:  error.errorCode ?? 500 });
+  return NextResponse.json({ message }, { status:  error.errorCode ?? 500 });
 };
