@@ -37,7 +37,7 @@ const RequestMenu = ({ request }: IProps) => {
       ) : (
         <>
           <Button
-            className="w-20 h-8 hover:bg-gray-50 bg-gray-50 "
+            className="w-16 xs:w-20 h-8 hover:bg-gray-50 bg-gray-50 "
             onClick={handleRejectRequest}
           >
             <Typography className="text__label__button text-primary">
@@ -45,7 +45,7 @@ const RequestMenu = ({ request }: IProps) => {
             </Typography>
           </Button>
           <Button
-            className="w-20 h-8 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="w-16 xs:w-20 h-8 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
             onClick={handleAcceptRequest}
           >
             <Typography className="text__label__button text-white">

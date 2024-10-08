@@ -1,5 +1,5 @@
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import React from "react";
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";

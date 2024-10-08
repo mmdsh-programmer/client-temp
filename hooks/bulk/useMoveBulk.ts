@@ -8,18 +8,22 @@ const useMoveBulk = () => {
     mutationKey: ["moveBulk"],
     mutationFn: async (values: {
       repoId: number;
-      parentId: number | null;
+      currentParentId: number | null;
+      destCategory: number | null;
       children: number[];
       callBack?: () => void;
     }) => {
-      const { repoId, parentId, children } = values;
-      const response = await moveBulkAction(repoId, parentId, children);
+      const { repoId, destCategory, children } = values;
+      const response = await moveBulkAction(repoId, destCategory, children);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, parentId } = values;
+      const { callBack, currentParentId, destCategory } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`],
+        queryKey: [`category-${currentParentId || "parent"}-children`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`category-${destCategory || "parent"}-children`],
       });
       callBack?.();
     },

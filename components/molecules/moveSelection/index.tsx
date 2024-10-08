@@ -1,8 +1,4 @@
-import React, {
- useRef,
- useState
-} from "react";
-
+import React, { useRef, useState } from "react";
 import { Button } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import MoveBreadCrumb from "../moveBreadCrumb";
@@ -51,7 +47,9 @@ const MoveSelection = ({ target }: IProps) => {
       {isOpen && (
         <div className="absolute z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
           <MoveBreadCrumb />
-          {getRepo ? <MoveChildren target={target} repoId={getRepo.id} /> : null}
+          {getRepo ? (
+            <MoveChildren target={target} repoId={getRepo.id} />
+          ) : null}
         </div>
       )}
     </div>

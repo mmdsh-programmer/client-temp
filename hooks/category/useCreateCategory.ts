@@ -26,9 +26,10 @@ const useCreateCategory = () => {
       return response as ICategory;
     },
     onSuccess: (response, values) => {
-      const { callBack, parentId } = values;
+      const { callBack } = values;
+      console.log("--------------- response ----------------", response);
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`, undefined],
+        queryKey: [`category-${response.parentId || "parent"}-children`],
       });
       callBack?.();
     },

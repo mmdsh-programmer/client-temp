@@ -1,5 +1,8 @@
 import React from "react";
-import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
+import {
+  categoryQueryParamsAtom,
+  categoryShowAtom,
+} from "@atom/category";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
 import { EEmptyList } from "@components/molecules/emptyList";
 import MobileView from "../categoryView/categoryMobileView";
@@ -37,7 +40,7 @@ const CategoryChildren = () => {
     undefined,
     getFilterChildren,
     false,
-    !getFilterReport,
+    !getFilterReport
   );
 
   const {
@@ -52,7 +55,7 @@ const CategoryChildren = () => {
     getSortParams,
     queryParams.limit,
     getFilterReport,
-    !!getFilterReport && !getFilterChildren,
+    !!getFilterReport && !getFilterChildren
   );
 
   const commonProps: ICategoryView = {

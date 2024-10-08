@@ -46,9 +46,10 @@ const MoveChildren = ({
     getSortParams,
     queryParams.limit,
     undefined,
+    // getBulkItems.length ? "category" : undefined,
     "category",
     undefined,
-    true,
+    true
   );
 
   const bulkItemsCategories = getBulkItems.filter((item) => {

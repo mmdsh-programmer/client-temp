@@ -1,8 +1,4 @@
-import {
- DialogBody,
- DialogFooter,
- Typography
-} from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -30,19 +26,11 @@ const RepoImage = ({
   selectedFile,
 }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const [imageType, setImageType] = useState<"default" | "custom">(
-    selectedFile ? "custom" : "default"
-  );
+  const [imageType, setImageType] = useState<"default" | "custom">();
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
-  const {
- isPending, mutate 
-} = useAddImageToRepo();
-  const {
-    handleSubmit,
-    clearErrors,
-    reset,
-  } = useForm<IForm>();
+  const { isPending, mutate } = useAddImageToRepo();
+  const { handleSubmit, clearErrors, reset } = useForm<IForm>();
 
   const handleReset = () => {
     clearErrors();

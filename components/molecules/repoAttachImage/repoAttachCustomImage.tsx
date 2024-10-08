@@ -1,15 +1,15 @@
 import React from "react";
 import { Button, Radio, Typography } from "@material-tailwind/react";
 import { AddImageIcon } from "@components/atoms/icons";
-import RepoDefaultImage from "@components/molecules/repoAttachImage/repoAttachDefaultImage";
-import ImageComponent from "@components/atoms/image";
+import RepoAttachDefaultImage from "@components/molecules/repoAttachImage/repoAttachDefaultImage";
+import RepoDefaultImage from "../repoDefaultImage";
 
 interface IProps {
-  imageType: "default" | "custom";
+  imageType: "default" | "custom" | undefined;
   setOpenFileManagement: React.Dispatch<React.SetStateAction<boolean>>;
-  setImageType: React.Dispatch<React.SetStateAction<"default" | "custom">>;
+  setImageType: React.Dispatch<React.SetStateAction<"default" | "custom" | undefined>>;
   onSelect: (image: string) => void;
-  imageSrc?: string;
+  imageHash?: string;
 }
 
 const RepoAttachCustomImage = ({
@@ -17,7 +17,7 @@ const RepoAttachCustomImage = ({
   setImageType,
   onSelect,
   setOpenFileManagement,
-  imageSrc,
+  imageHash,
 }: IProps) => {
   return (
     <div className="flex flex-col gap-6">
@@ -46,7 +46,7 @@ const RepoAttachCustomImage = ({
           }}
         />
         <div className="">
-          <RepoDefaultImage
+          <RepoAttachDefaultImage
             onClick={(image: string) => {
               return onSelect(image);
             }}
@@ -86,12 +86,8 @@ const RepoAttachCustomImage = ({
           placeholder=""
           disabled={imageType !== "custom"}
         >
-          {imageSrc ? (
-            <ImageComponent
-              src={imageSrc}
-              alt="repo-image"
-              className="w-full h-full"
-            />
+          {imageHash ? (
+            <RepoDefaultImage imageHash={imageHash} />
           ) : (
             <AddImageIcon className="h-6 w-6" />
           )}
