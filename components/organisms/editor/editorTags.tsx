@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
 import DocumentTagList from "@components/organisms/document/documentTagList";
@@ -9,11 +9,13 @@ import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import useGetTags from "@hooks/tag/useGetTags";
 import LoadingButton from "@components/molecules/loadingButton";
+import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 
 const EditorTags = () => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
+  const [openCreateTagDialog, setOpenCreateTagDialog] = useState(false);
 
   const repoId = getRepo!.id;
   const adminRole =
@@ -73,6 +75,7 @@ const EditorTags = () => {
                   return [...oldValue, val];
                 });
               }}
+              setOpen={setOpenCreateTagDialog}
             />
           </div>
           <DocumentTagList tagList={documentTags} />
@@ -88,6 +91,13 @@ const EditorTags = () => {
             ارسال
           </Typography>
         </LoadingButton>
+      ) : null}
+      {openCreateTagDialog ? (
+        <TagCreateDialog
+          setOpen={() => {
+            return setOpenCreateTagDialog(false);
+          }}
+        />
       ) : null}
     </form>
   );
