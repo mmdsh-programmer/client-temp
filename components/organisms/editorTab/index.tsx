@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  editorChatDrawerAtom,
   editorDataAtom,
   editorDecryptedContentAtom,
   editorModeAtom,
@@ -15,7 +14,6 @@ import EditorComponent from "@components/organisms/editor";
 import EditorFooter from "../editor/editorFooter";
 import EditorHeader from "../editor/editorHeader";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
-import FloatingButtons from "../editor/floatingButtons";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@material-tailwind/react";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
@@ -33,7 +31,6 @@ const EditorTab = () => {
     useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
-  const setChatDrawer = useSetRecoilState(editorChatDrawerAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
@@ -150,7 +147,6 @@ const EditorTab = () => {
     setShowKey(false);
     setPublicKey(null);
     setSelectedVersion(null);
-    setChatDrawer(false);
     window.close();
   };
 
@@ -177,7 +173,7 @@ const EditorTab = () => {
 
   // eslint-disable-next-line no-nested-ternary
   return isFetching ? (
-    <div className="w-full h-full text-center flex items-center justify-center bg-primary">
+    <div className="w-full h-screen text-center flex items-center justify-center bg-primary">
       <Spinner className="h-5 w-5 " color="deep-purple" />
     </div>
   ) : data ? (
@@ -195,12 +191,6 @@ const EditorTab = () => {
           <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
             <EditorFooter editorRef={getEditorConfig().ref} />
           </div>
-          {editorMode === "preview" && data ? (
-            <FloatingButtons
-              version={data}
-              className=" bottom-[100px] xs:bottom-[100px] "
-            />
-          ) : null}
         </>
       </BlockDraft>
     </div>

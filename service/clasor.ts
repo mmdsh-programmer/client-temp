@@ -41,7 +41,9 @@ import { ITag } from "@interface/tags.interface";
 import { IRoles, IUser } from "@interface/users.interface";
 import {
   IAddVersion,
+  IComment,
   IFileVersion,
+  ILikeList,
   IVersion,
 } from "@interface/version.interface";
 import {
@@ -1764,6 +1766,28 @@ export const deleteDocumentPassword = async (
   }
 };
 
+export const documentEnableUserGroupHash = async (
+  access_token: string,
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/enableUserGroup`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 ///////////////////// VERSION //////////////////
 export const getVersion = async (
   access_token: string,
@@ -2496,6 +2520,165 @@ export const getAdminPanelFeedback = async (
         skip,
       },
     });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+////////////////////////////////// CORE //////////////////////
+export const getCommentList = async (
+  access_token: string,
+  postId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
+      `core/content/${postId}/comment`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteComment = async (
+  access_token: string,
+  commentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `core/comment/${commentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createComment = async (
+  access_token: string,
+  postId: number,
+  text: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `core/content/${postId}/comment`,
+      { text },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const like = async (access_token: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `core/content/${postId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const dislike = async (access_token: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `core/content/${postId}/dislike`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getLike = async (
+  access_token: string,
+  postId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
+      `core/content/${postId}/like`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          hasUser: true,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDislike = async (
+  access_token: string,
+  postId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
+      `core/content/${postId}/dislike`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          hasUser: true,
+        },
+      }
+    );
 
     return response.data.data;
   } catch (error) {

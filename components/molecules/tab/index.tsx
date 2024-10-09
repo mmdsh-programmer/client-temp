@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Tab,
   TabPanel,
@@ -6,19 +7,15 @@ import {
   TabsHeader,
 } from "@material-tailwind/react";
 
-import React from "react";
-
 interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const TabComponent = ({
- tabList, activeTab, setActiveTab 
-}: IProps) => {
+const TabComponent = ({ tabList, activeTab, setActiveTab }: IProps) => {
   return (
-    <Tabs value={activeTab}>
+    <Tabs value={activeTab} className="h-full">
       <TabsHeader
         className="flex items-center p-[2px] rounded-lg bg-secondary"
         indicatorProps={{ className: "" }}
@@ -41,10 +38,14 @@ const TabComponent = ({
           );
         })}
       </TabsHeader>
-      <TabsBody placeholder="tab-body" className="">
+      <TabsBody placeholder="tab-body" className="h-[calc(100%-50px)]">
         {tabList.map((tab) => {
           return (
-            <TabPanel key={tab.tabTitle} value={tab.tabTitle} className="p-0 ">
+            <TabPanel
+              key={tab.tabTitle}
+              value={tab.tabTitle}
+              className="p-0 h-full"
+            >
               {tab.tabContent}
             </TabPanel>
           );

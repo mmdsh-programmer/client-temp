@@ -29,6 +29,81 @@
   }
 }
 
+.shepherd-modal-overlay-container{
+  @apply !hidden
+}
+.tour-overlay{
+  @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-60 !z-[20]
+}
+.version-overlay{
+  @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-60 !z-[1000]
+}
+.custom-shepherd-theme{
+  @apply  absolute max-w-[350px] z-[1000] overflow-hidden shadow-lg border-normal border-2
+}
+.shepherd-content{
+  @apply px-3 py-2 !bg-white rounded-lg  shadow-md
+}
+
+.custom-shepherd-theme {
+  @apply !border-none
+}
+
+.tour-step-container{
+  @apply p-3
+}
+.tour-step-header{
+  @apply text-base font-semibold pb-4
+}
+.tour-step-title{
+  @apply text-base font-semibold 
+}
+.tour-step-text, .tour-step-list{
+  @apply !text-[13px] text-secondary !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan;
+}
+.tour-step-list{
+  @apply text-sm pb-4
+}
+.shepherd-header{
+  @apply w-full flex justify-end 
+}
+.shepherd-cancel-icon,
+.shepherd-cancel-icon span{
+  @apply block w-5 h-5
+}
+.shepherd-footer{
+  @apply flex justify-between
+}
+.main__header .shepherd-enabled.shepherd-target,
+.tabs .shepherd-enabled.shepherd-target,
+.home-container .shepherd-enabled.shepherd-target,
+.shepherd-enabled.shepherd-target
+{
+  @apply relative !z-[2000] !bg-white
+}
+.categorySearchContent.shepherd-enabled.shepherd-target,
+.categoryTreeMode.shepherd-enabled.shepherd-target,
+.createDocument.shepherd-enabled.shepherd-target,
+.user-create.shepherd-enabled.shepherd-target,
+.file-table-mode.shepherd-enabled.shepherd-target,
+.file-card-mode.shepherd-enabled.shepherd-target,
+.file-search-delete-mode.shepherd-enabled.shepherd-target,
+.searchRepo.shepherd-enabled.shepherd-target,
+.createNewRepo.shepherd-enabled.shepherd-target,
+.RepoTableMode.shepherd-enabled.shepherd-target,
+.RepoCardMode.shepherd-enabled.shepherd-target,
+.categorySearch.shepherd-enabled.shepherd-target,
+.createMenu.shepherd-enabled.shepherd-target
+{
+  @apply !relative !z-[2000] !bg-primary p-3
+}
+thead:has(tr th.shepherd-enabled.shepherd-target){
+  @apply !static 
+}
+ul.menu:has(li.shepherd-enabled.shepherd-target){
+  @apply bg-gray-700
+}
+
 @layer components {
   .spinner {
     @apply !border-r-purple-normal !border-t-purple-normal;
@@ -144,6 +219,8 @@
   .white-list-input button[aria-label="Clear"] {
     @apply translate-x-[7px];
   }
+
+
 }
 
 @layer utilities {
@@ -171,4 +248,8 @@
   .rdp__modal.css-1e0sis0 {
     @apply z-[99999];
   }
+
+  
 }
+
+

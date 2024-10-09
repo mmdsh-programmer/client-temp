@@ -1,13 +1,11 @@
 import React, { useRef } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import {
-  editorChatDrawerAtom,
   editorDataAtom,
   editorDecryptedContentAtom,
+  editorListDrawerAtom,
   editorModeAtom,
 } from "@atom/editor";
-
-import ChatDrawer from "../like&comment/chatDrawer";
 import { EDocumentTypes } from "@interface/enums";
 import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
@@ -17,6 +15,8 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
+import FloatingButtons from "./floatingButtons";
+import EditorDrawer from "./editorDrawer";
 
 interface IProps {
   getEditorConfig: () => {
@@ -26,22 +26,18 @@ interface IProps {
   version?: IVersion;
 }
 
-const EditorComponent = ({
- getEditorConfig, version 
-}: IProps) => {
+const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const selectedVersion = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const chatDrawer = useRecoilValue(editorChatDrawerAtom);
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
+  const listDrawer = useRecoilValue(editorListDrawerAtom);
 
   const timestampRef = useRef(Date.now());
 
-  const {
- data: userInfo, isLoading 
-} = useGetUser();
+  const { data: userInfo, isLoading } = useGetUser();
 
   if (isLoading) {
     return (
@@ -56,7 +52,9 @@ const EditorComponent = ({
     : selectedVersion?.content;
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full relative">
+      {listDrawer ? <div className="w-full xs:w-[300px]"><EditorDrawer version={version} /></div> : null}
+     <div className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"}`}>
       <RemoteEditor
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
         editorMode={editorMode}
@@ -82,7 +80,10 @@ const EditorComponent = ({
             : content
         }
       />
-      {chatDrawer ? <ChatDrawer /> : null}
+      </div>
+      <FloatingButtons
+        version={version}
+      />
     </div>
   );
 };

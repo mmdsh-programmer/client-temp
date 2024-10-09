@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MoreDotIcon, StarIcon } from "@components/atoms/icons";
+import { InfoIcon, MoreDotIcon, StarIcon } from "@components/atoms/icons";
 import { repoInfoAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { Button } from "@material-tailwind/react";
@@ -11,6 +11,7 @@ import { listModeAtom } from "@atom/app";
 import { useRouter } from "next/navigation";
 import RepoDialogs from "../repoDialogs";
 import useRepoMenuList from "./useRepoMenuList";
+import { activeTourAtom, ETourSection } from "@atom/tour";
 
 interface IProps {
   repo?: IRepo;
@@ -22,6 +23,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
 
   const mode = useRecoilValue(listModeAtom);
   const setRepoInfo = useSetRecoilState(repoInfoAtom);
+  const setActiveTour = useSetRecoilState(activeTourAtom);
 
   const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
     boolean | null
@@ -58,32 +60,46 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   return (
     <>
       {!showDrawer ? (
-        <div className="flex items-center gap-1 justify-end">
-          {repo?.isArchived ? null : (
+        <div className=" flex items-center gap-1 justify-end">
+          {window.location.pathname !== "/admin/dashboard" ? (
             <Button
               placeholder="button"
               className="rounded-lg border-2 border-gray-50 
              bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
               onClick={() => {
-                setModalState("bookmark", true);
+                setActiveTour(ETourSection.REPO);
               }}
             >
-              <StarIcon
-                className={`w-4 h-4 ${repo?.bookmark ? "fill-amber-600 stroke-amber-600" : "stroke-icon-active"}`}
-              />
+              <InfoIcon className="w-4 h-4 stroke-purple-normal" />
             </Button>
-          )}
-          <MenuTemplate
-            setOpenDrawer={() => {
-              setOpenRepoActionDrawer(true);
-            }}
-            menuList={menuList}
-            icon={
-              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                <MoreDotIcon className="w-4 h-4" />
-              </div>
-            }
-          />
+          ) : null}
+          <div className="repoInformationTab repoActions flex items-center gap-1 justify-end">
+            {repo?.isArchived ? null : (
+              <Button
+                placeholder="button"
+                className="repo-bookmark rounded-lg border-2 border-gray-50 
+             bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
+                onClick={() => {
+                  setModalState("bookmark", true);
+                }}
+              >
+                <StarIcon
+                  className={`w-4 h-4 ${repo?.bookmark ? "fill-amber-600 stroke-amber-600" : "stroke-icon-active"}`}
+                />
+              </Button>
+            )}
+            <MenuTemplate
+              setOpenDrawer={() => {
+                setOpenRepoActionDrawer(true);
+              }}
+              menuList={menuList}
+              icon={
+                <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+                  <MoreDotIcon className="w-4 h-4" />
+                </div>
+              }
+            />
+          </div>
         </div>
       ) : null}
       <DrawerTemplate

@@ -1,12 +1,5 @@
-import {
- ChevronLeftIcon,
- SearchIcon
-} from "@components/atoms/icons";
-import React, {
- useRef,
- useState
-} from "react";
-
+import React, { useRef, useState } from "react";
+import { ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
 import InputAtom from "@components/atoms/input";
 import { Typography } from "@material-tailwind/react";
 
@@ -16,9 +9,7 @@ interface IProps {
   background?: string;
 }
 
-const SearchableDropdown = ({
- options, handleChange, background 
-}: IProps) => {
+const SearchableDropdown = ({ options, handleChange, background }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchVal = useRef("");
@@ -105,7 +96,7 @@ const SearchableDropdown = ({
       }}
     >
       <div
-        className={`w-full h-10 flex items-center bg-${background} border-2 border-normal rounded-lg px-2`}
+        className={`w-full h-10 flex items-center ${background} border-2 border-normal rounded-lg px-2`}
       >
         <SearchIcon className="h-5 w-5 stroke-icon-hover" />
         <InputAtom

@@ -10,6 +10,7 @@ import {
   createDocumentTemplate,
   deleteDocument,
   deleteDocumentPassword,
+  documentEnableUserGroupHash,
   editDocument,
   getClasorField,
   getDocument,
@@ -38,7 +39,7 @@ export const getDocumentAction = async (
   repoId: number,
   documentId: number,
   offset?: number,
-  size?: number,
+  size?: number
 ) => {
   const userInfo = await getMe();
   try {
@@ -47,7 +48,7 @@ export const getDocumentAction = async (
       repoId,
       documentId,
       offset,
-      size,
+      size
     );
 
     return response;
@@ -65,7 +66,7 @@ export const createDocumentAction = async (
   description?: string,
   order?: number,
   imageUrl?: string,
-  publicKeyId?: string,
+  publicKeyId?: string
 ) => {
   const userInfo = await getMe();
   try {
@@ -79,7 +80,7 @@ export const createDocumentAction = async (
       description,
       order,
       imageUrl,
-      publicKeyId,
+      publicKeyId
     );
 
     return response;
@@ -97,7 +98,7 @@ export const createDocumentTemplateAction = async (
   templateId: number,
   description?: string,
   order?: number,
-  imageUrl?: string,
+  imageUrl?: string
 ) => {
   const userInfo = await getMe();
   try {
@@ -111,7 +112,7 @@ export const createDocumentTemplateAction = async (
       templateId,
       description,
       order,
-      imageUrl,
+      imageUrl
     );
 
     return response;
@@ -129,7 +130,7 @@ export const editDocumentAction = async (
   description?: string,
   order?: number | null,
   isHidden?: boolean,
-  tagIds?: number[],
+  tagIds?: number[]
 ) => {
   const userInfo = await getMe();
   try {
@@ -143,7 +144,7 @@ export const editDocumentAction = async (
       description,
       order,
       isHidden,
-      tagIds,
+      tagIds
     );
 
     return response;
@@ -154,14 +155,14 @@ export const editDocumentAction = async (
 
 export const deleteDocumentAction = async (
   repoId: number,
-  documentId: number,
+  documentId: number
 ) => {
   const userInfo = await getMe();
   try {
     const response = await deleteDocument(
       userInfo.access_token,
       repoId,
-      documentId,
+      documentId
     );
 
     return response;
@@ -175,7 +176,7 @@ export const getUserDocumentAction = async (
   sortParams: ISortProps,
   offset: number,
   size: number,
-  filters?: IReportFilter | null,
+  filters?: IReportFilter | null
 ) => {
   const userInfo = await getMe();
   try {
@@ -185,7 +186,7 @@ export const getUserDocumentAction = async (
       sortParams,
       offset,
       size,
-      filters,
+      filters
     );
 
     return response;
@@ -197,7 +198,7 @@ export const getUserDocumentAction = async (
 export const bookmarkDocumentAction = async (
   repoId: number,
   documentId: number,
-  detach?: boolean,
+  detach?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -205,7 +206,7 @@ export const bookmarkDocumentAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      detach,
+      detach
     );
 
     return response;
@@ -218,7 +219,7 @@ export const getDocumentBlocklistAction = async (
   repoId: number,
   documentId: number,
   offset: number,
-  size: number,
+  size: number
 ) => {
   const userInfo = await getMe();
   try {
@@ -227,7 +228,7 @@ export const getDocumentBlocklistAction = async (
       repoId,
       documentId,
       offset,
-      size,
+      size
     );
 
     return response;
@@ -240,7 +241,7 @@ export const addUserToDocumentBlocklistAction = async (
   repoId: number,
   documentId: number,
   username: string,
-  type: "block" | "unblock",
+  type: "block" | "unblock"
 ) => {
   const userInfo = await getMe();
   try {
@@ -249,7 +250,7 @@ export const addUserToDocumentBlocklistAction = async (
       repoId,
       documentId,
       username,
-      type,
+      type
     );
 
     return response;
@@ -260,14 +261,14 @@ export const addUserToDocumentBlocklistAction = async (
 
 export const getDocumentWhiteBlackListAction = async (
   repoId: number,
-  documentId: number,
+  documentId: number
 ) => {
   const userInfo = await getMe();
   try {
     const response = await getDocumentWhiteBlackList(
       userInfo.access_token,
       repoId,
-      documentId,
+      documentId
     );
 
     return response;
@@ -279,7 +280,7 @@ export const getDocumentWhiteBlackListAction = async (
 export const addToDocumentBlackListAction = async (
   repoId: number,
   documentId: number,
-  usernameList: string[],
+  usernameList: string[]
 ) => {
   const userInfo = await getMe();
   try {
@@ -287,7 +288,7 @@ export const addToDocumentBlackListAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      usernameList,
+      usernameList
     );
 
     return response;
@@ -299,7 +300,7 @@ export const addToDocumentBlackListAction = async (
 export const addToDocumentWhiteListAction = async (
   repoId: number,
   documentId: number,
-  usernameList: string[],
+  usernameList: string[]
 ) => {
   const userInfo = await getMe();
   try {
@@ -307,7 +308,7 @@ export const addToDocumentWhiteListAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      usernameList,
+      usernameList
     );
 
     return response;
@@ -319,7 +320,7 @@ export const addToDocumentWhiteListAction = async (
 export const createDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  password: string,
+  password: string
 ) => {
   const userInfo = await getMe();
   try {
@@ -327,7 +328,7 @@ export const createDocumentPasswordAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      password,
+      password
     );
 
     return response;
@@ -340,7 +341,7 @@ export const updateDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
   oldPassword: string,
-  newPassword: string,
+  newPassword: string
 ) => {
   const userInfo = await getMe();
   try {
@@ -349,7 +350,7 @@ export const updateDocumentPasswordAction = async (
       repoId,
       documentId,
       oldPassword,
-      newPassword,
+      newPassword
     );
 
     return response;
@@ -361,7 +362,7 @@ export const updateDocumentPasswordAction = async (
 export const deleteDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  oldPassword: string,
+  oldPassword: string
 ) => {
   const userInfo = await getMe();
   try {
@@ -369,11 +370,25 @@ export const deleteDocumentPasswordAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      oldPassword,
+      oldPassword
     );
 
     return response;
   } catch (error) {
     console.log("============ error ==========", error);
   }
+};
+
+export const documentEnableUserGroupHashAction = async (
+  repoId: number,
+  documentId: number
+) => {
+  const userInfo = await getMe();
+  const response = await documentEnableUserGroupHash(
+    userInfo.access_token,
+    repoId,
+    documentId
+  );
+
+  return response;
 };

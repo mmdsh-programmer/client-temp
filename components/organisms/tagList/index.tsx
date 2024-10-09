@@ -74,7 +74,7 @@ const TagList = ({repoId}: { repoId: number }) => {
             >
               <ChipMolecule
                 value="افزودن تگ"
-                className="border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
+                className="repoTags border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
               />
             </div>
           ) : null}

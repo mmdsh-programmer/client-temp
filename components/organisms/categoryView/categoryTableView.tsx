@@ -43,11 +43,11 @@ const TableView = ({
             <table className="w-full overflow-hidden min-w-max ">
               <TableHead
                 tableHead={[
-                  { key: "select", value: "انتخاب", className: "" },
+                  { key: "select", value: "انتخاب", className: "categoryBulk" },
                   {key: "order",
                     value: "اولویت",
                     isSorted: true,
-                    className: "hidden xl:table-cell",},
+                    className: "categoryOrder hidden xl:table-cell",},
                   { key: "name", value: "نام دسته", isSorted: true },
                   { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
                   {key: "editDate",
@@ -56,7 +56,7 @@ const TableView = ({
                   {key: "creator",
                     value: "نام سازنده",
                     className: "hidden lg:table-cell",},
-                  { key: "action", value: "عملیات" },
+                  { key: "action", value: "عملیات", className: "category-action " },
                 ]}
               />              
               <tbody>

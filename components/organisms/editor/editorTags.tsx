@@ -1,26 +1,16 @@
 import React from "react";
-import {
- selectedDocumentAtom,
- tempDocTagAtom
-} from "@atom/document";
-import {
- useRecoilState,
- useRecoilValue
-} from "recoil";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
+import { useRecoilState, useRecoilValue } from "recoil";
 import DocumentTagList from "@components/organisms/document/documentTagList";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import useGetTags from "@hooks/tag/useGetTags";
+import LoadingButton from "@components/molecules/loadingButton";
 
-interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
-}
-
-const DocumentAccessDialog = ({ setOpen }: IProps) => {
+const EditorTags = () => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
@@ -29,9 +19,7 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
 
-  const {
- data: getTags, isLoading 
-} = useGetTags(repoId, 30, true);
+  const { data: getTags, isLoading } = useGetTags(repoId, 30, true);
 
   const editDocument = useEditDocument();
 
@@ -52,11 +40,6 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
     return getTempDocTag.includes(+repoTag.id);
   });
 
-  const handleClose = () => {
-    setOpen(false);
-    setTempDocTag([]);
-  };
-
   const handleSubmit = async () => {
     if (!getRepo || !document) return;
     if (!getTempDocTag) return;
@@ -72,39 +55,42 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
       },
     });
   };
-
   return (
-    <ConfirmFullHeightDialog
-      dialogHeader="تگ‌های سند"
-      setOpen={handleClose}
-      className="min-h-[350px]"
-      isPending={editDocument.isPending}
+    <form
       onSubmit={handleSubmit}
+      className="flex flex-col h-full justify-between gap-5 px-6 py-4"
     >
-      <form className="flex flex-col gap-5">
-        {isLoading ? (
-          <Spinner className="h-5 w-5" color="deep-purple" />
-        ) : (
-          adminRole && (
-            <div className="flex gap-2">
-              <div className="flex-grow">
-                <SearchableDropdown
-                  options={updatedAvailableTags}
-                  handleChange={(val) => {
-                    return setTempDocTag((oldValue) => {
-                      const newValue = new Set([...oldValue, +val.value]);
-                      return Array.from(newValue);
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          )
-        )}
-        <DocumentTagList tagList={documentTags} />
-      </form>
-    </ConfirmFullHeightDialog>
+      {isLoading ? (
+        <Spinner className="h-5 w-5" color="deep-purple" />
+      ) : (
+        <div className="flex flex-col gap-2">
+          <div className="flex-grow">
+            <SearchableDropdown
+              options={updatedAvailableTags}
+              background="bg-gray-50"
+              handleChange={(val) => {
+                return setTempDocTag((oldValue: any) => {
+                  return [...oldValue, val];
+                });
+              }}
+            />
+          </div>
+          <DocumentTagList tagList={documentTags} />
+        </div>
+      )}
+      {adminRole ? (
+        <LoadingButton
+          className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          onClick={handleSubmit}
+          loading={editDocument.isPending}
+        >
+          <Typography className="text__label__button text-white">
+            ارسال
+          </Typography>
+        </LoadingButton>
+      ) : null}
+    </form>
   );
 };
 
-export default DocumentAccessDialog;
+export default EditorTags;
