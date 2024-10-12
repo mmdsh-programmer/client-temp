@@ -2,7 +2,7 @@
 
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
-  getToken,
+  logout,
   renewToken,
   userInfo,
 } from "@service/clasor";
@@ -24,7 +24,7 @@ const refreshCookieHeader = async (rToken: string) => {
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    }),
+    })
   );
 
   const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
@@ -45,29 +45,29 @@ const refreshCookieHeader = async (rToken: string) => {
 };
 
 export const getMe = async () => {
-    const encodedToken = cookies().get("token")?.value;
-      if (!encodedToken) {
-        redirect("/signin");
-      }
+  const encodedToken = cookies().get("token")?.value;
+  if (!encodedToken) {
+    redirect("/signin");
+  }
 
-      const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
-      const tokenInfo = JSON.parse(decryptKey(payload)) as {
-        access_token: string;
-        refresh_token: string;
-      };
-      try {
-        const userData = await userInfo(`${tokenInfo.access_token}`);
-        return {
-          ...userData,
-          access_token: tokenInfo.access_token,
-          refresh_token: tokenInfo.refresh_token,
-        };
-      } catch (error: unknown) {
-        if ((error as IActionError)?.errorCode === 401) {
-          return refreshCookieHeader(tokenInfo.refresh_token);
-        }
-        throw error;
-      }
+  const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
+  const tokenInfo = JSON.parse(decryptKey(payload)) as {
+    access_token: string;
+    refresh_token: string;
+  };
+  try {
+    const userData = await userInfo(`${tokenInfo.access_token}`);
+    return {
+      ...userData,
+      access_token: tokenInfo.access_token,
+      refresh_token: tokenInfo.refresh_token,
+    };
+  } catch (error: unknown) {
+    if ((error as IActionError)?.errorCode === 401) {
+      return refreshCookieHeader(tokenInfo.refresh_token);
+    }
+    throw error;
+  }
 };
 
 export const login = async (domain) => {
@@ -100,4 +100,11 @@ export const getUserToken = async (domain: string, code: string, redirectUrl: st
   });
 
   return {};
+};
+
+export const logoutAction = async () => {
+  const userData = await getMe();
+  const response = await logout(userData.access_token, userData.refresh_token);
+  cookies().delete("token");
+  return response;
 };

@@ -1,16 +1,14 @@
 "use server";
+
 import { getMe } from "./auth";
 
 import { addUserToFeedbackGroupHash, sendFeedback } from "@service/clasor";
 
 export const addUserToFeedbackGroupHashAction = async () => {
   const userInfo = await getMe();
-  try {
-    const result = await addUserToFeedbackGroupHash(userInfo.access_token);
-    return result;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+
+  const result = await addUserToFeedbackGroupHash(userInfo.access_token);
+  return result;
 };
 
 export const sendFeedbackAction = async (
@@ -18,14 +16,11 @@ export const sendFeedbackAction = async (
   fileHashList: string[]
 ) => {
   const userInfo = await getMe();
-  try {
-    const result = await sendFeedback(
-      userInfo.access_token,
-      content,
-      fileHashList
-    );
-    return result;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+
+  const result = await sendFeedback(
+    userInfo.access_token,
+    content,
+    fileHashList
+  );
+  return result;
 };

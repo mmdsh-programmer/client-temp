@@ -13,10 +13,11 @@ interface IForm {
 }
 
 interface IProps {
+  name?: string | number;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TagCreateDialog = ({ setOpen }: IProps) => {
+const TagCreateDialog = ({ name, setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const createTag = useCreateTag();
   const {
@@ -58,7 +59,10 @@ const TagCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-2 ">
         <Typography className="label">نام تگ</Typography>
-        <FormInput placeholder="نام تگ" register={{ ...register("name") }} />
+        <FormInput
+          placeholder="نام تگ"
+          register={{ ...register("name", { value: name?.toString() }) }}
+        />
         {errors.name && (
           <Typography className="warning_text">
             {errors.name?.message}

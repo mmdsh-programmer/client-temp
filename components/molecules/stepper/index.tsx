@@ -25,7 +25,7 @@ const StepperComponent = ({ getActiveStep, stepList }: IProps) => {
             completedClassName="bg-purple-normal"
           >
             {getActiveStep > index ? (
-              <TickIcon className="h-full w-full" />
+              <TickIcon className="h-4 w-4 fill-white" />
             ) : (
               <StepperIcon
                 className={`h-full w-full 

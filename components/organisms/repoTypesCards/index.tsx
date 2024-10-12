@@ -1,18 +1,20 @@
+import React, { useMemo } from "react";
 import {
   ArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
-  MyFolderIcon
+  MyFolderIcon,
 } from "@components/atoms/icons";
-import React, { useMemo } from "react";
-
 import { ERepoGrouping } from "@interface/enums";
 import RepoTypeCard from "@components/molecules/repoTypeCard";
 import { repoGroupingAtom } from "@atom/repository";
 import { useSetRecoilState } from "recoil";
+import useGetMyInfo from "@hooks/useGetMyInfo";
 
 const RepoTypesCards = () => {
   const setRepoGroup = useSetRecoilState(repoGroupingAtom);
+
+  const { data: getMyInfo } = useGetMyInfo();
 
   const repoTypeData = useMemo(() => {
     return [
@@ -22,7 +24,7 @@ const RepoTypesCards = () => {
         onClick: () => {
           return setRepoGroup(ERepoGrouping.MY_REPO);
         },
-        repoNumber: 0,
+        repoNumber: getMyInfo?.owner || 0,
       },
       {
         cardTitle: "مخزن‌های اشتراکی",
@@ -30,7 +32,7 @@ const RepoTypesCards = () => {
         onClick: () => {
           return setRepoGroup(ERepoGrouping.ACCESS_REPO);
         },
-        repoNumber: 0,
+        repoNumber: getMyInfo?.access || 0,
       },
       {
         cardTitle: "مخزن‌های نشان‌شده",
@@ -40,7 +42,7 @@ const RepoTypesCards = () => {
         onClick: () => {
           return setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
         },
-        repoNumber: 0,
+        repoNumber: getMyInfo?.bookmark || 0,
       },
       {
         cardTitle: "مخزن‌های بایگانی‌شده",
@@ -48,10 +50,10 @@ const RepoTypesCards = () => {
         onClick: () => {
           return setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
         },
-        repoNumber: 0,
+        repoNumber: getMyInfo?.archived || 0,
       },
     ];
-  }, [setRepoGroup]);
+  }, [getMyInfo]);
 
   return (
     <div className="hidden xs:flex gap-4 flex-wrap min-w-full">

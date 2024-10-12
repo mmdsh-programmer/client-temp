@@ -43,14 +43,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, className }: IProps) => {
         </MenuItem>
       </MenuHandler>
       <MenuList
-        className={`${
-          // eslint-disable-next-line no-nested-ternary
-          variant === "small"
-            ? "w-[180px]"
-            : variant === "medium"
-              ? "w-[220px]"
-              : "w-full"
-        } ${className} -ml-3 !z-[99999] font-iranYekan text-primary overflow-hidden p-[2px]`}
+        className={`${className} -ml-3 !z-[99999] font-iranYekan text-primary overflow-hidden p-[2px]`}
         placeholder="menu-list"
       >
         {subMenuList.map((menuItem, index) => {

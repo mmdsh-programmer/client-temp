@@ -11,7 +11,7 @@ interface IProps {
   children: JSX.Element;
   version: IVersion
 }
-const BlockDraft = ({ children, version }: IProps) => {
+const BlockDraft = React.memo(({ children, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
@@ -31,13 +31,13 @@ const BlockDraft = ({ children, version }: IProps) => {
       setEditorData(null);
       toast.error("نسخه ای برای این سند پیدا نشد!");
     }
-  }, []);
+  }, [getRepo, selectedDocument, version, editorMode]);
 
   return (
     <div className="version-list__container h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0">
       {children}
     </div>
   );
-};
+});
 
 export default BlockDraft;

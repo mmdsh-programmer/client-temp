@@ -29,6 +29,7 @@ const Sidebar = () => {
     {
       text: ERepoGrouping.DASHBOARD,
       icon: <DashboardIcon className="h-6 w-6" />,
+      className: "dashboard",
       onClick: () => {
         setRepoGroup(ERepoGrouping.DASHBOARD);
       },
@@ -36,6 +37,7 @@ const Sidebar = () => {
     {
       text: ERepoGrouping.MY_REPO,
       icon: <FolderIcon className="h-6 w-6" />,
+      className: "myRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.MY_REPO);
       },
@@ -43,6 +45,7 @@ const Sidebar = () => {
     {
       text: ERepoGrouping.ACCESS_REPO,
       icon: <FolderShareIcon className="h-6 w-6" />,
+      className: "myAccessList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ACCESS_REPO);
       },
@@ -50,6 +53,7 @@ const Sidebar = () => {
     {
       text: ERepoGrouping.BOOKMARK_REPO,
       icon: <FolderBookmarkIcon className="h-6 w-6" />,
+      className: "myBookmarkList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
       },
@@ -57,6 +61,7 @@ const Sidebar = () => {
     {
       text: ERepoGrouping.ARCHIVE_REPO,
       icon: <ArchiveIcon className="h-6 w-6" />,
+      className: "myArchiveList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
       },
@@ -75,7 +80,7 @@ const Sidebar = () => {
               <ListItem
                 key={item.text}
                 placeholder="sidebar-item"
-                className="p-0"
+                className={`p-0 ${item.className}`}
               >
                 <Button
                   placeholder="sidebar-button"

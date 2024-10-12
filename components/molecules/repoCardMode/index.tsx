@@ -5,7 +5,7 @@ import RepoMenu from "@components/molecules/repoMenu";
 import RepoCardMoreInfo from "./repoCardMoreInfo";
 import { useRecoilValue } from "recoil";
 import { repoInfoAtom } from "@atom/repository";
-import RepoImage from "../repoDefaultImage";
+import RepoDefaultImage from "../repoDefaultImage";
 
 interface IProps {
   repo: IRepo;
@@ -23,7 +23,7 @@ const RepoCardMode = ({ repo }: IProps) => {
       <div className="flex p-4 justify-between items-center">
         <div className="flex items-center gap-3 ">
           <div className="h-12 w-12">
-            <RepoImage repo={repo} />
+            <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
           <Typography className="title_t2 w-full sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]">
             {repo.name}

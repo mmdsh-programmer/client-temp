@@ -100,17 +100,18 @@ const AdminPanelReport = () => {
         },
         {
           label: "مجموع اسناد",
-          value: 0,
+          value: getReport?.documentCount || 0,
         },
       ],
     },
   ];
 
   return (
-    <div className="!m-4 xs:!m-0 h-full grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
+    <div className="!p-4 xs:!p-0 h-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
       {reportList.map((item) => {
         return (
           <ReportCard
+            key={item.title}
             title={item.title}
             icon={item.icon}
             description={item.description}

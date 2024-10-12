@@ -4,16 +4,32 @@ import React from "react";
 import CategoryDocumentCreateMenu from "../../molecules/categoryDocumentCreateMenu";
 import CategoryMenu from "../../molecules/categoryMenu/categoryMenu";
 import DocumentMenu from "@components/molecules/documentMenu";
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import CategoryChildren from "./categoryChildren";
 import FilterMobileView from "../advancedFilterView/filterMobileView";
+import { activeTourAtom, ETourSection } from "@atom/tour";
+import { InfoIcon } from "@components/atoms/icons";
+import { useSetRecoilState } from "recoil";
 
 const CategoryList = () => {
+  const setActiveTour = useSetRecoilState(activeTourAtom);
   return (
     <>
       <div className="flex flex-col gap-4 xs:gap-6">
         <div className="category-header flex justify-between items-center px-4 xs:px-0">
-          <Typography className="title_t1 text-primary">لیست اسناد</Typography>
+          <div className="flex items-center gap-1">
+            <Typography className="title_t1 text-primary">
+              لیست اسناد
+            </Typography>
+            <Button
+              className="rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
+              onClick={() => {
+                setActiveTour(ETourSection.DOCUMENTS);
+              }}
+            >
+              <InfoIcon className="w-5 h-5 stroke-purple-normal" />
+            </Button>
+          </div>
           <CategoryDocumentCreateMenu />
           <div className="flex xs:!hidden">
             <FilterMobileView />

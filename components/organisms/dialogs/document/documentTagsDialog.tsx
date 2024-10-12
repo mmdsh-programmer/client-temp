@@ -1,3 +1,4 @@
+import React from "react";
 import {
  selectedDocumentAtom,
  tempDocTagAtom
@@ -6,10 +7,8 @@ import {
  useRecoilState,
  useRecoilValue
 } from "recoil";
-
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import DocumentTagList from "@components/organisms/document/documentTagList";
-import React from "react";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";

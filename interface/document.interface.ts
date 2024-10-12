@@ -141,6 +141,7 @@ export interface IDocumentMetadata {
   publishExpireTime: number | null;
   versions?: IVersionMetadata;
   publicKeyId?: string;
+  userGroupHash: string | null;
 }
 
 export interface IWhiteListItem {

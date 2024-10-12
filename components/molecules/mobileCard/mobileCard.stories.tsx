@@ -8,8 +8,6 @@ const meta: Meta<typeof MobileCard> = {
   component: MobileCard,
   argTypes: {
     name: { control: "text" },
-    createDate: { control: "text" },
-    creator: { control: "text" },
     cardAction: { control: "object" },
     icon: { control: "text" },
   },
@@ -27,8 +25,6 @@ export const Basic: StoryObj<typeof MobileCard> = {
   ...Template,
   args: {
     name: "Sample Card",
-    createDate: "2024-08-05",
-    creator: "aaaa bbbb",
     cardAction: (
       <button className=" px-2 py-1 rounded">
         <MoreDotIcon className="h-4 w-4" />

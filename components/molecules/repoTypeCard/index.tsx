@@ -15,7 +15,7 @@ const RepoTypeCard = ({ cardTitle, icon, repoNumber, onClick }: IProps) => {
   return (
     <Card
       placeholder="repo-type-card"
-      className="flex flex-col flex-grow flex-shrink w-[40%] lg:w-[20%] rounded-lg bg-white border-2 border-gray-200 shadow-none"
+      className="flex flex-col flex-grow flex-shrink cursor-pointer w-[40%] lg:w-[20%] rounded-lg bg-white border-2 border-gray-200 shadow-none"
     >
       <CardBody placeholder="repo-card-body" className="p-0">
         <RepoCardBody icon={icon} title={cardTitle}>
