@@ -31,6 +31,7 @@ const mockDocument: IDocumentMetadata = {
   isPublish: false,
   publishLinkPassword: null,
   publishExpireTime: null,
+  userGroupHash: null
 };
 
 const queryClient = new QueryClient();

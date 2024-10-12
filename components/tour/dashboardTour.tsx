@@ -226,6 +226,7 @@ const DashboardTour = () => {
       ),
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tourSteps.forEach((step) => { return dashboardTour.addStep(step as any); });
 
     dashboardTour.start();
