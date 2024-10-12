@@ -35,6 +35,7 @@ const CategoryHideDialog = ({ setOpen }: IProps) => {
       description: getCategory?.description,
       order: null,
       isHidden: true,
+      currentParentId: null,
       callBack: () => {
         toast.success("دسته بندی مخفی شد.");
         handleClose();

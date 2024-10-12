@@ -31,6 +31,7 @@ const VersionTableView = ({
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
+  
   const listLength = getVersionList?.[0].length;
 
   const handleOpenEditor = (value: IVersion) => {
@@ -77,11 +78,11 @@ const VersionTableView = ({
                   value: "تاریخ ویرایش",
                   className: "hidden xl:table-cell",
                 },
-                { key: "status", value: "وضعیت" },
+                { key: "status", value: "وضعیت", className: "version-status" },
                 {
                   key: "action",
                   value: "عملیات",
-                  className: "flex !justify-end ml-4 ",
+                  className: "version-action flex !justify-end ml-4 ",
                 },
               ]}
             />
@@ -171,6 +172,7 @@ const VersionTableView = ({
                               showDrawer={false}
                             />
                           ),
+                          stopPropagation: true,
                           className: "justify-end",
                         },
                       ]}

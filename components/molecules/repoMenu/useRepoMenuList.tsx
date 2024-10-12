@@ -24,7 +24,7 @@ type ModalType =
   | "leave"
   | "archive";
 
-interface MenuItem {
+export interface MenuItem {
   text: string;
   icon?: JSX.Element;
   onClick: () => void;
@@ -48,7 +48,7 @@ const useMenuList = (
 
   const ownerAdminActions = () => {
     return [
-      window.location.pathname === "dashboard" &&
+      window.location.pathname === "/admin/dashboard" &&
         createMenuItem(
           "اطلاعات پوشه",
           <FolderInfoIcon className="w-4 h-4" />,
@@ -99,7 +99,7 @@ const useMenuList = (
         "بایگانی",
         <ArchiveIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
-          setModalState("restore", true);
+          setModalState("archive", true);
           setOpenRepoActionDrawer(false);
         }
       ),
@@ -111,18 +111,16 @@ const useMenuList = (
   };
 
   const adminActions = () => {
-    if (!repo?.isArchived) {
-      return [
-        ...ownerAdminActions(),
-        createMenuItem(
-          "ترک مخزن",
-          <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
-          () => {
-            setModalState("leave", true);
-          }
-        ),
-      ];
-    }
+    return [
+      ...ownerAdminActions(),
+      createMenuItem(
+        "ترک مخزن",
+        <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
+        () => {
+          setModalState("leave", true);
+        }
+      ),
+    ];
   };
 
   const defaultActions = () => {

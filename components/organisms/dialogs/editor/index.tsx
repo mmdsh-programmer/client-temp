@@ -1,21 +1,25 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  editorChatDrawerAtom,
   editorDataAtom,
   editorDecryptedContentAtom,
+  editorListDrawerAtom,
   editorModalAtom,
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  useRecoilCallback,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "./blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
 import EditorComponent from "@components/organisms/editor";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
-import FloatingButtons from "@components/organisms/editor/floatingButtons";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@material-tailwind/react";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
@@ -25,6 +29,7 @@ import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { toast } from "react-toastify";
+import { IVersion } from "@interface/version.interface";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,8 +41,7 @@ const Editor = ({ setOpen }: IProps) => {
     useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
-  const setChatDrawer = useSetRecoilState(editorChatDrawerAtom);
+  const getVersionData = useRecoilValue(editorDataAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
@@ -46,6 +50,8 @@ const Editor = ({ setOpen }: IProps) => {
     editorDecryptedContentAtom
   );
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
+  const setListDrawer = useSetRecoilState(editorListDrawerAtom);
+
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -120,9 +126,18 @@ const Editor = ({ setOpen }: IProps) => {
     }
   }, [getLastVersion]);
 
+  const handleVersionUpdate = useRecoilCallback(({ snapshot, set }) => {
+    return async (newVersionData) => {
+      const currentData = await snapshot.getPromise(editorDataAtom);
+      if (JSON.stringify(currentData) !== JSON.stringify(newVersionData)) {
+        set(editorDataAtom, newVersionData as IVersion | null);
+      }
+    };
+  }, []);
+
   useEffect(() => {
     if (data && isSuccess) {
-      setVersionData(data);
+      handleVersionUpdate(data);
     }
   }, [isSuccess]);
 
@@ -143,9 +158,9 @@ const Editor = ({ setOpen }: IProps) => {
     setShowKey(false);
     setPublicKey(null);
     setSelectedVersion(null);
-    setChatDrawer(false);
     setEditorModal(false);
     setVersionModalList(false);
+    setListDrawer(false);
   };
 
   if (error || keyError) {
@@ -188,12 +203,6 @@ const Editor = ({ setOpen }: IProps) => {
               onClose={handleClose}
             />
             <EditorComponent version={data} getEditorConfig={getEditorConfig} />
-            {editorMode === "preview" ? (
-              <FloatingButtons
-                version={data}
-                className=" bottom-[5px] xs:bottom-[30px] "
-              />
-            ) : null}
           </>
         </BlockDraft>
       ) : null}

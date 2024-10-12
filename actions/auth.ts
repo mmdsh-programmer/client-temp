@@ -4,6 +4,7 @@ import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   getToken,
   handleRedirect,
+  logout,
   renewToken,
   userInfo,
 } from "@service/clasor";
@@ -95,4 +96,11 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
   });
 
   return { ...response };
+};
+
+export const logoutAction = async () => {
+  const userData = await getMe();
+  const response = await logout(userData.access_token, userData.refresh_token);
+  cookies().delete("token");
+  return response;
 };

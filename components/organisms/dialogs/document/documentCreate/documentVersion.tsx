@@ -10,7 +10,7 @@ import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
 import FormInput from "@components/atoms/input/formInput";
 import { IDocument } from "@interface/document.interface";
-import { categoryAtom } from "@atom/category";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateDocument from "@hooks/document/useCreateDocument";
@@ -37,6 +37,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
   const getDocumentKey = useRecoilValue(documentKeyAtom);
   const getCategory = useRecoilValue(categoryAtom);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
   const getRepo = useRecoilValue(repoAtom);
   const createDocumentHook = useCreateDocument();
   const createVersionHook = useCreateVersion();
@@ -77,7 +78,9 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     } else {
       createDocumentHook.mutate({
         repoId: getRepo.id,
-        categoryId: getCategory?.id || null,
+        categoryId: getCategoryShow
+          ? getCategoryShow.id
+          : getCategory?.id || null,
         title: getDocumentInfo.title,
         description: getDocumentInfo.description,
         contentType: getDocumentType,

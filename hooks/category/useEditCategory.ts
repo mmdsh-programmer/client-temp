@@ -1,13 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICategory } from "@interface/category.interface";
-import { categoryShowAtom } from "@atom/category";
 import { editCategoryAction } from "@actions/category";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
 
-const useEditCategory = (move?: boolean) => {
+const useEditCategory = () => {
   const queryClient = useQueryClient();
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
 
   return useMutation({
     mutationKey: ["editCategory"],
@@ -19,6 +16,7 @@ const useEditCategory = (move?: boolean) => {
       description: string | undefined;
       order: number | null;
       isHidden: boolean;
+      currentParentId: number | null;
       callBack?: () => void;
     }) => {
       const {
@@ -42,17 +40,15 @@ const useEditCategory = (move?: boolean) => {
       return response as ICategory;
     },
     onSuccess: (response, values) => {
-      const { callBack, parentId } = values;
+      const { callBack, parentId, currentParentId } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`category-${currentParentId || "parent"}-children`],
+      });
 
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`, undefined],
+        queryKey: [`category-${parentId || "parent"}-children`],
       });
-      queryClient.invalidateQueries({
-        queryKey: [
-          `category-${getCategoryShow?.id || "parent"}-children`,
-          undefined,
-        ],
-      });
+
       callBack?.();
     },
     onError: (error) => {

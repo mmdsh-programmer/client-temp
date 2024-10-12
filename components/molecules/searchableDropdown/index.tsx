@@ -1,23 +1,20 @@
-import {
- ChevronLeftIcon,
- SearchIcon
-} from "@components/atoms/icons";
-import React, {
- useRef,
- useState
-} from "react";
-
+import React, { useRef, useState } from "react";
+import { AddIcon, ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
 import InputAtom from "@components/atoms/input";
-import { Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 
 interface IProps {
   options?: { label: string; value: string | number }[];
   handleChange: (event: { label: string; value: string | number }) => void;
   background?: string;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchableDropdown = ({
- options, handleChange, background 
+  options,
+  handleChange,
+  background,
+  setOpen,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -105,7 +102,7 @@ const SearchableDropdown = ({
       }}
     >
       <div
-        className={`w-full h-10 flex items-center bg-${background} border-2 border-normal rounded-lg px-2`}
+        className={`w-full h-10 flex items-center ${background} border-2 border-normal rounded-lg px-2`}
       >
         <SearchIcon className="h-5 w-5 stroke-icon-hover" />
         <InputAtom
@@ -126,11 +123,19 @@ const SearchableDropdown = ({
           type="text"
           placeholder="جست و جو کنید ..."
         />
-        <ChevronLeftIcon
+        {/* <ChevronLeftIcon
           className={`w-2 h-2 stroke-icon-hover transform transition-transform ${
             isOpen ? "rotate-90" : "-rotate-90"
           }`}
-        />
+        /> */}
+        <Button
+        className="p-0 bg-transparent"
+          onClick={() => {
+            setOpen?.(true);
+          }}
+        >
+          <AddIcon className="w-4 h-4 stroke-icon-hover" />
+        </Button>
       </div>
       {isOpen && (
         <div className="absolute z-[99999] text-right overflow-auto focus:outline-none  shadow-menu mt-2 min-w-max w-full p-1 rounded-md bg-white ring-1 ring-black ring-opacity-5">

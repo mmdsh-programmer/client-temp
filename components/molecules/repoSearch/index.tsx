@@ -39,7 +39,7 @@ const RepoSearch = () => {
   return (
     <div className="hidden w-full gap-4 py-5 xs:flex justify-between">
       <div
-        className="flex flex-grow gap-2 w-[100px] max-w-[300px] ml-2 items-center h-9 px-3 border-[1px] border-normal bg-primary rounded-lg "
+        className="searchRepo flex flex-grow gap-2 w-[100px] max-w-[300px] ml-2 items-center h-9 px-3 border-[1px] border-normal bg-primary rounded-lg "
         onKeyDown={(event) => {
           if (event.code === "Enter") {
             event.preventDefault();
@@ -67,7 +67,7 @@ const RepoSearch = () => {
           value={search}
         />
       </div>
-      <div className="flex items-center justify-center">
+      <div className="searchRepo flex items-center justify-center">
         <SelectAtom
           className="w-[150px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
           defaultOption={

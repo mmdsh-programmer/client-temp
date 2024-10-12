@@ -39,6 +39,7 @@ export interface IMyInfo {
   owner: number;
   bookmark: number;
   access: number;
+  archived: number;
 }
 
 export interface IPodspaceResult {

@@ -10,15 +10,3 @@ export const bulkItemsAtom = atom<IBulkItems>({
   default: [],
   effects: [logEffect("bulkItemsAtom")],
 });
-
-export const bulkMoveAtom = atom<boolean>({
-  key: "bulkMoveAtom",
-  default: false,
-  effects: [logEffect("bulkMoveAtom")],
-});
-
-export const bulkDeleteAtom = atom<boolean>({
-  key: "bulkDeleteAtom",
-  default: false,
-  effects: [logEffect("bulkDeleteAtom")],
-});

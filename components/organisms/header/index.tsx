@@ -1,31 +1,60 @@
+import React, { useEffect, useState } from "react";
 import {
- AlertIcon, LogoMobileIcon, ThemeIcon 
+  AlertIcon,
+  BackIcon,
+  LogoMobileIcon,
+  ThemeIcon,
 } from "@components/atoms/icons";
-import {
- Button, Typography 
-} from "@material-tailwind/react";
-import React, { useState } from "react";
-
+import { Button, Typography } from "@material-tailwind/react";
 import Breadcrumb from "@components/molecules/breadcumb";
 import FeedbackDialog from "../dialogs/feedback";
 import ProfileMenu from "@components/molecules/profileMenu";
 import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 const Header = () => {
   const router = useRouter();
+  const setRepo = useSetRecoilState(repoAtom);
   const [openRequestDialog, setOpenRequestDialog] = useState(false);
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
+
+  const handleAdminPanelNavigation = () => {
+    if (isNavigating) return;
+
+    setIsNavigating(true);
+    router.push("/panel-admin-clasor");
+  };
+
+  useEffect(() => {
+    if (isNavigating && currentPath === "/panel-admin-clasor") {
+      setRepo(null);
+      setIsNavigating(false);
+    }
+  }, [currentPath, isNavigating, setRepo]);
 
   return (
     <>
       <div className="w-auto h-auto xs:h-20 px-0 xs:px-8 bg-white xs:bg-secondary flex flex-col xs:flex-row justify-between items-center">
         <div className="order-2 xs:order-1 px-4 py-3 xs:p-0 w-full flex items-center h-fit ">
-          {window.location.pathname === "/panel-admin-clasor" ? (
-            <Typography>پنل ادمین</Typography>
+          {currentPath.includes("/panel-admin-clasor") ? (
+            <div className="flex items-center gap-2">
+              <Button
+                className="p-0 bg-transparent"
+                onClick={() => {
+                  return window.history.back();
+                }}
+              >
+                <BackIcon className="h-5 w-5 fill-icon-active" />
+              </Button>
+              <Typography>پنل ادمین</Typography>
+            </div>
           ) : (
             <Breadcrumb />
           )}
@@ -36,11 +65,9 @@ const Header = () => {
           </div>
           <div className="flex items-center gap-4 mr-auto">
             {userInfo?.isClasorAdmin &&
-            window.location.pathname !== "/panel-admin-clasor" ? (
+            currentPath !== "/panel-admin-clasor" ? (
               <Button
-                onClick={() => {
-                  return router.push("/panel-admin-clasor");
-                }}
+                onClick={handleAdminPanelNavigation}
                 className="w-max rounded-lg bg-white py-1 px-2 shadow-lg h-10 border-[1px] border-normal"
               >
                 <Typography className="text-secondary title_t4">
@@ -52,7 +79,7 @@ const Header = () => {
               onClick={() => {
                 return setOpenRequestDialog(true);
               }}
-              className="rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+              className="notice rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
             >
               <AlertIcon className=" h-4 w-4" />
             </Button>
@@ -70,12 +97,18 @@ const Header = () => {
       </div>
       <hr className="" />
       {openRequestDialog && (
-        <UserJoinToRepoRequests setOpen={() => 
-{return setOpenRequestDialog(false);}} />
+        <UserJoinToRepoRequests
+          setOpen={() => {
+            return setOpenRequestDialog(false);
+          }}
+        />
       )}
       {openFeedbackDialog && (
-        <FeedbackDialog setOpen={() => 
-{return setOpenFeedbackDialog(false);}} />
+        <FeedbackDialog
+          setOpen={() => {
+            return setOpenFeedbackDialog(false);
+          }}
+        />
       )}
     </>
   );

@@ -10,6 +10,7 @@ import {
   createDocumentTemplate,
   deleteDocument,
   deleteDocumentPassword,
+  documentEnableUserGroupHash,
   editDocument,
   getClasorField,
   getDocument,
@@ -325,6 +326,20 @@ export const deleteDocumentPasswordAction = async (
     repoId,
     documentId,
     oldPassword
+  );
+
+  return response;
+};
+
+export const documentEnableUserGroupHashAction = async (
+  repoId: number,
+  documentId: number
+) => {
+  const userInfo = await getMe();
+  const response = await documentEnableUserGroupHash(
+    userInfo.access_token,
+    repoId,
+    documentId
   );
 
   return response;

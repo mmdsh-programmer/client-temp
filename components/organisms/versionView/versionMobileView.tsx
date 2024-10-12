@@ -1,6 +1,6 @@
 import React from "react";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
-import { editorDataAtom, editorModeAtom } from "@atom/editor";
+import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
@@ -8,10 +8,10 @@ import { IVersion, IVersionView } from "@interface/version.interface";
 import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import VersionMenu from "@components/molecules/versionMenu";
 import { selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 
 const VersionMobileView = ({
   isLoading,
@@ -27,6 +27,8 @@ const VersionMobileView = ({
     useRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
 
   const listLength = getVersionList?.[0].length;
 
@@ -37,6 +39,8 @@ const VersionMobileView = ({
     setEditorData(value);
     setEditorMode("preview");
     setVersionModalList(false);
+    setEditorModal(true);
+    setSelectedVersion(value);
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {
@@ -58,10 +62,46 @@ const VersionMobileView = ({
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <div
-                  className=""
+                <MobileCard
                   key={version.id}
+                  name={
+                    version.state === "version" &&
+                    lastVersion?.id === version.id &&
+                    (version.status === "private" ||
+                      version.status === "accepted") ? (
+                      <div className="flex items-center gap-1">
+                        <Typography className="text-primary title_t2">
+                          {version.versionNumber}
+                        </Typography>
+                        <Typography className="label text-green-400">
+                          آخرین نسخه
+                        </Typography>
+                      </div>
+                    ) : (
+                      version.versionNumber
+                    )
+                  }
+                  description={[
+                    {
+                      title: "تاریخ ایجاد",
+                      value: FaDateFromTimestamp(+version.createDate) || "--",
+                    },
+                    {
+                      title: "سازنده",
+                      value: version.creator?.userName || "--",
+                    },
+                    {
+                      title: "وضعیت",
+                      value: translateVersionStatus(
+                        version.status,
+                        version.state
+                      ).translated,
+                      className: `${translateVersionStatus(
+                        version.status,
+                        version.state
+                      ).className} version-status`,
+                    },
+                  ]}
                   onClick={() => {
                     if (
                       getSelectedDocument?.contentType !== EDocumentTypes.board
@@ -71,35 +111,11 @@ const VersionMobileView = ({
                       handleOpenBoardEditor(version);
                     }
                   }}
-                >
-                  <MobileCard
-                    name={`${
-                      version.state === "version" &&
-                      lastVersion?.id === version.id &&
-                      (version.status === "private" ||
-                        version.status === "accepted")
-                        ? `${version.versionNumber} (آخرین نسخه)`
-                        : version.versionNumber
-                    } `}
-                    createDate={
-                      version.createDate
-                        ? FaDateFromTimestamp(version.createDate)
-                        : "--"
-                    }
-                    status={translateVersionStatus(
-                      version.status,
-                      version.state
-                    )}
-                    creator={version.creator?.userName}
-                    cardAction={
-                      <VersionMenu
-                        version={version}
-                        lastVersion={lastVersion}
-                      />
-                    }
-                    className={`${versionModalList ? "border-[1px] border-normal" : ""}`}
-                  />
-                </div>
+                  cardAction={
+                    <VersionMenu version={version} lastVersion={lastVersion} />
+                  }
+                  className={`version-action ${versionModalList ? "border-[1px] border-normal" : ""}`}
+                />
               );
             });
           })}

@@ -12,6 +12,7 @@ const useDeleteCategory = () => {
       parentId: number | null;
       forceDelete: boolean;
       callBack?: () => void;
+      errorCallBack?: (error: any) => void
     }) => {
       const { repoId, categoryId, forceDelete } = values;
       const response = await deleteCategoryAction(
@@ -28,8 +29,10 @@ const useDeleteCategory = () => {
       });
       callBack?.();
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      const {errorCallBack} = values;
       toast.error(error.message || "خطای نامشخصی رخ داد");
+      errorCallBack?.(error);
     },
   });
 };

@@ -20,10 +20,10 @@ export const editorDataAtom = atom<IVersion | null>({
   effects: [logEffect("editorDataAtom")],
 });
 
-export const editorChatDrawerAtom = atom<boolean>({
-  key: "editorChatDrawerAtom",
+export const editorListDrawerAtom = atom<boolean>({
+  key: "editorListDrawerAtom",
   default: false,
-  effects: [logEffect("editorChatDrawerAtom")],
+  effects: [logEffect("editorListDrawerAtom")],
 });
 
 export const editorDecryptedContentAtom = atom<string | null>({
@@ -36,4 +36,9 @@ export const editorPublicKeyAtom = atom<string | null>({
   key: "editorPublicKeyAtom",
   default: null,
   effects: [logEffect("editorPublicKeyAtom")],
+});
+
+export const postIdAtom = atom<number | null>({
+  key: "postIdAtom",
+  default: null,
 });

@@ -48,7 +48,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
   return (
     <>
       {showDrawer ? (
-        <div className="xs:hidden flex">
+        <div className="xs:hidden flex createMenu">
           <DrawerTemplate
             openDrawer={openCreateDrawer}
             setOpenDrawer={setOpenCreateDrawer}
@@ -57,7 +57,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         </div>
       ) : (
         <>
-          <div className="hidden xs:flex">
+          <div className="createMenu hidden xs:flex">
             <MenuTemplate
               setOpenDrawer={() => {
                 setOpenCreateDrawer(true);

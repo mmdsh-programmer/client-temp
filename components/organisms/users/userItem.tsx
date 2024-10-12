@@ -105,7 +105,7 @@ const UserItem = ({ user }: IProps) => {
         }}
         options={userOptions}
         selectedOption={{
-          label: user.userRole,
+          label: translateRoles(user.userRole),
           value: user.userRole,
         }}
         setSelectedOption={handleChange}

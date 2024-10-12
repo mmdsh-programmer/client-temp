@@ -63,6 +63,23 @@ export interface IComment {
   liked: boolean;
 }
 
+export interface ILikeList {
+  list:{
+   id: number;
+   timestamp: number;
+   user: {
+     id: number;
+     name: string;
+     profileImage: string;
+     ssoId: string;
+     ssoIssuerCode: number;
+   }
+  }[];
+  offset: number;
+  size: number;
+  total: number;
+}
+
 export declare interface IOutline extends ILevelObject {
   children: IOutline[];
 }

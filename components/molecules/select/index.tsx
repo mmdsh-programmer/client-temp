@@ -72,7 +72,7 @@ const SelectAtom = ({
          truncate text-[13px] text-primary font-iranYekan font-normal gap-x-2
         bg-transparent  rounded-md focus:outline-none`}
       >
-        {selectedOption?.value ?? defaultOption?.value}
+        {selectedOption?.label ?? defaultOption?.label}
         <ChevronLeftIcon
           className={`w-2 h-2 stroke-icon-active transform transition-transform ${
             isOpen ? "rotate-90" : "-rotate-90"

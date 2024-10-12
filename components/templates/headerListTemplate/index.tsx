@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { AddIcon } from "@components/atoms/icons";
+import { AddIcon, InfoIcon } from "@components/atoms/icons";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
+import { useSetRecoilState } from "recoil";
+import { activeTourAtom, ETourSection } from "@atom/tour";
 
 export interface IProps {
   header: string;
@@ -17,17 +19,30 @@ const HeaderListTemplate = ({
   renderDialog,
 }: IProps) => {
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
+  const setActiveTour = useSetRecoilState(activeTourAtom);
 
   return (
     <header className="flex justify-between items-center">
-      <Typography className="title_t1 text-primary">{header}</Typography>
-      <div className="flex gap-2">
+      <div className="flex items-center gap-1">
+        <Typography className="title_t1 text-primary version-list">{header}</Typography>
+        <Button
+          className="rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
+          onClick={() => {
+            setActiveTour(
+              header === "مخزن‌ها" ? ETourSection.DASHBOARD : ETourSection.VERSION
+            );
+          }}
+        >
+          <InfoIcon className="w-5 h-5 stroke-purple-normal" />
+        </Button>
+      </div>
+      <div className="createNewRepo version-create flex gap-2">
         <div className="hidden md:flex">
           <IconTextButton
             text={buttonText}
             icon={<AddIcon className="h-5 w-5 stroke-white pr-1" />}
             classNameText="text-white text-[13px] leading-[19.5px] -tracking-[0.13px] font-medium !px-2  font-iranYekan"
-            classNameButton="rounded-lg h-9 !px-[6px] bg-purple-normal "
+            classNameButton=" rounded-lg h-9 !px-[6px] bg-purple-normal "
             onClick={() => {
               setOpenCreateRepo(true);
             }}

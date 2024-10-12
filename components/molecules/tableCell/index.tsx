@@ -37,7 +37,7 @@ const TableCell = ({
             className={`p-4 truncate font-iranYekan ${row.className || ""}
               `}
             onClick={(e) => {
-              if (index === tableCell.length - 1 || row.stopPropagation) {
+              if (row.stopPropagation) {
                 e.stopPropagation();
               }
             }}

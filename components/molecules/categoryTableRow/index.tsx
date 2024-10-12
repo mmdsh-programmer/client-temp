@@ -1,11 +1,10 @@
+import React from "react";
 import { FolderIcon, InvisibleIcon } from "@components/atoms/icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { Checkbox } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
 import { ICategoryMetadata } from "@interface/category.interface";
-import React from "react";
 import TableCell from "@components/molecules/tableCell";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
@@ -43,7 +42,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
     <TableCell
       key={`category-table-item-${categoryProp.id}`}
       onClick={() => {
-        handleRowClick(categoryProp);
+        return handleRowClick(categoryProp);
       }}
       tableCell={[
         {
@@ -107,6 +106,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
         },
         {
           data: <CategoryMenu category={categoryProp} />,
+          stopPropagation: true,
         },
       ]}
     />
