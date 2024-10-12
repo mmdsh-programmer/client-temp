@@ -169,6 +169,7 @@ const VersionTour = () => {
     ];
 
     tourSteps.forEach((step) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return versionTour.addStep(step as any);
     });
 

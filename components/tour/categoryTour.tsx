@@ -187,6 +187,7 @@ const CategoryTour = () => {
     ];
 
     categoryTourSteps?.forEach((step) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return categoryTour.addStep(step as any);
     });
 

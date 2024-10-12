@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { AddIcon, ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
+import { AddIcon, SearchIcon } from "@components/atoms/icons";
 import InputAtom from "@components/atoms/input";
 import { Button, Typography } from "@material-tailwind/react";
 

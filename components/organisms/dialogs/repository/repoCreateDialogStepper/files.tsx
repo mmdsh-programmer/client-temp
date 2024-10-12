@@ -36,7 +36,6 @@ const Files = (props: IProps) => {
   const queryClient = useQueryClient();
   const {
     data: userInfo,
-    refetch: refetchUser,
     isFetching: isFetchingUserInfo,
   } = useGetUser();
   const {

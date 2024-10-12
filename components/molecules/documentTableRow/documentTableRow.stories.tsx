@@ -34,6 +34,7 @@ const mockDocument: IDocumentMetadata = {
   isPublish: false,
   publishLinkPassword: null,
   publishExpireTime: null,
+  userGroupHash: null
 };
 
 const meta: Meta<typeof DocumentTableRow> = {

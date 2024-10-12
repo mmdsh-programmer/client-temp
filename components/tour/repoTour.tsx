@@ -233,6 +233,7 @@ const RepoTour = () => {
       ),
     ];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     tourSteps.forEach((step) => { return repoTour.addStep(step as any); });
 
     repoTour.start();
