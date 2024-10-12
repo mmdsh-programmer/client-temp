@@ -11,7 +11,9 @@ import {
 } from "@interface/accessRequest.interface";
 import {
   IAddVersion,
+  IComment,
   IFileVersion,
+  ILikeList,
   IVersion,
 } from "@interface/version.interface";
 import { ICategory, ICategoryMetadata } from "@interface/category.interface";
@@ -44,8 +46,8 @@ import {
   IReport,
 } from "@interface/repo.interface";
 import { IRoles, IUser } from "@interface/users.interface";
+import Logger from "@utils/logger";
 import axios, { AxiosError, isAxiosError } from "axios";
-
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
@@ -53,7 +55,7 @@ import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
-import Logger from "@utils/logger";
+
 import qs from "qs";
 
 const { CLASOR } = process.env;
@@ -93,18 +95,18 @@ axiosClasorInstance.interceptors.response.use((response) => {
 
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   if (isAxiosError(error)) {
-    const message = [error.response?.data.messages[0] || error.message];
+    const message = [error.response?.data?.messages?.[0] || error.message];
     switch (error.response?.status) {
       case 400:
         throw new InputError(message);
       case 401:
         throw new AuthorizationError(message);
       case 403:
-        throw new ForbiddenError(message);
+        throw new ForbiddenError(message, error);
       case 404:
-        throw new NotFoundError(message);
+        throw new NotFoundError(message, error);
       default:
-        throw new ServerError(message);
+        throw new ServerError(message, error);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
@@ -136,13 +138,13 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (access_token: string) => {
+export const userInfo = async (accessToken: string) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -153,12 +155,12 @@ export const userInfo = async (access_token: string) => {
   }
 };
 
-export const renewToken = async (refresh_token: string) => {
+export const renewToken = async (refreshToken: string) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
       "auth/renewToken",
       {
-        refreshToken: refresh_token,
+        refreshToken,
       }
     );
 
@@ -174,6 +176,11 @@ export const logout = async (access_token: string, refresh_token: string) => {
       "auth/logout",
       {
         refreshToken: refresh_token,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
       }
     );
 
@@ -202,13 +209,13 @@ export const getMyInfo = async (access_token: string) => {
 };
 
 /// ////////////////////// REPORT //////////////////////
-export const getReport = async (access_token: string, repoId: number) => {
+export const getReport = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IReport>>(
       `repositories/${repoId}/report`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -221,7 +228,7 @@ export const getReport = async (access_token: string, repoId: number) => {
 
 /// /////////////////// REPOSITORY /////////////////////////
 export const getAllRepositories = async (
-  access_token: string,
+  accessToken: string,
   offset: number,
   size: number,
   name?: string
@@ -231,7 +238,7 @@ export const getAllRepositories = async (
       IServerResult<IListResponse<IRepo>>
     >("repositories", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -247,7 +254,7 @@ export const getAllRepositories = async (
 };
 
 export const getRepositoryKeys = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -257,7 +264,7 @@ export const getRepositoryKeys = async (
       `repositories/${repoId}/publicKey`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -273,7 +280,7 @@ export const getRepositoryKeys = async (
 };
 
 export const deleteRepositoryKey = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   keyId: number
 ) => {
@@ -282,7 +289,7 @@ export const deleteRepositoryKey = async (
       `repositories/${repoId}/publicKey/${keyId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -294,7 +301,7 @@ export const deleteRepositoryKey = async (
 };
 
 export const createRepositoryKey = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   name: string,
   key: string
@@ -308,7 +315,7 @@ export const createRepositoryKey = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -320,7 +327,7 @@ export const createRepositoryKey = async (
 };
 
 export const getKey = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   keyId: number
 ) => {
@@ -329,7 +336,7 @@ export const getKey = async (
       `repositories/${repoId}/publicKey/${keyId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -341,7 +348,7 @@ export const getKey = async (
 };
 
 export const getMyRepositories = async (
-  access_token: string,
+  accessToken: string,
   offset: number,
   size: number,
   archived: boolean,
@@ -352,7 +359,7 @@ export const getMyRepositories = async (
       IServerResult<IListResponse<IRepo>>
     >("repositories/myRepoList", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -369,7 +376,7 @@ export const getMyRepositories = async (
 };
 
 export const getRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number | null
 ) => {
   try {
@@ -377,7 +384,7 @@ export const getRepository = async (
       `repositories/${repoId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -389,7 +396,7 @@ export const getRepository = async (
 };
 
 export const getAccessRepositories = async (
-  access_token: string,
+  accessToken: string,
   offset: number,
   size: number,
   name?: string
@@ -399,7 +406,7 @@ export const getAccessRepositories = async (
       IServerResult<IListResponse<IRepo>>
     >("repositories/myAccessRepoList", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -415,7 +422,7 @@ export const getAccessRepositories = async (
 };
 
 export const getBookmarkRepositories = async (
-  access_token: string,
+  accessToken: string,
   offset: number,
   size: number,
   name?: string
@@ -425,7 +432,7 @@ export const getBookmarkRepositories = async (
       IServerResult<IListResponse<IRepo>>
     >("repositories/myBookmarkList", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -441,7 +448,7 @@ export const getBookmarkRepositories = async (
 };
 
 export const editRepo = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   name: string,
   description: string
@@ -455,7 +462,7 @@ export const editRepo = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -467,7 +474,7 @@ export const editRepo = async (
 };
 
 export const deleteRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number
 ) => {
   try {
@@ -475,7 +482,7 @@ export const deleteRepository = async (
       `repositories/${repoId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -487,7 +494,7 @@ export const deleteRepository = async (
 };
 
 export const archiveRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number
 ) => {
   try {
@@ -496,7 +503,7 @@ export const archiveRepository = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -508,7 +515,7 @@ export const archiveRepository = async (
 };
 
 export const restoreRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number
 ) => {
   try {
@@ -517,7 +524,7 @@ export const restoreRepository = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -529,7 +536,7 @@ export const restoreRepository = async (
 };
 
 export const createRepo = async (
-  access_token: string,
+  accessToken: string,
   name: string,
   description?: string
 ) => {
@@ -542,7 +549,7 @@ export const createRepo = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -553,13 +560,13 @@ export const createRepo = async (
   }
 };
 
-export const leaveRepository = async (access_token: string, repoId: number) => {
+export const leaveRepository = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/leftRepo`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -571,7 +578,7 @@ export const leaveRepository = async (access_token: string, repoId: number) => {
 };
 
 export const bookmarkRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   detach?: boolean
 ) => {
@@ -581,7 +588,7 @@ export const bookmarkRepository = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           detach,
@@ -596,7 +603,7 @@ export const bookmarkRepository = async (
 };
 
 export const imageRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   fileHash: string | null
 ) => {
@@ -608,7 +615,7 @@ export const imageRepository = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -620,7 +627,7 @@ export const imageRepository = async (
 };
 
 export const transferOwnershipRepository = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   userName: string
 ) => {
@@ -630,7 +637,7 @@ export const transferOwnershipRepository = async (
       { userName },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -643,7 +650,7 @@ export const transferOwnershipRepository = async (
 
 /// /////////////////////// USERS ///////////////////////
 export const getRepositoryUsers = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -653,7 +660,7 @@ export const getRepositoryUsers = async (
       IServerResult<IListResponse<IUser>>
     >(`repositories/${repoId}/acl/getRepoUsers`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -668,7 +675,7 @@ export const getRepositoryUsers = async (
 };
 
 export const getRepositoryInviteRequestsByOwner = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -678,7 +685,7 @@ export const getRepositoryInviteRequestsByOwner = async (
       IServerResult<IListResponse<IAccessRequest>>
     >(`repositories/${repoId}/userAccessRequest`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -692,13 +699,13 @@ export const getRepositoryInviteRequestsByOwner = async (
   }
 };
 
-export const getRoles = async (access_token: string) => {
+export const getRoles = async (accessToken: string) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRoles[]>>(
       "admin/getRoles",
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -710,7 +717,7 @@ export const getRoles = async (access_token: string) => {
 };
 
 export const addUserToRepo = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   username: string,
   accessName: string
@@ -724,7 +731,7 @@ export const addUserToRepo = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -736,7 +743,7 @@ export const addUserToRepo = async (
 };
 
 export const editUserRole = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   userName: string,
   roleName: string
@@ -747,7 +754,7 @@ export const editUserRole = async (
       { userName, roleName },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -759,7 +766,7 @@ export const editUserRole = async (
 };
 
 export const deleteUser = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   userName: string
 ) => {
@@ -768,7 +775,7 @@ export const deleteUser = async (
       `repositories/${repoId}/acl`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         data: {
           userName,
@@ -783,7 +790,7 @@ export const deleteUser = async (
 };
 
 export const deleteInviteRequest = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   userId: number
 ) => {
@@ -792,7 +799,7 @@ export const deleteInviteRequest = async (
       `repositories/${repoId}/userAccessRequest/${userId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -805,7 +812,7 @@ export const deleteInviteRequest = async (
 
 /// ////////////////////////// GROUPS ///////////////////////
 export const getRepositoryGroups = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -815,7 +822,7 @@ export const getRepositoryGroups = async (
       IServerResult<IListResponse<IGetGroups>>
     >(`repositories/${repoId}/groups/getRepoGroups`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -830,7 +837,7 @@ export const getRepositoryGroups = async (
 };
 
 export const getGroupInfo = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   title: string
 ) => {
@@ -839,7 +846,7 @@ export const getGroupInfo = async (
       `${CLASOR}/repositories/${repoId}/groups/${title}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -851,7 +858,7 @@ export const getGroupInfo = async (
 };
 
 export const createGroup = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   title: string,
   description?: string,
@@ -865,7 +872,7 @@ export const createGroup = async (
       { title, description, members, memberType: "username" },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -877,7 +884,7 @@ export const createGroup = async (
 };
 
 export const updateGroup = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   title: string,
   description?: string,
@@ -891,7 +898,7 @@ export const updateGroup = async (
       { title, description, members, memberType: "username" },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -903,7 +910,7 @@ export const updateGroup = async (
 };
 
 export const deleteGroup = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   title: string
 ) => {
@@ -912,7 +919,7 @@ export const deleteGroup = async (
       IServerResult<IUpdateGroup>
     >(`repositories/${repoId}/groups/${title}`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -924,7 +931,7 @@ export const deleteGroup = async (
 
 /// //////////////////////// TAGS /////////////////////
 export const getRepositoryTags = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -934,7 +941,7 @@ export const getRepositoryTags = async (
       IServerResult<IListResponse<ITag>>
     >(`repositories/${repoId}/tags`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -949,7 +956,7 @@ export const getRepositoryTags = async (
 };
 
 export const createTag = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   name: string
 ) => {
@@ -959,7 +966,7 @@ export const createTag = async (
       { name },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -971,7 +978,7 @@ export const createTag = async (
 };
 
 export const editTag = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   tagId: number,
   name: string
@@ -982,7 +989,7 @@ export const editTag = async (
       { name },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -994,7 +1001,7 @@ export const editTag = async (
 };
 
 export const deleteTag = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   idTag: number
 ) => {
@@ -1003,7 +1010,7 @@ export const deleteTag = async (
       `repositories/${repoId}/tags/${idTag}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1016,7 +1023,7 @@ export const deleteTag = async (
 
 /// /////////////////// CATEGORY ////////////////////////
 export const getChildren = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number | undefined | null,
   sortParams: ISortProps,
@@ -1064,7 +1071,7 @@ export const getChildren = async (
         .join("&")}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           parentId: categoryId,
@@ -1093,7 +1100,7 @@ export const getChildren = async (
 };
 
 export const createCategory = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   parentId: number | null,
   name: string,
@@ -1111,7 +1118,7 @@ export const createCategory = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1123,7 +1130,7 @@ export const createCategory = async (
 };
 
 export const editCategory = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number | null,
   parentId: number | null,
@@ -1138,7 +1145,7 @@ export const editCategory = async (
       { name, description, order, isHidden, parentId },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1150,7 +1157,7 @@ export const editCategory = async (
 };
 
 export const deleteCategory = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number,
   forceDelete: boolean
@@ -1160,7 +1167,7 @@ export const deleteCategory = async (
       `repositories/${repoId}/categories/${categoryId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           forceDelete,
@@ -1175,7 +1182,7 @@ export const deleteCategory = async (
 };
 
 export const getCategoryBlocklist = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number,
   offset: number,
@@ -1186,7 +1193,7 @@ export const getCategoryBlocklist = async (
       `repositories/${repoId}/categories/${categoryId}/blocklist`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -1202,7 +1209,7 @@ export const getCategoryBlocklist = async (
 };
 
 export const addUserToCategoryBlocklist = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number,
   username: string,
@@ -1214,7 +1221,7 @@ export const addUserToCategoryBlocklist = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1227,7 +1234,7 @@ export const addUserToCategoryBlocklist = async (
 
 /// ///////////////////// CONTENT ///////////////////////
 export const getContent = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   searchParam: string,
   offset: number,
@@ -1240,7 +1247,7 @@ export const getContent = async (
       `publicContent/repository/${repoId}/search/${encodeURIComponent(searchParam)}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -1257,7 +1264,7 @@ export const getContent = async (
 
 /// /////////////////////////// REPORT ////////////////////
 export const getUserDocument = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   sortParams: ISortProps,
   offset: number,
@@ -1292,7 +1299,7 @@ export const getUserDocument = async (
         .join("&")}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -1323,7 +1330,7 @@ export const getUserDocument = async (
 
 /// //////////////////// BULK ////////////////////
 export const moveBulk = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   parentId: number | null,
   children: number[]
@@ -1337,7 +1344,7 @@ export const moveBulk = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1349,7 +1356,7 @@ export const moveBulk = async (
 };
 
 export const deleteBulk = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   children: number[],
   forceDelete?: boolean
@@ -1359,7 +1366,7 @@ export const deleteBulk = async (
       `repositories/${repoId}/categories/deleteChildren`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           forceDelete,
@@ -1376,7 +1383,7 @@ export const deleteBulk = async (
 
 /// ////////////////////// DOCUMENT ///////////////////////
 export const getDocument = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   offset?: number,
@@ -1389,7 +1396,7 @@ export const getDocument = async (
       `repositories/${repoId}/documents/${documentId}/info?type=document&sortParams[]={"field": "createdAt", "order": "asc" }`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -1404,13 +1411,13 @@ export const getDocument = async (
   }
 };
 
-export const getClasorField = async (access_token: string) => {
+export const getClasorField = async (accessToken: string) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IClasorField[]>
     >("clasorFields", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -1421,7 +1428,7 @@ export const getClasorField = async (access_token: string) => {
 };
 
 export const createDocument = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number | null,
   title: string,
@@ -1447,7 +1454,7 @@ export const createDocument = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1459,7 +1466,7 @@ export const createDocument = async (
 };
 
 export const createDocumentTemplate = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   categoryId: number | null,
   title: string,
@@ -1483,7 +1490,7 @@ export const createDocumentTemplate = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1495,7 +1502,7 @@ export const createDocumentTemplate = async (
 };
 
 export const editDocument = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   categoryId: number | null,
@@ -1512,7 +1519,7 @@ export const editDocument = async (
       { categoryId, title, contentType, order, description, isHidden, tagIds },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1524,7 +1531,7 @@ export const editDocument = async (
 };
 
 export const deleteDocument = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number
 ) => {
@@ -1533,7 +1540,7 @@ export const deleteDocument = async (
       `repositories/${repoId}/documents/${documentId}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1545,7 +1552,7 @@ export const deleteDocument = async (
 };
 
 export const bookmarkDocument = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   detach?: boolean
@@ -1556,7 +1563,7 @@ export const bookmarkDocument = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           detach,
@@ -1571,7 +1578,7 @@ export const bookmarkDocument = async (
 };
 
 export const getDocumentBlocklist = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   offset: number,
@@ -1582,7 +1589,7 @@ export const getDocumentBlocklist = async (
       `repositories/${repoId}/documents/${documentId}/blocklist`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -1598,7 +1605,7 @@ export const getDocumentBlocklist = async (
 };
 
 export const addUserToDocumentBlocklist = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   username: string,
@@ -1610,7 +1617,7 @@ export const addUserToDocumentBlocklist = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1621,7 +1628,7 @@ export const addUserToDocumentBlocklist = async (
 };
 
 export const getDocumentWhiteBlackList = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number
 ) => {
@@ -1630,7 +1637,7 @@ export const getDocumentWhiteBlackList = async (
       `repositories/${repoId}/documents/${documentId}/getUserList`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1642,7 +1649,7 @@ export const getDocumentWhiteBlackList = async (
 };
 
 export const addToDocumentBlackList = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   usernameList: string[]
@@ -1653,7 +1660,7 @@ export const addToDocumentBlackList = async (
       { usernameList },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1665,7 +1672,7 @@ export const addToDocumentBlackList = async (
 };
 
 export const addToDocumentWhiteList = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   usernameList: string[]
@@ -1676,7 +1683,7 @@ export const addToDocumentWhiteList = async (
       { usernameList },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1688,7 +1695,7 @@ export const addToDocumentWhiteList = async (
 };
 
 export const createDocumentPassword = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   password: string
@@ -1701,7 +1708,7 @@ export const createDocumentPassword = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1713,7 +1720,7 @@ export const createDocumentPassword = async (
 };
 
 export const updateDocumentPassword = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   oldPassword: string,
@@ -1728,7 +1735,7 @@ export const updateDocumentPassword = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1740,7 +1747,7 @@ export const updateDocumentPassword = async (
 };
 
 export const deleteDocumentPassword = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   oldPassword: string
@@ -1750,7 +1757,7 @@ export const deleteDocumentPassword = async (
       `repositories/${repoId}/documents/${documentId}/password`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         data: {
           oldPassword,
@@ -1764,9 +1771,31 @@ export const deleteDocumentPassword = async (
   }
 };
 
-/// ////////////////// VERSION //////////////////
-export const getVersion = async (
+export const documentEnableUserGroupHash = async (
   access_token: string,
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/enableUserGroup`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+///////////////////// VERSION //////////////////
+export const getVersion = async (
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number | undefined,
@@ -1779,7 +1808,7 @@ export const getVersion = async (
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : state === "public" ? "/publicVersion" : ""}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           innerDocument,
@@ -1795,7 +1824,7 @@ export const getVersion = async (
 };
 
 export const createVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionNumber: string,
@@ -1808,7 +1837,7 @@ export const createVersion = async (
       { versionNumber, content, outline },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1820,7 +1849,7 @@ export const createVersion = async (
 };
 
 export const createFileVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionNumber: string,
@@ -1832,7 +1861,7 @@ export const createFileVersion = async (
       { versionNumber, fileHash },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1844,7 +1873,7 @@ export const createFileVersion = async (
 };
 
 export const deleteVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number,
@@ -1857,7 +1886,7 @@ export const deleteVersion = async (
       }`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1869,7 +1898,7 @@ export const deleteVersion = async (
 };
 
 export const getLastVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number
 ) => {
@@ -1878,7 +1907,7 @@ export const getLastVersion = async (
       `repositories/${repoId}/documents/${documentId}/lastVersion`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1890,7 +1919,7 @@ export const getLastVersion = async (
 };
 
 export const setLastVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
@@ -1901,7 +1930,7 @@ export const setLastVersion = async (
       { versionId },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1913,7 +1942,7 @@ export const setLastVersion = async (
 };
 
 export const publicVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
@@ -1924,7 +1953,7 @@ export const publicVersion = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1936,7 +1965,7 @@ export const publicVersion = async (
 };
 
 export const cancelPublicVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
@@ -1947,7 +1976,7 @@ export const cancelPublicVersion = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1959,7 +1988,7 @@ export const cancelPublicVersion = async (
 };
 
 export const confirmVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
@@ -1970,7 +1999,7 @@ export const confirmVersion = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -1982,7 +2011,7 @@ export const confirmVersion = async (
 };
 
 export const cancelConfirmVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
@@ -1993,7 +2022,7 @@ export const cancelConfirmVersion = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2006,7 +2035,7 @@ export const cancelConfirmVersion = async (
 
 /// ////////////////// FILES ///////////////////////////
 export const getResourceFiles = async (
-  access_token: string,
+  accessToken: string,
   resourceId: number,
   userGroupHash: string,
   offset: number,
@@ -2025,7 +2054,7 @@ export const getResourceFiles = async (
       >
     >(`fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -2041,7 +2070,7 @@ export const getResourceFiles = async (
 };
 
 export const editFile = async (
-  access_token: string,
+  accessToken: string,
   resourceId: number,
   newName: string,
   hash: string
@@ -2054,7 +2083,7 @@ export const editFile = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2066,7 +2095,7 @@ export const editFile = async (
 };
 
 export const deleteFile = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   resourceId: number,
   fileHash: string,
@@ -2077,7 +2106,7 @@ export const deleteFile = async (
       `repositories/${repoId}/files/resource/${resourceId}/fileHash/${fileHash}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           type,
@@ -2093,7 +2122,7 @@ export const deleteFile = async (
 
 /// //////////////////////// RELEASE DOCS //////////////////////////
 export const getPendingDrafts = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -2103,7 +2132,7 @@ export const getPendingDrafts = async (
       IServerResult<IListResponse<IVersion>>
     >(`repositories/${repoId}/getPendingDrafts`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -2118,7 +2147,7 @@ export const getPendingDrafts = async (
 };
 
 export const getPendingVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   offset: number,
   size: number
@@ -2128,7 +2157,7 @@ export const getPendingVersion = async (
       IServerResult<IListResponse<IVersion>>
     >(`admin/${repoId}/getRepoPendingVersion`, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -2144,7 +2173,7 @@ export const getPendingVersion = async (
 
 /// ////////////////////// PUBLIC LINK ///////////////////
 export const createRepoPublicLink = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   roleId: number,
   expireTime: number,
@@ -2160,7 +2189,7 @@ export const createRepoPublicLink = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2171,7 +2200,7 @@ export const createRepoPublicLink = async (
 };
 
 export const deletePublicLink = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   roleId: number
 ) => {
@@ -2180,7 +2209,7 @@ export const deletePublicLink = async (
       `repositories/${repoId}/publicLink`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         data: {
           roleId,
@@ -2195,7 +2224,7 @@ export const deletePublicLink = async (
 };
 
 export const subscribeRepo = async (
-  access_token: string,
+  accessToken: string,
   hash: string,
   password?: string
 ) => {
@@ -2209,7 +2238,7 @@ export const subscribeRepo = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2221,7 +2250,7 @@ export const subscribeRepo = async (
 };
 /// //////////////////////// PUBLISH /////////////////////
 export const createRepoPublishLink = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   expireTime?: number,
   password?: string
@@ -2235,7 +2264,7 @@ export const createRepoPublishLink = async (
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2246,7 +2275,7 @@ export const createRepoPublishLink = async (
 };
 
 export const deletePublishLink = async (
-  access_token: string,
+  accessToken: string,
   repoId: number
 ) => {
   try {
@@ -2254,7 +2283,7 @@ export const deletePublishLink = async (
       `repositories/${repoId}/publish`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2267,7 +2296,7 @@ export const deletePublishLink = async (
 
 /// ///////////////////// REQUESTS ///////////////////
 export const getUserToRepoRequests = async (
-  access_token: string,
+  accessToken: string,
   offset: number,
   size: number
 ) => {
@@ -2276,7 +2305,7 @@ export const getUserToRepoRequests = async (
       IServerResult<IAccessRequestResponse>
     >("acl/userRequests", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         offset,
@@ -2291,7 +2320,7 @@ export const getUserToRepoRequests = async (
 };
 
 export const acceptUserToRepoRequest = async (
-  access_token: string,
+  accessToken: string,
   requestId: number
 ) => {
   try {
@@ -2300,7 +2329,7 @@ export const acceptUserToRepoRequest = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           requestId,
@@ -2315,7 +2344,7 @@ export const acceptUserToRepoRequest = async (
 };
 
 export const rejectUserToRepoRequest = async (
-  access_token: string,
+  accessToken: string,
   requestId: number
 ) => {
   try {
@@ -2324,7 +2353,7 @@ export const rejectUserToRepoRequest = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           requestId,
@@ -2340,7 +2369,7 @@ export const rejectUserToRepoRequest = async (
 
 /// ////////////////////// EDITOR //////////////////
 export const saveVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number,
@@ -2354,7 +2383,7 @@ export const saveVersion = async (
       { content, outline, versionNumber },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2367,7 +2396,7 @@ export const saveVersion = async (
 };
 
 export const freeDraftVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number,
@@ -2381,7 +2410,7 @@ export const freeDraftVersion = async (
       { versionNumber, content, outline },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2393,7 +2422,7 @@ export const freeDraftVersion = async (
 };
 
 export const createBlockVersion = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
@@ -2406,7 +2435,7 @@ export const createBlockVersion = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2420,7 +2449,7 @@ export const createBlockVersion = async (
 /// ///////////////////////////// FEEDBACK ////////////////////////////////
 
 export const sendFeedback = async (
-  access_token: string,
+  accessToken: string,
   content: string,
   fileHashList: string[]
 ) => {
@@ -2428,6 +2457,115 @@ export const sendFeedback = async (
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       "feedback",
       { message: content, fileHash: fileHashList },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const addUserToFeedbackGroupHash = async (accessToken: string) => {
+  try {
+    const response = await axiosClasorInstance.post<
+      IServerResult<{ isAddUser: boolean }>
+    >(
+      "feedback/addUser",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// ///////////////////////// ADMIN PANEL //////////////////////////////
+
+export const getAdminPanelReport = async (accessToken: string) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IClasorReport>
+    >("admin/clasorReport", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getAdminPanelFeedback = async (
+  accessToken: string,
+  top: number,
+  skip: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IOfferResponse>
+    >(`admin/feedback?top=${top}&skip=${skip}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        top,
+        skip,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+////////////////////////////////// CORE //////////////////////
+export const getCommentList = async (
+  access_token: string,
+  postId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
+      `core/content/${postId}/comment`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteComment = async (
+  access_token: string,
+  commentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `core/comment/${commentId}`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -2441,12 +2579,32 @@ export const sendFeedback = async (
   }
 };
 
-export const addUserToFeedbackGroupHash = async (access_token: string) => {
+export const createComment = async (
+  access_token: string,
+  postId: number,
+  text: string
+) => {
   try {
-    const response = await axiosClasorInstance.post<
-      IServerResult<{ isAddUser: boolean }>
-    >(
-      "feedback/addUser",
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `core/content/${postId}/comment`,
+      { text },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const like = async (access_token: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `core/content/${postId}/like`,
       {},
       {
         headers: {
@@ -2461,17 +2619,17 @@ export const addUserToFeedbackGroupHash = async (access_token: string) => {
   }
 };
 
-/// ///////////////////////// ADMIN PANEL //////////////////////////////
-
-export const getAdminPanelReport = async (access_token: string) => {
+export const dislike = async (access_token: string, postId: number) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IClasorReport>
-    >("admin/clasorReport", {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `core/content/${postId}/dislike`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
 
     return response.data.data;
   } catch (error) {
@@ -2479,23 +2637,53 @@ export const getAdminPanelReport = async (access_token: string) => {
   }
 };
 
-export const getAdminPanelFeedback = async (
+export const getLike = async (
   access_token: string,
-  top: number,
-  skip: number
+  postId: number,
+  offset: number,
+  size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IOfferResponse>
-    >(`admin/feedback?top=${top}&skip=${skip}`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-      params: {
-        top,
-        skip,
-      },
-    });
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
+      `core/content/${postId}/like`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          hasUser: true,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDislike = async (
+  access_token: string,
+  postId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
+      `core/content/${postId}/dislike`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          hasUser: true,
+        },
+      }
+    );
 
     return response.data.data;
   } catch (error) {

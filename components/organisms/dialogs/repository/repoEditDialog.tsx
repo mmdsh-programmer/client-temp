@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import useEditRepo from "@hooks/repository/useEditRepo";
 import { useForm } from "react-hook-form";
-import useGetUser from "@hooks/auth/useGetUser";
 import { useSetRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 
@@ -30,12 +29,9 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
   const [selectedFile, setSelectedFile] = useState<string | undefined>(
     repo?.imageFileHash
   );
-  const [imageType, setImageType] = useState<"default" | "custom">(
-    selectedFile ? "custom" : "default"
-  );
+  const [imageType, setImageType] = useState<"default" | "custom">();
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
-  const { data: getUserInfo } = useGetUser();
   const { isPending, mutate } = useEditRepo();
   const attachImageToRepo = useAddImageToRepo();
 
@@ -86,13 +82,19 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
     if ((selectedFile && selectedFile !== repo.imageFileHash) || defualtImage) {
       if (imageType === "default" && !defualtImage) return;
       if (imageType === "custom" && !selectedFile) return;
+
+      const imageHash =
+        imageType === "default" && defualtImage
+          ? defualtImage
+          : imageType === "custom" && selectedFile && selectedFile;
+
       attachImageToRepo.mutate({
         repoId: repo.id,
-        fileHash: selectedFile || defualtImage,
+        fileHash: imageHash || null,
         callBack: () => {
           setRepo({
             ...repo,
-            imageFileHash: selectedFile || defualtImage || "",
+            imageFileHash: imageHash || "",
           });
           toast.success("عکس با موفقیت به مخزن اضافه شد.");
           handleClose();
@@ -154,11 +156,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
           setImageType={setImageType}
           setOpenFileManagement={setOpenFileManagement}
           onSelect={handleSelect}
-          imageSrc={
-            repo?.imageFileHash
-              ? `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${repo?.imageFileHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`
-              : undefined
-          }
+          imageHash={selectedFile}
         />
       </form>
     </EditDialog>

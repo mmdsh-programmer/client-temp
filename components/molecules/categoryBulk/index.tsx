@@ -9,7 +9,7 @@ import {
   XIcon,
 } from "@components/atoms/icons";
 import BulkDeleteDialog from "@components/organisms/dialogs/bulk/bulkDeleteDialog";
-import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryMoveDialog";
+import BulkMoveDialog from "@components/organisms/dialogs/bulk/bulkMoveDialog";
 
 const CategoryBulk = () => {
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
@@ -87,7 +87,7 @@ const CategoryBulk = () => {
         </div>
       </div>
       {openDeleteDialog && <BulkDeleteDialog setOpen={setOpenDeleteDialog} />}
-      {openMoveDialog && <CategoryMoveDialog setOpen={setOpenMoveDialog} />}
+      {openMoveDialog && <BulkMoveDialog setOpen={setOpenMoveDialog} />}
     </>
   );
 };

@@ -96,10 +96,10 @@ const VersionMobileView = ({
                         version.status,
                         version.state
                       ).translated,
-                      className: translateVersionStatus(
+                      className: `${translateVersionStatus(
                         version.status,
                         version.state
-                      ).className,
+                      ).className} version-status`,
                     },
                   ]}
                   onClick={() => {
@@ -114,7 +114,7 @@ const VersionMobileView = ({
                   cardAction={
                     <VersionMenu version={version} lastVersion={lastVersion} />
                   }
-                  className={`${versionModalList ? "border-[1px] border-normal" : ""}`}
+                  className={`version-action ${versionModalList ? "border-[1px] border-normal" : ""}`}
                 />
               );
             });

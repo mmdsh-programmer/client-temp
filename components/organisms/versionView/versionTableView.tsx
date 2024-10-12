@@ -78,11 +78,11 @@ const VersionTableView = ({
                   value: "تاریخ ویرایش",
                   className: "hidden xl:table-cell",
                 },
-                { key: "status", value: "وضعیت" },
+                { key: "status", value: "وضعیت", className: "version-status" },
                 {
                   key: "action",
                   value: "عملیات",
-                  className: "flex !justify-end ml-4 ",
+                  className: "version-action flex !justify-end ml-4 ",
                 },
               ]}
             />

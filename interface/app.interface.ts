@@ -190,3 +190,21 @@ export interface IActionError {
   errorList: string[];
   originalError?: string;
 }
+
+
+export interface ISocialError {message: string, status: number, url: string}
+export interface ISocialResponse {
+  count: number;
+  errorCode: number;
+  hasError: boolean;
+  message: string;
+  messageId: number;
+  ott: string;
+  referenceNumber: string;
+}
+
+export interface IMetaQuery {
+  field: string;
+  is: string;
+  and?: IMetaQuery[]; // Optional recursive definition for nested conditions
+}

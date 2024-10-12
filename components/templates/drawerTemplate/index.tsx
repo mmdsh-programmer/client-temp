@@ -45,7 +45,7 @@ const DrawerComponent = ({
                ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
       >
         {menuList.map((menuItem) => {
-          return menuItem.subMenu ? (
+          return menuItem?.subMenu ? (
             <div key={`drawer-sub-menu-${menuItem.text}`}>
               <Button
                 className="w-full flex items-center justify-between bg-transparent px-0"
@@ -70,7 +70,7 @@ const DrawerComponent = ({
                         onClick={subItem?.onClick}
                       >
                         <div className="flex items-center gap-1">
-                          {subItem.icon}
+                          {subItem?.icon}
                           <Typography className="select_option__text font-normal">
                             {subItem.text}
                           </Typography>
@@ -88,7 +88,7 @@ const DrawerComponent = ({
               onClick={menuItem?.onClick}
             >
               <div className="flex items-center gap-1">
-                {menuItem.icon}
+                {menuItem?.icon}
                 <Typography className="select_option__text font-normal">
                   {menuItem.text}
                 </Typography>

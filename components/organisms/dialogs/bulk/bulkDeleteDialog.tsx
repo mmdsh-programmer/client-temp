@@ -1,5 +1,5 @@
 import { bulkItemsAtom } from "@atom/bulk";
-import { categoryAtom } from "@atom/category";
+import { categoryShowAtom } from "@atom/category";
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
@@ -15,7 +15,7 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
   const bulkDeleteHook = useDeleteBulk();
 
   const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(categoryAtom);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
 
   const { handleSubmit, clearErrors, reset } = useForm();
@@ -26,7 +26,6 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
   const close = () => {
-    setCategory(null);
     setBulkItems([]);
   };
   const onSubmit = () => {
@@ -36,7 +35,7 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
       children: getBulkItems.map((item) => {
         return item.id;
       }),
-      parentId: getCategory?.id,
+      parentId: getCategoryShow?.id,
       forceDelete: true,
       callBack: close,
     });

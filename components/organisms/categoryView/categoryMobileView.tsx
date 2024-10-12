@@ -35,7 +35,7 @@ const MobileView = ({
               return item.type === "category" ? (
                 <CategoryMobileCard key={item.id} category={item} />
               ) : (
-                <DocumentMobileCard document={item} />
+                <DocumentMobileCard key={item.id} document={item} />
               );
             });
           })}

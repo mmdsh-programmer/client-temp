@@ -14,7 +14,7 @@ const useGetUserDocuments = (
   enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`repo-${repoId}-children-${JSON.stringify(filters)}`],
+    queryKey: [`repo-${repoId}-children-user-document-${JSON.stringify(filters)}`],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getUserDocumentAction(
         repoId,
@@ -28,7 +28,7 @@ const useGetUserDocuments = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId && !!enabled,
+    enabled: !!enabled,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

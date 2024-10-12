@@ -22,8 +22,6 @@ import {
   transferOwnershipRepository,
 } from "@service/clasor";
 import { getMe } from "./auth";
-import { handleActionError } from "@utils/error";
-import { IActionError } from "@interface/app.interface";
 
 export const getMyInfoAction = async () => {
   const userInfo = await getMe();
@@ -42,7 +40,7 @@ export const getAllRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await getAllRepositories(
       userInfo.access_token,
       offset,
@@ -51,9 +49,7 @@ export const getAllRepositoryList = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const getMyRepositoryList = async (
@@ -63,7 +59,7 @@ export const getMyRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await getMyRepositories(
       userInfo.access_token,
       offset,
@@ -73,20 +69,16 @@ export const getMyRepositoryList = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const getRepositoryAction = async (repoId: number | null) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await getRepository(userInfo.access_token, repoId);
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const getAccessRepositoryList = async (
@@ -95,7 +87,7 @@ export const getAccessRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await getAccessRepositories(
       userInfo.access_token,
       offset,
@@ -104,9 +96,7 @@ export const getAccessRepositoryList = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const getBookmarkRepositoryList = async (
@@ -115,7 +105,7 @@ export const getBookmarkRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await getBookmarkRepositories(
       userInfo.access_token,
       offset,
@@ -124,9 +114,7 @@ export const getBookmarkRepositoryList = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const editRepoAction = async (
@@ -135,7 +123,7 @@ export const editRepoAction = async (
   description: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await editRepo(
       userInfo.access_token,
       repoId,
@@ -144,69 +132,57 @@ export const editRepoAction = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const createRepoAction = async (name: string, description?: string) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await createRepo(userInfo.access_token, name, description);
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const deleteRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await deleteRepository(userInfo.access_token, repoId);
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const archiveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await archiveRepository(userInfo.access_token, repoId);
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const restoreRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await restoreRepository(userInfo.access_token, repoId);
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const leaveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await leaveRepository(userInfo.access_token, repoId);
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const bookmarkRepoAction = async (repoId: number, detach?: boolean) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await bookmarkRepository(
       userInfo.access_token,
       repoId,
@@ -214,9 +190,7 @@ export const bookmarkRepoAction = async (repoId: number, detach?: boolean) => {
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const imageRepoAction = async (
@@ -224,7 +198,7 @@ export const imageRepoAction = async (
   fileHash: string | null
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await imageRepository(
       userInfo.access_token,
       repoId,
@@ -232,9 +206,7 @@ export const imageRepoAction = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const getRepoKeysAction = async (
@@ -243,7 +215,7 @@ export const getRepoKeysAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await getRepositoryKeys(
       userInfo.access_token,
       repoId,
@@ -252,14 +224,11 @@ export const getRepoKeysAction = async (
     );
 
     return response;
-  } catch (error) {
-    return handleActionError(error as IActionError);
-  }
 };
 
 export const deleteRepoKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await deleteRepositoryKey(
       userInfo.access_token,
       repoId,
@@ -267,9 +236,7 @@ export const deleteRepoKeyAction = async (repoId: number, keyId: number) => {
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const createRepoKeyAction = async (
@@ -278,7 +245,7 @@ export const createRepoKeyAction = async (
   key: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await createRepositoryKey(
       userInfo.access_token,
       repoId,
@@ -287,20 +254,20 @@ export const createRepoKeyAction = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const getKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
-  try {
-    const response = await getKey(userInfo.access_token, repoId, keyId);
+  
+    const response = await getKey(
+      userInfo.access_token,
+      repoId,
+      keyId,
+    );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };
 
 export const transferOwnershipRepositoryAction = async (
@@ -308,7 +275,7 @@ export const transferOwnershipRepositoryAction = async (
   userName: string
 ) => {
   const userInfo = await getMe();
-  try {
+  
     const response = await transferOwnershipRepository(
       userInfo.access_token,
       repoId,
@@ -316,7 +283,5 @@ export const transferOwnershipRepositoryAction = async (
     );
 
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  
 };

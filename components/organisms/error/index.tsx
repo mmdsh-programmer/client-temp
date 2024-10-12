@@ -1,7 +1,4 @@
-import {
- Button,
- Typography
-} from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import React from "react";
@@ -11,9 +8,7 @@ interface IProps {
   retry?: () => void;
 }
 
-const Error = ({
- error, retry 
-}: IProps) => {
+const Error = ({ error, retry }: IProps) => {
   return (
     <div className="flex flex-col h-full mx-auto justify-center items-center gap-3 my-2">
       <FolderEmptyIcon />

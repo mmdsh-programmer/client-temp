@@ -30,7 +30,7 @@ const SearchFilter = ({
             setOpenSearchModal(true);
           }}
           placeholder=""
-          className="bg-white search-container  shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+          className="categorySearchContent bg-white shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
         >
           <SearchIcon className="h-5 w-5 stroke-gray-500" />
         </Button>
@@ -43,7 +43,7 @@ const SearchFilter = ({
             }
           }}
           placeholder=""
-          className="bg-white search-container shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+          className="categorySearch bg-whiteshadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
         >
           <FilterIcon className="h-5 w-5 stroke-gray-500" />
         </Button>

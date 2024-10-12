@@ -1,40 +1,29 @@
 "use server";
 
-import {
-  createRepoPublicLink,
-  createRepoPublishLink,
-  deletePublicLink,
-  deletePublishLink,
-} from "@service/clasor";
+import { createRepoPublishLink, deletePublishLink } from "@service/clasor";
 import { getMe } from "./auth";
 
 export const createRepoPublishLinkAction = async (
   repoId: number,
   expireTime?: number,
-  password?: string,
+  password?: string
 ) => {
   const userInfo = await getMe();
-  try {
-    const response = await createRepoPublishLink(
-      userInfo.access_token,
-      repoId,
-      expireTime,
-      password,
-    );
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await createRepoPublishLink(
+    userInfo.access_token,
+    repoId,
+    expireTime,
+    password
+  );
+
+  return response;
 };
 
 export const deletePublishLinkAction = async (repoId: number) => {
   const userInfo = await getMe();
-  try {
-    const response = await deletePublishLink(userInfo.access_token, repoId);
 
-    return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
+  const response = await deletePublishLink(userInfo.access_token, repoId);
+
+  return response;
 };

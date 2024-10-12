@@ -16,29 +16,29 @@ const Start = ({ children }: IProps) => {
  isLoading, isError, error, refetch 
 } = useGetUser();
 
-  if (isError) {
+    if (isError) {
+      return (
+        <div>
+          <Error
+            error={error}
+            reset={() => {
+              refetch();
+            }}
+          />
+        </div>
+      );
+    }
+  
+    if (isLoading) {
+      return <SpinnerText text="در حال دریافت اطلاعات" />;
+    }
+  
     return (
-      <div>
-        <Error
-          error={error}
-          reset={() => {
-            refetch();
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return <SpinnerText text="در حال دریافت اطلاعات" />;
-  }
-
-  return (
-    <>
-      <PanelURl />
-      {children}
-    </>
-  );
+      <>
+        <PanelURl />
+        {children}
+      </>
+    ); 
 };
 
 export default Start;

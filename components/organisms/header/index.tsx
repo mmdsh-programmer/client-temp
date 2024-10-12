@@ -79,7 +79,7 @@ const Header = () => {
               onClick={() => {
                 return setOpenRequestDialog(true);
               }}
-              className="rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+              className="notice rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
             >
               <AlertIcon className=" h-4 w-4" />
             </Button>

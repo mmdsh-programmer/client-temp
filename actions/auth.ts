@@ -9,6 +9,7 @@ import {
   userInfo,
 } from "@service/clasor";
 
+import { IActionError } from "@interface/app.interface";
 import { cookies } from "next/dist/client/components/headers";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
@@ -44,34 +45,28 @@ const refreshCookieHeader = async (rToken: string) => {
 };
 
 export const getMe = async () => {
-  try{
-    const encodedToken = cookies().get("token")?.value;
-      if (!encodedToken) {
-        redirect("/signin");
-      }
+  const encodedToken = cookies().get("token")?.value;
+  if (!encodedToken) {
+    redirect("/signin");
+  }
 
-      const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
-      const tokenInfo = JSON.parse(decryptKey(payload)) as {
-        access_token: string;
-        refresh_token: string;
-      };
-      try {
-
-      
-        const userData = await userInfo(tokenInfo.access_token);
-        return {
-          ...userData,
-          access_token: tokenInfo.access_token,
-          refresh_token: tokenInfo.refresh_token,
-        };
-      } catch {
-        return refreshCookieHeader(tokenInfo.refresh_token);
-      }
-  } catch(error) {
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> error");
-      console.log(error);
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> error");
-      throw error;
+  const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
+  const tokenInfo = JSON.parse(decryptKey(payload)) as {
+    access_token: string;
+    refresh_token: string;
+  };
+  try {
+    const userData = await userInfo(`${tokenInfo.access_token}`);
+    return {
+      ...userData,
+      access_token: tokenInfo.access_token,
+      refresh_token: tokenInfo.refresh_token,
+    };
+  } catch (error: unknown) {
+    if ((error as IActionError)?.errorCode === 401) {
+      return refreshCookieHeader(tokenInfo.refresh_token);
+    }
+    throw error;
   }
 };
 

@@ -1,4 +1,5 @@
 import { IActionError } from "@interface/app.interface";
+import { NextResponse } from "next/server";
 
 export const ERRORS: Record<
   number,
@@ -41,7 +42,8 @@ export default class BasicError extends Error {
     public errorCode: number,
     public message: string,
     public errorList?: string[],
-    public originalError?: any,
+    public referenceNumber?: string,
+    public originalError?: any
   ) {
     super(errorCode in ERRORS ? ERRORS[errorCode].MSG : "");
     Error.captureStackTrace(this, this.constructor);
@@ -51,6 +53,7 @@ export default class BasicError extends Error {
     return {
       error: ERRORS[this.errorCode].MSG as string,
       message: this.errorList,
+      referenceNumber: this.referenceNumber ? this.referenceNumber : "",
     };
   }
 }
@@ -58,49 +61,56 @@ export default class BasicError extends Error {
 export class InputError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[400].MSG as string);
-    super(400, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(400, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class AuthorizationError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[401].MSG as string);
-    super(401, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(401, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class ForbiddenError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[403].MSG as string);
-    super(403, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(403, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class NotFoundError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[404].MSG as string);
-    super(404, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(404, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class ServerError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[500].MSG as string);
-    super(500, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(500, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class DuplicateError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[409].MSG as string);
-    super(409, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(409, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class UnprocessableError extends BasicError {
   constructor(errorList?: string[], originalError?: any) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[422].MSG as string);
-    super(422, defaultMessage, errorList, originalError);
+    const referenceNumber = originalError?.data?.referenceNumber;
+    super(422, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
@@ -118,4 +128,9 @@ export const handleActionError = (error: IActionError) => {
     default:
       throw new ServerError(messages);
   }
+};
+
+export const handleRouteError = (error: IActionError) => {
+  const message = error.errorList?.[0] ?? "";
+  return NextResponse.json({ message }, { status: error.errorCode ?? 500 });
 };

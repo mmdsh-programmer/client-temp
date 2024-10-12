@@ -6,9 +6,7 @@ import useRenameFile from "@hooks/files/useRenameFile";
 import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
-import {
- ClasorFileManagement, IFile 
-} from "cls-file-management";
+import { ClasorFileManagement, IFile } from "cls-file-management";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
@@ -24,13 +22,8 @@ interface IProps {
 }
 
 const Files = (props: IProps) => {
-  const {
-    setSelectedFile,
-    userGroupHash,
-    resourceId,
-    type,
-    handleClose,
-  } = props;
+  const { setSelectedFile, userGroupHash, resourceId, type, handleClose } =
+    props;
   const getRepo = useRecoilValue(repoAtom);
   const [page, setPage] = useState<number>(0);
   const [processCount, setProcessCount] = useState(0);
@@ -42,8 +35,10 @@ const Files = (props: IProps) => {
 
   const queryClient = useQueryClient();
   const {
- data: userInfo, refetch: refetchUser 
-} = useGetUser();
+    data: userInfo,
+    refetch: refetchUser,
+    isFetching: isFetchingUserInfo,
+  } = useGetUser();
   const {
     data: files,
     isFetching,
@@ -113,19 +108,59 @@ const Files = (props: IProps) => {
 
   const handleUploadFile = async (item: any, showCropper: boolean) => {
     setProcessCount(0);
-    refetchUser();
-    setIsLoading(true);
-    if (showCropper) {
-      try {
-        await axios
+    // refetchUser();
+    const token = userInfo?.access_token;
+    if (!isFetchingUserInfo && token) {
+      setIsLoading(true);
+      if (showCropper) {
+        try {
+          await axios
+            .put(
+              `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
+              item,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data;",
+                  Authorization: `Bearer ${token}`,
+                  _token_: token || "",
+                  _token_issuer_: "1",
+                },
+                onUploadProgress(progressEvent: any) {
+                  const process = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );
+                  setProcessCount(process);
+                },
+              }
+            )
+            .then(async (result: any) => {
+              if (result.data.data.result.hash) {
+                await onSuccess();
+              }
+              queryClient.invalidateQueries({
+                queryKey: [`getReport-${resourceId}`],
+              });
+            });
+        } catch {
+          setIsLoading(false);
+          setIsError(true);
+          toast.error("آپلود ناموفق");
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        const fileItem = item;
+        const file = new FormData();
+        file.append("file", fileItem, encodeURIComponent(item.name));
+        axios
           .put(
             `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
-            item,
+            file,
             {
               headers: {
                 "Content-Type": "multipart/form-data;",
-                Authorization: `Bearer ${userInfo?.access_token}`,
-                _token_: userInfo?.access_token || "",
+                Authorization: `Bearer ${token}`,
+                _token_: token || "",
                 _token_issuer_: "1",
               },
               onUploadProgress(progressEvent: any) {
@@ -136,54 +171,21 @@ const Files = (props: IProps) => {
               },
             }
           )
-          .then(async (result: any) => {
-            if (result.data.data.result.hash) {
-              await onSuccess();
+          .then(async (res: any) => {
+            if (res.data.data.result.hash) {
+              onSuccess();
+              setIsLoading(false);
             }
-            queryClient.invalidateQueries({queryKey: [`getReport-${resourceId}`],});
-          });
-      } catch {
-        setIsLoading(false);
-        setIsError(true);
-        toast.error("آپلود ناموفق");
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      const fileItem = item;
-      const file = new FormData();
-      file.append("file", fileItem, encodeURIComponent(item.name));
-      axios
-        .put(
-          `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
-          file,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data;",
-              Authorization: `Bearer ${userInfo?.access_token}`,
-              _token_: userInfo?.access_token || "",
-              _token_issuer_: "1",
-            },
-            onUploadProgress(progressEvent: any) {
-              const process = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setProcessCount(process);
-            },
-          }
-        )
-        .then(async (res: any) => {
-          if (res.data.data.result.hash) {
-            onSuccess();
+            queryClient.invalidateQueries({
+              queryKey: [`getReport-${resourceId}`],
+            });
+          })
+          .catch(() => {
+            toast.error("خطا در بارگذاری فایل");
+            setIsError(true);
             setIsLoading(false);
-          }
-          queryClient.invalidateQueries({queryKey: [`getReport-${resourceId}`],});
-        })
-        .catch(() => {
-          toast.error("خطا در بارگذاری فایل");
-          setIsError(true);
-          setIsLoading(false);
-        });
+          });
+      }
     }
   };
 
