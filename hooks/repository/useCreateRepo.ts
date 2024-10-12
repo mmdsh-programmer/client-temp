@@ -1,5 +1,6 @@
-import { createRepoAction } from "@actions/repository";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { createRepoAction } from "@actions/repository";
 import { toast } from "react-toastify";
 
 const useCreateRepo = () => {
@@ -18,10 +19,10 @@ const useCreateRepo = () => {
     onSuccess: (response, values) => {
       const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`, `allRepoList`],
+        queryKey: ["myRepoList-false", "allRepoList"],
       });
       queryClient.invalidateQueries({
-        queryKey: [`allRepoList`],
+        queryKey: ["allRepoList"],
       });
       callBack?.(response);
     },

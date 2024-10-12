@@ -1,5 +1,9 @@
-import { AuthorizationError, InputError, ServerError } from "@utils/error";
-import { IMetaQuery, ISocialError, ISocialResponse } from "@interface/app.interface";
+import { AuthorizationError, InputError, NotFoundError, ServerError } from "@utils/error";
+import {
+  IMetaQuery,
+  ISocialError,
+  ISocialResponse,
+} from "@interface/app.interface";
 import axios, { AxiosError } from "axios";
 
 import Logger from "@utils/logger";
@@ -79,7 +83,11 @@ export const createCustomPost = async (metadata: string, domain: string) => {
   return response.data;
 };
 
-export const getCustomPost = async (metaQuery: IMetaQuery, size: string, offset: string) => {
+export const getCustomPost = async (
+  metaQuery: IMetaQuery,
+  size: string,
+  offset: string
+) => {
   const response = await axiosSocialInstance.post(
     "/biz/searchTimelineByMetadata",
     {},
@@ -96,4 +104,26 @@ export const getCustomPost = async (metaQuery: IMetaQuery, size: string, offset:
     return handleSocialStatusError(response.data);
   }
   return response.data;
+};
+
+export const getCustomPostByDomain = async (domain: string) => {
+  const metaQuery: IMetaQuery = {
+    field: "CUSTOM_POST_TYPE",
+    is: "DOMAIN_BUSINESS",
+    and: [
+      {
+        field: "domain",
+        is: domain,
+      },
+    ],
+  };
+  const size = "1";
+  const offset = "0";
+  const response = await getCustomPost(metaQuery, size, offset);
+  if(!response.result.length){
+    throw new NotFoundError(["Domain not found"]);
+  }
+  const customPost = response.result[0]?.item;
+  const { metadata } = customPost;
+  return JSON.parse(metadata);
 };

@@ -3,17 +3,18 @@
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   getToken,
-  handleRedirect,
   renewToken,
   userInfo,
 } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
 import { cookies } from "next/dist/client/components/headers";
+import { getCustomPostByDomain } from "@service/social";
+import { getPodAccessToken } from "@service/account";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
 
-const { JWT_SECRET_KEY, SECURE } = process.env;
+const { JWT_SECRET_KEY, SECURE, ACCOUNTS } = process.env;
 
 const refreshCookieHeader = async (rToken: string) => {
   const response = await renewToken(rToken);
@@ -69,19 +70,23 @@ export const getMe = async () => {
       }
 };
 
-export const login = async (redirectUrl: string) => {
-  const response = await handleRedirect(redirectUrl);
-  redirect(response.data.url);
+export const login = async (domain) => {
+  // get domain and find proper custom post base on domain
+  const { clientId } = await getCustomPostByDomain(domain);
+  const url = (`${ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
+    `${domain  }/signin`
+  )}&scope=profile`).replace("http:", "https:");
+  redirect(url);
 };
 
-export const getUserToken = async (code: string, redirectUrl: string) => {
-  const response = await getToken(code, redirectUrl);
-  const { accessToken, refreshToken } = response;
+export const getUserToken = async (domain: string, code: string, redirectUrl: string) => {
+  const { clientId, clientSecret } = await getCustomPostByDomain(domain);
+  const { access_token, refresh_token } = await getPodAccessToken(code, redirectUrl, clientId, clientSecret);
 
   const encryptedData = encryptKey(
     JSON.stringify({
-      access_token: accessToken,
-      refresh_token: refreshToken,
+      access_token,
+      refresh_token,
     }),
   );
 
@@ -94,5 +99,5 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
     sameSite: "lax",
   });
 
-  return { ...response };
+  return {};
 };

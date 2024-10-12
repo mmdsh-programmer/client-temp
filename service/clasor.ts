@@ -110,18 +110,6 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   }
 };
 
-export const handleRedirect = async (redirectUrl: string) => {
-  try {
-    const response = await axiosClasorInstance.get(
-      `auth/loginUrl?redirectUrl=${redirectUrl}`
-    );
-
-    return response.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
 export const getToken = async (code: string, redirectUrl: string) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(

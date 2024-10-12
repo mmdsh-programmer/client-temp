@@ -207,3 +207,8 @@ export interface IMetaQuery {
   is: string;
   and?: IMetaQuery[]; // Optional recursive definition for nested conditions
 }
+
+export interface IGetTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}

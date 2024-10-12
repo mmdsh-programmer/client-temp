@@ -1,16 +1,20 @@
 "use client";
 
 import React, {
- useEffect, useState 
+ useEffect,
+ useState
 } from "react";
 import {
- Spinner, Typography 
+ Spinner,
+ Typography
 } from "@material-tailwind/react";
 import {
- getUserToken, login 
+ getUserToken,
+ login
 } from "@actions/auth";
 import {
- useRouter, useSearchParams 
+ useRouter,
+ useSearchParams
 } from "next/navigation";
 
 import { ClasorLogo } from "@components/atoms/icons";
@@ -28,7 +32,7 @@ const SignInComponent = () => {
 
     try {
       setLoading(true);
-      await getUserToken(code, redirect_uri);
+      await getUserToken(window.location.origin, code, redirect_uri);
       setLoading(false);
       const lastPage = localStorage.getItem("CLASOR:LAST_PAGE") || null;
 
@@ -119,7 +123,7 @@ const SignInComponent = () => {
             <LoadingButton
               className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-purple-normal  text-white font-iranYekan"
               onClick={() => {
-                return login(`${window.location.origin}/signin`);
+                return login(window.location.origin);
               }}
             >
               ورود
