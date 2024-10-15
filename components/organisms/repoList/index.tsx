@@ -14,6 +14,7 @@ import HeaderListTemplate from "@components/templates/headerListTemplate";
 import ListMode from "@components/molecules/listMode";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
+import PublishedRepoList from "./publishedRepoList";
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
@@ -55,6 +56,9 @@ const RepoList = () => {
       </RenderIf>
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.BOOKMARK_REPO}>
         <BookmarkRepoList />
+      </RenderIf>
+      <RenderIf isTrue={getRepoGroup === ERepoGrouping.PUBLISHED_REPO}>
+        <PublishedRepoList />
       </RenderIf>
     </div>
   );

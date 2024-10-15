@@ -6,16 +6,18 @@ const useGetMyRepoList = (
   size: number,
   archived: boolean,
   name?: string,
+  isPublished?: boolean,
   enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`myRepoList-${archived}${name ? `-${name}` : ""}`],
+    queryKey: [`myRepoList-${archived}${name ? `-${name}` : ""}${isPublished ? "-isPublished" : ""}`],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getMyRepositoryList(
         (pageParam - 1) * size,
         size,
         archived,
         name,
+        isPublished
       );
       return response as IListResponse<IRepo>;
     },

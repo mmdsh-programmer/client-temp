@@ -1,36 +1,34 @@
+import React from "react";
 import CardView from "../repoView/cardView";
 import { EEmptyList } from "@components/molecules/emptyList";
 import { EListMode } from "@interface/enums";
 import MobileView from "../repoView/mobileView";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import TableView from "../repoView/tableView";
 import { listModeAtom } from "@atom/app";
-import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import { useRecoilValue } from "recoil";
 import { IRepoView } from "@interface/repo.interface";
+import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 
-interface IProps {
-  archived: boolean;
-}
-
-const MyRepoList = ({ archived }: IProps) => {
+const PublishedRepoList = () => {
   const mode = useRecoilValue(listModeAtom);
   const {
-    data: getMyRepoList,
+    data: getMyPublishedRepo,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-  } = useGetMyRepoList(20, archived, undefined, false, true);
+    isFetching
+  } = useGetMyRepoList(20, false, undefined, true, true);
 
   const commonProps: IRepoView = {
     isLoading,
-    getRepoList: getMyRepoList,
+    getRepoList: getMyPublishedRepo,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    type: archived ? EEmptyList.ARCHIVE_REPO : EEmptyList.MY_REPO,
+    isFetching,
+    type: EEmptyList.PUBLISHED_REPO,
   };
 
   return (
@@ -52,4 +50,4 @@ const MyRepoList = ({ archived }: IProps) => {
   );
 };
 
-export default MyRepoList;
+export default PublishedRepoList;

@@ -8,6 +8,7 @@ export enum EEmptyList {
   ACCESS_REPO = "access_repo",
   BOOKMARK_REPO = "bookmark_repo",
   ARCHIVE_REPO = "archive_repo",
+  PUBLISHED_REPO = "published_repo",
   CHILDREN = "children",
   CATEGORY = "category",
   VERSION = "version",
@@ -66,6 +67,15 @@ const EmptyList = ({ type }: IProps) => {
             className="title_t3 text-primary"
           >
             شما در حال حاضر مخزن بایگانی شده‌ای ندارید.
+          </Typography>
+        );
+      case EEmptyList.PUBLISHED_REPO:
+        return (
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary"
+          >
+            شما در حال حاضر مخزن منتشر شده ای ندارید.
           </Typography>
         );
       case EEmptyList.ACCESS_REPO:

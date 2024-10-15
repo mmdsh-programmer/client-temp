@@ -4,6 +4,7 @@ import {
   FolderBookmarkIcon,
   FolderIcon,
   FolderShareIcon,
+  PublishIcon,
 } from "@components/atoms/icons";
 import {
  Button, List, ListItem, Typography 
@@ -64,6 +65,14 @@ const Sidebar = () => {
       className: "myArchiveList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
+      },
+    },
+    {
+      text: ERepoGrouping.PUBLISHED_REPO,
+      icon: <PublishIcon className="h-6 w-6" />,
+      className: "myPublishedRepoList",
+      onClick: () => {
+        setRepoGroup(ERepoGrouping.PUBLISHED_REPO);
       },
     },
   ];

@@ -352,7 +352,8 @@ export const getMyRepositories = async (
   offset: number,
   size: number,
   archived: boolean,
-  name?: string
+  name?: string,
+  isPublish?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -366,6 +367,7 @@ export const getMyRepositories = async (
         size,
         archived,
         title: name,
+        isPublish
       },
     });
 
