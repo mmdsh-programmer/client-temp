@@ -1,8 +1,10 @@
 import type {
- Meta, StoryObj 
+ Meta,
+ StoryObj
 } from "@storybook/react";
 import {
- QueryClient, QueryClientProvider 
+ QueryClient,
+ QueryClientProvider
 } from "@tanstack/react-query";
 
 import { EDocumentTypes } from "@interface/enums";
@@ -60,6 +62,7 @@ const mockDocItem: IDocumentTreeItem = {
   isPublish: false,
   publishLinkPassword: null,
   publishExpireTime: null,
+  userGroupHash: "",
 };
 
 export const Default: Story = {render: () => 

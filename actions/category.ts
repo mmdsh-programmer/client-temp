@@ -8,9 +8,10 @@ import {
   getCategoryBlocklist,
   getChildren,
 } from "@service/clasor";
-import { getMe } from "./auth";
-import { ISortProps } from "@atom/sortParam";
+
 import { IChildrenFilter } from "@interface/app.interface";
+import { ISortProps } from "@atom/sortParam";
+import { getMe } from "./auth";
 
 export const getChildrenAction = async (
   repoId: number,
@@ -90,16 +91,16 @@ export const deleteCategoryAction = async (
   categoryId: number,
   forceDelete: boolean
 ) => {
-  const userInfo = await getMe();
+    const userInfo = await getMe();
 
-  const response = await deleteCategory(
-    userInfo.access_token,
-    repoId,
-    categoryId,
-    forceDelete
-  );
-
-  return response;
+    const response = await deleteCategory(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      forceDelete
+    );
+  
+    return response;
 };
 
 export const getCategoryBlocklistAction = async (

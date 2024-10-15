@@ -1,5 +1,6 @@
 import { AuthorizationError, InputError, NotFoundError, ServerError } from "@utils/error";
 import {
+  ICustomPostMetadata,
   IMetaQuery,
   ISocialError,
   ISocialResponse,
@@ -88,10 +89,8 @@ export const getCustomPost = async (
   size: string,
   offset: string
 ) => {
-  const response = await axiosSocialInstance.post(
-    "/biz/searchTimelineByMetadata",
-    {},
-    {
+  const response = await axiosSocialInstance.get(
+    "/biz/searchTimelineByMetadata", {
       params: {
         metaQuery: JSON.stringify(metaQuery),
         activityInfo: false,
@@ -106,7 +105,7 @@ export const getCustomPost = async (
   return response.data;
 };
 
-export const getCustomPostByDomain = async (domain: string) => {
+export const getCustomPostByDomain = async (domain: string): Promise<ICustomPostMetadata> => {
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
     is: "DOMAIN_BUSINESS",
@@ -119,11 +118,81 @@ export const getCustomPostByDomain = async (domain: string) => {
   };
   const size = "1";
   const offset = "0";
-  const response = await getCustomPost(metaQuery, size, offset);
-  if(!response.result.length){
+  
+  
+  const response = await axiosSocialInstance.get(
+    "/biz/searchTimelineByMetadata", {
+      params: {
+        metaQuery: JSON.stringify(metaQuery),
+        activityInfo: false,
+        size,
+        offset,
+      },
+    }
+  );
+  
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  if(!response.data.result.length){
     throw new NotFoundError(["Domain not found"]);
   }
-  const customPost = response.result[0]?.item;
+  const customPost = response.data.result[0]?.item;
   const { metadata } = customPost;
-  return JSON.parse(metadata);
+  return { ...JSON.parse(metadata), id: customPost.entityId, content: customPost.content ?? "0" };
+};
+
+export const getCustomPostById = async (id: number): Promise<ICustomPostMetadata> => {
+  const metaQuery: IMetaQuery = {
+    field: "CUSTOM_POST_TYPE",
+    is: "DOMAIN_BUSINESS"
+  };
+  
+  const response = await axiosSocialInstance.get(
+    "/biz/searchTimelineByMetadata", {
+      params: {
+        metaQuery: JSON.stringify(metaQuery),
+        postIds: id
+      },
+    }
+  );
+  
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  if(!response.data.result.length){
+    throw new NotFoundError(["Post not found"]);
+  }
+  const customPost = response.data.result[0]?.item;
+  const { metadata } = customPost;
+  return { ...JSON.parse(metadata), id: customPost.id, entityId: customPost.entityId, content: customPost.content ?? "0" };
+};
+
+
+export const updateCustomPostByEntityId = async (metadata: {
+  domain: string,
+  clientId: string,
+  type: string,
+  clientSecret: string
+}, entityId: number, content: string) => {
+  
+  const response = await axiosSocialInstance.get(
+    "/biz/updateCustomPost", {
+      params: {
+        metadata: JSON.stringify({
+          ...metadata,
+          "CUSTOM_POST_TYPE": "DOMAIN_BUSINESS"
+        }),
+        entityId,
+        content
+      },
+    }
+  );
+  
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+  
 };

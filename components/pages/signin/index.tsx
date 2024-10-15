@@ -32,7 +32,7 @@ const SignInComponent = () => {
 
     try {
       setLoading(true);
-      await getUserToken(window.location.origin, code, redirect_uri);
+      await getUserToken(code, redirect_uri);
       setLoading(false);
       const lastPage = localStorage.getItem("CLASOR:LAST_PAGE") || null;
 
@@ -123,7 +123,7 @@ const SignInComponent = () => {
             <LoadingButton
               className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-purple-normal  text-white font-iranYekan"
               onClick={() => {
-                return login(window.location.origin);
+                return login();
               }}
             >
               ورود

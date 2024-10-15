@@ -43,15 +43,15 @@ export default class BasicError extends Error {
     public message: string,
     public errorList?: string[],
     public referenceNumber?: string,
-    public originalError?: any
+    public originalError?: { data?: { referenceNumber?: string } }
   ) {
-    super(errorCode in ERRORS ? ERRORS[errorCode].MSG : "");
+    super(errorCode in ERRORS ? ERRORS[errorCode]?.MSG : "");
     Error.captureStackTrace(this, this.constructor);
   }
 
   createResponseError() {
     return {
-      error: ERRORS[this.errorCode].MSG as string,
+      error: ERRORS[this.errorCode]?.MSG as string,
       message: this.errorList,
       referenceNumber: this.referenceNumber ? this.referenceNumber : "",
     };
@@ -59,7 +59,10 @@ export default class BasicError extends Error {
 }
 
 export class InputError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[400].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(400, defaultMessage, errorList, referenceNumber, originalError);
@@ -67,7 +70,10 @@ export class InputError extends BasicError {
 }
 
 export class AuthorizationError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[401].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(401, defaultMessage, errorList, referenceNumber, originalError);
@@ -75,7 +81,10 @@ export class AuthorizationError extends BasicError {
 }
 
 export class ForbiddenError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[403].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(403, defaultMessage, errorList, referenceNumber, originalError);
@@ -83,7 +92,10 @@ export class ForbiddenError extends BasicError {
 }
 
 export class NotFoundError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[404].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(404, defaultMessage, errorList, referenceNumber, originalError);
@@ -91,7 +103,10 @@ export class NotFoundError extends BasicError {
 }
 
 export class ServerError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[500].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(500, defaultMessage, errorList, referenceNumber, originalError);
@@ -99,7 +114,10 @@ export class ServerError extends BasicError {
 }
 
 export class DuplicateError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[409].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(409, defaultMessage, errorList, referenceNumber, originalError);
@@ -107,30 +125,45 @@ export class DuplicateError extends BasicError {
 }
 
 export class UnprocessableError extends BasicError {
-  constructor(errorList?: string[], originalError?: any) {
+  constructor(
+    errorList?: string[],
+    originalError?: { data?: { referenceNumber?: string } }
+  ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[422].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(422, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
-export const handleActionError = (error: IActionError) => {
-  const messages = [...(error.errorList ?? "")];
-  switch (error.errorCode) {
+export const handleActionError = (errorObject: IActionError) => {
+  const messages = [
+    ...(errorObject.errorList ?? "خطای ناشناخته ای رخ داده است"),
+  ];
+  switch (errorObject.errorCode) {
     case 401:
-      throw new AuthorizationError(messages);
+      throw new AuthorizationError(messages, errorObject.originalError);
     case 403:
-      throw new ForbiddenError(messages);
+      throw new ForbiddenError(messages, errorObject.originalError);
+    case 404:
+      throw new NotFoundError(messages, errorObject.originalError);
     case 400:
-      throw new InputError(messages);
+      throw new InputError(messages, errorObject.originalError);
     case 409:
-      throw new DuplicateError(messages);
+      throw new DuplicateError(messages, errorObject.originalError);
+    case 422:
+      throw new UnprocessableError(messages, errorObject.originalError);
     default:
-      throw new ServerError(messages);
+      throw new ServerError(messages, errorObject.originalError);
+  }
+};
+
+export const handleClientSideHookError = (errorObject: IActionError) => {
+  if (errorObject.error) {
+    return handleActionError(errorObject);
   }
 };
 
 export const handleRouteError = (error: IActionError) => {
-  const message = error.errorList?.[0] ?? "";
+  const message = error.errorList?.[0] ?? "خطای ناشناخته ای رخ داده است";
   return NextResponse.json({ message }, { status: error.errorCode ?? 500 });
 };

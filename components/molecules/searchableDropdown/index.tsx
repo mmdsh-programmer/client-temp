@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
-import { AddIcon, ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
-import InputAtom from "@components/atoms/input";
+import { AddIcon, SearchIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useRef, useState } from "react";
+
+import InputAtom from "@components/atoms/input";
 
 interface IProps {
   options?: { label: string; value: string | number }[];

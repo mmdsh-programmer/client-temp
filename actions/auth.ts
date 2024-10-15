@@ -1,5 +1,6 @@
 "use server";
 
+import { cookies, headers } from "next/dist/client/components/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   logout,
@@ -8,13 +9,11 @@ import {
 } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
-import { cookies } from "next/dist/client/components/headers";
 import { getCustomPostByDomain } from "@service/social";
 import { getPodAccessToken } from "@service/account";
+import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
-
-const { JWT_SECRET_KEY, SECURE, ACCOUNTS } = process.env;
 
 const refreshCookieHeader = async (rToken: string) => {
   const response = await renewToken(rToken);
@@ -27,10 +26,10 @@ const refreshCookieHeader = async (rToken: string) => {
     })
   );
 
-  const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
+  const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
   cookies().set("token", token, {
     httpOnly: true,
-    secure: SECURE === "true",
+    secure: process.env.SECURE === "true",
     path: "/",
     maxAge: 60 * 60 * 24,
     sameSite: "lax",
@@ -50,7 +49,7 @@ export const getMe = async () => {
     redirect("/signin");
   }
 
-  const payload = jwt.verify(encodedToken, JWT_SECRET_KEY as string) as string;
+  const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
   const tokenInfo = JSON.parse(decryptKey(payload)) as {
     access_token: string;
     refresh_token: string;
@@ -66,20 +65,30 @@ export const getMe = async () => {
     if ((error as IActionError)?.errorCode === 401) {
       return refreshCookieHeader(tokenInfo.refresh_token);
     }
-    throw error;
+    return handleActionError(error as IActionError);
   }
 };
 
-export const login = async (domain) => {
+export const login = async () => {
   // get domain and find proper custom post base on domain
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  
   const { clientId } = await getCustomPostByDomain(domain);
-  const url = (`${ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-    `${domain  }/signin`
+  const url = (`${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
+    `${process.env.SECURE === "true" ? "https" : "http"}://${domain}/signin`
   )}&scope=profile`).replace("http:", "https:");
   redirect(url);
 };
 
-export const getUserToken = async (domain: string, code: string, redirectUrl: string) => {
+export const getUserToken = async (code: string, redirectUrl: string) => {
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    
   const { clientId, clientSecret } = await getCustomPostByDomain(domain);
   const { access_token, refresh_token } = await getPodAccessToken(code, redirectUrl, clientId, clientSecret);
 
@@ -90,10 +99,10 @@ export const getUserToken = async (domain: string, code: string, redirectUrl: st
     }),
   );
 
-  const token = jwt.sign(encryptedData, JWT_SECRET_KEY as string);
+  const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
   cookies().set("token", token, {
     httpOnly: true,
-    secure: SECURE === "true",
+    secure: process.env.SECURE === "true",
     path: "/",
     maxAge: 60 * 60 * 24,
     sameSite: "lax",

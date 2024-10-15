@@ -1,8 +1,8 @@
+import Shepherd, { StepOptions } from "shepherd.js";
 
 import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import Shepherd from "shepherd.js";
 
 const RepoTour = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -233,7 +233,7 @@ const RepoTour = () => {
       ),
     ];
 
-    tourSteps.forEach((step) => { return repoTour.addStep(step as any); });
+    tourSteps.forEach((step) => { return repoTour.addStep(step as StepOptions ); });
 
     repoTour.start();
     return () => {

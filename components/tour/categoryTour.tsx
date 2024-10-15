@@ -1,7 +1,8 @@
+import Shepherd, { StepOptions } from "shepherd.js";
+
 import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import Shepherd from "shepherd.js";
 
 const CategoryTour = () => {
     const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -187,7 +188,7 @@ const CategoryTour = () => {
     ];
 
     categoryTourSteps?.forEach((step) => {
-      return categoryTour.addStep(step as any);
+      return categoryTour.addStep(step as StepOptions);
     });
 
     categoryTour.start();

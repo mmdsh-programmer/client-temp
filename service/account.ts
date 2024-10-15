@@ -65,38 +65,3 @@ export const getPodAccessToken = async (
     throw error;
   }
 };
-
-// export const getPodUserInfo = async (res: Response, token: string): Promise<any> => {
-//     try {
-//       const ssoStartTime = Date.now();
-//       // check cache
-//       const cacheUser = await getKey(`user-${token}`);
-//       if (cacheUser) {
-//         return JSON.parse(cacheUser);
-//       }
-//       const result = await axios.get<PlatformGetUserResponse>(
-//         `${CORE_ADDRESS}/getUserProfile`,
-//         {
-//           headers: {
-//             _token_: token,
-//             _token_issuer_: 1,
-//             "X-Request-Cls-Ref": res.clasorReferenceNumber
-//           },
-//         }
-//       );
-//       if (result.data.hasError) {
-//         throw result;
-//       }
-
-//       await setKey(`user-${token}`, JSON.stringify(result.data.result), 14 * 60);
-
-//       res.clasorSsoTime += Date.now() - ssoStartTime;
-//       return result.data.result;
-//     } catch (e) {
-//       res.errorPoint = EErrorPoints.sso;
-//       if (e.data?.errorCode === 21) {
-//         throw { code: 401, type: NOT_AUTHORIZED, message: "authRefreshTokenIsInvalid", originalMessage: e };
-//       }
-//       else throw { code: 500, type: THIRD_PARTY_DOWN, message: "thirdPartyDown", originalMessage: e };
-//     }
-//   };

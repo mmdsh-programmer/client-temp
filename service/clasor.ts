@@ -4,6 +4,7 @@ import {
   InputError,
   NotFoundError,
   ServerError,
+  UnprocessableError,
 } from "@utils/error";
 import {
   IAccessRequest,
@@ -46,8 +47,8 @@ import {
   IReport,
 } from "@interface/repo.interface";
 import { IRoles, IUser } from "@interface/users.interface";
-import Logger from "@utils/logger";
 import axios, { AxiosError, isAxiosError } from "axios";
+
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
@@ -55,7 +56,7 @@ import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
-
+import Logger from "@utils/logger";
 import qs from "qs";
 
 const { CLASOR } = process.env;
@@ -105,8 +106,10 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
         throw new ForbiddenError(message, error);
       case 404:
         throw new NotFoundError(message, error);
+      case 422:
+        throw new UnprocessableError(message, error);
       default:
-        throw new ServerError(message, error);
+        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
@@ -178,8 +181,8 @@ export const logout = async (access_token: string, refresh_token: string) => {
   }
 };
 
-////////////////////////// INFO /////////////////////////
-export const getMyInfo = async (access_token: string) => {
+/// /////////////////////// INFO /////////////////////////
+export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>(
       "myInfo",
@@ -187,6 +190,9 @@ export const getMyInfo = async (access_token: string) => {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
+        params: {
+          repoTypes
+        }
       }
     );
 
@@ -219,7 +225,9 @@ export const getAllRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string,
+  
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -232,6 +240,7 @@ export const getAllRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes
       },
     });
 
@@ -340,7 +349,8 @@ export const getMyRepositories = async (
   offset: number,
   size: number,
   archived: boolean,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -354,6 +364,7 @@ export const getMyRepositories = async (
         size,
         archived,
         title: name,
+        repoTypes
       },
     });
 
@@ -387,7 +398,8 @@ export const getAccessRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -400,6 +412,7 @@ export const getAccessRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes
       },
     });
 
@@ -413,7 +426,8 @@ export const getBookmarkRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -426,6 +440,7 @@ export const getBookmarkRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes
       },
     });
 
@@ -526,7 +541,8 @@ export const restoreRepository = async (
 export const createRepo = async (
   accessToken: string,
   name: string,
-  description?: string
+  description?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -534,6 +550,7 @@ export const createRepo = async (
       {
         name,
         description,
+        repoTypes
       },
       {
         headers: {
@@ -1781,7 +1798,7 @@ export const documentEnableUserGroupHash = async (
   }
 };
 
-///////////////////// VERSION //////////////////
+/// ////////////////// VERSION //////////////////
 export const getVersion = async (
   accessToken: string,
   repoId: number,
@@ -2520,7 +2537,7 @@ export const getAdminPanelFeedback = async (
   }
 };
 
-////////////////////////////////// CORE //////////////////////
+/// /////////////////////////////// CORE //////////////////////
 export const getCommentList = async (
   access_token: string,
   postId: number,

@@ -1,15 +1,16 @@
 import React, { useState } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
+
 import DocumentTagList from "@components/organisms/document/documentTagList";
+import LoadingButton from "@components/molecules/loadingButton";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
-import { Spinner, Typography } from "@material-tailwind/react";
+import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import useGetTags from "@hooks/tag/useGetTags";
-import LoadingButton from "@components/molecules/loadingButton";
-import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 
 const EditorTags = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -73,8 +74,8 @@ const EditorTags = () => {
               background="bg-gray-50"
               handleChange={(val) => {
                 setTagName(val.value);
-                return setTempDocTag((oldValue: any) => {
-                  return [...oldValue, val];
+                return setTempDocTag((oldValue: number[]) => {
+                  return [...oldValue, val.value as number];
                 });
               }}
               setOpen={setOpenCreateTagDialog}
