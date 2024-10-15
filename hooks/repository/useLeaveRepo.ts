@@ -1,4 +1,4 @@
-import { deleteRepoAction } from "@actions/repository";
+import { leaveRepoAction } from "@actions/repository";
 import {
  useMutation, useQueryClient 
 } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ const useLeaveRepo = () => {
     mutationKey: ["leaveRepo"],
     mutationFn: async (values: { repoId: number; callBack?: () => void }) => {
       const { repoId } = values;
-      const response = await deleteRepoAction(repoId);
+      const response = await leaveRepoAction(repoId);
       return response;
     },
     onSuccess: (response, values) => {

@@ -21,13 +21,13 @@ const CheckPanelUrlData = () => {
   const versionId = searchParams.get("versionId");
   const versionState = searchParams.get("versionState");
 
-  const { data: getCategory, isLoading: isLoadingCategory } = useGetCategory(
+  const { data: getCategory } = useGetCategory(
     +repoId!,
     +categoryId!,
     !!categoryId
   );
 
-  const { data: getDocument, isLoading: isLoadingDocument } = useGetDocument(
+  const { data: getDocument } = useGetDocument(
     +repoId!,
     +documentId!,
     !!documentId
@@ -45,13 +45,13 @@ const CheckPanelUrlData = () => {
       setCategory(getCategory);
       setCategoryShow(getCategory);
       setDocument(getDocument);
-      setDocumentShow(getDocument)
+      setDocumentShow(getDocument);
       setShowVersionList(true);
     } else if (categoryId && documentId && getCategory && getDocument) {
       setCategory(getCategory);
       setCategoryShow(getCategory);
       setDocument(getDocument);
-      setDocumentShow(getDocument)
+      setDocumentShow(getDocument);
       setShowVersionList(true);
     } else if (categoryId && getCategory) {
       setCategory(getCategory);

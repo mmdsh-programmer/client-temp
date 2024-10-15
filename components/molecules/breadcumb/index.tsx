@@ -14,7 +14,6 @@ const Breadcrumb: React.FC = () => {
   const setShowVersionList = useSetRecoilState(versionListAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
 
-
   const router = useRouter();
 
   const breadcrumbList = () => {
@@ -24,9 +23,8 @@ const Breadcrumb: React.FC = () => {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name, getDocument.name];
     } else if (getRepo) {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name];
-    } else {
-      return [...baseBreadcrumb, getRepoGroup];
     }
+    return [...baseBreadcrumb, getRepoGroup];
   };
 
   const renderBreadcrumbItems = () => {

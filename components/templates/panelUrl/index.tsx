@@ -2,7 +2,7 @@
 
 import { categoryShowAtom } from "atom/category";
 import { repoAtom } from "atom/repository";
-import { documentShowAtom, selectedDocumentAtom } from "atom/document";
+import { documentShowAtom } from "atom/document";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 

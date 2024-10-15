@@ -32,11 +32,12 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     { username: string; picture: string | number | undefined }[]
   >([]);
 
-  const { data: getUsers } = useGetRepoUsers(getRepo!.id, 2, true);
+  const { data: getUsers } = useGetRepoUsers(getRepo!.id, 20, true);
   const { isPending, mutate } = useCreateGroup();
   const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
 
-  const { register, handleSubmit, formState, reset, clearErrors } = form;
+  const { register, handleSubmit, formState, reset, clearErrors, setValue } =
+    form;
   const { errors } = formState;
 
   const filteredUsers = getUsers?.pages
@@ -82,7 +83,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     if (!getRepo) return;
     if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
     mutate({
-      repoId: getRepo!.id,
+      repoId: getRepo.id,
       title: dataForm.title,
       description: dataForm.description,
       members: updatedUsers.map((user) => {
@@ -145,9 +146,18 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                     },
                   ];
                 });
+                setValue(
+                  "members",
+                  updatedUsers.map((user) => user.username)
+                );
               }
             }}
           />
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           {updatedUsers.map((item) => {

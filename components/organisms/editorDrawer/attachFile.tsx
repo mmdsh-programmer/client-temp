@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
+// import { selectedDocumentAtom } from "@atom/document";
 import useGetFiles from "@hooks/files/useGetFiles";
 import { repoAtom } from "@atom/repository";
 import { categoryShowAtom } from "@atom/category";
@@ -19,10 +19,10 @@ const fileTablePageSize = 20;
 const AttachFile = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getCategory = useRecoilValue(categoryShowAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const [processCount, setProcessCount] = useState(0);
+  // const getDocument = useRecoilValue(selectedDocumentAtom);
+  // const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  // const [isError, setIsError] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -66,7 +66,7 @@ const AttachFile = () => {
   const onSuccess = () => {
     toast.success("آپلود موفق");
     setIsLoading(false);
-    setIsError(false);
+    // setIsError(false);
     refetch();
   };
 
@@ -76,7 +76,7 @@ const AttachFile = () => {
       return;
     }
 
-    setProcessCount(0);
+    // setProcessCount(0);
     refetchUser();
     const token = userInfo?.access_token;
     if (!isFetchingUserInfo && token) {
@@ -100,7 +100,7 @@ const AttachFile = () => {
               const process = Math.round(
                 (progressEvent.loaded * 100) / progressEvent.total
               );
-              setProcessCount(process);
+              // setProcessCount(process);
             },
           }
         )
@@ -117,7 +117,7 @@ const AttachFile = () => {
         })
         .catch(() => {
           toast.error("خطا در بارگذاری فایل");
-          setIsError(true);
+          // setIsError(true);
           setIsLoading(false);
         });
     }

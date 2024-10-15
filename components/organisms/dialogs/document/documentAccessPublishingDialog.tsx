@@ -41,8 +41,6 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
     ? userList.blackList
     : userList?.whiteList;
 
-    console.log("================= use list -------------------", userList)
-
   const handleClose = () => {
     setOpen(false);
   };

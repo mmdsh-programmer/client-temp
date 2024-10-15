@@ -30,9 +30,6 @@ const DocumentWhiteList = ({
   const [selectedUser] = useState<IWhiteListItem | null>(null);
   const whiteListHook = useAddWhiteList();
 
-  console.log("================= white list -------------------", whiteList)
-
-
   const handleSpaceClick = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (
       event.code === "Space" ||

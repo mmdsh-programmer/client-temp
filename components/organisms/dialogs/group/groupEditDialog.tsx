@@ -33,7 +33,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   const group = useRecoilValue(selectedGroupAtom);
 
   const [updatedUsers, setUpdatedUsers] = useState<
-    { username: string; picture: string | number | undefined }[] | undefined
+    { username: string; picture: string | number | undefined }[]
   >([]);
 
   const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 20, true);
@@ -44,7 +44,8 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   const { isPending, mutate } = useEditGroup();
 
   const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
-  const { reset, clearErrors, handleSubmit, register, formState } = form;
+  const { reset, clearErrors, handleSubmit, register, formState, setValue } =
+    form;
   const { errors } = formState;
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       };
     });
 
-    setUpdatedUsers(updatedUserList);
+    setUpdatedUsers(updatedUserList || []);
   }, [getUsers, groupInfo]);
 
   const filteredUsers = getUsers?.pages
@@ -76,9 +77,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
         });
       });
     })[0]
-    .filter((user) => {
-      return user.userRole !== "owner";
-    })
+    .filter((user) => user.userRole !== "owner")
     .map((item) => {
       return {
         label: item.userInfo.userName,
@@ -99,14 +98,16 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
-    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
+    if (!updatedUsers.length) {
+      return toast.error("لیست اعضای گروه نباید خالی باشد.");
+    }
+
     mutate({
       repoId: getRepo!.id,
       title: dataForm.title,
       description: dataForm.description,
-      members: updatedUsers?.map((user) => {
-        return user.username;
-      }),
+      // Send only usernames for members
+      members: updatedUsers.map((user) => user.username),
       callBack: () => {
         toast.success("گروه با موفقیت ویرایش شد.");
         handleClose();
@@ -116,12 +117,14 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
   const handleDelete = (username: string) => {
     setUpdatedUsers((oldValue) => {
-      if (!oldValue?.length) {
+      if (!oldValue.length) {
         return [];
       }
-      const newUsers = oldValue.filter((user) => {
-        return user.username !== username;
-      });
+
+      // Remove user and update form members field
+      const newUsers = oldValue.filter((user) => user.username !== username);
+      setValue("members", newUsers.map((user) => user.username));
+
       return [...newUsers];
     });
   };
@@ -169,20 +172,27 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
             handleSelect={(val) => {
               if (val) {
                 setUpdatedUsers((oldValue) => {
-                  if (!oldValue) {
-                    return [];
-                  }
-                  return [
+                  const newUsers = [
                     ...oldValue,
                     {
                       username: val.label,
                       picture: val.value || undefined,
                     },
                   ];
+
+                  // Update form members field
+                  setValue("members", newUsers.map((user) => user.username));
+
+                  return newUsers;
                 });
               }
             }}
           />
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           {isLoading || isFetching ? (
@@ -226,3 +236,4 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 };
 
 export default GroupEditDialog;
+
