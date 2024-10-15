@@ -62,7 +62,7 @@ const mockDocItem: IDocumentTreeItem = {
   isPublish: false,
   publishLinkPassword: null,
   publishExpireTime: null,
-  userGroupHash: "",
+  userGroupHash: null
 };
 
 export const Default: Story = {render: () => 

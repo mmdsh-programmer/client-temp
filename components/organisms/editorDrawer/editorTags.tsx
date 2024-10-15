@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
