@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 const useRejectJoinToRepoRequest = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`reject-join-to-repo-request`],
+    mutationKey: ["reject-join-to-repo-request"],
     mutationFn: async (values: {
       requestId: number;
       callBack?: () => void;
@@ -17,7 +17,7 @@ const useRejectJoinToRepoRequest = () => {
     onSuccess: (response, values) => {
       const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`userJoinRepoRequests`],
+        queryKey: ["userJoinRepoRequests"],
       });
       callBack?.();
     },

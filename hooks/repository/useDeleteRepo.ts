@@ -1,6 +1,6 @@
 import { deleteRepoAction } from "@actions/repository";
 import {
- useMutation, useQueryClient 
+  useMutation, useQueryClient
 } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -18,6 +18,9 @@ const useDeleteRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
+      });
       callBack?.();
     },
     onError: (error) => {

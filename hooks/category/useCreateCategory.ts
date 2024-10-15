@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const useCreateCategory = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ["createCategory"],
     mutationFn: async (values: {
@@ -26,13 +27,21 @@ const useCreateCategory = () => {
       return response as ICategory;
     },
     onSuccess: (response, values) => {
-      const { callBack } = values;
-      console.log("--------------- response ----------------", response);
+
+      const { callBack, parentId } = values;
+      const queryKey = [`category-${parentId || "parent"}-children`]
       queryClient.invalidateQueries({
-        queryKey: [`category-${response.parentId || "parent"}-children`],
+        queryKey,
       });
       callBack?.();
     },
+    // onSettled(data, error, variables, context) {
+    //   const { callBack, parentId } = variables;
+    //   queryClient.invalidateQueries({
+    //     queryKey: [`category-${parentId || "parent"}-children`],
+    //   });
+    //   callBack?.();
+    // },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },

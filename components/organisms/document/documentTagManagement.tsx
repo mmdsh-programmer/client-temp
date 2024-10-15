@@ -1,0 +1,67 @@
+import React from "react";
+import { tempDocTagAtom } from "@atom/document";
+import { repoAtom } from "@atom/repository";
+import { useRecoilState, useRecoilValue } from "recoil";
+import useGetTags from "@hooks/tag/useGetTags";
+import { Spinner } from "@material-tailwind/react";
+import SearchableDropdown from "../../molecules/searchableDropdown";
+import DocumentTagList from "@components/organisms/document/documentTagList";
+
+interface IProps {
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  setTagName: React.Dispatch<React.SetStateAction<string | number>>;
+}
+
+const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+  const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
+
+  const adminRole =
+    getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
+
+  const repoId = getRepo!.id;
+  const { data: getTags, isLoading } = useGetTags(repoId, 30, true);
+
+  const updatedAvailableTags = getTags?.pages[0].list
+    .filter((repoTag) => {
+      return getTempDocTag.every((tag) => {
+        return tag !== +repoTag.id;
+      });
+    })
+    .map((tag) => {
+      return {
+        label: tag.name,
+        value: tag.id,
+      };
+    });
+
+  const documentTags = getTags?.pages[0].list.filter((repoTag) => {
+    return getTempDocTag.includes(+repoTag.id);
+  });
+
+  const handleTagSelect = (val: { label: string; value: string | number }) => {
+    setTagName(val.value);
+    setTempDocTag((oldValue) => {
+      return [...oldValue, +val.value];
+    });
+  };
+
+  return isLoading ? (
+    <Spinner className="h-5 w-5" color="deep-purple" />
+  ) : (
+    <div className="flex flex-col gap-2">
+      {adminRole && (
+        <SearchableDropdown
+          options={updatedAvailableTags}
+          handleSelect={handleTagSelect}
+          handleChange={setTagName}
+          setOpen={setOpen}
+         createIcon
+        />
+      )}
+      <DocumentTagList tagList={documentTags} />
+    </div>
+  );
+};
+
+export default DocumentTagManagement;

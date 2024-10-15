@@ -18,6 +18,9 @@ const useLeaveRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
+      });
       callBack?.();
     },
     onError: (error) => {

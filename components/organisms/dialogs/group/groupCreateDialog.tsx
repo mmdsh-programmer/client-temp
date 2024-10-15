@@ -1,13 +1,6 @@
-import {
- Button,
- Typography
-} from "@material-tailwind/react";
 import React, { useState } from "react";
-import {
- UserIcon,
- XIcon
-} from "@components/atoms/icons";
-
+import { Button, Typography } from "@material-tailwind/react";
+import { UserIcon, XIcon } from "@components/atoms/icons";
 import ChipMolecule from "@components/molecules/chip";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -36,18 +29,14 @@ interface IProps {
 const GroupCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const [updatedUsers, setUpdatedUsers] = useState<
-    { username: string; picture: string }[]
+    { username: string; picture: string | number | undefined }[]
   >([]);
 
   const { data: getUsers } = useGetRepoUsers(getRepo!.id, 2, true);
-  const {
- isPending, mutate 
-} = useCreateGroup();
+  const { isPending, mutate } = useCreateGroup();
   const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
 
-  const {
- register, handleSubmit, formState, reset, clearErrors 
-} = form;
+  const { register, handleSubmit, formState, reset, clearErrors } = form;
   const { errors } = formState;
 
   const filteredUsers = getUsers?.pages
@@ -145,14 +134,14 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           <SearchableDropdown
             background="gray-50"
             options={filteredUsers}
-            handleChange={(val) => {
+            handleSelect={(val) => {
               if (val) {
                 setUpdatedUsers((oldValue) => {
                   return [
                     ...oldValue,
                     {
                       username: val.label,
-                      picture: `${val.value}`,
+                      picture: val.value || undefined,
                     },
                   ];
                 });
@@ -168,11 +157,11 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                 value={`${item.username}`}
                 className="w-auto border-[1px] border-normal pl-2 text-primary"
                 icon={
-                  item.picture ? (
+                  item?.picture ? (
                     <ImageComponent
                       className="w-full h-full rounded-full overflow-hidden"
-                      src={item.picture}
-                      alt={item.picture}
+                      src={item.picture.toString()}
+                      alt={item.picture.toString()}
                     />
                   ) : (
                     <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />

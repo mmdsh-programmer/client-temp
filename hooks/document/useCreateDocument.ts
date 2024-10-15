@@ -48,7 +48,7 @@ const useCreateDocument = () => {
     onSuccess: (response, values) => {
       const { successCallBack, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`, undefined],
+        queryKey: [`category-${categoryId || "parent"}-children`],
       });
       successCallBack?.(response);
     },

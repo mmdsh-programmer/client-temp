@@ -24,7 +24,7 @@ const useDeleteCategory = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: [`category-${parentId || "parent"}-children`],
       });
       callBack?.();

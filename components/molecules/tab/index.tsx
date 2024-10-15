@@ -38,7 +38,7 @@ const TabComponent = ({ tabList, activeTab, setActiveTab }: IProps) => {
           );
         })}
       </TabsHeader>
-      <TabsBody placeholder="tab-body" className="h-[calc(100%-50px)]">
+      <TabsBody placeholder="tab-body" className="h-[calc(100%-40px)]">
         {tabList.map((tab) => {
           return (
             <TabPanel

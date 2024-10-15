@@ -4,7 +4,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetUserJoinRepoRequests = (size: number) => {
   return useInfiniteQuery({
-    queryKey: [`userJoinRepoRequests`],
+    queryKey: ["userJoinRepoRequests"],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getUserToRepoRequestsAction(
         (pageParam - 1) * size,

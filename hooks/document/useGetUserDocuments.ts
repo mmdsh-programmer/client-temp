@@ -10,8 +10,8 @@ const useGetUserDocuments = (
   repoId: number,
   sortParams: ISortProps,
   size: number,
-  filters?: IReportFilter | null,
-  enabled?: boolean,
+  filters: IReportFilter | null,
+  enabled: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`repo-${repoId}-children-user-document-${JSON.stringify(filters)}`],

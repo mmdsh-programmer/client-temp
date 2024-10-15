@@ -52,7 +52,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     : selectedVersion?.content;
 
   return (
-    <div className="flex h-full relative">
+    <div className="flex h-full relative bg-primary">
       {listDrawer ? <div className="w-full xs:w-[300px]"><EditorDrawer version={version} /></div> : null}
      <div className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"}`}>
       <RemoteEditor
@@ -67,7 +67,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
                 auth: {
                   accessToken: userInfo?.access_token,
                   refreshToken: userInfo?.refresh_token,
-                  url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
+                  url: `${process.env.NEXT_PUBLIC_CLASOR}auth/renewToken`,
                 },
                 publicUserGroupHash: getRepo?.userGroupHash || undefined,
                 privateUserGroupHash:

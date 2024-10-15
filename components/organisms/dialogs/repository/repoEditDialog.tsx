@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import EditDialog from "@components/templates/dialog/editDialog";
-import Files from "./repoCreateDialogStepper/files";
+import Files from "../../fileManagement";
 import FormInput from "@components/atoms/input/formInput";
 import { IRepo } from "@interface/repo.interface";
 import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";

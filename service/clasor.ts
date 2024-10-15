@@ -94,6 +94,7 @@ axiosClasorInstance.interceptors.response.use((response) => {
 });
 
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
+  console.log("----------------- error ------------------", error.response)
   if (isAxiosError(error)) {
     const message = [error.response?.data?.messages?.[0] || error.message];
     switch (error.response?.status) {
@@ -1099,6 +1100,29 @@ export const getChildren = async (
   }
 };
 
+export const getCategory = async (
+  accessToken: string,
+  repoId: number,
+  categoryId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<ICategoryMetadata>
+    >(
+      `repositories/${repoId}/categories/${categoryId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const createCategory = async (
   accessToken: string,
   repoId: number,
@@ -1677,6 +1701,7 @@ export const addToDocumentWhiteList = async (
   documentId: number,
   usernameList: string[]
 ) => {
+  console.log("---------------------- white list -------------", usernameList)
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/whitelist`,

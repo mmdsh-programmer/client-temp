@@ -31,11 +31,7 @@ const RepoList = () => {
         header="مخزن‌ها"
         buttonText="ایجاد مخزن جدید"
         renderList={() => {
-          return (
-            <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
-              <ListMode />
-            </RenderIf>
-          );
+          return <ListMode />;
         }}
         renderDialog={(close: () => void) => {
           return <RepoCreateDialogStepper close={close} />;

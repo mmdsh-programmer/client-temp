@@ -11,14 +11,17 @@ import LoadMore from "@components/molecules/loadMore";
 import { useRecoilValue } from "recoil";
 import { repoSearchParamAtom } from "@atom/repository";
 import RepoSearch from "../../molecules/repoSearch";
-import { ERepoGrouping } from "@interface/enums";
+import { EListMode, ERepoGrouping } from "@interface/enums";
 import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
 import MobileView from "../repoView/mobileView";
+import { listModeAtom } from "@atom/app";
+import CardView from "../repoView/cardView";
 
 const AllRepoList = () => {
+  const mode = useRecoilValue(listModeAtom);
   const getSearchParam = useRecoilValue(repoSearchParamAtom);
   const repoType = getSearchParam?.repoType;
   const search = getSearchParam?.search;
@@ -128,41 +131,55 @@ const AllRepoList = () => {
                   <Spinner className="h-8 w-8" color="deep-purple" />
                 </div>
               ) : listLength ? (
-                <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-                  <table className="w-full overflow-hidden min-w-max">
-                    <TableHead
-                      tableHead={[
-                        { key: "name", value: "نام مخزن", isSorted: true },
-                        {
-                          key: "createDate",
-                          value: "تاریخ ایجاد",
-                          isSorted: true,
-                        },
-                        { key: "role", value: "نقش من" },
-                        { key: "status", value: "وضعیت" },
-                        {
-                          key: "action",
-                          value: "عملیات",
-                          className: "justify-end",
-                        },
-                      ]}
+                <>
+                  <RenderIf isTrue={mode === EListMode.table}>
+                    <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+                      <table className="w-full overflow-hidden min-w-max">
+                        <TableHead
+                          tableHead={[
+                            { key: "name", value: "نام مخزن", isSorted: true },
+                            {
+                              key: "createDate",
+                              value: "تاریخ ایجاد",
+                              isSorted: true,
+                            },
+                            { key: "role", value: "نقش من" },
+                            { key: "status", value: "وضعیت" },
+                            {
+                              key: "action",
+                              value: "عملیات",
+                              className: "justify-end",
+                            },
+                          ]}
+                        />
+                        <tbody>
+                          {renderTableRows()}
+                          <RenderIf isTrue={hasNextPage}>
+                            <tr>
+                              <td colSpan={5} className="!text-center">
+                                <LoadMore
+                                  className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                                  isFetchingNextPage={isFetchingNextPage}
+                                  fetchNextPage={fetchNextPage}
+                                />
+                              </td>
+                            </tr>
+                          </RenderIf>
+                        </tbody>
+                      </table>
+                    </div>
+                  </RenderIf>
+                  <RenderIf isTrue={mode === EListMode.card}>
+                    <CardView
+                      isLoading={isLoadingAllRepos || isLoading}
+                      getRepoList={repoList}
+                      hasNextPage={hasNextPage}
+                      fetchNextPage={fetchNextPage}
+                      isFetchingNextPage={isFetchingNextPage}
+                      type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
                     />
-                    <tbody>
-                      {renderTableRows()}
-                      <RenderIf isTrue={hasNextPage}>
-                        <tr>
-                          <td colSpan={5} className="!text-center">
-                            <LoadMore
-                              className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                              isFetchingNextPage={isFetchingNextPage}
-                              fetchNextPage={fetchNextPage}
-                            />
-                          </td>
-                        </tr>
-                      </RenderIf>
-                    </tbody>
-                  </table>
-                </div>
+                  </RenderIf>
+                </>
               ) : (
                 <EmptyList type={EEmptyList.FILTER} />
               )}

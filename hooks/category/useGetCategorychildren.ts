@@ -18,13 +18,14 @@ const useGetCategoryChildren = (
   forMove?: boolean,
   enabled = true
 ) => {
+  const queryKey = [
+    `category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
+      filters ? `-filters=${JSON.stringify(filters)}` : ""
+    }`,
+    title,
+  ];
   return useInfiniteQuery({
-    queryKey: [
-      `category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
-        filters ? `-filters=${JSON.stringify(filters)}` : ""
-      }`,
-      title,
-    ],
+    queryKey,
     queryFn: async ({ signal, pageParam }) => {
       const response = await getChildrenAction(
         repoId,
@@ -40,7 +41,7 @@ const useGetCategoryChildren = (
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,
-    retry: false,
+    retry: true,
     refetchOnWindowFocus: false,
     enabled: !!enabled,
     getNextPageParam: (lastPage, pages) => {

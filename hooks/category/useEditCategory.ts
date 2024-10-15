@@ -49,6 +49,10 @@ const useEditCategory = () => {
         queryKey: [`category-${parentId || "parent"}-children`],
       });
 
+      queryClient.invalidateQueries({
+        queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
+      });
+
       callBack?.();
     },
     onError: (error) => {

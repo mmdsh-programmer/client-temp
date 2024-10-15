@@ -42,11 +42,11 @@ const CommentCreate = ({ version }: IProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="absolute md:relative !w-[300px] left-0 bg-white shadow-lg md:shadow-none z-[9999] h-full"
+      className="gap-2 justify-center items-center rounded-lg !w-[300px] left-0 bg-white shadow-lg md:shadow-none z-[9999]"
     >
       <div className="flex flex-col h-full">
-        <div className="border-b-[1px] border-normal" />
-        <div className="px-4 py-3 flex flex-grow flex-col justify-end">
+        <div className="px-4 py-3 flex flex-grow flex-col gap-4 justify-end">
+          <div className="border-b-[1px] border-normal" />
           <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
             <InputAtom
               id="username"

@@ -1,5 +1,5 @@
 import { bookmarkRepoAction } from "@actions/repository";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
 const useBookmarkRepo = () => {
@@ -11,17 +11,20 @@ const useBookmarkRepo = () => {
       detach?: boolean;
       callBack?: () => void;
     }) => {
-      const {detach, repoId} = values;
+      const { detach, repoId } = values;
       const response = await bookmarkRepoAction(repoId, detach);
       return response;
     },
     onSuccess: (response, values) => {
-      const {callBack, repoId} = values;
-      queryClient.invalidateQueries({queryKey: [`getRepo-${repoId}`],});
-      queryClient.invalidateQueries({queryKey: ["allRepoList"],});
-      queryClient.invalidateQueries({queryKey: ["bookmarkRepoList"],});
-      queryClient.invalidateQueries({queryKey: ["myRepoList-false"],});
-      queryClient.invalidateQueries({queryKey: ["accessRepoList"],});
+      const { callBack, repoId } = values;
+      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`], });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"], });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"], });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"], });
+      queryClient.invalidateQueries({ queryKey: ["accessRepoList"], });
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
+      });
       callBack?.();
     },
     onError: (error) => {

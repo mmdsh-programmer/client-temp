@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Files from "./files";
+import Files from "../../../fileManagement";
 import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
 import RepoCreate from "./repoCreate";
 import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";

@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { editorModeAtom } from "@atom/editor";
 
 interface IProps {
@@ -22,11 +22,13 @@ const DocumentTableRow = ({ document }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCat = useRecoilValue(categoryAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const setDocumentShow = useSetRecoilState(documentShowAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const handleRowClick = () => {
     if (document.contentType === "file") {
       setDocument(document);
+      setDocumentShow(document);
       setEditorMode("preview");
       return;
     }

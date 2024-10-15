@@ -1,13 +1,15 @@
 import React, { useRef, useState } from "react";
-import { AddIcon, SearchIcon } from "@components/atoms/icons";
+import { AddIcon, ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
 import InputAtom from "@components/atoms/input";
 import { Button, Typography } from "@material-tailwind/react";
 
 interface IProps {
   options?: { label: string; value: string | number }[];
-  handleChange: (event: { label: string; value: string | number }) => void;
+  handleChange?: (event: string) => void;
   background?: string;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSelect: (event: { label: string; value: string | number }) => void;
+  createIcon?: boolean;
 }
 
 const SearchableDropdown = ({
@@ -15,6 +17,8 @@ const SearchableDropdown = ({
   handleChange,
   background,
   setOpen,
+  handleSelect,
+  createIcon,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -29,8 +33,8 @@ const SearchableDropdown = ({
     setIsOpen(!isOpen);
   };
 
-  const handleSelect = (option) => {
-    handleChange(option.value);
+  const handleSelectOption = (option) => {
+    handleSelect(option);
     toggleDropdown();
     setInputVal(option.label);
   };
@@ -46,7 +50,7 @@ const SearchableDropdown = ({
                   className="cursor-pointer select-none relative p-[6px]"
                   key={option.label}
                   onClick={() => {
-                    return handleSelect(option);
+                    return handleSelectOption(option);
                   }}
                 >
                   <Typography className="select_option__text truncate text-right text-primary ">
@@ -73,7 +77,7 @@ const SearchableDropdown = ({
                 className="cursor-pointer select-none relative p-[6px]"
                 key={option.label}
                 onClick={() => {
-                  return handleSelect(option);
+                  return handleSelectOption(option);
                 }}
               >
                 <Typography className="select_option__text truncate text-right text-primary ">
@@ -116,6 +120,7 @@ const SearchableDropdown = ({
             if (inputVal !== "") {
               setIsOpen(true);
             }
+            handleChange?.(e.target.value);
           }}
           onClick={toggleDropdown}
           value={inputVal}
@@ -123,19 +128,22 @@ const SearchableDropdown = ({
           type="text"
           placeholder="جست و جو کنید ..."
         />
-        {/* <ChevronLeftIcon
-          className={`w-2 h-2 stroke-icon-hover transform transition-transform ${
-            isOpen ? "rotate-90" : "-rotate-90"
-          }`}
-        /> */}
-        <Button
-        className="p-0 bg-transparent"
-          onClick={() => {
-            setOpen?.(true);
-          }}
-        >
-          <AddIcon className="w-4 h-4 stroke-icon-hover" />
-        </Button>
+        {createIcon ? (
+          <Button
+            className="p-0 bg-transparent"
+            onClick={() => {
+              setOpen?.(true);
+            }}
+          >
+            <AddIcon className="w-4 h-4 stroke-icon-hover" />
+          </Button>
+        ) : (
+          <ChevronLeftIcon
+            className={`w-2 h-2 stroke-icon-hover transform transition-transform ${
+              isOpen ? "rotate-90" : "-rotate-90"
+            }`}
+          />
+        )}
       </div>
       {isOpen && (
         <div className="absolute z-[99999] text-right overflow-auto focus:outline-none  shadow-menu mt-2 min-w-max w-full p-1 rounded-md bg-white ring-1 ring-black ring-opacity-5">

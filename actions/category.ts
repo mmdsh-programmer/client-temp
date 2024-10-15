@@ -5,6 +5,7 @@ import {
   createCategory,
   deleteCategory,
   editCategory,
+  getCategory,
   getCategoryBlocklist,
   getChildren,
 } from "@service/clasor";
@@ -34,6 +35,21 @@ export const getChildrenAction = async (
     title,
     type,
     filters
+  );
+
+  return response;
+};
+
+export const getCategoryAction = async (
+  repoId: number,
+  categoryId: number,
+) => {
+  const userInfo = await getMe();
+
+  const response = await getCategory(
+    userInfo.access_token,
+    repoId,
+    categoryId,
   );
 
   return response;

@@ -20,6 +20,12 @@ const useMoveBulk = () => {
     onSuccess: (response, values) => {
       const { callBack, currentParentId, destCategory } = values;
       queryClient.invalidateQueries({
+        queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`category-${destCategory || "parent"}-children-for-move`],
+      });
+      queryClient.invalidateQueries({
         queryKey: [`category-${currentParentId || "parent"}-children`],
       });
       queryClient.invalidateQueries({

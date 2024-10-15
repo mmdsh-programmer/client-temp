@@ -18,10 +18,13 @@ const useCreateRepo = () => {
     onSuccess: (response, values) => {
       const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`myRepoList-false`, `allRepoList`],
+        queryKey: ["myRepoList-false"],
       });
       queryClient.invalidateQueries({
-        queryKey: [`allRepoList`],
+        queryKey: ["allRepoList"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
       });
       callBack?.(response);
     },
