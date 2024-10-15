@@ -230,4 +230,6 @@ export interface ICustomPostMetadata {
   CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
   entityId: number;
   content: string;
+  cryptoInitVectorKey: string;
+  cryptoSecretKey: string;
 }

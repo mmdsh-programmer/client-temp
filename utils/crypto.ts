@@ -4,29 +4,37 @@
 
 import crypto from "crypto";
 
-const secretKey_in_bytes = Buffer.from(process.env.CRYPTO_SECRET_KEY!, "hex");
-const initVectorKey_in_bytes = Buffer.from(
-  process.env.CRYPTO_INIT_VECTOR_KEY!,
-  "hex",
-);
-
-export const decryptKey = (payload: string) => {
+export const decryptKey = (
+  payload: string,
+  cryptoSecretKey: string, 
+  cryptoInitVectorKey: string
+) => {
   const decipher = crypto.createDecipheriv(
     process.env.CRYPTO_ALGORITM!,
-    secretKey_in_bytes!,
-    initVectorKey_in_bytes!,
+    Buffer.from(cryptoSecretKey, "hex"),
+    Buffer.from(
+      cryptoInitVectorKey,
+      "hex",
+    ),
   );
   let decryptedData = decipher.update(payload, "hex", "utf8");
   decryptedData += decipher.final("utf8");
   return decryptedData;
 };
 
-export const encryptKey = (payload: string) => {
+export const encryptKey = (
+  payload: string,
+  cryptoSecretKey: string, 
+  cryptoInitVectorKey: string
+) => {
   // the cipher function
   const cipher = crypto.createCipheriv(
     process.env.CRYPTO_ALGORITM!,
-    secretKey_in_bytes,
-    initVectorKey_in_bytes,
+    Buffer.from(cryptoSecretKey, "hex"),
+    Buffer.from(
+      cryptoInitVectorKey,
+      "hex",
+    ),
   );
 
   // encrypt the data

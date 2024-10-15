@@ -175,7 +175,9 @@ export const updateCustomPostByEntityId = async (metadata: {
   domain: string,
   clientId: string,
   type: string,
-  clientSecret: string
+  clientSecret: string,
+  cryptoInitVectorKey: string,
+  cryptoSecretKey: string,
 }, entityId: number, content: string) => {
   
   const response = await axiosSocialInstance.get(

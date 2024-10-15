@@ -19,11 +19,19 @@ const refreshCookieHeader = async (rToken: string) => {
   const response = await renewToken(rToken);
   const { accessToken, refreshToken } = response;
 
+  // get domain and find proper custom post base on domain
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  
+  const { cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
+      
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    })
+    }), cryptoSecretKey, cryptoInitVectorKey
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
@@ -50,7 +58,16 @@ export const getMe = async () => {
   }
 
   const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
-  const tokenInfo = JSON.parse(decryptKey(payload)) as {
+
+    // get domain and find proper custom post base on domain
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    
+    const { cryptoSecretKey, cryptoInitVectorKey } = await getCustomPostByDomain(domain);
+
+  const tokenInfo = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
     access_token: string;
     refresh_token: string;
   };
@@ -89,7 +106,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
       throw new Error("Domain is not found");
     }
     
-  const { clientId, clientSecret } = await getCustomPostByDomain(domain);
+  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
   const { access_token, refresh_token } = await getPodAccessToken(code, redirectUrl, clientId, clientSecret);
 
   const encryptedData = encryptKey(
@@ -97,6 +114,8 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
       access_token,
       refresh_token,
     }),
+    cryptoSecretKey,
+    cryptoInitVectorKey
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);

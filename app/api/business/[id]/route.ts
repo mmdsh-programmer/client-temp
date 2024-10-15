@@ -22,13 +22,15 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
         }
         const response = await getCustomPostById(+id);
 
-        const { domain, clientId, type, clientSecret } = await request.json();
+        const { domain, clientId, type, clientSecret, cryptoSecretKey, cryptoInitVectorKey  } = await request.json();
         
         await updateCustomPostByEntityId({ 
             domain: domain ?? response.domain, 
             clientId: clientId ?? response.clientId, 
             type: type ?? response.type, 
-            clientSecret: clientSecret ?? response.clientSecret 
+            clientSecret: clientSecret ?? response.clientSecret,
+            cryptoSecretKey: cryptoSecretKey ?? response.cryptoSecretKey,
+            cryptoInitVectorKey: cryptoInitVectorKey ?? response.cryptoInitVectorKey
         }, +response.entityId, response.content);
 
         return NextResponse.json({});
