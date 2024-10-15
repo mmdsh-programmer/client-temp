@@ -1,6 +1,7 @@
 import {
   AuthorizationError,
   ForbiddenError,
+  IOriginalError,
   InputError,
   NotFoundError,
   ServerError,
@@ -99,17 +100,17 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
     const message = [error.response?.data?.messages?.[0] || error.message];
     switch (error.response?.status) {
       case 400:
-        throw new InputError(message);
+        throw new InputError(message, error as IOriginalError);
       case 401:
-        throw new AuthorizationError(message);
+        throw new AuthorizationError(message, error as IOriginalError);
       case 403:
-        throw new ForbiddenError(message, error);
+        throw new ForbiddenError(message, error as IOriginalError);
       case 404:
-        throw new NotFoundError(message, error);
+        throw new NotFoundError(message, error as IOriginalError);
       case 422:
-        throw new UnprocessableError(message, error);
+        throw new UnprocessableError(message, error as IOriginalError);
       default:
-        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error);
+        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);

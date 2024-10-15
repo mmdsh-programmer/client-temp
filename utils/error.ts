@@ -37,13 +37,15 @@ export const ERRORS: Record<
     CODE: 422,
   },
 };
+
+export interface IOriginalError  { data?: { referenceNumber?: string } };
 export default class BasicError extends Error {
   constructor(
     public errorCode: number,
     public message: string,
     public errorList?: string[],
     public referenceNumber?: string,
-    public originalError?: { data?: { referenceNumber?: string } }
+    public originalError?: IOriginalError
   ) {
     super(errorCode in ERRORS ? ERRORS[errorCode]?.MSG : "");
     Error.captureStackTrace(this, this.constructor);
@@ -61,7 +63,7 @@ export default class BasicError extends Error {
 export class InputError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[400].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
@@ -72,7 +74,7 @@ export class InputError extends BasicError {
 export class AuthorizationError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[401].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
@@ -83,7 +85,7 @@ export class AuthorizationError extends BasicError {
 export class ForbiddenError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[403].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
@@ -94,7 +96,7 @@ export class ForbiddenError extends BasicError {
 export class NotFoundError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[404].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
@@ -105,7 +107,7 @@ export class NotFoundError extends BasicError {
 export class ServerError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[500].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
@@ -116,7 +118,7 @@ export class ServerError extends BasicError {
 export class DuplicateError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[409].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
@@ -127,7 +129,7 @@ export class DuplicateError extends BasicError {
 export class UnprocessableError extends BasicError {
   constructor(
     errorList?: string[],
-    originalError?: { data?: { referenceNumber?: string } }
+    originalError?: IOriginalError
   ) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[422].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
