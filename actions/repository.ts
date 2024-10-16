@@ -14,6 +14,7 @@ import {
   getKey,
   getMyInfo,
   getMyRepositories,
+  getPublishRepoList,
   getRepository,
   getRepositoryKeys,
   imageRepository,
@@ -297,6 +298,17 @@ export const transferOwnershipRepositoryAction = async (
     repoId,
     userName
   );
+
+  return response;
+};
+
+export const getPublishRepositoriesAction = async (
+  offset: number,
+  size: number,
+  repoType?: string,
+  userssoid?: number,
+) => {
+  const response = await getPublishRepoList(offset, size, repoType, userssoid);
 
   return response;
 };
