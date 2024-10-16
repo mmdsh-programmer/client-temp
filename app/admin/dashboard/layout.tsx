@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 const DashboardLayout = ({ children }: IProps) => {
   return (
     <ErrorBoundary> 
-    <Tour />
-    <DashboardTemplate>
-      {children}
-    </DashboardTemplate>
-  </ErrorBoundary>
+      <Tour />
+      <DashboardTemplate>
+        {children}
+      </DashboardTemplate>
+    </ErrorBoundary>
   );
 };
 
