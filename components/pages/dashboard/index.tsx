@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from "react";
 import RepoCards from "@components/organisms/repoTypesCards";
 import RepoList from "@components/organisms/repoList";

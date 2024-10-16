@@ -21,17 +21,22 @@ import {
   restoreRepository,
   transferOwnershipRepository,
 } from "@service/clasor";
+
+import { NotFoundError } from "@utils/error";
+import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
+import { headers } from "next/headers";
 
 export const getMyInfoAction = async () => {
-  const userInfo = await getMe();
-  try {
-    const response = await getMyInfo(userInfo.access_token);
+    const userInfo = await getMe();
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new NotFoundError(["دامنه مورد نظر پیدا نشد"]);
+    }
+    const { type } = await getCustomPostByDomain(domain);
 
+    const response = await getMyInfo(userInfo.access_token, [type]);
     return response;
-  } catch (error) {
-    console.log("============ error ==========", error);
-  }
 };
 
 export const getAllRepositoryList = async (
@@ -40,16 +45,20 @@ export const getAllRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await getAllRepositories(
-      userInfo.access_token,
-      offset,
-      size,
-      name
-    );
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const { type } = await getCustomPostByDomain(domain);
+  const response = await getAllRepositories(
+    userInfo.access_token,
+    offset,
+    size,
+    name,
+    type
+  );
 
-    return response;
-  
+  return response;
 };
 
 export const getMyRepositoryList = async (
@@ -59,26 +68,30 @@ export const getMyRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await getMyRepositories(
-      userInfo.access_token,
-      offset,
-      size,
-      archived,
-      name
-    );
+  const domain = headers().get("host");
+  if(!domain){
+    throw new Error("Domain is not found");
+  }
+  const { type } = await getCustomPostByDomain(domain);
 
-    return response;
-  
+  const response = await getMyRepositories(
+    userInfo.access_token,
+    offset,
+    size,
+    archived,
+    name,
+    [type]
+  );
+
+  return response;
 };
 
 export const getRepositoryAction = async (repoId: number | null) => {
   const userInfo = await getMe();
-  
-    const response = await getRepository(userInfo.access_token, repoId);
 
-    return response;
-  
+  const response = await getRepository(userInfo.access_token, repoId);
+
+  return response;
 };
 
 export const getAccessRepositoryList = async (
@@ -87,16 +100,22 @@ export const getAccessRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await getAccessRepositories(
-      userInfo.access_token,
-      offset,
-      size,
-      name
-    );
 
-    return response;
-  
+  const domain = headers().get("host");
+  if(!domain){
+    throw new Error("Domain is not found");
+  }
+  const { type } = await getCustomPostByDomain(domain);
+
+  const response = await getAccessRepositories(
+    userInfo.access_token,
+    offset,
+    size,
+    name,
+    [type]
+  );
+
+  return response;
 };
 
 export const getBookmarkRepositoryList = async (
@@ -105,16 +124,21 @@ export const getBookmarkRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await getBookmarkRepositories(
-      userInfo.access_token,
-      offset,
-      size,
-      name
-    );
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const { type } = await getCustomPostByDomain(domain);
 
-    return response;
-  
+  const response = await getBookmarkRepositories(
+    userInfo.access_token,
+    offset,
+    size,
+    name,
+    [type]
+  );
+
+  return response;
 };
 
 export const editRepoAction = async (
@@ -123,74 +147,74 @@ export const editRepoAction = async (
   description: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await editRepo(
-      userInfo.access_token,
-      repoId,
-      name,
-      description
-    );
 
-    return response;
-  
+  const response = await editRepo(
+    userInfo.access_token,
+    repoId,
+    name,
+    description
+  );
+
+  return response;
 };
 
 export const createRepoAction = async (name: string, description?: string) => {
   const userInfo = await getMe();
-  
-    const response = await createRepo(userInfo.access_token, name, description);
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const { type } = await getCustomPostByDomain(domain);
 
-    return response;
-  
+  const response = await createRepo(userInfo.access_token, name, description, [
+    type,
+  ]);
+
+  return response;
 };
 
 export const deleteRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  
-    const response = await deleteRepository(userInfo.access_token, repoId);
 
-    return response;
-  
+  const response = await deleteRepository(userInfo.access_token, repoId);
+
+  return response;
 };
 
 export const archiveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  
-    const response = await archiveRepository(userInfo.access_token, repoId);
 
-    return response;
-  
+  const response = await archiveRepository(userInfo.access_token, repoId);
+
+  return response;
 };
 
 export const restoreRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  
-    const response = await restoreRepository(userInfo.access_token, repoId);
 
-    return response;
-  
+  const response = await restoreRepository(userInfo.access_token, repoId);
+
+  return response;
 };
 
 export const leaveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  
-    const response = await leaveRepository(userInfo.access_token, repoId);
 
-    return response;
-  
+  const response = await leaveRepository(userInfo.access_token, repoId);
+
+  return response;
 };
 
 export const bookmarkRepoAction = async (repoId: number, detach?: boolean) => {
   const userInfo = await getMe();
-  
-    const response = await bookmarkRepository(
-      userInfo.access_token,
-      repoId,
-      detach
-    );
 
-    return response;
-  
+  const response = await bookmarkRepository(
+    userInfo.access_token,
+    repoId,
+    detach
+  );
+
+  return response;
 };
 
 export const imageRepoAction = async (
@@ -198,15 +222,14 @@ export const imageRepoAction = async (
   fileHash: string | null
 ) => {
   const userInfo = await getMe();
-  
-    const response = await imageRepository(
-      userInfo.access_token,
-      repoId,
-      fileHash
-    );
 
-    return response;
-  
+  const response = await imageRepository(
+    userInfo.access_token,
+    repoId,
+    fileHash
+  );
+
+  return response;
 };
 
 export const getRepoKeysAction = async (
@@ -215,28 +238,27 @@ export const getRepoKeysAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
-  
-    const response = await getRepositoryKeys(
-      userInfo.access_token,
-      repoId,
-      offset,
-      size
-    );
 
-    return response;
+  const response = await getRepositoryKeys(
+    userInfo.access_token,
+    repoId,
+    offset,
+    size
+  );
+
+  return response;
 };
 
 export const deleteRepoKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
-  
-    const response = await deleteRepositoryKey(
-      userInfo.access_token,
-      repoId,
-      keyId
-    );
 
-    return response;
-  
+  const response = await deleteRepositoryKey(
+    userInfo.access_token,
+    repoId,
+    keyId
+  );
+
+  return response;
 };
 
 export const createRepoKeyAction = async (
@@ -245,29 +267,23 @@ export const createRepoKeyAction = async (
   key: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await createRepositoryKey(
-      userInfo.access_token,
-      repoId,
-      name,
-      key
-    );
 
-    return response;
-  
+  const response = await createRepositoryKey(
+    userInfo.access_token,
+    repoId,
+    name,
+    key
+  );
+
+  return response;
 };
 
 export const getKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
-  
-    const response = await getKey(
-      userInfo.access_token,
-      repoId,
-      keyId,
-    );
 
-    return response;
-  
+  const response = await getKey(userInfo.access_token, repoId, keyId);
+
+  return response;
 };
 
 export const transferOwnershipRepositoryAction = async (
@@ -275,13 +291,12 @@ export const transferOwnershipRepositoryAction = async (
   userName: string
 ) => {
   const userInfo = await getMe();
-  
-    const response = await transferOwnershipRepository(
-      userInfo.access_token,
-      repoId,
-      userName
-    );
 
-    return response;
-  
+  const response = await transferOwnershipRepository(
+    userInfo.access_token,
+    repoId,
+    userName
+  );
+
+  return response;
 };

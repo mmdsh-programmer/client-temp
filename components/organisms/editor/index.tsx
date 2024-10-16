@@ -67,7 +67,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
                 auth: {
                   accessToken: userInfo?.access_token,
                   refreshToken: userInfo?.refresh_token,
-                  url: `${process.env.NEXT_PUBLIC_CLASOR}auth/renewToken`,
+                  url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
                 },
                 publicUserGroupHash: getRepo?.userGroupHash || undefined,
                 privateUserGroupHash:

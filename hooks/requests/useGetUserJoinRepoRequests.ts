@@ -1,5 +1,5 @@
-import { getUserToRepoRequestsAction } from "@actions/requests";
 import { IAccessRequestResponse } from "@interface/accessRequest.interface";
+import { getUserToRepoRequestsAction } from "@actions/requests";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetUserJoinRepoRequests = (size: number) => {

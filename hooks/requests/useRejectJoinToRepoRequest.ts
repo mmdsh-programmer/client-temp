@@ -1,5 +1,6 @@
-import { rejectUserToRepoRequestAction } from "@actions/requests";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { rejectUserToRepoRequestAction } from "@actions/requests";
 import { toast } from "react-toastify";
 
 const useRejectJoinToRepoRequest = () => {

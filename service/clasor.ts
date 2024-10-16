@@ -1,9 +1,11 @@
 import {
   AuthorizationError,
   ForbiddenError,
+  IOriginalError,
   InputError,
   NotFoundError,
   ServerError,
+  UnprocessableError,
 } from "@utils/error";
 import {
   IAccessRequest,
@@ -46,8 +48,8 @@ import {
   IReport,
 } from "@interface/repo.interface";
 import { IRoles, IUser } from "@interface/users.interface";
-import Logger from "@utils/logger";
 import axios, { AxiosError, isAxiosError } from "axios";
+
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
@@ -55,7 +57,7 @@ import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
-
+import Logger from "@utils/logger";
 import qs from "qs";
 
 const { CLASOR } = process.env;
@@ -99,30 +101,20 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
     const message = [error.response?.data?.messages?.[0] || error.message];
     switch (error.response?.status) {
       case 400:
-        throw new InputError(message);
+        throw new InputError(message, error as IOriginalError);
       case 401:
-        throw new AuthorizationError(message);
+        throw new AuthorizationError(message, error as IOriginalError);
       case 403:
-        throw new ForbiddenError(message, error);
+        throw new ForbiddenError(message, error as IOriginalError);
       case 404:
-        throw new NotFoundError(message, error);
+        throw new NotFoundError(message, error as IOriginalError);
+      case 422:
+        throw new UnprocessableError(message, error as IOriginalError);
       default:
-        throw new ServerError(message, error);
+        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
-  }
-};
-
-export const handleRedirect = async (redirectUrl: string) => {
-  try {
-    const response = await axiosClasorInstance.get(
-      `auth/loginUrl?redirectUrl=${redirectUrl}`
-    );
-
-    return response.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -191,8 +183,8 @@ export const logout = async (access_token: string, refresh_token: string) => {
   }
 };
 
-////////////////////////// INFO /////////////////////////
-export const getMyInfo = async (access_token: string) => {
+/// /////////////////////// INFO /////////////////////////
+export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>(
       "myInfo",
@@ -200,6 +192,9 @@ export const getMyInfo = async (access_token: string) => {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
+        params: {
+          repoTypes
+        }
       }
     );
 
@@ -232,7 +227,9 @@ export const getAllRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string,
+  
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -245,6 +242,7 @@ export const getAllRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes
       },
     });
 
@@ -353,7 +351,8 @@ export const getMyRepositories = async (
   offset: number,
   size: number,
   archived: boolean,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -367,6 +366,7 @@ export const getMyRepositories = async (
         size,
         archived,
         title: name,
+        repoTypes
       },
     });
 
@@ -400,7 +400,8 @@ export const getAccessRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -413,6 +414,7 @@ export const getAccessRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes
       },
     });
 
@@ -426,7 +428,8 @@ export const getBookmarkRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -439,6 +442,7 @@ export const getBookmarkRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes
       },
     });
 
@@ -539,7 +543,8 @@ export const restoreRepository = async (
 export const createRepo = async (
   accessToken: string,
   name: string,
-  description?: string
+  description?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -547,6 +552,7 @@ export const createRepo = async (
       {
         name,
         description,
+        repoTypes
       },
       {
         headers: {
@@ -1818,7 +1824,7 @@ export const documentEnableUserGroupHash = async (
   }
 };
 
-///////////////////// VERSION //////////////////
+/// ////////////////// VERSION //////////////////
 export const getVersion = async (
   accessToken: string,
   repoId: number,
@@ -2557,7 +2563,7 @@ export const getAdminPanelFeedback = async (
   }
 };
 
-////////////////////////////////// CORE //////////////////////
+/// /////////////////////////////// CORE //////////////////////
 export const getCommentList = async (
   access_token: string,
   postId: number,

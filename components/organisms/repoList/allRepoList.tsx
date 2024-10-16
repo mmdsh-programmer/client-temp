@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useMemo } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import TableHead from "@components/molecules/tableHead";
@@ -85,7 +84,6 @@ const AllRepoList = () => {
     return allRepos?.data?.pages[0]?.total || 0;
   }, [allRepos]);
   const isLoadingAllRepos = allRepos?.isLoading;
-
   const renderTableRows = () => {
     return repoList?.pages.map((page) => {
       return page.list.map((repo) => {
@@ -115,78 +113,63 @@ const AllRepoList = () => {
     });
   };
 
+  const handleList = () => {
+    if (isLoadingAllRepos) {
+      return (
+        <div className="w-full h-full flex justify-center items-center">
+          <Spinner className="h-8 w-8" color="deep-purple" />
+        </div>
+      );
+    }
+    if (listLengthAllRepos) {
+      if (isLoading && !!search) {
+        return (
+          <div className="w-full h-full flex justify-center items-center">
+            <Spinner className="h-8 w-8" color="deep-purple" />
+          </div>
+        );
+      }
+      if (listLength) {
+        return (
+          <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+            <table className="w-full overflow-hidden min-w-max">
+              <TableHead
+                tableHead={[
+                  { key: "name", value: "نام مخزن", isSorted: true },
+                  { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
+                  { key: "role", value: "نقش من" },
+                  { key: "status", value: "وضعیت" },
+                  { key: "action", value: "عملیات", className: "justify-end" },
+                ]}
+              />
+              <tbody>
+                {renderTableRows()}
+                <RenderIf isTrue={hasNextPage}>
+                  <tr>
+                    <td colSpan={5} className="!text-center">
+                      <LoadMore
+                        className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                        isFetchingNextPage={isFetchingNextPage}
+                        fetchNextPage={fetchNextPage}
+                      />
+                    </td>
+                  </tr>
+                </RenderIf>
+              </tbody>
+            </table>
+          </div>
+        );
+      }
+      return <EmptyList type={EEmptyList.FILTER} />;
+    }
+    return <EmptyList type={EEmptyList.DASHBOARD} />;
+  };
+
   return (
     <>
       <div className="hidden xs:block">
-        <div className="flex flex-col h-full bg-primary px-5 pb-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
-          {isLoadingAllRepos ? (
-            <div className="w-full h-full flex justify-center items-center">
-              <Spinner className="h-8 w-8" color="deep-purple" />
-            </div>
-          ) : listLengthAllRepos ? (
-            <>
-              <RepoSearch />
-              {isLoading && !!search ? (
-                <div className="w-full h-full flex justify-center items-center">
-                  <Spinner className="h-8 w-8" color="deep-purple" />
-                </div>
-              ) : listLength ? (
-                <>
-                  <RenderIf isTrue={mode === EListMode.table}>
-                    <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-                      <table className="w-full overflow-hidden min-w-max">
-                        <TableHead
-                          tableHead={[
-                            { key: "name", value: "نام مخزن", isSorted: true },
-                            {
-                              key: "createDate",
-                              value: "تاریخ ایجاد",
-                              isSorted: true,
-                            },
-                            { key: "role", value: "نقش من" },
-                            { key: "status", value: "وضعیت" },
-                            {
-                              key: "action",
-                              value: "عملیات",
-                              className: "justify-end",
-                            },
-                          ]}
-                        />
-                        <tbody>
-                          {renderTableRows()}
-                          <RenderIf isTrue={hasNextPage}>
-                            <tr>
-                              <td colSpan={5} className="!text-center">
-                                <LoadMore
-                                  className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                                  isFetchingNextPage={isFetchingNextPage}
-                                  fetchNextPage={fetchNextPage}
-                                />
-                              </td>
-                            </tr>
-                          </RenderIf>
-                        </tbody>
-                      </table>
-                    </div>
-                  </RenderIf>
-                  <RenderIf isTrue={mode === EListMode.card}>
-                    <CardView
-                      isLoading={isLoadingAllRepos || isLoading}
-                      getRepoList={repoList}
-                      hasNextPage={hasNextPage}
-                      fetchNextPage={fetchNextPage}
-                      isFetchingNextPage={isFetchingNextPage}
-                      type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
-                    />
-                  </RenderIf>
-                </>
-              ) : (
-                <EmptyList type={EEmptyList.FILTER} />
-              )}
-            </>
-          ) : (
-            <EmptyList type={EEmptyList.DASHBOARD} />
-          )}
+        <div className="flex flex-col h-full bg-primary p-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
+          {handleList()}
         </div>
       </div>
       <div className="flex flex-col h-full min-h-[calc(100vh-340px)] xs:hidden gap-y-4">

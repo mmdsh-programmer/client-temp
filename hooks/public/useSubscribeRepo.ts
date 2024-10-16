@@ -11,7 +11,7 @@ const useSubscribeRepo = () => {
   const setRepoGroup = useSetRecoilState(repoGroupingAtom);
 
   return useMutation({
-    mutationKey: [`subscribe-repo`],
+    mutationKey: ["subscribe-repo"],
     mutationFn: async (values: {
       hash: string;
       password?: string;

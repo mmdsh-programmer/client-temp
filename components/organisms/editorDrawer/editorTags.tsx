@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { Typography } from "@material-tailwind/react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
-import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";

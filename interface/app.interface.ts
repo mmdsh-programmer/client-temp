@@ -132,7 +132,7 @@ export declare interface IThreadInfo {
       userGroupHash: string;
       closed: boolean;
     };
-    metadata: {};
+    metadata: {[key: string] : string};
     time: number;
     timeMiliSeconds: number;
     timeNanos: number;
@@ -186,9 +186,17 @@ export interface IGetToken {
 }
 
 export interface IActionError {
+  error?: boolean;
   errorCode: number;
   errorList: string[];
-  originalError?: string;
+  originalError?: {
+    data: {
+      error: string;
+      message: string[];
+      referenceNumber: string,
+    }
+  };
+  referenceNumber?: string,
 }
 
 
@@ -207,4 +215,21 @@ export interface IMetaQuery {
   field: string;
   is: string;
   and?: IMetaQuery[]; // Optional recursive definition for nested conditions
+}
+
+export interface IGetTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface ICustomPostMetadata {
+  domain: string;
+  clientId: string;
+  type: string;
+  clientSecret: string;
+  CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
+  entityId: number;
+  content: string;
+  cryptoInitVectorKey: string;
+  cryptoSecretKey: string;
 }

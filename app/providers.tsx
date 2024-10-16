@@ -17,7 +17,7 @@ const Providers = ({ children }: IProps) => {
     return new QueryClient({
       defaultOptions: {
         queries: {
-          staleTime: 15 * 60 * 1000, // 15 minutes
+          staleTime: 1 * 1000,
         },
       },
     });

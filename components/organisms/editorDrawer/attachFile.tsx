@@ -1,15 +1,14 @@
 import React, { ChangeEvent, useState } from "react";
-import { useRecoilValue } from "recoil";
-// import { selectedDocumentAtom } from "@atom/document";
-import useGetFiles from "@hooks/files/useGetFiles";
-import { repoAtom } from "@atom/repository";
-import { categoryShowAtom } from "@atom/category";
-import useDeleteFile from "@hooks/files/useDeleteFile";
-import { useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { toast } from "react-toastify";
-import useGetUser from "@hooks/auth/useGetUser";
+import axios, { AxiosProgressEvent } from "axios";
 import { IFile } from "cls-file-management";
+import { categoryShowAtom } from "@atom/category";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import useDeleteFile from "@hooks/files/useDeleteFile";
+import useGetFiles from "@hooks/files/useGetFiles";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRecoilValue } from "recoil";
 import DocumentEnableUserGroup from "./documentEnableUserGroup";
 import FileUpload from "@components/molecules/fileUpload";
 import FileList from "../fileList";
@@ -22,7 +21,6 @@ const AttachFile = () => {
   // const getDocument = useRecoilValue(selectedDocumentAtom);
   // const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  // const [isError, setIsError] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -66,7 +64,6 @@ const AttachFile = () => {
   const onSuccess = () => {
     toast.success("آپلود موفق");
     setIsLoading(false);
-    // setIsError(false);
     refetch();
   };
 
@@ -96,15 +93,17 @@ const AttachFile = () => {
               _token_: token || "",
               _token_issuer_: "1",
             },
-            onUploadProgress(progressEvent: any) {
-              const process = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              // setProcessCount(process);
+            onUploadProgress(progressEvent: AxiosProgressEvent) {
+              if (progressEvent.total) {
+                // const process = Math.round(
+                //   (progressEvent.loaded * 100) / progressEvent.total
+                // );
+                // setProcessCount(process);
+              }
             },
           }
         )
-        .then(async (res: any) => {
+        .then(async (res: { data: { data: { result: { hash: string } } } }) => {
           if (res.data.data.result.hash) {
             onSuccess();
             setIsLoading(false);
@@ -117,7 +116,6 @@ const AttachFile = () => {
         })
         .catch(() => {
           toast.error("خطا در بارگذاری فایل");
-          // setIsError(true);
           setIsLoading(false);
         });
     }
