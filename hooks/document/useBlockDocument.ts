@@ -1,11 +1,13 @@
 import { addUserToDocumentBlocklistAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useBlockDocument = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`blockDocument`],
+    mutationKey: ["blockDocument"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
@@ -20,6 +22,7 @@ const useBlockDocument = () => {
         username,
         type,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

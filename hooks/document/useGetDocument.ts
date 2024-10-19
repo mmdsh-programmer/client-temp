@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDocumentAction } from "@actions/document";
 import { IDocumentMetadata } from "@interface/document.interface";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetDocument = (
   repoId: number,
@@ -11,6 +13,7 @@ const useGetDocument = (
     queryKey: [`document-${documentId}-info`],
     queryFn: async ({ signal }) => {
       const response = await getDocumentAction(repoId, documentId);
+      handleClientSideHookError(response as IActionError);
       return response as IDocumentMetadata;
     },
     retry: false,

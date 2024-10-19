@@ -18,7 +18,6 @@ const BookmarkRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
   } = useGetBookmarkList(10, undefined, true);
 
   const commonProps: IRepoView = {
@@ -27,7 +26,6 @@ const BookmarkRepoList = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    isFetching,
     type: EEmptyList.BOOKMARK_REPO,
   };
 

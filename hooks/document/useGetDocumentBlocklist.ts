@@ -2,6 +2,8 @@ import { getDocumentBlocklistAction } from "@actions/document";
 import { IListResponse } from "@interface/repo.interface";
 import { IUser } from "@interface/users.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetDocumentBlocklist = (
   repoId: number,
@@ -17,6 +19,7 @@ const useGetDocumentBlocklist = (
         (pageParam - 1) * size,
         size,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<IUser>;
     },
     initialPageParam: 1,

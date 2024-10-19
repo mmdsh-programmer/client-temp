@@ -1,6 +1,8 @@
 import { getFileAction } from "@actions/files";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { IFile } from "@interface/file.interface";
+import { IFile, IPodspaceResult } from "@interface/file.interface";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetFiles = (
   resourceId: number,
@@ -9,7 +11,7 @@ const useGetFiles = (
   offset?: number,
   name?: string,
   order?: string,
-  dataType?: string,
+  dataType?: string
 ) => {
   return useInfiniteQuery({
     queryKey: [`getFiles-${userGroupHash}`, name],
@@ -21,10 +23,17 @@ const useGetFiles = (
         size,
         name,
         order,
-        dataType,
+        dataType
       );
 
-      return response?.result as {
+      handleClientSideHookError(response as IActionError);
+
+      return (
+        response as IPodspaceResult<{
+          list: IFile[];
+          count: number;
+        }>
+      ).result as {
         list: IFile[];
         count: number;
       };

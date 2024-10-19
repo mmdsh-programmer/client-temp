@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getDocumentWhiteBlackListAction } from "@actions/document";
 import { IWhiteList } from "@interface/document.interface";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetWhiteBlackList = (repoId: number, documentId: number) => {
   return useQuery({
@@ -10,6 +12,7 @@ const useGetWhiteBlackList = (repoId: number, documentId: number) => {
         repoId,
         documentId,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IWhiteList;
     },
     retry: false,

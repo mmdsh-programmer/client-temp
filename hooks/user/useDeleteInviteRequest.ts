@@ -1,6 +1,8 @@
 import { deleteInviteRequestAction } from "@actions/users";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useDeleteInviteRequest = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ const useDeleteInviteRequest = () => {
     }) => {
       const { userId, repoId } = values;
       const response = await deleteInviteRequestAction(repoId, userId);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

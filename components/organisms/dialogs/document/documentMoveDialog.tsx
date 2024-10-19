@@ -1,9 +1,8 @@
+import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import MoveSelection from "@components/molecules/moveSelection";
-import React from "react";
-import { categoryMoveDestAtom } from "@atom/category";
+import { categoryMoveDestAtom, categoryShowAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
@@ -17,6 +16,7 @@ interface IProps {
 const DocumentMoveDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
+  const categoryShow = useRecoilValue(categoryShowAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
 
@@ -45,6 +45,7 @@ const DocumentMoveDialog = ({ setOpen }: IProps) => {
       contentType: document.contentType,
       order: document.order,
       isHidden: document.isHidden,
+      currentParentId: categoryShow?.id,
       callBack: () => {
         toast.success(" سند انتقال یافت.");
         handleClose();

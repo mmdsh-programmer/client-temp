@@ -1,6 +1,6 @@
 import { useSetRecoilState } from "recoil";
 import { IDocumentMetadata } from "@interface/document.interface";
-import { selectedDocumentAtom } from "@atom/document";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { versionListAtom } from "@atom/version";
 import { editorModeAtom } from "@atom/editor";
 
@@ -25,94 +25,130 @@ type Modals = {
   documentAccessPublishing: boolean;
 };
 
-const useDocumentMenuList = ({document,
-  toggleModal,}: UseDocumentMenuListProps) => {
+const useDocumentMenuList = ({
+  document,
+  toggleModal,
+}: UseDocumentMenuListProps) => {
   const setDocument = useSetRecoilState(selectedDocumentAtom);
   const setShowVersionList = useSetRecoilState(versionListAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setDocumentShow = useSetRecoilState(documentShowAtom);
 
   const editOptions = [
-    {text: "ویرایش محتوا",
+    {
+      text: "ویرایش محتوا",
       onClick: () => {
         toggleModal("editContent", true);
         setEditorMode("preview");
         if (document) setDocument(document);
-      },},
-    {text: "ویرایش سند",
+      },
+    },
+    {
+      text: "ویرایش سند",
       onClick: () => {
         toggleModal("editDocument", true);
         if (document) setDocument(document);
-      },},
-    {text: "تگ های سند",
+      },
+    },
+    {
+      text: "تگ های سند",
       onClick: () => {
         toggleModal("documentTags", true);
-        if (document) setDocument(document);
-      },},
+        if (document) {
+          setDocument(document);
+        }
+      },
+    },
   ];
 
   const publishDocOptions = [
-    {text: document?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
+    {
+      text: document?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
       onClick: () => {
         toggleModal(document?.isHidden ? "visible" : "hide", true);
         if (document) setDocument(document);
-      },},
-    {text: "محدودیت کاربران",
+      },
+    },
+    {
+      text: "محدودیت کاربران",
       onClick: () => {
         toggleModal("documentAccessPublishing", true);
         if (document) setDocument(document);
-      },},
+      },
+    },
     ...(document?.hasPassword
       ? [
-          {text: "ویرایش رمز عبور",
+          {
+            text: "ویرایش رمز عبور",
             onClick: () => {
               toggleModal("updatePassword", true);
               if (document) setDocument(document);
-            },},
-          {text: "حذف رمز عبور",
+            },
+          },
+          {
+            text: "حذف رمز عبور",
             onClick: () => {
               toggleModal("deletePassword", true);
               if (document) setDocument(document);
-            },},
+            },
+          },
         ]
       : [
-          {text: "اعمال رمز عبور",
+          {
+            text: "اعمال رمز عبور",
             onClick: () => {
               toggleModal("createPassword", true);
               if (document) setDocument(document);
-            },},
+            },
+          },
         ]),
   ];
 
   const menuList = [
     { text: "ویرایش", subMenu: editOptions, onClick: () => {} },
-    {text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
+    {
+      text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
       onClick: () => {
         toggleModal("bookmarkDocument", true);
         if (document) setDocument(document);
-      },},
-    {text: "انتقال",
+      },
+    },
+    {
+      text: "انتقال",
       onClick: () => {
         toggleModal("move", true);
         if (document) setDocument(document);
-      },},
-    {text: "نسخه های سند",
+      },
+    },
+    {
+      text: "نسخه های سند",
       onClick: () => {
         setShowVersionList(true);
-        if (document) setDocument(document);
-      },},
-    {text: "محدودیت دسترسی در پنل",
+        if (document) {
+          setDocument(document);
+          setDocumentShow(document);
+        }
+      },
+    },
+    {
+      text: "محدودیت دسترسی در پنل",
       onClick: () => {
         toggleModal("documentAccess", true);
         if (document) setDocument(document);
-      },},
-    {text: "محدودیت در انتشار",
+      },
+    },
+    {
+      text: "محدودیت در انتشار",
       subMenu: publishDocOptions,
-      onClick: () => {},},
-    {text: "حذف سند",
+      onClick: () => {},
+    },
+    {
+      text: "حذف سند",
       onClick: () => {
         toggleModal("deleteDocument", true);
         if (document) setDocument(document);
-      },},
+      },
+    },
   ];
 
   return menuList;

@@ -1,6 +1,6 @@
 import React from "react";
 import EmptyList from "@components/molecules/emptyList";
-import { FaDateFromTimestamp } from "@utils/index";
+import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
@@ -37,6 +37,7 @@ const TableView = ({
               tableHead={[
                 { key: "name", value: "نام مخزن", isSorted: true },
                 { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
+                { key: "role", value: "نقش من" },
                 {
                   key: "action",
                   value: "عملیات",
@@ -60,6 +61,7 @@ const TableView = ({
                         {
                           data: FaDateFromTimestamp(+new Date(repo.createDate)),
                         },
+                        { data: translateRoles(repo.roleName) },
                         {
                           data: <RepoMenu repo={repo} />,
                           stopPropagation: true,

@@ -2,6 +2,8 @@ import { createGroupAction } from "@actions/group";
 import { ICreateGroup } from "@interface/group.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreateGroup = () => {
   const queryClient = useQueryClient();
@@ -21,6 +23,7 @@ const useCreateGroup = () => {
         description,
         members,
       );
+      handleClientSideHookError(response as IActionError);
       return response as ICreateGroup;
     },
     onSuccess: (response, values) => {

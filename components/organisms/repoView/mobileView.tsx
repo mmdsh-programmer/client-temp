@@ -1,6 +1,6 @@
 import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { FaDateFromTimestamp } from "@utils/index";
+import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import { IRepo, IRepoView } from "@interface/repo.interface";
 import { InfiniteData } from "@tanstack/react-query";
 import LoadMore from "@components/molecules/loadMore";
@@ -43,6 +43,7 @@ const renderContent = (
                 value: FaDateFromTimestamp(+new Date(repo.createDate)) || "--",
               },
               { title: "سازنده", value: repo.owner?.userName || "--" },
+              { title: "نقش من", value:  translateRoles(repo.roleName) || "--" },
             ]}
             cardAction={<RepoMenu repo={repo} />}
             onClick={() => {

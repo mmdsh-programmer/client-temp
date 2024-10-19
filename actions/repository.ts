@@ -26,9 +26,12 @@ import { NotFoundError } from "@utils/error";
 import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
+import { IActionError } from "@interface/app.interface";
+import { normalizeError } from "@utils/normalizeActionError";
 
 export const getMyInfoAction = async () => {
-    const userInfo = await getMe();
+  const userInfo = await getMe();
+  try {
     const domain = headers().get("host");
     if (!domain) {
       throw new NotFoundError(["دامنه مورد نظر پیدا نشد"]);
@@ -37,6 +40,9 @@ export const getMyInfoAction = async () => {
 
     const response = await getMyInfo(userInfo.access_token, [type]);
     return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getAllRepositoryList = async (
@@ -45,20 +51,24 @@ export const getAllRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const { type } = await getCustomPostByDomain(domain);
-  const response = await getAllRepositories(
-    userInfo.access_token,
-    offset,
-    size,
-    name,
-    type
-  );
+  try {
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const { type } = await getCustomPostByDomain(domain);
+    const response = await getAllRepositories(
+      userInfo.access_token,
+      offset,
+      size,
+      name,
+      type
+    );
 
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getMyRepositoryList = async (
@@ -68,30 +78,37 @@ export const getMyRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if(!domain){
-    throw new Error("Domain is not found");
+  try {
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const { type } = await getCustomPostByDomain(domain);
+
+    const response = await getMyRepositories(
+      userInfo.access_token,
+      offset,
+      size,
+      archived,
+      name,
+      [type]
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
   }
-  const { type } = await getCustomPostByDomain(domain);
-
-  const response = await getMyRepositories(
-    userInfo.access_token,
-    offset,
-    size,
-    archived,
-    name,
-    [type]
-  );
-
-  return response;
 };
 
 export const getRepositoryAction = async (repoId: number | null) => {
   const userInfo = await getMe();
+  try {
+    const response = await getRepository(userInfo.access_token, repoId);
 
-  const response = await getRepository(userInfo.access_token, repoId);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getAccessRepositoryList = async (
@@ -100,22 +117,25 @@ export const getAccessRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const { type } = await getCustomPostByDomain(domain);
 
-  const domain = headers().get("host");
-  if(!domain){
-    throw new Error("Domain is not found");
+    const response = await getAccessRepositories(
+      userInfo.access_token,
+      offset,
+      size,
+      name,
+      [type]
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
   }
-  const { type } = await getCustomPostByDomain(domain);
-
-  const response = await getAccessRepositories(
-    userInfo.access_token,
-    offset,
-    size,
-    name,
-    [type]
-  );
-
-  return response;
 };
 
 export const getBookmarkRepositoryList = async (
@@ -124,21 +144,25 @@ export const getBookmarkRepositoryList = async (
   name?: string
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
+  try {
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const { type } = await getCustomPostByDomain(domain);
+
+    const response = await getBookmarkRepositories(
+      userInfo.access_token,
+      offset,
+      size,
+      name,
+      [type]
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
   }
-  const { type } = await getCustomPostByDomain(domain);
-
-  const response = await getBookmarkRepositories(
-    userInfo.access_token,
-    offset,
-    size,
-    name,
-    [type]
-  );
-
-  return response;
 };
 
 export const editRepoAction = async (
@@ -147,74 +171,99 @@ export const editRepoAction = async (
   description: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await editRepo(
+      userInfo.access_token,
+      repoId,
+      name,
+      description
+    );
 
-  const response = await editRepo(
-    userInfo.access_token,
-    repoId,
-    name,
-    description
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const createRepoAction = async (name: string, description?: string) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
+  try {
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const { type } = await getCustomPostByDomain(domain);
+
+    const response = await createRepo(
+      userInfo.access_token,
+      name,
+      description,
+      [type]
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
   }
-  const { type } = await getCustomPostByDomain(domain);
-
-  const response = await createRepo(userInfo.access_token, name, description, [
-    type,
-  ]);
-
-  return response;
 };
 
 export const deleteRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteRepository(userInfo.access_token, repoId);
 
-  const response = await deleteRepository(userInfo.access_token, repoId);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const archiveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await archiveRepository(userInfo.access_token, repoId);
 
-  const response = await archiveRepository(userInfo.access_token, repoId);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const restoreRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await restoreRepository(userInfo.access_token, repoId);
 
-  const response = await restoreRepository(userInfo.access_token, repoId);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const leaveRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await leaveRepository(userInfo.access_token, repoId);
 
-  const response = await leaveRepository(userInfo.access_token, repoId);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const bookmarkRepoAction = async (repoId: number, detach?: boolean) => {
   const userInfo = await getMe();
+  try {
+    const response = await bookmarkRepository(
+      userInfo.access_token,
+      repoId,
+      detach
+    );
 
-  const response = await bookmarkRepository(
-    userInfo.access_token,
-    repoId,
-    detach
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const imageRepoAction = async (
@@ -222,14 +271,17 @@ export const imageRepoAction = async (
   fileHash: string | null
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await imageRepository(
+      userInfo.access_token,
+      repoId,
+      fileHash
+    );
 
-  const response = await imageRepository(
-    userInfo.access_token,
-    repoId,
-    fileHash
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getRepoKeysAction = async (
@@ -238,27 +290,33 @@ export const getRepoKeysAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getRepositoryKeys(
+      userInfo.access_token,
+      repoId,
+      offset,
+      size
+    );
 
-  const response = await getRepositoryKeys(
-    userInfo.access_token,
-    repoId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deleteRepoKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteRepositoryKey(
+      userInfo.access_token,
+      repoId,
+      keyId
+    );
 
-  const response = await deleteRepositoryKey(
-    userInfo.access_token,
-    repoId,
-    keyId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const createRepoKeyAction = async (
@@ -267,23 +325,29 @@ export const createRepoKeyAction = async (
   key: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await createRepositoryKey(
+      userInfo.access_token,
+      repoId,
+      name,
+      key
+    );
 
-  const response = await createRepositoryKey(
-    userInfo.access_token,
-    repoId,
-    name,
-    key
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await getKey(userInfo.access_token, repoId, keyId);
 
-  const response = await getKey(userInfo.access_token, repoId, keyId);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const transferOwnershipRepositoryAction = async (
@@ -291,12 +355,15 @@ export const transferOwnershipRepositoryAction = async (
   userName: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await transferOwnershipRepository(
+      userInfo.access_token,
+      repoId,
+      userName
+    );
 
-  const response = await transferOwnershipRepository(
-    userInfo.access_token,
-    repoId,
-    userName
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

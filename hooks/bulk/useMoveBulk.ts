@@ -1,6 +1,8 @@
 import { moveBulkAction } from "@actions/bulk";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useMoveBulk = () => {
   const queryClient = useQueryClient();
@@ -15,10 +17,17 @@ const useMoveBulk = () => {
     }) => {
       const { repoId, destCategory, children } = values;
       const response = await moveBulkAction(repoId, destCategory, children);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
       const { callBack, currentParentId, destCategory } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`category-${destCategory || "parent"}-children-for-move`],
+      });
       queryClient.invalidateQueries({
         queryKey: [`category-${currentParentId || "parent"}-children`],
       });

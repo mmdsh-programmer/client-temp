@@ -49,6 +49,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
       },
     });
   };
+
   return (
     <CreateDialog
       isPending={createTag.isPending}

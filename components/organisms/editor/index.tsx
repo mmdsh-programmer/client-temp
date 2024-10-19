@@ -16,6 +16,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import FloatingButtons from "./floatingButtons";
 import EditorDrawer from "../editorDrawer";
+import FileEditor from "./fileEditor";
 
 interface IProps {
   getEditorConfig: () => {
@@ -50,7 +51,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     : version?.content || " ";
 
   return (
-    <div className="flex h-full relative">
+    <div className="flex h-full relative bg-primary">
       {listDrawer ? (
         <div className="w-full xs:w-[300px]">
           <EditorDrawer version={version} />
@@ -59,31 +60,35 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       <div
         className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"}`}
       >
-        <RemoteEditor
-          url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
-          editorMode={editorMode}
-          ref={getEditorConfig().ref}
-          loadData={
-            selectedDocument?.contentType === EDocumentTypes.classic
-              ? ({
-                  content,
-                  outline: version?.outline || [],
-                  auth: {
-                    accessToken: userInfo?.access_token,
-                    refreshToken: userInfo?.refresh_token,
-                    url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
-                  },
-                  publicUserGroupHash: getRepo?.userGroupHash || undefined,
-                  privateUserGroupHash:
-                    selectedCategory?.userGroupHash || undefined,
-                  repositoryId: getRepo?.id || undefined,
-                  resourceId: selectedCategory?.id || undefined,
-                  podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-                  backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
-                } as IClassicData)
-              : content
-          }
-        />
+        {selectedDocument?.contentType === EDocumentTypes.file ? (
+          <FileEditor />
+        ) : (
+          <RemoteEditor
+            url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
+            editorMode={editorMode}
+            ref={getEditorConfig().ref}
+            loadData={
+              selectedDocument?.contentType === EDocumentTypes.classic
+                ? ({
+                    content: version?.content || " ",
+                    outline: version?.outline || [],
+                    auth: {
+                      accessToken: userInfo?.access_token,
+                      refreshToken: userInfo?.refresh_token,
+                      url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
+                    },
+                    publicUserGroupHash: getRepo?.userGroupHash || undefined,
+                    privateUserGroupHash:
+                      selectedCategory?.userGroupHash || undefined,
+                    repositoryId: getRepo?.id || undefined,
+                    resourceId: selectedCategory?.id || undefined,
+                    podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
+                    backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
+                  } as IClassicData)
+                : content
+            }
+          />
+        )}
       </div>
       <FloatingButtons version={version} />
     </div>

@@ -1,17 +1,17 @@
-import {  likeAction } from "@actions/core";
+import { likeAction } from "@actions/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useLike = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["like"],
-    mutationFn: async (values: {
-      postId: number;
-      callBack?: () => void;
-    }) => {
+    mutationFn: async (values: { postId: number; callBack?: () => void }) => {
       const { postId } = values;
       const response = await likeAction(postId);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

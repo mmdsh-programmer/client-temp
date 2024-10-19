@@ -1,14 +1,18 @@
 "use server";
 
+import { normalizeError } from "@utils/normalizeActionError";
 import { getMe } from "./auth";
-
 import { addUserToFeedbackGroupHash, sendFeedback } from "@service/clasor";
+import { IActionError } from "@interface/app.interface";
 
 export const addUserToFeedbackGroupHashAction = async () => {
   const userInfo = await getMe();
-
-  const result = await addUserToFeedbackGroupHash(userInfo.access_token);
-  return result;
+  try {
+    const result = await addUserToFeedbackGroupHash(userInfo.access_token);
+    return result;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const sendFeedbackAction = async (
@@ -16,11 +20,14 @@ export const sendFeedbackAction = async (
   fileHashList: string[]
 ) => {
   const userInfo = await getMe();
-
-  const result = await sendFeedback(
-    userInfo.access_token,
-    content,
-    fileHashList
-  );
-  return result;
+  try {
+    const result = await sendFeedback(
+      userInfo.access_token,
+      content,
+      fileHashList
+    );
+    return result;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
