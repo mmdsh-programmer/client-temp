@@ -248,8 +248,6 @@ ul.menu:has(li.shepherd-enabled.shepherd-target){
   .rdp__modal.css-1e0sis0 {
     @apply z-[99999];
   }
-
-  
 }
 
 

@@ -30,7 +30,7 @@ const Start = ({ children }: IProps) => {
     }
   
     if (isLoading) {
-      return <SpinnerText text="در حال دریافت اطلاعات" />;
+      return <div className="flex items-center justify-center h-screen"><SpinnerText text="در حال دریافت اطلاعات" /></div>;
     }
   
     return (

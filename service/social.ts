@@ -140,7 +140,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<ICustomPost
   }
   const customPost = response.data.result[0]?.item;
   const { metadata } = customPost;
-  return { ...JSON.parse(metadata), id: customPost.entityId, content: customPost.content ?? "0" };
+  return { ...JSON.parse(metadata), id: customPost.entityId, data: customPost.data ?? "0" };
 };
 
 export const getCustomPostById = async (id: number): Promise<ICustomPostMetadata> => {
@@ -167,7 +167,7 @@ export const getCustomPostById = async (id: number): Promise<ICustomPostMetadata
   }
   const customPost = response.data.result[0]?.item;
   const { metadata } = customPost;
-  return { ...JSON.parse(metadata), id: customPost.id, entityId: customPost.entityId, content: customPost.content ?? "0" };
+  return { ...JSON.parse(metadata), id: customPost.id, entityId: customPost.entityId, data: customPost.data ?? "0" };
 };
 
 
@@ -179,22 +179,17 @@ export const updateCustomPostByEntityId = async (metadata: {
   cryptoInitVectorKey: string,
   cryptoSecretKey: string,
 }, entityId: number, content: string) => {
-  
-  const response = await axiosSocialInstance.get(
+  const response = await axiosSocialInstance.post(
     "/biz/updateCustomPost", {
-      params: {
-        metadata: JSON.stringify({
-          ...metadata,
-          "CUSTOM_POST_TYPE": "DOMAIN_BUSINESS"
-        }),
-        entityId,
-        content
-      },
-    }
+      metadata: JSON.stringify({
+        ...metadata,
+        "CUSTOM_POST_TYPE": "DOMAIN_BUSINESS"
+      }),
+      entityId,
+      content,
+    },
   );
-  
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
   }
-  
 };

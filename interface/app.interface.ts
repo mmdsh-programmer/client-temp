@@ -229,7 +229,19 @@ export interface ICustomPostMetadata {
   clientSecret: string;
   CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
   entityId: number;
-  content: string;
+  data: string;
   cryptoInitVectorKey: string;
   cryptoSecretKey: string;
+}
+
+export interface IThemeInfo {
+  primaryColor?: string;
+  secondaryColor?: string;
+  textColor?: string;
+  textColorLight?: string;
+  textColorLabel?: string;
+  textColorSecondary?: string;
+  textColorPrimary?: string;
+  borderColor?: string;
+  backgroundColor?: string;
 }
