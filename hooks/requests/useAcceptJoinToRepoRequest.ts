@@ -1,6 +1,8 @@
 import { acceptUserToRepoRequestAction } from "@actions/requests";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useAcceptJoinToRepoRequest = () => {
   const queryClient = useQueryClient();
@@ -12,6 +14,7 @@ const useAcceptJoinToRepoRequest = () => {
     }) => {
       const { requestId } = values;
       const response = await acceptUserToRepoRequestAction(requestId);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

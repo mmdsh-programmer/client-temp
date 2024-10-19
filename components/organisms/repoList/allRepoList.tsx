@@ -113,6 +113,68 @@ const AllRepoList = () => {
     });
   };
 
+  const renderRepoContent = () => {
+    if (isLoading && !!search) {
+      return (
+        <div className="w-full h-full flex justify-center items-center">
+          <Spinner className="h-8 w-8" color="deep-purple" />
+        </div>
+      );
+    }
+
+    if (listLength) {
+      return (
+        <>
+          <RenderIf isTrue={mode === EListMode.table}>
+            <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+              <table className="w-full overflow-hidden min-w-max">
+                <TableHead
+                  tableHead={[
+                    { key: "name", value: "نام مخزن", isSorted: true },
+                    { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
+                    { key: "role", value: "نقش من" },
+                    { key: "status", value: "وضعیت" },
+                    {
+                      key: "action",
+                      value: "عملیات",
+                      className: "justify-end",
+                    },
+                  ]}
+                />
+                <tbody>
+                  {renderTableRows()}
+                  <RenderIf isTrue={hasNextPage}>
+                    <tr>
+                      <td colSpan={5} className="!text-center">
+                        <LoadMore
+                          className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                          isFetchingNextPage={isFetchingNextPage}
+                          fetchNextPage={fetchNextPage}
+                        />
+                      </td>
+                    </tr>
+                  </RenderIf>
+                </tbody>
+              </table>
+            </div>
+          </RenderIf>
+          <RenderIf isTrue={mode === EListMode.card}>
+            <CardView
+              isLoading={isLoadingAllRepos || isLoading}
+              getRepoList={repoList}
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
+            />
+          </RenderIf>
+        </>
+      );
+    }
+
+    return <EmptyList type={EEmptyList.FILTER} />;
+  };
+
   const handleList = () => {
     if (isLoadingAllRepos) {
       return (
@@ -121,48 +183,17 @@ const AllRepoList = () => {
         </div>
       );
     }
-    if (listLengthAllRepos) {
-      if (isLoading && !!search) {
-        return (
-          <div className="w-full h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="deep-purple" />
-          </div>
-        );
-      }
-      if (listLength) {
-        return (
-          <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-            <table className="w-full overflow-hidden min-w-max">
-              <TableHead
-                tableHead={[
-                  { key: "name", value: "نام مخزن", isSorted: true },
-                  { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
-                  { key: "role", value: "نقش من" },
-                  { key: "status", value: "وضعیت" },
-                  { key: "action", value: "عملیات", className: "justify-end" },
-                ]}
-              />
-              <tbody>
-                {renderTableRows()}
-                <RenderIf isTrue={hasNextPage}>
-                  <tr>
-                    <td colSpan={5} className="!text-center">
-                      <LoadMore
-                        className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                        isFetchingNextPage={isFetchingNextPage}
-                        fetchNextPage={fetchNextPage}
-                      />
-                    </td>
-                  </tr>
-                </RenderIf>
-              </tbody>
-            </table>
-          </div>
-        );
-      }
-      return <EmptyList type={EEmptyList.FILTER} />;
+
+    if (!listLengthAllRepos) {
+      return <EmptyList type={EEmptyList.DASHBOARD} />;
     }
-    return <EmptyList type={EEmptyList.DASHBOARD} />;
+
+    return (
+      <>
+        <RepoSearch />
+        {renderRepoContent()}
+      </>
+    );
   };
 
   return (

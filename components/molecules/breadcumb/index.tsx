@@ -21,7 +21,8 @@ const Breadcrumb: React.FC = () => {
 
     if (getDocument && getRepo) {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name, getDocument.name];
-    } else if (getRepo) {
+    }
+    if (getRepo) {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name];
     }
     return [...baseBreadcrumb, getRepoGroup];
@@ -51,7 +52,7 @@ const Breadcrumb: React.FC = () => {
                     if (realIndex === 1) {
                       router.push("/admin/dashboard");
                     }
-                    1;
+
                     if (realIndex === 2) {
                       setShowVersionList(null);
                       setDocument(null);
@@ -85,38 +86,40 @@ const Breadcrumb: React.FC = () => {
       );
     }
 
-    return list.map((breadcrumbItem, index) => (
-      <div key={breadcrumbItem}>
-        <Button
-          className="border-none !shadow-none outline-none bg-transparent p-0"
-          onClick={() => {
-            if (index === 1) {
-              router.push("/admin/dashboard");
-            }
-            if (index === 2) {
-              setShowVersionList(null);
-              setDocument(null);
-              setDocumentShow(null);
-            }
-          }}
-        >
-          <div className="flex items-center">
-            <Typography
-              title={breadcrumbItem}
-              className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap max-w-[80px]
+    return list.map((breadcrumbItem, index) => {
+      return (
+        <div key={breadcrumbItem}>
+          <Button
+            className="border-none !shadow-none outline-none bg-transparent p-0"
+            onClick={() => {
+              if (index === 1) {
+                router.push("/admin/dashboard");
+              }
+              if (index === 2) {
+                setShowVersionList(null);
+                setDocument(null);
+                setDocumentShow(null);
+              }
+            }}
+          >
+            <div className="flex items-center">
+              <Typography
+                title={breadcrumbItem}
+                className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap max-w-[80px]
               ${index === list.length - 1 ? "text-primary" : "text-secondary"}`}
-            >
-              {breadcrumbItem}
-            </Typography>
-            {index !== list.length - 1 && (
-              <div className="h-6 w-[14px] flex items-center justify-center">
-                <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
-              </div>
-            )}
-          </div>
-        </Button>
-      </div>
-    ));
+              >
+                {breadcrumbItem}
+              </Typography>
+              {index !== list.length - 1 && (
+                <div className="h-6 w-[14px] flex items-center justify-center">
+                  <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
+                </div>
+              )}
+            </div>
+          </Button>
+        </div>
+      );
+    });
   };
 
   return (

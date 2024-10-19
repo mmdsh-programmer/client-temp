@@ -1,11 +1,11 @@
 import { getChildrenAction } from "@actions/category";
 import { ISortProps } from "@atom/sortParam";
-import { IChildrenFilter } from "@interface/app.interface";
+import { IActionError, IChildrenFilter } from "@interface/app.interface";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetCategoryChildren = (
   repoId: number,
@@ -37,7 +37,7 @@ const useGetCategoryChildren = (
         type,
         filters
       );
-
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,

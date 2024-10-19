@@ -32,9 +32,7 @@ const AttachFile = () => {
 
   const {
     data: files,
-    isFetching,
     refetch,
-    fetchNextPage,
   } = useGetFiles(
     getCategory ? getCategory!.id : getRepo!.id,
     getCategory?.userGroupHash || getRepo?.userGroupHash || "",
@@ -129,7 +127,7 @@ const AttachFile = () => {
           <FileList
             files={
               files?.pages?.flatMap((page) => {
-                return page.list;
+                return page?.list;
               }) || []
             }
             onDelete={handleDeleteFile}

@@ -22,6 +22,8 @@ const CategoryDeleteDialog = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setForceDelete(false);
+    setErrorMessage("");
   };
 
   const handleDelete = async () => {

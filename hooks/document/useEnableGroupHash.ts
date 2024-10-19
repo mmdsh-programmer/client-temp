@@ -2,6 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { IDocument } from "@interface/document.interface";
 import { documentEnableUserGroupHashAction } from "@actions/document";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEnableGroupHash = () => {
   return useMutation({
@@ -16,11 +18,11 @@ const useEnableGroupHash = () => {
         repoId,
         documentId
       );
+      handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
-      console.log("=============== enable user group --------------", response)
       callBack?.();
     },
     onError: (error) => {

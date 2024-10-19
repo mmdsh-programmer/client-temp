@@ -96,7 +96,6 @@ axiosClasorInstance.interceptors.response.use((response) => {
 });
 
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
-  console.log("----------------- error ------------------", error.response)
   if (isAxiosError(error)) {
     const message = [error.response?.data?.messages?.[0] || error.message];
     switch (error.response?.status) {
@@ -111,7 +110,10 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
       case 422:
         throw new UnprocessableError(message, error as IOriginalError);
       default:
-        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
+        throw new ServerError(
+          ["خطا در ارتباط با سرویس خارجی"],
+          error as IOriginalError
+        );
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
@@ -193,8 +195,8 @@ export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
           Authorization: `Bearer ${access_token}`,
         },
         params: {
-          repoTypes
-        }
+          repoTypes,
+        },
       }
     );
 
@@ -228,8 +230,7 @@ export const getAllRepositories = async (
   offset: number,
   size: number,
   name?: string,
-  repoTypes?: string,
-  
+  repoTypes?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -242,7 +243,7 @@ export const getAllRepositories = async (
         offset,
         size,
         title: name,
-        repoTypes
+        repoTypes,
       },
     });
 
@@ -366,7 +367,7 @@ export const getMyRepositories = async (
         size,
         archived,
         title: name,
-        repoTypes
+        repoTypes,
       },
     });
 
@@ -414,7 +415,7 @@ export const getAccessRepositories = async (
         offset,
         size,
         title: name,
-        repoTypes
+        repoTypes,
       },
     });
 
@@ -442,7 +443,7 @@ export const getBookmarkRepositories = async (
         offset,
         size,
         title: name,
-        repoTypes
+        repoTypes,
       },
     });
 
@@ -478,10 +479,7 @@ export const editRepo = async (
   }
 };
 
-export const deleteRepository = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const deleteRepository = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -552,7 +550,7 @@ export const createRepo = async (
       {
         name,
         description,
-        repoTypes
+        repoTypes,
       },
       {
         headers: {
@@ -1109,19 +1107,16 @@ export const getChildren = async (
 export const getCategory = async (
   accessToken: string,
   repoId: number,
-  categoryId: number,
+  categoryId: number
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<ICategoryMetadata>
-    >(
-      `repositories/${repoId}/categories/${categoryId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    >(`repositories/${repoId}/categories/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -1707,7 +1702,7 @@ export const addToDocumentWhiteList = async (
   documentId: number,
   usernameList: string[]
 ) => {
-  console.log("---------------------- white list -------------", usernameList)
+  console.log("---------------------- white list -------------", usernameList);
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/whitelist`,
@@ -2426,6 +2421,36 @@ export const saveVersion = async (
   }
 };
 
+export const saveFileVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  fileHash: {
+    hash: string;
+    fileName: string;
+    fileExtension: string;
+  }
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
+      { fileHash, versionNumber },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    console.log("-------------------------error -----------------", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const freeDraftVersion = async (
   accessToken: string,
   repoId: number,
@@ -2571,18 +2596,17 @@ export const getCommentList = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
-      `core/content/${postId}/comment`,
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IComment>>
+    >(`core/content/${postId}/comment`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -2675,19 +2699,18 @@ export const getLike = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
-      `core/content/${postId}/like`,
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        params: {
-          offset,
-          size,
-          hasUser: true,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ILikeList>>
+    >(`core/content/${postId}/like`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        hasUser: true,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -2702,19 +2725,18 @@ export const getDislike = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
-      `core/content/${postId}/dislike`,
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        params: {
-          offset,
-          size,
-          hasUser: true,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ILikeList>>
+    >(`core/content/${postId}/dislike`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        hasUser: true,
+      },
+    });
 
     return response.data.data;
   } catch (error) {

@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ICategory } from "@interface/category.interface";
 import { editCategoryAction } from "@actions/category";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEditCategory = () => {
   const queryClient = useQueryClient();
@@ -37,6 +39,7 @@ const useEditCategory = () => {
         order,
         isHidden
       );
+      handleClientSideHookError(response as IActionError);
       return response as ICategory;
     },
     onSuccess: (response, values) => {

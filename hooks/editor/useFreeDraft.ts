@@ -2,7 +2,8 @@ import {
  useMutation,
  useQueryClient
 } from "@tanstack/react-query";
-
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 import { freeDraftVersionAction } from "@actions/editor";
 import { toast } from "react-toastify";
 
@@ -30,6 +31,7 @@ const useFreeDraft = () => {
         content,
         outline
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

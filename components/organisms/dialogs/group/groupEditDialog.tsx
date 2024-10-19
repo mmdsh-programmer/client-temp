@@ -77,7 +77,9 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
         });
       });
     })[0]
-    .filter((user) => user.userRole !== "owner")
+    .filter((user) => {
+      return user.userRole !== "owner";
+    })
     .map((item) => {
       return {
         label: item.userInfo.userName,
@@ -107,7 +109,9 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       title: dataForm.title,
       description: dataForm.description,
       // Send only usernames for members
-      members: updatedUsers.map((user) => user.username),
+      members: updatedUsers.map((user) => {
+        return user.username;
+      }),
       callBack: () => {
         toast.success("گروه با موفقیت ویرایش شد.");
         handleClose();
@@ -122,8 +126,15 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       }
 
       // Remove user and update form members field
-      const newUsers = oldValue.filter((user) => user.username !== username);
-      setValue("members", newUsers.map((user) => user.username));
+      const newUsers = oldValue.filter((user) => {
+        return user.username !== username;
+      });
+      setValue(
+        "members",
+        newUsers.map((user) => {
+          return user.username;
+        })
+      );
 
       return [...newUsers];
     });
@@ -181,7 +192,12 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                   ];
 
                   // Update form members field
-                  setValue("members", newUsers.map((user) => user.username));
+                  setValue(
+                    "members",
+                    newUsers.map((user) => {
+                      return user.username;
+                    })
+                  );
 
                   return newUsers;
                 });
@@ -236,4 +252,3 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 };
 
 export default GroupEditDialog;
-

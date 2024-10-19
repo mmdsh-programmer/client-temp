@@ -1,10 +1,12 @@
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
-
 import { ERepoGrouping } from "@interface/enums";
 import { subscribeRepoAction } from "@actions/public";
 import { toast } from "react-toastify";
 import { useMutation } from "@tanstack/react-query";
 import { useSetRecoilState } from "recoil";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
+import { IRepo } from "@interface/repo.interface";
 
 const useSubscribeRepo = () => {
   const setRepo = useSetRecoilState(repoAtom);
@@ -19,8 +21,9 @@ const useSubscribeRepo = () => {
     }) => {
       const { hash, password } = values;
       const response = await subscribeRepoAction(hash, password);
-      if (response?.repository) {
-        setRepo(response?.repository);
+      handleClientSideHookError(response as IActionError);
+      if ("repository" in response) {
+        setRepo(response?.repository as IRepo);
       }
     },
     onSuccess: (response, values) => {

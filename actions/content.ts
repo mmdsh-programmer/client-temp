@@ -2,6 +2,8 @@
 
 import { getContent } from "@service/clasor";
 import { getMe } from "./auth";
+import { normalizeError } from "@utils/normalizeActionError";
+import { IActionError } from "@interface/app.interface";
 
 export const getContentAction = async (
   repoId: number,
@@ -10,14 +12,17 @@ export const getContentAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getContent(
+      userInfo.access_token,
+      repoId,
+      searchParam,
+      offset,
+      size
+    );
 
-  const response = await getContent(
-    userInfo.access_token,
-    repoId,
-    searchParam,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

@@ -1,6 +1,8 @@
 import { bookmarkRepoAction } from "@actions/repository";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useBookmarkRepo = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ const useBookmarkRepo = () => {
     }) => {
       const { detach, repoId } = values;
       const response = await bookmarkRepoAction(repoId, detach);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

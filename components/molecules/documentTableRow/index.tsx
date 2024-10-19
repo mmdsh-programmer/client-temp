@@ -7,11 +7,9 @@ import { IDocumentMetadata } from "@interface/document.interface";
 import TableCell from "../tableCell";
 import { bulkItemsAtom } from "@atom/bulk";
 import { toast } from "react-toastify";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { editorModeAtom } from "@atom/editor";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -21,17 +19,8 @@ const DocumentTableRow = ({ document }: IProps) => {
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
   const getRepo = useRecoilValue(repoAtom);
   const selectedCat = useRecoilValue(categoryAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setDocumentShow = useSetRecoilState(documentShowAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
 
   const handleRowClick = () => {
-    if (document.contentType === "file") {
-      setDocument(document);
-      setDocumentShow(document);
-      setEditorMode("preview");
-      return;
-    }
     const path = selectedCat
       ? `edit?repoId=${document.repoId}&categoryId=${
           selectedCat.id

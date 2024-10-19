@@ -15,10 +15,12 @@ import useRenameFile from "@hooks/files/useRenameFile";
 const fileTablePageSize = 20;
 
 interface IProps {
-  setSelectedFile?: (file?: string) => void;
+  setSelectedFile?: (
+    file?: IFile | null | { name: string; extension: string; hash: string }
+  ) => void;
   userGroupHash: string;
   resourceId: number;
-  handleClose: () => void;
+  handleClose?: () => void;
   type: "private" | "public";
 }
 
@@ -146,7 +148,6 @@ const Files = ({
         } catch (error: any) {
           if (error?.response?.status === 401) {
             refetchUser();
-            handleUploadFile(item, showCropper);
           }
           setIsError(true);
           toast.error("خطا در بارگذاری فایل");
@@ -166,7 +167,6 @@ const Files = ({
       } catch (error: any) {
         if (error?.response?.status === 401) {
           refetchUser();
-          handleUploadFile(item, showCropper);
         }
         setIsError(true);
         toast.error("آپلود ناموفق");
@@ -178,24 +178,26 @@ const Files = ({
     return `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`;
   };
 
-  const handleSelect = useCallback(() => {
-    const fileExtension = selectedImage?.extension.toLowerCase();
-    const imageExtensions = ["png", "jpg", "jfif", "svg"];
+  const handleSelect = () => {
+    // const fileExtension = selectedImage?.extension.toLowerCase();
+    // const imageExtensions = ["png", "jpg", "jfif", "svg"];
+    setSelectedFile?.(selectedImage);
+    handleClose?.();
 
-    if (fileExtension && imageExtensions.includes(fileExtension)) {
-      setSelectedFile?.(selectedImage?.hash);
-      handleClose();
-    } else {
-      toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");
-    }
-  }, [selectedImage, setSelectedFile, handleClose]);
+    // if (fileExtension && imageExtensions.includes(fileExtension)) {
+    // } else {
+    //   toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");
+    // }
+  };
 
   return (
     <FileManagementDialog
       dialogClassName="flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
       dialogBodyClassName="bg-secondary h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
       dialogHeader="افزودن عکس"
-      setOpen={handleClose}
+      setOpen={() => {
+        return handleClose?.();
+      }}
       handleSelect={handleSelect}
     >
       <ClasorFileManagement

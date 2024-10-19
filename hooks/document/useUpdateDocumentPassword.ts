@@ -2,6 +2,8 @@ import { updateDocumentPasswordAction } from "@actions/document";
 import { IDocument } from "@interface/document.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useUpdateDocumentPassword = () => {
   const queryClient = useQueryClient();
@@ -23,6 +25,7 @@ const useUpdateDocumentPassword = () => {
         oldPassword,
         newPassword,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
     onSuccess: (response, values) => {

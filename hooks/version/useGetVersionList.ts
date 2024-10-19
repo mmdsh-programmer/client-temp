@@ -1,6 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { getDocumentAction } from "@actions/document";
 import { IVersion, IVersionMetadata } from "@interface/version.interface";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
+import { IDocumentMetadata } from "@interface/document.interface";
 
 const useGetVersionList = (
   repoId: number,
@@ -16,7 +19,8 @@ const useGetVersionList = (
         (pageParam - 1) * size,
         size
       );
-      return response?.versions as IVersionMetadata;
+      handleClientSideHookError(response as IActionError);
+      return (response as IDocumentMetadata).versions as IVersionMetadata;
     },
     initialPageParam: 1,
     retry: false,

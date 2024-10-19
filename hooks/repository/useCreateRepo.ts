@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createRepoAction } from "@actions/repository";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreateRepo = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ const useCreateRepo = () => {
     }) => {
       const { description, name } = values;
       const response = await createRepoAction(name, description);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

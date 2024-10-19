@@ -3,6 +3,8 @@ import { EDocumentTypes } from "@interface/enums";
 import { IDocument } from "@interface/document.interface";
 import { editDocumentAction } from "@actions/document";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEditDocument = () => {
   const queryClient = useQueryClient();
@@ -44,6 +46,7 @@ const useEditDocument = () => {
         isHidden,
         tagIds,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
     onSuccess: (response, values) => {

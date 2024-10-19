@@ -3,6 +3,8 @@ import { IDocument } from "@interface/document.interface";
 import { EDocumentTypes } from "@interface/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreateDocument = () => {
   const queryClient = useQueryClient();
@@ -43,6 +45,7 @@ const useCreateDocument = () => {
         imageUrl,
         publicKeyId,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
     onSuccess: (response, values) => {

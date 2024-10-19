@@ -1,6 +1,8 @@
 import { deleteFileAction } from "@actions/files";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useDeleteFile = () => {
   const queryClient = useQueryClient();
@@ -15,12 +17,14 @@ const useDeleteFile = () => {
       callBack?: () => void;
     }) => {
       const { resourceId, repoId, fileHash, type } = values;
+
       const response = await deleteFileAction(
         repoId,
         resourceId,
         fileHash,
-        type,
+        type
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

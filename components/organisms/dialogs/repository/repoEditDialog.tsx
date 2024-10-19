@@ -112,7 +112,9 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
         handleClose={() => {
           setOpenFileManagement(false);
         }}
-        setSelectedFile={setSelectedFile}
+        setSelectedFile={(file) => {
+          return setSelectedFile(file?.hash);
+        }}
       />
     );
   }

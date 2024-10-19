@@ -148,7 +148,9 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                 });
                 setValue(
                   "members",
-                  updatedUsers.map((user) => user.username)
+                  updatedUsers.map((user) => {
+                    return user.username;
+                  })
                 );
               }
             }}
