@@ -19,7 +19,10 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: IProps) => {
   return (
     <html lang="fa">
-        <ThemeLoader><Providers>{children}</Providers></ThemeLoader>
+        {/* @ts-expect-error Async Server Component */}
+        <ThemeLoader>
+          <Providers>{children}</Providers>
+        </ThemeLoader>
     </html>
   );
 };
