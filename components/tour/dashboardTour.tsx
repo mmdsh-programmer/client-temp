@@ -1,8 +1,8 @@
+import Shepherd, { StepOptions } from "shepherd.js";
 
 import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import Shepherd from "shepherd.js";
 
 const DashboardTour = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -226,8 +226,7 @@ const DashboardTour = () => {
       ),
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    tourSteps.forEach((step) => { return dashboardTour.addStep(step as any); });
+    tourSteps.forEach((step) => { return dashboardTour.addStep(step as StepOptions); });
 
     dashboardTour.start();
     return () => {

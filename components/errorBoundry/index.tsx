@@ -1,55 +1,11 @@
-// "use client";
-
-// import { IActionError } from "@interface/app.interface";
-// import React from "react";
-
-// class ErrorBoundary extends React.Component<
-//   { children: React.ReactNode },
-//   { errorCode: number; errorList: string[] }
-// > {
-//   constructor(props) {
-//     super(props);
-//     // Define a state variable to track whether is an error or not
-//     this.state = { errorList: [], errorCode: 0 };
-//   }
-
-//   static getDerivedStateFromError(error: IActionError) {
-//     // Update state so the next render will show the fallback UI
-//     const { errorCode, errorList, originalError } = error;
-//     return { errorCode, errorList, originalError };
-//   }
-
-//   componentDidCatch(error, errorInfo) {
-//     // You can use your own error logging service here
-//     console.log({ error, errorInfo });
-//   }
-
-//   render() {
-//     const { children } = this.props;
-//     const { errorList, errorCode } = this.state;
-//     // Return children components in case of no error
-//     return (
-//       <>
-//         {children}
-//         {errorList[0] ? (
-//           <div>
-//             <h2>{errorList[0]}</h2>
-//             <p>{errorCode}</p>
-//           </div>
-//         ) : null}
-//       </>
-//     );
-//   }
-// }
-
-// export default ErrorBoundary;
-
 "use client";
 
-import React, { useState, useEffect } from "react";
+import "react-toastify/dist/ReactToastify.css";
+
+import React, { useEffect, useState } from "react";
+
 import { IActionError } from "@interface/app.interface";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 type ErrorBoundaryProps = { children: React.ReactNode};
 
@@ -81,14 +37,13 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
     }
   }, [errorCodeState, errorListState]);
 
-  // Custom hook for catching the error
-  console.log(
-    "------------------- hiiiiiiiiii -------------------",
-    
-  );
   const handleError = (error: IActionError) => {
     const { errorCode: errorCodeData, errorList: errorListData } = error;
 
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Error Boundary");
+    console.log(errorCodeData);
+    console.log(errorListData);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Error Boundary");
     setErrorCodeState(errorCodeData);
     setErrorListState(errorListData);
   };

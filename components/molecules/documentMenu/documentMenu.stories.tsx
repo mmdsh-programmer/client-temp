@@ -1,10 +1,11 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import DocumentMenu from ".";
-import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { IDocumentMetadata } from "@interface/document.interface";
+
+import DocumentMenu from ".";
 import { EDocumentTypes } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
+import React from "react";
+import { RecoilRoot } from "recoil";
 
 const mockDocument: IDocumentMetadata = {
   id: 1,
