@@ -1,8 +1,10 @@
 import type {
- Meta, StoryObj 
+ Meta,
+ StoryObj
 } from "@storybook/react";
 import {
- QueryClient, QueryClientProvider 
+ QueryClient,
+ QueryClientProvider
 } from "@tanstack/react-query";
 
 import { EDocumentTypes } from "@interface/enums";

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-import-module-exports */
-import { fontFamily } from "tailwindcss/defaultTheme";
 
+import { fontFamily } from "tailwindcss/defaultTheme";
 import withMT from "@material-tailwind/react/utils/withMT";
 
 module.exports = withMT({
@@ -12,49 +12,56 @@ module.exports = withMT({
   theme: {extend: {
       colors: {
         gray: {
-          50: "#F6F7F8", // cancel background
-          100: "#EEF0F2",
-          200: "#ECECEE", // border-normel // menu-active
-          300: "#CED4D9",
-          400: "#9AA6B1", // text-hint // icon-normal
-          500: "#71717A", // text-secondary //icon-hover
-          700: "#414147",
-          800: "#1B1B1D", // icon-active
-          900: "#181C20", // text-primary
+          50: "var(--gray-50)", // cancel background
+          100: "var(--gray-100)",
+          200: "var(--gray-200)", // border-normel // menu-active
+          300: "var(--gray-300)",
+          400: "var(--gray-400)", // text-hint // icon-normal
+          500: "var(--gray-500)", // text-secondary //icon-hover
+          700: "var(--gray-700)",
+          800: "var(--gray-800)", // icon-active
+          900: "var(--gray-900)", // text-primary
         },
         purple: {
-          normal: "#7446B2",
-          light: "#F1EDF7",
+          normal: "var(--purple-normal)",
+          light: "var(--purple-light)",
         },
         icon: {
-          active: "#181C20",
-          hover: "#667585",
+          active: "var(--icon-active)",
+          hover: "var(--icon-hover)",
         },
-        critical: { normal: "#E03E1A" },
-        error: "#E03E1A",
+        critical: { 
+          normal: "var(--critical-normal)" 
+        },
+        error: "var(--error)",
         success: {
-          normal: "#1F7A37",
-          secondary: "#F7FDF8",
+          normal: "var(--success-normal)",
+          secondary: "var(--success-secondary)",
         },
-        info: "#0C8CE9",
-        "info-secondary": "#E7F5FD",
+        info: {
+          normal: "var(--info-normal)",
+          secondary: "var(--info-secondary)",
+        },
       },
       backgroundColor: {
-        primary: "#FFFFFF",
-        secondary: "#F5F7FA",
-        tertiary: "#F2F2F7",
+        primary: "var(--bg-primary-color)",
+        secondary: "var(--bg-secondary-color)",
+        tertiary: "var(--bg-tertiary-color)",
       },
-
-      borderColor: {normal: "#EEF0F2",},
-      iconColor: {active: "#181C20",},
+      borderColor: {
+        normal: "var(--border-normal)"
+      },
+      iconColor: {
+        active: "var(--icon-active)"
+      },
       textColor: {
-        primary: "#0C0E10",
-        secondary: "#667585",
-        hint: "#9AA6B1",
-        placeholder: "#98A2B3",
-        disabled: "#9AA6B1",
-        primary_normal: "#7446B2",
-        link: "#0C8CE9",
+        primary: "var(--text-primary)",
+        secondary: "var(--text-secondary)",
+        hint: "var(--text-hint)",
+        placeholder: "var(--text-placeholder)",
+        disabled: "var(--text-disabled)",
+        primary_normal: "var(--text-primary-normal)",
+        link: "var(--text-link)",
       },
       fontFamily: {iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans],},
       screens: {
@@ -76,8 +83,11 @@ module.exports = withMT({
         "1": "1 1 auto",
         "2": "2 2 auto",
       },
-      letterSpacing: {tightest: "0.13px",},
-    },},
+      letterSpacing: {
+        tightest: "0.13px"
+      },
+    },
+  },
   // eslint-disable-next-line @typescript-eslint/no-require-imports, global-require, import/no-extraneous-dependencies
   plugins: [require("tailwindcss-rtl")],
 });
