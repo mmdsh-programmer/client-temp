@@ -139,23 +139,23 @@ export class UnprocessableError extends BasicError {
 
 export const handleActionError = (errorObject: IActionError) => {
   const messages = [
-    ...(errorObject.errorList ?? "خطای ناشناخته ای رخ داده است"),
+    ...(errorObject?.errorList ?? "خطای ناشناخته ای رخ داده است"),
   ];
-  switch (errorObject.errorCode) {
+  switch (errorObject?.errorCode) {
     case 401:
-      throw new AuthorizationError(messages, errorObject.originalError);
+      throw new AuthorizationError(messages, errorObject?.originalError);
     case 403:
-      throw new ForbiddenError(messages, errorObject.originalError);
+      throw new ForbiddenError(messages, errorObject?.originalError);
     case 404:
-      throw new NotFoundError(messages, errorObject.originalError);
+      throw new NotFoundError(messages, errorObject?.originalError);
     case 400:
-      throw new InputError(messages, errorObject.originalError);
+      throw new InputError(messages, errorObject?.originalError);
     case 409:
-      throw new DuplicateError(messages, errorObject.originalError);
+      throw new DuplicateError(messages, errorObject?.originalError);
     case 422:
-      throw new UnprocessableError(messages, errorObject.originalError);
+      throw new UnprocessableError(messages, errorObject?.originalError);
     default:
-      throw new ServerError(messages, errorObject.originalError);
+      throw new ServerError(messages, errorObject?.originalError);
   }
 };
 

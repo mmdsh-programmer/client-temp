@@ -12,6 +12,7 @@ import { getCustomPostByDomain } from "@service/social";
 import { getPodAccessToken } from "@service/account";
 import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
+import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
 
 const refreshCookieHeader = async (rToken: string) => {
@@ -85,6 +86,15 @@ export const getMe = async () => {
   }
 };
 
+
+export const userInfoAction = async () => {
+  const encodedToken = cookies().get("token")?.value;
+  if (!encodedToken) {
+    return null;
+  }
+  return getMe();
+};
+
 export const login = async () => {
   // get domain and find proper custom post base on domain
   const domain = headers().get("host");
@@ -130,8 +140,33 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 };
 
 export const logoutAction = async () => {
-  const userData = await getMe();
-  const response = await logout(userData.access_token, userData.refresh_token);
-  cookies().delete("token");
-  return response;
+  const encodedToken = cookies().get("token")?.value;
+  if (!encodedToken) {
+    return redirect("/signin");
+  }
+  try {
+  
+    const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
+  
+      // get domain and find proper custom post base on domain
+      const domain = headers().get("host");
+      if (!domain) {
+        throw new Error("Domain is not found");
+      }
+      
+      const { cryptoSecretKey, cryptoInitVectorKey } = await getCustomPostByDomain(domain);
+  
+    const { access_token, refresh_token } = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
+      access_token: string;
+      refresh_token: string;
+    };
+
+    const response = await logout(access_token, refresh_token);
+    cookies().delete("token");
+    return response;
+  } catch (error) {
+    
+    cookies().delete("token");
+    return normalizeError(error as IActionError);
+  }
 };

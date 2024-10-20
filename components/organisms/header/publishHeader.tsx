@@ -1,17 +1,10 @@
-"use client";
-
-import { InfoIcon, UserIcon } from "@components/atoms/icons";
-
-import { Button } from "@material-tailwind/react";
 import ImageComponent from "@components/atoms/image";
+import { InfoIcon } from "@components/atoms/icons";
 import ProfileMenu from "@components/molecules/profileMenu";
 import React from "react";
-import { login } from "@actions/auth";
 import useGetTheme from "@hooks/theme/useGetTheme";
-import useGetUser from "@hooks/auth/useGetUser";
 
 const PublishHeader = () => {
-  const { data: userInfo } = useGetUser();
   const { data: themeInfo } = useGetTheme();
 
   if (themeInfo && "error" in themeInfo) {
@@ -47,19 +40,7 @@ const PublishHeader = () => {
             ) : null}
           </div>
           <div className="flex items-center gap-4 mr-auto">
-            {userInfo ? (
-              <ProfileMenu />
-            ) : (
-              <Button
-                placeholder=""
-                onClick={() => {
-                  return login();
-                }}
-                className="userProfile rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
-              >
-                <UserIcon className="h-4 w-4 fill-gray-400" />
-              </Button>
-            )}
+            <ProfileMenu />
           </div>
         </div>
       </div>
