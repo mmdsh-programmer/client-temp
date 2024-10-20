@@ -14,13 +14,14 @@ export const getThemeAction = async () => {
     }
 
     const { data } = await getCustomPostByDomain(domain);
-    const { projectDescription, projectName, logo } = JSON.parse(data) as {
+    const { projectDescription, projectName, logo, heroImage } = JSON.parse(data) as {
       projectDescription?: string;
       projectName?: string;
       logo?: string;
+      heroImage?: string;
     };
 
-    return { projectDescription, projectName, logo };
+    return { projectDescription, projectName, logo, heroImage };
   } catch (error) {
     return normalizeError(error as IActionError);
   }

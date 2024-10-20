@@ -1,9 +1,11 @@
 import {
- FilterIcon, SearchIcon 
+ FilterIcon,
+ SearchIcon
 } from "@components/atoms/icons";
 import React, { useState } from "react";
 import {
- filterChildrenAtom, filterReportAtom 
+ filterChildrenAtom,
+ filterReportAtom
 } from "@atom/filter";
 
 import { Button } from "@material-tailwind/react";
@@ -43,7 +45,7 @@ const SearchFilter = ({
             }
           }}
           placeholder=""
-          className="categorySearch bg-whiteshadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+          className="categorySearch bg-whiteShadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
         >
           <FilterIcon className="h-5 w-5 stroke-gray-500" />
         </Button>

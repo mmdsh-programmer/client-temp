@@ -1,8 +1,9 @@
-import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
+
 import { IRepo } from "@interface/repo.interface";
-import RepoDefaultImage from "../repoDefaultImage";
 import Link from "next/link";
+import React from "react";
+import RepoDefaultImage from "../repoDefaultImage";
 import { toPersinaDigit } from "@utils/index";
 
 interface IProps {
@@ -14,7 +15,7 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
     <Card
       placeholder="card"
       key={`repo-card-item-${repo.id}`}
-      className="flex flex-col h-full rounded-lg bg-white border-[1px] border-normal shadow-small"
+      className="repo-publish-card last:flex flex-col h-full rounded-lg bg-white border-[1px] border-normal shadow-small"
     >
       <Link
       className="h-full"
@@ -26,7 +27,7 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
       >
         <div className="flex p-4 justify-between items-center w-full h-full">
           <div className="flex flex-col items-center justify-center gap-3 w-full">
-            <div className="h-auto w-full max-w-40">
+            <div className="h-auto w-full max-h-[129px] max-w-40 flex justify-center items-center overflow-hidden">
               <RepoDefaultImage imageHash={repo.imageFileHash} />
             </div>
             <Typography className="title_t2 w-full mt-5 text-center sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]">

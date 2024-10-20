@@ -1,5 +1,7 @@
-import React from "react";
+"use client";
+
 import Image from "next/image";
+import React from "react";
 
 interface IProps {
   src: string;
@@ -12,7 +14,7 @@ interface IProps {
 const ImageComponent = ({ alt, src, className, width, height }: IProps) => {
   return (
     <Image
-      className={`${className ?? "h-full w-full overflow-hidden"}`}
+      className={`${className}`}
       src={src}
       alt={alt}
       width={width ?? 100}

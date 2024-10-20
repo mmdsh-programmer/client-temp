@@ -33,7 +33,6 @@ const SignInComponent = () => {
     try {
       setLoading(true);
       await getUserToken(code, redirect_uri);
-      setLoading(false);
       const lastPage = localStorage.getItem("CLASOR:LAST_PAGE") || null;
 
       if (lastPage === null) {
@@ -59,6 +58,7 @@ const SignInComponent = () => {
         router.push(lastPage);
       }
     } catch {
+      setLoading(false);
       setError("خطا در دریافت اطلاعات کاربری");
     }
   };
@@ -66,6 +66,7 @@ const SignInComponent = () => {
   const init = useDebouncedCallback(async () => {
     const code = searchParams.get("code");
     const paramError = searchParams.get("error");
+    debugger;
     if (paramError) {
       const error_description = searchParams.get("error_description");
       setError(error_description);

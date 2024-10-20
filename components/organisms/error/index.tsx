@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Typography } from "@material-tailwind/react";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
