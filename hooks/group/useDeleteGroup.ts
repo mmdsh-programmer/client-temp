@@ -1,6 +1,8 @@
 import { deleteGroupAction } from "@actions/group";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useDeleteGroup = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ const useDeleteGroup = () => {
     }) => {
       const { repoId, title } = values;
       const response = await deleteGroupAction(repoId, title);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

@@ -17,11 +17,11 @@ const logger = (key: string, newValue: any, oldValue: any) => {
 
 export const logEffect =
   (atomName) =>
-  ({ onSet }) => {
+  {return ({ onSet }) => {
     onSet((newValue, oldValue) => {
       logger(atomName, newValue, oldValue);
     });
-  };
+  };};
 
 export const translateRoles = (role?: ERoles) => {
   switch (role) {
@@ -189,4 +189,48 @@ export const mapOrder = (array: IRepo[], order: number[]) => {
   });
 
   return [...inSortList, ...notInSortList];
+};
+export const checkFormat = (fileExtension?: string) => {
+  const extension = fileExtension?.toLowerCase();
+  if (
+    extension?.includes("png")
+    || extension?.includes("jpeg")
+    || extension?.includes("jpg")
+    || extension?.includes("image")
+    || extension?.includes("webp")
+    || extension?.includes("jfif")
+  ) {
+    return "image";
+  }
+  if (
+    extension?.includes("m4v")
+    || extension?.includes("avi")
+    || extension?.includes("mpg")
+    || extension?.includes("mp4")
+    || extension?.includes("ogg")
+    || extension?.includes("mov")
+  ) {
+    return "video";
+  }
+  if (
+    extension?.includes("m4a")
+    || extension?.includes("flac")
+    || extension?.includes("mp3")
+    || extension?.includes("wav")
+    || extension?.includes("wma")
+    || extension?.includes("aac")
+  ) {
+    return "audio";
+  }
+  if (extension?.includes("pdf")) {
+    return "pdf";
+  }
+};
+export const fileSize = (size: number) => {
+  const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+  return (
+    `${+(size / 1024 ** i).toFixed(2) * 1
+    } ${
+      ["بایت", "کیلوبایت", "مگابایت", "گیگابایت", "ترابایت"][i]}`
+  );
 };

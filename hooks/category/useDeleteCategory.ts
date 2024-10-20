@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { deleteCategoryAction } from "@actions/category";
 import { toast } from "react-toastify";
+import { handleClientSideHookError } from "@utils/error";
+import { IActionError } from "@interface/app.interface";
 
 // Define a custom error type
 interface CustomError {
@@ -28,20 +30,17 @@ const useDeleteCategory = () => {
         categoryId,
         forceDelete,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: [`category-${parentId || "parent"}-children`],
       });
       callBack?.();
     },
     onError: (error: CustomError, values) => { // Use the custom error type
-      debugger;
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      console.log(error);
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       const {errorCallBack} = values;
       toast.error(error.message || "خطای نامشخصی رخ داد");
       errorCallBack?.(error);

@@ -1,6 +1,8 @@
 import { editGroupAction } from "@actions/group";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEditGroup = () => {
   const queryClient = useQueryClient();
@@ -20,6 +22,7 @@ const useEditGroup = () => {
         description,
         members,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

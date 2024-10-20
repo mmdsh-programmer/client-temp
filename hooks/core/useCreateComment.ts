@@ -1,6 +1,8 @@
 import { createCommentAction } from "@actions/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreateComment = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ const useCreateComment = () => {
     }) => {
       const { postId, text } = values;
       const response = await createCommentAction(postId, text);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

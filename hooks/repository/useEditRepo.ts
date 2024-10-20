@@ -1,6 +1,8 @@
 import { editRepoAction } from "@actions/repository";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEditRepo = () => {
   const queryClient = useQueryClient();
@@ -14,6 +16,7 @@ const useEditRepo = () => {
     }) => {
       const { description, name, repoId } = values;
       const response = await editRepoAction(repoId, name, description);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

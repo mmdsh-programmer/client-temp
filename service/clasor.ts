@@ -1118,6 +1118,26 @@ export const getChildren = async (
   }
 };
 
+export const getCategory = async (
+  accessToken: string,
+  repoId: number,
+  categoryId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<ICategoryMetadata>
+    >(`repositories/${repoId}/categories/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const createCategory = async (
   accessToken: string,
   repoId: number,
@@ -1727,6 +1747,7 @@ export const addToDocumentWhiteList = async (
   documentId: number,
   usernameList: string[]
 ) => {
+  console.log("---------------------- white list -------------", usernameList);
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/whitelist`,
@@ -2431,6 +2452,36 @@ export const saveVersion = async (
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
       { content, outline, versionNumber },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    console.log("-------------------------error -----------------", error);
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const saveFileVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  fileHash: {
+    hash: string;
+    fileName: string;
+    fileExtension: string;
+  }
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
+      { fileHash, versionNumber },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

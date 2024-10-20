@@ -1,11 +1,13 @@
 import { getContentAction } from "@actions/content";
 import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useSearchContent = (
   repoId: number,
   searchParam: string,
-  size: number,
+  size: number
 ) => {
   return useInfiniteQuery({
     queryKey: [`repoId-${repoId}-searchContent-${searchParam}`],
@@ -14,9 +16,9 @@ const useSearchContent = (
         repoId,
         searchParam,
         (pageParam - 1) * size,
-        size,
+        size
       );
-
+      handleClientSideHookError(response as IActionError);
       return response as IContentSearchResult;
     },
     initialPageParam: 1,

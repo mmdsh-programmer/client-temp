@@ -1,11 +1,13 @@
 import { renameFileAction } from "@actions/files";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useRenameFile = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`renameFile`],
+    mutationKey: ["renameFile"],
     mutationFn: async (values: {
       resourceId: number;
       newName: string;
@@ -15,6 +17,7 @@ const useRenameFile = () => {
     }) => {
       const { resourceId, newName, hash } = values;
       const response = await renameFileAction(resourceId, newName, hash);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

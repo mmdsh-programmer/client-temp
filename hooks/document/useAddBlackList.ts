@@ -1,11 +1,13 @@
 import { addToDocumentBlackListAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useAddBlackList = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`add-blacklist`],
+    mutationKey: ["add-blacklist"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
@@ -18,6 +20,7 @@ const useAddBlackList = () => {
         documentId,
         usernameList,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

@@ -69,7 +69,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       contentType: document.contentType,
       title: dataForm.title,
       description: dataForm?.description,
-      order: null,
+      order: dataForm.order,
       isHidden: false,
       callBack: () => {
         toast.success("سند با موفقیت به روز رسانی شد.");

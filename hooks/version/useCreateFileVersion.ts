@@ -2,6 +2,8 @@ import { createFileVersionAction } from "@actions/version";
 import { IFileVersion } from "@interface/version.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreateFileVersion = () => {
   const queryClient = useQueryClient();
@@ -21,6 +23,7 @@ const useCreateFileVersion = () => {
         versionNumber,
         fileHash,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

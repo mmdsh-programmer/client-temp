@@ -18,7 +18,6 @@ const AccessRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching,
   } = useGetAccessList(20, undefined, true);
 
   const commonProps: IRepoView = {
@@ -27,7 +26,6 @@ const AccessRepoList = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    isFetching,
     type: EEmptyList.ACCESS_REPO,
   };
 

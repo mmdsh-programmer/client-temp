@@ -8,7 +8,7 @@ import {
 import { Button } from "@material-tailwind/react";
 import { EDraftStatus } from "@interface/enums";
 import { IVersion } from "@interface/version.interface";
-import LikeAndComment from "../like&comment";
+import LikeAndDislike from "../like&dislike";
 import RenderIf from "@components/atoms/renderIf";
 import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
 import VersionPublicDialog from "../dialogs/version/versionPublicDialog";
@@ -80,11 +80,11 @@ const FloatingButtons = ({ version }: IProps) => {
                   setVersionPublicModal(true);
                 }}
               >
-                <GlobeIcon className="h-5 w-5 fill-white" />
+                <GlobeIcon className="h-5 w-5 " />
               </Button>
             </RenderIf>
             <RenderIf isTrue={renderLike}>
-              <LikeAndComment version={version} />
+              <LikeAndDislike version={version} />
             </RenderIf>
           </>
         ) : null}

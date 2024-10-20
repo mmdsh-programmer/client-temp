@@ -2,6 +2,8 @@ import { deletePublicLinkAction } from "@actions/public";
 import { IRoles } from "@interface/users.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useDeletePublicLink = () => {
   const queryClient = useQueryClient();
@@ -14,6 +16,7 @@ const useDeletePublicLink = () => {
     }) => {
       const { repoId, roleId } = values;
       const response = await deletePublicLinkAction(repoId, roleId);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

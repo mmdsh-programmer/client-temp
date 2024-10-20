@@ -14,6 +14,8 @@ import {
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { IFileVersion } from "@interface/version.interface";
+import { normalizeError } from "@utils/normalizeActionError";
+import { IActionError } from "@interface/app.interface";
 
 export const getVersionAction = async (
   repoId: number,
@@ -24,18 +26,21 @@ export const getVersionAction = async (
   innerOutline?: boolean
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId,
+      state,
+      innerDocument,
+      innerOutline
+    );
 
-  const response = await getVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId,
-    state,
-    innerDocument,
-    innerOutline
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const createVersionAction = async (
@@ -46,17 +51,20 @@ export const createVersionAction = async (
   outline: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await createVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionNumber,
+      content,
+      outline
+    );
 
-  const response = await createVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionNumber,
-    content,
-    outline
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const createFileVersionAction = async (
@@ -66,16 +74,19 @@ export const createFileVersionAction = async (
   fileHash?: IFileVersion
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await createFileVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionNumber,
+      fileHash
+    );
 
-  const response = await createFileVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionNumber,
-    fileHash
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deleteVersionAction = async (
@@ -85,16 +96,19 @@ export const deleteVersionAction = async (
   state: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId,
+      state
+    );
 
-  const response = await deleteVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId,
-    state
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getLastVersionAction = async (
@@ -102,14 +116,17 @@ export const getLastVersionAction = async (
   documentId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getLastVersion(
+      userInfo.access_token,
+      repoId,
+      documentId
+    );
 
-  const response = await getLastVersion(
-    userInfo.access_token,
-    repoId,
-    documentId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const setLastVersionAction = async (
@@ -118,15 +135,18 @@ export const setLastVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await setLastVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId
+    );
 
-  const response = await setLastVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const publicVersionAction = async (
@@ -135,15 +155,18 @@ export const publicVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await publicVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId
+    );
 
-  const response = await publicVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const cancelPublicVersionAction = async (
@@ -152,15 +175,18 @@ export const cancelPublicVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await cancelPublicVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId
+    );
 
-  const response = await cancelPublicVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const confirmVersionAction = async (
@@ -169,15 +195,18 @@ export const confirmVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await confirmVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId
+    );
 
-  const response = await confirmVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const cancelConfirmVersionAction = async (
@@ -186,13 +215,16 @@ export const cancelConfirmVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await cancelConfirmVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId
+    );
 
-  const response = await cancelConfirmVersion(
-    userInfo.access_token,
-    repoId,
-    documentId,
-    versionId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

@@ -10,6 +10,8 @@ import {
   getRoles,
 } from "@service/clasor";
 import { getMe } from "./auth";
+import { normalizeError } from "@utils/normalizeActionError";
+import { IActionError } from "@interface/app.interface";
 
 export const getRepositoryUserList = async (
   repoId: number,
@@ -17,15 +19,18 @@ export const getRepositoryUserList = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getRepositoryUsers(
+      userInfo.access_token,
+      repoId,
+      offset,
+      size
+    );
 
-  const response = await getRepositoryUsers(
-    userInfo.access_token,
-    repoId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getRepositoryInviteRequestsAction = async (
@@ -34,23 +39,29 @@ export const getRepositoryInviteRequestsAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getRepositoryInviteRequestsByOwner(
+      userInfo.access_token,
+      repoId,
+      offset,
+      size
+    );
 
-  const response = await getRepositoryInviteRequestsByOwner(
-    userInfo.access_token,
-    repoId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getRolesAction = async () => {
   const userInfo = await getMe();
+  try {
+    const response = await getRoles(userInfo.access_token);
 
-  const response = await getRoles(userInfo.access_token);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const addUserToRepoAction = async (
@@ -59,15 +70,18 @@ export const addUserToRepoAction = async (
   accessName: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await addUserToRepo(
+      userInfo.access_token,
+      repoId,
+      username,
+      accessName
+    );
 
-  const response = await addUserToRepo(
-    userInfo.access_token,
-    repoId,
-    username,
-    accessName
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const userRoleEditAction = async (
@@ -76,23 +90,29 @@ export const userRoleEditAction = async (
   roleName: string
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await editUserRole(
+      userInfo.access_token,
+      repoId,
+      userName,
+      roleName
+    );
 
-  const response = await editUserRole(
-    userInfo.access_token,
-    repoId,
-    userName,
-    roleName
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deleteUserAction = async (repoId: number, userName: string) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteUser(userInfo.access_token, repoId, userName);
 
-  const response = await deleteUser(userInfo.access_token, repoId, userName);
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deleteInviteRequestAction = async (
@@ -100,12 +120,15 @@ export const deleteInviteRequestAction = async (
   userId: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteInviteRequest(
+      userInfo.access_token,
+      repoId,
+      userId
+    );
 
-  const response = await deleteInviteRequest(
-    userInfo.access_token,
-    repoId,
-    userId
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

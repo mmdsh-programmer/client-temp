@@ -1,4 +1,6 @@
 import { addUserToCategoryBlocklistAction } from "@actions/category";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
@@ -19,6 +21,7 @@ const useBlockCategory = () => {
         username,
         type
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
