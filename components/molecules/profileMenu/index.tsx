@@ -78,7 +78,7 @@ const ProfileMenu: React.FC = () => {
       >
         {userData?.profileImage ? (
           <ImageComponent
-            className="rounded-full h-6 w-6 "
+            className="rounded-full h-full w-full"
             src={userData?.profileImage}
             alt={userData?.username}
           />
