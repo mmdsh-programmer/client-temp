@@ -1,11 +1,12 @@
-import React from "react";
 import {
   getPublishDocumentLastVersion,
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
+
 import { IRepo } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
+import React from "react";
 import { toEnglishDigit } from "@utils/index";
 
 export interface IPublishProps {
@@ -122,7 +123,7 @@ export default async function PublishContentPage({
   params: { slug: string[] };
 }) {
   try {
-    const { uniqueId, repoId, repoName, repository, data } =
+    const { repoName } =
       await getPublishData(params.slug);
 
     return <div>{repoName}</div>;

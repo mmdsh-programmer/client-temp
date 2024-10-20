@@ -37,7 +37,7 @@ const refreshCookieHeader = async (rToken: string) => {
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
   cookies().set("token", token, {
     httpOnly: true,
-    secure: process.env.SECURE === "true",
+    secure: process.env.SECURE === "TRUE",
     path: "/",
     maxAge: 60 * 60 * 24,
     sameSite: "lax",
@@ -95,7 +95,7 @@ export const login = async () => {
   
   const { clientId } = await getCustomPostByDomain(domain);
   const url = (`${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-    `${process.env.SECURE === "true" ? "https" : "http"}://${domain}/signin`
+    `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}/signin`
   )}&scope=profile`).replace("http:", "https:");
   redirect(url);
 };
@@ -121,7 +121,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
   cookies().set("token", token, {
     httpOnly: true,
-    secure: process.env.SECURE === "true",
+    secure: process.env.SECURE === "TRUE",
     path: "/",
     maxAge: 60 * 60 * 24,
     sameSite: "lax",
