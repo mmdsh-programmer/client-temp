@@ -127,9 +127,9 @@ export default async function PublishContentPage({
       await getPublishData(params.slug);
 
     return <div>{repoName}</div>;
-  } catch (error: any) {
-    const errorMessage = Array.isArray(error.messages)
-      ? error.messages[0]
+  } catch (error) {
+    const errorMessage = Array.isArray((error as { messages?: string[] })?.messages)
+      ? (error as { messages?: string[] })?.messages?.[0]
       : JSON.stringify(error);
 
     return (
