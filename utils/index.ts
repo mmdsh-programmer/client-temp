@@ -190,6 +190,20 @@ export const mapOrder = (array: IRepo[], order: number[]) => {
 
   return [...inSortList, ...notInSortList];
 };
+
+export const bracketStringify = (data: Record<string, any>): string => {
+  const queryString = Object.keys(data)
+    .map(key => {
+      const value = data[key];
+      if (Array.isArray(value)) {
+        return value.map(item => 
+{return `${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`;}).join("&");
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    })
+    .join("&");
+  return queryString;
+};
 export const checkFormat = (fileExtension?: string) => {
   const extension = fileExtension?.toLowerCase();
   if (

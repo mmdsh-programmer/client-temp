@@ -2,36 +2,38 @@
 
 import { cookies, headers } from "next/dist/client/components/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
-import {
-  logout,
-  renewToken,
-  userInfo,
-} from "@service/clasor";
+import { getPodAccessToken, refreshPodAccessToken, revokePodToken } from "@service/account";
+
 import { IActionError } from "@interface/app.interface";
 import { getCustomPostByDomain } from "@service/social";
-import { getPodAccessToken } from "@service/account";
 import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
+import {
+  userInfo,
+} from "@service/clasor";
 
-const refreshCookieHeader = async (rToken: string) => {
-  const response = await renewToken(rToken);
-  const { accessToken, refreshToken } = response;
+const refreshCookieHeader = async (rToken: string, clientId: string, clientSecret: string) => {
+  const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
+  const { access_token, refresh_token } = response;
 
   // get domain and find proper custom post base on domain
   const domain = headers().get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  
-  const { cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
-      
+
+  const { cryptoInitVectorKey, cryptoSecretKey } =
+    await getCustomPostByDomain(domain);
+
   const encryptedData = encryptKey(
     JSON.stringify({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    }), cryptoSecretKey, cryptoInitVectorKey
+      access_token,
+      refresh_token,
+    }),
+    cryptoSecretKey,
+    cryptoInitVectorKey
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
@@ -43,31 +45,37 @@ const refreshCookieHeader = async (rToken: string) => {
     sameSite: "lax",
   });
 
-  const userData = await userInfo(accessToken);
+  const userData = await userInfo(access_token);
   return {
     ...userData,
-    access_token: accessToken,
-    refresh_token: refreshToken,
+    access_token,
+    refresh_token,
   };
 };
 
 export const getMe = async () => {
   const encodedToken = cookies().get("token")?.value;
   if (!encodedToken) {
-    redirect("/signin");
+    return redirect("/signin");
   }
 
-  const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
+  const payload = jwt.verify(
+    encodedToken,
+    process.env.JWT_SECRET_KEY as string
+  ) as string;
 
-    // get domain and find proper custom post base on domain
-    const domain = headers().get("host");
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-    
-    const { cryptoSecretKey, cryptoInitVectorKey } = await getCustomPostByDomain(domain);
+  // get domain and find proper custom post base on domain
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
 
-  const tokenInfo = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
+  const { cryptoSecretKey, cryptoInitVectorKey, clientId, clientSecret } =
+    await getCustomPostByDomain(domain);
+
+  const tokenInfo = JSON.parse(
+    decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)
+  ) as {
     access_token: string;
     refresh_token: string;
   };
@@ -80,19 +88,26 @@ export const getMe = async () => {
     };
   } catch (error: unknown) {
     if ((error as IActionError)?.errorCode === 401) {
-      return refreshCookieHeader(tokenInfo.refresh_token);
+      try {
+        return refreshCookieHeader(tokenInfo.refresh_token, clientId, clientSecret);
+      } catch (refreshTokenError) {
+        return handleActionError(refreshTokenError as IActionError);
+      }
     }
     return handleActionError(error as IActionError);
   }
 };
 
-
 export const userInfoAction = async () => {
-  const encodedToken = cookies().get("token")?.value;
-  if (!encodedToken) {
-    return null;
+  try {
+    const encodedToken = cookies().get("token")?.value;
+    if (!encodedToken) {
+      return null;
+    }
+    return getMe();
+  } catch (error) {
+    return normalizeError(error as IActionError);
   }
-  return getMe();
 };
 
 export const login = async () => {
@@ -101,22 +116,29 @@ export const login = async () => {
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  
+
   const { clientId } = await getCustomPostByDomain(domain);
-  const url = (`${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-    `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}/signin`
-  )}&scope=profile`).replace("http:", "https:");
+  const url =
+    `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
+      `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}/signin`
+    )}&scope=profile`.replace("http:", "https:");
   redirect(url);
 };
 
 export const getUserToken = async (code: string, redirectUrl: string) => {
-    const domain = headers().get("host");
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-    
-  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
-  const { access_token, refresh_token } = await getPodAccessToken(code, redirectUrl, clientId, clientSecret);
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+
+  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
+    await getCustomPostByDomain(domain);
+  const { access_token, refresh_token } = await getPodAccessToken(
+    code,
+    redirectUrl,
+    clientId,
+    clientSecret
+  );
 
   const encryptedData = encryptKey(
     JSON.stringify({
@@ -142,30 +164,40 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 export const logoutAction = async () => {
   const encodedToken = cookies().get("token")?.value;
   if (!encodedToken) {
-    return redirect("/signin");
+    return;
   }
   try {
-  
-    const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
-  
-      // get domain and find proper custom post base on domain
-      const domain = headers().get("host");
-      if (!domain) {
-        throw new Error("Domain is not found");
-      }
-      
-      const { cryptoSecretKey, cryptoInitVectorKey } = await getCustomPostByDomain(domain);
-  
-    const { access_token, refresh_token } = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
+    const payload = jwt.verify(
+      encodedToken,
+      process.env.JWT_SECRET_KEY as string
+    ) as string;
+
+    // get domain and find proper custom post base on domain
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const { cryptoSecretKey, cryptoInitVectorKey, clientId, clientSecret } =
+      await getCustomPostByDomain(domain);
+
+    const { access_token, refresh_token } = JSON.parse(
+      decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)
+    ) as {
       access_token: string;
       refresh_token: string;
     };
 
-    const response = await logout(access_token, refresh_token);
+    await revokePodToken(clientId, clientSecret, access_token, "access_token");
+    await revokePodToken(
+      clientId,
+      clientSecret,
+      refresh_token,
+      "refresh_token"
+    );
+
     cookies().delete("token");
-    return response;
   } catch (error) {
-    
     cookies().delete("token");
     return normalizeError(error as IActionError);
   }

@@ -10,18 +10,29 @@ import React from "react";
 import { login } from "@actions/auth";
 import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import useLogout from "@hooks/auth/useLogout";
+import { useQueryClient } from "@tanstack/react-query";
 
-const ProfileMenu: React.FC = () => {
+interface IProps{
+  redirect?: boolean;
+}
+const ProfileMenu = ({ redirect = true }: IProps) => {
   const { isFetching, data: userData } = useGetOptionalUser();
+  const queryClient = useQueryClient();
   const logout = useLogout();
 
   const handleLogout = () => {
     logout.mutate({
       callBack: () => {
         window.localStorage.clear();
-        setTimeout(() => {
-          return window.location.assign("/signin");
-        }, 1500);
+        if(redirect){
+          setTimeout(() => {
+            return window.location.assign("/signin");
+          }, 1500);
+        } else {
+          queryClient.invalidateQueries({
+            queryKey: ["user-info"],
+          });
+        }
       },
     });
   };
