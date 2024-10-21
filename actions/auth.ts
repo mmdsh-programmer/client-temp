@@ -43,11 +43,11 @@ const refreshCookieHeader = async (rToken: string, clientId: string, clientSecre
     sameSite: "lax",
   });
 
-  const userData = await userInfo(accessToken);
+  const userData = await userInfo(access_token);
   return {
     ...userData,
-    access_token: accessToken,
-    refresh_token: refreshToken,
+    access_token,
+    refresh_token,
   };
 };
 
