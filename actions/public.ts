@@ -6,6 +6,8 @@ import {
   subscribeRepo,
 } from "@service/clasor";
 import { getMe } from "./auth";
+import { normalizeError } from "@utils/normalizeActionError";
+import { IActionError } from "@interface/app.interface";
 
 export const createRepoPublicLinkAction = async (
   repoId: number,
@@ -15,15 +17,19 @@ export const createRepoPublicLinkAction = async (
 ) => {
   const userInfo = await getMe();
 
-  const response = await createRepoPublicLink(
-    userInfo.access_token,
-    repoId,
-    roleId,
-    expireTime,
-    password
-  );
+  try {
+    const response = await createRepoPublicLink(
+      userInfo.access_token,
+      repoId,
+      roleId,
+      expireTime,
+      password
+    );
 
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deletePublicLinkAction = async (
@@ -32,19 +38,27 @@ export const deletePublicLinkAction = async (
 ) => {
   const userInfo = await getMe();
 
-  const response = await deletePublicLink(
-    userInfo.access_token,
-    repoId,
-    roleId
-  );
+  try {
+    const response = await deletePublicLink(
+      userInfo.access_token,
+      repoId,
+      roleId
+    );
 
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const subscribeRepoAction = async (hash: string, password?: string) => {
   const userInfo = await getMe();
 
-  const response = await subscribeRepo(userInfo.access_token, hash, password);
+  try {
+    const response = await subscribeRepo(userInfo.access_token, hash, password);
 
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

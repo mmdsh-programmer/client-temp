@@ -1,17 +1,18 @@
 import { getUserDocumentAction } from "@actions/document";
 import { ISortProps } from "@atom/sortParam";
-import { IReportFilter } from "@interface/app.interface";
+import { IActionError, IReportFilter } from "@interface/app.interface";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetUserDocuments = (
   repoId: number,
   sortParams: ISortProps,
   size: number,
-  filters?: IReportFilter | null,
-  enabled?: boolean,
+  filters: IReportFilter | null,
+  enabled: boolean,
 ) => {
   return useInfiniteQuery({
     queryKey: [`repo-${repoId}-children-user-document-${JSON.stringify(filters)}`],
@@ -23,6 +24,7 @@ const useGetUserDocuments = (
         size,
         filters,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,

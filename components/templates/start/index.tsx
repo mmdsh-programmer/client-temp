@@ -3,10 +3,10 @@
 import React, { ReactNode } from "react";
 
 import Error from "@app/error";
-import PanelURl from "../panelUrl";
 import SpinnerText from "@components/molecules/spinnerText";
 import { redirect } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import PanelUrl from "../panelUrl";
 
 interface IProps {
   children: ReactNode;
@@ -42,7 +42,7 @@ const Start = ({ children }: IProps) => {
   
     return (
       <>
-        <PanelURl />
+        <PanelUrl />
         {children}
       </>
     ); 

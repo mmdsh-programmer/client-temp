@@ -10,7 +10,9 @@ import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
-import { userInfo } from "@service/clasor";
+import {
+  userInfo,
+} from "@service/clasor";
 
 const refreshCookieHeader = async (rToken: string, clientId: string, clientSecret: string) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);

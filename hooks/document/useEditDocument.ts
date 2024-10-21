@@ -1,15 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { EDocumentTypes } from "@interface/enums";
 import { IDocument } from "@interface/document.interface";
-import { categoryShowAtom } from "@atom/category";
 import { editDocumentAction } from "@actions/document";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
-const useEditDocument = (move?: boolean) => {
+const useEditDocument = () => {
   const queryClient = useQueryClient();
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
 
   return useMutation({
     mutationKey: ["editDocument"],
@@ -23,6 +21,7 @@ const useEditDocument = (move?: boolean) => {
       order?: number | null;
       isHidden?: boolean;
       tagIds?: number[];
+      currentParentId?: number | null;
       callBack?: () => void;
     }) => {
       const {
@@ -47,18 +46,20 @@ const useEditDocument = (move?: boolean) => {
         isHidden,
         tagIds,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
     onSuccess: (response, values) => {
-      const { callBack, categoryId } = values;
+      const { callBack, categoryId, currentParentId } = values;
+      
       queryClient.invalidateQueries({
-        queryKey: [
-          `category-${getCategoryShow?.id || "parent"}-children`,
-          undefined,
-        ],
+        queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`, undefined],
+        queryKey: [`category-${currentParentId || "parent"}-children`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`category-${categoryId || "parent"}-children`],
       });
       callBack?.();
     },

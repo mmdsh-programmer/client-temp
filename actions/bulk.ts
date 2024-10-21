@@ -2,6 +2,8 @@
 
 import { deleteBulk, moveBulk } from "@service/clasor";
 import { getMe } from "./auth";
+import { normalizeError } from "@utils/normalizeActionError";
+import { IActionError } from "@interface/app.interface";
 
 export const moveBulkAction = async (
   repoId: number,
@@ -9,15 +11,18 @@ export const moveBulkAction = async (
   children: number[]
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await moveBulk(
+      userInfo.access_token,
+      repoId,
+      parentId,
+      children
+    );
 
-  const response = await moveBulk(
-    userInfo.access_token,
-    repoId,
-    parentId,
-    children
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deleteBulkAction = async (
@@ -26,13 +31,16 @@ export const deleteBulkAction = async (
   forceDelete?: boolean
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteBulk(
+      userInfo.access_token,
+      repoId,
+      children,
+      forceDelete
+    );
 
-  const response = await deleteBulk(
-    userInfo.access_token,
-    repoId,
-    children,
-    forceDelete
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

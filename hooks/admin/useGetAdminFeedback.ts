@@ -1,6 +1,8 @@
 import { getAdminPanelFeedbackAction } from "@actions/admin";
 import { IOfferResponse } from "@interface/offer.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetAdminFeedback = (size: number) => {
   return useInfiniteQuery({
@@ -10,6 +12,7 @@ const useGetAdminFeedback = (size: number) => {
         (pageParam - 1) * size,
         size
       );
+      handleClientSideHookError(response as IActionError);
       return response as IOfferResponse;
     },
     initialPageParam: 1,

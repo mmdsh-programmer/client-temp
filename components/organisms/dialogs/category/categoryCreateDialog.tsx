@@ -56,7 +56,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       parentId: getCategory?.id || null,
       name: dataForm.name,
       description: dataForm?.description || "",
-      order: null,
+      order: dataForm.order || null,
       callBack: () => {
         toast.success("دسته بندی با موفقیت ایجاد شد.");
         handleClose();

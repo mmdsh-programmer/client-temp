@@ -3014,7 +3014,7 @@ export const UpdateIcon = (props: IProps) => {
 };
 
 export const UploadIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, stroke } = props;
   return (
     <svg
       className={className}
@@ -3024,7 +3024,7 @@ export const UploadIcon = (props: IProps) => {
     >
       <path
         d="M16.0654 13.9544C17.2374 13.1066 18 11.7276 18 10.1705C18 7.59295 15.9105 5.50346 13.333 5.50346C13.2413 5.50346 13.1502 5.50611 13.0598 5.51132C11.9975 3.83412 10.1254 2.72064 7.99314 2.72064C4.68322 2.72064 2 5.40386 2 8.71379C2 10.3319 2.64126 11.8002 3.68351 12.8785M10.0075 17.2794V10.052M10.0075 10.052L6.76626 13.2932M10.0075 10.052L13.2488 13.2932"
-        stroke="#667585"
+        stroke={stroke || "#667585"}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

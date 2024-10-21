@@ -29,7 +29,7 @@ const DocumentEncryption = ({ repoId }: IProps) => {
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
       >
-        <div className="w-full overflow-auto h-[calc(100vh-450px)] border-[0.5px] border-normal rounded-lg mt-4">
+        <div className="w-full overflow-auto max-h-[403px] xs:max-h-[327px] h-auto border-[0.5px] border-normal rounded-lg mt-4">
           <RepoKeyList
             repoId={repoId}
             isSelectable

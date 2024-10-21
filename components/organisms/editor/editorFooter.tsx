@@ -19,6 +19,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
+import EditorFileFooter from "./editorFileFooter";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -160,6 +161,10 @@ const EditorFooter = ({ editorRef }: IProps) => {
       stopWorker();
     };
   }, []);
+
+  if (selectedDocument?.contentType === EDocumentTypes.file) {
+    return <EditorFileFooter />;
+  }
 
   return editorMode === "preview" ? (
     <div className="w-full flex justify-between items-center gap-2">

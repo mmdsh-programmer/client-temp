@@ -65,7 +65,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
             <div className="flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
-                handleChange={(val) => {
+                handleSelect={(val) => {
                   return setValue(`${val.value}`);
                 }}
               />

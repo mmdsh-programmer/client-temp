@@ -26,6 +26,12 @@ export const selectedDocumentAtom = atom<IDocumentMetadata | null>({
   effects: [logEffect("selectedDocumentAtom")],
 });
 
+export const documentShowAtom = atom<IDocumentMetadata | null>({
+  key: "documentShowAtom",
+  default: null,
+  effects: [logEffect("documentShowAtom")],
+});
+
 export const publishDocumentIdAtom = atom<number>({
   key: "publishDocumentIdAtom",
   default: 0,

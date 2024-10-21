@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import React, { useState, useCallback } from "react";
 import { ClasorFileManagement, IFile } from "cls-file-management";
-import React, { useState } from "react";
-
 import FileManagementDialog from "@components/templates/dialog/fileManagementDialog";
 import axios from "axios";
 import { repoAtom } from "@atom/repository";
@@ -15,18 +13,24 @@ import { useRecoilValue } from "recoil";
 import useRenameFile from "@hooks/files/useRenameFile";
 
 const fileTablePageSize = 20;
+
 interface IProps {
-  setSelectedFile?: (file?: string) => void;
+  setSelectedFile?: (
+    file?: IFile | null | { name: string; extension: string; hash: string }
+  ) => void;
   userGroupHash: string;
   resourceId: number;
-  handleClose: () => void;
+  handleClose?: () => void;
   type: "private" | "public";
 }
 
-const Files = (props: IProps) => {
-  const { setSelectedFile, userGroupHash, resourceId, type, handleClose } =
-    props;
-  const getRepo = useRecoilValue(repoAtom);
+const Files = ({
+  setSelectedFile,
+  userGroupHash,
+  resourceId,
+  type,
+  handleClose,
+}: IProps) => {
   const [page, setPage] = useState<number>(0);
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +40,9 @@ const Files = (props: IProps) => {
   const [selectedImage, setSelectedImage] = useState<IFile | null>(null);
 
   const queryClient = useQueryClient();
-  const {
-    data: userInfo,
-    isFetching: isFetchingUserInfo,
-  } = useGetUser();
+  const getRepo = useRecoilValue(repoAtom);
+  const { data: userInfo, refetch: refetchUser } = useGetUser();
+
   const {
     data: files,
     isFetching,
@@ -57,15 +60,15 @@ const Files = (props: IProps) => {
   const renameHook = useRenameFile();
   const deleteFile = useDeleteFile();
 
-  const handleDataType = (dtype: string) => {
-    setDataType(dtype);
-  };
+  const handleDataType = useCallback((dtype: string) => {
+    return setDataType(dtype);
+  }, []);
 
-  const handleRenameFile = (file: IFile, dataForm: string) => {
-    setIsLoading(true);
-    if (resourceId) {
+  const handleRenameFile = useCallback(
+    (file: IFile, newName: string) => {
+      setIsLoading(true);
       renameHook.mutate({
-        newName: dataForm,
+        newName,
         resourceId,
         hash: file.hash,
         userGroupHash: file.parentHash,
@@ -74,14 +77,15 @@ const Files = (props: IProps) => {
           refetch();
         },
       });
-    }
-  };
+    },
+    [renameHook, resourceId, refetch]
+  );
 
-  const handleDeleteFile = (file: IFile) => {
-    setIsLoading(true);
-    if (resourceId && getRepo) {
+  const handleDeleteFile = useCallback(
+    (file: IFile) => {
+      setIsLoading(true);
       deleteFile.mutate({
-        repoId: getRepo?.id,
+        repoId: getRepo!.id,
         resourceId,
         userGroupHash,
         fileHash: file.hash,
@@ -91,72 +95,33 @@ const Files = (props: IProps) => {
           refetch();
         },
       });
-    }
-  };
+    },
+    [deleteFile, getRepo, resourceId, userGroupHash, type, refetch]
+  );
 
-  const handleFetchNextPage = (nextPage?: boolean) => {
-    if (nextPage) {
-      fetchNextPage();
-    }
-  };
+  const handleFetchNextPage = useCallback(() => {
+    return fetchNextPage();
+  }, [fetchNextPage]);
 
-  const onSuccess = () => {
+  const onSuccess = useCallback(() => {
     toast.success("آپلود موفق");
     setIsLoading(false);
     setIsError(false);
     refetch();
-  };
+  }, [refetch]);
 
   const handleUploadFile = async (item: any, showCropper: boolean) => {
     setProcessCount(0);
-    // refetchUser();
     const token = userInfo?.access_token;
-    if (!isFetchingUserInfo && token) {
+
+    if (token) {
       setIsLoading(true);
-      if (showCropper) {
+
+      const uploadFile = async (fileData: FormData | any) => {
         try {
-          await axios
-            .put(
-              `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
-              item,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data;",
-                  Authorization: `Bearer ${token}`,
-                  _token_: token || "",
-                  _token_issuer_: "1",
-                },
-                onUploadProgress(progressEvent: any) {
-                  const process = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  );
-                  setProcessCount(process);
-                },
-              }
-            )
-            .then(async (result: any) => {
-              if (result.data.data.result.hash) {
-                await onSuccess();
-              }
-              queryClient.invalidateQueries({
-                queryKey: [`getReport-${resourceId}`],
-              });
-            });
-        } catch {
-          setIsLoading(false);
-          setIsError(true);
-          toast.error("آپلود ناموفق");
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        const fileItem = item;
-        const file = new FormData();
-        file.append("file", fileItem, encodeURIComponent(item.name));
-        axios
-          .put(
+          const response = await axios.put(
             `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
-            file,
+            fileData,
             {
               headers: {
                 "Content-Type": "multipart/form-data;",
@@ -165,50 +130,64 @@ const Files = (props: IProps) => {
                 _token_issuer_: "1",
               },
               onUploadProgress(progressEvent: any) {
-                const process = Math.round(
+                const progress = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total
                 );
-                setProcessCount(process);
+                setProcessCount(progress);
               },
             }
-          )
-          .then(async (res: any) => {
-            if (res.data.data.result.hash) {
-              onSuccess();
-              setIsLoading(false);
-            }
-            queryClient.invalidateQueries({
-              queryKey: [`getReport-${resourceId}`],
-            });
-          })
-          .catch(() => {
-            toast.error("خطا در بارگذاری فایل");
-            setIsError(true);
-            setIsLoading(false);
+          );
+
+          if (response.data.data.result.hash) {
+            await onSuccess();
+          }
+
+          queryClient.invalidateQueries({
+            queryKey: [`getReport-${resourceId}`],
           });
+        } catch (error: any) {
+          if (error?.response?.status === 401) {
+            refetchUser();
+          }
+          setIsError(true);
+          toast.error("خطا در بارگذاری فایل");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      try {
+        if (showCropper) {
+          await uploadFile(item);
+        } else {
+          const formData = new FormData();
+          formData.append("file", item, encodeURIComponent(item.name));
+          await uploadFile(formData);
+        }
+      } catch (error: any) {
+        if (error?.response?.status === 401) {
+          refetchUser();
+        }
+        setIsError(true);
+        toast.error("آپلود ناموفق");
       }
     }
   };
 
   const generateDownloadLink = (file: IFile) => {
-    return `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${
-      file.hash
-    }?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`;
+    return `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`;
   };
 
   const handleSelect = () => {
-    const fileExtension = selectedImage?.extension.toLowerCase();
-    if (
-      fileExtension === "png" ||
-      fileExtension === "jpg" ||
-      fileExtension === "jfif" ||
-      fileExtension === "svg"
-    ) {
-      setSelectedFile?.(selectedImage?.hash);
-      handleClose();
-    } else {
-      toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");
-    }
+    // const fileExtension = selectedImage?.extension.toLowerCase();
+    // const imageExtensions = ["png", "jpg", "jfif", "svg"];
+    setSelectedFile?.(selectedImage);
+    handleClose?.();
+
+    // if (fileExtension && imageExtensions.includes(fileExtension)) {
+    // } else {
+    //   toast.error("فایل انتخاب شده از نوع عکس نمی باشد.");
+    // }
   };
 
   return (
@@ -216,7 +195,9 @@ const Files = (props: IProps) => {
       dialogClassName="flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
       dialogBodyClassName="bg-secondary h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
       dialogHeader="افزودن عکس"
-      setOpen={handleClose}
+      setOpen={() => {
+        return handleClose?.();
+      }}
       handleSelect={handleSelect}
     >
       <ClasorFileManagement

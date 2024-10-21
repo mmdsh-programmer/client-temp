@@ -1,7 +1,9 @@
 import { getDislikeAction } from "@actions/core";
 import { IListResponse } from "@interface/repo.interface";
-import {  ILikeList } from "@interface/version.interface";
+import { ILikeList } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetDislikeList = (postId: number, size: number) => {
   return useInfiniteQuery({
@@ -10,8 +12,9 @@ const useGetDislikeList = (postId: number, size: number) => {
       const response = await getDislikeAction(
         postId,
         (pageParam - 1) * size,
-        size,
+        size
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<ILikeList>;
     },
     initialPageParam: 1,

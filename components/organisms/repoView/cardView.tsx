@@ -26,7 +26,7 @@ const CardView = ({
           </div>
         ) : listLength ? (
           <>
-            <div className="h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
               {getRepoList?.pages.map((page) => {
                 return page.list.map((repo) => {
                   return <RepoCardMode key={repo.id} repo={repo} />;

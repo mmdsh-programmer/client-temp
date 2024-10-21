@@ -1,6 +1,8 @@
 import { sendFeedbackAction } from "@actions/feedback";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useSendFeedback = () => {
   return useMutation({
@@ -12,6 +14,7 @@ const useSendFeedback = () => {
     }) => {
       const { content, fileHashList } = values;
       const response = await sendFeedbackAction(content, fileHashList);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

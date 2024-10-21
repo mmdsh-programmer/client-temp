@@ -16,11 +16,11 @@ const Comments = ({ version }: IProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col gap-2 px-6 py-4 ">
+      <div className="flex flex-col gap-2 px-6 py-4 h-[calc(100vh-290px)] overflow-auto">
         {getComments?.pages.map((page) => {
           return page.list.map((comment) => {
             return (
-              <div className="p-2 flex flex-col gap-4 bg-gray-50 border-[1px] border-normal rounded-lg">
+              <div className="p-2 flex flex-col justify-between gap-4 bg-gray-50 border-[1px] border-normal rounded-lg">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-1">
                     {comment.user.profileImage ? (

@@ -1,19 +1,15 @@
+import React from "react";
 import {
   DialogBody,
   DialogFooter,
   Spinner,
   Typography,
 } from "@material-tailwind/react";
-import {
- useRecoilValue,
- useSetRecoilState
-} from "recoil";
-
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
-import React from "react";
 import { repoActiveStepAtom } from "@atom/stepper";
 import { repoAtom } from "@atom/repository";
 import { repoTagSchema } from "../validation.yup";
@@ -35,21 +31,12 @@ const Tags = ({ handleClose }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const repoId = getRepo!.id;
 
-  const {
- isPending, mutate 
-} = useCreateTag();
-  const {
-    data: tagList,
-    isLoading,
-    isFetching,
-  } = useGetTags(repoId, 10, true);
+  const { isPending, mutate } = useCreateTag();
+  const { data: tagList, isLoading } = useGetTags(repoId, 30, true);
 
-  const {
-    register,
-    handleSubmit,
-    clearErrors,
-    reset,
-  } = useForm<IForm>({resolver: yupResolver(repoTagSchema),});
+  const { register, handleSubmit, clearErrors, reset } = useForm<IForm>({
+    resolver: yupResolver(repoTagSchema),
+  });
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
@@ -91,8 +78,10 @@ const Tags = ({ handleClose }: IProps) => {
             </div>
           </div>
         </form>
-        {isLoading || isFetching ? (
-          <Spinner color="purple" className="" />
+        {isLoading ? (
+          <div className="mt-4 w-full justify-center">
+            <Spinner color="deep-purple" className="w-5 h-5" />
+          </div>
         ) : (
           <div className="flex flex-wrap gap-2 py-4">
             {tagList?.pages.map((page) => {
@@ -118,8 +107,9 @@ const Tags = ({ handleClose }: IProps) => {
         </CancelButton>
         <LoadingButton
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-          onClick={() => 
-{return setActiveStep(3);}}
+          onClick={() => {
+            return setActiveStep(3);
+          }}
         >
           <Typography className="text__label__button text-white">
             ادامه

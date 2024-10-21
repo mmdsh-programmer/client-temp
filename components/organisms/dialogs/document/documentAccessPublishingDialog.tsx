@@ -37,9 +37,9 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
   const blackListHook = useAddBlackList();
 
   const listHook = type === "black-list" ? blackListHook : whiteListHook;
-  // const users = userList?.blackList.length
-  //   ? userList.blackList
-  //   : userList?.whiteList;
+  const users = userList?.blackList.length
+    ? userList.blackList
+    : userList?.whiteList;
 
   const handleClose = () => {
     setOpen(false);
@@ -146,13 +146,13 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
           <Spinner className="w-6 h-6" color="deep-purple" />
         ) : type === "white-list" ? (
           <DocumentWhiteList
-            whiteList={userList?.whiteList}
+            whiteList={users}
             selectedUserList={selectedUserList}
             setSelectedUserList={setSelectedUserList}
           />
         ) : (
           <DocumentBlackList
-            blackList={userList?.blackList}
+            blackList={users}
             selectedUserList={selectedUserList}
             setSelectedUserList={setSelectedUserList}
           />

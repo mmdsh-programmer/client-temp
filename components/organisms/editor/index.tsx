@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import {
-  editorDataAtom,
   editorDecryptedContentAtom,
   editorListDrawerAtom,
   editorModeAtom,
@@ -17,6 +16,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import FloatingButtons from "./floatingButtons";
 import EditorDrawer from "../editorDrawer";
+import FileEditor from "./fileEditor";
 
 interface IProps {
   getEditorConfig: () => {
@@ -30,7 +30,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const selectedVersion = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
   const listDrawer = useRecoilValue(editorListDrawerAtom);
@@ -49,41 +48,49 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   const content = selectedDocument?.publicKeyId
     ? decryptedContent
-    : selectedVersion?.content;
+    : version?.content || " ";
 
   return (
-    <div className="flex h-full relative">
-      {listDrawer ? <div className="w-full xs:w-[300px]"><EditorDrawer version={version} /></div> : null}
-     <div className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"}`}>
-      <RemoteEditor
-        url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
-        editorMode={editorMode}
-        ref={getEditorConfig().ref}
-        loadData={
-          selectedDocument?.contentType === EDocumentTypes.classic
-            ? ({
-                content: version?.content || " ",
-                outline: version?.outline || [],
-                auth: {
-                  accessToken: userInfo?.access_token,
-                  refreshToken: userInfo?.refresh_token,
-                  url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
-                },
-                publicUserGroupHash: getRepo?.userGroupHash || undefined,
-                privateUserGroupHash:
-                  selectedCategory?.userGroupHash || undefined,
-                repositoryId: getRepo?.id || undefined,
-                resourceId: selectedCategory?.id || undefined,
-                podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-                backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
-              } as IClassicData)
-            : content
-        }
-      />
+    <div className="flex h-full relative bg-primary">
+      {listDrawer ? (
+        <div className="w-full xs:w-[300px]">
+          <EditorDrawer version={version} />
+        </div>
+      ) : null}
+      <div
+        className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"}`}
+      >
+        {selectedDocument?.contentType === EDocumentTypes.file ? (
+          <FileEditor />
+        ) : (
+          <RemoteEditor
+            url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
+            editorMode={editorMode}
+            ref={getEditorConfig().ref}
+            loadData={
+              selectedDocument?.contentType === EDocumentTypes.classic
+                ? ({
+                    content: version?.content || " ",
+                    outline: version?.outline || [],
+                    auth: {
+                      accessToken: userInfo?.access_token,
+                      refreshToken: userInfo?.refresh_token,
+                      url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
+                    },
+                    publicUserGroupHash: getRepo?.userGroupHash || undefined,
+                    privateUserGroupHash:
+                      selectedCategory?.userGroupHash || undefined,
+                    repositoryId: getRepo?.id || undefined,
+                    resourceId: selectedCategory?.id || undefined,
+                    podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
+                    backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
+                  } as IClassicData)
+                : content
+            }
+          />
+        )}
       </div>
-      <FloatingButtons
-        version={version}
-      />
+      <FloatingButtons version={version} />
     </div>
   );
 };
