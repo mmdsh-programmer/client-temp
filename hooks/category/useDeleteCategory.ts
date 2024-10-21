@@ -38,10 +38,6 @@ const useDeleteCategory = () => {
       callBack?.();
     },
     onError: (error: CustomError, values) => { // Use the custom error type
-      debugger;
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      console.log(error);
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       const {errorCallBack} = values;
       toast.error(error.message || "خطای نامشخصی رخ داد");
       errorCallBack?.(error);

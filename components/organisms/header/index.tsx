@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   AlertIcon,
   BackIcon,
@@ -6,14 +5,16 @@ import {
   ThemeIcon,
 } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+
 import Breadcrumb from "@components/molecules/breadcumb";
 import FeedbackDialog from "../dialogs/feedback";
 import ProfileMenu from "@components/molecules/profileMenu";
 import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
-import useGetUser from "@hooks/auth/useGetUser";
-import { useRouter, usePathname } from "next/navigation";
-import { useSetRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useSetRecoilState } from "recoil";
 
 const Header = () => {
   const router = useRouter();
@@ -91,7 +92,7 @@ const Header = () => {
             >
               <ThemeIcon className=" h-4 w-4" />
             </Button>
-            <ProfileMenu />
+            <ProfileMenu/>
           </div>
         </div>
       </div>

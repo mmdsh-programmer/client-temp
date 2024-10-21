@@ -17,11 +17,11 @@ const logger = (key: string, newValue: any, oldValue: any) => {
 
 export const logEffect =
   (atomName) =>
-  ({ onSet }) => {
+  {return ({ onSet }) => {
     onSet((newValue, oldValue) => {
       logger(atomName, newValue, oldValue);
     });
-  };
+  };};
 
 export const translateRoles = (role?: ERoles) => {
   switch (role) {
@@ -189,4 +189,18 @@ export const mapOrder = (array: IRepo[], order: number[]) => {
   });
 
   return [...inSortList, ...notInSortList];
+};
+
+export const bracketStringify = (data: Record<string, any>): string => {
+  const queryString = Object.keys(data)
+    .map(key => {
+      const value = data[key];
+      if (Array.isArray(value)) {
+        return value.map(item => 
+{return `${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`;}).join("&");
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    })
+    .join("&");
+  return queryString;
 };

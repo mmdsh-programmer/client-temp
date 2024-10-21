@@ -1,13 +1,16 @@
+import { IActionError, TUserData } from "@interface/app.interface";
+
+import { handleClientSideHookError } from "@utils/error";
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "@actions/auth";
-import { TUserData } from "@interface/app.interface";
+import { userInfoAction } from "@actions/auth";
 
 const useGetUser = () => {
   return useQuery({
     queryKey: ["user-info"],
     queryFn: async ({ signal }) => {
-      const data = await getMe();
-      return data as TUserData;
+      const response = await userInfoAction();
+      handleClientSideHookError(response as IActionError);
+      return response as TUserData;
     },
     retry: false,
     refetchOnWindowFocus: false,

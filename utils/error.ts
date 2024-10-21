@@ -159,8 +159,8 @@ export const handleActionError = (errorObject: IActionError) => {
   }
 };
 
-export const handleClientSideHookError = (errorObject: IActionError) => {
-  if (errorObject.error) {
+export const handleClientSideHookError = (errorObject?: IActionError) => {
+  if (errorObject?.error) {
     return handleActionError(errorObject);
   }
 };
