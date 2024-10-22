@@ -61,50 +61,49 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   return (
     <>
       {!showDrawer ? (
-        <>
-          <div className=" flex items-center gap-1 justify-end">
-            {window.location.pathname === "/admin/repositories" ? (
+        <div className=" flex items-center gap-1 justify-end">
+          {window.location.pathname === "/admin/repositories" ? (
+            <Button
+              placeholder="button"
+              className="rounded-lg border-2 border-gray-50 
+             bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
+              onClick={() => {
+                setActiveTour(ETourSection.REPO);
+              }}
+            >
+              <InfoIcon className="w-4 h-4 stroke-purple-normal" />
+            </Button>
+          ) : null}
+          <div className="repoInformationTab repoActions flex items-center gap-1 justify-end">
+            {repo?.isArchived ? null : (
               <Button
                 placeholder="button"
-                className="rounded-lg border-2 border-gray-50 
+                className="repo-bookmark rounded-lg border-2 border-gray-50 
              bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
-                onClick={() => {
-                  setActiveTour(ETourSection.REPO);
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModalState("bookmark", true);
                 }}
               >
-                <InfoIcon className="w-4 h-4 stroke-purple-normal" />
+                <StarIcon
+                  className={`w-4 h-4 ${repo?.bookmark ? "fill-amber-600 stroke-amber-600" : "stroke-icon-active"}`}
+                />
               </Button>
-            ) : null}
-            <div className="repoInformationTab repoActions flex items-center gap-1 justify-end">
-              {repo?.isArchived ? null : (
-                <Button
-                  placeholder="button"
-                  className="repo-bookmark rounded-lg border-2 border-gray-50 
-             bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setModalState("bookmark", true);
-                  }}
-                >
-                  <StarIcon
-                    className={`w-4 h-4 ${repo?.bookmark ? "fill-amber-600 stroke-amber-600" : "stroke-icon-active"}`}
-                  />
-                </Button>
-              )}
-              <MenuTemplate
-                setOpenDrawer={() => {
-                  setOpenRepoActionDrawer(true);
-                }}
-                menuList={menuList}
-                icon={
-                  <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                    <MoreDotIcon className="w-4 h-4" />
-                  </div>
-                }
-              />
-            </div>
+            )}
+            <MenuTemplate
+              setOpenDrawer={() => {
+                setOpenRepoActionDrawer(true);
+                setRepo(repo || null);
+              }}
+              menuList={menuList}
+              icon={
+                <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+                  <MoreDotIcon className="w-4 h-4" />
+                </div>
+              }
+            />
           </div>
-        </>
+        </div>
       ) : (
         <div className="xs:hidden flex">
           <DrawerTemplate
@@ -114,7 +113,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
           />
         </div>
       )}
-      <RepoDialogs modals={modals} setModalState={setModalState} repo={repo} />
+      <RepoDialogs modals={modals} setModalState={setModalState} />
     </>
   );
 };

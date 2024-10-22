@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import React, { useState } from "react";
 import {
   ICategoryMetadata,
@@ -34,7 +36,6 @@ const TableView = ({
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />
       </div>
       {openFilter ? <AdvancedFilter /> : null}
-      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
