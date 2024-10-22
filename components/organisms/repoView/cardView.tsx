@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Spinner } from "@material-tailwind/react";
 import LoadMore from "@components/molecules/loadMore";
 import EmptyList from "@components/molecules/emptyList";
 import RepoCardMode from "@components/molecules/repoCardMode";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
-import { IRepoView } from "@interface/repo.interface";
+import { IRepo, IRepoView } from "@interface/repo.interface";
 
 const CardView = ({
   isLoading,
@@ -15,6 +15,7 @@ const CardView = ({
   isFetchingNextPage,
   type,
 }: IRepoView) => {
+  const [selectedRepo, setSelectedRepo] = useState<IRepo | undefined>(undefined);
   const listLength = getRepoList?.pages[0].total;
   return (
     <>
@@ -29,7 +30,13 @@ const CardView = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
               {getRepoList?.pages.map((page) => {
                 return page.list.map((repo) => {
-                  return <RepoCardMode key={repo.id} repo={repo} />;
+                  return (
+                    <RepoCardMode
+                      key={repo.id}
+                      repo={repo}
+                      setselectedRepo={setSelectedRepo}
+                    />
+                  );
                 });
               })}
             </div>
@@ -46,7 +53,7 @@ const CardView = ({
           <EmptyList type={type} />
         )}
       </div>
-      <RepoMenu showDrawer />
+      <RepoMenu showDrawer repo={selectedRepo} />
     </>
   );
 };

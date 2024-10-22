@@ -1,20 +1,20 @@
 import React from "react";
-import { IRepo } from "@interface/repo.interface";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { Button, Typography } from "@material-tailwind/react";
 import { AddIcon } from "@components/atoms/icons";
-import { useRecoilState } from "recoil";
-import { createRepoKeyAtom, deleteRepoKeyAtom } from "@atom/repository";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { createRepoKeyAtom, deleteRepoKeyAtom, repoAtom } from "@atom/repository";
 import RepoKeyDeleteDialog from "./repoKeyDeleteDialog";
 import RepoKeyCreateDialog from "./repoKeyCreateDialog";
 import RepoKeyList from "./repoKeyList";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
+const RepoKeyDialog = ({ setOpen }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+
   const [getDeleteRepoKey, setDeleteRepoKey] =
     useRecoilState(deleteRepoKeyAtom);
   const [getCreateRepoKey, setCreateRepoKey] =
@@ -25,10 +25,10 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
   };
 
   // eslint-disable-next-line no-nested-ternary
-  return getCreateRepoKey && repo ? (
-    <RepoKeyCreateDialog repoId={repo.id} setOpen={setCreateRepoKey} />
-  ) : getDeleteRepoKey && repo ? (
-    <RepoKeyDeleteDialog repoId={repo.id} setOpen={setDeleteRepoKey} />
+  return getCreateRepoKey && getRepo ? (
+    <RepoKeyCreateDialog repoId={getRepo.id} setOpen={setCreateRepoKey} />
+  ) : getDeleteRepoKey && getRepo ? (
+    <RepoKeyDeleteDialog repoId={getRepo.id} setOpen={setDeleteRepoKey} />
   ) : (
     <InfoDialog dialogHeader="لیست کلید های مخزن" setOpen={handleClose}>
       <div className="p-4">
@@ -45,7 +45,7 @@ const RepoKeyDialog = ({ repo, setOpen }: IProps) => {
           </Typography>
         </Button>
         <div className="w-full overflow-auto max-h-[calc(100dvh-200px)] border-[0.5px] border-normal rounded-lg mt-4">
-          {repo && <RepoKeyList repoId={repo.id} hasAction />}
+          {getRepo && <RepoKeyList repoId={getRepo.id} hasAction />}
         </div>
       </div>
     </InfoDialog>

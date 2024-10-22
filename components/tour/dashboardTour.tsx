@@ -8,7 +8,9 @@ const DashboardTour = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
 
   useEffect(() => {
-    const tourOverlay = document.querySelectorAll(".tour-overlay")[0] as HTMLElement;
+    const tourOverlay = document.querySelectorAll(
+      ".tour-overlay"
+    )[0] as HTMLElement;
 
     const dashboardTour = new Shepherd.Tour({
       useModalOverlay: false,
@@ -43,11 +45,11 @@ const DashboardTour = () => {
     });
 
     const createStep = (
-      id:string,
-      content:string,
+      id: string,
+      content: string,
       element: string,
-      where:string,
-      disabled?:string,
+      where: string,
+      disabled?: string
     ) => {
       return {
         id,
@@ -93,7 +95,7 @@ const DashboardTour = () => {
         </div>`,
         ".myRepoList",
         "bottom",
-        "back",
+        "back"
       ),
       createStep(
         "step2",
@@ -107,7 +109,7 @@ const DashboardTour = () => {
   </div>
             `,
         ".myAccessList",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step3",
@@ -120,7 +122,7 @@ const DashboardTour = () => {
           </div>`,
 
         ".myBookmarkList",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step4",
@@ -134,7 +136,7 @@ const DashboardTour = () => {
           </div>`,
 
         ".myArchiveList",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step5",
@@ -147,7 +149,7 @@ const DashboardTour = () => {
             </p>
         </div>`,
         ".notice",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step5",
@@ -159,7 +161,7 @@ const DashboardTour = () => {
         </p>
       </div>`,
         ".userProfile",
-        "bottom",
+        "bottom"
       ),
       // createStep(
       //   "step6",
@@ -167,7 +169,7 @@ const DashboardTour = () => {
       //   <div class="tour-step-container">
       //   <h1 class="tour-step-header"> نمایش کارتی </h1>
       //   <p class="tour-step-text">
-      //   امکان نمایش و انتخاب کارتی مخزن ها.        
+      //   امکان نمایش و انتخاب کارتی مخزن ها.
       //   </p>
       // </div>`,
       //   ".RepoCardMode",
@@ -179,7 +181,7 @@ const DashboardTour = () => {
       //   <div class="tour-step-container">
       //   <h1 class="tour-step-header"> نمایش لیستی   </h1>
       //   <p class="tour-step-text">
-      //   امکان نمایش و انتخاب لیستی مخزن ها.        
+      //   امکان نمایش و انتخاب لیستی مخزن ها.
       //   </p>
       // </div>`,
       //   ".RepoTableMode",
@@ -198,7 +200,7 @@ const DashboardTour = () => {
         </p>
       </div>`,
         ".createNewRepo",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step9",
@@ -209,10 +211,10 @@ const DashboardTour = () => {
         امکان جست و جوی نام مخزن در لیست انتخابی .        </p>
       </div>`,
         ".searchRepo",
-        "bottom",
+        "bottom"
       ),
       createStep(
-        "step10",
+        "step-last",
         `
         <div class="tour-step-container">
         <h1 class="tour-step-header"> عملیات مخزن </h1>
@@ -221,12 +223,13 @@ const DashboardTour = () => {
         </p>
         </div>`,
         ".repoActions",
-        "right",
-        "next",
+        "right"
       ),
     ];
 
-    tourSteps.forEach((step) => { return dashboardTour.addStep(step as StepOptions); });
+    tourSteps.forEach((step) => {
+      return dashboardTour.addStep(step as StepOptions);
+    });
 
     dashboardTour.start();
     return () => {

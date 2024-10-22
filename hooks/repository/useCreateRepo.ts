@@ -3,6 +3,7 @@ import { createRepoAction } from "@actions/repository";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { IRepo } from "@interface/repo.interface";
 
 const useCreateRepo = () => {
   const queryClient = useQueryClient();
@@ -11,10 +12,11 @@ const useCreateRepo = () => {
     mutationFn: async (values: {
       name: string;
       description?: string;
-      callBack?: (result: any) => void;
+      callBack?: (result: IRepo) => void;
     }) => {
       const { description, name } = values;
       const response = await createRepoAction(name, description);
+
       handleClientSideHookError(response as IActionError);
       return response;
     },

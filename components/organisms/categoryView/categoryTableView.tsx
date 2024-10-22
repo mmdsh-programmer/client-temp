@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
+import {
+  ICategoryMetadata,
+  ICategoryView,
+} from "@interface/category.interface";
 import AdvancedFilter from "@components/molecules/advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
@@ -43,35 +46,47 @@ const TableView = ({
               <TableHead
                 tableHead={[
                   { key: "select", value: "انتخاب", className: "categoryBulk" },
-                  {key: "order",
+                  {
+                    key: "order",
                     value: "اولویت",
                     isSorted: true,
-                    className: "categoryOrder hidden xl:table-cell",},
+                    className: "categoryOrder hidden xl:table-cell",
+                  },
                   { key: "name", value: "نام دسته", isSorted: true },
                   { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
-                  {key: "editDate",
+                  {
+                    key: "editDate",
                     value: "تاریخ ویرایش",
-                    className: "hidden xl:table-cell",},
-                  {key: "creator",
+                    className: "hidden xl:table-cell",
+                  },
+                  {
+                    key: "creator",
                     value: "نام سازنده",
-                    className: "hidden lg:table-cell",},
-                  { key: "action", value: "عملیات", className: "category-action " },
+                    className: "hidden lg:table-cell",
+                  },
+                  {
+                    key: "action",
+                    value: "عملیات",
+                    className: "category-action ",
+                  },
                 ]}
-              />              
+              />
               <tbody>
                 {getCategoryList?.pages.map((page) => {
                   return page.list.map((item) => {
-                    return item.type === "category" ? (
-                      <CategoryTableRow
-                        key={item.id}
-                        category={item as ICategoryMetadata}
-                      />
-                    ) : (
-                      <DocumentTableRow
-                        key={item.id}
-                        document={item as IDocumentMetadata}
-                      />
-                    );
+                    return item ? (
+                      item.type === "category" ? (
+                        <CategoryTableRow
+                          key={item.id}
+                          category={item as ICategoryMetadata}
+                        />
+                      ) : (
+                        <DocumentTableRow
+                          key={item.id}
+                          document={item as IDocumentMetadata}
+                        />
+                      )
+                    ) : null;
                   });
                 })}
                 <RenderIf isTrue={!!hasNextPage}>

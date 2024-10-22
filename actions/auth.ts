@@ -12,6 +12,7 @@ import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
 import {
   userInfo,
+  userMetadata,
 } from "@service/clasor";
 
 const refreshCookieHeader = async (rToken: string, clientId: string, clientSecret: string) => {
@@ -199,6 +200,17 @@ export const logoutAction = async () => {
     cookies().delete("token");
   } catch (error) {
     cookies().delete("token");
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const userMetadataAction = async (data: object) => {
+  const userData = await getMe();
+  try {
+    const response = await userMetadata(userData.access_token, data);
+
+    return response;
+  } catch (error) {
     return normalizeError(error as IActionError);
   }
 };

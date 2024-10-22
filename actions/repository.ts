@@ -201,7 +201,6 @@ export const createRepoAction = async (name: string, description?: string) => {
       description,
       [type]
     );
-
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

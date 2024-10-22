@@ -1,11 +1,13 @@
+import React from "react";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
-import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import useDeleteBulk from "@hooks/bulk/useDeleteBulk";
 import { useForm } from "react-hook-form";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import CategoryDeleteDialog from "../category/categoryDeleteDialog";
+import DocumentDeleteDialog from "../document/documentDeleteDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,9 +27,11 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
     reset();
     setOpen(false);
   };
+
   const close = () => {
     setBulkItems([]);
   };
+
   const onSubmit = () => {
     if (!getRepo) return;
     bulkDeleteHook.mutate({
@@ -40,6 +44,15 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
       callBack: close,
     });
   };
+
+  if (getBulkItems.length === 1) {
+    if (getBulkItems[0].type === "category") {
+      return (
+        <CategoryDeleteDialog setOpen={close} category={getBulkItems[0]} />
+      );
+    }
+    return <DocumentDeleteDialog setOpen={close} document={getBulkItems[0]} />;
+  }
 
   return (
     <DeleteDialog

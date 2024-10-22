@@ -38,7 +38,9 @@ export const ERRORS: Record<
   },
 };
 
-export interface IOriginalError  { data?: { referenceNumber?: string } };
+export interface IOriginalError {
+  data?: { referenceNumber?: string };
+}
 export default class BasicError extends Error {
   constructor(
     public errorCode: number,
@@ -48,7 +50,7 @@ export default class BasicError extends Error {
     public originalError?: IOriginalError
   ) {
     super(errorCode in ERRORS ? ERRORS[errorCode]?.MSG : "");
-    Error.captureStackTrace(this, this.constructor);
+    Error.captureStackTrace?.(this, this.constructor);
   }
 
   createResponseError() {
@@ -61,21 +63,15 @@ export default class BasicError extends Error {
 }
 
 export class InputError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
-    const defaultMessage = errorList?.[0] ?? (ERRORS[400].MSG as string);
+  constructor(errorList?: string[], originalError?: IOriginalError) {
+    const defaultMessage = errorList?.[0] || (ERRORS[400].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(400, defaultMessage, errorList, referenceNumber, originalError);
   }
 }
 
 export class AuthorizationError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
+  constructor(errorList?: string[], originalError?: IOriginalError) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[401].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(401, defaultMessage, errorList, referenceNumber, originalError);
@@ -83,10 +79,7 @@ export class AuthorizationError extends BasicError {
 }
 
 export class ForbiddenError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
+  constructor(errorList?: string[], originalError?: IOriginalError) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[403].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(403, defaultMessage, errorList, referenceNumber, originalError);
@@ -94,10 +87,7 @@ export class ForbiddenError extends BasicError {
 }
 
 export class NotFoundError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
+  constructor(errorList?: string[], originalError?: IOriginalError) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[404].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(404, defaultMessage, errorList, referenceNumber, originalError);
@@ -105,10 +95,7 @@ export class NotFoundError extends BasicError {
 }
 
 export class ServerError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
+  constructor(errorList?: string[], originalError?: IOriginalError) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[500].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(500, defaultMessage, errorList, referenceNumber, originalError);
@@ -116,10 +103,7 @@ export class ServerError extends BasicError {
 }
 
 export class DuplicateError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
+  constructor(errorList?: string[], originalError?: IOriginalError) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[409].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(409, defaultMessage, errorList, referenceNumber, originalError);
@@ -127,10 +111,7 @@ export class DuplicateError extends BasicError {
 }
 
 export class UnprocessableError extends BasicError {
-  constructor(
-    errorList?: string[],
-    originalError?: IOriginalError
-  ) {
+  constructor(errorList?: string[], originalError?: IOriginalError) {
     const defaultMessage = errorList?.[0] ?? (ERRORS[422].MSG as string);
     const referenceNumber = originalError?.data?.referenceNumber;
     super(422, defaultMessage, errorList, referenceNumber, originalError);

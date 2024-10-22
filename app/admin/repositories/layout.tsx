@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "پنل مدیریت محتوا",
 };
 
-const DashboardLayout = ({ children }: IProps) => {
+const RepositoryLayout = ({ children }: IProps) => {
   return (
     <ErrorBoundary>
       <Tour />
@@ -22,4 +22,4 @@ const DashboardLayout = ({ children }: IProps) => {
   );
 };
 
-export default DashboardLayout;
+export default RepositoryLayout;

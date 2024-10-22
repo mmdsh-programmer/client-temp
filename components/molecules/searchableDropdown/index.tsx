@@ -10,6 +10,7 @@ interface IProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   handleSelect: (event: { label: string; value: string | number }) => void;
   createIcon?: boolean;
+  showInput?: boolean;
 }
 
 const SearchableDropdown = ({
@@ -19,6 +20,7 @@ const SearchableDropdown = ({
   setOpen,
   handleSelect,
   createIcon,
+  showInput,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,7 +38,11 @@ const SearchableDropdown = ({
   const handleSelectOption = (option) => {
     handleSelect(option);
     toggleDropdown();
-    setInputVal(option.label);
+    if (showInput) {
+      setInputVal(option.label);
+    } else {
+      setInputVal("");
+    }
   };
 
   const renderOptions = () => {

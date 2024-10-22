@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createGroupAtom, deleteGroupAtom, editGroupAtom } from "@atom/group";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CreateRepoPublicLink from "@components/organisms/publicLink/createRepoPublicLink";
 import { DialogBody } from "@material-tailwind/react";
 import GroupCreateDialog from "@components/organisms/dialogs/group/groupCreateDialog";
@@ -30,7 +30,7 @@ export enum ETabs {
 const RepoShareDialog = ({ setOpen }: IProps) => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.USERS);
 
-  const [getRepo, setRepository] = useRecoilState(repoAtom);
+  const getRepo = useRecoilValue(repoAtom);
   const [getCreateGroupModal, setCreateGroupModal] =
     useRecoilState(createGroupAtom);
   const [getEditGroupModal, setEditGroupModal] = useRecoilState(editGroupAtom);
@@ -41,9 +41,6 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setOpen(false);
-    if (window.location.pathname === "/admin/dashboard") {
-      setRepository(null);
-    }
   };
 
   const tabList = [

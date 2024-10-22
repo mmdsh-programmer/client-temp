@@ -1,31 +1,32 @@
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import { IRepo } from "@interface/repo.interface";
 import React from "react";
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { toast } from "react-toastify";
 import useArchiveRepo from "@hooks/repository/useArchiveRepo";
+import { useRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoArchiveDialog = ({
- repo, setOpen 
-}: IProps) => {
-  const {
- isPending, mutate 
-} = useArchiveRepo();
+const RepoArchiveDialog = ({ setOpen }: IProps) => {
+  const { isPending, mutate } = useArchiveRepo();
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
 
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleSubmit = async () => {
-    if (!repo) return;
-    mutate({repoId: repo.id,
+    if (!getRepo) return;
+    mutate({
+      repoId: getRepo.id,
       callBack: () => {
         toast.success("مخزن با موفقیت بایگانی شد.");
         handleClose();
-      },});
+        setRepo(null);
+      },
+    });
   };
 
   return (
@@ -41,10 +42,10 @@ const RepoArchiveDialog = ({
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از آرشیو"
           <span
-            title={repo?.name}
+            title={getRepo?.name}
             className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
           >
-            {repo?.name}
+            {getRepo?.name}
           </span>
           " اطمینان دارید؟
         </div>

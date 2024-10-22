@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import { IRepo, IRepoView } from "@interface/repo.interface";
@@ -69,6 +69,7 @@ const MobileView = ({
   type,
 }: IRepoView) => {
   const router = useRouter();
+
   const listLength = getRepoList?.pages[0].total ?? 0;
 
   return (

@@ -218,7 +218,7 @@ const RepoTour = () => {
     //     "bottom",
     //   ),
       createStep(
-        "step4",
+        "step-last",
         `
         <div class="tour-step-container">
         <h1 class="tour-step-header"> ساخت تگ </h1>
@@ -229,7 +229,6 @@ const RepoTour = () => {
       </div>`,
         ".repoTags",
         "bottom",
-        "next",
       ),
     ];
 
