@@ -165,17 +165,16 @@ export const ArrowDownIcon = (props: IProps) => {
 };
 
 export const ArrowRightIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, fill } = props;
   return (
     <svg
       className={className}
       viewBox="0 0 16 17"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
         d="M-6.11959e-07 9.5L12.17 9.5L6.58 15.09L8 16.5L16 8.5L8 0.500001L6.59 1.91L12.17 7.5L-7.86805e-07 7.5L-6.11959e-07 9.5Z"
-        fill="#181C20"
+        fill={fill ?? "#181C20"}
       />
     </svg>
   );
