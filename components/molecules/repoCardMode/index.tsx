@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation";
 
 interface IProps {
   repo: IRepo;
+  setselectedRepo: React.Dispatch<React.SetStateAction<IRepo | undefined>>
 }
 
-const RepoCardMode = ({ repo }: IProps) => {
+const RepoCardMode = ({ repo, setselectedRepo }: IProps) => {
   const router = useRouter();
   const getRepoInfo = useRecoilValue(repoInfoAtom);
 
@@ -21,21 +22,30 @@ const RepoCardMode = ({ repo }: IProps) => {
       placeholder="card"
       key={`repo-card-item-${repo.id}`}
       className="flex flex-col cursor-pointer h-auto max-h-[85px] rounded-lg bg-white border-[1px] border-normal shadow-small"
-      onClick={() => {
-        if (!repo.isArchived)
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!repo.isArchived) {
           router.push(`/admin/repositories?repoId=${repo.id}`);
+        }
       }}
     >
       <div className="flex p-4 justify-between items-center">
         <div className="flex items-center gap-3 ">
-          <div className="h-auto w-12">
+          <div className="h-12 w-12">
             <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
           <Typography className="title_t2 w-full sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]">
             {repo.name}
           </Typography>
         </div>
-        <RepoMenu repo={repo} />
+        <div
+          onClick={(e) => {
+             e.stopPropagation();
+             setselectedRepo(repo);
+          }}
+        >
+          <RepoMenu repo={repo} />
+        </div>
       </div>
       {getRepoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
     </Card>

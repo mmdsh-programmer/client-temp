@@ -1,33 +1,31 @@
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { IRepo } from "@interface/repo.interface";
 import React from "react";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
-  const setRepo = useSetRecoilState(repoAtom);
+const RepoBookmarkDialog = ({ setOpen }: IProps) => {
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const { isPending, mutate } = useBookmarkRepo();
 
   const handleClose = () => {
     setOpen(false);
   };
   const handleSubmit = async () => {
-    if (!repo) return;
-    if (!repo.bookmark) {
+    if (!getRepo) return;
+    if (!getRepo.bookmark) {
       mutate({
-        repoId: repo.id,
+        repoId: getRepo.id,
         callBack: () => {
           toast.success("مخزن مورد نظر به نشان شده ها اضافه شد.");
           setRepo({
-            ...repo,
+            ...getRepo,
             bookmark: true,
           });
           handleClose();
@@ -35,12 +33,12 @@ const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
       });
     } else {
       mutate({
-        repoId: repo.id,
+        repoId: getRepo.id,
         detach: true,
         callBack: () => {
           toast.success("مخزن مورد نظر از نشان شده ها حذف شد.");
           setRepo({
-            ...repo,
+            ...getRepo,
             bookmark: false,
           });
           handleClose();
@@ -51,18 +49,18 @@ const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={isPending}
-      dialogHeader={repo?.bookmark ? "حذف نشان مخزن" : "نشان‌دار کردن مخزن"}
+      dialogHeader={getRepo?.bookmark ? "حذف نشان مخزن" : "نشان‌دار کردن مخزن"}
       onSubmit={handleSubmit}
       setOpen={handleClose}
       className=""
     >
-      آیا از {repo?.bookmark ? " حذف نشان   " : "  نشان‌دار کردن  "}"
+      آیا از {getRepo?.bookmark ? " حذف نشان   " : "  نشان‌دار کردن  "}"
       <Typography
-        title={repo?.name}
+        title={getRepo?.name}
         placeholder="name"
         className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
       >
-        {repo?.name}
+        {getRepo?.name}
       </Typography>
       " اطمینان دارید؟
     </ConfirmDialog>

@@ -12,12 +12,12 @@ const DocumentEnableUserGroup = () => {
 
   useEffect(() => {
     if (!getRepo || !getDocument) return;
-    if (!getDocument?.userGroupHash) {
-      enableUserGroup.mutate({
-        repoId: getRepo.id,
-        documentId: getDocument.id,
-      });
-    }
+    if (getDocument?.attachmentUserGroup) return;
+
+    enableUserGroup.mutate({
+      repoId: getRepo.id,
+      documentId: getDocument.id,
+    });
   }, [getDocument]);
 
   return null;

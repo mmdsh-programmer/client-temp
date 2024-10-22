@@ -142,6 +142,7 @@ export interface IDocumentMetadata {
   versions?: IVersionMetadata;
   publicKeyId?: string;
   userGroupHash: string | null;
+  attachmentUserGroup: string | null
 }
 
 export interface IWhiteListItem {

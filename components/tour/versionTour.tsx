@@ -7,18 +7,18 @@ import { useSetRecoilState } from "recoil";
 const VersionTour = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
 
-  const versonListContainer = document.querySelector(
-    ".version-list__container"
-  );
+  // const versonListContainer = document.querySelector(
+  //   ".version-list__container"
+  // );
 
-  const versionOverlay = document.createElement("div");
-  versonListContainer?.append(versionOverlay);
-  versionOverlay.classList.add("version-overlay");
+  // const versionOverlay = document.createElement("div");
+  // versonListContainer?.append(versionOverlay);
+  // versionOverlay.classList.add("version-overlay");
 
   useEffect(() => {
     const tourOverlay = document.querySelectorAll(
-        ".tour-overlay",
-      )[0] as HTMLElement;
+      ".tour-overlay"
+    )[0] as HTMLElement;
 
     const versionTour = new Shepherd.Tour({
       useModalOverlay: false,
@@ -37,7 +37,7 @@ const VersionTour = () => {
             tourOverlay.style.display = "block";
           },
           hide: () => {
-            tourOverlay.style.display = "none";
+            tourOverlay.style.display = "none !important";
             // setActiveTour(null);
           },
           complete: () => {
@@ -73,23 +73,26 @@ const VersionTour = () => {
         // },
         buttons: [
           {
-            text: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-      </svg>        
-              `,
+            text: `
+            <svg style="display:${id === "step1" ? "none" : "inherit"}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+            </svg>        
+          `,
             action: () => {
               versionTour.back();
             },
+            disabled: disabled === "back",
           },
           {
             action: () => {
               versionTour.next();
             },
-            text: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            text: `
+            <svg style="display:${id === "step-last" ? "none" : "inherit"}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
             </svg>
-            `,
-            disabled: disabled === "next" && true,
+          `,
+            disabled: disabled === "next",
           },
         ],
       };
@@ -156,35 +159,36 @@ const VersionTour = () => {
         "bottom"
       ),
       createStep(
-        "step4",
+        "step-last",
         `
           <div class="tour-step-container">
           <h1 class="tour-step-header"> عملیات نسخه </h1>
           <p class="tour-step-text">
           می توانید عملیات مربوط به نسخه از جمله ساخت، ویرایش، حذف، مقایسه، کپی فایل هش، تایید و عمومی سازی را در این قسمت انجام دهید.       
           </p>
-        </div>`,
+        </div>
+        `,
         ".version-action",
         "bottom",
       ),
     ];
 
     tourSteps.forEach((step) => {
-      return versionTour.addStep(step as StepOptions );
+      return versionTour.addStep(step as StepOptions);
     });
 
     versionTour.start();
 
     return () => {
       if (versionTour) {
-        versionOverlay.remove();
-
+        tourOverlay.style.display = "none";
+        
         versionTour.hide();
         versionTour.complete();
         versionTour.cancel();
       }
     };
-    // }
+
   }, []);
 
   return null;

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import EditDialog from "@components/templates/dialog/editDialog";
 import Files from "../../fileManagement";
 import FormInput from "@components/atoms/input/formInput";
-import { IRepo } from "@interface/repo.interface";
 import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
@@ -10,24 +9,25 @@ import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import useEditRepo from "@hooks/repository/useEditRepo";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { repoCreateSchema } from "./validation.yup";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface IForm {
   name: string;
-  description: string;
+  description?: string;
 }
 
-const RepoEditDialog = ({ repo, setOpen }: IProps) => {
-  const setRepo = useSetRecoilState(repoAtom);
+const RepoEditDialog = ({ setOpen }: IProps) => {
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const [openFileManagement, setOpenFileManagement] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | undefined>(
-    repo?.imageFileHash
+    getRepo?.imageFileHash
   );
   const [imageType, setImageType] = useState<"default" | "custom">();
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
@@ -41,7 +41,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
     formState: { errors },
     clearErrors,
     reset,
-  } = useForm<IForm>();
+  } = useForm<IForm>({ resolver: yupResolver(repoCreateSchema) });
 
   const handleReset = () => {
     clearErrors();
@@ -58,28 +58,35 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!repo) return;
+    if (!getRepo) return;
+
     if (
-      dataForm.name !== repo.name ||
-      dataForm.description !== repo.description
+      dataForm.name === getRepo.name &&
+      dataForm.description === getRepo.description &&
+      (!imageType ||
+        (defualtImage === getRepo.imageFileHash &&
+          selectedFile === getRepo.imageFileHash))
     ) {
-      mutate({
-        repoId: repo.id,
-        name: dataForm.name,
-        description: dataForm.description,
-        callBack: () => {
-          setRepo({
-            ...repo,
-            name: dataForm.name,
-            description: dataForm.description,
-          });
-          toast.success("مخزن با موفقیت به روز رسانی شد.");
-          handleClose();
-        },
-      });
+      toast.error("تغییری در مخزن وجود ندارد");
+      return;
     }
 
-    if ((selectedFile && selectedFile !== repo.imageFileHash) || defualtImage) {
+    mutate({
+      repoId: getRepo.id,
+      name: dataForm.name,
+      description: dataForm.description || "",
+      callBack: () => {
+        setRepo({
+          ...getRepo,
+          name: dataForm.name,
+          description: dataForm.description || "",
+        });
+        toast.success("مخزن با موفقیت به روز رسانی شد.");
+        handleClose();
+      },
+    });
+
+    if ((selectedFile && selectedFile !== getRepo.imageFileHash) || defualtImage) {
       if (imageType === "default" && !defualtImage) return;
       if (imageType === "custom" && !selectedFile) return;
 
@@ -89,11 +96,11 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
           : imageType === "custom" && selectedFile && selectedFile;
 
       attachImageToRepo.mutate({
-        repoId: repo.id,
+        repoId: getRepo.id,
         fileHash: imageHash || null,
         callBack: () => {
           setRepo({
-            ...repo,
+            ...getRepo,
             imageFileHash: imageHash || "",
           });
           toast.success("عکس با موفقیت به مخزن اضافه شد.");
@@ -103,11 +110,11 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
     }
   };
 
-  if (openFileManagement && repo) {
+  if (openFileManagement && getRepo) {
     return (
       <Files
-        userGroupHash={repo.userGroupHash}
-        resourceId={repo.id}
+        userGroupHash={getRepo.userGroupHash}
+        resourceId={getRepo.id}
         type="public"
         handleClose={() => {
           setOpenFileManagement(false);
@@ -131,7 +138,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
           <Typography className="label">عنوان مخزن</Typography>
           <FormInput
             placeholder="عنوان"
-            register={{ ...register("name", { value: repo?.name }) }}
+            register={{ ...register("name", { value: getRepo?.name }) }}
           />
           {errors.name && (
             <Typography className="warning_text">
@@ -144,7 +151,7 @@ const RepoEditDialog = ({ repo, setOpen }: IProps) => {
           <TextareaAtom
             placeholder="توضیحات"
             register={{
-              ...register("description", { value: repo?.description }),
+              ...register("description", { value: getRepo?.description }),
             }}
           />
           {errors.name && (

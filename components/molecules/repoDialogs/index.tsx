@@ -8,6 +8,8 @@ import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRest
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
 import RepoLeaveDialog from "@components/organisms/dialogs/repository/repoLeaveDialog";
 import { IRepo } from "@interface/repo.interface";
+import { useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 interface IRepoDialogsProps {
   modals: {
@@ -28,71 +30,80 @@ interface IRepoDialogsProps {
 }
 
 const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
+  const setRepo = useSetRecoilState(repoAtom);
+
+  const handleClose = () => {
+    if (window.location.pathname === "/admin/dashboard") {
+      setRepo(null);
+    }
+  };
+
   return (
     <>
       {modals.edit ? (
         <RepoEditDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("edit", false);
+            setModalState("edit", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.delete ? (
         <RepoDeleteDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("delete", false);
+            setModalState("delete", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.archive ? (
         <RepoArchiveDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("archive", false);
+            setModalState("archive", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.restore ? (
         <RepoRestoreDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("restore", false);
+            setModalState("restore", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.bookmark ? (
         <RepoBookmarkDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("bookmark", false);
+            setModalState("bookmark", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.share ? (
         <RepoShareDialog
           setOpen={() => {
-            return setModalState("share", false);
+            setModalState("share", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.key ? (
         <RepoKeyDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("key", false);
+            setModalState("key", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
       {modals.leave ? (
         <RepoLeaveDialog
-          repo={repo}
           setOpen={() => {
-            return setModalState("leave", false);
+            setModalState("leave", false);
+            handleClose();
           }}
         />
-      ): null}
+      ) : null}
     </>
   );
 };

@@ -2,17 +2,14 @@
 
 import { cookies, headers } from "next/dist/client/components/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
-import {
-  logout,
-  renewToken,
-  userInfo,
-} from "@service/clasor";
+import { logout, renewToken, userInfo, userMetadata } from "@service/clasor";
 import { IActionError } from "@interface/app.interface";
 import { getCustomPostByDomain } from "@service/social";
 import { getPodAccessToken } from "@service/account";
 import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { redirect } from "next/navigation";
+import { normalizeError } from "@utils/normalizeActionError";
 
 const refreshCookieHeader = async (rToken: string) => {
   const response = await renewToken(rToken);
@@ -23,14 +20,17 @@ const refreshCookieHeader = async (rToken: string) => {
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  
-  const { cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
-      
+
+  const { cryptoInitVectorKey, cryptoSecretKey } =
+    await getCustomPostByDomain(domain);
+
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token: accessToken,
       refresh_token: refreshToken,
-    }), cryptoSecretKey, cryptoInitVectorKey
+    }),
+    cryptoSecretKey,
+    cryptoInitVectorKey
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
@@ -56,17 +56,23 @@ export const getMe = async () => {
     redirect("/signin");
   }
 
-  const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
+  const payload = jwt.verify(
+    encodedToken,
+    process.env.JWT_SECRET_KEY as string
+  ) as string;
 
-    // get domain and find proper custom post base on domain
-    const domain = headers().get("host");
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-    
-    const { cryptoSecretKey, cryptoInitVectorKey } = await getCustomPostByDomain(domain);
+  // get domain and find proper custom post base on domain
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
 
-  const tokenInfo = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
+  const { cryptoSecretKey, cryptoInitVectorKey } =
+    await getCustomPostByDomain(domain);
+
+  const tokenInfo = JSON.parse(
+    decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)
+  ) as {
     access_token: string;
     refresh_token: string;
   };
@@ -77,10 +83,11 @@ export const getMe = async () => {
       access_token: tokenInfo.access_token,
       refresh_token: tokenInfo.refresh_token,
     };
-  } catch (error: unknown) {
+  } catch (error) {
     if ((error as IActionError)?.errorCode === 401) {
       return refreshCookieHeader(tokenInfo.refresh_token);
     }
+
     return handleActionError(error as IActionError);
   }
 };
@@ -91,22 +98,29 @@ export const login = async () => {
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  
+
   const { clientId } = await getCustomPostByDomain(domain);
-  const url = (`${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-    `${process.env.SECURE === "true" ? "https" : "http"}://${domain}/signin`
-  )}&scope=profile`).replace("http:", "https:");
+  const url =
+    `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
+      `${process.env.SECURE === "true" ? "https" : "http"}://${domain}/signin`
+    )}&scope=profile`.replace("http:", "https:");
   redirect(url);
 };
 
 export const getUserToken = async (code: string, redirectUrl: string) => {
-    const domain = headers().get("host");
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-    
-  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
-  const { access_token, refresh_token } = await getPodAccessToken(code, redirectUrl, clientId, clientSecret);
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+
+  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
+    await getCustomPostByDomain(domain);
+  const { access_token, refresh_token } = await getPodAccessToken(
+    code,
+    redirectUrl,
+    clientId,
+    clientSecret
+  );
 
   const encryptedData = encryptKey(
     JSON.stringify({
@@ -134,4 +148,15 @@ export const logoutAction = async () => {
   const response = await logout(userData.access_token, userData.refresh_token);
   cookies().delete("token");
   return response;
+};
+
+export const userMetadataAction = async (data: object) => {
+  const userData = await getMe();
+  try {
+    const response = await userMetadata(userData.access_token, data);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

@@ -8,6 +8,10 @@ import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { IRepo } from "@interface/repo.interface";
 
+interface ISubscribeResult {
+  repository: IRepo;
+}
+
 const useSubscribeRepo = () => {
   const setRepo = useSetRecoilState(repoAtom);
   const setRepoGroup = useSetRecoilState(repoGroupingAtom);
@@ -23,8 +27,10 @@ const useSubscribeRepo = () => {
       const response = await subscribeRepoAction(hash, password);
       handleClientSideHookError(response as IActionError);
       if ("repository" in response) {
-        setRepo(response?.repository as IRepo);
+        setRepo((response as ISubscribeResult).repository);
       }
+
+      return response;
     },
     onSuccess: (response, values) => {
       const { callBack } = values;

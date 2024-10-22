@@ -18,6 +18,7 @@ import { useRecoilValue } from "recoil";
 import FloatingButtons from "./floatingButtons";
 import EditorDrawer from "../editorDrawer";
 import FileEditor from "./fileEditor";
+import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 
 interface IProps {
   getEditorConfig: () => {
@@ -39,6 +40,14 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const timestampRef = useRef(Date.now());
 
   const { data: userInfo, isLoading } = useGetUser();
+  const setUserMetadataHook = useSetUserMetadata();
+
+  const handleSaveConfig = (newData: string) => {
+    const newMetadata = JSON.parse(newData);
+    setUserMetadataHook.mutate({
+      data: newMetadata,
+    });
+  };
 
   if (isLoading) {
     return (
@@ -89,6 +98,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
                   } as IClassicData)
                 : content
             }
+            onGetConfig={handleSaveConfig}
           />
         )}
       </div>

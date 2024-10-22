@@ -5,7 +5,7 @@ import { TUserData } from "@interface/app.interface";
 const useGetUser = () => {
   return useQuery({
     queryKey: ["user-info"],
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
       const data = await getMe();
       return data as TUserData;
     },

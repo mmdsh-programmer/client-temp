@@ -67,6 +67,12 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
     });
 
     setUpdatedUsers(updatedUserList || []);
+    setValue(
+      "members",
+      updatedUserList?.map((user) => {
+        return user.username;
+      }) || []
+    );
   }, [getUsers, groupInfo]);
 
   const filteredUsers = getUsers?.pages
@@ -194,7 +200,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                   // Update form members field
                   setValue(
                     "members",
-                    newUsers.map((user) => {
+                    updatedUsers.map((user) => {
                       return user.username;
                     })
                   );

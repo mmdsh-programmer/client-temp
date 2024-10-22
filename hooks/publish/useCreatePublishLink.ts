@@ -21,7 +21,7 @@ const useCreatePublishLink = () => {
         password,
       );
       handleClientSideHookError(response as IActionError);
-      return response?.data;
+      return response;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;

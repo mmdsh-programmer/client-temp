@@ -53,6 +53,10 @@ const CheckPanelUrlData = () => {
       setDocument(getDocument);
       setDocumentShow(getDocument);
       setShowVersionList(true);
+    } else if (documentId && getDocument) {
+      setDocument(getDocument);
+      setDocumentShow(getDocument);
+      setShowVersionList(true);
     } else if (categoryId && getCategory) {
       setCategory(getCategory);
       setCategoryShow(getCategory);

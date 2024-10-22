@@ -32,11 +32,13 @@ const MobileView = ({
         <div className="flex flex-col gap-3">
           {getCategoryList?.pages.map((page) => {
             return page.list.map((item) => {
-              return item.type === "category" ? (
-                <CategoryMobileCard key={item.id} category={item} />
-              ) : (
-                <DocumentMobileCard key={item.id} document={item} />
-              );
+              return item ? (
+                item.type === "category" ? (
+                  <CategoryMobileCard key={item.id} category={item} />
+                ) : (
+                  <DocumentMobileCard key={item.id} document={item} />
+                )
+              ) : null;
             });
           })}
           <RenderIf isTrue={!!hasNextPage}>

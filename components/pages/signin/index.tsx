@@ -1,21 +1,9 @@
 "use client";
 
-import React, {
- useEffect,
- useState
-} from "react";
-import {
- Spinner,
- Typography
-} from "@material-tailwind/react";
-import {
- getUserToken,
- login
-} from "@actions/auth";
-import {
- useRouter,
- useSearchParams
-} from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
+import { getUserToken, login } from "@actions/auth";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { ClasorLogo } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -38,7 +26,7 @@ const SignInComponent = () => {
 
       if (lastPage === null) {
         const selectedrepoString = window.localStorage.getItem(
-          "CLASOR:SELECTED_REPO",
+          "CLASOR:SELECTED_REPO"
         );
         const selectedRepo = selectedrepoString
           ? JSON.parse(selectedrepoString)
@@ -56,9 +44,10 @@ const SignInComponent = () => {
         }
       }
       if (lastPage) {
+        localStorage.removeItem("CLASOR:LAST_PAGE");
         router.push(lastPage);
       }
-    } catch {
+    } catch {                                                                                     
       setError("خطا در دریافت اطلاعات کاربری");
     }
   };

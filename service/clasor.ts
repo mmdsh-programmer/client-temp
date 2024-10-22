@@ -1,5 +1,6 @@
 import {
   AuthorizationError,
+  DuplicateError,
   ForbiddenError,
   IOriginalError,
   InputError,
@@ -107,6 +108,8 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
         throw new ForbiddenError(message, error as IOriginalError);
       case 404:
         throw new NotFoundError(message, error as IOriginalError);
+      case 409:
+        throw new DuplicateError(message, error as IOriginalError);
       case 422:
         throw new UnprocessableError(message, error as IOriginalError);
       default:
@@ -171,6 +174,26 @@ export const logout = async (access_token: string, refresh_token: string) => {
       "auth/logout",
       {
         refreshToken: refresh_token,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const userMetadata = async (access_token: string, data: object) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      "auth/setUserMetadata",
+      {
+        metadata: data
       },
       {
         headers: {
@@ -561,6 +584,10 @@ export const createRepo = async (
 
     return response.data.data;
   } catch (error) {
+    console.log(
+      "==================== clasor create repo ===================",
+      error
+    );
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
@@ -2243,7 +2270,7 @@ export const deletePublicLink = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2294,7 +2321,7 @@ export const createRepoPublishLink = async (
         },
       }
     );
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2314,7 +2341,7 @@ export const deletePublishLink = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2414,9 +2441,8 @@ export const saveVersion = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
-    console.log("-------------------------error -----------------", error);
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
@@ -2446,7 +2472,6 @@ export const saveFileVersion = async (
 
     return response.data.data;
   } catch (error) {
-    console.log("-------------------------error -----------------", error);
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from "react";
-
 import SpinnerText from "@components/molecules/spinnerText";
 import SubscribePasswordRequest from "@components/organisms/subscribe/subscribePasswordRequest";
 import SubscribeRequest from "@components/organisms/subscribe/subscribeRequest";
@@ -12,18 +11,14 @@ interface IProps {
   hasPassword?: string;
 }
 
-const SubscribePage = ({
- hash, hasPassword 
-}: IProps) => {
-  const {
- data: userInfo, isLoading 
-} = useGetUser();
+const SubscribePage = ({ hash, hasPassword }: IProps) => {
+  const { data: userInfo, isLoading } = useGetUser();
 
   useEffect(() => {
     if (!userInfo) {
       localStorage.setItem(
         "CLASOR:LAST_PAGE",
-        `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`,
+        `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`
       );
     }
   }, []);
@@ -32,9 +27,10 @@ const SubscribePage = ({
     return <SpinnerText text="در حال بررسی اطلاعات" />;
   }
 
-  if (hash && !hasPassword) {
+  if (userInfo && hash && !hasPassword) {
     return <SubscribeRequest hash={hash} />;
-  } if (hash && hasPassword) {
+  }
+  if (userInfo && hash && hasPassword) {
     <SubscribePasswordRequest hasPassword={hasPassword} hash={hash} />;
   }
 
