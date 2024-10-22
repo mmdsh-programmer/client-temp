@@ -33,8 +33,12 @@ const PublishHeader = ({ themeInfo }: IProps) => {
             ) : null}
           </div>
           <div className="flex items-center gap-4 mr-auto">
-            <LoginPanelButton />
-            <ProfileMenu redirect={false} />
+            <ProfileMenu
+              renderSideButton={() => {
+                return <LoginPanelButton />;
+              }}
+              redirect={false}
+            />
           </div>
         </div>
       </div>
