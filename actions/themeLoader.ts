@@ -7,9 +7,9 @@ import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 
 export const themeLoaderAction = async () => {
+  // get domain and find proper custom post base on domain
+  const domain = headers().get("host");
   try {
-    // get domain and find proper custom post base on domain
-    const domain = headers().get("host");
     if (!domain) {
       throw new Error("Domain is not found");
     }
