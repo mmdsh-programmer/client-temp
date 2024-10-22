@@ -131,7 +131,10 @@ export interface IDocumentMetadata {
     contactId: string | null;
   } | null;
   order?: number | null;
-  tags: number[];
+  tags: {
+    name: string;
+    id: number;
+  }[];
   contentType: EDocumentTypes;
   lastVersionId: number | null;
   isTemplate: boolean;
@@ -142,7 +145,7 @@ export interface IDocumentMetadata {
   versions?: IVersionMetadata;
   publicKeyId?: string;
   userGroupHash: string | null;
-  attachmentUserGroup: string | null
+  attachmentUserGroup: string | null;
 }
 
 export interface IWhiteListItem {

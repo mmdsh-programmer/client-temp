@@ -67,6 +67,7 @@ export const editGroupAction = async (
   repoId: number,
   title: string,
   description?: string,
+  newTitle?: string,
   members?: string[]
 ) => {
   const userInfo = await getMe();
@@ -76,6 +77,7 @@ export const editGroupAction = async (
       repoId,
       title,
       description,
+      newTitle,
       members
     );
 

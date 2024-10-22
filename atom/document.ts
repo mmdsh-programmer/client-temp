@@ -38,7 +38,7 @@ export const publishDocumentIdAtom = atom<number>({
   effects: [logEffect("publishDocumentIdAtom")],
 });
 
-export const tempDocTagAtom = atom<number[]>({
+export const tempDocTagAtom = atom<{name: string; id: number}[]>({
   key: "tempDocTagAtom",
   default: [],
   effects: [logEffect("tempDocTagAtom")],

@@ -12,14 +12,16 @@ const useEditGroup = () => {
       repoId: number;
       title: string;
       description?: string;
+      newTitle?: string;
       members?: string[];
       callBack?: () => void;
     }) => {
-      const { repoId, title, description, members } = values;
+      const { repoId, title, description, members, newTitle } = values;
       const response = await editGroupAction(
         repoId,
         title,
         description,
+        newTitle,
         members,
       );
       handleClientSideHookError(response as IActionError);

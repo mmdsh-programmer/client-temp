@@ -3,9 +3,10 @@ import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   onUpload: (e: ChangeEvent<HTMLInputElement>) => void;
+  progress: number;
 }
 
-const FileUpload = ({ onUpload }: IProps) => {
+const FileUpload = ({ progress, onUpload }: IProps) => {
   return (
     <label
       htmlFor="input-file"
@@ -16,6 +17,14 @@ const FileUpload = ({ onUpload }: IProps) => {
           بارگذاری فایل ضمیمه
         </Typography>
       </div>
+      <div
+          className="absolute inset-0 h-full rounded-lg"
+          style={{
+            backgroundColor: progress > 0 ? "#7446B2" : "transparent",
+            width: `${progress}%`,
+            transition: "width 0.3s ease",
+          }}
+        />
       <input
         type="file"
         id="input-file"

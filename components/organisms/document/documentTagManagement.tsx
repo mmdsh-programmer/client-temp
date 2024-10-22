@@ -1,5 +1,5 @@
-import React from "react";
-import { tempDocTagAtom } from "@atom/document";
+import React, { useEffect } from "react";
+import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { repoAtom } from "@atom/repository";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useGetTags from "@hooks/tag/useGetTags";
@@ -14,6 +14,7 @@ interface IProps {
 
 const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const getDocument = useRecoilValue(selectedDocumentAtom);
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
 
   const adminRole =
@@ -25,7 +26,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const updatedAvailableTags = getTags?.pages[0].list
     .filter((repoTag) => {
       return getTempDocTag.every((tag) => {
-        return tag !== +repoTag.id;
+        return tag.id !== +repoTag.id;
       });
     })
     .map((tag) => {
@@ -35,16 +36,22 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
       };
     });
 
-  const documentTags = getTags?.pages[0].list.filter((repoTag) => {
-    return getTempDocTag.includes(+repoTag.id);
-  });
-
-  const handleTagSelect = (val: { label: string; value: string | number }) => {
+  const handleTagSelect = (val: { label: string; value: number | string}) => {
     setTagName(val.value);
     setTempDocTag((oldValue) => {
-      return [...oldValue, +val.value];
+      return [...oldValue, { name: val.label, id: +val.value }];
     });
   };
+
+  useEffect(() => {
+    if (getDocument?.tags) {
+      setTempDocTag(
+        getDocument?.tags.map((tag) => {
+          return tag;
+        })
+      );
+    }
+  }, []);
 
   return isLoading ? (
     <Spinner className="h-5 w-5" color="deep-purple" />
@@ -56,10 +63,10 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
           handleSelect={handleTagSelect}
           handleChange={setTagName}
           setOpen={setOpen}
-         createIcon
+          createIcon
         />
       )}
-      <DocumentTagList tagList={documentTags} />
+      <DocumentTagList tagList={getTempDocTag} />
     </div>
   );
 };

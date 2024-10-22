@@ -1,8 +1,7 @@
+import React from "react";
 import { Card, Spinner, Typography } from "@material-tailwind/react";
-
 import ImageComponent from "@components/atoms/image";
 import { InfoIcon } from "@components/atoms/icons";
-import React from "react";
 import useGetTheme from "@hooks/theme/useGetTheme";
 
 const SidebarHeader = () => {

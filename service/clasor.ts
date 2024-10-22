@@ -686,7 +686,7 @@ export const transferOwnershipRepository = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -932,6 +932,7 @@ export const updateGroup = async (
   repoId: number,
   title: string,
   description?: string,
+  newTitle?: string,
   members?: string[]
 ) => {
   try {
@@ -939,7 +940,7 @@ export const updateGroup = async (
       IServerResult<IUpdateGroup>
     >(
       `repositories/${repoId}/groups/${title}`,
-      { title, description, members, memberType: "username" },
+      { title: newTitle, description, members, memberType: "username" },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

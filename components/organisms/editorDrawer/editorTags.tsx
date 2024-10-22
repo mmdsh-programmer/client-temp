@@ -31,7 +31,9 @@ const EditorTags = () => {
       categoryId: document.categoryId,
       title: document.name,
       contentType: document.contentType,
-      tagIds: getTempDocTag,
+      tagIds: getTempDocTag.map((tag) => {
+        return tag.id;
+      }),
       callBack: () => {
         toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },
@@ -43,7 +45,10 @@ const EditorTags = () => {
       onSubmit={handleSubmit}
       className="flex flex-col h-full justify-between gap-5 px-6 py-4"
     >
-      <DocumentTagManagement setTagName={setTagName} setOpen={setOpenCreateTagDialog}/>
+      <DocumentTagManagement
+        setTagName={setTagName}
+        setOpen={setOpenCreateTagDialog}
+      />
       {adminRole ? (
         <LoadingButton
           className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"

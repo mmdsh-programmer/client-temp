@@ -11,7 +11,7 @@ import { translateRoles } from "@utils/index";
 import useDeleteUser from "@hooks/user/useDeleteUser";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
 
 interface IProps {
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 const UserItem = ({ user }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
@@ -63,7 +63,13 @@ const UserItem = ({ user }: IProps) => {
       transferOwnership.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
-        callBack: () => {},
+        callBack: () => {
+          setRepo({
+            ...getRepo,
+            roleName: ERoles.admin,
+          });
+          toast.success("انتقال مالکیت با موفقیت انجام شد.");
+        },
       });
     } else {
       editRole.mutate({
@@ -89,7 +95,11 @@ const UserItem = ({ user }: IProps) => {
         </div>
       );
     }
-    if (editRole.isPending || deleteUser.isPending) {
+    if (
+      editRole.isPending ||
+      deleteUser.isPending ||
+      transferOwnership.isPending
+    ) {
       return (
         <div className="w-5">
           <Spinner className="h-4 w-4" color="deep-purple" />

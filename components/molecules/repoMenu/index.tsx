@@ -93,7 +93,9 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
             <MenuTemplate
               setOpenDrawer={() => {
                 setOpenRepoActionDrawer(true);
-                setRepo(repo || null);
+                if (repo) {
+                  setRepo(repo);
+                }
               }}
               menuList={menuList}
               icon={

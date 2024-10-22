@@ -105,16 +105,16 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo) return;
+    if (!getRepo || !group) return;
     if (!updatedUsers.length) {
       return toast.error("لیست اعضای گروه نباید خالی باشد.");
     }
 
     mutate({
       repoId: getRepo!.id,
-      title: dataForm.title,
+      title: group.title,
       description: dataForm.description,
-      // Send only usernames for members
+      newTitle: dataForm.title,
       members: updatedUsers.map((user) => {
         return user.username;
       }),

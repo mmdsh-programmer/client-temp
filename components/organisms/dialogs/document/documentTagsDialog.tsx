@@ -36,7 +36,9 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
       categoryId: document.categoryId,
       title: document.name,
       contentType: document.contentType,
-      tagIds: getTempDocTag,
+      tagIds: getTempDocTag.map((tag) => {
+        return tag.id;
+      }),
       callBack: () => {
         toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },

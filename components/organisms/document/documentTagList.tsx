@@ -4,12 +4,14 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
-import { ITag } from "@interface/tags.interface";
 import { XIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
 
 interface IProps {
-  tagList?: ITag[];
+  tagList?: {
+    name: string;
+    id: number;
+  }[];
 }
 
 const DocumentTagList = ({ tagList }: IProps) => {
@@ -20,13 +22,13 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
 
-  const handleDelete = (tag: ITag) => {
+  const handleDelete = (tag: { name: string; id: number }) => {
     if (!getRepo || !document) return;
     if (!tag) return;
     setTempDocTag((oldValue) => {
       return [
-        ...oldValue.filter((id) => {
-          return +tag.id !== id;
+        ...oldValue.filter((docTag) => {
+          return +tag.id !== docTag.id;
         }),
       ];
     });

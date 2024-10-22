@@ -56,6 +56,9 @@ const useMenuList = (
         ),
       createMenuItem("ویرایش", <EditIcon className="w-4 h-4" />, () => {
         setModalState("edit", true);
+        if (repo) {
+          setRepo(repo);
+        }
       }),
       createMenuItem("اشتراک گذاری", <ShareIcon className="w-4 h-4" />, () => {
         setModalState("share", true);
@@ -68,6 +71,9 @@ const useMenuList = (
         <KeyIcon className="w-4 h-4 stroke-1" />,
         () => {
           setModalState("key", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
       repo?.isPublish &&
@@ -85,10 +91,16 @@ const useMenuList = (
         createMenuItem("حذف", <DeleteIcon className="w-4 h-4" />, () => {
           setModalState("delete", true);
           setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
         }),
         createMenuItem("بازگردانی", <RestoreIcon className="w-4 h-4" />, () => {
           setModalState("restore", true);
           setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
         }),
       ];
     }
@@ -101,11 +113,17 @@ const useMenuList = (
         () => {
           setModalState("archive", true);
           setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
       createMenuItem("حذف", <DeleteIcon className="w-4 h-4" />, () => {
         setModalState("delete", true);
         setOpenRepoActionDrawer(false);
+        if (repo) {
+          setRepo(repo);
+        }
       }),
     ];
   };
@@ -118,6 +136,9 @@ const useMenuList = (
         <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
           setModalState("leave", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
     ];
@@ -142,6 +163,9 @@ const useMenuList = (
         <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
           setModalState("leave", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
     ];

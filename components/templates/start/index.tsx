@@ -19,7 +19,6 @@ const Start = ({ children }: IProps) => {
 
     if (isError) {
       console.log(error);
-      debugger;
       return (
         <div>
           <Error

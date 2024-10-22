@@ -45,7 +45,7 @@ export const createTinyLink = async (access_token: string, url: string) => {
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          // "_token_issuer_": 1,
+          "_token_issuer_": 1,
         },
       },
     );
