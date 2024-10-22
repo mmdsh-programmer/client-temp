@@ -7,7 +7,6 @@ import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
 import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRestoreDialog";
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
 import RepoLeaveDialog from "@components/organisms/dialogs/repository/repoLeaveDialog";
-import { IRepo } from "@interface/repo.interface";
 import { useSetRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 
@@ -26,10 +25,9 @@ interface IRepoDialogsProps {
     key: keyof IRepoDialogsProps["modals"],
     state: boolean
   ) => void;
-  repo?: IRepo;
 }
 
-const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
+const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
   const setRepo = useSetRecoilState(repoAtom);
 
   const handleClose = () => {

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useState } from "react";
-import axios, { AxiosProgressEvent } from "axios";
+import axios from "axios";
 import { IFile } from "cls-file-management";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -18,7 +19,7 @@ const fileTablePageSize = 20;
 const AttachFile = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
-  const [processCount, setProcessCount] = useState(0);
+  // const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const queryClient = useQueryClient();
@@ -67,7 +68,7 @@ const AttachFile = () => {
       return;
     }
 
-    setProcessCount(0);
+    // setProcessCount(0);
 
     const token = userInfo?.access_token;
     if (!isFetchingUserInfo && token) {
@@ -87,14 +88,14 @@ const AttachFile = () => {
               _token_: token || "",
               _token_issuer_: "1",
             },
-            onUploadProgress(progressEvent: AxiosProgressEvent) {
-              if (progressEvent.total) {
-                const process = Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total
-                );
-                setProcessCount(process);
-              }
-            },
+            // onUploadProgress(progressEvent: AxiosProgressEvent) {
+            //   // if (progressEvent.total) {
+            //   //   const process = Math.round(
+            //   //     (progressEvent.loaded * 100) / progressEvent.total
+            //   //   );
+            //   //  setProcessCount(process);
+            //   // }
+            // },
           }
         )
         .then(async (res: { data: { data: { result: { hash: string } } } }) => {

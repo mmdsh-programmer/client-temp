@@ -32,7 +32,9 @@ const mockDocument: IDocumentMetadata = {
   isPublish: false,
   publishLinkPassword: null,
   publishExpireTime: null,
-  userGroupHash: null
+  userGroupHash: null,
+  attachmentUserGroup: null
+
 };
 
 const queryClient = new QueryClient();
