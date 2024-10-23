@@ -1,7 +1,8 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
+import HamburgerButton from "@components/organisms/hamburgerButton";
 import PublishFooter from "@components/organisms/footer/publishFooter";
 import PublishHeader from "@components/organisms/header/publishHeader";
 import PublishSidebar from "@components/organisms/publishSidebar";
@@ -15,6 +16,7 @@ declare interface IProps {
 const PublishTemplate = ({ children }: IProps) => {
   const { data: themeInfo } = useGetTheme();
   const isInRoot = usePathname() === "/publish";
+  const [isOpen, setIsOpen] = useState(false);
 
   if (themeInfo && "error" in themeInfo) {
     return (
@@ -28,13 +30,25 @@ const PublishTemplate = ({ children }: IProps) => {
 
   return (
     <>
-      <PublishHeader themeInfo={themeInfo} />
-       <div className="flex w-full">
-        {isInRoot ? null : <PublishSidebar />}
+      <PublishHeader
+        themeInfo={themeInfo}
+        hamburgerButton={
+          <HamburgerButton isOpen={isOpen} setIsOpen={setIsOpen} />
+        }
+      />
+      <div className="flex w-full">
+        {isInRoot ? null : (
+          <PublishSidebar
+            isOpen={isOpen}
+            onClose={() => {
+              return setIsOpen(false);
+            }}
+          />
+        )}
         <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
           {children}
         </main>
-       </div>
+      </div>
       <PublishFooter themeInfo={themeInfo} />
     </>
   );

@@ -7,8 +7,9 @@ import React from "react";
 
 interface IProps {
   themeInfo?: IThemeInfo;
+  hamburgerButton?: React.ReactNode;
 }
-const PublishHeader = ({ themeInfo }: IProps) => {
+const PublishHeader = ({ themeInfo, hamburgerButton }: IProps) => {
   return (
     <>
       <div className="sticky top-0 w-full h-auto xs:h-20 px-0 xs:px-8 bg-white xs:bg-secondary flex flex-col xs:flex-row justify-between items-center">
@@ -31,6 +32,7 @@ const PublishHeader = ({ themeInfo }: IProps) => {
                 {themeInfo.projectName}
               </h1>
             ) : null}
+            {hamburgerButton || null}
           </div>
           <div className="flex items-center gap-4 mr-auto">
             <ProfileMenu

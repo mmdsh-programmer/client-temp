@@ -8,7 +8,7 @@ interface IProps {
 }
 const PublishFooter = ({ themeInfo }: IProps) => {
   return (
-    <div className="h-[75px] bg-secondary flex items-center">
+    <div className="h-[75px] bg-secondary flex items-center px-11">
       <div className="flex h-8 w-full m-auto items-center max-w-3xl justify-between">
         <div className="flex">
           {themeInfo?.logo ? (
