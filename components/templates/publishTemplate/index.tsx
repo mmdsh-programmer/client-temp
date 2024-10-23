@@ -4,7 +4,9 @@ import React, { ReactNode } from "react";
 
 import PublishFooter from "@components/organisms/footer/publishFooter";
 import PublishHeader from "@components/organisms/header/publishHeader";
+import PublishSidebar from "@components/organisms/publishSidebar";
 import useGetTheme from "@hooks/theme/useGetTheme";
+import { usePathname } from "next/navigation";
 
 declare interface IProps {
   children: ReactNode;
@@ -12,6 +14,8 @@ declare interface IProps {
 
 const PublishTemplate = ({ children }: IProps) => {
   const { data: themeInfo } = useGetTheme();
+  const isInRoot = usePathname() === "/publish";
+
   if (themeInfo && "error" in themeInfo) {
     return (
       <div className="sticky top-0 w-full h-auto xs:h-20 px-0 xs:px-8 bg-white xs:bg-secondary flex flex-col xs:flex-row justify-between items-center">
@@ -25,7 +29,12 @@ const PublishTemplate = ({ children }: IProps) => {
   return (
     <>
       <PublishHeader themeInfo={themeInfo} />
-        <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto">{children}</main>
+       <div className="flex">
+        {isInRoot ? null : <PublishSidebar />}
+        <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative">
+          {children}
+        </main>
+       </div>
       <PublishFooter themeInfo={themeInfo} />
     </>
   );
