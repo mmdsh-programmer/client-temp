@@ -29,9 +29,9 @@ const PublishTemplate = ({ children }: IProps) => {
   return (
     <>
       <PublishHeader themeInfo={themeInfo} />
-       <div className="flex">
+       <div className="flex w-full">
         {isInRoot ? null : <PublishSidebar />}
-        <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative">
+        <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
           {children}
         </main>
        </div>

@@ -22,7 +22,7 @@ const PublishHomePage = async () => {
         <div className="flex w-full relative justify-center">
           {data.heroImage ? <ImageComponent
             src={data?.heroImage ? `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${data.heroImage}?&time=${Date.now()}` : "/docs.png"}
-            alt="راهنمای پلتفرم پایه"
+            alt={data.projectName ?? "نام پروژه"}
             width={637}
             height={241}
           /> : <HeroIcon fill="purple" />}
