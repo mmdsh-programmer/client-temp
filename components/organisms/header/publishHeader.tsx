@@ -36,9 +36,7 @@ const PublishHeader = ({ themeInfo, hamburgerButton }: IProps) => {
           </div>
           <div className="flex items-center gap-4 mr-auto">
             <ProfileMenu
-              renderSideButton={() => {
-                return <LoginPanelButton />;
-              }}
+              renderSideButton={<LoginPanelButton />}
               redirect={false}
             />
           </div>

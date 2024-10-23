@@ -16,7 +16,7 @@ declare interface IProps {
 const PublishTemplate = ({ children }: IProps) => {
   const { data: themeInfo } = useGetTheme();
   const isInRoot = usePathname() === "/publish";
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   if (themeInfo && "error" in themeInfo) {
     return (

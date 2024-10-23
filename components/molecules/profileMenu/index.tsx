@@ -14,7 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 interface IProps {
   redirect?: boolean;
-  renderSideButton?: () => React.ReactNode;
+  renderSideButton?: React.ReactNode;
 }
 const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
   const { isFetching, data: userData } = useGetOptionalUser();
@@ -57,7 +57,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
 
   return (
     <>
-      {renderSideButton?.()}
+      {renderSideButton || null}
       <MenuComponent
         variant="medium"
         menuList={[

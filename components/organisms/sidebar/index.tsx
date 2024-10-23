@@ -63,7 +63,7 @@ const Sidebar = () => {
   ];
   return (
     <aside
-      className="hidden md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100"
+      className="hidden md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white"
     >
       <div className="p-4 h-[80px] flex items-center justify-center ">
         <SidebarHeader />
