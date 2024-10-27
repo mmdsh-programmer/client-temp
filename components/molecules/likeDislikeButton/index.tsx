@@ -21,8 +21,8 @@ const LikeDislikeButtons = ({
 }: IProps) => {
   return (
     <div className="flex">
-      <LikeButton onClick={onLike} likeCount={likeCount} likePending={likePending} />
-      <DislikeButton onClick={onDislike} dislikeCount={dislikeCount} dislikePending={dislikePending} />
+      <LikeButton onClick={onLike} likeCount={likeCount} likePending={likePending || dislikePending} />
+      <DislikeButton onClick={onDislike} dislikeCount={dislikeCount} dislikePending={dislikePending || likePending} />
     </div>
   );
 };

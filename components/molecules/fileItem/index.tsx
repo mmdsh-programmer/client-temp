@@ -15,7 +15,7 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
   const fileSizeInMB = fileSizeInKB / 1000;
 
   return (
-    <div className="w-full flex justify-between items-center p-4 rounded-lg border-normal border-[1px]">
+    <div className="w-full flex gap-2 justify-between items-center p-4 rounded-lg border-normal border-[1px]">
       <div className="flex flex-col flex-grow items-start max-w-[90%]">
         <Typography
           className="title_t2 text-primary truncate max-w-full"
@@ -42,7 +42,7 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
         </div>
       </div>
       <Button
-        className="bg-transparent p-0"
+        className="bg-transparent !p-0"
         onClick={() => {
           return onDelete(file);
         }}

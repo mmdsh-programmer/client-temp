@@ -30,7 +30,8 @@ const CheckPanelUrlData = () => {
   const { data: getDocument } = useGetDocument(
     +repoId!,
     +documentId!,
-    !!documentId
+    !!documentId,
+    true
   );
 
   useEffect(() => {

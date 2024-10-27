@@ -6,6 +6,7 @@ import useGetTags from "@hooks/tag/useGetTags";
 import { Spinner } from "@material-tailwind/react";
 import SearchableDropdown from "../../molecules/searchableDropdown";
 import DocumentTagList from "@components/organisms/document/documentTagList";
+import useGetDocument from "@hooks/document/useGetDocument";
 
 interface IProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,7 +22,18 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
 
   const repoId = getRepo!.id;
-  const { data: getTags, isLoading } = useGetTags(repoId, 30, true);
+  const { data: getTags, isLoading: isLoadingTags } = useGetTags(
+    repoId,
+    30,
+    true
+  );
+
+  const { data: documentInfo, isLoading } = useGetDocument(
+    repoId,
+    getDocument!.id,
+    true,
+    true
+  );
 
   const updatedAvailableTags = getTags?.pages[0].list
     .filter((repoTag) => {
@@ -36,7 +48,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
       };
     });
 
-  const handleTagSelect = (val: { label: string; value: number | string}) => {
+  const handleTagSelect = (val: { label: string; value: number | string }) => {
     setTagName(val.value);
     setTempDocTag((oldValue) => {
       return [...oldValue, { name: val.label, id: +val.value }];
@@ -44,20 +56,19 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   };
 
   useEffect(() => {
-    if (getDocument?.tags) {
-      setTempDocTag(
-        getDocument?.tags.map((tag) => {
-          return tag;
-        })
-      );
-    }
-  }, []);
+    if (!documentInfo) return;
+    setTempDocTag(
+      documentInfo?.tags.map((tag) => {
+        return tag;
+      })
+    );
+  }, [documentInfo]);
 
-  return isLoading ? (
+  return isLoading || isLoadingTags ? (
     <Spinner className="h-5 w-5" color="deep-purple" />
   ) : (
     <div className="flex flex-col gap-2">
-      {adminRole && (
+      {adminRole ? (
         <SearchableDropdown
           options={updatedAvailableTags}
           handleSelect={handleTagSelect}
@@ -65,7 +76,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
           setOpen={setOpen}
           createIcon
         />
-      )}
+      ) : null}
       <DocumentTagList tagList={getTempDocTag} />
     </div>
   );

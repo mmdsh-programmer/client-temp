@@ -557,7 +557,7 @@ export const DeleteIcon = (props: IProps) => {
 };
 
 export const DislikeIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, stroke } = props;
   return (
     <svg
       className={className}
@@ -567,13 +567,13 @@ export const DislikeIcon = (props: IProps) => {
     >
       <path
         d="M14.2668 4.70825L11.6834 2.70825C11.3501 2.37492 10.6001 2.20825 10.1001 2.20825H6.93344C5.93344 2.20825 4.8501 2.95825 4.6001 3.95825L2.6001 10.0416C2.18344 11.2083 2.93344 12.2083 4.18344 12.2083H7.51677C8.01677 12.2083 8.43344 12.6249 8.3501 13.2083L7.93344 15.8749C7.76677 16.6249 8.26677 17.4583 9.01677 17.7083C9.68344 17.9583 10.5168 17.6249 10.8501 17.1249L14.2668 12.0416"
-        stroke="white"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeMiterlimit="10"
       />
       <path
         d="M18.5182 4.70833V12.875C18.5182 14.0417 18.0182 14.4583 16.8516 14.4583H16.0182C14.8516 14.4583 14.3516 14.0417 14.3516 12.875V4.70833C14.3516 3.54167 14.8516 3.125 16.0182 3.125H16.8516C18.0182 3.125 18.5182 3.54167 18.5182 4.70833Z"
-        stroke="white"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -1784,7 +1784,7 @@ export const LeaveRepoIcon = (props: IProps) => {
 };
 
 export const LikeIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, stroke } = props;
   return (
     <svg
       className={className}
@@ -1794,13 +1794,13 @@ export const LikeIcon = (props: IProps) => {
     >
       <path
         d="M6.73438 15.2916L9.31771 17.2916C9.65104 17.6249 10.401 17.7916 10.901 17.7916H14.0677C15.0677 17.7916 16.151 17.0416 16.401 16.0416L18.401 9.95823C18.8177 8.79156 18.0677 7.79156 16.8177 7.79156H13.4844C12.9844 7.79156 12.5677 7.37489 12.651 6.79156L13.0677 4.12489C13.2344 3.37489 12.7344 2.54156 11.9844 2.29156C11.3177 2.04156 10.4844 2.37489 10.151 2.87489L6.73438 7.95823"
-        stroke="white"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeMiterlimit="10"
       />
       <path
         d="M2.48438 15.2917V7.12508C2.48438 5.95841 2.98438 5.54175 4.15104 5.54175H4.98437C6.15104 5.54175 6.65104 5.95841 6.65104 7.12508V15.2917C6.65104 16.4584 6.15104 16.8751 4.98437 16.8751H4.15104C2.98438 16.8751 2.48438 16.4584 2.48438 15.2917Z"
-        stroke="white"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

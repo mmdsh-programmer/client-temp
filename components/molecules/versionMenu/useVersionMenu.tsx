@@ -145,7 +145,7 @@ const useVersionMenuList = (
         }
         return "لغو درخواست عمومی شدن نسخه";
       })(),
-      icon: <GlobeIcon className="h-4 w-4" />,
+      icon: <GlobeIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
         if (version?.status === "private" && adminOrOwner) {
           toggleModal("public", true);

@@ -131,10 +131,12 @@ export interface IDocumentMetadata {
     contactId: string | null;
   } | null;
   order?: number | null;
-  tags: {
-    name: string;
-    id: number;
-  }[];
+  tags:
+    | {
+        name: string;
+        id: number;
+      }[]
+    | number[];
   contentType: EDocumentTypes;
   lastVersionId: number | null;
   isTemplate: boolean;

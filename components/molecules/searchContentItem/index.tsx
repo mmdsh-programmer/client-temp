@@ -13,7 +13,7 @@ export const ResultItem = ({
  data, onClick 
 }: IProps) => {
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  useGetDocument(data.repoId, data.documentId, isEnabled);
+  useGetDocument(data.repoId, data.documentId, isEnabled, false);
 
   const handleDocumentSelect = () => {
     setEnabled(true);

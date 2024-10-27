@@ -12,7 +12,7 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const DocumentAccessDialog = ({ setOpen }: IProps) => {
+const DocumentTagsDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
@@ -74,4 +74,4 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
   );
 };
 
-export default DocumentAccessDialog;
+export default DocumentTagsDialog;

@@ -39,8 +39,7 @@ export const getClasorFieldAction = async () => {
 export const getDocumentAction = async (
   repoId: number,
   documentId: number,
-  offset?: number,
-  size?: number
+  disableVersions?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -48,8 +47,7 @@ export const getDocumentAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      offset,
-      size
+      disableVersions
     );
 
     return response;

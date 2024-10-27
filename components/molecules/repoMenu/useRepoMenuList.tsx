@@ -80,7 +80,9 @@ const useMenuList = (
         createMenuItem(
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 stroke-icon-active" />,
-          () => {}
+          () => {
+            window.open(`/publish/${repo.name}/${repo.id}`, "_blank");
+          }
         ),
     ].filter(Boolean) as MenuItem[];
   };

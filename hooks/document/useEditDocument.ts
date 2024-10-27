@@ -50,7 +50,7 @@ const useEditDocument = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
-      const { callBack, categoryId, currentParentId } = values;
+      const { callBack, categoryId, currentParentId, documentId } = values;
       
       queryClient.invalidateQueries({
         queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
@@ -60,6 +60,9 @@ const useEditDocument = () => {
       });
       queryClient.invalidateQueries({
         queryKey: [`category-${categoryId || "parent"}-children`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`document-${documentId}-info`],
       });
       callBack?.();
     },

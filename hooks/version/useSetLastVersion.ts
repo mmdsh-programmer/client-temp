@@ -24,9 +24,9 @@ const useSetLastVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, documentId } = values;
+      const { callBack, documentId, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`get-last-version-document-${documentId}`],
+        queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
       });
       callBack?.();
     },

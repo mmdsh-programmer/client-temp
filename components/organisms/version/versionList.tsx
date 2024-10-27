@@ -29,7 +29,8 @@ const VersionList = () => {
 
   const { data: getLastVersion } = useGetLastVersion(
     getRepo!.id,
-    getSelectedDocument!.id
+    getSelectedDocument!.id,
+    true
   );
 
   const order = [
