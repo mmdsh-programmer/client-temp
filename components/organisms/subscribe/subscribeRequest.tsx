@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
-
+import React, { useEffect, useRef } from "react";
 import Error from "../error";
 import SpinnerText from "@components/molecules/spinnerText";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
+import { useSetRecoilState } from "recoil";
+import { repoGroupingAtom } from "@atom/repository";
+import { ERepoGrouping } from "@interface/enums";
 
 interface IProps {
   hash: string;
@@ -12,14 +14,22 @@ interface IProps {
 
 const SubscribeRequest = ({ hash }: IProps) => {
   const router = useRouter();
+  const hasFetched = useRef(false);
+  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
+
   const subscribeHook = useSubscribeRepo();
 
   const fetchSubscribe = () => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+    
     subscribeHook.mutate({
-      hash: hash as string,
-      callBack: () => {
+      hash,
+      callBack: (result) => {
         toast.success("با موفقیت به ریپو منصوب شدید");
-        router.push("/admin/repositories");
+        localStorage.removeItem("CLASOR:LAST_PAGE");
+        router.push(`/admin/repositories?repoId=${result.repository.id}`);
+        setRepoGroup(ERepoGrouping.ACCESS_REPO);
       },
       errorCallBack: () => {
         localStorage.removeItem("CLASOR:LAST_PAGE");

@@ -7,7 +7,7 @@ import { repoDeleteSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useDeleteRepo from "@hooks/repository/useDeleteRepo";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -21,6 +21,8 @@ interface IProps {
 
 const RepoDeleteDialog = ({ setOpen }: IProps) => {
   const router = useRouter();
+  const currentPath = usePathname();
+
   const [getRepo, setRepo] = useRecoilState(repoAtom);
   const { isPending, mutate } = useDeleteRepo();
 
@@ -43,11 +45,11 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
-        setRepo(null);
-        router.push("dashboard");
-        window.setTimeout(() => {
+        router.push("/admin/dashboard");
+        if (currentPath === "/admin/dashboard") {
+          setRepo(null);
           localStorage.removeItem("CLASOR:SELECTED_REPO");
-        }, 100);
+        }
         toast.success("مخزن با موفقیت حذف شد.");
         handleClose();
       },

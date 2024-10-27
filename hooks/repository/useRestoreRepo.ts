@@ -18,6 +18,9 @@ const useRestoreRepo = () => {
       const { callBack } = values;
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
+      });
       callBack?.();
     },
     onError: (error) => {

@@ -16,7 +16,7 @@ const LikeButton = ({ onClick, likeCount, likePending }: IProps) => {
       title={likeCount.toString()}
       disabled={likePending}
     >
-      <LikeIcon className={`h-5 w-5 ${likeCount > 0 ? "stroke-success-normal" : "stroke-icon-active"}`} />
+      <LikeIcon className={`h-5 w-5 ${likeCount > 0 ? "stroke-white fill-success-normal" : "stroke-white"}`} />
     </Button>
   );
 };

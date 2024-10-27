@@ -7,6 +7,8 @@ import { IVersion } from "@interface/version.interface";
 import { useRecoilValue } from "recoil";
 import { editorModeAtom } from "@atom/editor";
 import Comments from "./comments";
+import { selectedDocumentAtom } from "@atom/document";
+import { EDocumentTypes } from "@interface/enums";
 
 export enum ETabs {
   CHAT = "گفتگو",
@@ -20,6 +22,7 @@ interface IProps {
 }
 
 const EditorDrawer = ({ version }: IProps) => {
+  const getDocument = useRecoilValue(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const [activeTab, setActiveTab] = useState<string>(ETabs.CHAT);
 
@@ -28,14 +31,18 @@ const EditorDrawer = ({ version }: IProps) => {
       tabTitle: ETabs.CHAT,
       tabContent: <Typography>تب گفتگو</Typography>,
     },
-    {
-      tabTitle: ETabs.TAGS,
-      tabContent: <EditorTags />,
-    },
-    {
-      tabTitle: ETabs.ATTACH_FILE,
-      tabContent: <AttachFile />,
-    },
+    getDocument?.contentType === EDocumentTypes.classic
+      ? {
+          tabTitle: ETabs.TAGS,
+          tabContent: <EditorTags />,
+        }
+      : null,
+    getDocument?.contentType === EDocumentTypes.classic
+      ? {
+          tabTitle: ETabs.ATTACH_FILE,
+          tabContent: <AttachFile />,
+        }
+      : null,
     version?.state !== "draft" &&
     version?.status === "accepted" &&
     editorMode === "preview"
