@@ -21,6 +21,10 @@ const SubscribeRequest = ({ hash }: IProps) => {
         toast.success("با موفقیت به ریپو منصوب شدید");
         router.push("/admin/repositories");
       },
+      errorCallBack: () => {
+        localStorage.removeItem("CLASOR:LAST_PAGE");
+        router.push("/admin/dashboard");
+      },
     });
   };
 

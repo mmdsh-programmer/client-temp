@@ -29,6 +29,9 @@ const useTranferOwnershipRepository = () => {
       queryClient.invalidateQueries({queryKey: ["myRepoList-false"],});
       queryClient.invalidateQueries({queryKey: ["accessRepoList"],});
       queryClient.invalidateQueries({queryKey: [`getRepoUsers-${repoId}`],});
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
+      });
       callBack?.();
     },
     onError: (error) => {

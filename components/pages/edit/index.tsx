@@ -24,7 +24,7 @@ const EditPage = () => {
     data: getDocument,
     isFetching: isFetchingDocument,
     error,
-  } = useGetDocument(getRepo!.id, +documentId!, true);
+  } = useGetDocument(getRepo!.id, +documentId!, true, true);
 
   useEffect(() => {
     if (getDocument) {

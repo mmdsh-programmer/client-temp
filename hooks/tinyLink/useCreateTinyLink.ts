@@ -1,8 +1,19 @@
 import { createTinyLinkAction } from "@actions/tinyLink";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { IActionError } from "@interface/app.interface";
-import { handleClientSideHookError } from "@utils/error";
+
+export interface ITinyActionError {
+  code: number;
+  developerMessage: string;
+  error: boolean;
+  message: string;
+  result: {
+    hash: string;
+    shortenObjectKind: string;
+    urlOrContent: string;
+    visitCount: number;
+  } | null;
+}
 
 const useCreateTinyLink = () => {
   return useMutation({
@@ -13,16 +24,19 @@ const useCreateTinyLink = () => {
     }) => {
       const { url } = values;
       const response = await createTinyLinkAction(url);
-      handleClientSideHookError(response as IActionError);
-      return response?.data;
+
+      if (response?.error) {
+        const { message } = response;
+        toast.error(message || "خطای نامشخصی رخ داد");
+      } else {
+        return response?.result;
+      }
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
       callBack?.(response);
     },
-    onError: (error) => {
-      toast.error(error.message || "خطای نامشخصی رخ داد");
-    },
+    onError: () => {},
   });
 };
 

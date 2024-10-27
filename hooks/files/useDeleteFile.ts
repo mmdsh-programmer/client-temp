@@ -7,7 +7,7 @@ import { handleClientSideHookError } from "@utils/error";
 const useDeleteFile = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`renameFile`],
+    mutationKey: ["deleteFile"],
     mutationFn: async (values: {
       repoId: number;
       resourceId: number;

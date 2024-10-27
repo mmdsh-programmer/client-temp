@@ -40,6 +40,38 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const { data: userInfo, isLoading } = useGetUser();
   const setUserMetadataHook = useSetUserMetadata();
 
+  const content = selectedDocument?.publicKeyId
+    ? decryptedContent
+    : version?.content || " ";
+
+  const getLoadData = () => {
+    switch (selectedDocument?.contentType) {
+      case EDocumentTypes.classic:
+        return {
+          content: version?.content || " ",
+          outline: version?.outline || [],
+          auth: {
+            accessToken: userInfo?.access_token,
+            refreshToken: userInfo?.refresh_token,
+            url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
+          },
+          publicUserGroupHash: getRepo?.userGroupHash || undefined,
+          privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
+          repositoryId: getRepo?.id || undefined,
+          resourceId: selectedCategory?.id || undefined,
+          podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
+          backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
+        } as IClassicData;
+      case EDocumentTypes.word:
+        return {
+          username: userInfo?.username,
+          content,
+        };
+      default:
+        return content;
+    }
+  };
+
   const handleSaveConfig = (newData: string) => {
     const newMetadata = JSON.parse(newData);
     setUserMetadataHook.mutate({
@@ -54,10 +86,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       </div>
     );
   }
-
-  const content = selectedDocument?.publicKeyId
-    ? decryptedContent
-    : version?.content || " ";
 
   return (
     <div className="flex h-full relative bg-primary">
@@ -76,26 +104,8 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
             editorMode={editorMode}
             ref={getEditorConfig().ref}
-            loadData={
-              selectedDocument?.contentType === EDocumentTypes.classic
-                ? ({
-                    content: version?.content || " ",
-                    outline: version?.outline || [],
-                    auth: {
-                      accessToken: userInfo?.access_token,
-                      refreshToken: userInfo?.refresh_token,
-                      url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
-                    },
-                    publicUserGroupHash: getRepo?.userGroupHash || undefined,
-                    privateUserGroupHash:
-                      selectedCategory?.userGroupHash || undefined,
-                    repositoryId: getRepo?.id || undefined,
-                    resourceId: selectedCategory?.id || undefined,
-                    podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-                    backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
-                  } as IClassicData)
-                : content
-            }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            loadData={getLoadData() as any}
             onGetConfig={handleSaveConfig}
           />
         )}

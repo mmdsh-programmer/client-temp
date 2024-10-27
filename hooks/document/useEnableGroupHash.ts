@@ -11,7 +11,7 @@ const useEnableGroupHash = () => {
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
-      callBack?: () => void;
+      callBack?: (result) => void;
     }) => {
       const { repoId, documentId } = values;
       const response = await documentEnableUserGroupHashAction(
@@ -23,7 +23,7 @@ const useEnableGroupHash = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
-      callBack?.();
+      callBack?.(response);
     },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");

@@ -12,7 +12,6 @@ import { ChevronLeftIcon } from "@components/atoms/icons";
 
 interface IProps {
   variant: "small" | "medium" | "large";
-  className?: string;
   menuName: string;
   subMenuList: {
     text: string;
@@ -22,7 +21,7 @@ interface IProps {
   }[];
 }
 
-const NestedMenu = ({ variant, menuName, subMenuList, className }: IProps) => {
+const NestedMenu = ({ variant, menuName, subMenuList }: IProps) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <Menu
@@ -43,7 +42,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, className }: IProps) => {
         </MenuItem>
       </MenuHandler>
       <MenuList
-        className={`${className} -ml-3 !z-[99999] font-iranYekan text-primary overflow-hidden p-[2px]`}
+        className="!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary overflow-hidden p-[2px]"
         placeholder="menu-list"
       >
         {subMenuList.map((menuItem, index) => {
@@ -52,7 +51,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, className }: IProps) => {
               // eslint-disable-next-line react/no-array-index-key
               key={`sub-menu-${index}`}
               placeholder="menu-item"
-              className={`${variant === "small" ? "p-2" : "p-3"}`}
+              className="p-2"
               onClick={menuItem.onClick}
             >
               <div className="flex">

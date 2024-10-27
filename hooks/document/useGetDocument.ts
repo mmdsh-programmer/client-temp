@@ -8,11 +8,12 @@ const useGetDocument = (
   repoId: number,
   documentId: number,
   enabled?: boolean,
+  disableVersions?: boolean,
 ) => {
   return useQuery({
     queryKey: [`document-${documentId}-info`],
     queryFn: async ({ signal }) => {
-      const response = await getDocumentAction(repoId, documentId);
+      const response = await getDocumentAction(repoId, documentId, disableVersions);
       handleClientSideHookError(response as IActionError);
       return response as IDocumentMetadata;
     },

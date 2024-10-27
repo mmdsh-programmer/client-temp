@@ -68,6 +68,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
                 handleSelect={(val) => {
                   return setValue(`${val.value}`);
                 }}
+                showInput
               />
             </div>
             <LoadingButton

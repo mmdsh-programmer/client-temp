@@ -193,7 +193,7 @@ export const userMetadata = async (access_token: string, data: object) => {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       "auth/setUserMetadata",
       {
-        metadata: data
+        metadata: data,
       },
       {
         headers: {
@@ -1451,21 +1451,19 @@ export const getDocument = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  offset?: number,
-  size?: number
+  disableVersions?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IDocumentMetadata>
     >(
-      `repositories/${repoId}/documents/${documentId}/info?type=document&sortParams[]={"field": "createdAt", "order": "asc" }`,
+      `repositories/${repoId}/documents/${documentId}/info?type=document&disableVersions=${disableVersions}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          offset,
-          size,
+          // disableVersions: disableVersion
         },
       }
     );

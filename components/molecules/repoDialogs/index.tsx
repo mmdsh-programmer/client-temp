@@ -9,6 +9,7 @@ import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareD
 import RepoLeaveDialog from "@components/organisms/dialogs/repository/repoLeaveDialog";
 import { useSetRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
+import { IRepo } from "@interface/repo.interface";
 
 interface IRepoDialogsProps {
   modals: {
@@ -25,9 +26,10 @@ interface IRepoDialogsProps {
     key: keyof IRepoDialogsProps["modals"],
     state: boolean
   ) => void;
+  repo?: IRepo
 }
 
-const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
+const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
   const setRepo = useSetRecoilState(repoAtom);
 
   const handleClose = () => {
@@ -72,6 +74,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
       ) : null}
       {modals.bookmark ? (
         <RepoBookmarkDialog
+          repo={repo}
           setOpen={() => {
             setModalState("bookmark", false);
             handleClose();

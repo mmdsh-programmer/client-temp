@@ -2,6 +2,7 @@ import { IClasorError, IServerResult } from "@interface/app.interface";
 import Logger from "@utils/logger";
 import axios, { AxiosError } from "axios";
 import { handleClasorStatusError } from "./clasor";
+import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
 
 const { TINY_BASE_URL } = process.env;
 
@@ -40,16 +41,16 @@ axiosClasorInstance.interceptors.response.use((response) => {
 
 export const createTinyLink = async (access_token: string, url: string) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<any>>(
+    const response = await axiosClasorInstance.post<ITinyActionError>(
       `tiny/add?urlOrContent=${url}&shortenObjectKind=link`,
+      {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
-          "_token_issuer_": 1,
+          _token_: access_token,
         },
-      },
+      }
     );
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

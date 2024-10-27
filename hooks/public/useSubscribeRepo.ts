@@ -22,6 +22,7 @@ const useSubscribeRepo = () => {
       hash: string;
       password?: string;
       callBack?: () => void;
+      errorCallBack?: () => void;
     }) => {
       const { hash, password } = values;
       const response = await subscribeRepoAction(hash, password);
@@ -37,7 +38,9 @@ const useSubscribeRepo = () => {
       setRepoGroup(ERepoGrouping.ACCESS_REPO);
       callBack?.();
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      const { errorCallBack } = values;
+      errorCallBack?.();
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
     retry: false,

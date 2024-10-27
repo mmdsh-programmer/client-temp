@@ -65,6 +65,7 @@ const DeleteDialog = ({
           className="bg-critical-normal hover:bg-critical-normal active:bg-critical-normal"
           onClick={onSubmit}
           loading={isPending}
+          isPrimary={false}
         >
           <Typography className="text__label__button text-white">
             {isArchive ? "آرشیو" : "حذف"}
