@@ -1451,6 +1451,8 @@ export const getDocument = async (
   accessToken: string,
   repoId: number,
   documentId: number,
+  offset?: number,
+  size?: number,
   disableVersions?: boolean
 ) => {
   try {
@@ -1463,7 +1465,8 @@ export const getDocument = async (
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          // disableVersions: disableVersion
+          offset,
+          size,
         },
       }
     );
