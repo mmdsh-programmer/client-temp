@@ -18,10 +18,10 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
       className="repo-publish-card last:flex flex-col h-full rounded-lg bg-white border-[1px] border-normal shadow-small"
     >
       <Link
-      className="h-full"
+        className="h-full"
         key={`repo-link-${repo.id}`}
-        href={`/publish/${toPersinaDigit(
-          `${repo.name.replaceAll(/\s+/g, "-")}/${repo.id}`
+        href={`/publish/${repo.id}/${toPersinaDigit(
+          `${repo.name.replaceAll(/\s+/g, "-")}`
         )}`}
         prefetch={false}
       >

@@ -249,5 +249,3 @@ ul.menu:has(li.shepherd-enabled.shepherd-target){
     @apply z-[99999];
   }
 }
-
-
