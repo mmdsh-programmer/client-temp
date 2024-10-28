@@ -1,16 +1,20 @@
+import React from "react";
 import Error from "@components/organisms/error";
 import { IThemeInfo } from "@interface/app.interface";
 import PublishSlugTemplate from "@components/templates/publishTemplate/publishSlugTemplate";
-import React from "react";
 import { getThemeAction } from "@actions/theme";
+import { getRepositoryData } from "./page";
+import { toEnglishDigit } from "@utils/index";
 
 interface IProps {
   children: React.ReactNode;
   params: { id: string; name: string };
 }
-const PublishSlugLayout = async({ children, params }: IProps) => {
-  const { id, name } = params;
+const PublishSlugLayout = async ({ children, params: { id } }: IProps) => {
   const data = await getThemeAction();
+  const repository = await getRepositoryData(
+    Number.parseInt(toEnglishDigit(decodeURIComponent(id)), 10)
+  );
 
   if (data && "error" in data) {
     return (
@@ -22,7 +26,11 @@ const PublishSlugLayout = async({ children, params }: IProps) => {
     );
   }
   return (
-    <PublishSlugTemplate id={+id} name={name} themeInfo={data as IThemeInfo}>
+    <PublishSlugTemplate
+      repoId={repository.id}
+      repoName={repository.name}
+      themeInfo={data as IThemeInfo}
+    >
       {children}
     </PublishSlugTemplate>
   );

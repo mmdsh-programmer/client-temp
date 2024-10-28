@@ -28,6 +28,9 @@ export interface IDocument {
   versions: IVersion[];
   postId?: number;
   chatThreadId: string;
+  hasPassword: boolean;
+  hasWhiteList: boolean;
+  hasBlackList: boolean;
 }
 
 export interface IDocumentCrud {
@@ -142,7 +145,9 @@ export interface IDocumentMetadata {
   versions?: IVersionMetadata;
   publicKeyId?: string;
   userGroupHash: string | null;
-  attachmentUserGroup: string | null
+  attachmentUserGroup: string | null,
+  hasWhiteList: boolean;
+  hasBlackList: boolean;
 }
 
 export interface IWhiteListItem {

@@ -3134,7 +3134,8 @@ export const HeroIcon = (props: IProps) => {
   return (
     <svg
       className={className}
-      width="637px" height="241px"
+      width="637px"
+      height="241px"
       fill={fill}
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -3838,6 +3839,42 @@ export const HeroIcon = (props: IProps) => {
         fill={fill}
         d="M134.5 221.5a57.15 57.15 0 0115 1l-7.5 1c-2.929-.025-5.429-.691-7.5-2z"
         opacity="0.56"
+      />
+    </svg>
+  );
+};
+
+export const DocumentIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor;"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+      />
+    </svg>
+  );
+};
+
+export const LockIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor;"
+        d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2M9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9zm9 14H6V10h12zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2s-2 .9-2 2s.9 2 2 2"
       />
     </svg>
   );

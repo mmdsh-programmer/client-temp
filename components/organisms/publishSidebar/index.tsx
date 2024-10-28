@@ -1,45 +1,38 @@
 "use client";
 
 import React, { useState } from "react";
-
 import HamburgerButton from "../hamburgerButton";
-import PublishRepositoryLink from "@components/molecules/publishRepositoryLink";
+import SidebarTreeViewWrapper from "./sidebarTreeViewWrapper";
 
 interface IProps {
-  id?: number;
-  name?: string;
+  repoId: number;
+  repoName: string;
 }
 
-const PublishSidebar = ({ name, id }: IProps) => {
-  const [isOpen, setIsOpen] = useState(true);
-  return (
+const PublishSidebar = ({ repoId, repoName }: IProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return repoId ? (
     <>
-      <div className="fixed top-5">
+      <div className="fixed top-5 md:hidden">
         <HamburgerButton isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
       <div
-        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${
-          isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        } md:hidden z-[49]`}
+        className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 md:hidden z-[49]
+          ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={() => {
-          setIsOpen(false);
+          return setIsOpen(false);
         }}
       />
       <aside
-        className={`transition-all duration-300 md:flex flex-col bg-white w-64 border-l-2 border-l-gray-100 z-50 
-          ${isOpen ? "right-0" : "right-[-256px]"}
+        className={`transition-all duration-300 px-4 flex flex-col bg-white w-64 border-l-2 border-l-gray-100 z-50 
           fixed md:relative h-full md:h-[calc(100vh-156px)] top-0
-        `}
+          md:right-0 ${isOpen ? "right-0" : "-right-64"}`}
       >
-        {id && name ? (
-          <PublishRepositoryLink
-            link={`/admin/repositories?repoId=${id}`}
-            title={decodeURIComponent(name).replaceAll("-", " ")}
-          />
-        ) : null}
+        <SidebarTreeViewWrapper repoId={repoId} repoName={repoName} />
       </aside>
     </>
-  );
+  ) : null;
 };
 
 export default PublishSidebar;
