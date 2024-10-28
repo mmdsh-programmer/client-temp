@@ -1,8 +1,8 @@
 import { useSetRecoilState } from "recoil";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionListAtom } from "@atom/version";
-import { editorModeAtom } from "@atom/editor";
+import { versionModalListAtom } from "@atom/version";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
 
 interface UseDocumentMenuListProps {
   document?: IDocumentMetadata;
@@ -30,17 +30,21 @@ const useDocumentMenuList = ({
   toggleModal,
 }: UseDocumentMenuListProps) => {
   const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setShowVersionList = useSetRecoilState(versionListAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
+  const setShowVersionList = useSetRecoilState(versionModalListAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
 
   const editOptions = [
     {
       text: "ویرایش محتوا",
       onClick: () => {
-        toggleModal("editContent", true);
         setEditorMode("preview");
-        if (document) setDocument(document);
+        setEditorModal(true);
+        setShowVersionList(false);
+        if (document) {
+          setDocument(document);
+        }
       },
     },
     {

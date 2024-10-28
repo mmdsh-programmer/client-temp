@@ -8,7 +8,7 @@ import { repoAtom } from "@atom/repository";
 import { useResetRecoilState } from "recoil";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionListAtom } from "@atom/version";
+import { versionModalListAtom } from "@atom/version";
 
 const DashboardPage = () => {
   const resetRepo = useResetRecoilState(repoAtom);
@@ -16,7 +16,7 @@ const DashboardPage = () => {
   const resetCategoryShow = useResetRecoilState(categoryShowAtom);
   const resetDocument = useResetRecoilState(selectedDocumentAtom);
   const resetDocumentShow = useResetRecoilState(documentShowAtom);
-  const resetShowVersionList = useResetRecoilState(versionListAtom);
+  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
 
   useEffect(() => {
     resetRepo();

@@ -11,7 +11,6 @@ import DocumentAccessPublishingDialog from "@components/organisms/dialogs/docume
 import DocumentCreatePasswordDialog from "@components/organisms/dialogs/document/documentCreatePasswordDialog";
 import DocumentUpdatePasswordDialog from "@components/organisms/dialogs/document/documentUpdatePasswordDialog";
 import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document/documentDeletePasswordDialog";
-import Editor from "@components/organisms/dialogs/editor";
 
 interface DocumentDialogsProps {
   modalsState: {
@@ -28,6 +27,7 @@ interface DocumentDialogsProps {
     updatePassword: boolean;
     deletePassword: boolean;
     editContent: boolean;
+    documentVersionList: boolean;
   };
   toggleModal: (
     modalName: keyof DocumentDialogsProps["modalsState"],
@@ -35,9 +35,11 @@ interface DocumentDialogsProps {
   ) => void;
 }
 
-const DocumentDialogs: React.FC<DocumentDialogsProps> = ({modalsState,
-  toggleModal,}) => {
-  
+const DocumentDialogs: React.FC<DocumentDialogsProps> = ({
+  modalsState,
+  toggleModal,
+}) => {
+
   return (
     <>
       {modalsState.deleteDocument ? (
@@ -124,13 +126,7 @@ const DocumentDialogs: React.FC<DocumentDialogsProps> = ({modalsState,
           }}
         />
       ) : null}
-      {modalsState.editContent ? (
-        <Editor
-          setOpen={() => {
-            toggleModal("editContent", false);
-          }}
-        />
-      ) : null}
+ 
     </>
   );
 };

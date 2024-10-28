@@ -2,26 +2,18 @@ import React from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
-import { versionListAtom } from "@atom/version";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 
 const Breadcrumb: React.FC = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
   const getRepo = useRecoilValue(repoAtom);
-  const [getDocument, setDocument] = useRecoilState(selectedDocumentAtom);
-  const setShowVersionList = useSetRecoilState(versionListAtom);
-  const setDocumentShow = useSetRecoilState(documentShowAtom);
 
   const router = useRouter();
 
   const breadcrumbList = () => {
     const baseBreadcrumb = ["کلاسور"];
 
-    if (getDocument && getRepo) {
-      return [...baseBreadcrumb, getRepoGroup, getRepo.name, getDocument.name];
-    }
     if (getRepo) {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name];
     }
@@ -51,12 +43,6 @@ const Breadcrumb: React.FC = () => {
                   onClick={() => {
                     if (realIndex === 1) {
                       router.push("/admin/dashboard");
-                    }
-
-                    if (realIndex === 2) {
-                      setShowVersionList(null);
-                      setDocument(null);
-                      setDocumentShow(null);
                     }
                   }}
                 >
@@ -94,11 +80,6 @@ const Breadcrumb: React.FC = () => {
             onClick={() => {
               if (index === 1) {
                 router.push("/admin/dashboard");
-              }
-              if (index === 2) {
-                setShowVersionList(null);
-                setDocument(null);
-                setDocumentShow(null);
               }
             }}
           >

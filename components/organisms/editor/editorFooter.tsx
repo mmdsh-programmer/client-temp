@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import {
   editorDataAtom,
+  editorModalAtom,
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
@@ -33,6 +34,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const setVersion = useSetRecoilState(selectedVersionAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const key = useRecoilValue(editorPublicKeyAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
@@ -173,6 +175,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
+          setEditorModal(false);
         }}
       >
         <Typography className="label_l3 text-primary">
@@ -190,6 +193,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
+            setEditorModal(false);
           }}
         >
           <Typography className="label_l3 text-primary">

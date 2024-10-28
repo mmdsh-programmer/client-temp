@@ -5,14 +5,14 @@ import useGetDocument from "@hooks/document/useGetDocument";
 import { useSetRecoilState } from "recoil";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionListAtom } from "@atom/version";
+import { versionModalListAtom } from "@atom/version";
 
 const CheckPanelUrlData = () => {
   const setCategory = useSetRecoilState(categoryAtom);
   const setCategoryShow = useSetRecoilState(categoryShowAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
-  const setShowVersionList = useSetRecoilState(versionListAtom);
+  const setShowVersionList = useSetRecoilState(versionModalListAtom);
 
   const searchParams = useSearchParams();
   const repoId = searchParams.get("repoId");

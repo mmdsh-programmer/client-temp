@@ -1,23 +1,23 @@
 import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody } from "@material-tailwind/react";
 import VersionList from "../version/versionList";
 import { versionModalListAtom } from "@atom/version";
-import { editorModalAtom } from "@atom/editor";
 
 const VersionDialogView = () => {
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+  const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const setDocumentShow = useSetRecoilState(documentShowAtom);
 
   return (
     <InfoDialog
       dialogHeader={getSelectedDocument?.name}
       setOpen={() => {
         setVersionModalList(false);
-        setEditorModal(true);
+        setDocumentShow(null);
+        setSelectedDocument(null);
       }}
       className="!min-w-[95%] !min-h-[95%]"
     >
