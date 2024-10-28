@@ -8,7 +8,7 @@ import { EListMode } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
 import { listModeAtom } from "@atom/app";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import RepoDialogs from "../repoDialogs";
 import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
 import { activeTourAtom, ETourSection } from "@atom/tour";
@@ -20,6 +20,7 @@ interface IProps {
 
 const RepoMenu = ({ repo, showDrawer }: IProps) => {
   const router = useRouter();
+  const currentPath = usePathname();
 
   const setRepo = useSetRecoilState(repoAtom);
   const mode = useRecoilValue(listModeAtom);
@@ -62,7 +63,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     <>
       {!showDrawer ? (
         <div className=" flex items-center gap-1 justify-end">
-          {window.location.pathname === "/admin/repositories" ? (
+          {currentPath === "/admin/repositories" ? (
             <Button
               placeholder="button"
               className="rounded-lg border-2 border-gray-50 
