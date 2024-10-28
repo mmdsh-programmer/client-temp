@@ -2841,3 +2841,107 @@ export const getPublishRepoList = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const getPublishChildren = async (
+  repoId: number,
+  offset: number,
+  size: number,
+  categoryId?: number,
+  ssoId?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<(ICategoryMetadata | IDocumentMetadata)>>
+    >(
+      `repositories/${repoId}/publish/getChildren?${[
+        {
+          field: "type",
+          order: "asc",
+        },
+        {
+          field: "order",
+          order: "asc",
+        },
+        {
+          field: "createdAt",
+          order: "asc",
+        },
+        {
+          field: "name",
+          order: "asc",
+        },
+      ]
+        .map((n) => {
+          return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
+        })
+        .join("&")}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          parentId: categoryId,
+          offset,
+          size,
+          userssoid: ssoId,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getAllPublishChildren = async (
+  repoId: number,
+  offset: number,
+  size: number,
+  title?: string,
+  categoryId?: number,
+  ssoId?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<(ICategoryMetadata | IDocumentMetadata)>>
+    >(
+      `repositories/${repoId}/publish/children?${[
+        {
+          field: "type",
+          order: "asc",
+        },
+        {
+          field: "order",
+          order: "asc",
+        },
+        {
+          field: "createdAt",
+          order: "asc",
+        },
+        {
+          field: "name",
+          order: "asc",
+        },
+      ]
+        .map((n) => {
+          return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
+        })
+        .join("&")}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          parentId: categoryId,
+          offset,
+          size,
+          userssoid: ssoId,
+          title
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};

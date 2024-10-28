@@ -244,4 +244,8 @@ export interface IThemeInfo {
   textColorPrimary?: string;
   borderColor?: string;
   backgroundColor?: string;
+  logo?: string;
+  projectName?: string;
+  projectDescription?: string;
+  heroImage?: string;
 }
