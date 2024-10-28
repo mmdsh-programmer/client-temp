@@ -1,11 +1,8 @@
-import {
- Spinner, Typography 
-} from "@material-tailwind/react";
-
+import React from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IVersion } from "@interface/version.interface";
-import React from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
@@ -25,26 +22,24 @@ interface IProps {
   version: IVersion;
 }
 
-const VersionCloneDialog = ({
- setOpen, version 
-}: IProps) => {
+const VersionCloneDialog = ({ setOpen, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
-  const {
- data: getVersionInfo, isLoading 
-} = useGetVersion(
+  const { data: getVersionInfo, isLoading } = useGetVersion(
     getRepo!.id,
     getDocument!.id,
     version.id,
+    version.state,
+    true,
+    true,
+    true
   );
   const createVersion = useCreateVersion();
 
-  const form = useForm<IForm>({resolver: yupResolver(versionSchema),});
+  const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
 
-  const {
- register, handleSubmit, reset, clearErrors, formState 
-} = form;
+  const { register, handleSubmit, reset, clearErrors, formState } = form;
   const { errors } = formState;
 
   const handleReset = () => {

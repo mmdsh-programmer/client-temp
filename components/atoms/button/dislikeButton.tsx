@@ -16,7 +16,7 @@ const DislikeButton = ({ onClick, dislikeCount, dislikePending }: IProps) => {
       title={dislikeCount.toString()}
       disabled={dislikePending}
     >
-      <DislikeIcon className={`h-5 w-5 ${dislikeCount > 0 ? "stroke-error" : "stroke-icon-active"}`} />
+      <DislikeIcon className={`h-5 w-5 ${dislikeCount > 0 ? "stroke-white fill-error" : "stroke-white"}`} />
     </Button>
   );
 };

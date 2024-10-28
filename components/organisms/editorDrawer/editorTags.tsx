@@ -25,6 +25,10 @@ const EditorTags = () => {
   const handleSubmit = async () => {
     if (!getRepo || !document) return;
     if (!getTempDocTag) return;
+    if (getTempDocTag.length > 10) {
+      toast.error("بیش از ده آیتم نمی‌توانید به سند منصوب کنید.");
+      return;
+    }
     editDocument.mutate({
       repoId: getRepo.id,
       documentId: document.id,

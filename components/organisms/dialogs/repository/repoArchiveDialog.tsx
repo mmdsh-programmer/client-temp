@@ -4,12 +4,16 @@ import { toast } from "react-toastify";
 import useArchiveRepo from "@hooks/repository/useArchiveRepo";
 import { useRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
+import { usePathname, useRouter } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RepoArchiveDialog = ({ setOpen }: IProps) => {
+  const router = useRouter();
+  const currentPath = usePathname();
+
   const { isPending, mutate } = useArchiveRepo();
   const [getRepo, setRepo] = useRecoilState(repoAtom);
 
@@ -24,7 +28,12 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
       callBack: () => {
         toast.success("مخزن با موفقیت بایگانی شد.");
         handleClose();
-        setRepo(null);
+        router.push("/admin/dashboard");
+
+        if (currentPath === "/admin/dashboard") {
+          setRepo(null);
+          localStorage.removeItem("CLASOR:SELECTED_REPO");
+        }
       },
     });
   };
