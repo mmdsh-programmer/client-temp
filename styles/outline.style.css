@@ -1,0 +1,23 @@
+.clasor-outline {
+  @apply !w-full !p-0;
+}
+
+.clasor-outline a {
+  @apply !text-gray-700 hover:!bg-purple-light;
+}
+
+.clasor-outline .child li a {
+  @apply !text-gray-700;
+}
+
+.clasor-outline li a.active {
+  @apply !bg-purple-light hover:!text-gray-700;
+}
+
+.clasor-outline nav {
+  @apply !pt-4;
+}
+
+.clasor-outline h3 {
+  @apply mx-auto;
+}

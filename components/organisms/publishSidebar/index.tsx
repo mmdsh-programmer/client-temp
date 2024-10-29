@@ -25,8 +25,8 @@ const PublishSidebar = ({ repoId, repoName }: IProps) => {
         }}
       />
       <aside
-        className={`transition-all duration-300 px-4 flex flex-col bg-white w-64 border-l-2 border-l-gray-100 z-50 
-          fixed md:relative h-full md:h-[calc(100vh-156px)] top-0
+        className={`transition-all duration-300 px-4 flex flex-col bg-white border-l-2 border-l-gray-100 z-50 
+          fixed md:relative h-full md:h-[calc(100vh-156px)] top-0 w-64
           md:right-0 ${isOpen ? "right-0" : "-right-64"}`}
       >
         <SidebarTreeViewWrapper repoId={repoId} repoName={repoName} />

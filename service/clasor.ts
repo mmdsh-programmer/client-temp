@@ -1498,9 +1498,33 @@ export const getPublishDocumentLastVersion = async (
   documentId: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
-      `repositories/${repoId}/publish/document/${documentId}/lastVersion`
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IVersion | null>
+    >(`repositories/${repoId}/publish/document/${documentId}/lastVersion`);
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentVersions = async (
+  repoId: number,
+  documentId: number,
+  offset: number,
+  size: number,
+  ssoId?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IVersion>>
+    >(`repositories/${repoId}/publish/document/${documentId}/versions`, {
+      params: {
+        offset,
+        size,
+        userssoid: ssoId,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -2851,7 +2875,7 @@ export const getPublishChildren = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<(ICategoryMetadata | IDocumentMetadata)>>
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
     >(
       `repositories/${repoId}/publish/getChildren?${[
         {
@@ -2903,7 +2927,7 @@ export const getAllPublishChildren = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<(ICategoryMetadata | IDocumentMetadata)>>
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
     >(
       `repositories/${repoId}/publish/children?${[
         {
@@ -2936,7 +2960,7 @@ export const getAllPublishChildren = async (
           offset,
           size,
           userssoid: ssoId,
-          title
+          title,
         },
       }
     );

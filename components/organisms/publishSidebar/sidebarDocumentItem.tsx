@@ -1,8 +1,7 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { IDocumentMetadata } from "@interface/document.interface";
-import { toEnglishDigit } from "@utils/index";
 import Link from "next/link";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { DocumentIcon, LockIcon } from "@components/atoms/icons";
 
 interface IProps {
@@ -11,17 +10,12 @@ interface IProps {
 }
 
 const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
-  const segment = useSelectedLayoutSegment();
+  const pathname = usePathname();
   const isPrivateDoc =
     document.hasPassword || document.hasWhiteList || document.hasBlackList;
 
-  const isSelected = useMemo(() => {
-    if (segment) {
-      const decodedSegment = toEnglishDigit(decodeURIComponent(segment));
-      return decodedSegment.includes(document.id.toString());
-    }
-    return false;
-  }, [segment, document.id]);
+  const pathSegments = pathname?.split("/") || [];
+  const isSelected = pathSegments.includes(String(document.id));
 
   return (
     <Link
@@ -30,12 +24,10 @@ const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
         .toLowerCase()}
       key={`document-tree-item-${document.id}`}
       className={`collapse-document transition-all duration-300 flex items-center gap-2 hover:bg-purple-light rounded-[5px] py-[5px] pl-2.5 w-full text-right pr-[22px] ${
-        isSelected ? "selected" : ""
+        isSelected ? "bg-purple-light pointer-events-none" : ""
       }`}
       title={document.name}
-      role="link"
       tabIndex={0}
-      prefetch={false}
     >
       <DocumentIcon className="w-5 h-5 stroke-icon-hover flex-none self-start" />
       {isPrivateDoc && <LockIcon className="w-5 h-5 text-gray-400" />}
