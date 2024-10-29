@@ -56,7 +56,6 @@ const useCreateDocument = () => {
       const cachedData = await queryClient.getQueriesData({ queryKey });
       const cachePages = cachedData?.[0]?.[1] as { pages: { list: IDocument[]; offset: number; size: number; total: number }[] };
 
-      debugger;
       if (cachePages) {
         const newCategory = {
           ...response,
