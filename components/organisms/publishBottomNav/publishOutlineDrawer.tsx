@@ -17,7 +17,7 @@ const PublishOutlineDrawer = ({ outline }: IProps) => {
     return setOpen(false);
   };
 
-  const outlineList = outline?.startsWith('{"root": {"root"') ? "[]" : outline;
+  const outlineList = outline?.startsWith("{\"root\": {\"root\"") ? "[]" : outline;
 
   useEffect(() => {
     const links = document.getElementsByClassName("clasor-link");
