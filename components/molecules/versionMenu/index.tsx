@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IVersion } from "@interface/version.interface";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import MenuTemplate from "@components/templates/menuTemplate";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
 import useVersionMenuList from "./useVersionMenu";
 import { MoreDotIcon } from "@components/atoms/icons";
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
-  const setVersion = useSetRecoilState(selectedVersionAtom);
+  const [getVersion, setVersion] = useRecoilState(selectedVersionAtom);
   const [openVersionActionDrawer, setOpenVersionActionDrawer] =
     useRecoilState(versionDrawerAtom);
 
@@ -37,7 +37,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     });
   };
 
-  const menuList = useVersionMenuList(version, lastVersion, setModalState);
+  const menuList = useVersionMenuList(getVersion || version, lastVersion, setModalState);
 
   return (
     <>

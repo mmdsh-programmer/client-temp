@@ -63,41 +63,36 @@ const VersionDialogs = ({
           }}
         />
       ) : null}
-      {modals.confirm && version ? (
+      {modals.confirm ? (
         <VersionConfirmDialog
-          version={version}
           setOpen={() => {
             return setModalState("confirm", false);
           }}
         />
       ) : null}
-      {modals.cancelConfirm && version ? (
+      {modals.cancelConfirm ? (
         <VersionCancelConfirmDialog
-          version={version}
           setOpen={() => {
             return setModalState("cancelConfirm", false);
           }}
         />
       ) : null}
-      {modals.public && version ? (
+      {modals.public ? (
         <VersionPublicDialog
-          version={version}
           setOpen={() => {
             return setModalState("public", false);
           }}
         />
       ) : null}
-      {modals.cancelPublic && version ? (
+      {modals.cancelPublic ? (
         <VersionCancelPublicDialog
-          version={version}
           setOpen={() => {
             return setModalState("cancelPublic", false);
           }}
         />
       ) : null}
-      {modals.lastVersion && version ? (
+      {modals.lastVersion ? (
         <LastVersionDialog
-          version={version}
           setOpen={() => {
             return setModalState("lastVersion", false);
           }}

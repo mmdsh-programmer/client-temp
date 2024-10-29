@@ -26,7 +26,6 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
 
-
   const { data: getVersionInfo, isLoading } = useGetVersion(
     getRepo!.id,
     getDocument!.id,

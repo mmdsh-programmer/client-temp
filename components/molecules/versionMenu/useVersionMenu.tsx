@@ -4,7 +4,6 @@ import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import {
   compareVersionAtom,
   selectedVersionAtom,
-  versionDrawerAtom,
   versionModalListAtom,
 } from "@atom/version";
 import { IVersion } from "@interface/version.interface";
@@ -55,7 +54,6 @@ const useVersionMenuList = (
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const setOpenVersionActionDrawer = useSetRecoilState(versionDrawerAtom);
 
   const adminOrOwner =
     getRepo?.roleName === "admin" || getRepo?.roleName === "owner";

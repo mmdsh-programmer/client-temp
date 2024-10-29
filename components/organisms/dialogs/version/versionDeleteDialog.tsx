@@ -49,7 +49,7 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
   return (
     <DeleteDialog
       isPending={deleteVerion.isPending}
-      dialogHeader="حذف نسخه"
+      dialogHeader={getVersion?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه"}
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
