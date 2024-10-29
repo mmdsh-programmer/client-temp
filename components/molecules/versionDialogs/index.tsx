@@ -1,16 +1,15 @@
-import React from "react";
-import { IVersion } from "@interface/version.interface";
-import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
-import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
-import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
-import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
-import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
-import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
-import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
 import DiffVersionAlert from "../diffVersionAlert";
-import { useRecoilState } from "recoil";
+import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
+import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
+import React from "react";
+import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
+import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
+import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
+import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
+import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
+import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
 import { compareVersionAtom } from "@atom/version";
+import { useRecoilState } from "recoil";
 
 interface IVersionDialogsProps {
   modals: {
@@ -28,13 +27,11 @@ interface IVersionDialogsProps {
     key: keyof IVersionDialogsProps["modals"],
     state: boolean
   ) => void;
-  version?: IVersion;
 }
 
 const VersionDialogs = ({
   modals,
   setModalState,
-  version,
 }: IVersionDialogsProps) => {
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);

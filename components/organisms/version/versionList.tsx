@@ -1,11 +1,8 @@
-import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
-
 import { EEmptyList } from "@components/molecules/emptyList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import { IVersionView } from "@interface/version.interface";
 import React from "react";
 import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
-import VersionMenu from "@components/molecules/versionMenu";
 import VersionMobileView from "../versionView/versionMobileView";
 import VersionTableView from "@components/organisms/versionView/versionTableView";
 import { repoAtom } from "@atom/repository";
@@ -17,8 +14,6 @@ import { useRecoilValue } from "recoil";
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const openVersionActionDrawer = useRecoilValue(versionDrawerAtom);
-  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
 
   const {
     data: versionList,

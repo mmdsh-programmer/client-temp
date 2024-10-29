@@ -69,9 +69,13 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/api/:path*",
-    ...pages.map((page) => {
-      return `/${page}/:path*`;
-    }),
+    "/cache/:path*",
+    "/admin/:path*",
+    "/panel-admin-clasor/:path*",
+    "/publish/:path*",
+    "/sampleError/:path*",
+    "/signin/:path*",
+    "/subscribe/:path*",
+    "/api/:path*"
   ],
 };

@@ -3,7 +3,7 @@ import { IVersion, IVersionView } from "@interface/version.interface";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
@@ -26,8 +26,8 @@ const VersionTableView = ({
   type,
 }: IVersionView) => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
+  const setVersionModalList =
+  useSetRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
