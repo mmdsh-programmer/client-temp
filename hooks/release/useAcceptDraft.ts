@@ -1,26 +1,28 @@
-import { archiveRepoAction } from "@actions/repository";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { acceptDraftAction } from "@actions/releaseDocs";
 
-const useArchiveRepo = () => {
+const useAcceptDraft = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["archiveRepo"],
-    mutationFn: async (values: { repoId: number; callBack?: () => void }) => {
-      const { repoId } = values;
-      const response = await archiveRepoAction(repoId);
+    mutationKey: ["acceptDraft"],
+    mutationFn: async (values: {
+      repoId: number;
+      docId: number;
+      draftId: number;
+      callBack?: () => void;
+    }) => {
+      const { repoId, docId, draftId } = values;
+      const response = await acceptDraftAction(repoId, docId, draftId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
-      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
-      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      const { callBack, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: ["getMyInfo"],
+        queryKey: [`pending-draft-${repoId}`],
       });
       callBack?.();
     },
@@ -30,4 +32,4 @@ const useArchiveRepo = () => {
   });
 };
 
-export default useArchiveRepo;
+export default useAcceptDraft;

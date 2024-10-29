@@ -22,7 +22,9 @@ type ModalType =
   | "share"
   | "key"
   | "leave"
-  | "archive";
+  | "archive"
+  | "fileManagement"
+  | "versionRequests";
 
 export interface MenuItem {
   text: string;
@@ -31,7 +33,7 @@ export interface MenuItem {
 }
 
 const useMenuList = (
-  repo: IRepo | undefined,
+  repo: IRepo | null,
   setModalState: (type: ModalType, state: boolean) => void,
   handleRepoInfo: () => void,
   setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>
@@ -48,12 +50,13 @@ const useMenuList = (
 
   const ownerAdminActions = () => {
     return [
-      window.location.pathname === "/admin/dashboard" &&
-        createMenuItem(
-          "اطلاعات پوشه",
-          <FolderInfoIcon className="w-4 h-4" />,
-          handleRepoInfo
-        ),
+      window.location.pathname === "/admin/dashboard"
+        ? createMenuItem(
+            "اطلاعات پوشه",
+            <FolderInfoIcon className="w-4 h-4" />,
+            handleRepoInfo
+          )
+        : null,
       createMenuItem("ویرایش", <EditIcon className="w-4 h-4" />, () => {
         setModalState("edit", true);
         if (repo) {
@@ -66,16 +69,18 @@ const useMenuList = (
           setRepo(repo);
         }
       }),
-      createMenuItem(
-        "لیست کلید های مخزن",
-        <KeyIcon className="w-4 h-4 stroke-1" />,
-        () => {
-          setModalState("key", true);
-          if (repo) {
-            setRepo(repo);
-          }
+      createMenuItem("مدیریت فایل", <ShareIcon className="w-4 h-4" />, () => {
+        setModalState("fileManagement", true);
+        if (repo) {
+          setRepo(repo);
         }
-      ),
+      }),
+      createMenuItem("درخواست‌ها", <ShareIcon className="w-4 h-4" />, () => {
+        setModalState("versionRequests", true);
+        if (repo) {
+          setRepo(repo);
+        }
+      }),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
@@ -109,6 +114,16 @@ const useMenuList = (
 
     return [
       ...(ownerAdminActions() as MenuItem[]),
+      createMenuItem(
+        "لیست کلید های مخزن",
+        <KeyIcon className="w-4 h-4 stroke-1" />,
+        () => {
+          setModalState("key", true);
+          if (repo) {
+            setRepo(repo);
+          }
+        }
+      ),
       createMenuItem(
         "بایگانی",
         <ArchiveIcon className="w-4 h-4 stroke-icon-active" />,

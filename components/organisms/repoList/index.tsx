@@ -15,6 +15,7 @@ import ListMode from "@components/molecules/listMode";
 import MyRepoList from "./myRepoList";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
+import RepoMenu from "@components/molecules/repoMenu";
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
@@ -53,6 +54,7 @@ const RepoList = () => {
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.BOOKMARK_REPO}>
         <BookmarkRepoList />
       </RenderIf>
+      <RepoMenu showDrawer />
     </div>
   );
 };
