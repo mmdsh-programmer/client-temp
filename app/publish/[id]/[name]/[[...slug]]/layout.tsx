@@ -3,8 +3,8 @@ import Error from "@components/organisms/error";
 import { IThemeInfo } from "@interface/app.interface";
 import PublishSlugTemplate from "@components/templates/publishTemplate/publishSlugTemplate";
 import { getThemeAction } from "@actions/theme";
-import { getRepositoryData } from "./page";
 import { toEnglishDigit } from "@utils/index";
+import { getRepositoryData } from "@utils/publish";
 
 interface IProps {
   children: React.ReactNode;

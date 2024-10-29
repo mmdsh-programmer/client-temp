@@ -1,80 +1,99 @@
 import React from "react";
-import { IRepo } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
 import RepositoryInfo from "@components/organisms/repositoryInfo";
-import { getPublishRepositoryInfo } from "@service/clasor";
 import { notFound } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
+import { getRepositoryData } from "@utils/publish";
+import {
+  getPublishDocumentLastVersion,
+  getPublishDocumentVersion,
+} from "@service/clasor";
+import PublishVersionContent from "@components/pages/publish";
+import { ServerError } from "@utils/error";
+import { FolderEmptyIcon } from "@components/atoms/icons";
 
-export interface IPublishProps {
-  uniqueId: number;
-  repoId: number;
-  repoName: string;
-  repository?: IRepo;
-  error?: { status: number; messages: string[] };
-  data?: IVersion;
-}
-
-export async function getRepositoryData(repoId: number) {
-  if (!repoId || Number.isNaN(Number(repoId))) {
-    return notFound();
-  }
-  const repoInfoResponse = await getPublishRepositoryInfo(+repoId);
-  if (!repoInfoResponse) {
-    return notFound();
-  }
-  return repoInfoResponse;
-}
+type PageParams = {
+  name: string;
+  id: string;
+  slug?: string[];
+};
 
 export default async function PublishContentPage({
   params,
 }: {
-  params: { name: string; id: string; slug: string[] };
+  params: PageParams;
 }) {
   try {
-    const { name, id, slug } = params;
-    console.log(decodeURIComponent(id));
-    console.log(decodeURIComponent(name));
-    const repository = await getRepositoryData(
-      Number.parseInt(toEnglishDigit(decodeURIComponent(id)), 10)
+    const { id: repoId, slug } = params;
+
+    const parsedRepoId = Number.parseInt(
+      toEnglishDigit(decodeURIComponent(repoId)),
+      10
     );
-    if (!slug) {
+    if (Number.isNaN(parsedRepoId)) {
+      throw new ServerError(["آیدی مخزن صحیح نیست"]);
+    }
+
+    const repository = await getRepositoryData(parsedRepoId);
+
+    if (!slug?.length) {
       return <RepositoryInfo repository={repository} />;
     }
 
-    const hasVersion = (slug[slug.length - 1] as string).startsWith("v-");
+    const lastSlug = slug[slug.length - 1];
+    const hasVersion = lastSlug.startsWith("v-");
 
-    if (!hasVersion) {
-      return notFound();
-    }
+    let documentId: number;
+    let versionData: IVersion;
 
-    const versionId = slug[slug.length - 1].replace("v-", "");
-    if (!versionId || Number.isNaN(Number(versionId))) {
-      return notFound();
-    }
+    if (hasVersion) {
+      const versionId = parseInt(lastSlug.replace("v-", ""), 10);
+      documentId = parseInt(slug[slug.length - 3], 10);
 
-    if (!slug) {
-      return <div>no slug</div>;
+      if (Number.isNaN(versionId) || Number.isNaN(documentId)) {
+        return notFound();
+      }
+
+      versionData = await getPublishDocumentVersion(
+        repository.id,
+        documentId,
+        versionId
+      );
+    } else {
+      documentId = parseInt(lastSlug, 10);
+
+      if (Number.isNaN(documentId)) {
+        return notFound();
+      }
+
+      const lastVersionInfo = await getPublishDocumentLastVersion(
+        repository.id,
+        documentId
+      );
+
+      if (!lastVersionInfo)
+        throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
+
+      versionData = await getPublishDocumentVersion(
+        repository.id,
+        documentId,
+        lastVersionInfo.id
+      );
     }
 
     return (
-      <div className="flex flex-col">
-        <span>name: {decodeURIComponent(name)}</span>
-        <span>id: {decodeURIComponent(id)}</span>
-        <span>slug: {JSON.stringify(slug)}</span>
-      </div>
+      <PublishVersionContent documentId={documentId} version={versionData} />
     );
   } catch (error) {
-    const errorMessage = Array.isArray(
-      (error as { messages?: string[] })?.messages
-    )
-      ? (error as { messages?: string[] })?.messages?.[0]
-      : JSON.stringify(error);
-
-    return (
-      <div className="main w-full min-h-screen text-center bg-slate-50 flex items-center justify-center">
-        {errorMessage}
-      </div>
-    );
+    if (error instanceof Error) {
+      return (
+        <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">
+          <div className="flex flex-col justify-center items-center">
+            <FolderEmptyIcon />
+            {error.message}
+          </div>
+        </section>
+      );
+    }
   }
 }

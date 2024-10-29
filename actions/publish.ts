@@ -5,6 +5,7 @@ import {
   deletePublishLink,
   getAllPublishChildren,
   getPublishChildren,
+  getPublishDocumentVersions,
 } from "@service/clasor";
 import { getMe, userInfoAction } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -82,6 +83,30 @@ export const getAllPublishChildrenAction = async (
       size,
       title,
       categoryId,
+      ssoId
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishDocumentVersionsAction = async (
+  repoId: number,
+  documentId: number,
+  offset: number,
+  size: number,
+) => {
+  const userInfo = await userInfoAction();
+  try {
+    const ssoId =
+      userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const response = await getPublishDocumentVersions(
+      repoId,
+      documentId,
+      offset,
+      size,
       ssoId
     );
 

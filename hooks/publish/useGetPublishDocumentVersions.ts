@@ -1,32 +1,27 @@
 import { IActionError } from "@interface/app.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { handleClientSideHookError } from "@utils/error";
-import { getAllPublishChildrenAction } from "@actions/publish";
+import { getPublishDocumentVersionsAction } from "@actions/publish";
 import { IListResponse } from "@interface/repo.interface";
-import { ICategoryMetadata } from "@interface/category.interface";
-import { IDocumentMetadata } from "@interface/document.interface";
+import { IVersion } from "@interface/version.interface";
 
-const useGetAllPublishChildren = (
+const useGetPublishDocumentVersions = (
   repoId: number,
+  documentId: number,
   size: number,
-  categoryId?: number,
-  title?: string,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [
-      `publish-category-${categoryId || "parent"}${title ? `-${title}` : ""}-children`,
-    ],
+    queryKey: [`${documentId}-public-versions`],
     queryFn: async ({ signal, pageParam }) => {
-      const response = await getAllPublishChildrenAction(
+      const response = await getPublishDocumentVersionsAction(
         repoId,
+        documentId,
         (pageParam - 1) * size,
         size,
-        categoryId,
-        title
       );
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
+      return response as IListResponse<IVersion>;
     },
     initialPageParam: 1,
     retry: false,
@@ -40,4 +35,4 @@ const useGetAllPublishChildren = (
   });
 };
 
-export default useGetAllPublishChildren;
+export default useGetPublishDocumentVersions;
