@@ -1,23 +1,24 @@
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { IVersion } from "@interface/version.interface";
 import React from "react";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import usePublicVersion from "@hooks/version/usePublicVersion";
 import { useRecoilValue } from "recoil";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  version: IVersion;
+
 }
 
 const VersionPublicDialog = ({
- version, setOpen 
+setOpen 
 }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const publicVersion = usePublicVersion();
 
@@ -38,11 +39,11 @@ const VersionPublicDialog = ({
   };
 
   const onSubmit = async () => {
-    if (!getRepo) return;
+    if (!getRepo || !getVersion) return;
     publicVersion.mutate({
       repoId: getRepo?.id,
       documentId: getDocument!.id,
-      versionId: version.id,
+      versionId: getVersion.id,
       callBack: () => {
         toast.success(" نسخه با موفقیت عمومی شد.");
         handleClose();
@@ -61,7 +62,7 @@ const VersionPublicDialog = ({
         <div className="flex">
           آیا از عمومی شدن نسخه "
           <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
-            {version?.versionNumber}
+            {getVersion?.versionNumber}
           </span>
           " اطمینان دارید؟
         </div>

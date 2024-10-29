@@ -51,14 +51,14 @@ const VersionMobileView = ({
   };
 
   return (
-    <div className="px-0 xs:px-4 flex-grow flex-shrink-0">
+    <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div className="flex flex-col gap-3 rounded-lg">
+        <div className="flex flex-col gap-3 rounded-lg overflow-auto h-[calc(100vh-140px)]">
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
@@ -96,10 +96,10 @@ const VersionMobileView = ({
                         version.status,
                         version.state
                       ).translated,
-                      className: `${translateVersionStatus(
-                        version.status,
-                        version.state
-                      ).className} version-status`,
+                      className: `${
+                        translateVersionStatus(version.status, version.state)
+                          .className
+                      } version-status`,
                     },
                   ]}
                   onClick={() => {
@@ -130,7 +130,7 @@ const VersionMobileView = ({
       ) : (
         <EmptyList type={type} />
       )}
-    </div>
+    </>
   );
 };
 

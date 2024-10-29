@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Spinner } from "@material-tailwind/react";
 import LoadMore from "@components/molecules/loadMore";
 import EmptyList from "@components/molecules/emptyList";
 import RepoCardMode from "@components/molecules/repoCardMode";
 import RenderIf from "@components/atoms/renderIf";
-import RepoMenu from "@components/molecules/repoMenu";
-import { IRepo, IRepoView } from "@interface/repo.interface";
+import { IRepoView } from "@interface/repo.interface";
 
 const CardView = ({
   isLoading,
@@ -15,11 +14,9 @@ const CardView = ({
   isFetchingNextPage,
   type,
 }: IRepoView) => {
-  const [selectedRepo, setSelectedRepo] = useState<IRepo | undefined>(undefined);
   const listLength = getRepoList?.pages[0].total;
   return (
-    <>
-      <div className="min-h-[calc(100vh-340px)]">
+    <div className="min-h-[calc(100vh-340px)]">
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
@@ -34,7 +31,6 @@ const CardView = ({
                     <RepoCardMode
                       key={repo.id}
                       repo={repo}
-                      setselectedRepo={setSelectedRepo}
                     />
                   );
                 });
@@ -53,8 +49,6 @@ const CardView = ({
           <EmptyList type={type} />
         )}
       </div>
-      <RepoMenu showDrawer repo={selectedRepo} />
-    </>
   );
 };
 

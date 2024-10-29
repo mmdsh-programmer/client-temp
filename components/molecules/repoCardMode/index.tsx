@@ -10,10 +10,9 @@ import { useRouter } from "next/navigation";
 
 interface IProps {
   repo: IRepo;
-  setselectedRepo: React.Dispatch<React.SetStateAction<IRepo | undefined>>
 }
 
-const RepoCardMode = ({ repo, setselectedRepo }: IProps) => {
+const RepoCardMode = ({ repo }: IProps) => {
   const router = useRouter();
   const getRepoInfo = useRecoilValue(repoInfoAtom);
 
@@ -38,14 +37,7 @@ const RepoCardMode = ({ repo, setselectedRepo }: IProps) => {
             {repo.name}
           </Typography>
         </div>
-        <div
-          onClick={(e) => {
-             e.stopPropagation();
-             setselectedRepo(repo);
-          }}
-        >
-          <RepoMenu repo={repo} />
-        </div>
+        <RepoMenu repo={repo} />
       </div>
       {getRepoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
     </Card>

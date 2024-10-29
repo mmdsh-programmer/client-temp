@@ -85,9 +85,7 @@ const VersionList = () => {
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
         <VersionMobileView {...commonProps} />
       </div>
-      {openVersionActionDrawer && getSelectedVersion ? (
-        <VersionMenu version={getSelectedVersion} showDrawer />
-      ) : null}
+
     </div>
   );
 };

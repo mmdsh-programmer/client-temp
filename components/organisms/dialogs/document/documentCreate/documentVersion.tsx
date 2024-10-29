@@ -63,7 +63,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     if (getDocumentTemplate) {
       createDocFromTemplateHook.mutate({
         repoId: getRepo.id,
-        categoryId: getCategory?.id || null,
+        categoryId: getCategory?.id || getCategoryShow?.id || null,
         title: getDocumentInfo.title,
         contentType: getDocumentType,
         description: getDocumentInfo.description,
@@ -79,9 +79,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     } else {
       createDocumentHook.mutate({
         repoId: getRepo.id,
-        categoryId: getCategoryShow
-          ? getCategoryShow.id
-          : getCategory?.id || null,
+        categoryId: getCategory?.id || getCategoryShow?.id || null,
         title: getDocumentInfo.title,
         description: getDocumentInfo.description,
         contentType: getDocumentType,

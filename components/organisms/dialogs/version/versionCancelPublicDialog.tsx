@@ -5,17 +5,17 @@ import { useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
 import { selectedDocumentAtom } from "@atom/document";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { IVersion } from "@interface/version.interface";
 import useCancelPublicVersion from "@hooks/version/useCancelPublicVersion";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  version: IVersion;
 }
 
-const VersionCancelPublicDialog = ({ version, setOpen }: IProps) => {
+const VersionCancelPublicDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const cancelPublicVersion = useCancelPublicVersion();
 
@@ -34,11 +34,11 @@ const VersionCancelPublicDialog = ({ version, setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo) return;
+    if (!getRepo || !getVersion) return;
     cancelPublicVersion.mutate({
       repoId: getRepo?.id,
       documentId: getDocument!.id,
-      versionId: version.id,
+      versionId: getVersion.id,
       callBack: () => {
         toast.error(" .تایید نسخه لغو شد");
         handleClose();
@@ -55,7 +55,7 @@ const VersionCancelPublicDialog = ({ version, setOpen }: IProps) => {
     >
       آیا از لغو تایید نسخه "
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
-        {version?.versionNumber}
+        {getVersion?.versionNumber}
       </span>
       " اطمینان دارید؟
     </ConfirmDialog>

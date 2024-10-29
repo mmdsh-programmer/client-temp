@@ -5,17 +5,17 @@ import { useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
 import { selectedDocumentAtom } from "@atom/document";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { IVersion } from "@interface/version.interface";
 import useSetLastVersion from "@hooks/version/useSetLastVersion";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  version: IVersion;
 }
 
-const LastVersionDialog = ({ version, setOpen }: IProps) => {
+const LastVersionDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const setLastVersion = useSetLastVersion();
 
@@ -34,11 +34,11 @@ const LastVersionDialog = ({ version, setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo) return;
+    if (!getRepo || !getVersion) return;
     setLastVersion.mutate({
       repoId: getRepo?.id,
       documentId: getDocument!.id,
-      versionId: version.id,
+      versionId: getVersion.id,
       callBack: () => {
         toast.success("به عنوان آخرین نسخه انتخاب شد.");
         handleClose();

@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import { getPublishRepositoryInfo } from "@service/clasor";
+import { notFound } from "next/navigation";
 
 export async function getRepositoryData(repoId: number) {
   if (!repoId || Number.isNaN(Number(repoId))) {

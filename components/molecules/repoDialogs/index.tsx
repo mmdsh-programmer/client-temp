@@ -10,6 +10,8 @@ import RepoLeaveDialog from "@components/organisms/dialogs/repository/repoLeaveD
 import { useSetRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { IRepo } from "@interface/repo.interface";
+import Files from "@components/organisms/fileManagement";
+import RepoVersionRequestsDialog from "@components/organisms/dialogs/repository/repoVersionRequestsDialog";
 
 interface IRepoDialogsProps {
   modals: {
@@ -21,12 +23,14 @@ interface IRepoDialogsProps {
     share: boolean;
     key: boolean;
     leave: boolean;
+    fileManagement: boolean;
+    versionRequests: boolean;
   };
   setModalState: (
     key: keyof IRepoDialogsProps["modals"],
     state: boolean
   ) => void;
-  repo?: IRepo
+  repo?: IRepo;
 }
 
 const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
@@ -101,6 +105,25 @@ const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
         <RepoLeaveDialog
           setOpen={() => {
             setModalState("leave", false);
+            handleClose();
+          }}
+        />
+      ) : null}
+      {modals.fileManagement && repo ? (
+        <Files
+          type="public"
+          userGroupHash={repo.userGroupHash}
+          resourceId={repo?.id}
+          handleClose={() => {
+            setModalState("fileManagement", false);
+            handleClose();
+          }}
+        />
+      ) : null}
+      {modals.versionRequests ? (
+        <RepoVersionRequestsDialog
+          setOpen={() => {
+            setModalState("versionRequests", false);
             handleClose();
           }}
         />

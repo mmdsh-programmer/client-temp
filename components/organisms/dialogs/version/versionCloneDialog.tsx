@@ -2,10 +2,10 @@ import { Spinner, Typography } from "@material-tailwind/react";
 
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { IVersion } from "@interface/version.interface";
 import React from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
 import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
@@ -20,18 +20,18 @@ interface IForm {
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  version: IVersion;
 }
 
-const VersionCloneDialog = ({ setOpen, version }: IProps) => {
+const VersionCloneDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const { data: getVersionInfo, isLoading } = useGetVersion(
     getRepo!.id,
     getDocument!.id,
-    version.id,
-    version.state,
+    getVersion?.id,
+    getVersion?.state,
     true,
     true,
     true
