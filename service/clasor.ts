@@ -2269,6 +2269,95 @@ export const getPendingVersion = async (
   }
 };
 
+export const acceptDraft = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  draftId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${draftId}/accept`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const acceptVersion = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  versionId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${versionId}/accept`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectDraft = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  draftId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${draftId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectVersion = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  versionId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${versionId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+
 /// ////////////////////// PUBLIC LINK ///////////////////
 export const createRepoPublicLink = async (
   accessToken: string,
@@ -2851,7 +2940,7 @@ export const getPublishChildren = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<(ICategoryMetadata | IDocumentMetadata)>>
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
     >(
       `repositories/${repoId}/publish/getChildren?${[
         {
@@ -2903,7 +2992,7 @@ export const getAllPublishChildren = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<(ICategoryMetadata | IDocumentMetadata)>>
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
     >(
       `repositories/${repoId}/publish/children?${[
         {
@@ -2936,7 +3025,7 @@ export const getAllPublishChildren = async (
           offset,
           size,
           userssoid: ssoId,
-          title
+          title,
         },
       }
     );

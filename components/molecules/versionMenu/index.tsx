@@ -53,9 +53,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
         <MenuTemplate
           setOpenDrawer={() => {
             setOpenVersionActionDrawer(true);
-            if (version) {
-              setVersion(version);
-            }
+            setVersion(version || null);
           }}
           menuList={menuList}
           icon={

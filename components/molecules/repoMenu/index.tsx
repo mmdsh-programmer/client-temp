@@ -21,7 +21,7 @@ interface IProps {
 const RepoMenu = ({ repo, showDrawer }: IProps) => {
   const router = useRouter();
 
-  const setRepo = useSetRecoilState(repoAtom);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const mode = useRecoilValue(listModeAtom);
   const setRepoInfo = useSetRecoilState(repoInfoAtom);
   const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -38,6 +38,8 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     share: false,
     key: false,
     leave: false,
+    fileManagement: false,
+    versionRequests: false,
   });
 
   const setModalState = (key: keyof typeof modals, state: boolean) => {
@@ -52,7 +54,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   };
 
   const menuList = useRepoMenuList(
-    repo,
+    repo || getRepo,
     setModalState,
     handleRepoInfo,
     setOpenRepoActionDrawer
@@ -93,9 +95,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
             <MenuTemplate
               setOpenDrawer={() => {
                 setOpenRepoActionDrawer(true);
-                if (repo) {
-                  setRepo(repo);
-                }
+                setRepo(repo || null);
               }}
               menuList={menuList}
               icon={

@@ -31,24 +31,25 @@ interface IVersionDialogsProps {
   version?: IVersion;
 }
 
-const VersionDialogs = ({modals,
+const VersionDialogs = ({
+  modals,
   setModalState,
-  version,}: IVersionDialogsProps) => {
+  version,
+}: IVersionDialogsProps) => {
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
+
   return (
     <>
-      {modals.delete && version ? (
+      {modals.delete ? (
         <VersionDeleteDialog
-          version={version}
           setOpen={() => {
             return setModalState("delete", false);
           }}
         />
       ) : null}
-      {modals.clone && version ? (
+      {modals.clone ? (
         <VersionCloneDialog
-          version={version}
           setOpen={() => {
             return setModalState("clone", false);
           }}

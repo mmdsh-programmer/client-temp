@@ -31,7 +31,7 @@ const VersionTableView = ({
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  
+
   const listLength = getVersionList?.[0].length;
 
   const handleOpenEditor = (value: IVersion) => {
@@ -53,16 +53,14 @@ const VersionTableView = ({
   };
 
   return (
-    <div
-      className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
-    >
+    <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+        <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg h-[calc(100vh-200px)]">
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
@@ -193,7 +191,7 @@ const VersionTableView = ({
       ) : (
         <EmptyList type={type} />
       )}
-    </div>
+    </>
   );
 };
 
