@@ -1,17 +1,18 @@
-import React from "react";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
-import { EEmptyList } from "@components/molecules/emptyList";
-import VersionTableView from "@components/organisms/versionView/versionTableView";
-import HeaderListTemplate from "@components/templates/headerListTemplate";
-import useGetVersionList from "@hooks/version/useGetVersionList";
-import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import { IVersionView } from "@interface/version.interface";
-import VersionMobileView from "../versionView/versionMobileView";
-import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
 import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
+
+import { EEmptyList } from "@components/molecules/emptyList";
+import HeaderListTemplate from "@components/templates/headerListTemplate";
+import { IVersionView } from "@interface/version.interface";
+import React from "react";
+import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
 import VersionMenu from "@components/molecules/versionMenu";
+import VersionMobileView from "../versionView/versionMobileView";
+import VersionTableView from "@components/organisms/versionView/versionTableView";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import useGetVersionList from "@hooks/version/useGetVersionList";
+import { useRecoilValue } from "recoil";
 
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -25,7 +26,7 @@ const VersionList = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetVersionList(getRepo!.id, getSelectedDocument!.id, 10);
+  } = useGetVersionList(getRepo!.id, getSelectedDocument!.id, 5);
 
   const { data: getLastVersion } = useGetLastVersion(
     getRepo!.id,
@@ -45,6 +46,12 @@ const VersionList = () => {
   const sortedVersion = versionList?.pages.map((page) => {
     return page
       ? [...page.list].sort((a, b) => {
+          if (a.newOne && !b.newOne) {
+            return -1;
+          }
+          if (!a.newOne && b.newOne) {
+            return 1;
+          }
           if (a.id === b.id) {
             return order.indexOf(a.status) - order.indexOf(b.status);
           }
@@ -72,7 +79,7 @@ const VersionList = () => {
           return <VersionCreateDialog close={close} />;
         }}
       />
-      <div className="hidden xs:block">
+      <div className="hidden xs:block max-h-[calc(100vh_-_200px)] overflow-y-auto">
         <VersionTableView {...commonProps} />
       </div>
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">

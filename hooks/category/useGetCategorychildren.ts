@@ -19,12 +19,14 @@ const useGetCategoryChildren = (
   forMove?: boolean,
   enabled = true
 ) => {
-  const queryKey = [
-    `category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
-      filters ? `-filters=${JSON.stringify(filters)}` : ""
-    }`,
-    title,
-  ];
+  const queryKey = [`category-${categoryId || "parent"}-children`];
+  if (forMove) {
+    queryKey.push("for-move");
+  }
+  if (filters) {
+    queryKey.push(`filters=${JSON.stringify(filters)}`);
+  }
+  
   return useInfiniteQuery({
     queryKey,
     queryFn: async ({ signal, pageParam }) => {

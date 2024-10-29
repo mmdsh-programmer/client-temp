@@ -16,12 +16,13 @@ const useGetChildren = (
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
 ) => {
+  const queryKey = [`category-${categoryId || "parent"}-children`];
+  if (filters) {
+    queryKey.push(`filters=${JSON.stringify(filters)}`);
+  }
+
   return useInfiniteQuery({
-    queryKey: [
-      `category-${categoryId || "parent"}-children${
-        filters ? `-filters=${JSON.stringify(filters)}` : ""
-      }`,
-    ],
+    queryKey,
     queryFn: async ({ signal, pageParam }) => {
       const response = await getChildrenAction(
         repoId,

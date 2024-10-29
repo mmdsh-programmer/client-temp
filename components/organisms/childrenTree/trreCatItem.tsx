@@ -72,7 +72,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
   return (
     <div>
       {catItem.type === "category" ? (
-        <div className="flex flex-col items-start">
+        <div className={`flex flex-col items-start ${catItem.active ? "" : "bg-red-500"}`}>
           <div className="flex">
             {move && (
               <Radio

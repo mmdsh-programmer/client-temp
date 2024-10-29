@@ -120,6 +120,7 @@ const DocumentTableRow = ({ document }: IProps) => {
         },
         { data: <DocumentMenu document={document} />, stopPropagation: true },
       ]}
+      active={!!document.newOne}
     />
   );
 };

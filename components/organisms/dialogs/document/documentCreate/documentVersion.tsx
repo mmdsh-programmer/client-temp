@@ -1,16 +1,17 @@
-import React from "react";
 import { DialogBody, Typography } from "@material-tailwind/react";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
 import {
   documentInfoAtom,
   documentKeyAtom,
   documentTemplateAtom,
   documentTypeAtom,
 } from "@atom/document";
+
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
 import FormInput from "@components/atoms/input/formInput";
 import { IDocument } from "@interface/document.interface";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateDocument from "@hooks/document/useCreateDocument";
@@ -97,7 +98,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               content: "",
               outline: "",
               versionNumber: dataForm.versionNumber,
-              callBack: () => {
+              onSuccessHandler: () => {
                 close();
                 setOpen(false);
                 toast.success("سند مورد نظر با موفقیت ایجاد گردید.");

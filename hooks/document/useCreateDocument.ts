@@ -1,10 +1,11 @@
-import { createDocumentAction } from "@actions/document";
-import { IDocument } from "@interface/document.interface";
-import { EDocumentTypes } from "@interface/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
+import { EDocumentTypes } from "@interface/enums";
 import { IActionError } from "@interface/app.interface";
+import { IDocument } from "@interface/document.interface";
+import { createDocumentAction } from "@actions/document";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useCreateDocument = () => {
   const queryClient = useQueryClient();
@@ -48,11 +49,39 @@ const useCreateDocument = () => {
       handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
-    onSuccess: (response, values) => {
+    onSuccess: async(response, values) => {
       const { successCallBack, categoryId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`],
-      });
+      const queryKey = [`category-${categoryId || "parent"}-children`];
+
+      const cachedData = await queryClient.getQueriesData({ queryKey });
+      const cachePages = cachedData?.[0]?.[1] as { pages: { list: IDocument[]; offset: number; size: number; total: number }[] };
+
+      debugger;
+      if (cachePages) {
+        const newCategory = {
+          ...response,
+          createdAt: `${+new Date()}`,
+          updatedAt: null,
+          type: "document",
+          newOne: true,
+          name: values.title,
+          order: values.order,
+          isTemplate: values.isTemplate,
+          contentType: values.contentType,
+        };
+
+        const newData = {
+          ...cachePages,
+          pages: cachePages.pages.map((page, index) => 
+            {return index === 0 
+              ? { ...page, list: [newCategory, ...page.list] } 
+              : page;}
+          )
+        };
+
+        queryClient.setQueriesData({ queryKey }, newData);
+      }
+
       successCallBack?.(response);
     },
     onError: (error, values) => {

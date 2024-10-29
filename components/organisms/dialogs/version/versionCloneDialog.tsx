@@ -1,8 +1,9 @@
-import React from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IVersion } from "@interface/version.interface";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
@@ -60,7 +61,7 @@ const VersionCloneDialog = ({ setOpen, version }: IProps) => {
       versionNumber: dataForm.name,
       content: getVersionInfo?.content || "",
       outline: getVersionInfo?.outline || "",
-      callBack: () => {
+      onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();
       },

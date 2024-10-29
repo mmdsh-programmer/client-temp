@@ -13,6 +13,7 @@ export interface ICategory {
   parentId?: number;
   createDate: number;
   userGroupHash: string;
+  newOne?: boolean;
 }
 
 export interface ICategoryCrud {
@@ -45,6 +46,7 @@ export interface ICategoryMetadata {
   active: boolean;
   isTemplate: boolean;
   userGroupHash: string | null;
+  newOne?: boolean;
 }
 
 export interface ICategoryView {
