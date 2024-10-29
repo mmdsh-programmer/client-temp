@@ -40,6 +40,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
   };
   return (
     <TableCell
+      active={!!categoryProp.newOne}
       key={`category-table-item-${categoryProp.id}`}
       onClick={() => {
         return handleRowClick(categoryProp);

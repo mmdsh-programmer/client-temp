@@ -31,6 +31,7 @@ export interface IDocument {
   hasPassword: boolean;
   hasWhiteList: boolean;
   hasBlackList: boolean;
+  newOne?: boolean;
 }
 
 export interface IDocumentCrud {
@@ -153,6 +154,7 @@ export interface IDocumentMetadata {
   attachmentUserGroup: string | null;
   hasWhiteList: boolean;
   hasBlackList: boolean;
+  newOne?: boolean;
 }
 
 export interface IWhiteListItem {

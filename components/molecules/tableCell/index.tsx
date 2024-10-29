@@ -13,14 +13,15 @@ interface IProps {
   }[];
   navigateTo?: string;
   onClick?: () => void;
+  active?: boolean;
 }
 const TableCell = ({
- tableCell, navigateTo, onClick 
+ tableCell, navigateTo, onClick, active
 }: IProps) => {
   const router = useRouter();
   return (
     <tr
-      className="cursor-pointer text-[13px] font-normal text-primary border-b-[1px] border-normal"
+      className={`cursor-pointer text-[13px] font-normal text-primary border-b-[1px] border-normal ${active ? "bg-gray-300" : ""}`}
       onClick={() => {
         onClick?.();
         if (navigateTo) {

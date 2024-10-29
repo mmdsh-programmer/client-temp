@@ -2,18 +2,13 @@
 
 import { IActionError, IThemeInfo } from "@interface/app.interface";
 
+import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/social";
-import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 
-export const themeLoaderAction = async () => {
-  // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+export const themeLoaderAction = async (domainHash: string) => {
   try {
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-
+    const domain = decodeKey(domainHash);
     const { data } = await getCustomPostByDomain(domain);
 
     const theme = JSON.parse(data ?? "{}") as IThemeInfo;

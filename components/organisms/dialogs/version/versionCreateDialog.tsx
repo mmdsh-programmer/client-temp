@@ -50,7 +50,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
       versionNumber: dataForm.name,
       content: "",
       outline: "",
-      callBack: () => {
+      onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();
       },

@@ -1,9 +1,10 @@
-import React from "react";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { categorySchema } from "./validation.yup";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -58,7 +59,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       name: dataForm.name,
       description: dataForm?.description || "",
       order: dataForm.order || null,
-      callBack: () => {
+      onSuccessHandler: () => {
         toast.success("دسته بندی با موفقیت ایجاد شد.");
         handleClose();
       },

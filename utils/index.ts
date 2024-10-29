@@ -15,13 +15,13 @@ const logger = (key: string, newValue: any, oldValue: any) => {
   }
 };
 
-export const logEffect =
-  (atomName) =>
-  {return ({ onSet }) => {
+export const logEffect = (atomName) => {
+  return ({ onSet }) => {
     onSet((newValue, oldValue) => {
       logger(atomName, newValue, oldValue);
     });
-  };};
+  };
+};
 
 export const translateRoles = (role?: ERoles) => {
   switch (role) {
@@ -44,16 +44,14 @@ export const translateVersionStatus = (status: string, state: string) => {
   switch (status) {
     case "private":
     case "accepted":
-      {
-        (translated = "تایید شده"),
-          (className = "label bg-gray-50 text-success-normal ");
-      }
+      translated = "تایید شده";
+      className = "label bg-gray-50 text-success-normal ";
+
       break;
     case "editing":
-      {
-        (translated = "پیش نویس"),
-          (className = "label text-secondary bg-gray-50");
-      }
+      translated = "پیش نویس";
+      className = "label text-secondary bg-gray-50";
+
       break;
     case "pending":
       translated = "در انتظار تایید";
@@ -68,9 +66,8 @@ export const translateVersionStatus = (status: string, state: string) => {
       break;
 
     case "public":
-      {
-        (translated = "عمومی"), (className = "label text-info bg-gray-50");
-      }
+      translated = "عمومی";
+      className = "label text-info bg-gray-50";
       break;
     default:
       translated = status;
@@ -193,11 +190,14 @@ export const mapOrder = (array: IRepo[], order: number[]) => {
 
 export const bracketStringify = (data: Record<string, any>): string => {
   const queryString = Object.keys(data)
-    .map(key => {
+    .map((key) => {
       const value = data[key];
       if (Array.isArray(value)) {
-        return value.map(item => 
-{return `${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`;}).join("&");
+        return value
+          .map((item) => {
+            return `${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`;
+          })
+          .join("&");
       }
       return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
     })
@@ -207,32 +207,32 @@ export const bracketStringify = (data: Record<string, any>): string => {
 export const checkFormat = (fileExtension?: string) => {
   const extension = fileExtension?.toLowerCase();
   if (
-    extension?.includes("png")
-    || extension?.includes("jpeg")
-    || extension?.includes("jpg")
-    || extension?.includes("image")
-    || extension?.includes("webp")
-    || extension?.includes("jfif")
+    extension?.includes("png") ||
+    extension?.includes("jpeg") ||
+    extension?.includes("jpg") ||
+    extension?.includes("image") ||
+    extension?.includes("webp") ||
+    extension?.includes("jfif")
   ) {
     return "image";
   }
   if (
-    extension?.includes("m4v")
-    || extension?.includes("avi")
-    || extension?.includes("mpg")
-    || extension?.includes("mp4")
-    || extension?.includes("ogg")
-    || extension?.includes("mov")
+    extension?.includes("m4v") ||
+    extension?.includes("avi") ||
+    extension?.includes("mpg") ||
+    extension?.includes("mp4") ||
+    extension?.includes("ogg") ||
+    extension?.includes("mov")
   ) {
     return "video";
   }
   if (
-    extension?.includes("m4a")
-    || extension?.includes("flac")
-    || extension?.includes("mp3")
-    || extension?.includes("wav")
-    || extension?.includes("wma")
-    || extension?.includes("aac")
+    extension?.includes("m4a") ||
+    extension?.includes("flac") ||
+    extension?.includes("mp3") ||
+    extension?.includes("wav") ||
+    extension?.includes("wma") ||
+    extension?.includes("aac")
   ) {
     return "audio";
   }
@@ -242,9 +242,25 @@ export const checkFormat = (fileExtension?: string) => {
 };
 export const fileSize = (size: number) => {
   const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
-  return (
-    `${+(size / 1024 ** i).toFixed(2) * 1
-    } ${
-      ["بایت", "کیلوبایت", "مگابایت", "گیگابایت", "ترابایت"][i]}`
-  );
+  return `${+(size / 1024 ** i).toFixed(2) * 1} ${
+    ["بایت", "کیلوبایت", "مگابایت", "گیگابایت", "ترابایت"][i]
+  }`;
+};
+
+export const generateKey = (domain: string) => {
+  return domain
+    .split("")
+    .map((char) => {
+      return char.charCodeAt(0);
+    })
+    .join("_");
+};
+
+export const decodeKey = (domainKey: string) => {
+  return domainKey
+    .split("_") // Split the encoded string by "_"
+    .map((charCode) => {
+      return String.fromCharCode(Number(charCode));
+    }) // Convert each code back to a character
+    .join(""); // Join characters to form the original domain
 };

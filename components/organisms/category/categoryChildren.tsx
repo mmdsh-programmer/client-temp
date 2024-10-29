@@ -1,18 +1,19 @@
-import React from "react";
 import {
   categoryQueryParamsAtom,
   categoryShowAtom,
 } from "@atom/category";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+
 import { EEmptyList } from "@components/molecules/emptyList";
+import { ICategoryView } from "@interface/category.interface";
 import MobileView from "../categoryView/categoryMobileView";
+import React from "react";
 import TableView from "../categoryView/categoryTableView";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "@atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { useRecoilValue } from "recoil";
-import { ICategoryView } from "@interface/category.interface";
 
 const CategoryChildren = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -74,10 +75,9 @@ const CategoryChildren = () => {
         ? EEmptyList.FILTER
         : EEmptyList.CHILDREN,
   };
-
   return (
     <>
-      <div className="hidden xs:block">
+      <div className="category-children hidden xs:block">
         <TableView {...commonProps} />
       </div>
       <div className="block xs:hidden">

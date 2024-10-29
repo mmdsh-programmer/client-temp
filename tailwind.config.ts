@@ -39,7 +39,7 @@ module.exports = withMT({
           secondary: "var(--success-secondary)",
         },
         info: {
-          normal: "var(--info-normal)",
+          normal: "var(--info)",
           secondary: "var(--info-secondary)",
         },
       },

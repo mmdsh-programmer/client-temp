@@ -1,10 +1,11 @@
 /* eslint-disable no-nested-ternary */
 
-import React, { useState } from "react";
 import {
   ICategoryMetadata,
   ICategoryView,
 } from "@interface/category.interface";
+import React, { useState } from "react";
+
 import AdvancedFilter from "@components/molecules/advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
@@ -28,9 +29,8 @@ const TableView = ({
   const [openFilter, setOpenFilter] = useState(false);
 
   const listLength = getCategoryList?.pages[0].total;
-
   return (
-    <div className="category-children flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small">
+    <div className="category-children-table flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small">
       <div className="flex items-center py-4 px-5 justify-between">
         <CategoryBreadCrumb />
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />

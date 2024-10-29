@@ -223,6 +223,7 @@ export interface IGetTokenResponse {
 }
 
 export interface ICustomPostMetadata {
+  id: number;
   domain: string;
   clientId: string;
   type: string;

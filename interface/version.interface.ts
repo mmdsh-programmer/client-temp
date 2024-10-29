@@ -1,9 +1,12 @@
 import { EDraftStatus, EVersionStatus } from "./enums";
-import { IUserInfo } from "./app.interface";
-import {FetchNextPageOptions,
+import {
+  FetchNextPageOptions,
   InfiniteData,
-  InfiniteQueryObserverResult,} from "@tanstack/react-query";
+  InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
+
 import { EEmptyList } from "@components/molecules/emptyList";
+import { IUserInfo } from "./app.interface";
 
 export interface IVersion {
   createDate: number;
@@ -44,6 +47,7 @@ export interface IVersion {
   categoryUserGroupHash?: string;
   documentTitle?: string;
   repoName?: string;
+  newOne?: boolean;
 }
 
 export interface IComment {

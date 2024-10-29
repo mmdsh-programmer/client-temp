@@ -5,6 +5,7 @@ import { themeLoaderAction } from "@actions/themeLoader";
 
 interface IProps {
   children: React.ReactNode;
+  domain: string;
 }
 
 // main font for the app
@@ -30,8 +31,8 @@ const iranYekanFont = localFont({
   display: "swap",
 });
 
-const ThemeLoader = async ({ children }: IProps) => {
-  const theme = await themeLoaderAction() as IThemeInfo;
+const ThemeLoader = async ({ children, domain }: IProps) => {
+  const theme = await themeLoaderAction(domain) as IThemeInfo;
   return (
       <body
         className={`${iranYekanFont.variable} !font-iranYekan h-full w-full`}

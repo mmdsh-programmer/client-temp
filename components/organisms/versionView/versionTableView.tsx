@@ -1,14 +1,15 @@
-import React from "react";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
+import { IVersion, IVersionView } from "@interface/version.interface";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
-import { IVersion, IVersionView } from "@interface/version.interface";
 import { LastVersionIcon } from "@components/atoms/icons";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
@@ -25,8 +26,8 @@ const VersionTableView = ({
   type,
 }: IVersionView) => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
+  const setVersionModalList =
+  useSetRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
@@ -51,7 +52,7 @@ const VersionTableView = ({
     }
     window.open(`http://localhost:8080/board/${value.id}`);
   };
-
+  
   return (
     <>
       {/* eslint-disable-next-line no-nested-ternary */}
@@ -112,9 +113,9 @@ const VersionTableView = ({
                           ),
                         },
                         {
-                          data: FaDateFromTimestamp(
+                          data: version.updateDate ? FaDateFromTimestamp(
                             +new Date(version.updateDate)
-                          ),
+                          ) : "_",
                           className: "hidden xl:table-cell",
                         },
                         {
@@ -174,6 +175,7 @@ const VersionTableView = ({
                           className: "justify-end",
                         },
                       ]}
+                      active={!!version.newOne}
                     />
                   );
                 });
