@@ -120,7 +120,7 @@ const Files = ({
       const uploadFile = async (fileData: FormData | any) => {
         try {
           const response = await axios.put(
-            `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
             fileData,
             {
               headers: {

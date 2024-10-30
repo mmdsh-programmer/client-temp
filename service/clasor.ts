@@ -61,10 +61,10 @@ import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
 
-const { CLASOR } = process.env;
+const { BACKEND_URL } = process.env;
 
 const axiosClasorInstance = axios.create({
-  baseURL: CLASOR,
+  baseURL: BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
