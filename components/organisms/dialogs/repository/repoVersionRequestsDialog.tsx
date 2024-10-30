@@ -49,16 +49,17 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
   };
 
   const tabList = [
+    {
+      tabTitle: ETabs.DRAFT_REQUESTS,
+      tabContent: <DraftRequests />,
+    },
     getRepo?.roleName === "owner"
       ? {
-          tabTitle: ETabs.DRAFT_REQUESTS,
-          tabContent: <DraftRequests />,
+          tabTitle: ETabs.VERSION_REQUESTS,
+          tabContent: <VersionRequests />,
         }
       : null,
-    {
-      tabTitle: ETabs.VERSION_REQUESTS,
-      tabContent: <VersionRequests />,
-    },
+   
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;
@@ -108,7 +109,7 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="درخواست‌های تایید نسخه"
       setOpen={handleClose}
-      className="xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
+      className="xs:!min-w-[90%] xs:!max-w-[90%] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
     >
       <DialogBody
         placeholder="dialog body"

@@ -1,10 +1,9 @@
+import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";

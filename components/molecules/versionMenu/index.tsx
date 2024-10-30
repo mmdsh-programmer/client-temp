@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
-
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { IVersion } from "@interface/version.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
@@ -38,7 +37,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     });
   };
 
-  const menuList = useVersionMenuList(getVersion || version, lastVersion, setModalState);
+  const menuList = useVersionMenuList(version || getVersion, lastVersion, setModalState);
 
   return (
     <>

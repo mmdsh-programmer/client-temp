@@ -74,7 +74,7 @@ const VersionList = () => {
           return <VersionCreateDialog close={close} />;
         }}
       />
-      <div className="hidden xs:block max-h-[calc(100vh_-_200px)] overflow-y-auto">
+      <div className="hidden xs:block h-ful min-h-[calc(100vh-200px)] overflow-y-auto">
         <VersionTableView {...commonProps} />
       </div>
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
