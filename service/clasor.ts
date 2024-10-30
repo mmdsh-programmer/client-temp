@@ -887,7 +887,7 @@ export const getGroupInfo = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IGetGroup>>(
-      `${CLASOR}/repositories/${repoId}/groups/${title}`,
+      `repositories/${repoId}/groups/${title}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
