@@ -3,15 +3,14 @@
 import {
   createComment,
   deleteComment,
-  dislike,
   getCommentList,
   getDislike,
   getLike,
-  like,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { IActionError } from "@interface/app.interface";
 import { normalizeError } from "@utils/normalizeActionError";
+import { getPostInfo, likePost } from "@service/social";
 
 export const getCommentListAction = async (
   postId: number,
@@ -90,10 +89,10 @@ export const getDislikeAction = async (
   }
 };
 
-export const likeAction = async (postId: number) => {
+export const likeAction = async (postId: number, like: boolean) => {
   const userInfo = await getMe();
   try {
-    const response = await like(userInfo.access_token, postId);
+    const response = await likePost(userInfo.access_token, postId, like);
 
     return response;
   } catch (error) {
@@ -101,10 +100,26 @@ export const likeAction = async (postId: number) => {
   }
 };
 
-export const dislikeAction = async (postId: number) => {
+export const dislikeAction = async (postId: number, dislike: boolean) => {
   const userInfo = await getMe();
   try {
-    const response = await dislike(userInfo.access_token, postId);
+    const response = await likePost(
+      userInfo.access_token,
+      postId,
+      undefined,
+      dislike
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPostInfoAction = async (postId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getPostInfo(userInfo.access_token, postId);
 
     return response;
   } catch (error) {

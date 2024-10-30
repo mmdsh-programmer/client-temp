@@ -51,7 +51,7 @@ const PublishOutlineDrawer = ({ outline }: IProps) => {
   return (
     <>
       <Button
-        className="border-gray-400 w-fit min-w-fit p-2"
+        className="border-gray-400 w-fit min-w-fit p-2.5"
         onClick={openDrawer}
         variant="outlined"
       >

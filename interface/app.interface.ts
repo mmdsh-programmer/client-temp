@@ -132,7 +132,7 @@ export declare interface IThreadInfo {
       userGroupHash: string;
       closed: boolean;
     };
-    metadata: {[key: string] : string};
+    metadata: { [key: string]: string };
     time: number;
     timeMiliSeconds: number;
     timeNanos: number;
@@ -193,15 +193,18 @@ export interface IActionError {
     data: {
       error: string;
       message: string[];
-      referenceNumber: string,
-    }
+      referenceNumber: string;
+    };
   };
-  referenceNumber?: string,
+  referenceNumber?: string;
 }
 
-
-export interface ISocialError {message: string, status: number, url: string}
-export interface ISocialResponse {
+export interface ISocialError {
+  message: string;
+  status: number;
+  url: string;
+}
+export interface ISocialResponse<T> {
   count: number;
   errorCode: number;
   hasError: boolean;
@@ -209,7 +212,15 @@ export interface ISocialResponse {
   messageId: number;
   ott: string;
   referenceNumber: string;
+  result: T;
 }
+
+export interface IPostInfo {
+  disliked: boolean;
+  favorite: boolean;
+  liked: boolean;
+  postId: number;
+};
 
 export interface IMetaQuery {
   field: string;

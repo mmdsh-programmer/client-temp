@@ -16,7 +16,7 @@ const Comments = ({ version }: IProps) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex flex-col gap-2 px-6 py-4 h-[calc(100vh-290px)] overflow-auto">
+      <div className="flex flex-col flex-1 gap-2 px-6 py-4 overflow-auto">
         {getComments?.pages.map((page) => {
           return page.list.map((comment) => {
             return (
@@ -42,8 +42,10 @@ const Comments = ({ version }: IProps) => {
                     <CommentDelete version={version} comment={comment} />
                   </div>
                 </div>
-                <div>
-                  <Typography className="body_b3">{comment.text}</Typography>
+                <div className="w-full">
+                  <Typography className="body_b3 break-words">
+                    {comment.text}
+                  </Typography>
                 </div>
               </div>
             );

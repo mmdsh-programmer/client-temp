@@ -7,6 +7,7 @@ import {
 import {
   ICustomPostMetadata,
   IMetaQuery,
+  IPostInfo,
   ISocialError,
   ISocialResponse,
 } from "@interface/app.interface";
@@ -51,7 +52,7 @@ axiosSocialInstance.interceptors.response.use((response) => {
 });
 
 export const handleSocialStatusError = (
-  error: AxiosError<ISocialError> | ISocialResponse
+  error: AxiosError<ISocialError> | ISocialResponse<unknown>
 ) => {
   if ("hasError" in error) {
     const message = error.message ?? "خطای نامشخصی رخ داد";
@@ -128,7 +129,8 @@ export const getCustomPostByDomain = async (
   const offset = "0";
 
   const response = await axiosSocialInstance.get(
-    "/biz/searchTimelineByMetadata", {
+    "/biz/searchTimelineByMetadata",
+    {
       params: {
         metaQuery: JSON.stringify(metaQuery),
         activityInfo: false,
@@ -142,7 +144,7 @@ export const getCustomPostByDomain = async (
     return handleSocialStatusError(response.data);
   }
 
-  if(!response.data.result.length){
+  if (!response.data.result.length) {
     throw new NotFoundError(["Domain not found"]);
   }
   const customPost = response.data.result[0]?.item;
@@ -212,4 +214,56 @@ export const updateCustomPostByEntityId = async (
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
   }
+};
+
+export const likePost = async (
+  accessToken: string,
+  postId: number,
+  like?: boolean,
+  dislike?: boolean
+) => {
+  const mainUrl = typeof like === "boolean" ? "like" : "dislikePost";
+  let url = `/${mainUrl}?postId=${postId}`;
+  if (typeof like === "boolean") {
+    url += `&dislike=${!like}`;
+  } else if (typeof dislike === "boolean") {
+    url += `&dislike=${dislike}`;
+  }
+
+  const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
+    url,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+        _token_issuer_: 1,
+      },
+    }
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  return response.data.result;
+};
+
+export const getPostInfo = async (accessToken: string, postId: number) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<IPostInfo[]>>(
+    "getUserPostInfos",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+        _token_issuer_: 1,
+      },
+      params: {
+        postId,
+      },
+    }
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  return response.data.result;
 };
