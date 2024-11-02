@@ -22,7 +22,7 @@ const VersionDialogView = () => {
         setDocumentShow(null);
         setSelectedDocument(null);
       }}
-      className="!min-w-[95%] !min-h-[95%]"
+      className="!min-w-[95%] !min-h-[95%] !h-full xs:!h-[95%]"
     >
       <DialogBody placeholder="dialog body" className="p-0 xs:p-6 h-full">
         <VersionList />

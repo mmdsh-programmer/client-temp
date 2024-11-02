@@ -26,7 +26,7 @@ const RepoAttachDefaultImage = ({ onClick, disabled }: IProps) => {
           <Button
             placeholder="button"
             key={image.name}
-            className="flex focus:bg-secondary focus:outline-2 focus:outline-gray-200 justify-center items-center rounded-lg border-[1px] border-normal bg-primary w-[82px] h-[82px]"
+            className="flex flex-grow focus:bg-secondary focus:outline-2 focus:outline-gray-200 justify-center items-center rounded-lg border-[1px] border-normal bg-primary w-[82px] h-[82px]"
             onClick={() => {
               return onClick(image.name);
             }}

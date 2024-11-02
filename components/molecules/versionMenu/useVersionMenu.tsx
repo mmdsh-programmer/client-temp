@@ -42,13 +42,13 @@ type ModalType = {
 };
 
 const useVersionMenuList = (
-  version: IVersion | undefined,
+  version: IVersion | null,
   lastVersion: IVersion | undefined,
   toggleModal: (modalName: keyof ModalType, value: boolean) => void
 ): MenuItem[] => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
-  const [getVersion, setVersion] = useRecoilState(selectedVersionAtom);
+  const setVersion = useSetRecoilState(selectedVersionAtom);
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
@@ -87,6 +87,9 @@ const useVersionMenuList = (
         text: compareVersion?.version ? "مقایسه با نسخه مورد نظر" : "مقایسه",
         icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active" />,
         onClick: () => {
+          if (version) {
+            setVersion(version);
+          }
           if (getRepo && getDocument && version && compareVersion?.version) {
             setCompareVersion({
               ...compareVersion,
@@ -106,7 +109,10 @@ const useVersionMenuList = (
         text: "کپی هش فایل",
         icon: <CopyIcon className="h-4 w-4 fill-icon-active stroke-[1.5]" />,
         onClick: () => {
-          const hash = version?.hash || getVersion?.hash;
+          if (version) {
+            setVersion(version);
+          }
+          const hash = version?.hash;
           if (hash) {
             copy(hash);
             toast.success("هش مربوط به پیش نویس کپی شد.");
@@ -117,10 +123,12 @@ const useVersionMenuList = (
         text: "کپی آدرس اشتراک‌ گذاری",
         icon: <ShareIcon className="h-4 w-4" />,
         onClick: () => {
-          const selectedVersion = version || getVersion;
-          if (selectedVersion) {
+          if (version) {
+            setVersion(version);
+          }
+          if (version) {
             copy(
-              `${window.location.href}&versionId=${selectedVersion.id}&versionState=${selectedVersion.state}`
+              `${window.location.href}&versionId=${version.id}&versionState=${version.state}`
             );
             toast.success("آدرس کپی شد.");
           }
@@ -151,10 +159,10 @@ const useVersionMenuList = (
       })(),
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
-        if (version?.status === "editing") {
+        if (version?.status === "editing" && version) {
           setVersion(version);
           toggleModal("confirm", true);
-        } else if (version?.status === "pending") {
+        } else if (version?.status === "pending" && version) {
           setVersion(version);
           toggleModal("cancelConfirm", true);
         }
@@ -176,8 +184,14 @@ const useVersionMenuList = (
           onClick: () => {
             if (version?.status === "private" && adminOrOwner) {
               toggleModal("public", true);
+              if (version) {
+                setVersion(version);
+              }
             } else if (version?.status === "pending" && adminOrOwner) {
               toggleModal("cancelPublic", true);
+              if (version) {
+                setVersion(version);
+              }
             }
           },
         }
@@ -188,6 +202,9 @@ const useVersionMenuList = (
           icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
             toggleModal("lastVersion", true);
+            if (version) {
+              setVersion(version);
+            }
           },
         }
       : null,
@@ -200,6 +217,9 @@ const useVersionMenuList = (
           icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
             toggleModal("lastVersion", true);
+            if (version) {
+              setVersion(version);
+            }
           },
         }
       : null,

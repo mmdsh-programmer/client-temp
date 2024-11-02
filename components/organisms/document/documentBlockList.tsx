@@ -1,14 +1,10 @@
-import {
- Button, Spinner, Typography 
-} from "@material-tailwind/react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import {
- UserIcon, XIcon 
-} from "@components/atoms/icons";
+import { UserIcon, XIcon } from "@components/atoms/icons";
 
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
-import React from "react";
+import React, { useState } from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
@@ -20,9 +16,13 @@ const DocumentBlockList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
 
-  const {data: getDocumentBlockList,
+  const [selectedUser, setSelectedUser] = useState("");
+
+  const {
+    data: getDocumentBlockList,
     isFetching,
-    isLoading,} = useGetDocumentBlocklist(getRepo!.id, document!.id, 20);
+    isLoading,
+  } = useGetDocumentBlocklist(getRepo!.id, document!.id, 20);
   const blockDocument = useBlockDocument();
 
   const handleDelete = (username: string) => {
@@ -35,7 +35,7 @@ const DocumentBlockList = () => {
       type: "unblock",
       callBack: () => {
         toast.success(
-          `کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`,
+          `کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`
         );
       },
     });
@@ -71,12 +71,14 @@ const DocumentBlockList = () => {
                         )
                       }
                       actionIcon={
-                        blockDocument.isPending ? (
+                        blockDocument.isPending &&
+                        selectedUser === blockItem.userInfo.userName ? (
                           <Spinner className="h-4 w-4" color="deep-purple" />
                         ) : (
                           <Button
                             className="bg-transparent p-0"
                             onClick={() => {
+                              setSelectedUser(blockItem.userInfo.userName);
                               handleDelete(blockItem.userInfo.userName);
                             }}
                           >

@@ -49,20 +49,15 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
   };
 
   const tabList = [
-    getRepo?.roleName === "owner"
-      ? {
-          tabTitle: ETabs.DRAFT_REQUESTS,
-          tabContent: <DraftRequests />,
-        }
-      : null,
+    {
+      tabTitle: ETabs.DRAFT_REQUESTS,
+      tabContent: <DraftRequests />,
+    },
     {
       tabTitle: ETabs.VERSION_REQUESTS,
       tabContent: <VersionRequests />,
     },
-  ].filter(Boolean) as {
-    tabTitle: ETabs;
-    tabContent: React.JSX.Element;
-  }[];
+  ];
 
   if (openAcceptDraftDialog) {
     return (
@@ -108,19 +103,23 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="درخواست‌های تایید نسخه"
       setOpen={handleClose}
-      className="xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
+      className="xs:!min-w-[80%] xs:!max-w-[80%] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
     >
       <DialogBody
         placeholder="dialog body"
         className="p-0 h-full overflow-auto"
       >
         <div className="flex flex-col gap-4 p-4 xs:p-6 h-[calc(100%-160px)] xs:h-[535px] overflow-auto">
-          <TabComponent
-            className="overflow-auto"
-            tabList={tabList}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          {getRepo?.roleName === "owner" ? (
+            <TabComponent
+              className=""
+              tabList={tabList}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          ) : (
+            <DraftRequests />
+          )}
         </div>
       </DialogBody>
       <DraftRequestMenu showDrawer />
