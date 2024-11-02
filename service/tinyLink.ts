@@ -1,11 +1,10 @@
 import axios, { AxiosError } from "axios";
-
 import { IClasorError } from "@interface/app.interface";
 import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
 import Logger from "@utils/logger";
 import { handleClasorStatusError } from "./clasor";
 
-const { NEXT_PUBLIC_TINY_BASE_URL } = process.env;
+const { NEXT_PUBLIC_TINY_BASE_URL, API_TOKEN } = process.env;
 
 const axiosClasorInstance = axios.create({
   baseURL: NEXT_PUBLIC_TINY_BASE_URL,
@@ -47,7 +46,7 @@ export const createTinyLink = async (access_token: string, url: string) => {
       {},
       {
         headers: {
-          _token_: access_token,
+          _token_: API_TOKEN,
         },
       }
     );

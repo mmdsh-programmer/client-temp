@@ -35,8 +35,8 @@ const LinkWrapper = ({ role }: IProps) => {
     mutate({
       url: link,
       callBack: (result) => {
-        setTinyLink(`https://tilin.ir/${result.hash}`);
-        copy(`https://tilin.ir/${result.hash}`);
+        setTinyLink(`${process.env.NEXT_PUBLIC_TINY_LINK}/${result.hash}`);
+        copy(`${process.env.NEXT_PUBLIC_TINY_LINK}/${result.hash}`);
         toast.success("لینک کوتاه کپی شد");
       },
     });
