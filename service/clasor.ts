@@ -2839,42 +2839,6 @@ export const createComment = async (
   }
 };
 
-export const like = async (access_token: string, postId: number) => {
-  try {
-    const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `core/content/${postId}/like`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
-export const dislike = async (access_token: string, postId: number) => {
-  try {
-    const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `core/content/${postId}/dislike`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
 export const getLike = async (
   access_token: string,
   postId: number,

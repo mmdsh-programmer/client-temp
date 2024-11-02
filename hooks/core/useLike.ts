@@ -8,9 +8,13 @@ const useLike = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["like"],
-    mutationFn: async (values: { postId: number; callBack?: () => void }) => {
-      const { postId } = values;
-      const response = await likeAction(postId);
+    mutationFn: async (values: {
+      postId: number;
+      like: boolean;
+      callBack?: () => void;
+    }) => {
+      const { postId, like } = values;
+      const response = await likeAction(postId, like);
       handleClientSideHookError(response as IActionError);
       return response;
     },
@@ -21,6 +25,9 @@ const useLike = () => {
       });
       queryClient.invalidateQueries({
         queryKey: [`getLike-${postId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`post-${postId}-info`],
       });
       callBack?.();
     },

@@ -1,6 +1,7 @@
 import React from "react";
 import DislikeButton from "@components/atoms/button/dislikeButton";
 import LikeButton from "@components/atoms/button/likeButton";
+import { IPostInfo } from "@interface/app.interface";
 
 interface IProps {
   likeCount: number;
@@ -9,6 +10,11 @@ interface IProps {
   onDislike: () => void;
   likePending: boolean;
   dislikePending: boolean;
+  postInfo?: IPostInfo;
+  likeButtonClassName?: string;
+  dislikeButtonClassName?: string;
+  wrapperClassName?: string;
+  iconClassName?: string;
 }
 
 const LikeDislikeButtons = ({
@@ -18,11 +24,30 @@ const LikeDislikeButtons = ({
   onDislike,
   likePending,
   dislikePending,
+  postInfo,
+  wrapperClassName,
+  likeButtonClassName,
+  dislikeButtonClassName,
+  iconClassName,
 }: IProps) => {
   return (
-    <div className="flex">
-      <LikeButton onClick={onLike} likeCount={likeCount} likePending={likePending || dislikePending} />
-      <DislikeButton onClick={onDislike} dislikeCount={dislikeCount} dislikePending={dislikePending || likePending} />
+    <div className={`flex ${wrapperClassName}`}>
+      <LikeButton
+        likeButtonClassName={likeButtonClassName}
+        iconClassName={iconClassName}
+        onClick={onLike}
+        likeCount={likeCount}
+        likePending={likePending || dislikePending}
+        postInfo={postInfo}
+      />
+      <DislikeButton
+        dislikeButtonClassName={dislikeButtonClassName}
+        iconClassName={iconClassName}
+        onClick={onDislike}
+        dislikeCount={dislikeCount}
+        dislikePending={dislikePending || likePending}
+        postInfo={postInfo}
+        />
     </div>
   );
 };
