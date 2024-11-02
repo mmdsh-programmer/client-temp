@@ -46,7 +46,6 @@ const MoveChildren = ({
     getSortParams,
     queryParams.limit,
     undefined,
-    // getBulkItems.length ? "category" : undefined,
     "category",
     undefined,
     true

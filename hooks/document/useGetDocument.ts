@@ -8,10 +8,11 @@ const useGetDocument = (
   repoId: number,
   documentId: number,
   enabled?: boolean,
-  disableVersions?: boolean
+  disableVersions?: boolean,
+  queryKey?: string,
 ) => {
   return useQuery({
-    queryKey: [`document-${documentId}-info`],
+    queryKey: [queryKey ?? `document-${documentId}-info`],
     queryFn: async ({ signal }) => {
       const response = await getDocumentAction(
         repoId,
