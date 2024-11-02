@@ -1,13 +1,14 @@
 import React, { Suspense } from "react";
+
 import EditPage from "@components/pages/edit";
-import EditorContentTemplate from "@components/templates/editContentTemplate";
+import CheckRepoInfo from "@components/templates/checkRepoInfo";
 
 const Edit = () => {
   return (
     <Suspense>
-      <EditorContentTemplate>
+      <CheckRepoInfo>
         <EditPage />
-      </EditorContentTemplate>
+      </CheckRepoInfo>
     </Suspense>
   );
 };

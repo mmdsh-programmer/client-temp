@@ -21,7 +21,7 @@ const VersionList = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetVersionList(getRepo!.id, getSelectedDocument!.id, 10);
+  } = useGetVersionList(getRepo!.id, getSelectedDocument!.id, 30);
 
   const { data: getLastVersion } = useGetLastVersion(
     getRepo!.id,

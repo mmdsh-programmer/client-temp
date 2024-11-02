@@ -67,6 +67,7 @@ const useCreateDocument = () => {
           order: values.order,
           isTemplate: values.isTemplate,
           contentType: values.contentType,
+          repoId: values.repoId,
         };
 
         const newData = {

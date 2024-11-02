@@ -32,7 +32,8 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     repoId,
     getDocument!.id,
     true,
-    true
+    true,
+     `document-${getDocument!.id}-info-tags`
   );
 
   const updatedAvailableTags = getTags?.pages[0].list
