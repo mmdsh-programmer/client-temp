@@ -1,8 +1,10 @@
-import React from "react";
-import { IDocumentMetadata } from "@interface/document.interface";
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { IDocumentMetadata } from "@interface/document.interface";
 import { usePathname } from "next/navigation";
 import { DocumentIcon, LockIcon } from "@components/atoms/icons";
+import { useSetRecoilState } from "recoil";
+import { publishPageSelectedDocument } from "@atom/publish";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -11,11 +13,20 @@ interface IProps {
 
 const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
   const pathname = usePathname();
+  const setSelectedPublishDocument = useSetRecoilState(
+    publishPageSelectedDocument
+  );
   const isPrivateDoc =
     document.hasPassword || document.hasWhiteList || document.hasBlackList;
 
   const pathSegments = pathname?.split("/") || [];
   const isSelected = pathSegments.includes(String(document.id));
+
+  useEffect(() => {
+    if (isSelected) {
+      setSelectedPublishDocument(document);
+    }
+  }, [isSelected, document]);
 
   return (
     <Link
@@ -24,7 +35,7 @@ const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
         .toLowerCase()}
       key={`document-tree-item-${document.id}`}
       className={`collapse-document transition-all duration-300 flex items-center gap-2 hover:bg-purple-light rounded-[5px] py-[5px] pl-2.5 w-full text-right pr-[22px] ${
-        isSelected ? "bg-purple-light pointer-events-none" : ""
+        isSelected ? "bg-purple-light pointer-events-none selected" : ""
       }`}
       title={document.name}
       tabIndex={0}

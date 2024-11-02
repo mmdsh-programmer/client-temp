@@ -89,7 +89,7 @@ export default async function PublishContentPage({
     }
 
     return (
-      <PublishVersionContent documentId={documentId} version={versionData} />
+      <PublishVersionContent version={versionData} />
     );
   } catch (error) {
     if (error instanceof Error) {
