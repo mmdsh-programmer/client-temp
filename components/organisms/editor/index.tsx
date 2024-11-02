@@ -53,14 +53,14 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           auth: {
             accessToken: userInfo?.access_token,
             refreshToken: userInfo?.refresh_token,
-            url: `${process.env.NEXT_PUBLIC_CLASOR}/auth/renewToken`,
+            url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
           },
           publicUserGroupHash: getRepo?.userGroupHash || undefined,
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
           repositoryId: getRepo?.id || undefined,
           resourceId: selectedCategory?.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-          backendUrl: `${process.env.NEXT_PUBLIC_CLASOR}/`,
+          backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
         } as IClassicData;
       case EDocumentTypes.word:
         return {

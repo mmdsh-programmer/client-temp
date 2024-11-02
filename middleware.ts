@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateKey } from "./utils";
 import { headers } from "next/headers";
 
-const allowedOrigins = [process.env.NEXT_PUBLIC_CLASOR];
+const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
 
 const corsOptions = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",

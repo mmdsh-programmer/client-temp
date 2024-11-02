@@ -79,7 +79,7 @@ const AttachFile = () => {
       fileData.append("file", fileItem, encodeURIComponent(fileItem.name));
       axios
         .put(
-          `${process.env.NEXT_PUBLIC_CLASOR}/fileManagement/resource/${getDocument?.id}/userGroup/${getDocument?.attachmentUserGroup}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${getDocument?.id}/userGroup/${getDocument?.attachmentUserGroup}`,
           fileData,
           {
             headers: {
