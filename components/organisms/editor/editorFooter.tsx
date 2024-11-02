@@ -176,6 +176,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
         onClick={() => {
           setVersionModalList(true);
           setEditorModal(false);
+          setVersion(null);
+          setVersionData(null);
         }}
       >
         <Typography className="label_l3 text-primary">
@@ -194,6 +196,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
           onClick={() => {
             setVersionModalList(true);
             setEditorModal(false);
+            setVersion(null);
+            setVersionData(null);
           }}
         >
           <Typography className="label_l3 text-primary">
