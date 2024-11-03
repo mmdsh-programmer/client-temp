@@ -46,8 +46,8 @@ production:
   variables:
     IMAGE_TAG: $CI_COMMIT_TAG
   trigger:
-    include: .gitlab-ci.d/production.yml
+    include: .gitlab-ci.d/production-v3.yml
     strategy: depend
   rules:
-    - if:  $CI_COMMIT_TAG =~ /\d+\.\d+\.\d+\.\d+\-N$/
+    - if:  $CI_COMMIT_TAG =~ /\d+\.\d+\.\d+\.\d+\-v3$/
       when: always
