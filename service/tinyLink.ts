@@ -4,10 +4,10 @@ import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
 import Logger from "@utils/logger";
 import { handleClasorStatusError } from "./clasor";
 
-const { NEXT_PUBLIC_TINY_BASE_URL, API_TOKEN } = process.env;
+const { TINY_LINK_BASE_URL, API_TOKEN } = process.env;
 
 const axiosClasorInstance = axios.create({
-  baseURL: NEXT_PUBLIC_TINY_BASE_URL,
+  baseURL: TINY_LINK_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
