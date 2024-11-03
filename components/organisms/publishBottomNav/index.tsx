@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { publishPageSelectedDocument, publishVersionAtom } from "@atom/publish";
+import { publishPageSelectedDocumentAtom, publishVersionAtom } from "@atom/publish";
 import { useRecoilValue } from "recoil";
 import PublishChangeVersion from "./publishChangeVersion";
 import PublishOutlineDrawer from "./publishOutlineDrawer";
@@ -13,7 +13,7 @@ import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 const PublishBottomNav = () => {
   const getPublishVersion = useRecoilValue(publishVersionAtom);
   const getPublishPageSelectedDocument = useRecoilValue(
-    publishPageSelectedDocument
+    publishPageSelectedDocumentAtom
   );
 
   const { data: userData } = useGetOptionalUser();

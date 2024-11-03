@@ -25,6 +25,7 @@ const PublishSlugLayout = async ({ children, params: { id } }: IProps) => {
       </div>
     );
   }
+
   return (
     <PublishSlugTemplate
       repoId={repository.id}

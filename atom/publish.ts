@@ -9,8 +9,14 @@ export const publishVersionAtom = atom<IVersion | null>({
   effects: [logEffect("publishVersionAtom")],
 });
 
-export const publishPageSelectedDocument = atom<IDocumentMetadata | null>({
+export const publishPageSelectedDocumentAtom = atom<IDocumentMetadata | null>({
   key: "publishPageSelectedDocument",
   default: null,
   effects: [logEffect("publishPageSelectedDocument")],
+});
+
+export const openPublishPageSearchContent = atom<boolean>({
+  key: "openPublishPageSearchContent",
+  default: false,
+  effects: [logEffect("openPublishPageSearchContent")],
 });

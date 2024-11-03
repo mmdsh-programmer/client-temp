@@ -65,7 +65,8 @@ const mockDocItem: IDocumentTreeItem = {
   userGroupHash: null,
   attachmentUserGroup: null,
   hasWhiteList: false,
-  hasBlackList: false
+  hasBlackList: false,
+  repoName: ""
 };
 
 export const Default: Story = {render: () => 

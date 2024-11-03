@@ -4,6 +4,7 @@ import { InfoIcon } from "@components/atoms/icons";
 import LoginPanelButton from "@components/molecules/loginPanelButton";
 import ProfileMenu from "@components/molecules/profileMenu";
 import React from "react";
+import PublishSearchButton from "@components/molecules/publishSearchButton";
 
 interface IProps {
   themeInfo?: IThemeInfo;
@@ -34,7 +35,12 @@ const PublishHeader = ({ themeInfo }: IProps) => {
           </div>
           <div className="flex items-center gap-4 mr-auto">
             <ProfileMenu
-              renderSideButton={<LoginPanelButton />}
+              renderSideButton={
+                <>
+                  <PublishSearchButton />
+                  <LoginPanelButton />
+                </>
+              }
               redirect={false}
             />
           </div>

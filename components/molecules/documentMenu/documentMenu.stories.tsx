@@ -35,7 +35,8 @@ const mockDocument: IDocumentMetadata = {
   userGroupHash: null,
   attachmentUserGroup: null,
   hasWhiteList: false,
-  hasBlackList: false
+  hasBlackList: false,
+  repoName: ""
 };
 
 const queryClient = new QueryClient();

@@ -117,6 +117,7 @@ export interface IDocumentMetadata {
   description: string;
   type: "document";
   repoId: number;
+  repoName: string;
   categoryId: number;
   categoryName: string;
   extraDetails: string | null;

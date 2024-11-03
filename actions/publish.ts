@@ -6,6 +6,7 @@ import {
   getAllPublishChildren,
   getPublishChildren,
   getPublishDocumentVersions,
+  searchPublishContent,
 } from "@service/clasor";
 import { getMe, userInfoAction } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -96,7 +97,7 @@ export const getPublishDocumentVersionsAction = async (
   repoId: number,
   documentId: number,
   offset: number,
-  size: number,
+  size: number
 ) => {
   const userInfo = await userInfoAction();
   try {
@@ -108,6 +109,26 @@ export const getPublishDocumentVersionsAction = async (
       offset,
       size,
       ssoId
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const searchPublishContentAction = async (
+  repoId: number,
+  searchText: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await searchPublishContent(
+      repoId,
+      searchText,
+      offset,
+      size
     );
 
     return response;
