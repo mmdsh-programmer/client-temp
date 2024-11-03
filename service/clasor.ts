@@ -2347,12 +2347,11 @@ export const acceptDraft = async (
 export const acceptVersion = async (
   accessToken: string,
   repoId: number,
-  docId: number,
   versionId: number
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
-      `repositories/${repoId}/documents/${docId}/versions/${versionId}/accept`,
+      `admin/${repoId}/acceptVersion/${versionId}`,
       {},
       {
         headers: {
@@ -2391,12 +2390,11 @@ export const rejectDraft = async (
 export const rejectVersion = async (
   accessToken: string,
   repoId: number,
-  docId: number,
   versionId: number
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
-      `repositories/${repoId}/documents/${docId}/versions/${versionId}/reject`,
+      `admin/${repoId}/rejectVersion/${versionId}`,
       {},
       {
         headers: {

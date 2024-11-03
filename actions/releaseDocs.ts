@@ -95,7 +95,6 @@ export const rejectDraftAction = async (
 export const acceptVersionAction = async (
   repoId: number,
   docId: number,
-  versionId: number
 ) => {
   const userInfo = await getMe();
   try {
@@ -103,7 +102,6 @@ export const acceptVersionAction = async (
       userInfo.access_token,
       repoId,
       docId,
-      versionId
     );
 
     return response;
@@ -115,7 +113,6 @@ export const acceptVersionAction = async (
 export const rejectVersionAction = async (
   repoId: number,
   docId: number,
-  versionId: number
 ) => {
   const userInfo = await getMe();
   try {
@@ -123,7 +120,6 @@ export const rejectVersionAction = async (
       userInfo.access_token,
       repoId,
       docId,
-      versionId
     );
 
     return response;

@@ -32,7 +32,6 @@ const useGetVersion = (
     enabled: !!repoId && !!documentId && !!versionId && !!enabled,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 0,
   });
 };
 

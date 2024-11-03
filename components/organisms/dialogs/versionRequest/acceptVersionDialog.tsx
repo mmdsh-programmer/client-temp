@@ -29,8 +29,7 @@ const RejectDraft = ({ setOpen }: IProps) => {
     if (!getRepo || !getRequest) return;
     acceptRequest.mutate({
       repoId: getRepo.id,
-      docId: getRequest?.documentId,
-      draftId: getRequest.id,
+      versionId: getRequest.id,
       callBack: () => {
         toast.success("نسخه با موفقیت عمومی شد.");
         handleClose();

@@ -43,7 +43,8 @@ const useCreateCategory = () => {
           createdAt: `${+new Date()}`,
           updatedAt: null,
           type: "category",
-          newOne: true
+          newOne: true,
+          repoId: values.repoId,
         };
 
         const newData = {

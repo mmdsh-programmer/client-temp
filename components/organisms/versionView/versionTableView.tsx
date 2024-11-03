@@ -57,7 +57,7 @@ const VersionTableView = ({
     <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center overflow-hidden">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
@@ -168,7 +168,6 @@ const VersionTableView = ({
                             <VersionMenu
                               version={version}
                               lastVersion={lastVersion}
-                              showDrawer={false}
                             />
                           ),
                           stopPropagation: true,

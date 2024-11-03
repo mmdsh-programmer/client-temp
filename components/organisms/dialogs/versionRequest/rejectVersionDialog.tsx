@@ -29,8 +29,7 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
     if (!getRepo || !getRequest) return;
     rejectRequest.mutate({
       repoId: getRepo.id,
-      docId: getRequest?.documentId,
-      draftId: getRequest.id,
+      versionId: getRequest.id,
       callBack: () => {
         toast.error("عمومی سازی نسخه رد شد");
         handleClose();
