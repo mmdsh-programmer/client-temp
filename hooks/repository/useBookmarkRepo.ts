@@ -20,15 +20,15 @@ const useBookmarkRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
+      queryClient.invalidateQueries({
+        queryKey: ["getMyInfo"],
+      });
       queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`], });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"], });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"], });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"], });
       queryClient.invalidateQueries({ queryKey: ["accessRepoList"], });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
-      queryClient.invalidateQueries({
-        queryKey: ["getMyInfo"],
-      });
       callBack?.();
     },
     onError: (error) => {
