@@ -19,6 +19,7 @@ const useArchiveRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });

@@ -26,6 +26,7 @@ const useEditRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
     onError: (error) => {

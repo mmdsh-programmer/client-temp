@@ -16,6 +16,7 @@ const useHandleRepoChange = () => {
         "allRepoList",
         "myRepoList-false",
         "myRepoList-true",
+        "myRepoList-false-isPublished",
         "myAccessRepoList",
         "user-info",
         "roles",
