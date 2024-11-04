@@ -61,6 +61,7 @@ export async function middleware(request: NextRequest) {
     if (url.pathname === "/") {
       const domainKey = generateKey(domain);
       url.pathname = `/${domainKey}${url.pathname}`;
+      url.pathname = `/${domainKey}/publish`;
       return NextResponse.rewrite(url);
     }
   }
@@ -69,6 +70,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/cache/:path*",
     "/admin/:path*",
     "/panel-admin-clasor/:path*",

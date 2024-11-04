@@ -86,6 +86,9 @@ module.exports = withMT({
       letterSpacing: {
         tightest: "0.13px"
       },
+      backdropBlur:{
+        sm: "0"
+      }
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports, global-require, import/no-extraneous-dependencies
