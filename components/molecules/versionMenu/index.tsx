@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { IVersion } from "@interface/version.interface";
-import DrawerTemplate from "@components/templates/drawerTemplate";
-import MenuTemplate from "@components/templates/menuTemplate";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { selectedVersionAtom, versionDrawerAtom } from "@atom/version";
-import useVersionMenuList from "./useVersionMenu";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import { IVersion } from "@interface/version.interface";
+import MenuTemplate from "@components/templates/menuTemplate";
 import { MoreDotIcon } from "@components/atoms/icons";
 import VersionDialogs from "../versionDialogs";
+import { useRecoilState } from "recoil";
+import useVersionMenuList from "./useVersionMenu";
 
 interface IProps {
   version?: IVersion;
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
-  const setVersion = useSetRecoilState(selectedVersionAtom);
+  const [getVersion, setVersion] = useRecoilState(selectedVersionAtom);
   const [openVersionActionDrawer, setOpenVersionActionDrawer] =
     useRecoilState(versionDrawerAtom);
 
@@ -37,7 +37,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     });
   };
 
-  const menuList = useVersionMenuList(version, lastVersion, setModalState);
+  const menuList = useVersionMenuList(version || getVersion, lastVersion, setModalState);
 
   return (
     <>
@@ -53,9 +53,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
         <MenuTemplate
           setOpenDrawer={() => {
             setOpenVersionActionDrawer(true);
-            if (version) {
-              setVersion(version);
-            }
+            setVersion(version || null);
           }}
           menuList={menuList}
           icon={
@@ -68,7 +66,6 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
       <VersionDialogs
         modals={modals}
         setModalState={setModalState}
-        version={version}
       />
     </>
   );

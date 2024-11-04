@@ -1,41 +1,39 @@
 "use client";
 
-import React, { useEffect } from "react";
-
+import React from "react";
 import SpinnerText from "@components/molecules/spinnerText";
 import SubscribePasswordRequest from "@components/organisms/subscribe/subscribePasswordRequest";
 import SubscribeRequest from "@components/organisms/subscribe/subscribeRequest";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   hash: string;
   hasPassword?: string;
 }
 
-const SubscribePage = ({
- hash, hasPassword 
-}: IProps) => {
-  const {
- data: userInfo, isLoading 
-} = useGetUser();
-
-  useEffect(() => {
-    if (!userInfo) {
-      localStorage.setItem(
-        "CLASOR:LAST_PAGE",
-        `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`,
-      );
-    }
-  }, []);
+const SubscribePage = ({ hash, hasPassword }: IProps) => {
+  const router = useRouter();
+  const { data: userInfo, isLoading } = useGetUser();
 
   if (isLoading) {
     return <SpinnerText text="در حال بررسی اطلاعات" />;
   }
 
-  if (hash && !hasPassword) {
+  if (!userInfo) {
+    localStorage.setItem(
+      "CLASOR:LAST_PAGE",
+      `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`
+    );
+    router.push("/signin");
+  }
+
+  if (userInfo && hash && !hasPassword) {
     return <SubscribeRequest hash={hash} />;
-  } if (hash && hasPassword) {
-    <SubscribePasswordRequest hasPassword={hasPassword} hash={hash} />;
+  }
+
+  if (userInfo && hash && hasPassword) {
+    return <SubscribePasswordRequest hasPassword={hasPassword} hash={hash} />;
   }
 
   return null;

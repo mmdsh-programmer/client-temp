@@ -2,6 +2,8 @@ import { confirmVersionAction } from "@actions/version";
 import { IAddVersion } from "@interface/version.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useConfirmVersion = () => {
   const queryClient = useQueryClient();
@@ -19,6 +21,7 @@ const useConfirmVersion = () => {
         documentId,
         versionId,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IAddVersion;
     },
     onSuccess: (response, values) => {

@@ -3,9 +3,10 @@
 import React, { ReactNode } from "react";
 
 import Error from "@app/error";
-import PanelURl from "../panelUrl";
 import SpinnerText from "@components/molecules/spinnerText";
+import { redirect } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import PanelUrl from "../panelUrl";
 
 interface IProps {
   children: ReactNode;
@@ -13,10 +14,11 @@ interface IProps {
 
 const Start = ({ children }: IProps) => {
   const {
- isLoading, isError, error, refetch 
+ isLoading, isError, error, refetch,data
 } = useGetUser();
 
     if (isError) {
+      console.log(error);
       return (
         <div>
           <Error
@@ -30,12 +32,16 @@ const Start = ({ children }: IProps) => {
     }
   
     if (isLoading) {
-      return <SpinnerText text="در حال دریافت اطلاعات" />;
+      return <div className="flex items-center justify-center h-screen"><SpinnerText text="در حال دریافت اطلاعات" /></div>;
+    }
+
+    if(!data){
+      return redirect("/signin");
     }
   
     return (
       <>
-        <PanelURl />
+        <PanelUrl />
         {children}
       </>
     ); 

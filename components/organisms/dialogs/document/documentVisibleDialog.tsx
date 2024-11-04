@@ -29,10 +29,10 @@ const DocumentVisibleDialog = ({ setOpen }: IProps) => {
     if (!getRepo || !document) return;
     visibleDocument.mutate({
       repoId: getRepo?.id,
-      categoryId: document?.id,
+      categoryId: document?.categoryId,
       title: document.name,
       description: document?.description,
-      documentId: 0,
+      documentId: document.id,
       contentType: document.contentType,
       order: document.order,
       isHidden: false,

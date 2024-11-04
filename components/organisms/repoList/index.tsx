@@ -5,16 +5,18 @@ import {
   repoSearchParamAtom,
 } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import AccessRepoList from "./accessRepoList";
 import AllRepoList from "./allRepoList";
 import BookmarkRepoList from "./bookmarkList";
-import MyRepoList from "./myRepoList";
 import { ERepoGrouping } from "@interface/enums";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import ListMode from "@components/molecules/listMode";
+import MyRepoList from "./myRepoList";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 import PublishedRepoList from "./publishedRepoList";
+import RepoMenu from "@components/molecules/repoMenu";
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
@@ -32,11 +34,7 @@ const RepoList = () => {
         header="مخزن‌ها"
         buttonText="ایجاد مخزن جدید"
         renderList={() => {
-          return (
-            <RenderIf isTrue={getRepoGroup !== ERepoGrouping.DASHBOARD}>
-              <ListMode />
-            </RenderIf>
-          );
+          return <ListMode />;
         }}
         renderDialog={(close: () => void) => {
           return <RepoCreateDialogStepper close={close} />;
@@ -60,6 +58,7 @@ const RepoList = () => {
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.PUBLISHED_REPO}>
         <PublishedRepoList />
       </RenderIf>
+      <RepoMenu showDrawer />
     </div>
   );
 };

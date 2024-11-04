@@ -1,15 +1,18 @@
-import React, { useMemo } from "react";
+"use client";
+
 import {
   ArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
   MyFolderIcon,
 } from "@components/atoms/icons";
+import React, { useMemo } from "react";
+
 import { ERepoGrouping } from "@interface/enums";
 import RepoTypeCard from "@components/molecules/repoTypeCard";
 import { repoGroupingAtom } from "@atom/repository";
-import { useSetRecoilState } from "recoil";
 import useGetMyInfo from "@hooks/useGetMyInfo";
+import { useSetRecoilState } from "recoil";
 
 const RepoTypesCards = () => {
   const setRepoGroup = useSetRecoilState(repoGroupingAtom);
@@ -55,6 +58,7 @@ const RepoTypesCards = () => {
     ];
   }, [getMyInfo]);
 
+  
   return (
     <div className="hidden xs:flex gap-4 flex-wrap min-w-full">
       {repoTypeData.map((item) => {

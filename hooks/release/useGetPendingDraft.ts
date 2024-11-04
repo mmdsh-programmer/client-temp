@@ -2,6 +2,8 @@ import { getPendingDraftsAction } from "@actions/releaseDocs";
 import { IListResponse } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetPendingDraft = (repoId: number, size: number) => {
   return useInfiniteQuery({
@@ -12,6 +14,7 @@ const useGetPendingDraft = (repoId: number, size: number) => {
         (pageParam - 1) * size,
         size,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<IVersion>;
     },
     initialPageParam: 1,

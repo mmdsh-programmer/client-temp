@@ -1,6 +1,8 @@
-import { deleteRepoKeyAction, restoreRepoAction } from "@actions/repository";
+import { deleteRepoKeyAction } from "@actions/repository";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useDeleteRepoPublicKey = () => {
   const queryClient = useQueryClient();
@@ -13,6 +15,7 @@ const useDeleteRepoPublicKey = () => {
     }) => {
       const { repoId, keyId } = values;
       const response = await deleteRepoKeyAction(repoId, keyId);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

@@ -23,6 +23,8 @@ export enum EEmptyList {
   BLACK_LIST = "black_list",
   JOIN_REPO_REQUESTS = "join_repo_requests",
   FEEDBACK = "feedback",
+  DRAFT_REQUESTS = "draft_requests",
+  VERSION_REQUESTS = "version_requests",
 }
 
 interface IProps {
@@ -217,6 +219,40 @@ const EmptyList = ({ type }: IProps) => {
             </Typography>
           </div>
         );
+      case EEmptyList.VERSION:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              شما در حال حاضر نسخه‌ای ندارید.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.DRAFT_REQUESTS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              شما در حال حاضر لیست درخواستی ندارید.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.VERSION_REQUESTS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              شما در حال حاضر لیست درخواستی ندارید.
+            </Typography>
+          </div>
+        );
+
       default:
         return null;
     }

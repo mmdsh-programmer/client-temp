@@ -6,12 +6,14 @@ import { toast } from "react-toastify";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
 import { useRecoilValue } from "recoil";
 import { Checkbox, Typography } from "@material-tailwind/react";
+import { ICategoryMetadata } from "@interface/category.interface";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
+  category?: ICategoryMetadata;
 }
 
-const CategoryDeleteDialog = ({ setOpen }: IProps) => {
+const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getCategory = useRecoilValue(categoryAtom);
 
@@ -22,14 +24,17 @@ const CategoryDeleteDialog = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setForceDelete(false);
+    setErrorMessage("");
   };
 
   const handleDelete = async () => {
-    if (!getRepo || !getCategory) return;
+    const selectedCat = category || getCategory;
+    if (!getRepo || !selectedCat) return;
     deleteCategory.mutate({
       repoId: getRepo?.id,
-      parentId: getCategory.parentId,
-      categoryId: getCategory.id,
+      parentId: selectedCat.parentId,
+      categoryId: selectedCat.id,
       forceDelete,
       callBack: () => {
         toast.success("دسته بندی حذف شد.");
@@ -53,10 +58,10 @@ const CategoryDeleteDialog = ({ setOpen }: IProps) => {
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
-            title={getCategory?.name}
+            title={(category || getCategory)?.name}
             className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
           >
-            {getCategory?.name}
+            {(category || getCategory)?.name}
           </span>
           " اطمینان دارید؟
         </div>
@@ -74,7 +79,7 @@ const CategoryDeleteDialog = ({ setOpen }: IProps) => {
               checked={!!forceDelete}
             />
             <Typography className="warning_text">
-              دسته‌بندی {getCategory?.name} دارای زیرمجموعه می‌باشد، آیا
+              دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه می‌باشد، آیا
               می‌خواهید این دسته‌بندی را حذف کنید؟
             </Typography>
           </div>

@@ -43,6 +43,7 @@ const RepoImage = ({
 
   const onSubmit = async () => {
     if (!getRepo) return;
+    if (!imageType) return handleClose();
     if (imageType === "default" && !defualtImage) return;
     if (imageType === "custom" && !selectedFile) return;
     mutate({

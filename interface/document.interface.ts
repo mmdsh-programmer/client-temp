@@ -28,6 +28,10 @@ export interface IDocument {
   versions: IVersion[];
   postId?: number;
   chatThreadId: string;
+  hasPassword: boolean;
+  hasWhiteList: boolean;
+  hasBlackList: boolean;
+  newOne?: boolean;
 }
 
 export interface IDocumentCrud {
@@ -113,6 +117,7 @@ export interface IDocumentMetadata {
   description: string;
   type: "document";
   repoId: number;
+  repoName: string;
   categoryId: number;
   categoryName: string;
   extraDetails: string | null;
@@ -131,7 +136,12 @@ export interface IDocumentMetadata {
     contactId: string | null;
   } | null;
   order?: number | null;
-  tags: number[];
+  tags:
+    | {
+        name: string;
+        id: number;
+      }[]
+    | number[];
   contentType: EDocumentTypes;
   lastVersionId: number | null;
   isTemplate: boolean;
@@ -142,6 +152,10 @@ export interface IDocumentMetadata {
   versions?: IVersionMetadata;
   publicKeyId?: string;
   userGroupHash: string | null;
+  attachmentUserGroup: string | null;
+  hasWhiteList: boolean;
+  hasBlackList: boolean;
+  newOne?: boolean;
 }
 
 export interface IWhiteListItem {

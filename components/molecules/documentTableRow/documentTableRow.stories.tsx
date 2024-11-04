@@ -1,10 +1,11 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
-import DocumentTableRow from ".";
-import { RecoilRoot } from "recoil";
-import { IDocumentMetadata } from "@interface/document.interface";
-import { EDocumentTypes } from "@interface/enums";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+import DocumentTableRow from ".";
+import { EDocumentTypes } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
+import React from "react";
+import { RecoilRoot } from "recoil";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,11 @@ const mockDocument: IDocumentMetadata = {
   isPublish: false,
   publishLinkPassword: null,
   publishExpireTime: null,
-  userGroupHash: null
+  userGroupHash: null,
+  attachmentUserGroup: null,
+  hasWhiteList: false,
+  hasBlackList: false,
+  repoName: ""
 };
 
 const meta: Meta<typeof DocumentTableRow> = {

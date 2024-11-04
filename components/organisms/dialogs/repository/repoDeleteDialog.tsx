@@ -1,15 +1,14 @@
 import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { IRepo } from "@interface/repo.interface";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { repoDeleteSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useDeleteRepo from "@hooks/repository/useDeleteRepo";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useSetRecoilState } from "recoil";
+import { usePathname, useRouter } from "next/navigation";
+import { useRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
@@ -17,13 +16,14 @@ interface IForm {
 }
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
+const RepoDeleteDialog = ({ setOpen }: IProps) => {
   const router = useRouter();
-  const setRepo = useSetRecoilState(repoAtom);
+  const currentPath = usePathname();
+
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const { isPending, mutate } = useDeleteRepo();
 
   const {
@@ -41,15 +41,15 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!repo) return;
+    if (!getRepo) return;
     mutate({
-      repoId: repo.id,
+      repoId: getRepo.id,
       callBack: () => {
-        setRepo(null);
-        router.push("dashboard");
-        window.setTimeout(() => {
+        router.push("/admin/dashboard");
+        if (currentPath === "/admin/dashboard") {
+          setRepo(null);
           localStorage.removeItem("CLASOR:SELECTED_REPO");
-        }, 100);
+        }
         toast.success("مخزن با موفقیت حذف شد.");
         handleClose();
       },
@@ -68,16 +68,16 @@ const RepoDeleteDialog = ({ repo, setOpen }: IProps) => {
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
-            title={repo?.name}
+            title={getRepo?.name}
             className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
           >
-            {repo?.name}
+            {getRepo?.name}
           </span>
           " اطمینان دارید؟
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="warning_text">
-            برای تایید "<strong>{repo?.name}</strong>" را در کادر پایین تایپ
+            برای تایید "<strong>{getRepo?.name}</strong>" را در کادر پایین تایپ
             نمایید!
           </Typography>
           <FormInput placeholder="عنوان" register={{ ...register("name") }} />

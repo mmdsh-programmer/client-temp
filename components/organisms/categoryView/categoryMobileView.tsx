@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import React from "react";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import EmptyList from "@components/molecules/emptyList";
@@ -23,7 +25,6 @@ const MobileView = ({
       <div className="flex flex-col">
         <CategoryBreadCrumb />
       </div>
-      {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
@@ -32,11 +33,13 @@ const MobileView = ({
         <div className="flex flex-col gap-3">
           {getCategoryList?.pages.map((page) => {
             return page.list.map((item) => {
-              return item.type === "category" ? (
-                <CategoryMobileCard key={item.id} category={item} />
-              ) : (
-                <DocumentMobileCard key={item.id} document={item} />
-              );
+              return item ? (
+                item.type === "category" ? (
+                  <CategoryMobileCard key={item.id} category={item} />
+                ) : (
+                  <DocumentMobileCard key={item.id} document={item} />
+                )
+              ) : null;
             });
           })}
           <RenderIf isTrue={!!hasNextPage}>

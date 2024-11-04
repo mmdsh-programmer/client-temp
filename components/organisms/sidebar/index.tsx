@@ -6,15 +6,9 @@ import {
   FolderShareIcon,
   PublishIcon,
 } from "@components/atoms/icons";
-import {
- Button, List, ListItem, Typography 
-} from "@material-tailwind/react";
-import {
- repoGroupingAtom, repoSearchParamAtom 
-} from "@atom/repository";
-import {
- useRecoilState, useSetRecoilState 
-} from "recoil";
+import { Button, List, ListItem, Typography } from "@material-tailwind/react";
+import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { ERepoGrouping } from "@interface/enums";
 import React from "react";
@@ -77,7 +71,9 @@ const Sidebar = () => {
     },
   ];
   return (
-    <aside className="hidden md:flex h-screen flex-col bg-white max-w-fit border-l-2 border-l-gray-100">
+    <aside
+      className="hidden md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white"
+    >
       <div className="p-4 h-[80px] flex items-center justify-center ">
         <SidebarHeader />
       </div>

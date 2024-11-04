@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getVersionAction } from "@actions/version";
 import { IVersion } from "@interface/version.interface";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetVersion = (
   repoId: number,
@@ -24,12 +26,12 @@ const useGetVersion = (
         innerDocument,
         innerOutline,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IVersion;
     },
     enabled: !!repoId && !!documentId && !!versionId && !!enabled,
     retry: false,
     refetchOnWindowFocus: false,
-    staleTime: 0,
   });
 };
 

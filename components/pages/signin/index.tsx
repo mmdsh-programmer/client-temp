@@ -1,17 +1,9 @@
 "use client";
 
-import React, {
- useEffect, useState 
-} from "react";
-import {
- Spinner, Typography 
-} from "@material-tailwind/react";
-import {
- getUserToken, login 
-} from "@actions/auth";
-import {
- useRouter, useSearchParams 
-} from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
+import { getUserToken, login } from "@actions/auth";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { ClasorLogo } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -29,12 +21,11 @@ const SignInComponent = () => {
     try {
       setLoading(true);
       await getUserToken(code, redirect_uri);
-      setLoading(false);
       const lastPage = localStorage.getItem("CLASOR:LAST_PAGE") || null;
 
       if (lastPage === null) {
         const selectedrepoString = window.localStorage.getItem(
-          "CLASOR:SELECTED_REPO",
+          "CLASOR:SELECTED_REPO"
         );
         const selectedRepo = selectedrepoString
           ? JSON.parse(selectedrepoString)
@@ -52,9 +43,11 @@ const SignInComponent = () => {
         }
       }
       if (lastPage) {
+        localStorage.removeItem("CLASOR:LAST_PAGE");
         router.push(lastPage);
       }
     } catch {
+      setLoading(false);
       setError("خطا در دریافت اطلاعات کاربری");
     }
   };
@@ -84,7 +77,7 @@ const SignInComponent = () => {
   if (loading) {
     return (
       <div className="get-user-info w-screen h-screen flex items-center justify-center bg-slate-50">
-        <Spinner className="h-8 w-8" color="purple" />
+        <Spinner className="h-8 w-8" color="deep-purple" />
         <Typography className="font-bold mr-2 title_t1">
           در حال دریافت اطلاعات کاربری
         </Typography>
@@ -119,7 +112,7 @@ const SignInComponent = () => {
             <LoadingButton
               className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-purple-normal  text-white font-iranYekan"
               onClick={() => {
-                return login(`${window.location.origin}/signin`);
+                return login();
               }}
             >
               ورود

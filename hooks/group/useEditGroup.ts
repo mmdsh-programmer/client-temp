@@ -1,6 +1,8 @@
 import { editGroupAction } from "@actions/group";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEditGroup = () => {
   const queryClient = useQueryClient();
@@ -10,16 +12,19 @@ const useEditGroup = () => {
       repoId: number;
       title: string;
       description?: string;
+      newTitle?: string;
       members?: string[];
       callBack?: () => void;
     }) => {
-      const { repoId, title, description, members } = values;
+      const { repoId, title, description, members, newTitle } = values;
       const response = await editGroupAction(
         repoId,
         title,
         description,
+        newTitle,
         members,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

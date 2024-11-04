@@ -2,14 +2,14 @@
 
 import { categoryShowAtom } from "atom/category";
 import { repoAtom } from "atom/repository";
-import { selectedDocumentAtom } from "atom/document";
+import { documentShowAtom } from "atom/document";
 import { useEffect } from "react";
 import { useRecoilValue } from "recoil";
 
-const PanelURl = () => {
+const PanelUrl = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getCategory = useRecoilValue(categoryShowAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getDocument = useRecoilValue(documentShowAtom);
 
   useEffect(() => {
     if (getDocument && getCategory && getRepo) {
@@ -49,4 +49,4 @@ const PanelURl = () => {
   return null;
 };
 
-export default PanelURl;
+export default PanelUrl;

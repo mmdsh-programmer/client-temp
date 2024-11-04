@@ -1,26 +1,27 @@
 import { ERoles } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
 import moment from "moment-jalaali";
 
 const logger = (key: string, newValue: any, oldValue: any) => {
   if (process.env.NODE_ENV === "development") {
     console.log(
-      `############################################################################  ${key}`,
+      `############################################################################  ${key}`
     );
     console.log("newValue -->", newValue);
     console.log("oldValue -->", oldValue);
     console.log(
-      "####################################################################################",
+      "####################################################################################"
     );
   }
 };
 
-export const logEffect =
-  (atomName) =>
-  ({ onSet }) => {
+export const logEffect = (atomName) => {
+  return ({ onSet }) => {
     onSet((newValue, oldValue) => {
       logger(atomName, newValue, oldValue);
     });
   };
+};
 
 export const translateRoles = (role?: ERoles) => {
   switch (role) {
@@ -43,16 +44,14 @@ export const translateVersionStatus = (status: string, state: string) => {
   switch (status) {
     case "private":
     case "accepted":
-      {
-        (translated = "تایید شده"),
-          (className = "label bg-gray-50 text-success-normal ");
-      }
+      translated = "تایید شده";
+      className = "label bg-gray-50 text-success-normal ";
+
       break;
     case "editing":
-      {
-        (translated = "پیش نویس"),
-          (className = "label text-secondary bg-gray-50");
-      }
+      translated = "پیش نویس";
+      className = "label text-secondary bg-gray-50";
+
       break;
     case "pending":
       translated = "در انتظار تایید";
@@ -67,9 +66,8 @@ export const translateVersionStatus = (status: string, state: string) => {
       break;
 
     case "public":
-      {
-        (translated = "عمومی"), (className = "label text-info bg-gray-50");
-      }
+      translated = "عمومی";
+      className = "label text-info bg-gray-50";
       break;
     default:
       translated = status;
@@ -87,6 +85,12 @@ export const toPersinaDigit = (digits: number | string): string => {
   });
 };
 
+export const toEnglishDigit = (persianDigit: string): string => {
+  return persianDigit.replaceAll(/[۰-۹]/g, (d) => {
+    return "۰۱۲۳۴۵۶۷۸۹".indexOf(d).toString();
+  });
+};
+
 export const FaDate = (standardTime: string) => {
   try {
     moment.loadPersian({
@@ -94,8 +98,8 @@ export const FaDate = (standardTime: string) => {
     });
     return toPersinaDigit(
       moment(standardTime, "YYYY-MM-DDTHH:mm:ssZ").format(
-        "HH:mm:ss | jDD jMMMM jYYYY",
-      ),
+        "HH:mm:ss | jDD jMMMM jYYYY"
+      )
     );
   } catch {
     return "-";
@@ -108,9 +112,9 @@ export const FaDateFromTimestamp = (timestamp: number) => {
     const standardTime = `${newDate.getFullYear()}-${`0${
       newDate.getMonth() + 1
     }`.slice(-2)}-${`0${newDate.getDate()}`.slice(
-      -2,
+      -2
     )}T${`0${newDate.getHours()}`.slice(-2)}:${`0${newDate.getMinutes()}`.slice(
-      -2,
+      -2
     )}:${`0${newDate.getSeconds()}`.slice(-2)}`;
     return FaDate(standardTime);
   } catch {
@@ -119,13 +123,13 @@ export const FaDateFromTimestamp = (timestamp: number) => {
 };
 
 export const preventNegativeValues = (
-  event: React.KeyboardEvent<HTMLInputElement>,
+  event: React.KeyboardEvent<HTMLInputElement>
 ) => {
   return ["e", "E", "+", "-"].includes(event.key) && event.preventDefault();
 };
 
 export const preventPasteNegative = (
-  event: React.ClipboardEvent<HTMLInputElement>,
+  event: React.ClipboardEvent<HTMLInputElement>
 ) => {
   const { clipboardData } = event;
   const pastedData = Number.parseFloat(clipboardData.getData("text"));
@@ -166,4 +170,97 @@ export const addPemHeaders = (
   const formattedContent = content.match(/.{1,64}/g)?.join("\n") || content; // Splits content into lines of 64 characters
 
   return `${header}${formattedContent}${footer}`;
+};
+
+export const mapOrder = (array: IRepo[], order: number[]) => {
+  const inSortList = array.filter((repo) => {
+    return order.includes(repo.id);
+  });
+
+  const notInSortList = array.filter((repo) => {
+    return !order.includes(repo.id);
+  });
+
+  inSortList.sort((a, b) => {
+    return order.indexOf(a.id) - order.indexOf(b.id);
+  });
+
+  return [...inSortList, ...notInSortList];
+};
+
+export const bracketStringify = (data: Record<string, any>): string => {
+  const queryString = Object.keys(data)
+    .map((key) => {
+      const value = data[key];
+      if (Array.isArray(value)) {
+        return value
+          .map((item) => {
+            return `${encodeURIComponent(key)}[]=${encodeURIComponent(item)}`;
+          })
+          .join("&");
+      }
+      return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+    })
+    .join("&");
+  return queryString;
+};
+export const checkFormat = (fileExtension?: string) => {
+  const extension = fileExtension?.toLowerCase();
+  if (
+    extension?.includes("png") ||
+    extension?.includes("jpeg") ||
+    extension?.includes("jpg") ||
+    extension?.includes("image") ||
+    extension?.includes("webp") ||
+    extension?.includes("jfif")
+  ) {
+    return "image";
+  }
+  if (
+    extension?.includes("m4v") ||
+    extension?.includes("avi") ||
+    extension?.includes("mpg") ||
+    extension?.includes("mp4") ||
+    extension?.includes("ogg") ||
+    extension?.includes("mov")
+  ) {
+    return "video";
+  }
+  if (
+    extension?.includes("m4a") ||
+    extension?.includes("flac") ||
+    extension?.includes("mp3") ||
+    extension?.includes("wav") ||
+    extension?.includes("wma") ||
+    extension?.includes("aac")
+  ) {
+    return "audio";
+  }
+  if (extension?.includes("pdf")) {
+    return "pdf";
+  }
+};
+export const fileSize = (size: number) => {
+  const i = size === 0 ? 0 : Math.floor(Math.log(size) / Math.log(1024));
+  return `${+(size / 1024 ** i).toFixed(2) * 1} ${
+    ["بایت", "کیلوبایت", "مگابایت", "گیگابایت", "ترابایت"][i]
+  }`;
+};
+
+export const generateKey = (domain: string) => {
+  return domain
+    .split("")
+    .map((char) => {
+      return char.charCodeAt(0);
+    })
+    .join("_");
+};
+
+export const decodeKey = (domainKey: string) => {
+  return domainKey
+    .split("_") // Split the encoded string by "_"
+    .map((charCode) => {
+      return String.fromCharCode(Number(charCode));
+    }) // Convert each code back to a character
+    .join(""); // Join characters to form the original domain
 };

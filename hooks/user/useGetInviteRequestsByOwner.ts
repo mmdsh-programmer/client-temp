@@ -2,6 +2,8 @@ import { getRepositoryInviteRequestsAction } from "@actions/users";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetInviteRequestsByOwner = (
   repoId: number,
@@ -15,6 +17,7 @@ const useGetInviteRequestsByOwner = (
         (pageParam - 1) * size,
         size,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<IAccessRequest>;
     },
     initialPageParam: 1,

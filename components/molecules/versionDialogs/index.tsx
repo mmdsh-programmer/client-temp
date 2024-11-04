@@ -1,16 +1,15 @@
-import React from "react";
-import { IVersion } from "@interface/version.interface";
-import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
-import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
-import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
-import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
-import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
-import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
-import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
-import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
 import DiffVersionAlert from "../diffVersionAlert";
-import { useRecoilState } from "recoil";
+import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
+import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
+import React from "react";
+import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
+import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
+import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
+import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
+import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
+import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
 import { compareVersionAtom } from "@atom/version";
+import { useRecoilState } from "recoil";
 
 interface IVersionDialogsProps {
   modals: {
@@ -28,27 +27,26 @@ interface IVersionDialogsProps {
     key: keyof IVersionDialogsProps["modals"],
     state: boolean
   ) => void;
-  version?: IVersion;
 }
 
-const VersionDialogs = ({modals,
+const VersionDialogs = ({
+  modals,
   setModalState,
-  version,}: IVersionDialogsProps) => {
+}: IVersionDialogsProps) => {
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
+
   return (
     <>
-      {modals.delete && version ? (
+      {modals.delete ? (
         <VersionDeleteDialog
-          version={version}
           setOpen={() => {
             return setModalState("delete", false);
           }}
         />
       ) : null}
-      {modals.clone && version ? (
+      {modals.clone ? (
         <VersionCloneDialog
-          version={version}
           setOpen={() => {
             return setModalState("clone", false);
           }}
@@ -62,41 +60,36 @@ const VersionDialogs = ({modals,
           }}
         />
       ) : null}
-      {modals.confirm && version ? (
+      {modals.confirm ? (
         <VersionConfirmDialog
-          version={version}
           setOpen={() => {
             return setModalState("confirm", false);
           }}
         />
       ) : null}
-      {modals.cancelConfirm && version ? (
+      {modals.cancelConfirm ? (
         <VersionCancelConfirmDialog
-          version={version}
           setOpen={() => {
             return setModalState("cancelConfirm", false);
           }}
         />
       ) : null}
-      {modals.public && version ? (
+      {modals.public ? (
         <VersionPublicDialog
-          version={version}
           setOpen={() => {
             return setModalState("public", false);
           }}
         />
       ) : null}
-      {modals.cancelPublic && version ? (
+      {modals.cancelPublic ? (
         <VersionCancelPublicDialog
-          version={version}
           setOpen={() => {
             return setModalState("cancelPublic", false);
           }}
         />
       ) : null}
-      {modals.lastVersion && version ? (
+      {modals.lastVersion ? (
         <LastVersionDialog
-          version={version}
           setOpen={() => {
             return setModalState("lastVersion", false);
           }}

@@ -63,14 +63,14 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
       });
       return;
     }
-    if (!getRepo) return;
+    if (!getRepo || !getCategory) return;
     editCategory.mutate({
       repoId: getRepo?.id,
-      categoryId: 854796,
+      categoryId: getCategory?.id,
       parentId: getCategory?.parentId || null,
       name: dataForm.name,
       description: dataForm?.description,
-      order: null,
+      order: dataForm?.order || null,
       isHidden: false,
       currentParentId: null,
       callBack: () => {

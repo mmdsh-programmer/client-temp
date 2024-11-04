@@ -1,7 +1,16 @@
 "use server";
 
-import { createComment, deleteComment, dislike, getCommentList, getDislike, getLike, like } from "@service/clasor";
+import {
+  createComment,
+  deleteComment,
+  getCommentList,
+  getDislike,
+  getLike,
+} from "@service/clasor";
 import { getMe } from "./auth";
+import { IActionError } from "@interface/app.interface";
+import { normalizeError } from "@utils/normalizeActionError";
+import { getPostInfo, likePost } from "@service/social";
 
 export const getCommentListAction = async (
   postId: number,
@@ -9,47 +18,41 @@ export const getCommentListAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getCommentList(
+      userInfo.access_token,
+      postId,
+      offset,
+      size
+    );
 
-  const response = await getCommentList(
-    userInfo.access_token,
-    postId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
-export const deleteCommentAction = async (
-  postId: number,
-
-) => {
+export const deleteCommentAction = async (postId: number) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteComment(userInfo.access_token, postId);
 
-  const response = await deleteComment(
-    userInfo.access_token,
-    postId,
-
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
-export const createCommentAction = async (
-  postId: number,
-  text: string,
-) => {
+export const createCommentAction = async (postId: number, text: string) => {
   const userInfo = await getMe();
+  try {
+    const response = await createComment(userInfo.access_token, postId, text);
 
-  const response = await createComment(
-    userInfo.access_token,
-    postId,
-    text
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
-
 
 export const getLikeAction = async (
   postId: number,
@@ -57,15 +60,13 @@ export const getLikeAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getLike(userInfo.access_token, postId, offset, size);
 
-  const response = await getLike(
-    userInfo.access_token,
-    postId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getDislikeAction = async (
@@ -74,39 +75,54 @@ export const getDislikeAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getDislike(
+      userInfo.access_token,
+      postId,
+      offset,
+      size
+    );
 
-  const response = await getDislike(
-    userInfo.access_token,
-    postId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
-export const likeAction = async (
-  postId: number,
-) => {
+export const likeAction = async (postId: number, like: boolean) => {
   const userInfo = await getMe();
+  try {
+    const response = await likePost(userInfo.access_token, postId, like);
 
-  const response = await like(
-    userInfo.access_token,
-    postId,
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
-export const dislikeAction = async (
-  postId: number,
-) => {
+export const dislikeAction = async (postId: number, dislike: boolean) => {
   const userInfo = await getMe();
+  try {
+    const response = await likePost(
+      userInfo.access_token,
+      postId,
+      undefined,
+      dislike
+    );
 
-  const response = await dislike(
-    userInfo.access_token,
-    postId,
-  );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
 
-  return response;
+export const getPostInfoAction = async (postId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getPostInfo(userInfo.access_token, postId);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

@@ -1,17 +1,7 @@
-import {
- Button,
- Spinner
-} from "@material-tailwind/react";
 import React, { useState } from "react";
-import {
- deleteTagAtom,
- editTagAtom
-} from "@atom/tag";
-import {
- useRecoilState,
- useRecoilValue
-} from "recoil";
-
+import { Button, Spinner } from "@material-tailwind/react";
+import { deleteTagAtom, editTagAtom } from "@atom/tag";
+import { useRecoilState, useRecoilValue } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
 import TagDelete from "../dialogs/tag/tagDeleteDialog";
@@ -21,15 +11,13 @@ import TagMenu from "@components/molecules/tagMenu/tagMenu";
 import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
 
-const TagList = ({repoId}: { repoId: number }) => {
+const TagList = ({ repoId }: { repoId: number }) => {
   const [openTagsModal, setOpenTagsModal] = useState(false);
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
   const getRepo = useRecoilValue(repoAtom);
-  const {
-    data: getTags, isLoading, isFetching 
-  } = useGetTags(repoId, 2, true);
+  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 2, true);
 
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
@@ -39,15 +27,16 @@ const TagList = ({repoId}: { repoId: number }) => {
   const renderDialogs = () => {
     if (openTagsModal && getRepo) {
       return <TagListDialog setOpen={setOpenTagsModal} repoId={getRepo.id} />;
-    } if (getDeleteTagModal && !openTagsModal) {
+    }
+    if (getDeleteTagModal && !openTagsModal) {
       return <TagDelete setOpen={setDeleteTagModal} />;
-    } if (getEditTagModal && !openTagsModal) {
+    }
+    if (getEditTagModal && !openTagsModal) {
       return <TagEdit setOpen={setEditTagModal} />;
     }
     return null;
   };
 
-  
   return (
     <div className="">
       {isLoading || isFetching ? (

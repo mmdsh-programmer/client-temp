@@ -24,7 +24,10 @@ const RepoInfo = () => {
             <div className="repoCreationDate flex flex-col">
               <div className="flex items-center gap-1">
                 <Typography className="title_t1">{getRepo?.name}</Typography>
-                <ChipMolecule value={translateRoles(getRepo?.roleName)} className="px-2 py-[2px] border-[1px] border-normal bg-purple-light text-purple-normal" />
+                <ChipMolecule
+                  value={translateRoles(getRepo?.roleName)}
+                  className="px-2 py-[2px] border-[1px] border-normal bg-purple-light text-purple-normal"
+                />
               </div>
               <Typography className="caption_c2 text-hint">
                 {getRepo && FaDateFromTimestamp(+new Date(getRepo.createDate))}
@@ -42,6 +45,7 @@ const RepoInfo = () => {
           </div>
         </div>
       </div>
+      <RepoMenu showDrawer />
     </div>
   );
 };

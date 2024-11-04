@@ -1,6 +1,8 @@
 import { createRepoPublicLinkAction } from "@actions/public";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreatePublicLink = () => {
   const queryClient = useQueryClient();
@@ -22,6 +24,7 @@ const useCreatePublicLink = () => {
         expireTime,
         password
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: async (response, values) => {

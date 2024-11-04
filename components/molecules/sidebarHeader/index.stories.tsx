@@ -1,5 +1,6 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+
+import React from "react";
 import SiderbarHeader from "./index";
 
 const meta: Meta<typeof SiderbarHeader> = {
@@ -19,11 +20,7 @@ export default meta;
 type Story = StoryObj<typeof SiderbarHeader>;
 
 export const ArchiveFolder: Story = {
-  args: {
-    classNameCard:
-      "flex justify-between items-center p-2 rounded-md bg-tertiary w-[215px] border-2 border-gray-200",
-    classNameTitle: "text-primary font-medium text-sm",
-  },
+  args: {},
   render: function Render() {
     return (
       <div dir="rtl">

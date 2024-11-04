@@ -2,6 +2,8 @@ import { createBlockVersionAction } from "@actions/editor";
 import { IBLockDocument } from "@interface/editor.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useCreateBlock = () => {
   const queryClient = useQueryClient();
@@ -21,6 +23,7 @@ const useCreateBlock = () => {
         documentId,
         versionId,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

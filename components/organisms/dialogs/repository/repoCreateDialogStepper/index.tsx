@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Files from "./files";
+import Files from "../../../fileManagement";
 import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoAddUser";
 import RepoCreate from "./repoCreate";
 import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
@@ -56,7 +56,9 @@ const RepoCreateDialogStepper = ({ close }: IProps) => {
       handleClose={() => {
         setOpenFileManagement(false);
       }}
-      setSelectedFile={setSelectedFile}
+      setSelectedFile={(file) => {
+        return setSelectedFile(file?.hash);
+      }}
     />
   ) : (
     <StepperDialog

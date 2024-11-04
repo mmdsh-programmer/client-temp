@@ -1,19 +1,20 @@
-import React, { useState } from "react";
 import {
   ConfirmationVersionIcon,
   GlobeIcon,
   ListIcon,
   SpeedDialIcon,
 } from "@components/atoms/icons";
+import React, { useState } from "react";
+
 import { Button } from "@material-tailwind/react";
 import { EDraftStatus } from "@interface/enums";
 import { IVersion } from "@interface/version.interface";
-import LikeAndComment from "../like&comment";
+import LikeAndDislike from "../like&dislike";
 import RenderIf from "@components/atoms/renderIf";
 import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
 import VersionPublicDialog from "../dialogs/version/versionPublicDialog";
-import { useRecoilState } from "recoil";
 import { editorListDrawerAtom } from "@atom/editor";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   version?: IVersion;
@@ -80,18 +81,17 @@ const FloatingButtons = ({ version }: IProps) => {
                   setVersionPublicModal(true);
                 }}
               >
-                <GlobeIcon className="h-5 w-5 fill-white" />
+                <GlobeIcon className="h-5 w-5 " />
               </Button>
             </RenderIf>
             <RenderIf isTrue={renderLike}>
-              <LikeAndComment version={version} />
+              <LikeAndDislike version={version} />
             </RenderIf>
           </>
         ) : null}
       </div>
       {versionConfirmModal && version ? (
         <VersionConfirmDialog
-          version={version}
           setOpen={() => {
             return setVersionConfirmModal(false);
           }}
@@ -99,7 +99,6 @@ const FloatingButtons = ({ version }: IProps) => {
       ) : null}
       {versionPublicModal && version ? (
         <VersionPublicDialog
-          version={version}
           setOpen={() => {
             return setVersionPublicModal(false);
           }}

@@ -5,12 +5,14 @@ import {
   createCategory,
   deleteCategory,
   editCategory,
+  getCategory,
   getCategoryBlocklist,
   getChildren,
 } from "@service/clasor";
-import { getMe } from "./auth";
+import { IActionError, IChildrenFilter } from "@interface/app.interface";
 import { ISortProps } from "@atom/sortParam";
-import { IChildrenFilter } from "@interface/app.interface";
+import { getMe } from "./auth";
+import { normalizeError } from "@utils/normalizeActionError";
 
 export const getChildrenAction = async (
   repoId: number,
@@ -23,20 +25,38 @@ export const getChildrenAction = async (
   filters?: IChildrenFilter | null
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getChildren(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      sortParams,
+      offset,
+      size,
+      title,
+      type,
+      filters
+    );
 
-  const response = await getChildren(
-    userInfo.access_token,
-    repoId,
-    categoryId,
-    sortParams,
-    offset,
-    size,
-    title,
-    type,
-    filters
-  );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
 
-  return response;
+export const getCategoryAction = async (repoId: number, categoryId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getCategory(
+      userInfo.access_token,
+      repoId,
+      categoryId
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const editCategoryAction = async (
@@ -49,19 +69,22 @@ export const editCategoryAction = async (
   isHidden: boolean
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await editCategory(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      parentId,
+      name,
+      description,
+      order,
+      isHidden
+    );
 
-  const response = await editCategory(
-    userInfo.access_token,
-    repoId,
-    categoryId,
-    parentId,
-    name,
-    description,
-    order,
-    isHidden
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const createCategoryAction = async (
@@ -72,17 +95,20 @@ export const createCategoryAction = async (
   order: number | null
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await createCategory(
+      userInfo.access_token,
+      repoId,
+      parentId,
+      name,
+      description,
+      order
+    );
 
-  const response = await createCategory(
-    userInfo.access_token,
-    repoId,
-    parentId,
-    name,
-    description,
-    order
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const deleteCategoryAction = async (
@@ -91,15 +117,18 @@ export const deleteCategoryAction = async (
   forceDelete: boolean
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await deleteCategory(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      forceDelete
+    );
 
-  const response = await deleteCategory(
-    userInfo.access_token,
-    repoId,
-    categoryId,
-    forceDelete
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const getCategoryBlocklistAction = async (
@@ -109,16 +138,19 @@ export const getCategoryBlocklistAction = async (
   size: number
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await getCategoryBlocklist(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      offset,
+      size
+    );
 
-  const response = await getCategoryBlocklist(
-    userInfo.access_token,
-    repoId,
-    categoryId,
-    offset,
-    size
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };
 
 export const addUserToCategoryBlocklistAction = async (
@@ -128,14 +160,17 @@ export const addUserToCategoryBlocklistAction = async (
   type: "block" | "unblock"
 ) => {
   const userInfo = await getMe();
+  try {
+    const response = await addUserToCategoryBlocklist(
+      userInfo.access_token,
+      repoId,
+      categoryId,
+      username,
+      type
+    );
 
-  const response = await addUserToCategoryBlocklist(
-    userInfo.access_token,
-    repoId,
-    categoryId,
-    username,
-    type
-  );
-
-  return response;
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

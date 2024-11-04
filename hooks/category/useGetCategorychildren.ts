@@ -1,11 +1,12 @@
-import { getChildrenAction } from "@actions/category";
-import { ISortProps } from "@atom/sortParam";
-import { IChildrenFilter } from "@interface/app.interface";
+import { IActionError, IChildrenFilter } from "@interface/app.interface";
+
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
+import { ISortProps } from "@atom/sortParam";
+import { getChildrenAction } from "@actions/category";
+import { handleClientSideHookError } from "@utils/error";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
 
 const useGetCategoryChildren = (
   repoId: number,
@@ -18,13 +19,16 @@ const useGetCategoryChildren = (
   forMove?: boolean,
   enabled = true
 ) => {
+  const queryKey = [`category-${categoryId || "parent"}-children`];
+  if (forMove) {
+    queryKey.push("for-move");
+  }
+  if (filters) {
+    queryKey.push(`filters=${JSON.stringify(filters)}`);
+  }
+  
   return useInfiniteQuery({
-    queryKey: [
-      `category-${categoryId || "parent"}-children${forMove ? "-for-move" : ""}${
-        filters ? `-filters=${JSON.stringify(filters)}` : ""
-      }`,
-      title,
-    ],
+    queryKey,
     queryFn: async ({ signal, pageParam }) => {
       const response = await getChildrenAction(
         repoId,
@@ -36,11 +40,11 @@ const useGetCategoryChildren = (
         type,
         filters
       );
-
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,
-    retry: false,
+    retry: true,
     refetchOnWindowFocus: false,
     enabled: !!enabled,
     getNextPageParam: (lastPage, pages) => {

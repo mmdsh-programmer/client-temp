@@ -1,10 +1,14 @@
-import { createCategoryAction } from "@actions/category";
-import { ICategory } from "@interface/category.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { IActionError } from "@interface/app.interface";
+import { ICategory } from "@interface/category.interface";
+import { createCategoryAction } from "@actions/category";
+import { handleClientSideHookError } from "@utils/error";
 import { toast } from "react-toastify";
 
 const useCreateCategory = () => {
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ["createCategory"],
     mutationFn: async (values: {
@@ -13,9 +17,10 @@ const useCreateCategory = () => {
       name: string;
       description: string;
       order: number | null;
-      callBack?: () => void;
+      onSuccessHandler?: () => void;
     }) => {
-      const { repoId, parentId, order, description, name } = values;
+      const { repoId, parentId, order, description, name } =
+        values;
       const response = await createCategoryAction(
         repoId,
         parentId,
@@ -23,15 +28,37 @@ const useCreateCategory = () => {
         description,
         order
       );
+      handleClientSideHookError(response as IActionError);
       return response as ICategory;
     },
-    onSuccess: (response, values) => {
-      const { callBack } = values;
-      console.log("--------------- response ----------------", response);
-      queryClient.invalidateQueries({
-        queryKey: [`category-${response.parentId || "parent"}-children`],
-      });
-      callBack?.();
+    onSuccess: async(response, values) => {
+      const { onSuccessHandler, parentId } = values;
+      const queryKey = [`category-${parentId || "parent"}-children`];
+      const cachedData = await queryClient.getQueriesData({ queryKey });
+      const cachePages = cachedData?.[0]?.[1] as { pages: { list: ICategory[]; offset: number; size: number; total: number }[] };
+
+      if (cachePages) {
+        const newCategory = {
+          ...response,
+          createdAt: `${+new Date()}`,
+          updatedAt: null,
+          type: "category",
+          newOne: true,
+          repoId: values.repoId,
+        };
+
+        const newData = {
+          ...cachePages,
+          pages: cachePages.pages.map((page, index) => 
+            {return index === 0 
+              ? { ...page, list: [newCategory, ...page.list] } 
+              : page;}
+          )
+        };
+
+        queryClient.setQueriesData({ queryKey }, newData);
+      }
+      onSuccessHandler?.();
     },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");

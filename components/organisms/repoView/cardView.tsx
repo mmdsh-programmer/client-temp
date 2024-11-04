@@ -4,7 +4,6 @@ import LoadMore from "@components/molecules/loadMore";
 import EmptyList from "@components/molecules/emptyList";
 import RepoCardMode from "@components/molecules/repoCardMode";
 import RenderIf from "@components/atoms/renderIf";
-import RepoMenu from "@components/molecules/repoMenu";
 import { IRepoView } from "@interface/repo.interface";
 
 const CardView = ({
@@ -17,8 +16,7 @@ const CardView = ({
 }: IRepoView) => {
   const listLength = getRepoList?.pages[0].total;
   return (
-    <>
-      <div className="min-h-[calc(100vh-340px)]">
+    <div className="min-h-[calc(100vh-340px)]">
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="w-full h-full flex justify-center items-center">
@@ -26,10 +24,15 @@ const CardView = ({
           </div>
         ) : listLength ? (
           <>
-            <div className="h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
               {getRepoList?.pages.map((page) => {
                 return page.list.map((repo) => {
-                  return <RepoCardMode key={repo.id} repo={repo} />;
+                  return (
+                    <RepoCardMode
+                      key={repo.id}
+                      repo={repo}
+                    />
+                  );
                 });
               })}
             </div>
@@ -46,8 +49,6 @@ const CardView = ({
           <EmptyList type={type} />
         )}
       </div>
-      <RepoMenu showDrawer />
-    </>
   );
 };
 

@@ -18,7 +18,6 @@ const PublishedRepoList = () => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-    isFetching
   } = useGetMyRepoList(20, false, undefined, true, true);
 
   const commonProps: IRepoView = {
@@ -27,7 +26,6 @@ const PublishedRepoList = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    isFetching,
     type: EEmptyList.PUBLISHED_REPO,
   };
 

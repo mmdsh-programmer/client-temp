@@ -49,16 +49,19 @@ const DocumentBlackList = ({
   };
 
   useEffect(() => {
-    blackList?.map((user) => {
-      return setSelectedUserList([
-        {
-          username: user.preferred_username,
-          name: `${user.given_name} %${user.family_name}`,
-          picture: user.picture,
-        },
-      ]);
+    blackList?.map((item) => {
+      return setSelectedUserList((preValue) => {
+        return [
+          ...preValue,
+          {
+            username: item.preferred_username,
+            name: item.family_name,
+            picture: item.picture,
+          },
+        ];
+      });
     });
-  }, []);
+  }, [blackList]);
 
   return (
     <div className="flex flex-col gap-5">

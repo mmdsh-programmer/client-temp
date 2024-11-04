@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 
+import SpinnerText from "@components/molecules/spinnerText";
 import { useRouter } from "next/navigation";
 
 const LandingPage = () => {
@@ -12,11 +13,9 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="w-screen h-full flex items-start justify-center bg-slate-50">
-      <div className="flex items-center m-auto">
-        <h1 className="font-bold">در حال بررسی اطلاعات کاربری</h1>
+      <div className="flex items-center justify-center h-screen">
+        <SpinnerText text="در حال بررسی اطلاعات کاربری" />
       </div>
-    </div>
   );
 };
 

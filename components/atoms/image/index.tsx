@@ -1,20 +1,24 @@
-import React from "react";
+"use client";
+
 import Image from "next/image";
+import React from "react";
 
 interface IProps {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
   className?: string;
 }
 
-const ImageComponent = ({ alt, src, className }: IProps) => {
+const ImageComponent = ({ alt, src, className, width, height }: IProps) => {
   return (
     <Image
-      className={`h-full w-full overflow-hidden ${className || ""}`}
+      className={`${className}`}
       src={src}
       alt={alt}
-      width={100}
-      height={100}
+      width={width ?? 100}
+      height={height ?? 100}
       priority
     />
   );

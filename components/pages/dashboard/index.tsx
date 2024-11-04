@@ -1,16 +1,30 @@
-import React, { useEffect } from "react";
+"use client";
 
+import React, { useEffect } from "react";
 import RepoCards from "@components/organisms/repoTypesCards";
 import RepoList from "@components/organisms/repoList";
 import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
 import { repoAtom } from "@atom/repository";
-import { useSetRecoilState } from "recoil";
+import { useResetRecoilState } from "recoil";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { versionModalListAtom } from "@atom/version";
 
 const DashboardPage = () => {
-  const setRepo = useSetRecoilState(repoAtom);
+  const resetRepo = useResetRecoilState(repoAtom);
+  const resetCategory = useResetRecoilState(categoryAtom);
+  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
+  const resetDocument = useResetRecoilState(selectedDocumentAtom);
+  const resetDocumentShow = useResetRecoilState(documentShowAtom);
+  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
 
   useEffect(() => {
-    setRepo(null);
+    resetRepo();
+    resetCategory();
+    resetCategoryShow();
+    resetDocument();
+    resetDocumentShow();
+    resetShowVersionList();
   }, []);
 
   return (

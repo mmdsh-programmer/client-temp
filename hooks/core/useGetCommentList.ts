@@ -2,6 +2,8 @@ import { getCommentListAction } from "@actions/core";
 import { IListResponse } from "@interface/repo.interface";
 import { IComment } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetCommentList = (postId: number, size: number) => {
   return useInfiniteQuery({
@@ -10,8 +12,9 @@ const useGetCommentList = (postId: number, size: number) => {
       const response = await getCommentListAction(
         postId,
         (pageParam - 1) * size,
-        size,
+        size
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<IComment>;
     },
     initialPageParam: 1,

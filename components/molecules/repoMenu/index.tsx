@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { InfoIcon, MoreDotIcon, StarIcon } from "@components/atoms/icons";
-import { repoInfoAtom } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { repoActionDrawerAtom, repoAtom, repoInfoAtom } from "@atom/repository";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Button } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { EListMode } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
 import { listModeAtom } from "@atom/app";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import RepoDialogs from "../repoDialogs";
 import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
 import { activeTourAtom, ETourSection } from "@atom/tour";
@@ -20,14 +20,15 @@ interface IProps {
 
 const RepoMenu = ({ repo, showDrawer }: IProps) => {
   const router = useRouter();
+  const currentPath = usePathname();
 
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const mode = useRecoilValue(listModeAtom);
   const setRepoInfo = useSetRecoilState(repoInfoAtom);
   const setActiveTour = useSetRecoilState(activeTourAtom);
 
-  const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
-    boolean | null
-  >(false);
+  const [openRepoActionDrawer, setOpenRepoActionDrawer] =
+    useRecoilState(repoActionDrawerAtom);
 
   const [modals, setModals] = useState({
     edit: false,
@@ -38,6 +39,8 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     share: false,
     key: false,
     leave: false,
+    fileManagement: false,
+    versionRequests: false,
   });
 
   const setModalState = (key: keyof typeof modals, state: boolean) => {
@@ -52,7 +55,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   };
 
   const menuList = useRepoMenuList(
-    repo,
+    repo || getRepo,
     setModalState,
     handleRepoInfo,
     setOpenRepoActionDrawer
@@ -62,7 +65,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     <>
       {!showDrawer ? (
         <div className=" flex items-center gap-1 justify-end">
-          {window.location.pathname !== "/admin/dashboard" ? (
+          {currentPath === "/admin/repositories" ? (
             <Button
               placeholder="button"
               className="rounded-lg border-2 border-gray-50 
@@ -80,7 +83,8 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
                 placeholder="button"
                 className="repo-bookmark rounded-lg border-2 border-gray-50 
              bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setModalState("bookmark", true);
                 }}
               >
@@ -92,6 +96,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
             <MenuTemplate
               setOpenDrawer={() => {
                 setOpenRepoActionDrawer(true);
+                setRepo(repo || null);
               }}
               menuList={menuList}
               icon={
@@ -102,13 +107,16 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
             />
           </div>
         </div>
-      ) : null}
-      <DrawerTemplate
-        openDrawer={openRepoActionDrawer}
-        setOpenDrawer={setOpenRepoActionDrawer}
-        menuList={menuList}
-      />
-      <RepoDialogs modals={modals} setModalState={setModalState} repo={repo} />
+      ) : (
+        <div className="xs:hidden flex">
+          <DrawerTemplate
+            openDrawer={openRepoActionDrawer}
+            setOpenDrawer={setOpenRepoActionDrawer}
+            menuList={menuList}
+          />
+        </div>
+      )}
+      <RepoDialogs repo={repo} modals={modals} setModalState={setModalState} />
     </>
   );
 };

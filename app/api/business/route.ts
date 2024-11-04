@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         const headersList = headers();
         const Authorization = headersList.get("Authorization");
         if(!Authorization || Authorization.replace("Bearer ", "") !== process.env.API_TOKEN){
-            return NextResponse.json({ error: "Client is not authorized" }, { status: 401 });
+            return NextResponse.json({ message: "Client is not authorized" }, { status: 401 });
         }
         const {searchParams} = request.nextUrl;
         const domain = searchParams.get("domain");
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
         const offset = searchParams.get("offset");
 
         const metaQuery: IMetaQuery = {
-            field: "type",
+            field: "CUSTOM_POST_TYPE",
             is: "DOMAIN_BUSINESS"
         };
         if(domain){
@@ -46,12 +46,13 @@ export async function POST(request: Request) {
         if(!Authorization || Authorization.replace("Bearer ", "") !== process.env.API_TOKEN){
             return NextResponse.json({ error: "Client is not authorized" }, { status: 401 });
         }
-        const { domain, clientId, type } = await request.json();
+        const { domain, clientId, type, clientSecret } = await request.json();
         const result = await createCustomPost(JSON.stringify({
             domain,
             CUSTOM_POST_TYPE: "DOMAIN_BUSINESS",
             type,
-            clientId
+            clientId, 
+            clientSecret
         }), domain);
         return NextResponse.json({ result });
     } catch (error) {

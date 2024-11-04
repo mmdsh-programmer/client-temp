@@ -1,9 +1,8 @@
+import React, { useState } from "react";
 import {
  DialogBody,
  Typography
 } from "@material-tailwind/react";
-import React, { useState } from "react";
-
 import DocumentBlockList from "@components/organisms/document/documentBlockList";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -71,9 +70,10 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
             <div className="flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
-                handleChange={(val) => {
+                handleSelect={(val) => {
                   return setValue(`${val.value}`);
                 }}
+                showInput
               />
             </div>
             <LoadingButton

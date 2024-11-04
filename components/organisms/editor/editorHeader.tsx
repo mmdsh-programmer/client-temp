@@ -12,7 +12,7 @@ import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
-import { versionModalListAtom } from "@atom/version";
+import { selectedVersionAtom } from "@atom/version";
 
 export interface IProps {
   dialogHeader?: string;
@@ -26,8 +26,8 @@ const EditorHeader = ({
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const [editorData, setEditorData] = useRecoilState(editorDataAtom);
+  const setVersion = useSetRecoilState(selectedVersionAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const freeDraftHook = useFreeDraft();
 
@@ -48,7 +48,7 @@ const EditorHeader = ({
         outline: "",
       });
     }
-    setVersionModalList(false);
+    setVersion(null);
     setEditorData(null);
     setEditorModal(false);
   };

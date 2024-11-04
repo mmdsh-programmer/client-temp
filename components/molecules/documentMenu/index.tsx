@@ -4,7 +4,7 @@ import MenuTemplate from "@components/templates/menuTemplate";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { documentDrawerAtom, selectedDocumentAtom } from "@atom/document";
-import { MoreDotIcon } from "@components/atoms/icons";
+import { MoreDotIcon, StarIcon } from "@components/atoms/icons";
 import DocumentDialogs from "../documentDialogs";
 import useDocumentMenuList from "./useDocumentMenuList";
 
@@ -33,6 +33,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
     updatePassword: false,
     deletePassword: false,
     documentAccessPublishing: false,
+    documentVersionList: false
   });
 
   const toggleModal = (modalName: keyof typeof modals, value: boolean) => {
@@ -54,18 +55,23 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
           />
         </div>
       ) : (
-        <MenuTemplate
-          setOpenDrawer={() => {
-            setDocument(document || null);
-            setOpenDocumentActionDrawer(true);
-          }}
-          menuList={menuList}
-          icon={
-            <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-              <MoreDotIcon className="w-4 h-4" />
-            </div>
-          }
-        />
+        <div className="flex items-center justify-end gap-1">
+          {document?.isBookmarked ? (
+            <StarIcon className="w-4 h-4  fill-amber-600 stroke-amber-600" />
+          ) : null}
+          <MenuTemplate
+            setOpenDrawer={() => {
+              setDocument(document || null);
+              setOpenDocumentActionDrawer(true);
+            }}
+            menuList={menuList}
+            icon={
+              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+                <MoreDotIcon className="w-4 h-4" />
+              </div>
+            }
+          />
+        </div>
       )}
       <DocumentDialogs
         modalsState={modals}

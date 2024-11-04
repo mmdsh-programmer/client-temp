@@ -1,9 +1,12 @@
 import {
   AuthorizationError,
+  DuplicateError,
   ForbiddenError,
+  IOriginalError,
   InputError,
   NotFoundError,
   ServerError,
+  UnprocessableError,
 } from "@utils/error";
 import {
   IAccessRequest,
@@ -46,8 +49,8 @@ import {
   IReport,
 } from "@interface/repo.interface";
 import { IRoles, IUser } from "@interface/users.interface";
-import Logger from "@utils/logger";
 import axios, { AxiosError, isAxiosError } from "axios";
+
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
@@ -55,13 +58,14 @@ import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
-
+import Logger from "@utils/logger";
 import qs from "qs";
+import { IContentSearchListItem } from "@interface/contentSearch.interface";
 
-const { CLASOR } = process.env;
+const { BACKEND_URL, API_TOKEN } = process.env;
 
 const axiosClasorInstance = axios.create({
-  baseURL: CLASOR,
+  baseURL: BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -98,30 +102,25 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
     const message = [error.response?.data?.messages?.[0] || error.message];
     switch (error.response?.status) {
       case 400:
-        throw new InputError(message);
+        throw new InputError(message, error as IOriginalError);
       case 401:
-        throw new AuthorizationError(message);
+        throw new AuthorizationError(message, error as IOriginalError);
       case 403:
-        throw new ForbiddenError(message, error);
+        throw new ForbiddenError(message, error as IOriginalError);
       case 404:
-        throw new NotFoundError(message, error);
+        throw new NotFoundError(message, error as IOriginalError);
+      case 409:
+        throw new DuplicateError(message, error as IOriginalError);
+      case 422:
+        throw new UnprocessableError(message, error as IOriginalError);
       default:
-        throw new ServerError(message, error);
+        throw new ServerError(
+          ["خطا در ارتباط با سرویس خارجی"],
+          error as IOriginalError
+        );
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
-  }
-};
-
-export const handleRedirect = async (redirectUrl: string) => {
-  try {
-    const response = await axiosClasorInstance.get(
-      `auth/loginUrl?redirectUrl=${redirectUrl}`
-    );
-
-    return response.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
@@ -190,14 +189,37 @@ export const logout = async (access_token: string, refresh_token: string) => {
   }
 };
 
-////////////////////////// INFO /////////////////////////
-export const getMyInfo = async (access_token: string) => {
+export const userMetadata = async (access_token: string, data: object) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      "auth/setUserMetadata",
+      {
+        metadata: data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////// INFO /////////////////////////
+export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>(
       "myInfo",
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          repoTypes,
         },
       }
     );
@@ -231,7 +253,8 @@ export const getAllRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -244,8 +267,21 @@ export const getAllRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes,
       },
     });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishRepositoryInfo = async (repoId: number) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
+      `repositories/${repoId}/publish`
+    );
 
     return response.data.data;
   } catch (error) {
@@ -354,6 +390,7 @@ export const getMyRepositories = async (
   archived: boolean,
   name?: string,
   isPublish?: boolean,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -367,7 +404,8 @@ export const getMyRepositories = async (
         size,
         archived,
         title: name,
-        isPublish
+        isPublish,
+        repoTypes,
       },
     });
 
@@ -401,7 +439,8 @@ export const getAccessRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -414,6 +453,7 @@ export const getAccessRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes,
       },
     });
 
@@ -427,7 +467,8 @@ export const getBookmarkRepositories = async (
   accessToken: string,
   offset: number,
   size: number,
-  name?: string
+  name?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -440,6 +481,7 @@ export const getBookmarkRepositories = async (
         offset,
         size,
         title: name,
+        repoTypes,
       },
     });
 
@@ -475,10 +517,7 @@ export const editRepo = async (
   }
 };
 
-export const deleteRepository = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const deleteRepository = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -540,7 +579,8 @@ export const restoreRepository = async (
 export const createRepo = async (
   accessToken: string,
   name: string,
-  description?: string
+  description?: string,
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -548,6 +588,7 @@ export const createRepo = async (
       {
         name,
         description,
+        repoTypes,
       },
       {
         headers: {
@@ -558,6 +599,10 @@ export const createRepo = async (
 
     return response.data.data;
   } catch (error) {
+    console.log(
+      "==================== clasor create repo ===================",
+      error
+    );
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
@@ -644,7 +689,7 @@ export const transferOwnershipRepository = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -845,7 +890,7 @@ export const getGroupInfo = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IGetGroup>>(
-      `${CLASOR}/repositories/${repoId}/groups/${title}`,
+      `repositories/${repoId}/groups/${title}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -890,6 +935,7 @@ export const updateGroup = async (
   repoId: number,
   title: string,
   description?: string,
+  newTitle?: string,
   members?: string[]
 ) => {
   try {
@@ -897,7 +943,7 @@ export const updateGroup = async (
       IServerResult<IUpdateGroup>
     >(
       `repositories/${repoId}/groups/${title}`,
-      { title, description, members, memberType: "username" },
+      { title: newTitle, description, members, memberType: "username" },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -1094,6 +1140,26 @@ export const getChildren = async (
         },
       }
     );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getCategory = async (
+  accessToken: string,
+  repoId: number,
+  categoryId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<ICategoryMetadata>
+    >(`repositories/${repoId}/categories/${categoryId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -1389,16 +1455,100 @@ export const getDocument = async (
   repoId: number,
   documentId: number,
   offset?: number,
-  size?: number
+  size?: number,
+  disableVersions?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IDocumentMetadata>
     >(
-      `repositories/${repoId}/documents/${documentId}/info?type=document&sortParams[]={"field": "createdAt", "order": "asc" }`,
+      `repositories/${repoId}/documents/${documentId}/info?type=document&disableVersions=${disableVersions}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentVersion = async (
+  repoId: number,
+  documentId: number,
+  versionId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
+      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}`
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentLastVersion = async (
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IVersion | null>
+    >(`repositories/${repoId}/publish/document/${documentId}/lastVersion`);
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentVersions = async (
+  repoId: number,
+  documentId: number,
+  offset: number,
+  size: number,
+  ssoId?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IVersion>>
+    >(`repositories/${repoId}/publish/document/${documentId}/versions`, {
+      params: {
+        offset,
+        size,
+        userssoid: ssoId,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const searchPublishContent = async (
+  repoId: number,
+  searchText: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IContentSearchListItem>>
+    >(
+      `publicContent/repository/${repoId}/search/${encodeURIComponent(searchText)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
         },
         params: {
           offset,
@@ -1679,6 +1829,7 @@ export const addToDocumentWhiteList = async (
   documentId: number,
   usernameList: string[]
 ) => {
+  console.log("---------------------- white list -------------", usernameList);
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/whitelist`,
@@ -1795,7 +1946,7 @@ export const documentEnableUserGroupHash = async (
   }
 };
 
-///////////////////// VERSION //////////////////
+/// ////////////////// VERSION //////////////////
 export const getVersion = async (
   accessToken: string,
   repoId: number,
@@ -2173,6 +2324,92 @@ export const getPendingVersion = async (
   }
 };
 
+export const acceptDraft = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  draftId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${draftId}/accept`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const acceptVersion = async (
+  accessToken: string,
+  repoId: number,
+  versionId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `admin/${repoId}/acceptVersion/${versionId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectDraft = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  draftId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${draftId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectVersion = async (
+  accessToken: string,
+  repoId: number,
+  versionId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `admin/${repoId}/rejectVersion/${versionId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ////////////////////// PUBLIC LINK ///////////////////
 export const createRepoPublicLink = async (
   accessToken: string,
@@ -2219,7 +2456,7 @@ export const deletePublicLink = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2270,7 +2507,7 @@ export const createRepoPublishLink = async (
         },
       }
     );
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2290,7 +2527,7 @@ export const deletePublishLink = async (
       }
     );
 
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2390,9 +2627,37 @@ export const saveVersion = async (
       }
     );
 
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const saveFileVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionNumber: string,
+  fileHash: {
+    hash: string;
+    fileName: string;
+    fileExtension: string;
+  }
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
+      { fileHash, versionNumber },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
     return response.data.data;
   } catch (error) {
-    console.log("-------------------------error -----------------", error);
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
@@ -2534,7 +2799,7 @@ export const getAdminPanelFeedback = async (
   }
 };
 
-////////////////////////////////// CORE //////////////////////
+/// /////////////////////////////// CORE //////////////////////
 export const getCommentList = async (
   access_token: string,
   postId: number,
@@ -2542,18 +2807,17 @@ export const getCommentList = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
-      `core/content/${postId}/comment`,
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IComment>>
+    >(`core/content/${postId}/comment`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -2603,42 +2867,6 @@ export const createComment = async (
   }
 };
 
-export const like = async (access_token: string, postId: number) => {
-  try {
-    const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `core/content/${postId}/like`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
-export const dislike = async (access_token: string, postId: number) => {
-  try {
-    const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `core/content/${postId}/dislike`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
 export const getLike = async (
   access_token: string,
   postId: number,
@@ -2646,19 +2874,18 @@ export const getLike = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
-      `core/content/${postId}/like`,
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        params: {
-          offset,
-          size,
-          hasUser: true,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ILikeList>>
+    >(`core/content/${postId}/like`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        hasUser: true,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -2673,20 +2900,151 @@ export const getDislike = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
-      `core/content/${postId}/dislike`,
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ILikeList>>
+    >(`core/content/${postId}/dislike`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        offset,
+        size,
+        hasUser: true,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// PUBLISH SERVICES //////////////////////
+
+export const getPublishRepoList = async (
+  offset: number,
+  size: number,
+  repoType?: string,
+  userssoid?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories/publishRepoList", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        offset,
+        size,
+        repoType,
+        userssoid,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishChildren = async (
+  repoId: number,
+  offset: number,
+  size: number,
+  categoryId?: number,
+  ssoId?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
+    >(
+      `repositories/${repoId}/publish/getChildren?${[
+        {
+          field: "type",
+          order: "asc",
+        },
+        {
+          field: "order",
+          order: "asc",
+        },
+        {
+          field: "createdAt",
+          order: "asc",
+        },
+        {
+          field: "name",
+          order: "asc",
+        },
+      ]
+        .map((n) => {
+          return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
+        })
+        .join("&")}`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
         },
         params: {
+          parentId: categoryId,
           offset,
           size,
-          hasUser: true,
+          userssoid: ssoId,
         },
       }
     );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
 
+export const getAllPublishChildren = async (
+  repoId: number,
+  offset: number,
+  size: number,
+  title?: string,
+  categoryId?: number,
+  ssoId?: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
+    >(
+      `repositories/${repoId}/publish/children?${[
+        {
+          field: "type",
+          order: "asc",
+        },
+        {
+          field: "order",
+          order: "asc",
+        },
+        {
+          field: "createdAt",
+          order: "asc",
+        },
+        {
+          field: "name",
+          order: "asc",
+        },
+      ]
+        .map((n) => {
+          return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
+        })
+        .join("&")}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          parentId: categoryId,
+          offset,
+          size,
+          userssoid: ssoId,
+          title,
+        },
+      }
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

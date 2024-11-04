@@ -22,7 +22,9 @@ type ModalType =
   | "share"
   | "key"
   | "leave"
-  | "archive";
+  | "archive"
+  | "fileManagement"
+  | "versionRequests";
 
 export interface MenuItem {
   text: string;
@@ -31,7 +33,7 @@ export interface MenuItem {
 }
 
 const useMenuList = (
-  repo: IRepo | undefined,
+  repo: IRepo | null,
   setModalState: (type: ModalType, state: boolean) => void,
   handleRepoInfo: () => void,
   setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>
@@ -48,14 +50,18 @@ const useMenuList = (
 
   const ownerAdminActions = () => {
     return [
-      window.location.pathname === "/admin/dashboard" &&
-        createMenuItem(
-          "اطلاعات پوشه",
-          <FolderInfoIcon className="w-4 h-4" />,
-          handleRepoInfo
-        ),
+      window.location.pathname === "/admin/dashboard"
+        ? createMenuItem(
+            "اطلاعات پوشه",
+            <FolderInfoIcon className="w-4 h-4" />,
+            handleRepoInfo
+          )
+        : null,
       createMenuItem("ویرایش", <EditIcon className="w-4 h-4" />, () => {
         setModalState("edit", true);
+        if (repo) {
+          setRepo(repo);
+        }
       }),
       createMenuItem("اشتراک گذاری", <ShareIcon className="w-4 h-4" />, () => {
         setModalState("share", true);
@@ -63,18 +69,25 @@ const useMenuList = (
           setRepo(repo);
         }
       }),
-      createMenuItem(
-        "لیست کلید های مخزن",
-        <KeyIcon className="w-4 h-4 stroke-1" />,
-        () => {
-          setModalState("key", true);
+      createMenuItem("مدیریت فایل", <ShareIcon className="w-4 h-4" />, () => {
+        setModalState("fileManagement", true);
+        if (repo) {
+          setRepo(repo);
         }
-      ),
+      }),
+      createMenuItem("درخواست‌ها", <ShareIcon className="w-4 h-4" />, () => {
+        setModalState("versionRequests", true);
+        if (repo) {
+          setRepo(repo);
+        }
+      }),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 stroke-icon-active" />,
-          () => {}
+          () => {
+            window.open(`/publish/${repo.name}/${repo.id}`, "_blank");
+          }
         ),
     ].filter(Boolean) as MenuItem[];
   };
@@ -85,10 +98,16 @@ const useMenuList = (
         createMenuItem("حذف", <DeleteIcon className="w-4 h-4" />, () => {
           setModalState("delete", true);
           setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
         }),
         createMenuItem("بازگردانی", <RestoreIcon className="w-4 h-4" />, () => {
           setModalState("restore", true);
           setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
         }),
       ];
     }
@@ -96,16 +115,32 @@ const useMenuList = (
     return [
       ...(ownerAdminActions() as MenuItem[]),
       createMenuItem(
+        "لیست کلید های مخزن",
+        <KeyIcon className="w-4 h-4 stroke-1" />,
+        () => {
+          setModalState("key", true);
+          if (repo) {
+            setRepo(repo);
+          }
+        }
+      ),
+      createMenuItem(
         "بایگانی",
         <ArchiveIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
           setModalState("archive", true);
           setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
       createMenuItem("حذف", <DeleteIcon className="w-4 h-4" />, () => {
         setModalState("delete", true);
         setOpenRepoActionDrawer(false);
+        if (repo) {
+          setRepo(repo);
+        }
       }),
     ];
   };
@@ -118,6 +153,9 @@ const useMenuList = (
         <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
           setModalState("leave", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
     ];
@@ -142,6 +180,9 @@ const useMenuList = (
         <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
           setModalState("leave", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
       ),
     ];

@@ -132,7 +132,7 @@ export declare interface IThreadInfo {
       userGroupHash: string;
       closed: boolean;
     };
-    metadata: {};
+    metadata: { [key: string]: string };
     time: number;
     timeMiliSeconds: number;
     timeNanos: number;
@@ -186,14 +186,25 @@ export interface IGetToken {
 }
 
 export interface IActionError {
+  error?: boolean;
   errorCode: number;
   errorList: string[];
-  originalError?: string;
+  originalError?: {
+    data: {
+      error: string;
+      message: string[];
+      referenceNumber: string;
+    };
+  };
+  referenceNumber?: string;
 }
 
-
-export interface ISocialError {message: string, status: number, url: string}
-export interface ISocialResponse {
+export interface ISocialError {
+  message: string;
+  status: number;
+  url: string;
+}
+export interface ISocialResponse<T> {
   count: number;
   errorCode: number;
   hasError: boolean;
@@ -201,10 +212,52 @@ export interface ISocialResponse {
   messageId: number;
   ott: string;
   referenceNumber: string;
+  result: T;
 }
+
+export interface IPostInfo {
+  disliked: boolean;
+  favorite: boolean;
+  liked: boolean;
+  postId: number;
+};
 
 export interface IMetaQuery {
   field: string;
   is: string;
   and?: IMetaQuery[]; // Optional recursive definition for nested conditions
+}
+
+export interface IGetTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface ICustomPostMetadata {
+  id: number;
+  domain: string;
+  clientId: string;
+  type: string;
+  clientSecret: string;
+  CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
+  entityId: number;
+  data: string;
+  cryptoInitVectorKey: string;
+  cryptoSecretKey: string;
+}
+
+export interface IThemeInfo {
+  primaryColor?: string;
+  secondaryColor?: string;
+  textColor?: string;
+  textColorLight?: string;
+  textColorLabel?: string;
+  textColorSecondary?: string;
+  textColorPrimary?: string;
+  borderColor?: string;
+  backgroundColor?: string;
+  logo?: string;
+  projectName?: string;
+  projectDescription?: string;
+  heroImage?: string;
 }

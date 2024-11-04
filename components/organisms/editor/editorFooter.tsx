@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import {
   editorDataAtom,
+  editorModalAtom,
   editorModeAtom,
   editorPublicKeyAtom,
 } from "@atom/editor";
@@ -19,6 +20,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
+import EditorFileFooter from "./editorFileFooter";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -32,6 +34,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const setVersion = useSetRecoilState(selectedVersionAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const key = useRecoilValue(editorPublicKeyAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
@@ -161,6 +164,10 @@ const EditorFooter = ({ editorRef }: IProps) => {
     };
   }, []);
 
+  if (selectedDocument?.contentType === EDocumentTypes.file) {
+    return <EditorFileFooter />;
+  }
+
   return editorMode === "preview" ? (
     <div className="w-full flex justify-between items-center gap-2">
       <Button
@@ -168,6 +175,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
+          setEditorModal(false);
+          setVersion(null);
+          setVersionData(null);
         }}
       >
         <Typography className="label_l3 text-primary">
@@ -185,6 +195,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
+            setEditorModal(false);
+            setVersion(null);
+            setVersionData(null);
           }}
         >
           <Typography className="label_l3 text-primary">

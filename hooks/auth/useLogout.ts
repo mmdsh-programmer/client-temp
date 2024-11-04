@@ -1,13 +1,15 @@
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 import { logoutAction } from "@actions/auth";
-import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 const useLogout = () => {
   return useMutation({
     mutationKey: ["logout"],
     mutationFn: async (values: { callBack?: () => void }) => {
       const response = await logoutAction();
-      return response;
+      handleClientSideHookError(response as IActionError);
     },
     onSuccess: (response, values) => {
       const { callBack } = values;

@@ -1,3 +1,6 @@
+
+
+
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -12,6 +15,7 @@ const nextConfig = {
         protocol: "http",
         hostname: "**",
       },
+      
     ],
   },
   webpack: (config, { isServer }) => {

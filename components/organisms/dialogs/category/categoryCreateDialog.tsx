@@ -1,9 +1,10 @@
-import React from "react";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
-import { categoryShowAtom } from "@atom/category";
 import { categorySchema } from "./validation.yup";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -24,7 +25,8 @@ interface IProps {
 
 const CategoryCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryShowAtom);
+  const getCategory = useRecoilValue(categoryAtom);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
 
   const createCategory = useCreateCategory();
 
@@ -53,11 +55,11 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
     if (!getRepo) return;
     createCategory.mutate({
       repoId: getRepo?.id,
-      parentId: getCategory?.id || null,
+      parentId: getCategory?.id || getCategoryShow?.id || null,
       name: dataForm.name,
       description: dataForm?.description || "",
-      order: null,
-      callBack: () => {
+      order: dataForm.order || null,
+      onSuccessHandler: () => {
         toast.success("دسته بندی با موفقیت ایجاد شد.");
         handleClose();
       },

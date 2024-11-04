@@ -1,11 +1,13 @@
 import { bookmarkDocumentAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useBookmarkDocument = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [`bookmarkDocument`],
+    mutationKey: ["bookmarkDocument"],
     mutationFn: async (values: {
       repoId: number;
       categoryId?: number;
@@ -15,6 +17,7 @@ const useBookmarkDocument = () => {
     }) => {
       const { detach, repoId, documentId } = values;
       const response = await bookmarkDocumentAction(repoId, documentId, detach);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

@@ -1,6 +1,8 @@
-import { createTagAction, editTagAction } from "@actions/tag";
+import { editTagAction } from "@actions/tag";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useEditTag = () => {
   const queryClient = useQueryClient();
@@ -14,6 +16,7 @@ const useEditTag = () => {
     }) => {
       const { name, repoId, tagId } = values;
       const response = await editTagAction(repoId, tagId, name);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {

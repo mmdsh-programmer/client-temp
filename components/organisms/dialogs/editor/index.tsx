@@ -22,9 +22,8 @@ import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@material-tailwind/react";
-import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
@@ -51,7 +50,7 @@ const Editor = ({ setOpen }: IProps) => {
   );
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
   const setListDrawer = useSetRecoilState(editorListDrawerAtom);
-
+  const [getDocumentShow, setDocumentShow] = useRecoilState(documentShowAtom);
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -61,7 +60,7 @@ const Editor = ({ setOpen }: IProps) => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const { data: getLastVersion } = useGetLastVersion(
+  const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
     getRepo!.id,
     getSelectedDocument!.id,
     !getVersionData
@@ -111,8 +110,6 @@ const Editor = ({ setOpen }: IProps) => {
     if (error) {
       setSelectedDocument(null);
       setVersionModalList(false);
-    } else if (!getVersionData) {
-      // setVersionModalList(true);
     }
     if (
       document?.contentType === EDocumentTypes.board &&
@@ -159,11 +156,17 @@ const Editor = ({ setOpen }: IProps) => {
     setPublicKey(null);
     setSelectedVersion(null);
     setEditorModal(false);
-    setVersionModalList(false);
     setListDrawer(false);
+    if (!getDocumentShow) {
+      setVersionModalList(false);
+      setDocumentShow(null);
+      setSelectedDocument(null);
+    } else {
+      setVersionModalList(true);
+    }
   };
 
-  if (error || keyError) {
+  if (error || keyError || lastVersionError) {
     toast.warn("باز کردن سند با خطا مواجه شد.");
     handleClose();
     return null;
@@ -178,10 +181,6 @@ const Editor = ({ setOpen }: IProps) => {
         encryptedContent={getVersionData?.content}
       />
     );
-  }
-
-  if (versionModalList) {
-    return <VersionDialogView />;
   }
 
   return (

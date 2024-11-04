@@ -1,17 +1,6 @@
-import {
- Button,
- Spinner,
- Typography
-} from "@material-tailwind/react";
-import React, {
- useEffect,
- useState
-} from "react";
-import {
- UserIcon,
- XIcon
-} from "@components/atoms/icons";
-
+import React, { useEffect, useState } from "react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { UserIcon, XIcon } from "@components/atoms/icons";
 import ChipMolecule from "@components/molecules/chip";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -44,26 +33,19 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   const group = useRecoilValue(selectedGroupAtom);
 
   const [updatedUsers, setUpdatedUsers] = useState<
-    { username: string; picture: string }[] | undefined
+    { username: string; picture: string | number | undefined }[]
   >([]);
 
-  const {
- data: getUsers, isLoading 
-} = useGetRepoUsers(getRepo!.id, 20, true);
-  const {
- data: groupInfo, isFetching 
-} = useGetGroupInfo(
+  const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 20, true);
+  const { data: groupInfo, isFetching } = useGetGroupInfo(
     getRepo!.id,
     group!.title
   );
-  const {
- isPending, mutate 
-} = useEditGroup();
+  const { isPending, mutate } = useEditGroup();
 
   const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
-  const {
- reset, clearErrors, handleSubmit, register, formState 
-} = form;
+  const { reset, clearErrors, handleSubmit, register, formState, setValue } =
+    form;
   const { errors } = formState;
 
   useEffect(() => {
@@ -84,7 +66,13 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       };
     });
 
-    setUpdatedUsers(updatedUserList);
+    setUpdatedUsers(updatedUserList || []);
+    setValue(
+      "members",
+      updatedUserList?.map((user) => {
+        return user.username;
+      }) || []
+    );
   }, [getUsers, groupInfo]);
 
   const filteredUsers = getUsers?.pages
@@ -117,13 +105,17 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo) return;
-    if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
+    if (!getRepo || !group) return;
+    if (!updatedUsers.length) {
+      return toast.error("لیست اعضای گروه نباید خالی باشد.");
+    }
+
     mutate({
       repoId: getRepo!.id,
-      title: dataForm.title,
+      title: group.title,
       description: dataForm.description,
-      members: updatedUsers?.map((user) => {
+      newTitle: dataForm.title,
+      members: updatedUsers.map((user) => {
         return user.username;
       }),
       callBack: () => {
@@ -135,15 +127,22 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
   const handleDelete = (username: string) => {
     setUpdatedUsers((oldValue) => {
-      if (!oldValue?.length) {
+      if (!oldValue.length) {
         return [];
       }
+
+      // Remove user and update form members field
       const newUsers = oldValue.filter((user) => {
         return user.username !== username;
       });
-      return [
-        ...newUsers
-      ];
+      setValue(
+        "members",
+        newUsers.map((user) => {
+          return user.username;
+        })
+      );
+
+      return [...newUsers];
     });
   };
 
@@ -172,7 +171,9 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">توضیحات گروه</Typography>
           <TextareaAtom
             placeholder="توضیحات گروه"
-            register={{...register("description", { value: group?.description }),}}
+            register={{
+              ...register("description", { value: group?.description }),
+            }}
           />
           {errors.description && (
             <Typography className="warning_text">
@@ -185,23 +186,35 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
           <SearchableDropdown
             background="gray-50"
             options={filteredUsers}
-            handleChange={(val) => {
+            handleSelect={(val) => {
               if (val) {
                 setUpdatedUsers((oldValue) => {
-                  if (!oldValue) {
-                    return [];
-                  }
-                  return [
+                  const newUsers = [
                     ...oldValue,
                     {
                       username: val.label,
-                      picture: `${val.value}`,
+                      picture: val.value || undefined,
                     },
                   ];
+
+                  // Update form members field
+                  setValue(
+                    "members",
+                    updatedUsers.map((user) => {
+                      return user.username;
+                    })
+                  );
+
+                  return newUsers;
                 });
               }
             }}
           />
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           {isLoading || isFetching ? (
@@ -217,8 +230,8 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                     item.picture ? (
                       <ImageComponent
                         className="w-full h-full rounded-full overflow-hidden"
-                        src={item.picture}
-                        alt={item.picture}
+                        src={item.picture.toString()}
+                        alt={item.picture.toString()}
                       />
                     ) : (
                       <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />

@@ -1,10 +1,11 @@
 import { ICategoryMetadata } from "@interface/category.interface";
-import { IChildrenFilter } from "@interface/app.interface";
+import { IActionError, IChildrenFilter } from "@interface/app.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { ISortProps } from "@atom/sortParam";
 import { getChildrenAction } from "@actions/category";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetChildren = (
   repoId: number,
@@ -15,12 +16,13 @@ const useGetChildren = (
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
 ) => {
+  const queryKey = [`category-${categoryId || "parent"}-children`];
+  if (filters) {
+    queryKey.push(`filters=${JSON.stringify(filters)}`);
+  }
+
   return useInfiniteQuery({
-    queryKey: [
-      `category-${categoryId || "parent"}-children${
-        filters ? `-filters=${JSON.stringify(filters)}` : ""
-      }`,
-    ],
+    queryKey,
     queryFn: async ({ signal, pageParam }) => {
       const response = await getChildrenAction(
         repoId,
@@ -32,6 +34,7 @@ const useGetChildren = (
         type,
         filters,
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;
     },
     initialPageParam: 1,

@@ -11,9 +11,10 @@ interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  className?: string;
 }
 
-const TabComponent = ({ tabList, activeTab, setActiveTab }: IProps) => {
+const TabComponent = ({ tabList, activeTab, setActiveTab, className }: IProps) => {
   return (
     <Tabs value={activeTab} className="h-full">
       <TabsHeader
@@ -38,13 +39,13 @@ const TabComponent = ({ tabList, activeTab, setActiveTab }: IProps) => {
           );
         })}
       </TabsHeader>
-      <TabsBody placeholder="tab-body" className="h-[calc(100%-50px)]">
+      <TabsBody placeholder="tab-body" className="h-[calc(100%-40px)]">
         {tabList.map((tab) => {
           return (
             <TabPanel
               key={tab.tabTitle}
               value={tab.tabTitle}
-              className="p-0 h-full"
+              className={`p-0 h-full ${className || ""}`}
             >
               {tab.tabContent}
             </TabPanel>

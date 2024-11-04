@@ -10,14 +10,8 @@ export const selectedVersionAtom = atom<IVersion | null>({
   effects: [logEffect("selectedVersionAtom")],
 });
 
-export const versionListAtom = atom<boolean | null>({
-  key: "versionListAtom",
-  default: null,
-  effects: [logEffect("versionListAtom")],
-});
-
 export const compareVersionAtom = atom<{
-  version: {
+  version: { 
     data: IVersion;
     document: IDocumentMetadata;
     repo: IRepo;

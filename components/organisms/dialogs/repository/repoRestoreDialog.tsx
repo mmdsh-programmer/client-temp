@@ -1,29 +1,27 @@
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { IRepo } from "@interface/repo.interface";
 import React from "react";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useRestoreRepo from "@hooks/repository/useRestoreRepo";
+import { useRecoilValue } from "recoil";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoRestoreDialog = ({
- repo, setOpen 
-}: IProps) => {
-  const {
- isPending, mutate 
-} = useRestoreRepo();
+const RepoRestoreDialog = ({ setOpen }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+
+  const { isPending, mutate } = useRestoreRepo();
 
   const handleClose = () => {
     setOpen(false);
   };
   const handleSubmit = async () => {
-    if (!repo) return;
+    if (!getRepo) return;
     mutate({
-      repoId: repo.id,
+      repoId: getRepo.id,
       callBack: () => {
         toast.success("مخزن با موفقیت بازگردانی شد.");
         handleClose();
@@ -41,11 +39,11 @@ const RepoRestoreDialog = ({
     >
       آیا از بازگردانی"
       <Typography
-        title={repo?.name}
+        title={getRepo?.name}
         placeholder="name"
         className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
       >
-        {repo?.name}
+        {getRepo?.name}
       </Typography>
       " اطمینان دارید؟
     </ConfirmDialog>

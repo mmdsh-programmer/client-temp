@@ -1,14 +1,15 @@
-import React from "react";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
+import { IVersion, IVersionView } from "@interface/version.interface";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
-import { IVersion, IVersionView } from "@interface/version.interface";
 import { LastVersionIcon } from "@components/atoms/icons";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
@@ -25,13 +26,13 @@ const VersionTableView = ({
   type,
 }: IVersionView) => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
+  const setVersionModalList =
+  useSetRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  
+
   const listLength = getVersionList?.[0].length;
 
   const handleOpenEditor = (value: IVersion) => {
@@ -51,18 +52,16 @@ const VersionTableView = ({
     }
     window.open(`http://localhost:8080/board/${value.id}`);
   };
-
+  
   return (
-    <div
-      className={`p-5 flex flex-col bg-primary min-h-[calc(100vh-200px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small ${versionModalList ? "border-[1px] border-normal" : ""}`}
-    >
+    <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center overflow-hidden">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+        <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg h-[calc(100vh-200px)]">
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
@@ -114,9 +113,9 @@ const VersionTableView = ({
                           ),
                         },
                         {
-                          data: FaDateFromTimestamp(
+                          data: version.updateDate ? FaDateFromTimestamp(
                             +new Date(version.updateDate)
-                          ),
+                          ) : "_",
                           className: "hidden xl:table-cell",
                         },
                         {
@@ -169,13 +168,13 @@ const VersionTableView = ({
                             <VersionMenu
                               version={version}
                               lastVersion={lastVersion}
-                              showDrawer={false}
                             />
                           ),
                           stopPropagation: true,
                           className: "justify-end",
                         },
                       ]}
+                      active={!!version.newOne}
                     />
                   );
                 });
@@ -193,7 +192,7 @@ const VersionTableView = ({
       ) : (
         <EmptyList type={type} />
       )}
-    </div>
+    </>
   );
 };
 

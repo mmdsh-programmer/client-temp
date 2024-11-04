@@ -1,6 +1,8 @@
 import { getMyRepositoryList } from "@actions/repository";
 import { IRepo, IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useGetMyRepoList = (
   size: number,
@@ -19,6 +21,7 @@ const useGetMyRepoList = (
         name,
         isPublished
       );
+      handleClientSideHookError(response as IActionError);
       return response as IListResponse<IRepo>;
     },
     initialPageParam: 1,

@@ -1,6 +1,8 @@
 import { setLastVersionAction } from "@actions/version";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useSetLastVersion = () => {
   const queryClient = useQueryClient();
@@ -18,12 +20,13 @@ const useSetLastVersion = () => {
         documentId,
         versionId,
       );
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, documentId } = values;
+      const { callBack, documentId, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`get-last-version-document-${documentId}`],
+        queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
       });
       callBack?.();
     },

@@ -1,5 +1,16 @@
-import { AuthorizationError, InputError, ServerError } from "@utils/error";
-import { IMetaQuery, ISocialError, ISocialResponse } from "@interface/app.interface";
+import {
+  AuthorizationError,
+  InputError,
+  NotFoundError,
+  ServerError,
+} from "@utils/error";
+import {
+  ICustomPostMetadata,
+  IMetaQuery,
+  IPostInfo,
+  ISocialError,
+  ISocialResponse,
+} from "@interface/app.interface";
 import axios, { AxiosError } from "axios";
 
 import Logger from "@utils/logger";
@@ -41,7 +52,7 @@ axiosSocialInstance.interceptors.response.use((response) => {
 });
 
 export const handleSocialStatusError = (
-  error: AxiosError<ISocialError> | ISocialResponse
+  error: AxiosError<ISocialError> | ISocialResponse<unknown>
 ) => {
   if ("hasError" in error) {
     const message = error.message ?? "خطای نامشخصی رخ داد";
@@ -79,10 +90,13 @@ export const createCustomPost = async (metadata: string, domain: string) => {
   return response.data;
 };
 
-export const getCustomPost = async (metaQuery: IMetaQuery, size: string, offset: string) => {
-  const response = await axiosSocialInstance.post(
+export const getCustomPost = async (
+  metaQuery: IMetaQuery,
+  size: string,
+  offset: string
+) => {
+  const response = await axiosSocialInstance.get(
     "/biz/searchTimelineByMetadata",
-    {},
     {
       params: {
         metaQuery: JSON.stringify(metaQuery),
@@ -96,4 +110,160 @@ export const getCustomPost = async (metaQuery: IMetaQuery, size: string, offset:
     return handleSocialStatusError(response.data);
   }
   return response.data;
+};
+
+export const getCustomPostByDomain = async (
+  domain: string
+): Promise<ICustomPostMetadata> => {
+  const metaQuery: IMetaQuery = {
+    field: "CUSTOM_POST_TYPE",
+    is: "DOMAIN_BUSINESS",
+    and: [
+      {
+        field: "domain",
+        is: domain,
+      },
+    ],
+  };
+  const size = "1";
+  const offset = "0";
+
+  const response = await axiosSocialInstance.get(
+    "/biz/searchTimelineByMetadata",
+    {
+      params: {
+        metaQuery: JSON.stringify(metaQuery),
+        activityInfo: false,
+        size,
+        offset,
+      },
+    }
+  );
+
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  if (!response.data.result.length) {
+    throw new NotFoundError(["Domain not found"]);
+  }
+  const customPost = response.data.result[0]?.item;
+  const { metadata } = customPost;
+  return {
+    ...JSON.parse(metadata),
+    id: customPost.entityId,
+    data: customPost.data ?? "0",
+  };
+};
+
+export const getCustomPostById = async (
+  id: number
+): Promise<ICustomPostMetadata> => {
+  const metaQuery: IMetaQuery = {
+    field: "CUSTOM_POST_TYPE",
+    is: "DOMAIN_BUSINESS",
+  };
+
+  const response = await axiosSocialInstance.get(
+    "/biz/searchTimelineByMetadata",
+    {
+      params: {
+        metaQuery: JSON.stringify(metaQuery),
+        postIds: id,
+      },
+    }
+  );
+
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  if (!response.data.result.length) {
+    throw new NotFoundError(["Post not found"]);
+  }
+  const customPost = response.data.result[0]?.item;
+  const { metadata } = customPost;
+  return {
+    ...JSON.parse(metadata),
+    id: customPost.id,
+    entityId: customPost.entityId,
+    data: customPost.data ?? "0",
+  };
+};
+
+export const updateCustomPostByEntityId = async (
+  metadata: {
+    domain: string;
+    clientId: string;
+    type: string;
+    clientSecret: string;
+    cryptoInitVectorKey: string;
+    cryptoSecretKey: string;
+  },
+  entityId: number,
+  content: string
+) => {
+  const response = await axiosSocialInstance.post("/biz/updateCustomPost", {
+    metadata: JSON.stringify({
+      ...metadata,
+      CUSTOM_POST_TYPE: "DOMAIN_BUSINESS",
+    }),
+    entityId,
+    content,
+  });
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+};
+
+export const likePost = async (
+  accessToken: string,
+  postId: number,
+  like?: boolean,
+  dislike?: boolean
+) => {
+  const mainUrl = typeof like === "boolean" ? "like" : "dislikePost";
+  let url = `/${mainUrl}?postId=${postId}`;
+  if (typeof like === "boolean") {
+    url += `&dislike=${!like}`;
+  } else if (typeof dislike === "boolean") {
+    url += `&dislike=${dislike}`;
+  }
+
+  const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
+    url,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+        _token_issuer_: 1,
+      },
+    }
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  return response.data.result;
+};
+
+export const getPostInfo = async (accessToken: string, postId: number) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<IPostInfo[]>>(
+    "getUserPostInfos",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+        _token_issuer_: 1,
+      },
+      params: {
+        postId,
+      },
+    }
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  return response.data.result;
 };

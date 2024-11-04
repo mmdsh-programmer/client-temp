@@ -1,12 +1,13 @@
-import { IClasorError, IServerResult } from "@interface/app.interface";
-import Logger from "@utils/logger";
 import axios, { AxiosError } from "axios";
+import { IClasorError } from "@interface/app.interface";
+import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
+import Logger from "@utils/logger";
 import { handleClasorStatusError } from "./clasor";
 
-const { TINY_BASE_URL } = process.env;
+const { TINY_LINK_BASE_URL, API_TOKEN } = process.env;
 
 const axiosClasorInstance = axios.create({
-  baseURL: TINY_BASE_URL,
+  baseURL: TINY_LINK_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -40,16 +41,16 @@ axiosClasorInstance.interceptors.response.use((response) => {
 
 export const createTinyLink = async (access_token: string, url: string) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<any>>(
+    const response = await axiosClasorInstance.post<ITinyActionError>(
       `tiny/add?urlOrContent=${url}&shortenObjectKind=link`,
+      {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
-          // "_token_issuer_": 1,
+          _token_: API_TOKEN,
         },
-      },
+      }
     );
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

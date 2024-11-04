@@ -1,6 +1,8 @@
 import { deleteCommentAction } from "@actions/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { IActionError } from "@interface/app.interface";
+import { handleClientSideHookError } from "@utils/error";
 
 const useDeleteComment = () => {
   const queryClient = useQueryClient();
@@ -8,11 +10,12 @@ const useDeleteComment = () => {
     mutationKey: ["deleteComment"],
     mutationFn: async (values: {
       postId: number;
-      commentId: number
+      commentId: number;
       callBack?: () => void;
     }) => {
       const { commentId } = values;
       const response = await deleteCommentAction(commentId);
+      handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
