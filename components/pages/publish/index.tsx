@@ -6,6 +6,7 @@ import { IGetSpecificVersion } from "clasor-content-preview/dist/interface/conte
 import ConnectRemoteEditor from "@components/organisms/publish/connectRemoteEditor";
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
 import PublishVersion from "./publishVersion";
+import PublishTinyLink from "@components/organisms/publish/publishTinyLink";
 
 interface IProps {
   version: IVersion;
@@ -13,20 +14,23 @@ interface IProps {
 
 const PublishVersionContent = ({ version }: IProps) => {
   return (
-    <div className="scroller w-full overflow-y-auto">
-      <PublishVersion version={version} />
-      {version.contentType === EDocumentTypes.classic ? (
-        <>
-          <RenderClientContent versionData={version} />
-          <RenderServerSideContent
-            className="min-h-full"
-            versionData={version as IGetSpecificVersion}
-          />
-        </>
-      ) : (
-        <ConnectRemoteEditor versionData={version} />
-      )}
-    </div>
+    <>
+      <div className="scroller w-full overflow-y-auto">
+        <PublishVersion version={version} />
+        {version.contentType === EDocumentTypes.classic ? (
+          <>
+            <RenderClientContent versionData={version} />
+            <RenderServerSideContent
+              className="min-h-full"
+              versionData={version as IGetSpecificVersion}
+            />
+          </>
+        ) : (
+          <ConnectRemoteEditor versionData={version} />
+        )}
+      </div>
+      <PublishTinyLink />
+    </>
   );
 };
 

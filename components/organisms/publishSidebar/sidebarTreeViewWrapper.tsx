@@ -16,6 +16,8 @@ import Error from "@components/organisms/error";
 import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
 import useGetAllPublishChildren from "@hooks/publish/useGetAllPublishChildren";
 import { IListResponse } from "@interface/repo.interface";
+import { useSetRecoilState } from "recoil";
+import { publishPageSelectedDocumentAtom } from "@atom/publish";
 
 interface IProps {
   repoId: number;
@@ -35,6 +37,9 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
   const searchTimeout = 1500;
   const [searchInput, setSearchInput] = useState<string>("");
   const [manualSearch, setManualSearch] = useState<string>("");
+  const setSelectedPublishDocument = useSetRecoilState(
+    publishPageSelectedDocumentAtom
+  );
   const debouncedValue = useDebounce<string>(searchInput, searchTimeout);
   const pathname = usePathname();
 
@@ -78,6 +83,10 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
     setSearchInput("");
     setManualSearch("");
     index.current = -1;
+  };
+
+  const handleRootClick = () => {
+    setSelectedPublishDocument(null);
   };
 
   const overalLoading =
@@ -141,7 +150,7 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
   return (
     <div className="h-full pb-11 w-100">
       <div className="text-xl font-bold text-[#3e4a4d] text-center mt-4 mb-4 pb-4 border-b border-solid border-[rgba(0,0,0,0.08)]">
-        <Link prefetch={false} href={rootUrl}>
+        <Link prefetch={false} href={rootUrl} onClick={handleRootClick}>
           {repoName || ""}
         </Link>
         <div className="search-input flex justify-center w-full group mt-2 border-spacing-1 border-2 rounded-lg text-xs h-9">

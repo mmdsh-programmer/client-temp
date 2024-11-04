@@ -1,15 +1,15 @@
 "use server";
 
+import { IActionError } from "@interface/app.interface";
 import { createTinyLink } from "@service/tinyLink";
-import { getMe } from "./auth";
+import { normalizeError } from "@utils/normalizeActionError";
 
 export const createTinyLinkAction = async (url: string) => {
-  const userInfo = await getMe();
   try {
-    const response = await createTinyLink(userInfo.access_token, url);
+    const response = await createTinyLink(url);
 
     return response;
   } catch (error) {
-    console.log(`--------------- ERROR: ${error}`);
+    return normalizeError(error as IActionError);
   }
 };
