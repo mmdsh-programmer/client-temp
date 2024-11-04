@@ -1,105 +1,106 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, memo } from "react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
+import { IDocumentMetadata } from "@interface/document.interface";
 
-// Constants
-const CLASSNAMES = {
-  DISABLED: "disabled",
-  COLLAPSE_BUTTON: "collapse-button",
-  COLLAPSE_DOCUMENT: "collapse-document",
-  SELECTED: "selected",
-} as const;
-
-interface INavigation {
-  prevChild: HTMLAnchorElement | null;
-  nextChild: HTMLAnchorElement | null;
+interface IProps {
+  selectedDocument: IDocumentMetadata;
 }
 
-// Helper functions
-const isClickableDocument = (element: Element): boolean => {
-  return (
-    !element.classList.contains(CLASSNAMES.DISABLED) &&
-    !element.classList.contains(CLASSNAMES.COLLAPSE_BUTTON) &&
-    element.classList.contains(CLASSNAMES.COLLAPSE_DOCUMENT)
-  );
-};
+interface INavigation {
+  prevChild?: HTMLAnchorElement;
+  nextChild?: HTMLAnchorElement;
+}
 
-const getClickableDocuments = (parentNode: ParentNode): Element[] => {
-  const children = Array.from(parentNode.childNodes) as Element[];
+const CLASS_NAMES = {
+  DOCUMENT: "collapse-document",
+  SELECTED: "selected",
+  DISABLED: "disabled",
+  COLLAPSE_BUTTON: "collapse-button",
+} as const;
 
-  if (children.length > 1) {
-    return children.filter(isClickableDocument);
-  }
-
-  const grandParentChildren = Array.from(
-    parentNode.parentElement?.parentElement?.childNodes || []
-  ) as Element[];
-  return grandParentChildren.filter((node) => {
-    const targetElement = node.querySelector(
-      `.${CLASSNAMES.COLLAPSE_DOCUMENT}`
-    );
-    return targetElement && isClickableDocument(targetElement);
-  });
-};
-
-const PublishNextAndPrev: React.FC = () => {
+const PublishNextAndPrev = ({ selectedDocument }: IProps) => {
   const [navigation, setNavigation] = useState<INavigation>({
-    prevChild: null,
-    nextChild: null,
+    prevChild: undefined,
+    nextChild: undefined,
   });
 
-  const findDocument = (
-    child: HTMLAnchorElement,
-    target: "next" | "prev"
-  ): HTMLAnchorElement | null => {
-    if (!child.parentNode) return null;
+  const findDocument = useCallback(
+    (
+      child: HTMLAnchorElement,
+      target: "next" | "prev"
+    ): HTMLAnchorElement | undefined => {
+      const getClickableDocuments = (
+        nodes: NodeListOf<ChildNode>
+      ): ChildNode[] => {
+        return Array.from(nodes).filter((node: any) => {
+          const element = node.classList ? node : node.children[0]?.children[0];
+          return (
+            element &&
+            !element.classList.contains(CLASS_NAMES.DISABLED) &&
+            !element.classList.contains(CLASS_NAMES.COLLAPSE_BUTTON) &&
+            element.classList.contains(CLASS_NAMES.DOCUMENT)
+          );
+        });
+      };
 
-    const clickableDocuments = getClickableDocuments(child.parentNode);
-    const activeDocumentIndex = clickableDocuments.findIndex((document) => {
-      return document.classList.contains(CLASSNAMES.COLLAPSE_DOCUMENT)
-        ? document.classList.contains(CLASSNAMES.SELECTED)
-        : document.querySelector(`.${CLASSNAMES.SELECTED}`) !== null;
-    });
+      const parentNodes = child.parentNode?.childNodes;
+      if (!parentNodes) return undefined;
 
-    if (activeDocumentIndex === -1) return null;
+      const clickableDocuments =
+        parentNodes.length > 1
+          ? getClickableDocuments(parentNodes as NodeListOf<ChildNode>)
+          : getClickableDocuments(
+              (child.parentNode?.parentNode?.parentNode?.childNodes as NodeListOf<ChildNode>) ||
+                new NodeList() as NodeListOf<ChildNode>
+            );
 
-    const targetIndex =
-      target === "prev" ? activeDocumentIndex - 1 : activeDocumentIndex + 1;
+      const activeDocumentIndex = clickableDocuments.findIndex(
+        (document: ChildNode) => {
+          const element = (document as HTMLElement).classList?.contains(
+            CLASS_NAMES.DOCUMENT
+          )
+            ? (document as HTMLElement)
+            : ((document as HTMLElement).children?.[0]?.children?.[0] as HTMLElement);
+          return element?.classList?.contains(CLASS_NAMES.SELECTED);
+        }
+      );
 
-    return (clickableDocuments[targetIndex] as HTMLAnchorElement) || null;
-  };
+      if (activeDocumentIndex === -1) return undefined;
 
-  const updateNavigation = () => {
-    const selectedDocument = document.querySelector(
-      `.${CLASSNAMES.COLLAPSE_DOCUMENT}.${CLASSNAMES.SELECTED}`
-    ) as HTMLAnchorElement | null;
+      return clickableDocuments[
+        target === "prev" ? activeDocumentIndex - 1 : activeDocumentIndex + 1
+      ] as HTMLAnchorElement;
+    },
+    []
+  );
 
-    if (!selectedDocument?.parentNode) return;
+  const updateNavigation = useCallback(() => {
+    const child = document.querySelector(
+      `.${CLASS_NAMES.DOCUMENT}.${CLASS_NAMES.SELECTED}`
+    );
+    if (!child?.parentNode) return;
 
     setNavigation({
-      prevChild: findDocument(selectedDocument, "prev"),
-      nextChild: findDocument(selectedDocument, "next"),
+      prevChild: findDocument(child as HTMLAnchorElement, "prev"),
+      nextChild: findDocument(child as HTMLAnchorElement, "next"),
     });
-  };
+  }, [findDocument]);
 
-  const handleNavigation = (element: HTMLAnchorElement | null) => {
+  const handleClick = useCallback((element: HTMLAnchorElement | undefined) => {
     if (!element) return;
 
-    const targetElement = element.classList.contains(
-      CLASSNAMES.COLLAPSE_DOCUMENT
-    )
+    const targetElement = element.classList.contains(CLASS_NAMES.DOCUMENT)
       ? element
-      : (element.querySelector(
-          `.${CLASSNAMES.COLLAPSE_DOCUMENT}`
-        ) as HTMLAnchorElement);
+      : element.children[0]?.children[0] as HTMLElement;
 
     targetElement?.click();
-  };
+  }, []);
 
   useEffect(() => {
     updateNavigation();
-  }, []);
+  }, [selectedDocument, updateNavigation]);
 
   return (
     <>
@@ -107,7 +108,7 @@ const PublishNextAndPrev: React.FC = () => {
         className="border-gray-400 w-fit min-w-fit p-2.5"
         variant="outlined"
         onClick={() => {
-          return handleNavigation(navigation.nextChild);
+          return handleClick(navigation.nextChild);
         }}
         disabled={!navigation.nextChild}
       >
@@ -119,7 +120,7 @@ const PublishNextAndPrev: React.FC = () => {
         className="border-gray-400 w-fit min-w-fit p-2.5"
         variant="outlined"
         onClick={() => {
-          return handleNavigation(navigation.prevChild);
+          return handleClick(navigation.prevChild);
         }}
         disabled={!navigation.prevChild}
       >
@@ -130,4 +131,4 @@ const PublishNextAndPrev: React.FC = () => {
   );
 };
 
-export default PublishNextAndPrev;
+export default memo(PublishNextAndPrev);

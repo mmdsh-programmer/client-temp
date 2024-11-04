@@ -1,7 +1,10 @@
 "use client";
 
 import React from "react";
-import { publishPageSelectedDocumentAtom, publishVersionAtom } from "@atom/publish";
+import {
+  publishPageSelectedDocumentAtom,
+  publishVersionAtom,
+} from "@atom/publish";
 import { useRecoilValue } from "recoil";
 import PublishChangeVersion from "./publishChangeVersion";
 import PublishOutlineDrawer from "./publishOutlineDrawer";
@@ -31,7 +34,11 @@ const PublishBottomNav = () => {
           />
         ) : null}
 
-        {getPublishPageSelectedDocument ? <PublishNextAndPrev /> : null}
+        {getPublishPageSelectedDocument ? (
+          <PublishNextAndPrev
+            selectedDocument={getPublishPageSelectedDocument}
+          />
+        ) : null}
 
         {getPublishVersion ? (
           <>
