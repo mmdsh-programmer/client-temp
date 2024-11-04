@@ -145,7 +145,7 @@ export const getCustomPostByDomain = async (
   }
 
   if (!response.data.result.length) {
-    throw new NotFoundError(["Domain not found"]);
+    throw new NotFoundError(["این دامنه در سیستم ثبت نشده است."]);
   }
   const customPost = response.data.result[0]?.item;
   const { metadata } = customPost;
