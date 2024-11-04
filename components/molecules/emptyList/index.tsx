@@ -24,6 +24,7 @@ export enum EEmptyList {
   FEEDBACK = "feedback",
   DRAFT_REQUESTS = "draft_requests",
   VERSION_REQUESTS = "version_requests",
+  COMMENTS = "comments",
 }
 
 interface IProps {
@@ -242,7 +243,17 @@ const EmptyList = ({ type }: IProps) => {
             </Typography>
           </div>
         );
-
+      case EEmptyList.COMMENTS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              شما در حال حاضر لیست نظراتی ندارید.
+            </Typography>
+          </div>
+        );
       default:
         return null;
     }

@@ -39,11 +39,11 @@ const VersionTableView = ({
     if (isLoading) {
       return;
     }
-    setEditorData(value);
-    setEditorMode("preview");
-    setVersionModalList(false);
-    setEditorModal(true);
     setSelectedVersion(value);
+    setEditorData(null);
+    setEditorMode("preview");
+    setEditorModal(true);
+    setVersionModalList(false);
   };
 
   const handleOpenBoardEditor = (value: IVersion) => {

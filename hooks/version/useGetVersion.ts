@@ -11,7 +11,7 @@ const useGetVersion = (
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
-  enabled?: boolean,
+  enabled?: boolean
 ) => {
   return useQuery({
     queryKey: [
@@ -24,7 +24,7 @@ const useGetVersion = (
         versionId,
         state,
         innerDocument,
-        innerOutline,
+        innerOutline
       );
       handleClientSideHookError(response as IActionError);
       return response as IVersion;
@@ -32,6 +32,7 @@ const useGetVersion = (
     enabled: !!repoId && !!documentId && !!versionId && !!enabled,
     retry: false,
     refetchOnWindowFocus: false,
+    staleTime: 0,
   });
 };
 

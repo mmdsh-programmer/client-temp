@@ -29,6 +29,18 @@
   span {
     @apply !font-iranYekan;
   }
+
+  .prevent-toast-click {
+    pointer-events: all !important;
+  }
+  
+  .prevent-toast-click * {
+    pointer-events: all !important;
+  }
+  
+  .Toastify__toast-container {
+    pointer-events: all !important;
+  }
 }
 
 .shepherd-modal-overlay-container {
