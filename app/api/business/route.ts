@@ -46,13 +46,15 @@ export async function POST(request: Request) {
         if(!Authorization || Authorization.replace("Bearer ", "") !== process.env.API_TOKEN){
             return NextResponse.json({ error: "Client is not authorized" }, { status: 401 });
         }
-        const { domain, clientId, type, clientSecret } = await request.json();
+        const { domain, clientId, type, clientSecret, cryptoSecretKey, cryptoInitVectorKey } = await request.json();
         const result = await createCustomPost(JSON.stringify({
             domain,
             CUSTOM_POST_TYPE: "DOMAIN_BUSINESS",
             type,
             clientId, 
-            clientSecret
+            clientSecret,
+            cryptoSecretKey,
+            cryptoInitVectorKey
         }), domain);
         return NextResponse.json({ result });
     } catch (error) {
