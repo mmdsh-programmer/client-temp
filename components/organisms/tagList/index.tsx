@@ -20,7 +20,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
   const { data: getTags, isLoading, isFetching } = useGetTags(repoId, 2, true);
 
   const adminRole =
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
+    getRepo?.roleName === "owner" || getRepo?.roleName === "admin" || getRepo.roleName === "editor";
 
   const tagCount = getTags?.pages[0].total;
 
