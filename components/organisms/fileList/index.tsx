@@ -11,7 +11,7 @@ interface IProps {
 
 const FileList = ({ files, onDelete, isDeleting, userToken }: IProps) => {
   return (
-    <div className="flex flex-col gap-4 h-[calc(100vh-290px)] overflow-auto">
+    <div className="flex flex-col gap-4 h-[calc(100vh-320px)] overflow-auto">
       {files.map((file) => {
         return (
           <FileItem

@@ -2,16 +2,17 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import useGetCategory from "@hooks/category/useGetCategory";
 import useGetDocument from "@hooks/document/useGetDocument";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 
 const CheckPanelUrlData = () => {
   const setCategory = useSetRecoilState(categoryAtom);
   const setCategoryShow = useSetRecoilState(categoryShowAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
+  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
   const setShowVersionList = useSetRecoilState(versionModalListAtom);
 
   const searchParams = useSearchParams();
@@ -47,17 +48,23 @@ const CheckPanelUrlData = () => {
       setCategoryShow(getCategory);
       setDocument(getDocument);
       setDocumentShow(getDocument);
-      setShowVersionList(true);
+      if (!getSelectedVersion) {
+        setShowVersionList(true);
+      }
     } else if (categoryId && documentId && getCategory && getDocument) {
       setCategory(getCategory);
       setCategoryShow(getCategory);
       setDocument(getDocument);
       setDocumentShow(getDocument);
-      setShowVersionList(true);
+      if (!getSelectedVersion) {
+        setShowVersionList(true);
+      }
     } else if (documentId && getDocument) {
       setDocument(getDocument);
       setDocumentShow(getDocument);
-      setShowVersionList(true);
+      if (!getSelectedVersion) {
+        setShowVersionList(true);
+      }
     } else if (categoryId && getCategory) {
       setCategory(getCategory);
       setCategoryShow(getCategory);

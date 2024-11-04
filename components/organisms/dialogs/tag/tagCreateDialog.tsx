@@ -45,7 +45,6 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
       name: dataForm.name,
       callBack: () => {
         toast.success("تگ با موفقیت ایجاد شد.");
-        handleClose();
       },
     });
   };
