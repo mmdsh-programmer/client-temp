@@ -16,13 +16,13 @@ const useDeleteRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
+      queryClient.refetchQueries({
+        queryKey: ["getMyInfo"],
+      });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
-      queryClient.invalidateQueries({
-        queryKey: ["getMyInfo"],
-      });
       callBack?.();
     },
     onError: (error) => {

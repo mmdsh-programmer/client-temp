@@ -31,6 +31,12 @@ const CreateDialog = ({
     setOpen(false);
   };
 
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      setOpen(false);
+    }
+  };
+
   return (
     <Dialog
       placeholder=""
@@ -38,6 +44,7 @@ const CreateDialog = ({
       open
       handler={handleClose}
       className={`${className} flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary xs:!rounded-lg `}
+      onClick={handleBackdropClick}
     >
       <DialogHeader
         placeholder="dialog header"

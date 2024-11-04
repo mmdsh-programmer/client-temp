@@ -1,5 +1,5 @@
-import Error from "@components/organisms/error";
 import { HeroIcon } from "@components/atoms/icons";
+import { IThemeInfo } from "@interface/app.interface";
 import ImageComponent from "@components/atoms/image";
 import PublishFooter from "@components/organisms/footer/publishFooter";
 import PublishHeader from "@components/organisms/header/publishHeader";
@@ -8,16 +8,7 @@ import React from "react";
 import { getThemeAction } from "@actions/theme";
 
 const PublishHomePage = async () => {
-  const data = await getThemeAction();
-  if (data && "error" in data) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Error
-          error={{ message: data.errorList?.[0] ?? "خطا در دریافت اطلاعات" }}
-        />
-      </div>
-    );
-  }
+  const data = await getThemeAction() as IThemeInfo;
   return (
     <>
       <PublishHeader

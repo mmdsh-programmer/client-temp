@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { repoAtom } from "@atom/repository";
 import { useRecoilState, useRecoilValue } from "recoil";
-import useGetTags from "@hooks/tag/useGetTags";
-import { Spinner } from "@material-tailwind/react";
-import SearchableDropdown from "../../molecules/searchableDropdown";
+
 import DocumentTagList from "@components/organisms/document/documentTagList";
+import SearchableDropdown from "../../molecules/searchableDropdown";
+import { Spinner } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
+import { ERoles } from "@interface/enums";
+import useGetTags from "@hooks/tag/useGetTags";
 
 interface IProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,8 +21,9 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
 
   const adminRole =
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
-
+    getRepo?.roleName === ERoles.owner ||
+    getRepo?.roleName === ERoles.admin ||
+    getRepo?.roleName === ERoles.editor;
   const repoId = getRepo!.id;
   const { data: getTags, isLoading: isLoadingTags } = useGetTags(
     repoId,
@@ -33,7 +36,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     getDocument!.id,
     true,
     true,
-     `document-${getDocument!.id}-info-tags`
+    `document-${getDocument!.id}-info-tags`
   );
 
   const updatedAvailableTags = getTags?.pages[0].list

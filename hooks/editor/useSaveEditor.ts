@@ -16,6 +16,7 @@ const useSaveEditor = () => {
       versionNumber: string;
       content: string;
       outline: string;
+      versionState: string;
       callBack?: () => void;
     }) => {
       const { repoId, documentId, versionId, versionNumber, content, outline } =
@@ -32,36 +33,19 @@ const useSaveEditor = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { documentId, versionId, callBack } = values;
+      const { documentId, versionId, versionState, callBack } = values;
+      queryClient.refetchQueries({
+        queryKey: [
+          `document-${documentId}-version-${versionId}-state-${versionState}-innerDocument-true-innerOutline-true`,
+        ],
+      });
 
-      console.log(
-        "-------------------- save editor response ------------------",
-        response
-      );
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: [
-          `document-${documentId}-version-${versionId}-state-draft-innerDocument-true-innerOutline-true`,
+          `document-${documentId}-version-${versionId}-state-${versionState}-innerDocument-false-innerOutline-false`,
         ],
       });
-      queryClient.invalidateQueries({
-        queryKey: [
-          "document",
-          documentId.toString(),
-          "version",
-          versionId.toString(),
-          "state",
-          "draft",
-          "innerDocument",
-          "true",
-          "innerOutline",
-          "true",
-        ],
-        exact: true,
-        refetchType: "active",
-      });
-      // queryClient.invalidateQueries({
-      //   queryKey: [`version-list-${repoId}-${documentId}`],
-      // });
+      
       callBack?.();
     },
     onError: (error) => {

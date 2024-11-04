@@ -16,7 +16,7 @@ interface IProps {
 }
 
 const CommentCreate = ({ version }: IProps) => {
-  const addHook = useCreateComment();
+  const createComment = useCreateComment();
 
   const form = useForm<IForm>();
   const { register, handleSubmit, formState, reset } = form;
@@ -28,7 +28,7 @@ const CommentCreate = ({ version }: IProps) => {
       toast.error("تعداد کاراکتر وارد شده بیش از حد مجاز است.");
     } else {
       if (!version) return;
-      addHook.mutate({
+      createComment.mutate({
         postId: version.postId,
         ...dataForm,
         callBack: () => {
@@ -42,7 +42,7 @@ const CommentCreate = ({ version }: IProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="gap-2 justify-center items-center rounded-lg !w-[300px] left-0 bg-white shadow-lg md:shadow-none z-[9999]"
+      className="comment-create gap-2 justify-center items-center rounded-lg !w-[300px] left-0 bg-white shadow-lg md:shadow-none z-[9999]"
     >
       <div className="flex flex-col h-full">
         <div className="px-4 py-3 flex flex-grow flex-col gap-4 justify-end">
@@ -60,9 +60,10 @@ const CommentCreate = ({ version }: IProps) => {
               </Typography>
             )}
             <LoadingButton
-              loading={false}
+              loading={createComment.isPending}
               onClick={handleSubmit(onSubmit)}
-              className="!h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+              className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+              isPrimary
             >
               <Typography className="text__label__button !text-primary px-3 font-medium">
                 ارسال

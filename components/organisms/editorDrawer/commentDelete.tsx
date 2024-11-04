@@ -19,6 +19,7 @@ const CommentDelete = ({ comment, version }: IProps) => {
       commentId: comment?.id,
     });
   };
+
   return (
     <Button className="bg-transparent p-0" onClick={handleDeletecomment}>
       {deleteComment.isPending ? (

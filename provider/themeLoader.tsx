@@ -1,4 +1,4 @@
-import { IThemeInfo } from "@interface/app.interface";
+import Error from "@components/organisms/error";
 import React from "react";
 import localFont from "next/font/local";
 import { themeLoaderAction } from "@actions/themeLoader";
@@ -32,14 +32,27 @@ const iranYekanFont = localFont({
 });
 
 const ThemeLoader = async ({ children, domain }: IProps) => {
-  const theme = await themeLoaderAction(domain) as IThemeInfo;
-  return (
+  const data = await themeLoaderAction(domain);
+  if (data && "error" in data) {
+    return (
       <body
         className={`${iranYekanFont.variable} !font-iranYekan h-full w-full`}
-        style={theme}
       >
-        {children}
+        <div className="w-full h-full flex justify-center items-center">
+          <Error
+            error={{ message: data.errorList?.[0] ?? "خطا در دریافت اطلاعات" }}
+          />
+        </div>
       </body>
+    );
+  }
+  return (
+    <body
+      className={`${iranYekanFont.variable} !font-iranYekan h-full w-full`}
+      style={data}
+    >
+      {children}
+    </body>
   );
 };
 

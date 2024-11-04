@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import {
   compareVersionAtom,
   selectedVersionAtom,
@@ -54,6 +54,7 @@ const useVersionMenuList = (
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
+  const setVersionData = useSetRecoilState(editorDataAtom);
 
   const adminOrOwner =
     getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
@@ -74,13 +75,11 @@ const useVersionMenuList = (
         text: "ویرایش",
         icon: <EditIcon className="h-4 w-4" />,
         onClick: () => {
-          toggleModal("edit", true);
-          if (version) {
-            setVersion(version);
-            setEditorMode("edit");
-            setEditorModal(true);
-            setVersionModalList(false);
-          }
+          setVersion(version);
+          setEditorMode("edit");
+          setEditorModal(true);
+          setVersionModalList(false);
+          setVersionData(null);
         },
       },
       {

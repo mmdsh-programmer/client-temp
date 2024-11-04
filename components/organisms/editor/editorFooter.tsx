@@ -116,6 +116,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         documentId: selectedDocument.id,
         versionId: getVersionData.id,
         versionNumber: getVersionData.versionNumber,
+        versionState: getVersionData.state,
         callBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
         },
