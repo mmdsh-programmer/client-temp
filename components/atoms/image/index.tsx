@@ -3,20 +3,23 @@
 import Image from "next/image";
 import React from "react";
 
-interface IProps {
-  src: string;
-  alt: string;
-  width?: number;
+type IProps = React.ComponentProps<typeof Image> & {
   height?: number;
-  className?: string;
+  width?: number;
+  src: string;
 }
 
-const ImageComponent = ({ alt, src, className, width, height }: IProps) => {
+const imageLoader = (src: string) => {
+  return src;
+};
+
+const ImageComponent = (props: IProps) => {
+  const { width, height, src, ...rest } = props;
   return (
     <Image
-      className={`${className}`}
+      {...rest}
       src={src}
-      alt={alt}
+      loader={() => { return imageLoader(src); }}
       width={width ?? 100}
       height={height ?? 100}
       priority
