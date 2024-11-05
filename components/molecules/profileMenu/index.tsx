@@ -11,6 +11,7 @@ import { login } from "@actions/auth";
 import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import useLogout from "@hooks/auth/useLogout";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   redirect?: boolean;
@@ -20,6 +21,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
   const { isFetching, data: userData } = useGetOptionalUser();
   const queryClient = useQueryClient();
   const logout = useLogout();
+  const router = useRouter();
 
   const handleLogout = () => {
     logout.mutate({
@@ -33,6 +35,8 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
           queryClient.invalidateQueries({
             queryKey: ["user-info"],
           });
+
+          router.refresh();
         }
       },
     });
@@ -40,18 +44,21 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
 
   if (!isFetching && !userData) {
     return (
-      <LoadingButton
-        className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-purple-normal  text-white font-iranYekan"
-        onClick={() => {
-          window.localStorage.setItem(
-            "CLASOR:LAST_PAGE",
-            window.location.pathname
-          );
-          return login();
-        }}
-      >
-        ورود
-      </LoadingButton>
+      <>
+        {renderSideButton || null}
+        <LoadingButton
+          className="flex justify-center items-center mt-4 px-10 py-5 rounded-lg lg:mt-0 bg-purple-normal text-white font-iranYekan !max-h-[unset]"
+          onClick={() => {
+            window.localStorage.setItem(
+              "CLASOR:LAST_PAGE",
+              window.location.pathname
+            );
+            return login();
+          }}
+        >
+          ورود
+        </LoadingButton>
+      </>
     );
   }
 

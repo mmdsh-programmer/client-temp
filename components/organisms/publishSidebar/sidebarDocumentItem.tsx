@@ -34,14 +34,14 @@ const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
         .replace(/\s+/g, "-")
         .toLowerCase()}
       key={`document-tree-item-${document.id}`}
-      className={`collapse-document transition-all duration-300 flex items-center gap-2 hover:bg-purple-light rounded-[5px] py-[5px] pl-2.5 w-full text-right pr-[22px] ${
+      className={`collapse-document transition-all duration-300 flex gap-2 hover:bg-purple-light rounded-[5px] py-[5px] pl-2.5 w-full text-right pr-[22px] ${
         isSelected ? "bg-purple-light pointer-events-none selected" : ""
       }`}
       title={document.name}
       tabIndex={0}
     >
       <DocumentIcon className="w-5 h-5 stroke-icon-hover flex-none self-start" />
-      {isPrivateDoc && <LockIcon className="w-5 h-5 text-gray-400" />}
+      {isPrivateDoc && <LockIcon className="flex-none w-5 h-5 fill-icon-hover" />}
       <span className="text-sm text-gray-700 font-bold overflow-hidden text-right">
         {document.name}
       </span>

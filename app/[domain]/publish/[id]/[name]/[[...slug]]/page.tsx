@@ -4,11 +4,18 @@ import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { notFound } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
 import { getRepositoryData } from "@utils/publish";
-import { getPublishDocumentLastVersion, getPublishDocumentVersion } from "@service/clasor";
+import {
+  // getDocument,
+  getPublishDocumentLastVersion,
+  getPublishDocumentVersion,
+} from "@service/clasor";
 import { ServerError } from "@utils/error";
 import PublishVersionContent from "@components/pages/publish";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IRepo } from "@interface/repo.interface";
+// import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
+// import { userInfoAction } from "@actions/auth";
+// import { getDocumentPasswordAction } from "@actions/cookies";
 
 export interface IPublishProps {
   uniqueId: number;
@@ -32,6 +39,10 @@ export default async function PublishContentPage({
 }) {
   try {
     const { id: repoId, slug } = params;
+
+    // const userInfo = await userInfoAction();
+    // const userAccessToken =
+    // userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
 
     const parsedRepoId = Number.parseInt(
       toEnglishDigit(decodeURIComponent(repoId)),
@@ -61,6 +72,16 @@ export default async function PublishContentPage({
         return notFound();
       }
 
+      // const documentInfo = await getDocument(
+      //   userAccessToken || process.env.API_TOKEN as string,
+      //   +repoId,
+      //   documentId
+      // );
+
+      // if (documentInfo.hasPassword) {
+      //   return <PublishDocumentPassword documentId={documentId} />;
+      // }
+
       versionData = await getPublishDocumentVersion(
         repository.id,
         documentId,
@@ -72,6 +93,16 @@ export default async function PublishContentPage({
       if (Number.isNaN(documentId)) {
         return notFound();
       }
+
+      // const documentInfo = await getDocument(
+      //   userAccessToken || process.env.API_TOKEN as string,
+      //   +repoId,
+      //   documentId
+      // );
+
+      // if (true) {
+      //   return <PublishDocumentPassword documentId={documentId}  />;
+      // }
 
       const lastVersionInfo = await getPublishDocumentLastVersion(
         repository.id,
@@ -88,9 +119,7 @@ export default async function PublishContentPage({
       );
     }
 
-    return (
-      <PublishVersionContent version={versionData} />
-    );
+    return <PublishVersionContent version={versionData} />;
   } catch (error) {
     if (error instanceof Error) {
       return (

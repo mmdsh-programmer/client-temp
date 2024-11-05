@@ -5,7 +5,7 @@ import { RenderServerSideContent } from "clasor-content-preview";
 import { IGetSpecificVersion } from "clasor-content-preview/dist/interface/contentPreview.interface";
 import ConnectRemoteEditor from "@components/organisms/publish/connectRemoteEditor";
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
-import PublishVersion from "./publishVersion";
+import PublishVersion from "../../organisms/publish/publishVersion";
 import PublishTinyLink from "@components/organisms/publish/publishTinyLink";
 
 interface IProps {
