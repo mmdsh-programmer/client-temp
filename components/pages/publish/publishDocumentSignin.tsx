@@ -3,7 +3,7 @@
 import { login } from "@actions/auth";
 import { useEffect } from "react";
 
-const DocumentSignin = () => {
+const PublishDocumentSignin = () => {
   useEffect(() => {
     window.localStorage.setItem("CLASOR:LAST_PAGE", window.location.href);
     login();
@@ -12,4 +12,4 @@ const DocumentSignin = () => {
   return null;
 };
 
-export default DocumentSignin;
+export default PublishDocumentSignin;

@@ -15,7 +15,7 @@ interface IProps {
 const PublishVersionContent = ({ version }: IProps) => {
   return (
     <>
-      <div className="scroller w-full overflow-y-auto">
+      <div className="scroller w-full overflow-y-auto min-h-[calc(100vh-156px)]">
         <PublishVersion version={version} />
         {version.contentType === EDocumentTypes.classic ? (
           <>

@@ -22,8 +22,8 @@ const PublishBottomNav = () => {
   const { data: userData } = useGetOptionalUser();
 
   return (
-    <nav className="h-[75px] flex items-center justify-end">
-      <div className="w-full flex items-center justify-end px-0 xs:px-8 gap-3">
+    <nav className="h-[75px] overflow-x-auto">
+      <div className="min-w-fit flex items-center justify-end px-5 xs:px-8 gap-3 overflow-x-auto h-full">
         {getPublishVersion && userData ? (
           <LikeAndDislike
             wrapperClassName="gap-[inherit]"

@@ -19,7 +19,7 @@ const PublishSearchButton = () => {
   return (
     <>
       <IconButton variant="text" onClick={handleOpenSearch}>
-        <SearchIcon className="stroke-blue-gray-700 w-7 h-7" />
+        <SearchIcon className="stroke-blue-gray-700 w-5 h-5 xs:w-7 xs:h-7" />
       </IconButton>
 
       {getOpenSearch ? <PublishSearchContent /> : null}

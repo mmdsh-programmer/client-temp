@@ -40,7 +40,7 @@ const PublishTinyLink = () => {
   }
 
   return (
-    <div className="flex items-center gap-4 bg-white border-t border-blue-gray-200 py-8 px-12">
+    <div className="flex items-center gap-4 bg-white border-t border-blue-gray-200 py-8 px-5 xs:px-12">
       <div className="w-full max-w-sm">
         <div className="mb-2 flex justify-between items-center">
           <label

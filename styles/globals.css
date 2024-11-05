@@ -271,3 +271,29 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 .clasor-preview-content .clasor-preview-content__render-server-content {
   @apply !rounded-none;
 }
+
+.app-sidebar {
+  flex-grow: 0;
+  flex-shrink: 0;
+  min-width: 250px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+}
+
+.app-sidebar .app-sidebar-content {
+  flex: 1;
+}
+
+.app-sidebar .app-sidebar-resizer {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 6px;
+  justify-self: flex-end;
+  cursor: col-resize;
+  resize: horizontal;
+}
+
+.app-sidebar .app-sidebar-resizer:hover {
+  width: 3px;
+}
