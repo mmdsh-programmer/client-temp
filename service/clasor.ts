@@ -60,8 +60,9 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
+import { IContentSearchListItem } from "@interface/contentSearch.interface";
 
-const { BACKEND_URL } = process.env;
+const { BACKEND_URL, API_TOKEN } = process.env;
 
 const axiosClasorInstance = axios.create({
   baseURL: BACKEND_URL,
@@ -388,6 +389,7 @@ export const getMyRepositories = async (
   size: number,
   archived: boolean,
   name?: string,
+  isPublish?: boolean,
   repoTypes?: string[]
 ) => {
   try {
@@ -402,6 +404,7 @@ export const getMyRepositories = async (
         size,
         archived,
         title: name,
+        isPublish,
         repoTypes,
       },
     });
@@ -1532,6 +1535,34 @@ export const getPublishDocumentVersions = async (
   }
 };
 
+export const searchPublishContent = async (
+  repoId: number,
+  searchText: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IContentSearchListItem>>
+    >(
+      `publicContent/repository/${repoId}/search/${encodeURIComponent(searchText)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const getClasorField = async (accessToken: string) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2378,7 +2409,6 @@ export const rejectVersion = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
 
 /// ////////////////////// PUBLIC LINK ///////////////////
 export const createRepoPublicLink = async (

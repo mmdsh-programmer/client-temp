@@ -79,7 +79,7 @@ const PublishChangeVersion = ({
               <MenuItem
                 className={`text-ellipsis overflow-hidden whitespace-nowrap ${publishVersion.id === selectedVersionId ? "bg-blue-gray-50" : ""}`}
                 // eslint-disable-next-line react/no-array-index-key
-                key={`publish-version-${index}`}
+                key={`publish-version-${publishVersion.id}-${index}`}
                 onClick={() => {
                   return handleSelectVersion(publishVersion);
                 }}

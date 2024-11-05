@@ -31,8 +31,9 @@ const AllRepoList = () => {
     20,
     repoType === ERepoGrouping.ARCHIVE_REPO,
     search,
+    false,
     repoType === ERepoGrouping.MY_REPO ||
-      repoType === ERepoGrouping.ARCHIVE_REPO
+      repoType === ERepoGrouping.ARCHIVE_REPO,
   );
   const accessRepos = useGetAccessList(
     20,

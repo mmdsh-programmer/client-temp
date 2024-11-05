@@ -31,6 +31,9 @@ const useCreateRepo = () => {
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["myRepoList-false-isPublished"],
+      });
       callBack?.(response);
     },
     onError: (error) => {

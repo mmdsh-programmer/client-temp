@@ -9,13 +9,12 @@ import PublishVersion from "./publishVersion";
 
 interface IProps {
   version: IVersion;
-  documentId: number;
 }
 
-const PublishVersionContent = ({ version, documentId }: IProps) => {
+const PublishVersionContent = ({ version }: IProps) => {
   return (
     <div className="scroller w-full overflow-y-auto">
-      <PublishVersion documentId={documentId} version={version} />
+      <PublishVersion version={version} />
       {version.contentType === EDocumentTypes.classic ? (
         <>
           <RenderClientContent versionData={version} />

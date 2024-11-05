@@ -19,6 +19,11 @@ const useDeletePublishLink = () => {
       queryClient.invalidateQueries({
         queryKey: [`getRepo-${repoId}`],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ["myRepoList-false-isPublished"],
+      });
+
       callBack?.();
     },
     onError: (error) => {

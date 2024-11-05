@@ -16,12 +16,13 @@ const useLeaveRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
-      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
-      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ["getMyInfo"],
       });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
       callBack?.();
     },
     onError: (error) => {

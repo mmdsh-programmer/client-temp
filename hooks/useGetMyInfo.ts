@@ -11,8 +11,9 @@ const useGetMyInfo = () => {
       handleClientSideHookError(response as IActionError);
       return response as IMyInfo;
     },
-    retry: false,
+    retry: true,
     refetchOnWindowFocus: false,
+    staleTime: 0,
   });
 };
 

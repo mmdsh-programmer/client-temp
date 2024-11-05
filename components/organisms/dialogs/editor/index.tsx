@@ -43,7 +43,7 @@ const Editor = ({ setOpen }: IProps) => {
   const getVersionData = useRecoilValue(editorDataAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
-  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
   const [decryptedContent, setDecryptedContent] = useRecoilState(
     editorDecryptedContentAtom
@@ -63,14 +63,14 @@ const Editor = ({ setOpen }: IProps) => {
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
     getRepo!.id,
     getSelectedDocument!.id,
-    !getVersionData
+    !getSelectedVersion
   );
 
   const { data, isLoading, error, isSuccess } = useGetVersion(
     getRepo!.id,
     getSelectedDocument!.id,
-    getVersionData ? getVersionData.id : getLastVersion?.id,
-    getVersionData ? getVersionData.state : getLastVersion?.state, // state
+    getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
+    getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
     true
@@ -107,7 +107,7 @@ const Editor = ({ setOpen }: IProps) => {
   };
 
   useEffect(() => {
-    if (error) {
+    if (lastVersionError) {
       setSelectedDocument(null);
       setVersionModalList(false);
     }

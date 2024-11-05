@@ -1,3 +1,4 @@
+import { IDocumentMetadata } from "@interface/document.interface";
 import { IVersion } from "@interface/version.interface";
 import { logEffect } from "@utils/index";
 import { atom } from "recoil";
@@ -8,8 +9,14 @@ export const publishVersionAtom = atom<IVersion | null>({
   effects: [logEffect("publishVersionAtom")],
 });
 
-export const publishPageDocumentIdAtom = atom<number | null>({
-  key: "publishPageDocumentIdAtom",
+export const publishPageSelectedDocumentAtom = atom<IDocumentMetadata | null>({
+  key: "publishPageSelectedDocument",
   default: null,
-  effects: [logEffect("publishPageDocumentIdAtom")],
+  effects: [logEffect("publishPageSelectedDocument")],
+});
+
+export const openPublishPageSearchContent = atom<boolean>({
+  key: "openPublishPageSearchContent",
+  default: false,
+  effects: [logEffect("openPublishPageSearchContent")],
 });

@@ -23,7 +23,7 @@ export const ResultItem = ({
   return (
     <div
       title={`${data.repoName} > ${data.documentName}`}
-      className="flex bg-gray-50 border-[1px] border-normal p-3 rounded-lg text-right"
+      className="flex bg-gray-50 border-[1px] border-normal p-3 rounded-lg text-right cursor-pointer"
       onClick={handleDocumentSelect}
     >
       <DocIcon className="flex-none w-6 h-6 fill-info ml-2" />

@@ -42,6 +42,11 @@ const Providers = ({ children }: IProps) => {
         style={{
           zIndex: 99_999,
         }}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+        toastClassName="prevent-toast-click"
       />
     </ThemeProvider>
   );

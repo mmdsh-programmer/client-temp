@@ -4,7 +4,6 @@
 @import "../node_modules/cls-file-management/dist/style.css";
 @import "./outline.style.css";
 
-
 @layer base {
   html {
     @apply h-full !scroll-smooth;
@@ -28,6 +27,18 @@
   p,
   span {
     @apply !font-iranYekan;
+  }
+
+  .prevent-toast-click {
+    pointer-events: all !important;
+  }
+  
+  .prevent-toast-click * {
+    pointer-events: all !important;
+  }
+  
+  .Toastify__toast-container {
+    pointer-events: all !important;
   }
 }
 
@@ -106,6 +117,10 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 @layer components {
+  .list {
+    @apply !font-iranYekan;
+  }
+
   .spinner {
     @apply !border-r-purple-normal !border-t-purple-normal;
   }

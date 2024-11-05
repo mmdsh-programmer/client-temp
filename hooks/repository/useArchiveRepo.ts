@@ -16,12 +16,13 @@ const useArchiveRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
-      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
-      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
     onError: (error) => {

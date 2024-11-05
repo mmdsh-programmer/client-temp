@@ -76,7 +76,8 @@ export const getMyRepositoryList = async (
   offset: number,
   size: number,
   archived: boolean,
-  name?: string
+  name?: string,
+  isPublished?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -92,6 +93,7 @@ export const getMyRepositoryList = async (
       size,
       archived,
       name,
+      isPublished,
       [type]
     );
 
