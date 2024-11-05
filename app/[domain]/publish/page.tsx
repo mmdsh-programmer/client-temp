@@ -1,4 +1,3 @@
-import { HeroIcon } from "@components/atoms/icons";
 import { IThemeInfo } from "@interface/app.interface";
 import ImageComponent from "@components/atoms/image";
 import PublishFooter from "@components/organisms/footer/publishFooter";
