@@ -35,6 +35,7 @@ import {
   IDocumentMetadata,
   IWhiteList,
 } from "@interface/document.interface";
+import { IContentSearchListItem, IContentSearchResult } from "@interface/contentSearch.interface";
 import {
   ICreateGroup,
   IGetGroup,
@@ -54,13 +55,11 @@ import axios, { AxiosError, isAxiosError } from "axios";
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
-import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
-import { IContentSearchListItem } from "@interface/contentSearch.interface";
 
 const { BACKEND_URL, API_TOKEN } = process.env;
 
@@ -2924,8 +2923,7 @@ export const getDislike = async (
 export const getPublishRepoList = async (
   offset: number,
   size: number,
-  repoType?: string,
-  userssoid?: number
+  repoTypes?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2937,8 +2935,7 @@ export const getPublishRepoList = async (
       params: {
         offset,
         size,
-        repoType,
-        userssoid,
+        repoTypes,
       },
     });
     return response.data.data;

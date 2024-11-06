@@ -23,11 +23,11 @@ import {
   transferOwnershipRepository,
 } from "@service/clasor";
 
+import { IActionError } from "@interface/app.interface";
 import { NotFoundError } from "@utils/error";
 import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
-import { IActionError } from "@interface/app.interface";
 import { normalizeError } from "@utils/normalizeActionError";
 
 export const getMyInfoAction = async () => {
@@ -373,10 +373,12 @@ export const transferOwnershipRepositoryAction = async (
 export const getPublishRepositoriesAction = async (
   offset: number,
   size: number,
-  repoType?: string,
-  userssoid?: number,
 ) => {
-  const response = await getPublishRepoList(offset, size, repoType, userssoid);
-
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const { type } = await getCustomPostByDomain(domain);
+  const response = await getPublishRepoList(offset, size, type);
   return response;
 };

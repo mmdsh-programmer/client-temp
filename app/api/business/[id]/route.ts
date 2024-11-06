@@ -22,7 +22,16 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
         }
         const response = await getCustomPostById(+id);
 
-        const { domain, clientId, type, clientSecret, cryptoSecretKey, cryptoInitVectorKey, content  } = await request.json();
+        const { 
+            domain, 
+            clientId, 
+            type, 
+            clientSecret, 
+            cryptoSecretKey, 
+            cryptoInitVectorKey, 
+            content,
+            enablePublishPage
+        } = await request.json();
         
         await updateCustomPostByEntityId({  
             domain: domain ?? response.domain, 
@@ -30,7 +39,8 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             type: type ?? response.type, 
             clientSecret: clientSecret ?? response.clientSecret,
             cryptoSecretKey: cryptoSecretKey ?? response.cryptoSecretKey,
-            cryptoInitVectorKey: cryptoInitVectorKey ?? response.cryptoInitVectorKey
+            cryptoInitVectorKey: cryptoInitVectorKey ?? response.cryptoInitVectorKey,
+            enablePublishPage: enablePublishPage ?? response.enablePublishPage,
         }, +response.entityId, content ?? response.data);
 
         return NextResponse.json({});

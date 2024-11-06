@@ -3,19 +3,15 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetPublishRepositories = (
   size: number,
-  repoType?: string,
-  userssoid?: number
 ) => {
   return useInfiniteQuery({
     queryKey: [
-      `publish-repo-list${repoType ? `-${repoType}` : ""}${userssoid ? `-${userssoid}` : ""}`,
+      "publish-repo-list",
     ],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getPublishRepositoriesAction(
         (pageParam - 1) * size,
         size,
-        repoType,
-        userssoid
       );
       return response;
     },
