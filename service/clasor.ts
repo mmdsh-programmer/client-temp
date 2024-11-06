@@ -1483,11 +1483,17 @@ export const getDocument = async (
 export const getPublishDocumentVersion = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  password?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
-      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}`
+      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}`,
+      {
+        params: {
+          password,
+        },
+      }
     );
 
     return response.data.data;
@@ -1498,12 +1504,17 @@ export const getPublishDocumentVersion = async (
 
 export const getPublishDocumentLastVersion = async (
   repoId: number,
-  documentId: number
+  documentId: number,
+  password?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IVersion | null>
-    >(`repositories/${repoId}/publish/document/${documentId}/lastVersion`);
+    >(`repositories/${repoId}/publish/document/${documentId}/lastVersion`, {
+      params: {
+        password,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -1526,6 +1537,26 @@ export const getPublishDocumentVersions = async (
         offset,
         size,
         userssoid: ssoId,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentInfo = async (
+  repoId: number,
+  documentId: number,
+  disableVersions?: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IDocumentMetadata>
+    >(`repositories/${repoId}/publish/document/${documentId}`, {
+      params: {
+        disableVersions,
       },
     });
 

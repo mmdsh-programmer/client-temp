@@ -29,7 +29,8 @@ const PublishDocumentPassword = ({
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentPasswordSchema),
   });
-  const { register, handleSubmit, formState, reset } = form;
+  const { register, handleSubmit, formState, reset, setError, clearErrors } =
+    form;
   const { errors } = formState;
 
   const saveDocumentPasswordHook = useSetPublishDocumentPassword();
@@ -47,8 +48,9 @@ const PublishDocumentPassword = ({
   useEffect(() => {
     if (errorMessage) {
       reset({ password: documentPassword });
+      setError("password", { message: errorMessage });
     }
-  }, []);
+  }, [errorMessage]);
 
   return (
     <div className="scroller flex justify-center items-center w-full h-full overflow-y-auto">
@@ -59,14 +61,21 @@ const PublishDocumentPassword = ({
             type="password"
             placeholder="رمز عبور"
             register={{
-              ...register("password"),
+              ...register("password", {
+                onChange: () => {
+                  if (errorMessage) {
+                    clearErrors("password");
+                  }
+                },
+              }),
             }}
           />
-          {errors.password && (
+
+          {errors.password ? (
             <Typography className="warning_text">
-              {errors.password?.message || errorMessage}
+              {errors.password?.message}
             </Typography>
-          )}
+          ) : null}
         </div>
 
         <LoadingButton
