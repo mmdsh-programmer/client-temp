@@ -1,14 +1,15 @@
-import React from "react";
-import { IVersion } from "@interface/version.interface";
-import RepositoryInfo from "@components/organisms/repositoryInfo";
-import { notFound } from "next/navigation";
-import { toEnglishDigit } from "@utils/index";
-import { getRepositoryData } from "@utils/publish";
 import { getPublishDocumentLastVersion, getPublishDocumentVersion } from "@service/clasor";
-import { ServerError } from "@utils/error";
-import PublishVersionContent from "@components/pages/publish";
+
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IRepo } from "@interface/repo.interface";
+import { IVersion } from "@interface/version.interface";
+import PublishVersionContent from "@components/pages/publish";
+import React from "react";
+import RepositoryInfo from "@components/organisms/repositoryInfo";
+import { ServerError } from "@utils/error";
+import { getRepositoryData } from "@utils/publish";
+import { notFound } from "next/navigation";
+import { toEnglishDigit } from "@utils/index";
 
 export interface IPublishProps {
   uniqueId: number;
@@ -82,7 +83,7 @@ export default async function PublishContentPage({
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
 
       versionData = await getPublishDocumentVersion(
-        repository.id,
+        repository.id,   
         documentId,
         lastVersionInfo.id
       );
