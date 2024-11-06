@@ -48,7 +48,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     switch (selectedDocument?.contentType) {
       case EDocumentTypes.classic:
         return {
-          content: version?.content || " ",
+          content: content || " ",
           outline: version?.outline || [],
           auth: {
             accessToken: userInfo?.access_token,
