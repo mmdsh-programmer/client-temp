@@ -6,27 +6,29 @@ import { handleClientSideHookError } from "@utils/error";
 
 const useGetDocument = (
   repoId: number,
-  documentId: number,
+  documentId?: number,
   enabled?: boolean,
   disableVersions?: boolean,
-  queryKey?: string,
+  queryKey?: string
 ) => {
   return useQuery({
     queryKey: [queryKey ?? `document-${documentId}-info`],
     queryFn: async ({ signal }) => {
-      const response = await getDocumentAction(
-        repoId,
-        documentId,
-        undefined,
-        undefined,
-        disableVersions
-      );
-      handleClientSideHookError(response as IActionError);
-      return response as IDocumentMetadata;
+      if (documentId) {
+        const response = await getDocumentAction(
+          repoId,
+          documentId,
+          undefined,
+          undefined,
+          disableVersions
+        );
+        handleClientSideHookError(response as IActionError);
+        return response as IDocumentMetadata;
+      }
     },
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId && !!documentId && !!enabled,
+    enabled: !!enabled && !!repoId && !!documentId,
   });
 };
 

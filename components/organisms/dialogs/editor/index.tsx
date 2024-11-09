@@ -8,19 +8,13 @@ import {
   editorPublicKeyAtom,
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import {
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "./blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
 import EditorComponent from "@components/organisms/editor";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
-import { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
@@ -28,7 +22,7 @@ import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { toast } from "react-toastify";
-import { IVersion } from "@interface/version.interface";
+import { IRemoteEditorRef } from "clasor-remote-editor";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,10 +34,11 @@ const Editor = ({ setOpen }: IProps) => {
     useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  const getVersionData = useRecoilValue(editorDataAtom);
+  const [getVersionData, setEditorData] = useRecoilState(editorDataAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const [getSelectedVersion, setSelectedVersion] =
+    useRecoilState(selectedVersionAtom);
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
   const [decryptedContent, setDecryptedContent] = useRecoilState(
     editorDecryptedContentAtom
@@ -123,18 +118,9 @@ const Editor = ({ setOpen }: IProps) => {
     }
   }, [getLastVersion]);
 
-  const handleVersionUpdate = useRecoilCallback(({ snapshot, set }) => {
-    return async (newVersionData) => {
-      const currentData = await snapshot.getPromise(editorDataAtom);
-      if (JSON.stringify(currentData) !== JSON.stringify(newVersionData)) {
-        set(editorDataAtom, newVersionData as IVersion | null);
-      }
-    };
-  }, []);
-
   useEffect(() => {
     if (data && isSuccess) {
-      handleVersionUpdate(data);
+      setEditorData(data);
     }
   }, [isSuccess]);
 
@@ -183,18 +169,16 @@ const Editor = ({ setOpen }: IProps) => {
     );
   }
 
-  return (
-    <EditorDialog
-      dialogHeader={getSelectedDocument?.name}
-      setOpen={handleClose}
-      editorRef={getEditorConfig().ref}
-    >
-      {/* eslint-disable-next-line no-nested-ternary */}
-      {isLoading ? (
+  const renderContent = () => {
+    if (isLoading) {
+      return (
         <div className="main w-full h-full text-center flex items-center justify-center">
           <Spinner className="h-5 w-5 " color="deep-purple" />
         </div>
-      ) : data && isSuccess ? (
+      );
+    }
+    if (data && isSuccess) {
+      return (
         <BlockDraft version={data}>
           <>
             <BlockDraftDialog
@@ -204,7 +188,18 @@ const Editor = ({ setOpen }: IProps) => {
             <EditorComponent version={data} getEditorConfig={getEditorConfig} />
           </>
         </BlockDraft>
-      ) : null}
+      );
+    }
+    return null;
+  };
+
+  return (
+    <EditorDialog
+      dialogHeader={getSelectedDocument?.name}
+      setOpen={handleClose}
+      editorRef={getEditorConfig().ref}
+    >
+      {renderContent()}
     </EditorDialog>
   );
 };

@@ -5,7 +5,7 @@ import { selectedRequestAtom } from "@atom/releaseDocs";
 import { useForm } from "react-hook-form";
 import useRejectDraft from "@hooks/release/useRejectDraft";
 import { toast } from "react-toastify";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -39,7 +39,7 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
   };
 
   return (
-    <DeleteDialog
+    <ConfirmDialog
       isPending={rejectRequest.isPending}
       dialogHeader="رد تایید پیش‌نویس"
       onSubmit={handleSubmit(onSubmit)}
@@ -53,7 +53,7 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
         </span>
         " اطمینان دارید؟
       </div>
-    </DeleteDialog>
+    </ConfirmDialog>
   );
 };
 
