@@ -81,7 +81,7 @@ const FloatingButtons = ({ version }: IProps) => {
                   setVersionPublicModal(true);
                 }}
               >
-                <GlobeIcon className="h-5 w-5 " />
+                <GlobeIcon className="h-5 w-5 fill-white" />
               </Button>
             </RenderIf>
             <RenderIf isTrue={renderLike}>

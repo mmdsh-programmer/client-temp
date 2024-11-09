@@ -23,6 +23,7 @@ const RepoCardMode = ({ repo }: IProps) => {
       className="flex flex-col cursor-pointer h-auto max-h-[85px] rounded-lg bg-white border-[1px] border-normal shadow-small"
       onClick={(e) => {
         e.stopPropagation();
+        e.preventDefault();
         if (!repo.isArchived) {
           router.push(`/admin/repositories?repoId=${repo.id}`);
         }
@@ -37,7 +38,14 @@ const RepoCardMode = ({ repo }: IProps) => {
             {repo.name}
           </Typography>
         </div>
-        <RepoMenu repo={repo} />
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          <RepoMenu repo={repo} />
+        </div>
       </div>
       {getRepoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
     </Card>

@@ -1,13 +1,13 @@
 import React from "react";
 import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import CreateRepoPublishLink from "./createRepoPublishLink";
 import { Typography } from "@material-tailwind/react";
+import CreateRepoPublishLink from "./createRepoPublishLink";
 import LoadingButton from "@components/molecules/loadingButton";
 import useDeletePublishLink from "@hooks/publish/useDeletePublishLink";
 import { toast } from "react-toastify";
 
-const Publish = () => {
+const PublishLink = () => {
   const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
   const getRepo = useRecoilValue(repoAtom);
   const deletePublishLink = useDeletePublishLink();
@@ -48,4 +48,4 @@ const Publish = () => {
   );
 };
 
-export default Publish;
+export default PublishLink;

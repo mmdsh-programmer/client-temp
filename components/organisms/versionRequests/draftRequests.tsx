@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
 import { FaDateFromTimestamp } from "@utils/index";
@@ -7,13 +7,23 @@ import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import useGetPendingDraft from "@hooks/release/useGetPendingDraft";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import RequestTableView from "../versionRequestsView/requestTableView";
 import TableCell from "@components/molecules/tableCell";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { selectedVersionAtom } from "@atom/version";
+import useGetDocument from "@hooks/document/useGetDocument";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 
 const DraftRequests = () => {
   const getRepo = useRecoilValue(repoAtom);
+  const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const [getSelectedVersion, setSelectedVersion] =
+    useRecoilState(selectedVersionAtom);
 
   const {
     data: getDraftRequest,
@@ -23,7 +33,30 @@ const DraftRequests = () => {
     isFetchingNextPage,
   } = useGetPendingDraft(getRepo!.id, 10);
 
+  const {
+    data: getDocument,
+    isSuccess,
+    isError,
+  } = useGetDocument(
+    getRepo!.id,
+    getSelectedVersion ? getSelectedVersion!.documentId : undefined,
+    !!getSelectedVersion?.id,
+    true,
+    undefined
+  );
+
   const listLength = getDraftRequest?.pages[0].total;
+
+  useEffect(() => {
+    if (isSuccess && getDocument) {
+      setDocument(getDocument);
+      setEditorMode("preview");
+      setEditorModal(true);
+    }
+    if (isError) {
+      toast.error("خطا در دریافت اطلاعات سند");
+    }
+  }, [isSuccess]);
 
   const renderDraftRequests = () => {
     if (isLoading) {
@@ -43,6 +76,9 @@ const DraftRequests = () => {
                   return (
                     <TableCell
                       key={`draft-request-table-item-${request.id}`}
+                      onClick={() => {
+                        return setSelectedVersion(request);
+                      }}
                       tableCell={[
                         { data: request.versionNumber },
                         { data: request.documentTitle },
@@ -73,7 +109,9 @@ const DraftRequests = () => {
           <div className="flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
             {getDraftRequest?.pages.map((page) => {
               return page.list.map((request) => {
-                return <RequestMobileView request={request} />;
+                return <RequestMobileView request={request}  onClick={() => {
+                  return setSelectedVersion(request);
+                }} />;
               });
             })}
           </div>

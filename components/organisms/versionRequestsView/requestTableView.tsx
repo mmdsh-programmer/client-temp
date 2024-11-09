@@ -3,11 +3,15 @@ import TableHead from "@components/molecules/tableHead";
 
 interface IProps {
   children: React.ReactNode;
+  onClick?: () => void;
 }
 
-const RequestTableView = ({ children }: IProps) => {
+const RequestTableView = ({ children, onClick }: IProps) => {
   return (
-    <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
+    <div
+      className="w-full overflow-auto border-[0.5px] border-normal rounded-lg"
+      onClick={onClick}
+    >
       <table className="w-full overflow-hidden min-w-max ">
         <TableHead
           tableHead={[
