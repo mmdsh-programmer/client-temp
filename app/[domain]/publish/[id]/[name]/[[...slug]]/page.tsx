@@ -1,62 +1,25 @@
-import React from "react";
-import { IVersion } from "@interface/version.interface";
-import RepositoryInfo from "@components/organisms/repositoryInfo";
-import { notFound } from "next/navigation";
-import { toEnglishDigit } from "@utils/index";
-import { getRepositoryData } from "@utils/publish";
 import {
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
   getPublishDocumentVersion,
 } from "@service/clasor";
-import BasicError, { ServerError } from "@utils/error";
-import PublishVersionContent from "@components/pages/publish";
+
 import { FolderEmptyIcon } from "@components/atoms/icons";
-// import { userInfoAction } from "@actions/auth";
-import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
-import { getDocumentPasswordAction } from "@actions/cookies";
-// import PublishDocumentSignin from "@components/pages/publish/publishDocumentSignin";
+import { IVersion } from "@interface/version.interface";
+import PublishVersionContent from "@components/pages/publish";
+import React from "react";
+import RepositoryInfo from "@components/organisms/repositoryInfo";
+import { ServerError } from "@utils/error";
+import { getRepositoryData } from "@utils/publish";
+import { notFound } from "next/navigation";
+import { toEnglishDigit } from "@utils/index";
+import RedirectPage from "@components/pages/redirectPage";
 
 type PageParams = {
   name: string;
   id: string;
   slug?: string[];
 };
-
-type DocumentVersionParams = {
-  repoId: number;
-  documentId: number;
-  versionId?: number;
-  documentPassword?: string;
-};
-
-async function getDocumentVersion({
-  repoId,
-  documentId,
-  versionId,
-  documentPassword,
-}: DocumentVersionParams): Promise<IVersion> {
-  const resolvedVersionId =
-    versionId ??
-    (await (async () => {
-      const lastVersionInfo = await getPublishDocumentLastVersion(
-        repoId,
-        documentId,
-        documentPassword
-      );
-      if (!lastVersionInfo) {
-        throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
-      }
-      return lastVersionInfo.id;
-    })());
-
-  return getPublishDocumentVersion(
-    repoId,
-    documentId,
-    resolvedVersionId,
-    documentPassword
-  );
-}
 
 export default async function PublishContentPage({
   params,
@@ -90,50 +53,50 @@ export default async function PublishContentPage({
       ? parseInt(lastSlug.replace("v-", ""), 10)
       : undefined;
 
-    if (Number.isNaN(documentId) || (hasVersion && Number.isNaN(versionId))) {
+    let versionData: IVersion;
+
+    if (!documentId || Number.isNaN(documentId)) {
       return notFound();
     }
 
-    const documentPassword = await getDocumentPasswordAction(documentId);
     const documentInfo = await getPublishDocumentInfo(
       parsedRepoId,
       documentId,
       true
     );
 
-    // const userInfo = await userInfoAction();
-    // const ssoId =
-    //   userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-
-    // if ((documentInfo.hasWhiteList || documentInfo.hasBlackList) && !ssoId) {
-    //   return <PublishDocumentSignin />;
-    // }
-  
-    if (documentInfo.hasPassword && !documentPassword) {
-      return <PublishDocumentPassword documentId={documentId} />;
+    if (
+      documentInfo?.hasPassword ||
+      documentInfo?.hasWhiteList ||
+      documentInfo?.hasBlackList
+    ) {
+      const privatePath = `/publish/${repoId}/${params.name}/private/${slug.join("/")}`;
+      return <RedirectPage redirectUrl={privatePath} />;
     }
 
-    try {
-      const versionData = await getDocumentVersion({
-        repoId: repository.id,
+    if (hasVersion && versionId && Number.isNaN(versionId)) {
+      versionData = await getPublishDocumentVersion(
+        repository.id,
         documentId,
-        versionId,
-        documentPassword: documentPassword || undefined,
-      });
+        versionId
+      );
+    } else {
+      const lastVersionInfo = await getPublishDocumentLastVersion(
+        repository.id,
+        documentId
+      );
 
-      return <PublishVersionContent version={versionData} />;
-    } catch (error) {
-      if (error instanceof BasicError && error.errorCode === 403) {
-        return (
-          <PublishDocumentPassword
-            documentId={documentId}
-            documentPassword={documentPassword || undefined}
-            errorMessage={error.message}
-          />
-        );
-      }
-      throw error;
+      if (!lastVersionInfo)
+        throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
+
+      versionData = await getPublishDocumentVersion(
+        repository.id,
+        documentId,
+        lastVersionInfo.id
+      );
     }
+
+    return <PublishVersionContent version={versionData} />;
   } catch (error) {
     return (
       <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">

@@ -34,8 +34,8 @@ axiosSocialInstance.interceptors.request.use((request) => {
     url,
     data,
   });
-
-  Logger.info(log);
+  console.log(log);
+  // Logger.info(log);
   return request;
 });
 
@@ -47,7 +47,8 @@ axiosSocialInstance.interceptors.response.use((response) => {
     status,
   });
 
-  Logger.info(log);
+  console.log(log);
+  // Logger.info(log);
   return response;
 });
 
@@ -199,6 +200,7 @@ export const updateCustomPostByEntityId = async (
     clientSecret: string;
     cryptoInitVectorKey: string;
     cryptoSecretKey: string;
+    enablePublishPage: boolean;
   },
   entityId: number,
   content: string

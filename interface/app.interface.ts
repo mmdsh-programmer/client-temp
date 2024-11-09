@@ -244,6 +244,7 @@ export interface ICustomPostMetadata {
   data: string;
   cryptoInitVectorKey: string;
   cryptoSecretKey: string;
+  enablePublishPage: false;
 }
 
 export interface IThemeInfo {

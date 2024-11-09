@@ -1,13 +1,18 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { login } from "@actions/auth";
+import { useRouter } from "next/navigation";
 import { Spinner } from "@material-tailwind/react";
 
-const PublishDocumentSignin = () => {
+interface IProps {
+  redirectUrl: string;
+}
+
+const RedirectPage = ({ redirectUrl }: IProps) => {
+  const router = useRouter();
+
   useEffect(() => {
-    window.localStorage.setItem("CLASOR:LAST_PAGE", window.location.href);
-    login();
+    router.push(redirectUrl);
   }, []);
 
   return (
@@ -15,9 +20,9 @@ const PublishDocumentSignin = () => {
       <div className="w-full flex justify-center items-center">
         <Spinner className="h-8 w-8" color="purple" />
       </div>
-      <p className="mt-4 text-xl">در حال دریافت اطلاعات کاربری</p>
+      <p className="mt-4 text-xl">در حال دریافت اطلاعات</p>
     </section>
   );
 };
 
-export default PublishDocumentSignin;
+export default RedirectPage;

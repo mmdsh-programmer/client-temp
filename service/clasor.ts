@@ -36,6 +36,10 @@ import {
   IWhiteList,
 } from "@interface/document.interface";
 import {
+  IContentSearchListItem,
+  IContentSearchResult,
+} from "@interface/contentSearch.interface";
+import {
   ICreateGroup,
   IGetGroup,
   IGetGroups,
@@ -54,13 +58,11 @@ import axios, { AxiosError, isAxiosError } from "axios";
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
-import { IContentSearchResult } from "@interface/contentSearch.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
-import { IContentSearchListItem } from "@interface/contentSearch.interface";
 
 const { BACKEND_URL, API_TOKEN } = process.env;
 
@@ -1484,12 +1486,18 @@ export const getPublishDocumentVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  password?: string
+  password?: string,
+  accessToken?: string
 ) => {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
       `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}`,
       {
+        headers,
         params: {
           password,
         },
@@ -1505,12 +1513,18 @@ export const getPublishDocumentVersion = async (
 export const getPublishDocumentLastVersion = async (
   repoId: number,
   documentId: number,
-  password?: string
+  password?: string,
+  accessToken?: string
 ) => {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
+
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IVersion | null>
     >(`repositories/${repoId}/publish/document/${documentId}/lastVersion`, {
+      headers,
       params: {
         password,
       },
@@ -2955,8 +2969,7 @@ export const getDislike = async (
 export const getPublishRepoList = async (
   offset: number,
   size: number,
-  repoType?: string,
-  userssoid?: number
+  repoTypes?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2968,8 +2981,7 @@ export const getPublishRepoList = async (
       params: {
         offset,
         size,
-        repoType,
-        userssoid,
+        repoTypes,
       },
     });
     return response.data.data;
