@@ -1,8 +1,8 @@
 import React from "react";
 import { IVersion } from "@interface/version.interface";
 import {
-  acceptDraftAtom,
-  rejectDraftAtom,
+  acceptVersionAtom,
+  rejectVersionAtom,
   selectedRequestAtom,
   versionRequestDrawerAtom,
 } from "@atom/releaseDocs";
@@ -17,8 +17,8 @@ interface IProps {
 }
 
 const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
-  const setAcceptRequestModal = useSetRecoilState(acceptDraftAtom);
-  const setRejectRequestModal = useSetRecoilState(rejectDraftAtom);
+  const setAcceptRequestModal = useSetRecoilState(acceptVersionAtom);
+  const setRejectRequestModal = useSetRecoilState(rejectVersionAtom);
   const [openRequestActionDrawer, setOpenRequestActionDrawer] = useRecoilState(
     versionRequestDrawerAtom
   );

@@ -5,7 +5,7 @@ import { selectedRequestAtom } from "@atom/releaseDocs";
 import { useForm } from "react-hook-form";
 import useRejectVersion from "@hooks/release/useRejectVersion";
 import { toast } from "react-toastify";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -38,7 +38,7 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
   };
 
   return (
-    <DeleteDialog
+    <ConfirmDialog
       isPending={rejectRequest.isPending}
       dialogHeader="رد عمومی سازی نسخه"
       onSubmit={handleSubmit(onSubmit)}
@@ -52,7 +52,7 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
         </span>
         " اطمینان دارید؟
       </div>
-    </DeleteDialog>
+    </ConfirmDialog>
   );
 };
 

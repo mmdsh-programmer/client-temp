@@ -72,8 +72,6 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         templateId: getDocumentTemplate.id,
         callBack: () => {
           toast.success("سند مورد نظر با موفقیت ایجاد گردید.");
-          close();
-          setOpen(false);
         },
       });
     } else {
@@ -99,7 +97,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               onSuccessHandler: () => {
                 close();
                 setOpen(false);
-                toast.success("سند مورد نظر با موفقیت ایجاد گردید.");
+                toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
               },
             });
           } else if (getDocumentType === EDocumentTypes.file) {
@@ -110,7 +108,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               callBack: () => {
                 close();
                 setOpen(false);
-                toast.success("سند مورد نظر با موفقیت ایجاد گردید.");
+                toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
               },
             });
           }

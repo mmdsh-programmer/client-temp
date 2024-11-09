@@ -5,18 +5,19 @@ import { DialogBody } from "@material-tailwind/react";
 import DraftRequests from "@components/organisms/versionRequests/draftRequests";
 import VersionRequests from "@components/organisms/versionRequests/versionRequests";
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import {
-  acceptDraftAtom,
-  rejectDraftAtom,
   acceptVersionAtom,
   rejectVersionAtom,
+  selectedRequestAtom,
 } from "@atom/releaseDocs";
 import AcceptDraftDialog from "../draftRequest/acceptDraftDialog";
 import RejectDraftDialog from "../draftRequest/rejectDraftDialog";
 import AcceptVersionDialog from "../versionRequest/acceptVersionDialog";
 import RejectVersionDialog from "../versionRequest/rejectVersionDialog";
 import { repoAtom } from "@atom/repository";
+import { selectedVersionAtom } from "@atom/version";
+import { editorModalAtom } from "@atom/editor";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,13 +32,10 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.DRAFT_REQUESTS);
 
   const getRepo = useRecoilValue(repoAtom);
+  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
+  const getEditorModal = useRecoilValue(editorModalAtom);
 
-  const [openAcceptDraftDialog, setOpenAcceptDraftDialog] =
-    useRecoilState(acceptDraftAtom);
-
-  const [openRejectDraftDialog, setOpenRejectDraftDialog] =
-    useRecoilState(rejectDraftAtom);
-
+  const getRequest = useRecoilValue(selectedRequestAtom);
   const [openAcceptVersionDialog, setOpenAcceptVersionDialog] =
     useRecoilState(acceptVersionAtom);
 
@@ -46,6 +44,7 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedVersion(null);
   };
 
   const tabList = [
@@ -59,27 +58,27 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     },
   ];
 
-  if (openAcceptDraftDialog) {
+  if (getRequest?.state === "draft" && openAcceptVersionDialog) {
     return (
       <AcceptDraftDialog
         setOpen={() => {
-          return setOpenAcceptDraftDialog(false);
+          return setOpenAcceptVersionDialog(false);
         }}
       />
     );
   }
 
-  if (openRejectDraftDialog) {
+  if (getRequest?.state === "draft" && openRejectVersionDialog) {
     return (
       <RejectDraftDialog
         setOpen={() => {
-          return setOpenRejectDraftDialog(false);
+          return setOpenRejectVersionDialog(false);
         }}
       />
     );
   }
 
-  if (openAcceptVersionDialog) {
+  if (getRequest?.state === "version" && openAcceptVersionDialog) {
     return (
       <AcceptVersionDialog
         setOpen={() => {
@@ -89,7 +88,7 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     );
   }
 
-  if (openRejectVersionDialog) {
+  if (getRequest?.state === "version" && openRejectVersionDialog) {
     return (
       <RejectVersionDialog
         setOpen={() => {
@@ -97,6 +96,10 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
         }}
       />
     );
+  }
+
+  if (getEditorModal) {
+    return null;
   }
 
   return (

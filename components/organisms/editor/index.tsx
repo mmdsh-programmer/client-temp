@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import {
   editorDecryptedContentAtom,
@@ -34,6 +34,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const editorMode = useRecoilValue(editorModeAtom);
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
   const listDrawer = useRecoilValue(editorListDrawerAtom);
+  const [versionData, setVersionData] = useState(version);
 
   const timestampRef = useRef(Date.now());
 
@@ -44,6 +45,21 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     ? decryptedContent
     : version?.content || " ";
 
+  const handleChange = (value: { content: string; outline: string }) => {
+    const { content: newContent, outline } = value;
+    setVersionData((prev) => {
+      if (!prev) return undefined;
+      return { ...prev, content: newContent, outline };
+    });
+  };
+
+  const handleSaveConfig = (newData: string) => {
+    const newMetadata = JSON.parse(newData);
+    setUserMetadataHook.mutate({
+      data: newMetadata,
+    });
+  };
+
   const getLoadData = () => {
     switch (selectedDocument?.contentType) {
       case EDocumentTypes.classic:
@@ -53,14 +69,14 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           auth: {
             accessToken: userInfo?.access_token,
             refreshToken: userInfo?.refresh_token,
-            url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
+            url: `${process.env.NEXT_PUBLIC_BACKEND_URL}auth/renewToken`,
           },
           publicUserGroupHash: getRepo?.userGroupHash || undefined,
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
           repositoryId: getRepo?.id || undefined,
           resourceId: selectedCategory?.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-          backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
+          backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
         } as IClassicData;
       case EDocumentTypes.word:
         return {
@@ -72,11 +88,22 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     }
   };
 
-  const handleSaveConfig = (newData: string) => {
-    const newMetadata = JSON.parse(newData);
-    setUserMetadataHook.mutate({
-      data: newMetadata,
-    });
+  const renderContent = () => {
+    if (selectedDocument?.contentType === EDocumentTypes.file) {
+      return <FileEditor />;
+    }
+
+    return (
+      <RemoteEditor
+        url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
+        editorMode={editorMode}
+        ref={getEditorConfig().ref}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        loadData={getLoadData() as any}
+        onGetConfig={handleSaveConfig}
+        onChange={handleChange}
+      />
+    );
   };
 
   if (isLoading) {
@@ -89,28 +116,17 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="flex h-full relative bg-primary">
-      {listDrawer ? (
+      {listDrawer && getEditorConfig().ref ? (
         <div className="w-full xs:w-[300px]">
-          <EditorDrawer version={version} />
+          <EditorDrawer version={versionData} editorRef={getEditorConfig().ref} />
         </div>
       ) : null}
       <div
-        className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"}`}
+        className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"} h-full`}
       >
-        {selectedDocument?.contentType === EDocumentTypes.file ? (
-          <FileEditor />
-        ) : (
-          <RemoteEditor
-            url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
-            editorMode={editorMode}
-            ref={getEditorConfig().ref}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            loadData={getLoadData() as any}
-            onGetConfig={handleSaveConfig}
-          />
-        )}
+        {renderContent()}
+        <FloatingButtons version={version} />
       </div>
-      <FloatingButtons version={version} />
     </div>
   );
 };

@@ -10,7 +10,7 @@ import GroupMenu from "@components/molecules/groupMenu";
 import Groups from "@components/organisms/group";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import PublicLink from "@components/organisms/publicLink";
-import Publish from "@components/organisms/publish";
+import PublishLink from "@components/organisms/publishLink";
 import TabComponent from "@components/molecules/tab";
 import Users from "@components/organisms/users";
 import { openShareAccessAtom } from "@atom/public";
@@ -58,7 +58,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
     },
     getRepo?.roleName === "owner" && {
       tabTitle: ETabs.PUBLISH,
-      tabContent: <Publish />,
+      tabContent: <PublishLink />,
     },
   ].filter(Boolean) as {
     tabTitle: ETabs;

@@ -77,7 +77,13 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
               <InfoIcon className="w-4 h-4 stroke-purple-normal" />
             </Button>
           ) : null}
-          <div className="repoInformationTab repoActions flex items-center gap-1 justify-end">
+          <div
+            className="repoInformationTab repoActions flex items-center gap-1 justify-end"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
             {repo?.isArchived ? null : (
               <Button
                 placeholder="button"
@@ -85,6 +91,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
              bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
                 onClick={(e) => {
                   e.stopPropagation();
+                  e.preventDefault();
                   setModalState("bookmark", true);
                 }}
               >

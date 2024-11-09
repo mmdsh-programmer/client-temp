@@ -8,9 +8,10 @@ import { EVersionStatus } from "@interface/enums";
 
 interface IProps {
   request: IVersion;
+  onClick?: () => void;
 }
 
-const RequestMobileView = ({ request }: IProps) => {
+const RequestMobileView = ({ request, onClick }: IProps) => {
   return (
     <MobileCard
       key={request.id}
@@ -38,7 +39,7 @@ const RequestMobileView = ({ request }: IProps) => {
           <DraftRequestMenu request={request} />
         )
       }
-      onClick={() => {}}
+      onClick={onClick}
     />
   );
 };

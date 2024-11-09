@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { FaDateFromTimestamp } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
@@ -6,14 +6,24 @@ import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import useGetPendingVersion from "@hooks/release/useGetPendingVersion";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import RequestTableView from "../versionRequestsView/requestTableView";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
 import TableCell from "@components/molecules/tableCell";
 import VersionRequestMenu from "@components/molecules/versionRequestMenu";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { selectedVersionAtom } from "@atom/version";
+import useGetDocument from "@hooks/document/useGetDocument";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 
 const VersionRequests = () => {
   const getRepo = useRecoilValue(repoAtom);
+  const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const [getSelectedVersion, setSelectedVersion] =
+    useRecoilState(selectedVersionAtom);
 
   const {
     data: getVersionRequest,
@@ -23,7 +33,30 @@ const VersionRequests = () => {
     isFetchingNextPage,
   } = useGetPendingVersion(getRepo!.id, 10);
 
+  const {
+    data: getDocument,
+    isSuccess,
+    isError,
+  } = useGetDocument(
+    getRepo!.id,
+    getSelectedVersion ? getSelectedVersion!.documentId : undefined,
+    !!getSelectedVersion?.id,
+    true,
+    undefined
+  );
+
   const listLength = getVersionRequest?.pages[0].total;
+
+  useEffect(() => {
+    if (isSuccess && getDocument) {
+      setDocument(getDocument);
+      setEditorMode("preview");
+      setEditorModal(true);
+    }
+    if (isError) {
+      toast.error("خطا در دریافت اطلاعات سند");
+    }
+  }, [isSuccess]);
 
   const renderContent = () => {
     if (isLoading) {
@@ -37,12 +70,15 @@ const VersionRequests = () => {
       return (
         <>
           <div className="hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto ">
-          <RequestTableView>
+            <RequestTableView>
               {getVersionRequest?.pages.map((page) => {
                 return page.list.map((request) => {
                   return (
                     <TableCell
                       key={`version-request-table-item-${request.id}`}
+                      onClick={() => {
+                        return setSelectedVersion(request);
+                      }}
                       tableCell={[
                         { data: request.versionNumber },
                         { data: request.documentTitle },
@@ -60,6 +96,9 @@ const VersionRequests = () => {
                         },
                         {
                           data: <VersionRequestMenu request={request} />,
+                          onClick: () => {
+                            return setSelectedVersion(request);
+                          },
                           stopPropagation: true,
                         },
                       ]}
@@ -72,7 +111,14 @@ const VersionRequests = () => {
           <div className="flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
             {getVersionRequest?.pages.map((page) => {
               return page.list.map((request) => {
-                return <RequestMobileView request={request} />;
+                return (
+                  <RequestMobileView
+                    request={request}
+                    onClick={() => {
+                      return setSelectedVersion(request);
+                    }}
+                  />
+                );
               });
             })}
           </div>
