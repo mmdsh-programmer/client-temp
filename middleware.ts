@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { generateKey } from "./utils";
+import { generateKey, toEnglishDigit } from "./utils";
 import { getCustomPostByDomain } from "@service/social";
 import { headers } from "next/headers";
 
@@ -20,6 +20,51 @@ const pages = [
   "/signin",
   "/subscribe",
 ];
+
+function convertDocsUrlToPublishUrl(url: string): string | null {
+  const decodedUrl = decodeURIComponent(url);
+  const isPrivate = decodedUrl.startsWith("/private/");
+  
+  // Match pattern that accepts both cases (with and without category)
+  const pagePatternWithCategory = /^\/(?:private\/)?page\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)$/;
+  const pagePatternWithoutCategory = /^\/(?:private\/)?page\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)$/;
+  
+  const matchWithCategory = decodedUrl.match(pagePatternWithCategory);
+  const matchWithoutCategory = decodedUrl.match(pagePatternWithoutCategory);
+
+  if (!matchWithCategory && !matchWithoutCategory) return null;
+
+  let segments: string[];
+
+  if (matchWithCategory) {
+    const [, repoName, repoId, categoryName, categoryId, documentName, documentId, , versionId] = matchWithCategory;
+    segments = [
+      "publish",
+      toEnglishDigit(repoId),
+      encodeURIComponent(repoName),
+      ...(isPrivate ? ["private"] : []),
+      toEnglishDigit(categoryId),
+      encodeURIComponent(categoryName),
+      toEnglishDigit(documentId),
+      encodeURIComponent(documentName),
+      `v-${toEnglishDigit(versionId)}`,
+    ];
+  } else {
+    const [, repoName, repoId, documentName, documentId, , versionId] = matchWithoutCategory!;
+    segments = [
+      "publish",
+      toEnglishDigit(repoId),
+      encodeURIComponent(repoName),
+      ...(isPrivate ? ["private"] : []),
+      toEnglishDigit(documentId),
+      encodeURIComponent(documentName),
+      `v-${toEnglishDigit(versionId)}`,
+    ];
+  }
+
+  return `/${segments.join("/")}`;
+}
+
 export async function middleware(request: NextRequest) {
   // Check the origin from the request
   const origin = request.headers.get("origin") ?? "";
@@ -36,7 +81,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.json({}, { headers: preflightHeaders });
   }
 
-  // Handle simple requests
   const response = NextResponse.next();
 
   if (isAllowedOrigin) {
@@ -48,6 +92,14 @@ export async function middleware(request: NextRequest) {
   });
 
   const url = request.nextUrl;
+  const { pathname } = url;
+
+  const newUrl = convertDocsUrlToPublishUrl(pathname);
+  if (newUrl) {
+    url.pathname = newUrl;
+    return NextResponse.redirect(url);
+  }
+
   const headersList = await headers();
   const domain = headersList.get("host");
   if (domain) {
@@ -66,7 +118,7 @@ export async function middleware(request: NextRequest) {
         url.pathname = `/${domainKey}/publish`;
         return NextResponse.rewrite(url);
       }
-      url.pathname =  `/${domainKey}/signin`;
+      url.pathname = `/${domainKey}/signin`;
       return NextResponse.rewrite(url);
     }
   }
@@ -83,6 +135,8 @@ export const config = {
     "/sampleError/:path*",
     "/signin/:path*",
     "/subscribe/:path*",
-    "/api/:path*"
+    "/api/:path*",
+    "/page/:path*",
+    "/private/:path*",
   ],
 };
