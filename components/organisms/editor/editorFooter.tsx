@@ -10,7 +10,7 @@ import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import { EDocumentTypes } from "@interface/enums";
+import { EDocumentTypes, ERoles } from "@interface/enums";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
 import EditorFileFooter from "./editorFileFooter";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -41,6 +42,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const timeout = 5 * 60; // seconds
+
+  const { data: userInfo } = useGetUser();
   const saveEditorHook = useSaveEditor();
 
   const renderTitle = () => {
@@ -186,7 +189,17 @@ const EditorFooter = ({ editorRef }: IProps) => {
         </Typography>
         <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
       </Button>
-      <CancelButton onClick={handleChangeEditorMode}>ویرایش</CancelButton>
+
+      <CancelButton
+        onClick={handleChangeEditorMode}
+        disabled={
+          getRepo?.roleName === ERoles.viewer ||
+          (getRepo?.roleName === ERoles.writer &&
+            getVersionData?.creator?.userName !== userInfo?.username)
+        }
+      >
+        ویرایش
+      </CancelButton>
     </div>
   ) : (
     <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -230,7 +243,12 @@ const EditorFooter = ({ editorRef }: IProps) => {
             setEditorMode(editorMode === "edit" ? "temporaryPreview" : "edit");
           }}
           className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
-          disabled={saveEditorHook.isPending}
+          disabled={
+            saveEditorHook.isPending ||
+            getRepo?.roleName === ERoles.viewer ||
+            (getRepo?.roleName === ERoles.writer &&
+              getVersionData?.creator?.userName !== userInfo?.username)
+          }
         >
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>

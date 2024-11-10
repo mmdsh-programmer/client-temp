@@ -13,15 +13,17 @@ import { ChevronLeftIcon } from "@components/atoms/icons";
 interface IProps {
   variant: "small" | "medium" | "large";
   menuName: string;
+  icon?: React.ReactNode;
   subMenuList: {
     text: string;
     icon?: React.ReactNode;
+    disabled?: boolean;
     onClick?: React.MouseEventHandler<HTMLLIElement> &
       React.MouseEventHandler<HTMLButtonElement>;
   }[];
 }
 
-const NestedMenu = ({ variant, menuName, subMenuList }: IProps) => {
+const NestedMenu = ({ variant, menuName, subMenuList, icon }: IProps) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <Menu
@@ -31,9 +33,12 @@ const NestedMenu = ({ variant, menuName, subMenuList }: IProps) => {
       allowHover
       offset={15}
     >
-      <MenuHandler className="font-light text-[12px] px-4 py-2 flex items-center justify-between">
+      <MenuHandler className="font-light text-[12px] pl-4 pr-2 py-2 flex items-center justify-between">
         <MenuItem className="font-light text-[12px]">
-          {menuName}
+          <div className="flex gap-2">
+            {icon}
+            {menuName}
+          </div>
           <ChevronLeftIcon
             className={`h-2 w-2 transition-transform stroke-icon-active ${
               openMenu ? "rotate-90" : ""
@@ -53,6 +58,7 @@ const NestedMenu = ({ variant, menuName, subMenuList }: IProps) => {
               placeholder="menu-item"
               className="p-2"
               onClick={menuItem.onClick}
+              disabled={menuItem.disabled}
             >
               <div className="flex">
                 {menuItem.icon}

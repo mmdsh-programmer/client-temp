@@ -4,7 +4,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { ICategoryMetadata } from "@interface/category.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
-import { MoreDotIcon } from "@components/atoms/icons";
+import { InvisibleIcon, MoreDotIcon } from "@components/atoms/icons";
 import CategoryDialogs from "../categoryDialogs";
 import useCategoryMenuList from "./useCategoryMenuList";
 
@@ -60,18 +60,23 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
           />
         </div>
       ) : (
-        <MenuTemplate
-          setOpenDrawer={() => {
-            setCategory(categoryProp || null);
-            setOpenCategoryActionDrawer(true);
-          }}
-          menuList={menuList}
-          icon={
-            <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-              <MoreDotIcon className="w-4 h-4" />
-            </div>
-          }
-        />
+        <div className="flex items-center justify-end gap-1">
+          {categoryProp?.isHidden ? (
+            <InvisibleIcon className="w-4 h-4 flex-none" />
+          ): null}
+          <MenuTemplate
+            setOpenDrawer={() => {
+              setCategory(categoryProp || null);
+              setOpenCategoryActionDrawer(true);
+            }}
+            menuList={menuList}
+            icon={
+              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
+                <MoreDotIcon className="w-4 h-4" />
+              </div>
+            }
+          />
+        </div>
       )}
       <CategoryDialogs
         modals={modals}

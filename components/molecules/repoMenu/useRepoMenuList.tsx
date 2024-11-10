@@ -1,10 +1,13 @@
 import React from "react";
 import {
-  ArchiveIcon,
+  ArchiveActionIcon,
+  BookmarkRepoIcon,
   DeleteIcon,
   EditIcon,
+  FileManagementIcon,
   FolderInfoIcon,
   KeyIcon,
+  LastVersionIcon,
   LeaveRepoIcon,
   PublishIcon,
   RestoreIcon,
@@ -19,6 +22,7 @@ type ModalType =
   | "delete"
   | "restore"
   | "edit"
+  | "bookmark"
   | "share"
   | "key"
   | "leave"
@@ -63,19 +67,40 @@ const useMenuList = (
           setRepo(repo);
         }
       }),
+      !repo?.bookmark
+        ? createMenuItem(
+            "بوکمارک کردن",
+            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            () => {
+              setModalState("bookmark", true);
+              if (repo) {
+                setRepo(repo);
+              }
+            }
+          )
+        : createMenuItem(
+            "حذف بوکمارک",
+            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            () => {
+              setModalState("bookmark", true);
+              if (repo) {
+                setRepo(repo);
+              }
+            }
+          ),
       createMenuItem("اشتراک گذاری", <ShareIcon className="w-4 h-4" />, () => {
         setModalState("share", true);
         if (repo) {
           setRepo(repo);
         }
       }),
-      createMenuItem("مدیریت فایل", <ShareIcon className="w-4 h-4" />, () => {
+      createMenuItem("مدیریت فایل", <FileManagementIcon className="w-4 h-4 fill-icon-active" />, () => {
         setModalState("fileManagement", true);
         if (repo) {
           setRepo(repo);
         }
       }),
-      createMenuItem("درخواست‌ها", <ShareIcon className="w-4 h-4" />, () => {
+      createMenuItem("درخواست‌ها", <LastVersionIcon className="w-4 h-4" />, () => {
         setModalState("versionRequests", true);
         if (repo) {
           setRepo(repo);
@@ -84,7 +109,7 @@ const useMenuList = (
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
-          <PublishIcon className="w-4 h-4 stroke-icon-active" />,
+          <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {
             window.open(`/publish/${repo.name}/${repo.id}`, "_blank");
           }
@@ -115,7 +140,7 @@ const useMenuList = (
     return [
       ...(ownerAdminActions() as MenuItem[]),
       createMenuItem(
-        "لیست کلید های مخزن",
+        "کلید های مخزن",
         <KeyIcon className="w-4 h-4 stroke-1" />,
         () => {
           setModalState("key", true);
@@ -126,7 +151,7 @@ const useMenuList = (
       ),
       createMenuItem(
         "بایگانی",
-        <ArchiveIcon className="w-4 h-4 stroke-icon-active" />,
+        <ArchiveActionIcon className="w-4 h-4 fill-icon-active" />,
         () => {
           setModalState("archive", true);
           setOpenRepoActionDrawer(false);
@@ -169,10 +194,31 @@ const useMenuList = (
           <FolderInfoIcon className="w-4 h-4" />,
           handleRepoInfo
         ),
+      !repo?.bookmark
+        ? createMenuItem(
+            "بوکمارک کردن",
+            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            () => {
+              setModalState("bookmark", true);
+              if (repo) {
+                setRepo(repo);
+              }
+            }
+          )
+        : createMenuItem(
+            "حذف بوکمارک",
+            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            () => {
+              setModalState("bookmark", true);
+              if (repo) {
+                setRepo(repo);
+              }
+            }
+          ),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
-          <PublishIcon className="w-4 h-4 stroke-icon-active" />,
+          <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {}
         ),
       createMenuItem(

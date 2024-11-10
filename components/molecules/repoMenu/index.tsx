@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { InfoIcon, MoreDotIcon, StarIcon } from "@components/atoms/icons";
+import { BookmarkIcon, InfoIcon, MoreDotIcon } from "@components/atoms/icons";
 import { repoActionDrawerAtom, repoAtom, repoInfoAtom } from "@atom/repository";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Button } from "@material-tailwind/react";
@@ -84,22 +84,9 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
               e.preventDefault();
             }}
           >
-            {repo?.isArchived ? null : (
-              <Button
-                placeholder="button"
-                className="repo-bookmark rounded-lg border-2 border-gray-50 
-             bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  setModalState("bookmark", true);
-                }}
-              >
-                <StarIcon
-                  className={`w-4 h-4 ${repo?.bookmark ? "fill-amber-600 stroke-amber-600" : "stroke-icon-active"}`}
-                />
-              </Button>
-            )}
+            {repo?.bookmark ? (
+              <BookmarkIcon className="w-4 h-4  fill-amber-600 stroke-amber-600" />
+            ) : null}
             <MenuTemplate
               setOpenDrawer={() => {
                 setOpenRepoActionDrawer(true);

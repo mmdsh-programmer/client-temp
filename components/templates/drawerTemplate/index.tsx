@@ -1,9 +1,4 @@
-import {
- Button,
- Collapse,
- Drawer,
- Typography
-} from "@material-tailwind/react";
+import { Button, Collapse, Drawer, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import { ChevronLeftIcon } from "@components/atoms/icons";
@@ -14,14 +9,18 @@ export interface IProps {
   menuList: {
     text: string;
     icon?: React.JSX.Element;
+    disabled?: boolean;
     onClick: () => void;
-    subMenu?: { text: string; icon?: React.JSX.Element; onClick: () => void }[];
+    subMenu?: {
+      text: string;
+      icon?: React.JSX.Element;
+      onClick: () => void;
+      disabled?: boolean;
+    }[];
   }[];
 }
 
-const DrawerComponent = ({
- menuList, openDrawer, setOpenDrawer 
-}: IProps) => {
+const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
   const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
