@@ -7,16 +7,18 @@ import ConnectRemoteEditor from "@components/organisms/publish/connectRemoteEdit
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
 import PublishVersion from "../../organisms/publish/publishVersion";
 import PublishTinyLink from "@components/organisms/publish/publishTinyLink";
+import { IDocumentMetadata } from "@interface/document.interface";
 
 interface IProps {
   version: IVersion;
+  document: IDocumentMetadata;
 }
 
-const PublishVersionContent = ({ version }: IProps) => {
+const PublishVersionContent = ({ version, document }: IProps) => {
   return (
     <>
       <div className="scroller w-full overflow-y-auto min-h-[calc(100vh-156px)]">
-        <PublishVersion version={version} />
+        <PublishVersion document={document} version={version} />
         {version.contentType === EDocumentTypes.classic ? (
           <>
             <RenderClientContent versionData={version} />

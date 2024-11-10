@@ -96,7 +96,9 @@ export default async function PublishContentPage({
       );
     }
 
-    return <PublishVersionContent version={versionData} />;
+    return (
+      <PublishVersionContent document={documentInfo} version={versionData} />
+    );
   } catch (error) {
     return (
       <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">

@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { usePathname } from "next/navigation";
 import { DocumentIcon, LockIcon } from "@components/atoms/icons";
-import { useSetRecoilState } from "recoil";
-import { publishPageSelectedDocumentAtom } from "@atom/publish";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -13,20 +11,11 @@ interface IProps {
 
 const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
   const pathname = usePathname();
-  const setSelectedPublishDocument = useSetRecoilState(
-    publishPageSelectedDocumentAtom
-  );
   const isPrivateDoc =
     document.hasPassword || document.hasWhiteList || document.hasBlackList;
 
   const pathSegments = pathname?.split("/") || [];
   const isSelected = pathSegments.includes(String(document.id));
-
-  useEffect(() => {
-    if (isSelected) {
-      setSelectedPublishDocument(document);
-    }
-  }, [isSelected, document]);
 
   return (
     <Link

@@ -146,7 +146,9 @@ export default async function PublishContentPage({
         throw new ServerError(["سند مورد نظر فاقد نسخه میباشد."]);
       }
 
-      return <PublishVersionContent version={version} />;
+      return (
+        <PublishVersionContent document={documentInfo} version={version} />
+      );
     } catch (error) {
       if (error instanceof BasicError && error.errorCode === 400) {
         return (

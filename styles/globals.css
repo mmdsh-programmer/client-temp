@@ -3,6 +3,7 @@
 @tailwind utilities;
 @import "../node_modules/cls-file-management/dist/style.css";
 @import "./outline.style.css";
+@import "./clasor-preview.style.css";
 
 @layer base {
   html {
@@ -18,14 +19,14 @@
     @apply !scroll-smooth;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p,
-  span {
+  h1:not(.clasor-preview-content *),
+  h2:not(.clasor-preview-content *),
+  h3:not(.clasor-preview-content *),
+  h4:not(.clasor-preview-content *),
+  h5:not(.clasor-preview-content *),
+  h6:not(.clasor-preview-content *),
+  p:not(.clasor-preview-content *),
+  span:not(.clasor-preview-content *) {
     @apply !font-iranYekan;
   }
 
@@ -262,14 +263,6 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   .rdp__modal.css-1e0sis0 {
     @apply z-[99999];
   }
-}
-
-.clasor-preview-content {
-  @apply !p-0;
-}
-
-.clasor-preview-content .clasor-preview-content__render-server-content {
-  @apply !rounded-none;
 }
 
 .app-sidebar {

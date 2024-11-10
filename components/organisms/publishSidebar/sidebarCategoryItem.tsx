@@ -2,9 +2,8 @@ import React, { Fragment, useState } from "react";
 import SidebarCollapse from "./sidebarCollapse";
 import { Spinner } from "@material-tailwind/react";
 import SidebarDocumentItem from "./sidebarDocumentItem";
-import useGetChildren from "@hooks/category/useGetChildren";
 import { ICategoryMetadata } from "@interface/category.interface";
-import { sortParams } from "./sidebarTreeViewWrapper";
+import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
 
 interface IProps {
   repoId: number;
@@ -13,7 +12,12 @@ interface IProps {
   parentUrl: string;
 }
 
-const SidebarCategoryItem = ({ repoId, repoName, category, parentUrl }: IProps) => {
+const SidebarCategoryItem = ({
+  repoId,
+  repoName,
+  category,
+  parentUrl,
+}: IProps) => {
   const [shouldAddEndpoint, setShouldAddEndpoint] = useState(true);
   const [baseUrl, setBaseUrl] = useState(parentUrl);
 
@@ -23,7 +27,7 @@ const SidebarCategoryItem = ({ repoId, repoName, category, parentUrl }: IProps) 
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useGetChildren(repoId, category.id, sortParams, 10);
+  } = useGetPublishChildren(repoId, 10, category.id);
 
   const total = categoryChildren?.pages[0].total;
 
@@ -72,7 +76,10 @@ const SidebarCategoryItem = ({ repoId, repoName, category, parentUrl }: IProps) 
                           key={`category-${childItem.id}-tree-item-${childIndex}`}
                           title={childItem?.name || "بدون نام"}
                           onClick={() => {
-                            addEndpoint(childItem.name.replace(/\s+/g, "-"), childItem.id);
+                            addEndpoint(
+                              childItem.name.replace(/\s+/g, "-"),
+                              childItem.id
+                            );
                           }}
                         >
                           <SidebarCategoryItem

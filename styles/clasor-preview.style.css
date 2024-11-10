@@ -1,0 +1,7 @@
+.clasor-preview-content {
+  @apply !p-0;
+}
+
+.clasor-preview-content .clasor-preview-content__render-server-content {
+  @apply !rounded-none;
+}
