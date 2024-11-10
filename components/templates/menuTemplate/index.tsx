@@ -8,14 +8,18 @@ export interface IProps {
     text: string;
     icon?: React.JSX.Element;
     onClick: () => void;
+    subMenu?: {
+      text: string;
+      icon?: React.JSX.Element;
+      disabled?: boolean;
+      onClick: () => void;
+    }[];
   }[];
   icon?: React.ReactNode;
   className?: string;
 }
 
-const MenuTemplate = ({
- menuList, setOpenDrawer, icon, className 
-}: IProps) => {
+const MenuTemplate = ({ menuList, setOpenDrawer, icon, className }: IProps) => {
   return (
     <>
       <div className="hidden xs:flex justify-end">

@@ -22,10 +22,13 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
+import { ERoles } from "@interface/enums";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface MenuItem {
   text: string;
   icon?: JSX.Element;
+  disabled?: boolean;
   onClick: () => void;
 }
 
@@ -56,6 +59,8 @@ const useVersionMenuList = (
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setVersionData = useSetRecoilState(editorDataAtom);
 
+  const { data: userInfo } = useGetUser();
+
   const adminOrOwner =
     getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
 
@@ -64,6 +69,9 @@ const useVersionMenuList = (
       {
         text: "ایجاد نسخه جدید از نسخه",
         icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
+        disabled:
+          getRepo?.roleName === ERoles.viewer ||
+          getRepo?.roleName === ERoles.writer,
         onClick: () => {
           toggleModal("clone", true);
           if (version) {
@@ -74,6 +82,10 @@ const useVersionMenuList = (
       {
         text: "ویرایش",
         icon: <EditIcon className="h-4 w-4" />,
+        disabled:
+          getRepo?.roleName === ERoles.viewer ||
+          (getRepo?.roleName === ERoles.writer &&
+            version?.creator?.userName !== userInfo?.username),
         onClick: () => {
           setVersion(version);
           setEditorMode("edit");
@@ -136,6 +148,9 @@ const useVersionMenuList = (
       {
         text: version?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه",
         icon: <DeleteIcon className="h-4 w-4" />,
+        disabled:
+          getRepo?.roleName === ERoles.viewer ||
+          getRepo?.roleName === ERoles.writer,
         onClick: () => {
           toggleModal("delete", true);
           if (version) {

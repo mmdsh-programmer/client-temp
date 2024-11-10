@@ -4,7 +4,7 @@ import MenuTemplate from "@components/templates/menuTemplate";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { documentDrawerAtom, selectedDocumentAtom } from "@atom/document";
-import { MoreDotIcon, StarIcon } from "@components/atoms/icons";
+import { InvisibleIcon, MoreDotIcon, StarIcon } from "@components/atoms/icons";
 import DocumentDialogs from "../documentDialogs";
 import useDocumentMenuList from "./useDocumentMenuList";
 
@@ -33,7 +33,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
     updatePassword: false,
     deletePassword: false,
     documentAccessPublishing: false,
-    documentVersionList: false
+    documentVersionList: false,
   });
 
   const toggleModal = (modalName: keyof typeof modals, value: boolean) => {
@@ -56,6 +56,9 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
         </div>
       ) : (
         <div className="flex items-center justify-end gap-1">
+          {document?.isHidden ? (
+            <InvisibleIcon className="w-4 h-4 flex-none" />
+          ) : null}
           {document?.isBookmarked ? (
             <StarIcon className="w-4 h-4  fill-amber-600 stroke-amber-600" />
           ) : null}

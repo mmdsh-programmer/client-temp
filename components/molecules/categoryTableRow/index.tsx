@@ -75,9 +75,6 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
                 className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
                 title={categoryProp.name}
               >
-                {categoryProp.isHidden && (
-                  <InvisibleIcon className="w-5 h-5 flex-none" />
-                )}
                 {categoryProp.name}
               </span>
             </div>

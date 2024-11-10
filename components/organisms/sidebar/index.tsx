@@ -1,9 +1,9 @@
 import {
   ArchiveIcon,
+  BookmarkRepoIcon,
   DashboardIcon,
-  FolderBookmarkIcon,
-  FolderIcon,
   FolderShareIcon,
+  MyFolderIcon,
   PublishIcon,
 } from "@components/atoms/icons";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
@@ -31,7 +31,7 @@ const Sidebar = () => {
     },
     {
       text: ERepoGrouping.MY_REPO,
-      icon: <FolderIcon className="h-6 w-6" />,
+      icon: <MyFolderIcon className="h-6 w-6 stroke-icon-hover" />,
       className: "myRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.MY_REPO);
@@ -39,7 +39,7 @@ const Sidebar = () => {
     },
     {
       text: ERepoGrouping.ACCESS_REPO,
-      icon: <FolderShareIcon className="h-6 w-6" />,
+      icon: <FolderShareIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myAccessList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ACCESS_REPO);
@@ -47,7 +47,7 @@ const Sidebar = () => {
     },
     {
       text: ERepoGrouping.BOOKMARK_REPO,
-      icon: <FolderBookmarkIcon className="h-6 w-6" />,
+      icon: <BookmarkRepoIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myBookmarkList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
@@ -55,7 +55,7 @@ const Sidebar = () => {
     },
     {
       text: ERepoGrouping.ARCHIVE_REPO,
-      icon: <ArchiveIcon className="h-6 w-6" />,
+      icon: <ArchiveIcon className="h-6 w-6 stroke-0 fill-icon-hover" />,
       className: "myArchiveList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
@@ -63,7 +63,7 @@ const Sidebar = () => {
     },
     {
       text: ERepoGrouping.PUBLISHED_REPO,
-      icon: <PublishIcon className="h-6 w-6" />,
+      icon: <PublishIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myPublishedRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.PUBLISHED_REPO);
@@ -91,8 +91,8 @@ const Sidebar = () => {
                   placeholder="sidebar-button"
                   className={` bg-transparent justify-start w-full 
                      text-secondary gap-1 px-3 h-[44px]
-                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-icon-active text-primary" : "!stroke-icon-hover"}
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active`}
+                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
+                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
                   onClick={() => {
                     router.push("/admin/dashboard");
                     item.onClick();

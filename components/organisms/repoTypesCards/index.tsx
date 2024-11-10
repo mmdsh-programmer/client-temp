@@ -1,13 +1,12 @@
 "use client";
 
+import React, { useMemo } from "react";
 import {
-  ArchiveIcon,
-  FolderBookmarkIcon,
+  ArchiveCardIcon,
+  BookmarkRepoIcon,
   FolderShareIcon,
   MyFolderIcon,
 } from "@components/atoms/icons";
-import React, { useMemo } from "react";
-
 import { ERepoGrouping } from "@interface/enums";
 import RepoTypeCard from "@components/molecules/repoTypeCard";
 import { repoGroupingAtom } from "@atom/repository";
@@ -31,7 +30,7 @@ const RepoTypesCards = () => {
       },
       {
         cardTitle: "مخزن‌های اشتراکی",
-        icon: <FolderShareIcon className="h-full w-full stroke-icon-active" />,
+        icon: <FolderShareIcon className="h-full w-full fill-icon-active" />,
         onClick: () => {
           return setRepoGroup(ERepoGrouping.ACCESS_REPO);
         },
@@ -40,7 +39,7 @@ const RepoTypesCards = () => {
       {
         cardTitle: "مخزن‌های نشان‌شده",
         icon: (
-          <FolderBookmarkIcon className="h-full w-full stroke-icon-active" />
+          <BookmarkRepoIcon className="h-full w-full fill-icon-active" />
         ),
         onClick: () => {
           return setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
@@ -49,7 +48,7 @@ const RepoTypesCards = () => {
       },
       {
         cardTitle: "مخزن‌های بایگانی‌شده",
-        icon: <ArchiveIcon className="h-full w-full stroke-icon-active" />,
+        icon: <ArchiveCardIcon className="h-full w-full fill-icon-active" />,
         onClick: () => {
           return setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
         },

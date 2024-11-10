@@ -17,11 +17,17 @@ interface IProps {
     text: string;
     icon?: React.ReactNode;
     className?: string;
+    disabled?: boolean;
     onClick?:
       | (React.MouseEventHandler<HTMLLIElement> &
           React.MouseEventHandler<HTMLButtonElement>)
       | undefined;
-    subMenu?: { text: string; icon?: React.JSX.Element; onClick: () => void }[];
+    subMenu?: {
+      text: string;
+      icon?: React.JSX.Element;
+      onClick: () => void;
+      disabled?: boolean;
+    }[];
   }[];
 }
 
@@ -40,6 +46,7 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
               menuName={menuItem.text}
               subMenuList={menuItem.subMenu}
               key={`sub-menu-${index}`}
+              icon={menuItem.icon}
             />
           ) : (
             <MenuItem
@@ -47,13 +54,14 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
               placeholder="menu-item"
               className="p-2"
               onClick={menuItem.onClick}
+              disabled={menuItem.disabled}
             >
               <div className="flex items-center gap-2">
                 {menuItem.icon}
                 <Typography
                   placeholder="menu-item-text"
                   className={`font-iranYekan ${menuItem.className || ""}
-                     ${variant === "small" ? " font-light text-[12px] mr-2" : "font-medium text-base mb-1"}`}
+                     ${variant === "small" ? " font-light text-[12px] " : "font-medium text-base mb-1"}`}
                 >
                   {menuItem.text}
                 </Typography>

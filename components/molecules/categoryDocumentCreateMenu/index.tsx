@@ -1,18 +1,28 @@
 import React, { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { createCatDocDrawerAtom } from "@atom/category";
-import { AddIcon, ArrowDownIcon } from "@components/atoms/icons";
+import {
+  AddIcon,
+  ArrowDownIcon,
+  CategoryAddIcon,
+  DocumentAddIcon,
+  TemplateAddIcon,
+} from "@components/atoms/icons";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import CategoryCreateDialog from "@components/organisms/dialogs/category/categoryCreateDialog";
 import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
 import { Button, Typography } from "@material-tailwind/react";
+import { ERoles } from "@interface/enums";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
   showDrawer?: boolean;
 }
 
 const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
+
   const [createCategoryModal, setCreateCategoryModal] = useState(false);
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
@@ -23,22 +33,34 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
   const menuList: {
     text: string;
     icon?: React.JSX.Element;
+    disabled?: boolean;
     onClick: () => void;
   }[] = [
     {
-      text: " ایجاد سند جدید",
+      text: "سند جدید",
+      icon: <DocumentAddIcon className="w-4 h-4" />,
+      disabled: getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         setCreateDocumentModal(true);
       },
     },
     {
       text: "نمونه سند",
+      icon: <TemplateAddIcon className="w-4 h-4" />,
+      disabled:
+        getRepo?.roleName === ERoles.writer ||
+        getRepo?.roleName === ERoles.viewer ||
+        getRepo?.roleName === ERoles.editor,
       onClick: () => {
         setCreateTemplateModal(true);
       },
     },
     {
       text: "ایجاد دسته بندی",
+      icon: <CategoryAddIcon className="w-4 h-4" />,
+      disabled:
+        getRepo?.roleName === ERoles.writer ||
+        getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         setCreateCategoryModal(true);
       },
