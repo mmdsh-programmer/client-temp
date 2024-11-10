@@ -1,5 +1,5 @@
 import React from "react";
-import { FolderIcon, InvisibleIcon } from "@components/atoms/icons";
+import { FolderIcon } from "@components/atoms/icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { Checkbox } from "@material-tailwind/react";

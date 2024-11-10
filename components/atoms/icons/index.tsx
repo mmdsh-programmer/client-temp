@@ -2132,7 +2132,7 @@ export const LikeIcon = (props: IProps) => {
 };
 
 export const LimitationIcon = (props: IProps) => {
-  const { className, stroke } = props;
+  const { className } = props;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
