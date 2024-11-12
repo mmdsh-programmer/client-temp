@@ -139,7 +139,7 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
   };
 
   return (
-    <div className="h-full pb-11 w-100">
+    <div className="h-[calc(100vh-97px)] w-100">
       <div className="text-xl font-bold text-[#3e4a4d] text-center mt-4 mb-4 pb-4 border-b border-solid border-[rgba(0,0,0,0.08)]">
         <Link prefetch={false} href={rootUrl}>
           {repoName || ""}
@@ -182,7 +182,7 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
         </div>
       </div>
 
-      <div className="h-[calc(100vh-315px)] overflow-y-auto pl-2">
+      <div className="h-[calc(100vh-220px)] overflow-y-auto pl-2">
         {overalLoading ? (
           <div className="w-full flex justify-center pt-4">
             <Spinner className="h-5 w-5" color="deep-purple" />

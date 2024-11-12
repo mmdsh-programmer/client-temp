@@ -23,7 +23,7 @@ const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
         .replace(/\s+/g, "-")
         .toLowerCase()}
       key={`document-tree-item-${document.id}`}
-      className={`collapse-document transition-all duration-300 flex gap-2 hover:bg-purple-light rounded-[5px] py-[5px] pl-2.5 w-full text-right pr-[22px] ${
+      className={`collapse-document py-2 transition-all duration-300 flex gap-2 hover:bg-purple-light rounded-[5px] pl-2.5 w-full text-right pr-[22px] ${
         isSelected ? "bg-purple-light pointer-events-none selected" : ""
       }`}
       title={document.name}

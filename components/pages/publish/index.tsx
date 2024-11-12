@@ -8,6 +8,8 @@ import RenderClientContent from "@components/organisms/publish/renderClientConte
 import PublishVersion from "../../organisms/publish/publishVersion";
 import PublishTinyLink from "@components/organisms/publish/publishTinyLink";
 import { IDocumentMetadata } from "@interface/document.interface";
+import PublishOutlineDrawer from "@components/organisms/publishBottomNav/publishOutlineDrawer";
+import PublishBottomNav from "@components/organisms/publishBottomNav";
 
 interface IProps {
   version: IVersion;
@@ -17,7 +19,7 @@ interface IProps {
 const PublishVersionContent = ({ version, document }: IProps) => {
   return (
     <>
-      <div className="scroller w-full overflow-y-auto min-h-[calc(100vh-156px)]">
+      <div className="scroller grid gap-2 relative w-full overflow-y-auto min-h-full">
         <PublishVersion document={document} version={version} />
         {version.contentType === EDocumentTypes.classic ? (
           <>
@@ -30,8 +32,10 @@ const PublishVersionContent = ({ version, document }: IProps) => {
         ) : (
           <ConnectRemoteEditor versionData={version} />
         )}
+        <PublishTinyLink />
+        <PublishBottomNav />
       </div>
-      <PublishTinyLink />
+      <PublishOutlineDrawer outline={version.outline || "[]"} />
     </>
   );
 };

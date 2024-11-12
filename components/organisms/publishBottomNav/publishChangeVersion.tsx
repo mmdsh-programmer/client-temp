@@ -61,29 +61,28 @@ const PublishChangeVersion = ({
   }
 
   return (
-    <Menu placement="top" open={openMenu} handler={setOpenMenu}>
+    <Menu placement="top-end" open={openMenu} handler={setOpenMenu}>
       <MenuHandler>
-        <Button className="flex py-2 text-sm justify-between bg-transparent border border-gray-400 text-primary font-light px-1.5 sm:px-2.5 w-20 sm:w-[180px]">
-          <span className="text-ellipsis overflow-hidden whitespace-nowrap">
+        <Button className="flex-none flex gap-2.5 px-3 bg-white bg-opacity-15 rounded-[100px] w-32 justify-between leading-4">
+          <span className="flex-none text-ellipsis text-sm overflow-hidden whitespace-nowrap text-white">
             {getPublishVersion?.versionNumber}
           </span>
           <ChevronLeftIcon
-            className={`transition-all duration-150 stroke-gray-400 w-2.5 h-2.5 ${openMenu ? "-rotate-90" : "rotate-90"}`}
+            className={`transition-all duration-150 stroke-white w-2.5 h-2.5 ${openMenu ? "-rotate-90" : "rotate-90"}`}
           />
         </Button>
       </MenuHandler>
-      <MenuList className="p-1.5 w-20 sm:w-[180px] min-w-[unset]">
+      <MenuList className="bg-[#222] border-none p-1.5 w-32">
         {publicVersions?.pages.map((publicVersionPage, index) => {
           return publicVersionPage.list.map((publishVersion) => {
             return (
               <MenuItem
-                className={`text-ellipsis overflow-hidden whitespace-nowrap ${publishVersion.id === selectedVersionId ? "bg-blue-gray-50" : ""}`}
+                className={`text-ellipsis text-white hover:!bg-white hover:!bg-opacity-15 hover:!text-white overflow-hidden whitespace-nowrap ${publishVersion.id === selectedVersionId ? "bg-white bg-opacity-15" : ""}`}
                 // eslint-disable-next-line react/no-array-index-key
                 key={`publish-version-${publishVersion.id}-${index}`}
                 onClick={() => {
                   return handleSelectVersion(publishVersion);
                 }}
-                aria-selected
               >
                 {publishVersion.versionNumber}
               </MenuItem>

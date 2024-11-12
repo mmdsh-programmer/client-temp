@@ -105,27 +105,25 @@ const PublishNextAndPrev = ({ selectedDocument }: IProps) => {
   return (
     <>
       <Button
-        className="border-gray-400 w-fit min-w-fit p-2.5"
+        className="w-fit min-w-fit p-2.5 border-none"
         variant="outlined"
         onClick={() => {
           return handleClick(navigation.nextChild);
         }}
         disabled={!navigation.nextChild}
       >
-        <span className="hidden sm:block">سند بعدی</span>
-        <ChevronLeftIcon className="w-4 h-4 block stroke-gray-700 sm:hidden -rotate-180 scale-75" />
+        <ChevronLeftIcon className="w-5 h-5 block stroke-white -rotate-180 scale-75" />
       </Button>
 
       <Button
-        className="border-gray-400 w-fit min-w-fit p-2.5"
+        className="w-fit min-w-fit p-2.5 border-none"
         variant="outlined"
         onClick={() => {
           return handleClick(navigation.prevChild);
         }}
         disabled={!navigation.prevChild}
       >
-        <span className="hidden sm:block">سند قبلی</span>
-        <ChevronLeftIcon className="w-4 h-4 block stroke-gray-700 sm:hidden scale-75" />
+        <ChevronLeftIcon className="w-5 h-5 block stroke-white scale-75" />
       </Button>
     </>
   );

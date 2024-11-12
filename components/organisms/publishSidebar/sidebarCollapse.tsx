@@ -23,7 +23,7 @@ const SidebarCollapse = ({ title, children, className, onClick }: IProps) => {
     <>
       <Button
         onClick={toggleOpen}
-        className={`collapse-button justify-start bg-transparent flex items-center w-full hover:bg-purple-light rounded-[5px] py-[5px] px-1 ${className} ${open ? "active-collapse" : ""}`}
+        className={`collapse-button py-2 justify-start bg-transparent flex items-center w-full hover:bg-purple-light rounded-[5px] px-1 ${className} ${open ? "active-collapse" : ""}`}
       >
         <ChevronLeftIcon
           className={`stroke-gray-500 w-2 h-2 flex-none self-start mt-[7px] ${
@@ -36,7 +36,7 @@ const SidebarCollapse = ({ title, children, className, onClick }: IProps) => {
         </span>
       </Button>
       <Collapse open={open}>
-        <div className="pr-4 collapse-content flex flex-col gap-1">
+        <div className="pr-4 collapse-content flex flex-col">
           {open ? children : null}
         </div>
       </Collapse>

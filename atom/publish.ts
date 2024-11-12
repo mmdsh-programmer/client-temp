@@ -20,3 +20,9 @@ export const openPublishPageSearchContent = atom<boolean>({
   default: false,
   effects: [logEffect("openPublishPageSearchContent")],
 });
+
+export const openPublishOutlineDrawer = atom<boolean>({
+  key: "openPublishOutlineDrawer",
+  default: false,
+  effects: [logEffect("openPublishOutlineDrawer")],
+});

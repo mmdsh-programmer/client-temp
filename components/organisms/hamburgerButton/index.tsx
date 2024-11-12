@@ -17,7 +17,7 @@ const HamburgerButton = ({ isOpen, setIsOpen }: IProps) => {
       }}
       className="w-4 mr-3 bg-white px-4 py-2 md:hidden"
     >
-      <span>{isOpen ? <CancelIcon className="w-4 h-4" /> : <MoreLineIcon className="w-4 h-4" />}</span>
+      <span>{isOpen ? <CancelIcon className="w-4 h-4" /> : <MoreLineIcon className="w-4 h-4 stroke-blue-gray-700" />}</span>
     </Button>
   );
 };

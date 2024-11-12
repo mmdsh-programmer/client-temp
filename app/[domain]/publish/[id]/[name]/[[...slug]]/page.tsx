@@ -74,7 +74,7 @@ export default async function PublishContentPage({
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
-    if (hasVersion && versionId && Number.isNaN(versionId)) {
+    if (hasVersion && versionId && !Number.isNaN(versionId)) {
       versionData = await getPublishDocumentVersion(
         repository.id,
         documentId,
@@ -101,7 +101,7 @@ export default async function PublishContentPage({
     );
   } catch (error) {
     return (
-      <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">
+      <section className="main w-full h-[calc(100vh-81px)] text-center bg-slate-50 grid justify-items-center place-items-center">
         <div className="flex flex-col justify-center items-center">
           <FolderEmptyIcon />
           {error instanceof Error ? error.message : "خطای نامشخصی رخ داد"}
