@@ -15,6 +15,8 @@ interface IProps {
   dislikeButtonClassName?: string;
   wrapperClassName?: string;
   iconClassName?: string;
+  showCounter?: boolean;
+  counterClassName?: string;
 }
 
 const LikeDislikeButtons = ({
@@ -29,6 +31,8 @@ const LikeDislikeButtons = ({
   likeButtonClassName,
   dislikeButtonClassName,
   iconClassName,
+  showCounter,
+  counterClassName,
 }: IProps) => {
   return (
     <div className={`flex ${wrapperClassName}`}>
@@ -39,6 +43,8 @@ const LikeDislikeButtons = ({
         likeCount={likeCount}
         likePending={likePending || dislikePending}
         postInfo={postInfo}
+        showCounter={showCounter}
+        counterClassName={counterClassName}
       />
       <DislikeButton
         dislikeButtonClassName={dislikeButtonClassName}
@@ -47,7 +53,9 @@ const LikeDislikeButtons = ({
         dislikeCount={dislikeCount}
         dislikePending={dislikePending || likePending}
         postInfo={postInfo}
-        />
+        showCounter={showCounter}
+        counterClassName={counterClassName}
+      />
     </div>
   );
 };

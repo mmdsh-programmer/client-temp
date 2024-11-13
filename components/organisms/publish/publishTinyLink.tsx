@@ -31,7 +31,7 @@ const PublishTinyLink = () => {
 
   if (createTinyLinkHook.isPending) {
     return (
-      <div className="flex items-center gap-4 bg-white py-8 px-12">
+      <div className="flex items-center gap-4 bg-white py-8 px-5 xs:px-8">
         <div className="w-full flex justify-center pt-4">
           <Spinner className="h-6 w-6" color="deep-purple" />
         </div>
@@ -40,7 +40,7 @@ const PublishTinyLink = () => {
   }
 
   return (
-    <div className="flex items-center gap-4 bg-white py-8 px-5 xs:px-12">
+    <section className="flex items-center gap-4 bg-white py-8 px-5 xs:px-8">
       <div className="w-full max-w-sm">
         <div className="mb-2 flex justify-between items-center">
           <label
@@ -74,7 +74,7 @@ const PublishTinyLink = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

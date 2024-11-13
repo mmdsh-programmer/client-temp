@@ -1,7 +1,6 @@
 import React from "react";
 import useGetLikeList from "@hooks/core/useGetLikeList";
 import useGetDislikeList from "@hooks/core/useGetDislikeList";
-import { IVersion } from "@interface/version.interface";
 import useLike from "@hooks/core/useLike";
 import useDislike from "@hooks/core/useDislike";
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
@@ -9,37 +8,41 @@ import useGetPostInfo from "@hooks/core/useGetPostInfo";
 import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
-  version?: IVersion;
+  postId: number;
   likeButtonClassName?: string;
   dislikeButtonClassName?: string;
   wrapperClassName?: string;
   iconClassName?: string;
+  showCounter?: boolean;
+  counterClassName?: string;
 }
 
 const LikeAndDislike = ({
-  version,
+  postId,
   likeButtonClassName,
   dislikeButtonClassName,
   wrapperClassName,
   iconClassName,
+  showCounter,
+  counterClassName,
 }: IProps) => {
   const {
     data: getLikes,
     isLoading: isLoadingLikeList,
     isFetching: isFetchingLikeList,
-  } = useGetLikeList(version!.postId, 30);
+  } = useGetLikeList(postId, 30);
 
   const {
     data: getDislikes,
     isLoading: isLoadingDislikeList,
     isFetching: isFetchingDislikeList,
-  } = useGetDislikeList(version!.postId, 30);
+  } = useGetDislikeList(postId, 30);
 
   const {
     data: getPostInfo,
     isLoading: isLoadingPostInfo,
     isFetching: isFetchingPostInfo,
-  } = useGetPostInfo(version!.postId);
+  } = useGetPostInfo(postId);
 
   const isLoading =
     isLoadingLikeList || isLoadingDislikeList || isLoadingPostInfo;
@@ -53,24 +56,24 @@ const LikeAndDislike = ({
   const disLikeHook = useDislike();
 
   const handleLike = () => {
-    if (!version) return;
+    if (!postId) return;
     likeHook.mutate({
-      postId: version.postId,
+      postId,
       like: !postInfo?.liked,
     });
   };
 
   const handleDisLike = () => {
-    if (!version) return;
+    if (!postId) return;
     disLikeHook.mutate({
-      postId: version.postId,
+      postId,
       dislike: !postInfo?.disliked,
     });
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center w-fit">
+      <div className={`flex items-center w-fit ${wrapperClassName}`}>
         <Spinner className="h-5 w-5" color="deep-purple" />
       </div>
     );
@@ -89,6 +92,8 @@ const LikeAndDislike = ({
       likeButtonClassName={likeButtonClassName}
       dislikeButtonClassName={dislikeButtonClassName}
       iconClassName={iconClassName}
+      showCounter={showCounter}
+      counterClassName={counterClassName}
     />
   );
 };

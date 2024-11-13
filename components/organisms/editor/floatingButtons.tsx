@@ -85,7 +85,7 @@ const FloatingButtons = ({ version }: IProps) => {
               </Button>
             </RenderIf>
             <RenderIf isTrue={renderLike}>
-              <LikeAndDislike version={version} />
+              <LikeAndDislike postId={version!.postId} />
             </RenderIf>
           </>
         ) : null}

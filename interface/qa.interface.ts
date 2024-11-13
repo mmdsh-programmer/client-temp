@@ -1,0 +1,222 @@
+export interface IQAResponse {
+  id: number;
+  version: number;
+  timelineId: number;
+  entityId: number;
+  forwardedId: number;
+  numOfLikes: number;
+  numOfDisLikes: number;
+  numOfSaved: number;
+  numOfShare: number;
+  numOfFavorites: number;
+  numOfComments: number;
+  timestamp: number;
+  enable: boolean;
+  hide: boolean;
+  replyPostConfirmation: boolean;
+  userSrv: {
+    id: number;
+    name: string;
+    ssoId: string;
+    ssoIssuerCode: number;
+    profileImage: string;
+  };
+  rate: {
+    rate: number;
+    rateCount: number;
+  };
+  userPostInfo: {
+    postId: number;
+    liked: boolean;
+    disliked: boolean;
+    favorite: boolean;
+  };
+  latitude: number;
+  longitude: number;
+  canComment: boolean;
+  canLike: boolean;
+  canRate: boolean;
+  tags: string[];
+  tagTrees: string[];
+  name: string;
+  content: string;
+}
+
+export interface IQAList {
+  id: number;
+  version: number;
+  timelineId: number;
+  entityId: number;
+  forwardedId: number;
+  numOfLikes: number;
+  numOfDisLikes: number;
+  numOfSaved: number;
+  numOfShare: number;
+  numOfFavorites: number;
+  numOfComments: number;
+  timestamp: number;
+  enable: boolean;
+  hide: boolean;
+  replyPostConfirmation: boolean;
+  business: {
+    id: number;
+    name: string;
+    imageInfo: {
+      id: number;
+      name: string;
+      hashCode: string;
+      description: string;
+      actualWidth: number;
+      actualHeight: number;
+      width: number;
+      height: number;
+    };
+    image: string;
+    numOfProducts: number;
+    rate: {
+      myRate: number;
+      rate: number;
+      rateCount: number;
+    };
+    sheba: string;
+    phone: string;
+    serviceCallName: string;
+    ssoId: string;
+  };
+  userSrv: {
+    id: number;
+    name: string;
+    ssoId: string;
+    ssoIssuerCode: number;
+    profileImage: string;
+  };
+  rate: {
+    myRate: number;
+    rate: number;
+    rateCount: number;
+  };
+  userPostInfo: {
+    postId: number;
+    liked: boolean;
+    disliked: boolean;
+    favorite: boolean;
+  };
+  metadata: string;
+  lgContent: string;
+  latitude: number;
+  longitude: number;
+  uniqueId: string;
+  canComment: boolean;
+  canLike: boolean;
+  canRate: boolean;
+  tags: string[];
+  tagTrees: {
+    id: number;
+    name: string;
+    code: string;
+  }[];
+  repliedItemSrv: {
+    id: 0;
+    version: 0;
+    timelineId: 0;
+    entityId: 0;
+    forwardedId: 0;
+    numOfLikes: 0;
+    numOfDisLikes: 0;
+    numOfSaved: 0;
+    numOfShare: 0;
+    numOfFavorites: 0;
+    numOfComments: 0;
+    timestamp: 0;
+    enable: true;
+    hide: true;
+    replyPostConfirmation: true;
+    business: {
+      id: number;
+      name: string;
+      imageInfo: {
+        id: number;
+        name: string;
+        hashCode: string;
+        description: string;
+        actualWidth: number;
+        actualHeight: number;
+        width: number;
+        height: number;
+      };
+      image: string;
+      numOfProducts: number;
+      rate: {
+        myRate: number;
+        rate: number;
+        rateCount: number;
+      };
+      sheba: string;
+      phone: string;
+      serviceCallName: string;
+      ssoId: string;
+    };
+    userSrv: {
+      id: number;
+      name: string;
+      ssoId: string;
+      ssoIssuerCode: number;
+      profileImage: string;
+    };
+    rate: {
+      myRate: number;
+      rate: number;
+      rateCount: number;
+    };
+    userPostInfo: {
+      postId: number;
+      liked: boolean;
+      disliked: boolean;
+      favorite: boolean;
+    };
+    metadata: string;
+    lgContent: string;
+    latitude: number;
+    longitude: number;
+    uniqueId: string;
+    canComment: boolean;
+    canLike: boolean;
+    canRate: boolean;
+    tags: string[];
+    tagTrees: {
+      id: number;
+      name: string;
+      code: string;
+    }[];
+    attributeValues: {
+      code: string;
+      name: string;
+      value: string;
+    }[];
+    templateCode: string;
+  };
+  attributeValues: {
+    code: string;
+    name: string;
+    value: string;
+  }[];
+  templateCode: string;
+  name: string;
+  content: string;
+  repliedPostId: number;
+  forwardedDescription: string;
+  forwardedPostOwner: {
+    id: number;
+    name: string;
+    ssoId: string;
+    ssoIssuerCode: number;
+    profileImage: string;
+  };
+  mentionedUserIds: number[];
+}
+
+export interface IQuestionDetailsProps extends IQAList {
+  repoId: number;
+  docPostId: number;
+  docName: string;
+}

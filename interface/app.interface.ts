@@ -262,3 +262,8 @@ export interface IThemeInfo {
   projectDescription?: string;
   heroImage?: string;
 }
+
+export interface IEditorValue {
+  content: string;
+  outline: string;
+}

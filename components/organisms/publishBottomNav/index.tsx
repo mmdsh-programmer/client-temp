@@ -69,7 +69,7 @@ const PublishBottomNav = () => {
             likeButtonClassName="hover:bg-transparent"
             dislikeButtonClassName="hover:bg-transparent"
             iconClassName="w-6 h-6"
-            version={getPublishVersion}
+            postId={getPublishVersion.postId}
           />
         ) : null}
 

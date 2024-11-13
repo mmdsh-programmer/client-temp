@@ -50,7 +50,8 @@ module.exports = withMT({
         tertiary: "var(--bg-tertiary-color)",
       },
       borderColor: {
-        normal: "var(--border-normal)"
+        normal: "var(--border-normal)",
+        secondary: "var(--bg-secondary-color)",
       },
       iconColor: {
         active: "var(--icon-active)"

@@ -33,11 +33,11 @@
   .prevent-toast-click {
     pointer-events: all !important;
   }
-  
+
   .prevent-toast-click * {
     pointer-events: all !important;
   }
-  
+
   .Toastify__toast-container {
     pointer-events: all !important;
   }
@@ -118,6 +118,10 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 @layer components {
+  time {
+    @apply !font-iranYekan;
+  }
+
   .list {
     @apply !font-iranYekan;
   }
