@@ -57,12 +57,13 @@ export interface IComment {
   user: {
     id: number;
     name: string;
-    ssoId: number;
+    ssoId: string;
     ssoIssuerCode: number;
     profileImage: string;
   };
   confirmed: boolean;
   numOfLikes: number;
+  numOfDislikes: number;
   numOfComments: number;
   liked: boolean;
 }

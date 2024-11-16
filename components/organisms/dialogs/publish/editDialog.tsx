@@ -1,22 +1,28 @@
 import React, { useRef } from "react";
-import CreateDialog from "@components/templates/dialog/createDialog";
 import { Typography } from "@material-tailwind/react";
 import QuestionAnswerEditor, {
   IQaEditorRef,
 } from "@components/organisms/publishFeedback/PublishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
-import useCreateQuestionAnswer from "@hooks/questionAnswer/useCreateQuestionAnswer";
 import { config } from "@utils/clasorEditor";
+import useUpdateQuestionAnswer from "@hooks/questionAnswer/useUpdateQuestionAnswer";
+import EditDialog from "@components/templates/dialog/editDialog";
+import { IQAList } from "@interface/qa.interface";
 
 interface IProps {
-  postId: number;
+  item: IQAList;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
+  isAnswer?: boolean;
 }
 
-const AnswerDialog = ({ postId, setOpen }: IProps) => {
+const PublishQuestionAnswerEditDialog = ({
+  item,
+  setOpen,
+  isAnswer,
+}: IProps) => {
   const editorRef = useRef<IQaEditorRef | null>(null);
 
-  const createAnswerHook = useCreateQuestionAnswer();
+  const updateQuestionAnswer = useUpdateQuestionAnswer();
 
   const handleClose = () => {
     setOpen(false);
@@ -37,27 +43,38 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
       return toast.error("خطا در دریافت متن پاسخ");
     }
 
-    createAnswerHook.mutate({
-      name: `post-${postId}-answer`,
+    updateQuestionAnswer.mutate({
+      name: item.name,
       content: editorData.content,
-      repliedPostId: postId,
-      metadata: JSON.stringify({ isQuestion: false }),
-      callBack: () => {
-        toast.success("پاسخ شما با موفقیت اضافه شد");
-        setOpen(false);
+      entityId: item.entityId,
+      canComment: item.canComment,
+      canLike: item.canLike,
+      enable: item.enable,
+      repliedPostId: item.repliedPostId,
+      metadata: item.metadata,
+      callBack: async () => {
+        toast.success(
+          isAnswer
+            ? "پاسخ شما با موفقیت ویرایش شد"
+            : "سوال شما با موفقیت ویرایش شد"
+        );
         editorRef.current?.setData({
           content: "",
           outline: [],
           ...config,
         });
+
+        setOpen(false);
       },
     });
   };
 
   return (
-    <CreateDialog
-      isPending={createAnswerHook.isPending}
-      dialogHeader="به این پرسش پاسخ دهید"
+    <EditDialog
+      isPending={updateQuestionAnswer.isPending}
+      dialogHeader={
+        isAnswer ? "پاسخ خود را ویرایش کنید" : "پرسش خود را ویرایش کنید"
+      }
       onSubmit={async () => {
         await onSubmit();
       }}
@@ -66,15 +83,15 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-2">
         <Typography className="text-xs text-gray-800 mb-2">
-          پاسخ خود را بنویسید
+          متن خود را بنویسید
         </Typography>
 
         <div className="h-44">
-          <QuestionAnswerEditor ref={editorRef} />
+          <QuestionAnswerEditor defaultValue={item.content} ref={editorRef} />
         </div>
       </form>
-    </CreateDialog>
+    </EditDialog>
   );
 };
 
-export default AnswerDialog;
+export default PublishQuestionAnswerEditDialog;

@@ -11,7 +11,6 @@ const useLike = () => {
     mutationFn: async (values: {
       postId: number;
       like: boolean;
-      parentPostId?: number;
       callBack?: () => void;
     }) => {
       const { postId, like } = values;
@@ -20,7 +19,7 @@ const useLike = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId, parentPostId } = values;
+      const { callBack, postId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getDislike-${postId}`],
       });
@@ -29,10 +28,6 @@ const useLike = () => {
       });
       queryClient.invalidateQueries({
         queryKey: [`post-${postId}-info`],
-      });
-
-      queryClient.invalidateQueries({
-        queryKey: [`question-answer-list${parentPostId ? `-${parentPostId}` : ""}`],
       });
 
       callBack?.();

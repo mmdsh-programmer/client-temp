@@ -2,7 +2,7 @@ import React from "react";
 import { publishVersionAtom } from "@atom/publish";
 import { useRecoilValue } from "recoil";
 import CreateQuestion from "./createQuestion";
-import QuestionList from "./questionList";
+import QuestionAnswerList from "./questionAnswerList";
 
 const PublishQuestionAnswer = () => {
   const getPublishVersion = useRecoilValue(publishVersionAtom);
@@ -14,7 +14,7 @@ const PublishQuestionAnswer = () => {
       </div>
       <hr className="w-full h-[2px] bg-blue-gray-50" />
 
-      <QuestionList postId={getPublishVersion.postId} />
+      <QuestionAnswerList postId={getPublishVersion.postId} />
     </>
   ) : null;
 };

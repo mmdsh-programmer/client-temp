@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useGetLikeList from "@hooks/core/useGetLikeList";
 import useGetDislikeList from "@hooks/core/useGetDislikeList";
 import useLike from "@hooks/core/useLike";
@@ -9,6 +9,8 @@ import { Spinner } from "@material-tailwind/react";
 
 interface IProps {
   postId: number;
+  initLikeCount?: number;
+  initDislikeCount?: number;
   likeButtonClassName?: string;
   dislikeButtonClassName?: string;
   wrapperClassName?: string;
@@ -19,6 +21,8 @@ interface IProps {
 
 const LikeAndDislike = ({
   postId,
+  initLikeCount,
+  initDislikeCount,
   likeButtonClassName,
   dislikeButtonClassName,
   wrapperClassName,
@@ -26,23 +30,28 @@ const LikeAndDislike = ({
   showCounter,
   counterClassName,
 }: IProps) => {
+  const [enable, setEnable] = useState(
+    typeof initLikeCount === "undefined" &&
+      typeof initDislikeCount === "undefined"
+  );
+
   const {
     data: getLikes,
     isLoading: isLoadingLikeList,
     isFetching: isFetchingLikeList,
-  } = useGetLikeList(postId, 30);
+  } = useGetLikeList(postId, 30, enable);
 
   const {
     data: getDislikes,
     isLoading: isLoadingDislikeList,
     isFetching: isFetchingDislikeList,
-  } = useGetDislikeList(postId, 30);
+  } = useGetDislikeList(postId, 30, enable);
 
   const {
     data: getPostInfo,
     isLoading: isLoadingPostInfo,
     isFetching: isFetchingPostInfo,
-  } = useGetPostInfo(postId);
+  } = useGetPostInfo(postId, enable);
 
   const isLoading =
     isLoadingLikeList || isLoadingDislikeList || isLoadingPostInfo;
@@ -52,6 +61,11 @@ const LikeAndDislike = ({
 
   const postInfo = getPostInfo?.[0];
 
+  const likeCount = enable ? getLikes?.pages[0].total || 0 : initLikeCount || 0;
+  const dislikeCount = enable
+    ? getDislikes?.pages[0].total || 0
+    : initDislikeCount || 0;
+
   const likeHook = useLike();
   const disLikeHook = useDislike();
 
@@ -60,6 +74,11 @@ const LikeAndDislike = ({
     likeHook.mutate({
       postId,
       like: !postInfo?.liked,
+      callBack: () => {
+        if (!enable) {
+          setEnable(true);
+        }
+      },
     });
   };
 
@@ -68,6 +87,11 @@ const LikeAndDislike = ({
     disLikeHook.mutate({
       postId,
       dislike: !postInfo?.disliked,
+      callBack: () => {
+        if (!enable) {
+          setEnable(true);
+        }
+      },
     });
   };
 
@@ -82,8 +106,8 @@ const LikeAndDislike = ({
   return (
     <LikeDislikeButtons
       postInfo={postInfo}
-      likeCount={getLikes?.pages[0].total || 0}
-      dislikeCount={getDislikes?.pages[0].total || 0}
+      likeCount={likeCount}
+      dislikeCount={dislikeCount}
       likePending={likeHook.isPending || isFetcing}
       dislikePending={disLikeHook.isPending || isFetcing}
       onLike={handleLike}

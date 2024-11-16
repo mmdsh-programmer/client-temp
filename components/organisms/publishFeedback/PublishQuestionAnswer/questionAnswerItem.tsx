@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import RenderIf from "@components/atoms/renderIf";
 import AnswerDialog from "@components/organisms/dialogs/publish/answerDialog";
@@ -10,22 +11,24 @@ import {
   CardFooter,
   CardHeader,
   Collapse,
-  Rating,
-  Typography,
 } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
-import React, { useState } from "react";
-import QuestionAnswerLikeAndDislike from "./questionAnswerLikeAndDislike";
+import useGetUser from "@hooks/auth/useGetUser";
+import QuestionAnswerContentPreview from "./questionAnswerContentPreview";
+import PublishQuestionAnswerEditDialog from "@components/organisms/dialogs/publish/editDialog";
 
 interface IProps {
   questionItem: IQAList;
   children?: JSX.Element;
-  isAnwer?: boolean;
+  isAnswer?: boolean;
 }
 
-const QuestionItem = ({ questionItem, children, isAnwer }: IProps) => {
+const QuestionAnswerItem = ({ questionItem, children, isAnswer }: IProps) => {
+  const { data: userInfo } = useGetUser();
   const [openCollapse, setOpenCollapse] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+
 
   const handleOpenCollapse = () => {
     setOpenCollapse(!openCollapse);
@@ -35,11 +38,15 @@ const QuestionItem = ({ questionItem, children, isAnwer }: IProps) => {
     setOpenAnswer(true);
   };
 
+  const handleOpenEdit = () => {
+    setOpenEdit(true);
+  };
+
   return (
     <>
       <Card
         shadow={false}
-        className={`w-full pt-[30px] pb-5 px-5 flex flex-col gap-2.5 border-b-2 border-solid border-gray-200 rounded-none ${isAnwer ? "border-r-4 border-r-gray-200 bg-secondary" : "bg-white"}`}
+        className={`w-full pt-[30px] pb-5 px-5 flex flex-col gap-2.5 border-b-2 border-solid border-gray-200 rounded-none ${isAnswer ? "border-r-4 border-r-gray-200 bg-secondary" : "bg-white"}`}
       >
         <CardHeader
           color="transparent"
@@ -59,21 +66,15 @@ const QuestionItem = ({ questionItem, children, isAnwer }: IProps) => {
               {FaDateFromTimestamp(questionItem.timestamp)}
             </time>
           </div>
-
-          <div className="flex items-center gap-1.5">
-            <span className="text-base text-gray-500 border-l border-solid border-gray-500 pl-2">
-              {questionItem.rate.rateCount}
-            </span>
-            <Rating dir="ltr" value={questionItem.rate.rateCount} readonly />
-          </div>
         </CardHeader>
         <CardBody className="p-0">
-          <Typography className="text-[13px] leading-7 text-right text-gray-800">
-            {questionItem.content}
-          </Typography>
+          <QuestionAnswerContentPreview
+            content={questionItem.content}
+            className="text-sm"
+          />
         </CardBody>
         <CardFooter className="flex items-center p-0 gap-2 justify-between">
-          <RenderIf isTrue={!isAnwer}>
+          <RenderIf isTrue={!isAnswer}>
             <div className="flex items-center gap-2">
               <Button
                 ripple={false}
@@ -89,39 +90,76 @@ const QuestionItem = ({ questionItem, children, isAnwer }: IProps) => {
                   className={`align-middle w-2.5 h-2.5 stroke-gray-500 transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
                 />
               </Button>
+
+              <RenderIf isTrue={!!userInfo}>
+                <>
+                  <span className="text-lg text-gray-500">{"\u2022"}</span>
+                  <Button
+                    variant="text"
+                    className="border-none !p-0 text-[13px] leading-5 text-link"
+                    onClick={handleOpenAnswer}
+                  >
+                    پاسخ به پرسش
+                  </Button>
+                </>
+              </RenderIf>
+            </div>
+          </RenderIf>
+
+          <RenderIf
+            isTrue={
+              !!userInfo && +userInfo.ssoId === +questionItem.userSrv.ssoId
+            }
+          >
+            <>
               <span className="text-lg text-gray-500">{"\u2022"}</span>
               <Button
                 variant="text"
                 className="border-none !p-0 text-[13px] leading-5 text-link"
-                onClick={handleOpenAnswer}
+                onClick={handleOpenEdit}
               >
-                پاسخ به پرسش
+                {isAnswer ? "ویرایش پاسخ" : "ویرایش پرسش"}
               </Button>
-            </div>
+            </>
           </RenderIf>
 
-          <QuestionAnswerLikeAndDislike
-            wrapperClassName="gap-5 mr-auto"
-            likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
-            dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
-            iconClassName="w-7 h-7 !stroke-gray-500"
-            counterClassName="ml-1 text-base text-gray-500"
-            showCounter
-            item={questionItem}
-          />
+          <RenderIf isTrue={!!userInfo}>
+            <LikeAndDislike
+              postId={questionItem.id}
+              initLikeCount={questionItem.numOfLikes}
+              initDislikeCount={questionItem.numOfDisLikes}
+              wrapperClassName="gap-5 mr-auto"
+              likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
+              dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
+              iconClassName="w-7 h-7 !stroke-gray-500"
+              counterClassName="ml-1 text-base text-gray-500"
+              showCounter
+            />
+          </RenderIf>
         </CardFooter>
       </Card>
 
-      <RenderIf isTrue={!isAnwer}>
+      <RenderIf isTrue={!isAnswer}>
         <Collapse open={openCollapse}>
           <div className="pr-3 sm:pr-12">{openCollapse ? children : null}</div>
         </Collapse>
       </RenderIf>
 
-      <RenderIf isTrue={!isAnwer && openAnswer}>
+      <RenderIf isTrue={!isAnswer && openAnswer}>
         <AnswerDialog
+          postId={questionItem.id}
           setOpen={() => {
             return setOpenAnswer(!openAnswer);
+          }}
+        />
+      </RenderIf>
+
+      <RenderIf isTrue={openEdit}>
+        <PublishQuestionAnswerEditDialog
+          item={questionItem}
+          isAnswer={isAnswer}
+          setOpen={() => {
+            return setOpenEdit(!openEdit);
           }}
         />
       </RenderIf>
@@ -129,4 +167,4 @@ const QuestionItem = ({ questionItem, children, isAnwer }: IProps) => {
   );
 };
 
-export default QuestionItem;
+export default QuestionAnswerItem;

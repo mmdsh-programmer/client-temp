@@ -3,7 +3,7 @@ import { handleClientSideHookError } from "@utils/error";
 import { getPostInfoAction } from "@actions/core";
 import { IActionError, IPostInfo } from "@interface/app.interface";
 
-const useGetPostInfo = (postId: number) => {
+const useGetPostInfo = (postId: number, enabled?: boolean) => {
   return useQuery({
     queryKey: [`post-${postId}-info`],
     queryFn: async ({ signal }) => {
@@ -13,6 +13,7 @@ const useGetPostInfo = (postId: number) => {
     },
     retry: false,
     refetchOnWindowFocus: false,
+    enabled,
   });
 };
 
