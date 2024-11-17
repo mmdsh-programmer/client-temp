@@ -26,10 +26,8 @@ const PublishFeeback = ({ postId }: IProps) => {
       tabTitle: ETabs.COMMENTS,
       tabContent: <PublishComments postId={postId} />,
     },
-  ].filter(Boolean) as {
-    tabTitle: ETabs;
-    tabContent: React.JSX.Element;
-  }[];
+  ];
+
   return (
     <section className="w-full flex items-center gap-4 bg-white">
       <PublishTab

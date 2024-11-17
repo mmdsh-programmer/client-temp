@@ -6,7 +6,6 @@ import { IGetSpecificVersion } from "clasor-content-preview/dist/interface/conte
 import ConnectRemoteEditor from "@components/organisms/publish/connectRemoteEditor";
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
 import PublishVersion from "../../organisms/publish/publishVersion";
-import PublishTinyLink from "@components/organisms/publish/publishTinyLink";
 import { IDocumentMetadata } from "@interface/document.interface";
 import PublishOutlineDrawer from "@components/organisms/publishBottomNav/publishOutlineDrawer";
 import PublishBottomNav from "@components/organisms/publishBottomNav";
@@ -33,7 +32,6 @@ const PublishVersionContent = ({ version, document }: IProps) => {
         ) : (
           <ConnectRemoteEditor versionData={version} />
         )}
-        <PublishTinyLink />
         <PublishFeeback postId={version.postId} />
         <PublishBottomNav />
       </section>

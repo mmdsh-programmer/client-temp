@@ -13,6 +13,7 @@ import PublishNextAndPrev from "./publishNextAndPrev";
 import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import { Button } from "@material-tailwind/react";
 import { MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
+import PublishTinyLink from "./publishTinyLink";
 
 const PublishBottomNav = () => {
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
@@ -53,6 +54,8 @@ const PublishBottomNav = () => {
               selectedDocument={getPublishPageSelectedDocument}
             />
         ) : null}
+
+        <PublishTinyLink />
 
         <Button
           className="w-fit min-w-fit p-3 border-none"

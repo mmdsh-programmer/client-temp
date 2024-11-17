@@ -47,8 +47,12 @@ const PublishTab = ({
       <TabsBody placeholder="tab-body">
         {tabList.map((tab) => {
           return (
-            <TabPanel className="px-0 py-0" key={tab.tabTitle} value={tab.tabTitle}>
-              {tab.tabContent}
+            <TabPanel
+              className="px-0 py-0 min-h-[500px]"
+              key={tab.tabTitle}
+              value={tab.tabTitle}
+            >
+              {tab.tabTitle === activeTab ? tab.tabContent : null}
             </TabPanel>
           );
         })}
