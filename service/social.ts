@@ -13,11 +13,9 @@ import {
 } from "@interface/app.interface";
 import axios, { AxiosError } from "axios";
 import qs from "qs";
-
-import Logger from "@utils/logger";
 import crypto from "crypto";
 import { IQAList, IQAResponse } from "@interface/qa.interface";
-import { IFollowUser, ISubscriptionStatus } from "@interface/core.interface";
+import { IComment } from "@interface/version.interface";
 
 const { API_TOKEN } = process.env;
 
@@ -276,6 +274,7 @@ export const getPostInfo = async (accessToken: string, postId: number) => {
 };
 
 export const getQuestionAnswer = async (
+  accessToken: string,
   offset: number,
   size: number,
   parentPostId?: number,
@@ -287,6 +286,7 @@ export const getQuestionAnswer = async (
   fromDate?: number,
   toDate?: number,
   tags?: string[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tagTrees?: any,
   tagTreeCategoryName?: string[],
   mentionedUserList?: string[],
@@ -299,6 +299,7 @@ export const getQuestionAnswer = async (
     {
       headers: {
         "Content-Type": "application/json",
+        _token_: accessToken,
       },
       params: {
         offset,
@@ -343,6 +344,7 @@ export const createQuestionAnswer = async (
   lat?: number,
   lng?: number,
   tags?: string[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tagTrees?: any,
   tagTreeCategoryName?: string[],
   mentionedUserList?: string[],
@@ -404,6 +406,7 @@ export const updateQuestionAnswer = async (
   lat?: number,
   lng?: number,
   tags?: string[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tagTrees?: any,
   tagTreeCategoryName?: string[],
   mentionedUserList?: string[]
@@ -468,89 +471,79 @@ export const archivePost = async (accessToken: string, postIds: number[]) => {
   return response.data;
 };
 
-// export const editSocialProfile = async (
-//   accessToken: string,
-//   isPrivate: boolean
-// ) => {
-//   const response = await axiosSocialInstance.get<ISocialResponse<any>>(
-//     "/editSocialProfile",
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//         _token_: accessToken,
-//       },
-//       params: {
-//         private: isPrivate,
-//       },
-//     }
-//   );
+export const getPublishCommentList = async (
+  accessToken: string,
+  postId: number,
+  offset: number,
+  size: number,
+) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<IComment[]>>(
+    "/commentList",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+        _token_issuer_: 1,
+      },
+      params: {
+        postId,
+        offset,
+        size,
+      },
+    },
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+  return response.data;
+};
 
-//   if (response.data.hasError) {
-//     return handleSocialStatusError(response.data);
-//   }
+export const likeComment = async (
+  accessToken: string,
+  commentId: number,
+  dislike: boolean,
+) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
+    "/likeComment",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+      },
+      params: {
+        commentId,
+        dislike,
+      },
+    },
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
 
-//   return response.data;
-// };
+  return response.data;
+};
 
-// export const followUser = async (userId: number) => {
-//   const response = await axiosSocialInstance.get<ISocialResponse<IFollowUser>>(
-//     "/followUser",
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       params: {
-//         userId,
-//       },
-//     }
-//   );
+export const dislikeComment = async (
+  accessToken: string,
+  commentId: number,
+  dislike: boolean,
+) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
+    "/dislikeComment",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+      },
+      params: {
+        commentId,
+        dislike,
+      },
+    },
+  );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
 
-//   if (response.data.hasError) {
-//     return handleSocialStatusError(response.data);
-//   }
-
-//   return response.data;
-// };
-
-// export const acceptFollowUser = async (
-//   accessToken: string,
-//   requestId: number
-// ) => {
-//   const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
-//     "/acceptFollowRequest",
-//     {
-//       headers: {
-//         "Content-Type": "application/json",
-//         _token_: accessToken,
-//       },
-//       params: {
-//         requestId,
-//       },
-//     }
-//   );
-
-//   if (response.data.hasError) {
-//     return handleSocialStatusError(response.data);
-//   }
-
-//   return response.data;
-// };
-
-// export const getSubscriptionStatus = async (userId: number) => {
-//   const response = await axiosSocialInstance.get<
-//     ISocialResponse<ISubscriptionStatus>
-//   >("/getSubscriptionStatus", {
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     params: {
-//       userId,
-//     },
-//   });
-
-//   if (response.data.hasError) {
-//     return handleSocialStatusError(response.data);
-//   }
-
-//   return response.data;
-// };
+  return response.data;
+};

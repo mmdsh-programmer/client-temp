@@ -41,6 +41,7 @@ const QuestionAnswerList = ({ postId, isAnswerList }: IProps) => {
               <QuestionAnswerItem
                 key={`question-${questionItem.id}`}
                 questionItem={questionItem}
+                parentPostId={postId}
                 isAnswer={isAnswerList}
               >
                 <QuestionAnswerList isAnswerList postId={questionItem.id} />

@@ -1,6 +1,5 @@
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import LikeAndDislike from "@components/organisms/like&dislike";
 import {
   Card,
   CardBody,
@@ -13,6 +12,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { IComment } from "@interface/version.interface";
 import useDeleteComment from "@hooks/core/useDeleteComment";
 import LoadingButton from "@components/molecules/loadingButton";
+import CommentLikeAndDislike from "@components/organisms/commentLike&Dislike";
 
 interface IProps {
   postId: number;
@@ -71,10 +71,9 @@ const PublishCommentItem = ({ postId, commentItem }: IProps) => {
           </LoadingButton>
         </RenderIf>
         <RenderIf isTrue={!!userInfo}>
-          <LikeAndDislike
-            postId={commentItem.id}
-            initLikeCount={commentItem.numOfLikes}
-            initDislikeCount={commentItem.numOfDislikes}
+          <CommentLikeAndDislike
+            commentItem={commentItem}
+            postId={postId}
             wrapperClassName="gap-5 mr-auto"
             likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
             dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"

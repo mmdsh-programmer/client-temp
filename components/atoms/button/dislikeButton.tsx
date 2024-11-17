@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@material-tailwind/react";
 import { DislikeIcon } from "@components/atoms/icons";
-import { IPostInfo } from "@interface/app.interface";
 import RenderIf from "../renderIf";
 
 interface IProps {
@@ -10,9 +9,9 @@ interface IProps {
   dislikePending: boolean;
   counterClassName?: string;
   dislikeButtonClassName?: string;
-  postInfo?: IPostInfo;
   iconClassName?: string;
   showCounter?: boolean;
+  isDisliked?: boolean;
 }
 
 const DislikeButton = ({
@@ -21,9 +20,9 @@ const DislikeButton = ({
   dislikePending,
   counterClassName,
   dislikeButtonClassName,
-  postInfo,
   iconClassName,
   showCounter,
+  isDisliked
 }: IProps) => {
   return (
     <Button
@@ -37,7 +36,7 @@ const DislikeButton = ({
       </RenderIf>
       
       <DislikeIcon
-        className={`flex-none h-5 w-5 stroke-white ${postInfo?.disliked ? " fill-error" : ""} ${iconClassName}`}
+        className={`flex-none h-5 w-5 stroke-white ${isDisliked ? " fill-error" : ""} ${iconClassName}`}
       />
     </Button>
   );

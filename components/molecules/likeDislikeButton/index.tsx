@@ -1,16 +1,16 @@
 import React from "react";
 import DislikeButton from "@components/atoms/button/dislikeButton";
 import LikeButton from "@components/atoms/button/likeButton";
-import { IPostInfo } from "@interface/app.interface";
 
 interface IProps {
   likeCount: number;
   dislikeCount: number;
+  isLiked?: boolean;
+  isDisliked?: boolean;
   onLike: () => void;
   onDislike: () => void;
   likePending: boolean;
   dislikePending: boolean;
-  postInfo?: IPostInfo;
   likeButtonClassName?: string;
   dislikeButtonClassName?: string;
   wrapperClassName?: string;
@@ -22,11 +22,12 @@ interface IProps {
 const LikeDislikeButtons = ({
   likeCount,
   dislikeCount,
+  isLiked,
+  isDisliked,
   onLike,
   onDislike,
   likePending,
   dislikePending,
-  postInfo,
   wrapperClassName,
   likeButtonClassName,
   dislikeButtonClassName,
@@ -42,9 +43,9 @@ const LikeDislikeButtons = ({
         onClick={onLike}
         likeCount={likeCount}
         likePending={likePending || dislikePending}
-        postInfo={postInfo}
         showCounter={showCounter}
         counterClassName={counterClassName}
+        isLiked={isLiked}
       />
       <DislikeButton
         dislikeButtonClassName={dislikeButtonClassName}
@@ -52,9 +53,9 @@ const LikeDislikeButtons = ({
         onClick={onDislike}
         dislikeCount={dislikeCount}
         dislikePending={dislikePending || likePending}
-        postInfo={postInfo}
         showCounter={showCounter}
         counterClassName={counterClassName}
+        isDisliked={isDisliked}
       />
     </div>
   );

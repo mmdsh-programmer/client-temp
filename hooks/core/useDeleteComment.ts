@@ -23,6 +23,9 @@ const useDeleteComment = () => {
       queryClient.invalidateQueries({
         queryKey: [`getComments-${postId}`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`get-publish-${postId}-comments`],
+      });
       callBack?.();
     },
     onError: (error) => {

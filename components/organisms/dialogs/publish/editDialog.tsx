@@ -79,7 +79,8 @@ const PublishQuestionAnswerEditDialog = ({
         await onSubmit();
       }}
       setOpen={handleClose}
-      className=""
+      className="!max-w-[unset] xs:!max-w-[unset]"
+      size="lg"
     >
       <form className="flex flex-col gap-2">
         <Typography className="text-xs text-gray-800 mb-2">

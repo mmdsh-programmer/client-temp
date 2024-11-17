@@ -105,7 +105,6 @@ const LikeAndDislike = ({
 
   return (
     <LikeDislikeButtons
-      postInfo={postInfo}
       likeCount={likeCount}
       dislikeCount={dislikeCount}
       likePending={likeHook.isPending || isFetcing}
@@ -118,6 +117,8 @@ const LikeAndDislike = ({
       iconClassName={iconClassName}
       showCounter={showCounter}
       counterClassName={counterClassName}
+      isLiked={postInfo?.liked}
+      isDisliked={postInfo?.disliked}
     />
   );
 };

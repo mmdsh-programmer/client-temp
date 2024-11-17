@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@material-tailwind/react";
 import { LikeIcon } from "@components/atoms/icons";
-import { IPostInfo } from "@interface/app.interface";
 import RenderIf from "../renderIf";
 
 interface IProps {
@@ -10,9 +9,9 @@ interface IProps {
   likePending: boolean;
   counterClassName?: string;
   likeButtonClassName?: string;
-  postInfo?: IPostInfo;
   iconClassName?: string;
   showCounter?: boolean;
+  isLiked?: boolean;
 }
 
 const LikeButton = ({
@@ -21,9 +20,9 @@ const LikeButton = ({
   likePending,
   counterClassName,
   likeButtonClassName,
-  postInfo,
   iconClassName,
   showCounter,
+  isLiked,
 }: IProps) => {
   return (
     <Button
@@ -37,7 +36,7 @@ const LikeButton = ({
       </RenderIf>
 
       <LikeIcon
-        className={`flex-none h-5 w-5 stroke-white ${postInfo?.liked ? "fill-success-normal" : ""} ${iconClassName}`}
+        className={`flex-none h-5 w-5 stroke-white ${isLiked ? "fill-success-normal" : ""} ${iconClassName}`}
       />
     </Button>
   );

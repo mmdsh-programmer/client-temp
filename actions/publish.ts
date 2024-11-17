@@ -11,6 +11,9 @@ import {
 import { getMe, userInfoAction } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+import { getPublishCommentList } from "@service/social";
+
+const { API_TOKEN } = process.env;
 
 export const createRepoPublishLinkAction = async (
   repoId: number,
@@ -127,6 +130,31 @@ export const searchPublishContentAction = async (
     const response = await searchPublishContent(
       repoId,
       searchText,
+      offset,
+      size
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishCommentListAction = async (
+  postId: number,
+  offset: number,
+  size: number
+) => {
+  const userInfo = await userInfoAction();
+  try {
+    const accessToken =
+      userInfo && !("error" in userInfo)
+        ? userInfo.access_token
+        : (API_TOKEN as string);
+
+    const response = await getPublishCommentList(
+      accessToken,
+      postId,
       offset,
       size
     );

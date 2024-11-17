@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import RenderIf from "@components/atoms/renderIf";
 import AnswerDialog from "@components/organisms/dialogs/publish/answerDialog";
-import LikeAndDislike from "@components/organisms/like&dislike";
 import { IQAList } from "@interface/qa.interface";
 import {
   Button,
@@ -16,19 +15,27 @@ import { FaDateFromTimestamp } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import QuestionAnswerContentPreview from "./questionAnswerContentPreview";
 import PublishQuestionAnswerEditDialog from "@components/organisms/dialogs/publish/editDialog";
+import QuestionAnswerLikeAndDislike from "@components/organisms/questionAnswerLike&Dislike";
+import CommentDialog from "@components/organisms/dialogs/publish/commentDialog";
 
 interface IProps {
   questionItem: IQAList;
+  parentPostId: number;
   children?: JSX.Element;
   isAnswer?: boolean;
 }
 
-const QuestionAnswerItem = ({ questionItem, children, isAnswer }: IProps) => {
+const QuestionAnswerItem = ({
+  questionItem,
+  children,
+  isAnswer,
+  parentPostId,
+}: IProps) => {
   const { data: userInfo } = useGetUser();
   const [openCollapse, setOpenCollapse] = useState(false);
   const [openAnswer, setOpenAnswer] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-
+  const [openCommentsDialog, setOpenCommentsDialog] = useState(false);
 
   const handleOpenCollapse = () => {
     setOpenCollapse(!openCollapse);
@@ -40,6 +47,10 @@ const QuestionAnswerItem = ({ questionItem, children, isAnswer }: IProps) => {
 
   const handleOpenEdit = () => {
     setOpenEdit(true);
+  };
+
+  const handleOpenCommentsDialog = () => {
+    setOpenCommentsDialog(true);
   };
 
   return (
@@ -97,6 +108,14 @@ const QuestionAnswerItem = ({ questionItem, children, isAnswer }: IProps) => {
                   <Button
                     variant="text"
                     className="border-none !p-0 text-[13px] leading-5 text-link"
+                    onClick={handleOpenCommentsDialog}
+                  >
+                    مشاهده دیدگاه ها
+                  </Button>
+                  <span className="text-lg text-gray-500">{"\u2022"}</span>
+                  <Button
+                    variant="text"
+                    className="border-none !p-0 text-[13px] leading-5 text-link"
                     onClick={handleOpenAnswer}
                   >
                     پاسخ به پرسش
@@ -124,10 +143,9 @@ const QuestionAnswerItem = ({ questionItem, children, isAnswer }: IProps) => {
           </RenderIf>
 
           <RenderIf isTrue={!!userInfo}>
-            <LikeAndDislike
-              postId={questionItem.id}
-              initLikeCount={questionItem.numOfLikes}
-              initDislikeCount={questionItem.numOfDisLikes}
+            <QuestionAnswerLikeAndDislike
+              postInfo={questionItem}
+              parentPostId={parentPostId}
               wrapperClassName="gap-5 mr-auto"
               likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
               dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
@@ -160,6 +178,15 @@ const QuestionAnswerItem = ({ questionItem, children, isAnswer }: IProps) => {
           isAnswer={isAnswer}
           setOpen={() => {
             return setOpenEdit(!openEdit);
+          }}
+        />
+      </RenderIf>
+
+      <RenderIf isTrue={openCommentsDialog}>
+        <CommentDialog
+          postId={questionItem.id}
+          setOpen={() => {
+            return setOpenCommentsDialog(!openCommentsDialog);
           }}
         />
       </RenderIf>

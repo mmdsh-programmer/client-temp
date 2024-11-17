@@ -34,7 +34,7 @@ const PublishVersionContent = ({ version, document }: IProps) => {
           <ConnectRemoteEditor versionData={version} />
         )}
         <PublishTinyLink />
-        <PublishFeeback />
+        <PublishFeeback postId={version.postId} />
         <PublishBottomNav />
       </section>
       <PublishOutlineDrawer outline={version.outline || "[]"} />

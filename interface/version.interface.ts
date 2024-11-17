@@ -66,19 +66,20 @@ export interface IComment {
   numOfDislikes: number;
   numOfComments: number;
   liked: boolean;
+  disliked: boolean;
 }
 
 export interface ILikeList {
-  list:{
-   id: number;
-   timestamp: number;
-   user: {
-     id: number;
-     name: string;
-     profileImage: string;
-     ssoId: string;
-     ssoIssuerCode: number;
-   }
+  list: {
+    id: number;
+    timestamp: number;
+    user: {
+      id: number;
+      name: string;
+      profileImage: string;
+      ssoId: string;
+      ssoIssuerCode: number;
+    };
   }[];
   offset: number;
   size: number;

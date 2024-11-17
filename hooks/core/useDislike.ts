@@ -11,6 +11,7 @@ const useDislike = () => {
     mutationFn: async (values: {
       postId: number;
       dislike: boolean;
+      parentPostId?: number;
       callBack?: () => void;
     }) => {
       const { postId, dislike } = values;
@@ -19,7 +20,7 @@ const useDislike = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId } = values;
+      const { callBack, postId, parentPostId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getDislike-${postId}`],
       });
@@ -29,6 +30,12 @@ const useDislike = () => {
       queryClient.invalidateQueries({
         queryKey: [`post-${postId}-info`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [
+          `question-answer-list${parentPostId ? `-${parentPostId}` : ""}`,
+        ],
+      });
+
       callBack?.();
     },
     onError: (error) => {

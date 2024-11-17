@@ -1,12 +1,16 @@
+import React from "react";
 import {
- Dialog, DialogBody, DialogFooter, DialogHeader, Typography 
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Typography,
 } from "@material-tailwind/react";
-
 import BackButton from "@components/atoms/button/backButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import React from "react";
+import { size } from "@material-tailwind/react/types/components/dialog";
 
 export interface IProps {
   isPending: boolean;
@@ -16,6 +20,7 @@ export interface IProps {
   onSubmit: () => Promise<void>;
   className?: string;
   backToMain?: boolean;
+  size?: size;
 }
 
 const EditDialog = ({
@@ -26,6 +31,7 @@ const EditDialog = ({
   onSubmit,
   className,
   backToMain,
+  size
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -34,7 +40,7 @@ const EditDialog = ({
   return (
     <Dialog
       placeholder=""
-      size="sm"
+      size={size || "sm"}
       open
       handler={handleClose}
       className={`${className} flex flex-col shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}

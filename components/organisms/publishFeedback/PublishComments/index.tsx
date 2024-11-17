@@ -1,22 +1,22 @@
 import React from "react";
-import { publishVersionAtom } from "@atom/publish";
-import { useRecoilValue } from "recoil";
 import PublishCommentCreate from "./publishCommentCreate";
 import PublishCommentList from "./publishCommentList";
 
-const PublishComments = () => {
-  const getPublishVersion = useRecoilValue(publishVersionAtom);
+interface IProps {
+  postId: number;
+}
 
-  return getPublishVersion ? (
+const PublishComments = ({ postId }: IProps) => {
+  return (
     <>
-      <div className="px-5 xs:px-8 py-10">
-        <PublishCommentCreate postId={getPublishVersion.postId} />
+      <div className="px-5 xs:px-8 py-10 sticky top-0 z-50 bg-white">
+        <PublishCommentCreate postId={postId} />
       </div>
       <hr className="w-full h-[2px] bg-blue-gray-50" />
 
-      <PublishCommentList postId={getPublishVersion.postId} />
+      <PublishCommentList postId={postId} />
     </>
-  ) : null;
+  );
 };
 
 export default PublishComments;

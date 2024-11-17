@@ -1,10 +1,10 @@
 import React from "react";
-import useGetCommentList from "@hooks/core/useGetCommentList";
 import { Spinner } from "@material-tailwind/react";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import PublishCommentItem from "./publishCommentItem";
+import useGetPublishCommentList from "@hooks/core/useGetPublishCommentList";
 
 interface IProps {
   postId: number;
@@ -17,9 +17,9 @@ const PublishCommentList = ({ postId }: IProps) => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetCommentList(postId, 10);
+  } = useGetPublishCommentList(postId, 10);
 
-  const total = commentList?.pages[0].total || 0;
+  const total = commentList?.pages[0].count || 0;
 
   if (isLoading) {
     return (
@@ -35,7 +35,7 @@ const PublishCommentList = ({ postId }: IProps) => {
     return (
       <>
         {commentList.pages.map((commentListPage) => {
-          return commentListPage.list.map((commentItem) => {
+          return commentListPage.result.map((commentItem) => {
             return (
               <PublishCommentItem
                 postId={postId}

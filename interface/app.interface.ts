@@ -220,7 +220,19 @@ export interface IPostInfo {
   favorite: boolean;
   liked: boolean;
   postId: number;
-};
+}
+
+export interface IGetCommentLike {
+  id: number;
+  timestamp: number;
+  user: {
+    id: number;
+    name: string;
+    ssoId: string;
+    ssoIssuerCode: number;
+    profileImage: string;
+  };
+}
 
 export interface IMetaQuery {
   field: string;

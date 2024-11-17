@@ -5,12 +5,16 @@ import PublishTab from "@components/molecules/publishTab";
 import PublishQuestionAnswer from "./PublishQuestionAnswer";
 import PublishComments from "./PublishComments";
 
+interface IProps {
+  postId: number;
+}
+
 enum ETabs {
   QUESTION_ANSWER = "پرسش و پاسخ",
   COMMENTS = "نظرات کاربران",
 }
 
-const PublishFeeback = () => {
+const PublishFeeback = ({ postId }: IProps) => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.QUESTION_ANSWER);
 
   const tabList = [
@@ -20,7 +24,7 @@ const PublishFeeback = () => {
     },
     {
       tabTitle: ETabs.COMMENTS,
-      tabContent: <PublishComments />,
+      tabContent: <PublishComments postId={postId} />,
     },
   ].filter(Boolean) as {
     tabTitle: ETabs;

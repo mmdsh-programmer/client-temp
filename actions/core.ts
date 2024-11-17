@@ -10,7 +10,12 @@ import {
 import { getMe } from "./auth";
 import { IActionError } from "@interface/app.interface";
 import { normalizeError } from "@utils/normalizeActionError";
-import { getPostInfo, likePost } from "@service/social";
+import {
+  dislikeComment,
+  getPostInfo,
+  likeComment,
+  likePost,
+} from "@service/social";
 
 export const getCommentListAction = async (
   postId: number,
@@ -120,6 +125,42 @@ export const getPostInfoAction = async (postId: number) => {
   const userInfo = await getMe();
   try {
     const response = await getPostInfo(userInfo.access_token, postId);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const likeCommentAction = async (
+  commentId: number,
+  dislike: boolean
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await likeComment(
+      userInfo.access_token,
+      commentId,
+      dislike
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const dislikeCommentAction = async (
+  commentId: number,
+  dislike: boolean
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await dislikeComment(
+      userInfo.access_token,
+      commentId,
+      dislike
+    );
 
     return response;
   } catch (error) {

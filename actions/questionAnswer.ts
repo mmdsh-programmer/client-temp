@@ -1,4 +1,7 @@
 "use server";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { IActionError } from "@interface/app.interface";
 import {
   archivePost,
@@ -7,7 +10,9 @@ import {
   updateQuestionAnswer,
 } from "@service/social";
 import { normalizeError } from "@utils/normalizeActionError";
-import { getMe } from "./auth";
+import { getMe, userInfoAction } from "./auth";
+
+const { API_TOKEN } = process.env;
 
 export const getQuestionAnswerAction = async (
   offset: number,
@@ -28,8 +33,15 @@ export const getQuestionAnswerAction = async (
   q?: string,
   relatedToIssuerClient?: string
 ) => {
+  const userInfo = await userInfoAction();
+
   try {
+    const accessToken =
+      userInfo && !("error" in userInfo)
+        ? userInfo.access_token
+        : (API_TOKEN as string);
     const response = await getQuestionAnswer(
+      accessToken,
       offset,
       size,
       parentPostId,
