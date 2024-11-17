@@ -51,7 +51,7 @@ const Comments = ({ version }: IProps) => {
                         {comment.user.name}
                       </Typography>
                     </div>
-                    {comment.user.ssoId === userInfo?.ssoId ? (
+                    {+comment.user.ssoId === Number(userInfo?.ssoId) ? (
                       <div className="comment-delete flex items-center gap-1">
                         <CommentDelete version={version} comment={comment} />
                       </div>

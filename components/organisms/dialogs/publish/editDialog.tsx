@@ -80,7 +80,7 @@ const PublishQuestionAnswerEditDialog = ({
       }}
       setOpen={handleClose}
       className="!max-w-[unset] xs:!max-w-[unset]"
-      size="lg"
+      customSize="lg"
     >
       <form className="flex flex-col gap-2">
         <Typography className="text-xs text-gray-800 mb-2">

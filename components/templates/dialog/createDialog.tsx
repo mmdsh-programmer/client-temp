@@ -20,7 +20,7 @@ export interface IProps {
   onSubmit: () => Promise<void>;
   className?: string;
   backToMain?: boolean;
-  size?: size;
+  customSize?: size;
 }
 
 const CreateDialog = ({
@@ -31,7 +31,7 @@ const CreateDialog = ({
   onSubmit,
   className,
   backToMain,
-  size,
+  customSize,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -46,7 +46,7 @@ const CreateDialog = ({
   return (
     <Dialog
       placeholder=""
-      size={size || "sm"}
+      size={customSize || "sm"}
       open
       handler={handleClose}
       className={`${className} flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary xs:!rounded-lg `}

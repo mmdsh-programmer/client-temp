@@ -9,10 +9,10 @@ export interface IProps {
   dialogHeader?: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
-  size?: size;
+  customSize?: size;
 }
 
-const InfoDialog = ({ children, dialogHeader, setOpen, className, size }: IProps) => {
+const InfoDialog = ({ children, dialogHeader, setOpen, className, customSize }: IProps) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -20,7 +20,7 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className, size }: IProps
   return (
     <Dialog
       placeholder=""
-      size={size || "sm"}
+      size={customSize || "sm"}
       open
       handler={handleClose}
       className={`${className} flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
