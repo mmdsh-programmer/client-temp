@@ -4,13 +4,17 @@ import PublishCommentList from "./publishCommentList";
 
 interface IProps {
   postId: number;
+  isQuestionAnswerComments?: boolean;
 }
 
-const PublishComments = ({ postId }: IProps) => {
+const PublishComments = ({ postId, isQuestionAnswerComments }: IProps) => {
   return (
     <>
       <div className="px-5 xs:px-8 py-10 sticky top-0 z-50 bg-white">
-        <PublishCommentCreate postId={postId} />
+        <PublishCommentCreate
+          isQuestionAnswerComments={isQuestionAnswerComments}
+          postId={postId}
+        />
       </div>
       <hr className="w-full h-[2px] bg-blue-gray-50" />
 

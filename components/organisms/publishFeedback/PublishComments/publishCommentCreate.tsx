@@ -4,11 +4,11 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import PublishForceLogin from "../publishForceLogin";
-import useCreateComment from "@hooks/core/useCreateComment";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { publishCreateCommentSchema } from "../validation.yup";
 import PublishForcePublicProfile from "../publishForcePublicProfile";
+import useCreatePublishComment from "@hooks/publish/useCreatePublishComment";
 
 interface IForm {
   text: string;
@@ -16,12 +16,13 @@ interface IForm {
 
 interface IProps {
   postId: number;
+  isQuestionAnswerComments?: boolean;
 }
 
-const PublishCommentCreate = ({ postId }: IProps) => {
+const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
   const { data: userInfo } = useGetUser();
 
-  const createComment = useCreateComment();
+  const createComment = useCreatePublishComment();
 
   const form = useForm<IForm>({
     resolver: yupResolver(publishCreateCommentSchema),
@@ -38,6 +39,7 @@ const PublishCommentCreate = ({ postId }: IProps) => {
       createComment.mutate({
         postId,
         text: dataForm.text,
+        shouldConfirm: !isQuestionAnswerComments,
         callBack: () => {
           toast.success("نظر شما با موفقیت ارسال شد.");
           reset();

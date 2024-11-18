@@ -30,7 +30,7 @@ const CommentDialog = ({ postId, setOpen }: IProps) => {
       </DialogHeader>
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <div className="max-h-[500px] overflow-y-auto">
-        <PublishComments postId={postId} />
+        <PublishComments isQuestionAnswerComments postId={postId} />
       </div>
     </Dialog>
   );

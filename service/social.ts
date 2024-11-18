@@ -472,6 +472,50 @@ export const archivePost = async (accessToken: string, postIds: number[]) => {
   return response.data;
 };
 
+export const createComment = async (
+  accessToken: string,
+  text: string,
+  postId: number
+) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<number>>(
+    "/comment",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+      },
+      params: {
+        text,
+        postId,
+      },
+    }
+  );
+
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+  return response.data;
+};
+
+export const confirmComment = async (commentId: number) => {
+  const response = await axiosSocialInstance.get<ISocialResponse<number>>(
+    "/biz/confirmComment",
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        commentId,
+      },
+    }
+  );
+
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+  return response.data;
+};
+
 export const getPublishCommentList = async (
   accessToken: string,
   postId: number,

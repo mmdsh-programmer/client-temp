@@ -4,7 +4,7 @@ import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import PublishCommentItem from "./publishCommentItem";
-import useGetPublishCommentList from "@hooks/core/useGetPublishCommentList";
+import useGetPublishCommentList from "@hooks/publish/useGetPublishCommentList";
 
 interface IProps {
   postId: number;

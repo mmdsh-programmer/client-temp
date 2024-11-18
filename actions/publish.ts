@@ -11,7 +11,11 @@ import {
 import { getMe, userInfoAction } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
-import { getPublishCommentList } from "@service/social";
+import {
+  confirmComment,
+  createComment,
+  getPublishCommentList,
+} from "@service/social";
 
 const { API_TOKEN } = process.env;
 
@@ -158,6 +162,24 @@ export const getPublishCommentListAction = async (
       offset,
       size
     );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const createPublishCommentAction = async (
+  postId: number,
+  text: string,
+  shouldConfirm = true
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createComment(userInfo.access_token, text, postId);
+    if (shouldConfirm) {
+      await confirmComment(response.result);
+    }
 
     return response;
   } catch (error) {
