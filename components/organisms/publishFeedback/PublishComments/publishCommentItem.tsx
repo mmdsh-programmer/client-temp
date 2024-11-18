@@ -13,6 +13,7 @@ import { IComment } from "@interface/version.interface";
 import useDeleteComment from "@hooks/core/useDeleteComment";
 import LoadingButton from "@components/molecules/loadingButton";
 import CommentLikeAndDislike from "@components/organisms/commentLike&Dislike";
+import { DeleteIcon } from "@components/atoms/icons";
 
 interface IProps {
   postId: number;
@@ -42,13 +43,12 @@ const PublishCommentItem = ({ postId, commentItem }: IProps) => {
         className="flex items-center justify-between gap-2 pt-0 mt-0 mx-0"
       >
         <div className="flex items-center gap-2">
-          <h6 className="text-sm text-gray-800 font-bold">
+          <h6 className="text-sm text-gray-800 font-bold whitespace-nowrap max-w-44 sm:max-w-fit overflow-hidden text-ellipsis">
             {commentItem.user.name}
           </h6>
-          <span className="text-lg text-gray-500">{"\u2022"}</span>
           <time
-            className="text-xs text-gray-500"
-            dateTime={FaDateFromTimestamp(commentItem.timestamp)}
+            className="bullet text-xs text-gray-500 whitespace-nowrap max-w-16 sm:max-w-fit overflow-hidden text-ellipsis"
+            dateTime={String(commentItem.timestamp)}
           >
             {FaDateFromTimestamp(commentItem.timestamp)}
           </time>
@@ -67,17 +67,18 @@ const PublishCommentItem = ({ postId, commentItem }: IProps) => {
             loading={deleteComment.isPending}
             disabled={deleteComment.isPending}
           >
-            حذف نظر
+            <span className="hidden sm:block"> حذف نظر</span>
+            <DeleteIcon className="block sm:hidden w-4 h-4 !fill-gray-500" />
           </LoadingButton>
         </RenderIf>
         <RenderIf isTrue={!!userInfo}>
           <CommentLikeAndDislike
             commentItem={commentItem}
             postId={postId}
-            wrapperClassName="gap-5 mr-auto"
+            wrapperClassName="gap-3 sm:gap-5 mr-auto"
             likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
             dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
-            iconClassName="w-7 h-7 !stroke-gray-500"
+            iconClassName="w-4 h-4 sm:w-7 sm:h-7 !stroke-gray-500"
             counterClassName="ml-1 text-base text-gray-500"
             showCounter
           />

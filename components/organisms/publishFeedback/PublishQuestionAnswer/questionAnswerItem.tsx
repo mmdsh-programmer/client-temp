@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronLeftIcon } from "@components/atoms/icons";
+import { ChatIcon, ChevronLeftIcon, EditIcon, TickIcon } from "@components/atoms/icons";
 import RenderIf from "@components/atoms/renderIf";
 import AnswerDialog from "@components/organisms/dialogs/publish/answerDialog";
 import { IQAList } from "@interface/qa.interface";
@@ -66,13 +66,12 @@ const QuestionAnswerItem = ({
           className="flex items-center justify-between gap-2 pt-0 mt-0 mx-0"
         >
           <div className="flex items-center gap-2">
-            <h6 className="text-sm text-gray-800 font-bold">
+            <h6 className="text-sm text-gray-800 font-bold whitespace-nowrap max-w-44 sm:max-w-fit overflow-hidden text-ellipsis">
               {questionItem.userSrv.name}
             </h6>
-            <span className="text-lg text-gray-500">{"\u2022"}</span>
             <time
-              className="text-xs text-gray-500"
-              dateTime={FaDateFromTimestamp(questionItem.timestamp)}
+              className="bullet text-xs text-gray-500 block whitespace-nowrap max-w-16 sm:max-w-fit overflow-hidden text-ellipsis"
+              dateTime={String(questionItem.timestamp)}
             >
               {FaDateFromTimestamp(questionItem.timestamp)}
             </time>
@@ -102,25 +101,23 @@ const QuestionAnswerItem = ({
                 />
               </Button>
 
-              <span className="text-lg text-gray-500">{"\u2022"}</span>
               <Button
                 variant="text"
-                className="border-none !p-0 text-[13px] leading-5 text-link"
+                className="bullet border-none !p-0 text-[13px] leading-5 text-link"
                 onClick={handleOpenCommentsDialog}
               >
-                مشاهده دیدگاه ها
+                <span className="hidden sm:block">مشاهده دیدگاه ها</span>
+                <ChatIcon className="block sm:hidden w-4 h-4 !fill-gray-500 scale-125" />
               </Button>
               <RenderIf isTrue={!!userInfo}>
-                <>
-                  <span className="text-lg text-gray-500">{"\u2022"}</span>
-                  <Button
-                    variant="text"
-                    className="border-none !p-0 text-[13px] leading-5 text-link"
-                    onClick={handleOpenAnswer}
-                  >
-                    پاسخ به پرسش
-                  </Button>
-                </>
+                <Button
+                  variant="text"
+                  className="bullet border-none !p-0 text-[13px] leading-5 text-link"
+                  onClick={handleOpenAnswer}
+                >
+                  <span className="hidden sm:block">پاسخ به پرسش</span>
+                  <TickIcon className="block sm:hidden w-4 h-4 !fill-gray-500" />
+                </Button>
               </RenderIf>
             </div>
           </RenderIf>
@@ -130,26 +127,26 @@ const QuestionAnswerItem = ({
               !!userInfo && +userInfo.ssoId === +questionItem.userSrv.ssoId
             }
           >
-            <>
-              <span className="text-lg text-gray-500">{"\u2022"}</span>
-              <Button
-                variant="text"
-                className="border-none !p-0 text-[13px] leading-5 text-link"
-                onClick={handleOpenEdit}
-              >
+            <Button
+              variant="text"
+              className="bullet border-none !p-0 text-[13px] leading-5 text-link"
+              onClick={handleOpenEdit}
+            >
+              <span className="hidden sm:block">
                 {isAnswer ? "ویرایش پاسخ" : "ویرایش پرسش"}
-              </Button>
-            </>
+              </span>
+              <EditIcon className="block sm:hidden w-4 h-4 !stroke-gray-500" />
+            </Button>
           </RenderIf>
 
           <RenderIf isTrue={!!userInfo}>
             <QuestionAnswerLikeAndDislike
               postInfo={questionItem}
               parentPostId={parentPostId}
-              wrapperClassName="gap-5 mr-auto"
+              wrapperClassName="gap-3 sm:gap-5 mr-auto"
               likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
               dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
-              iconClassName="w-7 h-7 !stroke-gray-500"
+              iconClassName="w-4 h-4 sm:w-7 sm:h-7 !stroke-gray-500"
               counterClassName="ml-1 text-base text-gray-500"
               showCounter
             />

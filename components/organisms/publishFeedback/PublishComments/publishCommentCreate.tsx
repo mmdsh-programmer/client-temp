@@ -68,7 +68,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-center items-center shadow-lg md:shadow-none"
+        className="flex flex-col justify-center items-center"
       >
         <input
           id="commentText"

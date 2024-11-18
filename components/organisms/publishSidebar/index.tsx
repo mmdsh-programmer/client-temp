@@ -71,14 +71,11 @@ const PublishSidebar = ({ repoId, repoName }: IProps) => {
         ref={sidebarRef}
         className={`${
           !isResizing ? "transition-all duration-300" : ""
-        } app-sidebar px-4 flex flex-col bg-white border-l-2 border-l-gray-100 z-[51] 
+        } app-sidebar px-4 flex flex-col bg-white border-l-2 border-l-gray-100 z-[51] md:z-10 
           fixed md:relative h-full top-0
           md:right-0 ${isOpen ? "right-0" : "-right-64"}`}
         style={{
           width: window.innerWidth < 768 ? "256px" : `${sidebarWidth}px`,
-        }}
-        onMouseDown={(e) => {
-          return e.preventDefault();
         }}
       >
         <div className="app-sidebar-content">

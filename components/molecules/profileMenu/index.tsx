@@ -1,6 +1,6 @@
 "use client";
 
-import { LogoutIcon, UserIcon } from "@components/atoms/icons";
+import { LoginIcon, LogoutIcon, UserIcon } from "@components/atoms/icons";
 
 import { Button } from "@material-tailwind/react";
 import ImageComponent from "@components/atoms/image";
@@ -47,7 +47,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
       <>
         {renderSideButton || null}
         <LoadingButton
-          className="flex justify-center items-center mt-4 px-10 py-5 rounded-lg lg:mt-0 bg-purple-normal text-white font-iranYekan !max-h-[unset]"
+          className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
           onClick={() => {
             window.localStorage.setItem(
               "CLASOR:LAST_PAGE",
@@ -56,7 +56,8 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
             return login();
           }}
         >
-          ورود
+          <span className="hidden sm:block">ورود</span>
+          <LoginIcon className="block sm:hidden fill-blue-gray-700 w-5 h-5 xs:w-7 xs:h-7" />
         </LoadingButton>
       </>
     );
