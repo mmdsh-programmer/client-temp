@@ -9,6 +9,7 @@ import {
   IMetaQuery,
   IPostInfo,
   ISocialError,
+  ISocialProfile,
   ISocialResponse,
 } from "@interface/app.interface";
 import axios, { AxiosError } from "axios";
@@ -475,7 +476,7 @@ export const getPublishCommentList = async (
   accessToken: string,
   postId: number,
   offset: number,
-  size: number,
+  size: number
 ) => {
   const response = await axiosSocialInstance.get<ISocialResponse<IComment[]>>(
     "/commentList",
@@ -490,7 +491,7 @@ export const getPublishCommentList = async (
         offset,
         size,
       },
-    },
+    }
   );
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
@@ -501,7 +502,7 @@ export const getPublishCommentList = async (
 export const likeComment = async (
   accessToken: string,
   commentId: number,
-  dislike: boolean,
+  dislike: boolean
 ) => {
   const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
     "/likeComment",
@@ -514,7 +515,7 @@ export const likeComment = async (
         commentId,
         dislike,
       },
-    },
+    }
   );
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
@@ -526,7 +527,7 @@ export const likeComment = async (
 export const dislikeComment = async (
   accessToken: string,
   commentId: number,
-  dislike: boolean,
+  dislike: boolean
 ) => {
   const response = await axiosSocialInstance.get<ISocialResponse<boolean>>(
     "/dislikeComment",
@@ -539,8 +540,50 @@ export const dislikeComment = async (
         commentId,
         dislike,
       },
-    },
+    }
   );
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  return response.data;
+};
+
+export const getMySocialProfile = async (accessToken: string) => {
+  const response = await axiosSocialInstance.get<
+    ISocialResponse<ISocialProfile>
+  >("/mySocialProfile", {
+    headers: {
+      "Content-Type": "application/json",
+      _token_: accessToken,
+    },
+  });
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  return response.data;
+};
+
+export const editSocialProfile = async (
+  accessToken: string,
+  isPrivate: boolean
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const response = await axiosSocialInstance.get<ISocialResponse<any>>(
+    "/editSocialProfile",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        _token_: accessToken,
+        _token_issuer_: 1,
+      },
+      params: {
+        private: isPrivate,
+      },
+    }
+  );
+
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
   }

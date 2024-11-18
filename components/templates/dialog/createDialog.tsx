@@ -11,6 +11,7 @@ import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import { size } from "@material-tailwind/react/types/components/dialog";
+import RenderIf from "@components/atoms/renderIf";
 
 export interface IProps {
   isPending: boolean;
@@ -21,6 +22,7 @@ export interface IProps {
   className?: string;
   backToMain?: boolean;
   customSize?: size;
+  showFooter?: boolean;
 }
 
 const CreateDialog = ({
@@ -32,6 +34,7 @@ const CreateDialog = ({
   className,
   backToMain,
   customSize,
+  showFooter = true,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -82,23 +85,25 @@ const CreateDialog = ({
       >
         {children}
       </DialogBody>
-      <DialogFooter
-        placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
-      >
-        <CancelButton onClick={handleClose} disabled={isPending}>
-          انصراف
-        </CancelButton>
-        <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-          onClick={onSubmit}
-          loading={isPending}
+      <RenderIf isTrue={showFooter}>
+        <DialogFooter
+          placeholder="dialog footer"
+          className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
         >
-          <Typography className="text__label__button text-white">
-            ایجاد
-          </Typography>
-        </LoadingButton>
-      </DialogFooter>
+          <CancelButton onClick={handleClose} disabled={isPending}>
+            انصراف
+          </CancelButton>
+          <LoadingButton
+            className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            onClick={onSubmit}
+            loading={isPending}
+          >
+            <Typography className="text__label__button text-white">
+              ایجاد
+            </Typography>
+          </LoadingButton>
+        </DialogFooter>
+      </RenderIf>
     </Dialog>
   );
 };

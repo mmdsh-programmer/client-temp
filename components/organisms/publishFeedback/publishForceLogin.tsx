@@ -1,13 +1,18 @@
+import React from "react";
 import { login } from "@actions/auth";
 import LoadingButton from "@components/molecules/loadingButton";
 import { Typography } from "@material-tailwind/react";
-import React from "react";
 
-export const PublishForceLogin = () => {
+interface IProps {
+  customText?: string;
+}
+
+const PublishForceLogin = ({ customText }: IProps) => {
   return (
     <div className="flex flex-col items-center gap-6">
       <Typography className="text-sm text-gray-800 font-bold">
-        برای پرسیدن سوال باید وارد پنل کاربری یا در سایت عضو شوید
+        {customText ||
+          "برای پرسیدن سوال باید وارد پنل کاربری یا در سایت عضو شوید"}
       </Typography>
 
       <LoadingButton
@@ -25,3 +30,5 @@ export const PublishForceLogin = () => {
     </div>
   );
 };
+
+export default PublishForceLogin;

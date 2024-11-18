@@ -31,6 +31,7 @@ export type TUserData = Pick<
   | "business"
   | "isClasorAdmin"
 > & {
+  private: boolean;
   access_token: string;
   refresh_token: string;
 };
@@ -213,6 +214,16 @@ export interface ISocialResponse<T> {
   ott: string;
   referenceNumber: string;
   result: T;
+}
+
+export interface ISocialProfile {
+  id: number;
+  firstName: string;
+  lastName: string;
+  username: string;
+  profileImage: string;
+  numOfStories: number;
+  private: boolean;
 }
 
 export interface IPostInfo {

@@ -2,20 +2,25 @@
 
 import { cookies, headers } from "next/dist/client/components/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
-import { getPodAccessToken, refreshPodAccessToken, revokePodToken } from "@service/account";
+import {
+  getPodAccessToken,
+  refreshPodAccessToken,
+  revokePodToken,
+} from "@service/account";
 
 import { IActionError } from "@interface/app.interface";
-import { getCustomPostByDomain } from "@service/social";
+import { editSocialProfile, getCustomPostByDomain, getMySocialProfile } from "@service/social";
 import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
-import {
-  userInfo,
-  userMetadata,
-} from "@service/clasor";
+import { userInfo, userMetadata } from "@service/clasor";
 
-const refreshCookieHeader = async (rToken: string, clientId: string, clientSecret: string) => {
+const refreshCookieHeader = async (
+  rToken: string,
+  clientId: string,
+  clientSecret: string
+) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
   const { access_token, refresh_token } = response;
 
@@ -47,8 +52,10 @@ const refreshCookieHeader = async (rToken: string, clientId: string, clientSecre
   });
 
   const userData = await userInfo(access_token);
+  const mySocialProfile = await getMySocialProfile(access_token);
   return {
     ...userData,
+    private: mySocialProfile.result.private,
     access_token,
     refresh_token,
   };
@@ -82,15 +89,21 @@ export const getMe = async () => {
   };
   try {
     const userData = await userInfo(`${tokenInfo.access_token}`);
+    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
     return {
       ...userData,
+      private: mySocialProfile.result.private,
       access_token: tokenInfo.access_token,
       refresh_token: tokenInfo.refresh_token,
     };
   } catch (error: unknown) {
     if ((error as IActionError)?.errorCode === 401) {
       try {
-        return refreshCookieHeader(tokenInfo.refresh_token, clientId, clientSecret);
+        return refreshCookieHeader(
+          tokenInfo.refresh_token,
+          clientId,
+          clientSecret
+        );
       } catch (refreshTokenError) {
         return handleActionError(refreshTokenError as IActionError);
       }
@@ -208,6 +221,17 @@ export const userMetadataAction = async (data: object) => {
   const userData = await getMe();
   try {
     const response = await userMetadata(userData.access_token, data);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const editSocialProfileAction = async (isPrivate: boolean) => {
+  const userData = await getMe();
+  try {
+    const response = await editSocialProfile(userData.access_token, isPrivate);
 
     return response;
   } catch (error) {

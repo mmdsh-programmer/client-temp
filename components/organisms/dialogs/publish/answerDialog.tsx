@@ -7,6 +7,8 @@ import QuestionAnswerEditor, {
 import { toast } from "react-toastify";
 import useCreateQuestionAnswer from "@hooks/questionAnswer/useCreateQuestionAnswer";
 import { config } from "@utils/clasorEditor";
+import useGetUser from "@hooks/auth/useGetUser";
+import PublishForcePublicProfile from "@components/organisms/publishFeedback/publishForcePublicProfile";
 
 interface IProps {
   postId: number;
@@ -14,6 +16,7 @@ interface IProps {
 }
 
 const AnswerDialog = ({ postId, setOpen }: IProps) => {
+  const { data: userInfo } = useGetUser();
   const editorRef = useRef<IQaEditorRef | null>(null);
 
   const createAnswerHook = useCreateQuestionAnswer();
@@ -64,16 +67,21 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
       setOpen={handleClose}
       className="!max-w-[unset] xs:!max-w-[unset]"
       customSize="lg"
+      showFooter={!userInfo?.private}
     >
-      <form className="flex flex-col gap-2">
-        <Typography className="text-xs text-gray-800 mb-2">
-          پاسخ خود را بنویسید
-        </Typography>
+      {userInfo?.private ? (
+        <PublishForcePublicProfile customText="برای نوشتن پاسخ باید پروفایل کاربری شما عمومی باشد" />
+      ) : (
+        <form className="flex flex-col gap-2">
+          <Typography className="text-xs text-gray-800 mb-2">
+            پاسخ خود را بنویسید
+          </Typography>
 
-        <div className="h-44">
-          <QuestionAnswerEditor ref={editorRef} />
-        </div>
-      </form>
+          <div className="h-44">
+            <QuestionAnswerEditor ref={editorRef} />
+          </div>
+        </form>
+      )}
     </CreateDialog>
   );
 };

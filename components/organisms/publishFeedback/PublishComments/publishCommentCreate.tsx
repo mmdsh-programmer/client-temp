@@ -3,11 +3,12 @@ import LoadingButton from "@components/molecules/loadingButton";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
-import { PublishForceLogin } from "../publishForceLogin";
+import PublishForceLogin from "../publishForceLogin";
 import useCreateComment from "@hooks/core/useCreateComment";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { publishCreateCommentSchema } from "../validation.yup";
+import PublishForcePublicProfile from "../publishForcePublicProfile";
 
 interface IForm {
   text: string;
@@ -46,7 +47,15 @@ const PublishCommentCreate = ({ postId }: IProps) => {
   };
 
   if (!userInfo) {
-    return <PublishForceLogin />;
+    return (
+      <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />
+    );
+  }
+
+  if (userInfo.private) {
+    return (
+      <PublishForcePublicProfile customText="برای نوشتن دیدگاه باید پروفایل شما عمومی باشد" />
+    );
   }
 
   return (

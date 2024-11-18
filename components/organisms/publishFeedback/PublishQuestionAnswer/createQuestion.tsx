@@ -6,7 +6,8 @@ import QuestionAnswerEditor, { IQaEditorRef } from "./questionAnswerEditor";
 import { toast } from "react-toastify";
 import useCreateQuestionAnswer from "@hooks/questionAnswer/useCreateQuestionAnswer";
 import { config } from "@utils/clasorEditor";
-import { PublishForceLogin } from "../publishForceLogin";
+import PublishForceLogin from "../publishForceLogin";
+import PublishForcePublicProfile from "../publishForcePublicProfile";
 
 interface IProps {
   postId: number;
@@ -50,6 +51,10 @@ const CreateQuestion = ({ postId }: IProps) => {
 
   if (!userInfo) {
     return <PublishForceLogin />;
+  }
+
+  if (userInfo.private) {
+    return <PublishForcePublicProfile />;
   }
 
   return (

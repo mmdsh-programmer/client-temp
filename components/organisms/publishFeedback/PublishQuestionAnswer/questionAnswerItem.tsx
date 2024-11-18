@@ -102,16 +102,16 @@ const QuestionAnswerItem = ({
                 />
               </Button>
 
+              <span className="text-lg text-gray-500">{"\u2022"}</span>
+              <Button
+                variant="text"
+                className="border-none !p-0 text-[13px] leading-5 text-link"
+                onClick={handleOpenCommentsDialog}
+              >
+                مشاهده دیدگاه ها
+              </Button>
               <RenderIf isTrue={!!userInfo}>
                 <>
-                  <span className="text-lg text-gray-500">{"\u2022"}</span>
-                  <Button
-                    variant="text"
-                    className="border-none !p-0 text-[13px] leading-5 text-link"
-                    onClick={handleOpenCommentsDialog}
-                  >
-                    مشاهده دیدگاه ها
-                  </Button>
                   <span className="text-lg text-gray-500">{"\u2022"}</span>
                   <Button
                     variant="text"
