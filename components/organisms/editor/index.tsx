@@ -5,7 +5,11 @@ import {
   editorListDrawerAtom,
   editorModeAtom,
 } from "@atom/editor";
+
 import { EDocumentTypes } from "@interface/enums";
+import EditorDrawer from "../editorDrawer";
+import FileEditor from "./fileEditor";
+import FloatingButtons from "./floatingButtons";
 import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
 import { Spinner } from "@material-tailwind/react";
@@ -14,9 +18,6 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
-import FloatingButtons from "./floatingButtons";
-import EditorDrawer from "../editorDrawer";
-import FileEditor from "./fileEditor";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 
 interface IProps {
@@ -75,8 +76,8 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
           repositoryId: getRepo?.id || undefined,
           resourceId: selectedCategory?.id || undefined,
-          podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
-          backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
+          podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
+          backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
         } as IClassicData;
       case EDocumentTypes.word:
         return {
@@ -98,7 +99,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
         editorMode={editorMode}
         ref={getEditorConfig().ref}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         loadData={getLoadData() as any}
         onGetConfig={handleSaveConfig}
         onChange={handleChange}

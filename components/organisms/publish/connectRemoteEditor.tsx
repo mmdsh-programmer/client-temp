@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useMemo } from "react";
-import RemoteEditor from "clasor-remote-editor";
-import { IVersion } from "@interface/version.interface";
+
 import { EDocumentTypes } from "@interface/enums";
+import { IVersion } from "@interface/version.interface";
+import RemoteEditor from "clasor-remote-editor";
 
 interface IProps {
   versionData: IVersion;

@@ -2250,7 +2250,7 @@ export const getResourceFiles = async (
           count: number;
         }>
       >
-    >(`fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`, {
+    >(`/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -2275,7 +2275,7 @@ export const editFile = async (
 ) => {
   try {
     const response = await axiosClasorInstance.patch(
-      `fileManagement/resource/${resourceId}/rename/file/${hash}/newName/${newName}`,
+      `/fileManagement/resource/${resourceId}/rename/file/${hash}/newName/${newName}`,
       {
         newName,
       },
