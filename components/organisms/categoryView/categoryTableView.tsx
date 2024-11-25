@@ -90,15 +90,17 @@ const TableView = ({
                     ) : null;
                   });
                 })}
-                <RenderIf isTrue={!!hasNextPage}>
-                  <LoadMore
-                    className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
-                    isFetchingNextPage={isFetchingNextPage}
-                    fetchNextPage={fetchNextPage}
-                  />
-                </RenderIf>
               </tbody>
             </table>
+            <RenderIf isTrue={!!hasNextPage}>
+            <div className="w-full py-2 flex justify-center">
+              <LoadMore
+                className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
+                isFetchingNextPage={isFetchingNextPage}
+                fetchNextPage={fetchNextPage}
+              />
+              </div>
+            </RenderIf>
           </div>
         </div>
       ) : (

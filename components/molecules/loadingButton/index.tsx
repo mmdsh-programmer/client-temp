@@ -1,5 +1,6 @@
-import React from "react";
 import { Button, Spinner } from "@material-tailwind/react";
+
+import React from "react";
 
 interface IProps {
   loading?: boolean;

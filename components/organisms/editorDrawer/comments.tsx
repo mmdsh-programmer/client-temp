@@ -1,14 +1,15 @@
-import React from "react";
-import { UserIcon } from "@components/atoms/icons";
-import ImageComponent from "@components/atoms/image";
-import useGetCommentList from "@hooks/core/useGetCommentList";
-import { IVersion } from "@interface/version.interface";
-import { Typography } from "@material-tailwind/react";
-import CommentDelete from "./commentDelete";
-import CommentCreate from "./commentCreate";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import CommentCreate from "./commentCreate";
+import CommentDelete from "./commentDelete";
+import { IVersion } from "@interface/version.interface";
+import ImageComponent from "@components/atoms/image";
+import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import { Typography } from "@material-tailwind/react";
+import { UserIcon } from "@components/atoms/icons";
+import useGetCommentList from "@hooks/core/useGetCommentList";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -66,13 +67,15 @@ const Comments = ({ version }: IProps) => {
               );
             });
           })}
-          <RenderIf isTrue={!!hasNextPage}>
-            <LoadMore
-              className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
-              isFetchingNextPage={isFetchingNextPage}
-              fetchNextPage={fetchNextPage}
-            />
-          </RenderIf>
+            <RenderIf isTrue={!!hasNextPage}>
+              <div className="w-full py-2 flex justify-center">
+                <LoadMore
+                  className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
+                  isFetchingNextPage={isFetchingNextPage}
+                  fetchNextPage={fetchNextPage}
+                />
+                </div>
+            </RenderIf>
         </div>
       ) : (
         <EmptyList type={EEmptyList.COMMENTS} />
