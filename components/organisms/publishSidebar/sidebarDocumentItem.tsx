@@ -11,8 +11,6 @@ interface IProps {
 
 const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
   const pathname = usePathname();
-  const isPrivateDoc =
-    document.hasPassword || document.hasWhiteList || document.hasBlackList;
 
   const pathSegments = pathname?.split("/") || [];
   const isSelected = pathSegments.includes(String(document.id));
@@ -30,7 +28,9 @@ const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
       tabIndex={0}
     >
       <DocumentIcon className="w-5 h-5 stroke-icon-hover flex-none self-start" />
-      {isPrivateDoc && <LockIcon className="flex-none w-5 h-5 fill-icon-hover" />}
+      {document.hasPassword ? (
+        <LockIcon className="flex-none w-5 h-5 fill-icon-hover" />
+      ) : null}
       <span className="text-sm text-gray-700 font-bold overflow-hidden text-right">
         {document.name}
       </span>

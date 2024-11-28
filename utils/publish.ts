@@ -1,13 +1,13 @@
+import { IActionError } from "@interface/app.interface";
 import { getPublishRepositoryInfo } from "@service/clasor";
-import { notFound } from "next/navigation";
+import { normalizeError } from "./normalizeActionError";
 
 export async function getRepositoryData(repoId: number) {
-  if (!repoId || Number.isNaN(Number(repoId))) {
-    return notFound();
+  try {
+    const response = await getPublishRepositoryInfo(repoId);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
   }
-  const repoInfoResponse = await getPublishRepositoryInfo(+repoId);
-  if (!repoInfoResponse) {
-    return notFound();
-  }
-  return repoInfoResponse;
 }

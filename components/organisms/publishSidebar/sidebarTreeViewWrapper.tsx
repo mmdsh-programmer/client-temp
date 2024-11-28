@@ -141,7 +141,7 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
   return (
     <div className="h-[calc(100vh-97px)] w-100">
       <div className="text-xl font-bold text-[#3e4a4d] text-center mt-4 mb-4 pb-4 border-b border-solid border-[rgba(0,0,0,0.08)]">
-        <Link prefetch={false} href={rootUrl}>
+        <Link className="block whitespace-nowrap text-ellipsis overflow-hidden" prefetch={false} href={rootUrl}>
           {repoName || ""}
         </Link>
         <div className="search-input flex justify-center w-full group mt-2 border-spacing-1 border-2 rounded-lg text-xs h-9">

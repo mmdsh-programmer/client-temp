@@ -2,13 +2,13 @@ import {
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
   getPublishDocumentVersion,
+  getPublishRepositoryInfo,
 } from "@service/clasor";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RepositoryInfo from "@components/organisms/repositoryInfo";
 import BasicError, { ServerError } from "@utils/error";
-import { getRepositoryData } from "@utils/publish";
 import { notFound } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
 import RedirectPage from "@components/pages/redirectPage";
@@ -76,7 +76,7 @@ export default async function PublishContentPage({
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getRepositoryData(parsedRepoId);
+    const repository = await getPublishRepositoryInfo(parsedRepoId);
 
     if (!slug?.length) {
       return <RepositoryInfo repository={repository} />;

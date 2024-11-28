@@ -275,11 +275,11 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 .app-sidebar {
-  @apply flex flex-row grow-0 shrink-0 min-w-[250px] max-w-[400px];
+  @apply flex flex-row grow-0 shrink-0 min-w-[250px] max-w-[400px] overflow-auto;
 }
 
 .app-sidebar .app-sidebar-content {
-  @apply flex-[1];
+  @apply flex-[1] w-full;
 }
 
 .app-sidebar .app-sidebar-resizer {
@@ -288,4 +288,8 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 
 .app-sidebar .app-sidebar-resizer:hover {
   @apply w-2;
+}
+
+.word-break {
+  word-break: break-word;
 }
