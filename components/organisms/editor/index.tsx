@@ -99,6 +99,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
         editorMode={editorMode}
         ref={getEditorConfig().ref}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         loadData={getLoadData() as any}
         onGetConfig={handleSaveConfig}
         onChange={handleChange}
