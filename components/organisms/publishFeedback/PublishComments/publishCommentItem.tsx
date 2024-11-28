@@ -55,7 +55,7 @@ const PublishCommentItem = ({ postId, commentItem }: IProps) => {
         </div>
       </CardHeader>
       <CardBody className="p-0">
-        <Typography className="text-sm">{commentItem.text}</Typography>
+        <Typography className="text-sm word-break">{commentItem.text}</Typography>
       </CardBody>
       <CardFooter className="flex items-center p-0 gap-2 justify-between">
         <RenderIf

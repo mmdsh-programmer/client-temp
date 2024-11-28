@@ -289,3 +289,7 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 .app-sidebar .app-sidebar-resizer:hover {
   @apply w-2;
 }
+
+.word-break {
+  word-break: break-word;
+}

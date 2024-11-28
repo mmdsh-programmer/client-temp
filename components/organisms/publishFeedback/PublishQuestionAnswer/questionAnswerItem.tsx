@@ -77,7 +77,7 @@ const QuestionAnswerItem = ({
             </time>
           </div>
         </CardHeader>
-        <CardBody className="p-0">
+        <CardBody className="p-0 word-break">
           <QuestionAnswerContentPreview
             content={questionItem.content}
             className="text-sm"
