@@ -1,14 +1,15 @@
 import React, { Suspense } from "react";
-
 import EditPage from "@components/pages/edit";
 import CheckRepoInfo from "@components/templates/checkRepoInfo";
 
 const Edit = () => {
   return (
     <Suspense>
-      <CheckRepoInfo>
-        <EditPage />
-      </CheckRepoInfo>
+      <div className="h-screen">
+        <CheckRepoInfo>
+          <EditPage />
+        </CheckRepoInfo>
+      </div>
     </Suspense>
   );
 };

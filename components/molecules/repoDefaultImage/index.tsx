@@ -40,7 +40,7 @@ const RepoDefaultImage = ({ imageHash }: IProps) => {
           <ImageComponent
             className="object-cover max-h-full"
             alt="repo-image"
-            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${imageHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
+            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${imageHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
           />
         );
     }

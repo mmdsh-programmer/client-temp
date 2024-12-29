@@ -2305,7 +2305,7 @@ export const MoreDotIcon = (props: IProps) => {
 };
 
 export const MoreLineIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, stroke } = props;
   return (
     <svg
       className={className}
@@ -2315,7 +2315,7 @@ export const MoreLineIcon = (props: IProps) => {
     >
       <path
         d="M4 6H20M4 12H20M4 18H20"
-        stroke="currentColor;"
+        stroke={stroke}
         strokeWidth="1.5"
       />
     </svg>
@@ -2969,7 +2969,7 @@ export const SettingIcon = (props: IProps) => {
 };
 
 export const ShareIcon = (props: IProps) => {
-  const { className } = props;
+  const { className, stroke } = props;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -2979,7 +2979,7 @@ export const ShareIcon = (props: IProps) => {
     >
       <path
         d="M8.14636 10.75L16.2407 6.75M16.0323 17.23L7.93799 13.22M8.20572 12C8.20572 13.5188 6.98442 14.75 5.47786 14.75C3.97131 14.75 2.75 13.5188 2.75 12C2.75 10.4812 3.97131 9.25 5.47786 9.25C6.98442 9.25 8.20572 10.4812 8.20572 12ZM21.25 5.5C21.25 7.01878 20.0287 8.25 18.5221 8.25C17.0156 8.25 15.7943 7.01878 15.7943 5.5C15.7943 3.98122 17.0156 2.75 18.5221 2.75C20.0287 2.75 21.25 3.98122 21.25 5.5ZM21.25 18.5C21.25 20.0188 20.0287 21.25 18.5221 21.25C17.0156 21.25 15.7943 20.0188 15.7943 18.5C15.7943 16.9812 17.0156 15.75 18.5221 15.75C20.0287 15.75 21.25 16.9812 21.25 18.5Z"
-        stroke="currentColor;"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeLinejoin="round"
       />

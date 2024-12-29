@@ -19,7 +19,7 @@ const PublishHomePage = async () => {
             <ImageComponent
               src={
                 data?.heroImage
-                  ? `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${data.heroImage}?&time=${Date.now()}`
+                  ? `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${data.heroImage}?&time=${Date.now()}`
                   : "/docs.png"
               }
               alt={data.projectName ?? "نام پروژه"}

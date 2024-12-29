@@ -33,7 +33,7 @@ const AllRepoList = () => {
     search,
     false,
     repoType === ERepoGrouping.MY_REPO ||
-      repoType === ERepoGrouping.ARCHIVE_REPO,
+      repoType === ERepoGrouping.ARCHIVE_REPO
   );
   const accessRepos = useGetAccessList(
     20,
@@ -146,12 +146,14 @@ const AllRepoList = () => {
                   {renderTableRows()}
                   <RenderIf isTrue={hasNextPage}>
                     <tr>
-                      <td colSpan={5} className="!text-center">
-                        <LoadMore
-                          className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                          isFetchingNextPage={isFetchingNextPage}
-                          fetchNextPage={fetchNextPage}
-                        />
+                      <td colSpan={5} className="!text-center py-4">
+                        <div className="flex justify-center items-center">
+                          <LoadMore
+                            className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                            isFetchingNextPage={isFetchingNextPage}
+                            fetchNextPage={fetchNextPage}
+                          />
+                        </div>
                       </td>
                     </tr>
                   </RenderIf>

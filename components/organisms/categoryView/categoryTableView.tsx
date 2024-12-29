@@ -1,11 +1,10 @@
 /* eslint-disable no-nested-ternary */
 
+import React, { useState } from "react";
 import {
   ICategoryMetadata,
   ICategoryView,
 } from "@interface/category.interface";
-import React, { useState } from "react";
-
 import AdvancedFilter from "@components/molecules/advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
@@ -91,11 +90,17 @@ const TableView = ({
                   });
                 })}
                 <RenderIf isTrue={!!hasNextPage}>
-                  <LoadMore
-                    className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
-                    isFetchingNextPage={isFetchingNextPage}
-                    fetchNextPage={fetchNextPage}
-                  />
+                  <tr>
+                    <td colSpan={7} className="!text-center py-4">
+                      <div className="flex justify-center items-center">
+                        <LoadMore
+                          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
+                          isFetchingNextPage={isFetchingNextPage}
+                          fetchNextPage={fetchNextPage}
+                        />
+                      </div>
+                    </td>
+                  </tr>
                 </RenderIf>
               </tbody>
             </table>

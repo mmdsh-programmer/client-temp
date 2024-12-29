@@ -15,7 +15,6 @@ import EditorFooter from "../editor/editorFooter";
 import EditorHeader from "../editor/editorHeader";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { IRemoteEditorRef } from "clasor-remote-editor";
-import { Spinner } from "@material-tailwind/react";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
@@ -33,7 +32,8 @@ const EditorTab = () => {
   const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
   const [versionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
-  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
+  const [getSelectedVersion, setSelectedVersion] =
+    useRecoilState(selectedVersionAtom);
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
   const [decryptedContent, setDecryptedContent] = useRecoilState(
     editorDecryptedContentAtom
@@ -58,10 +58,12 @@ const EditorTab = () => {
     !getVersionData
   );
 
-  const vId = versionId || getVersionData?.id || getLastVersion?.id;
-  const vState =
-    versionState ||
-    (getVersionData ? getVersionData.state : getLastVersion?.state);
+  const vId = getSelectedVersion
+    ? getSelectedVersion.id
+    : versionId || getLastVersion?.id;
+  const vState = getSelectedVersion
+    ? getSelectedVersion.state
+    : versionState || getLastVersion?.state;
 
   const { data, isFetching, error, isSuccess } = useGetVersion(
     getRepo!.id,
@@ -171,12 +173,7 @@ const EditorTab = () => {
     return <VersionDialogView />;
   }
 
-  // eslint-disable-next-line no-nested-ternary
-  return isFetching ? (
-    <div className="w-full h-screen text-center flex items-center justify-center bg-primary">
-      <Spinner className="h-5 w-5 " color="deep-purple" />
-    </div>
-  ) : data ? (
+  return data ? (
     <div className="h-screen flex-grow p-0 overflow-auto">
       <BlockDraft version={data}>
         <>

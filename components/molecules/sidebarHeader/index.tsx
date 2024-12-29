@@ -36,7 +36,7 @@ const SidebarHeader = () => {
             width={32}
             height={32}
             alt="project-logo"
-            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${getThemeInfo?.logo}?&time=${Date.now()})`}
+            src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${getThemeInfo?.logo}?&time=${Date.now()})`}
           />
         ) : (
           <InfoIcon stroke="#000" className="h-8 w-8" />

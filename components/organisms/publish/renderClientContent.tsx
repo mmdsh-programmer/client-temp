@@ -24,7 +24,7 @@ const RenderClientContent = ({ versionData }: IProps) => {
 
   return (
     <RenderClientSideContent
-      podSpaceServer={process.env.NEXT_PUBLIC_PODSPACE_API as string}
+      podSpaceServer={`${process.env.NEXT_PUBLIC_PODSPACE_API}/`}
     />
   );
 };

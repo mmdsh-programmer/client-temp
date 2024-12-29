@@ -26,8 +26,7 @@ const VersionTableView = ({
   type,
 }: IVersionView) => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const setVersionModalList =
-  useSetRecoilState(versionModalListAtom);
+  const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
@@ -52,7 +51,7 @@ const VersionTableView = ({
     }
     window.open(`http://localhost:8080/board/${value.id}`);
   };
-  
+
   return (
     <>
       {/* eslint-disable-next-line no-nested-ternary */}
@@ -113,9 +112,9 @@ const VersionTableView = ({
                           ),
                         },
                         {
-                          data: version.updateDate ? FaDateFromTimestamp(
-                            +new Date(version.updateDate)
-                          ) : "_",
+                          data: version.updateDate
+                            ? FaDateFromTimestamp(+new Date(version.updateDate))
+                            : "_",
                           className: "hidden xl:table-cell",
                         },
                         {
@@ -180,11 +179,17 @@ const VersionTableView = ({
                 });
               })}
               <RenderIf isTrue={!!hasNextPage}>
-                <LoadMore
-                  className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                  isFetchingNextPage={isFetchingNextPage}
-                  fetchNextPage={fetchNextPage}
-                />
+                <tr>
+                  <td colSpan={6} className="!text-center py-4">
+                    <div className="flex justify-center items-center">
+                      <LoadMore
+                        className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                        isFetchingNextPage={isFetchingNextPage}
+                        fetchNextPage={fetchNextPage}
+                      />
+                    </div>
+                  </td>
+                </tr>
               </RenderIf>
             </tbody>
           </table>

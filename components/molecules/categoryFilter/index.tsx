@@ -43,8 +43,8 @@ const CategoryFilter = () => {
 
   return (
     <div className="w-full flex pb-4 px-5 gap-2 h-[calc(100%-60px)]">
-      <div className="flex w-full flex-wrap flex-col gap-4 xs:gap-2">
-        <div className="flex flex-wrap xs:flex-nowrap max-w-full gap-4 xs:gap-2">
+      <div className="flex w-full flex-col gap-4 xs:gap-2">
+        <div className="flex flex-wrap w-full xs:flex-nowrap max-w-full gap-4 xs:gap-2">
           <InputAtom
             className="flex-grow !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
             placeholder="جستجو در عنوان"
@@ -98,7 +98,7 @@ const CategoryFilter = () => {
           </div>
         ) : null}
         <div className="flex flex-grow items-end justify-end w-full">
-          <LoadingButton
+        <LoadingButton
             className="!h-10 !w-full sm:!w-auto !px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
             onClick={handleFilter}
           >

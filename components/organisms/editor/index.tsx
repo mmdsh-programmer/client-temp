@@ -78,7 +78,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
           repositoryId: getRepo?.id || undefined,
           resourceId: selectedCategory?.id || undefined,
-          podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}`,
+          podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
         } as IClassicData;
       case EDocumentTypes.word:

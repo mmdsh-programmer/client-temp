@@ -132,7 +132,7 @@ const useVersionMenuList = (
       },
       {
         text: "کپی آدرس اشتراک‌ گذاری",
-        icon: <ShareIcon className="h-4 w-4" />,
+        icon: <ShareIcon className="h-4 w-4 stroke-icon-active" />,
         onClick: () => {
           if (version) {
             setVersion(version);
