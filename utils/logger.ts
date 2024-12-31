@@ -4,7 +4,7 @@ const logFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.printf((info) => {
     const { message } = info;
-    return message;
+    return typeof message === "string" ? message : JSON.stringify(message);
   }),
 );
 

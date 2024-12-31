@@ -21,7 +21,6 @@ export const metadata: Metadata = {
 const RootLayout = ({ children, params }: IProps) => {
   return (
     <html lang="fa">
-      {/* @ts-expect-error Server Component */}
       <ThemeLoader domain={params.domain}>
       <Providers>
           <LayoutTransition
