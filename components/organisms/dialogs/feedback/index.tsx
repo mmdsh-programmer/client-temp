@@ -209,7 +209,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
             return (
               <FileUploaderInput
                 key={info.id}
-                uploadUrl={`${process.env.NEXT_PUBLIC_PODSPACE_API}usergroups/${process.env.NEXT_PUBLIC_USERGROUP}/files`}
+                uploadUrl={`${process.env.NEXT_PUBLIC_PODSPACE_API}/usergroups/${process.env.NEXT_PUBLIC_USERGROUP}/files`}
                 onSuccess={onUploadSuccess}
                 onDeleteFile={(file) => {
                   handleDeleteFile(file);

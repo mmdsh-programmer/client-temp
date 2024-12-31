@@ -88,7 +88,7 @@ const useMenuList = (
               }
             }
           ),
-      createMenuItem("اشتراک گذاری", <ShareIcon className="w-4 h-4" />, () => {
+      createMenuItem("اشتراک گذاری", <ShareIcon className="w-4 h-4 stroke-icon-active" />, () => {
         setModalState("share", true);
         if (repo) {
           setRepo(repo);

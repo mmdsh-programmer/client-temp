@@ -73,12 +73,14 @@ const TableView = ({
               })}
               <RenderIf isTrue={!!hasNextPage}>
                 <tr>
-                  <td colSpan={3} className="!text-center">
-                    <LoadMore
-                      className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                      isFetchingNextPage={isFetchingNextPage}
-                      fetchNextPage={fetchNextPage}
-                    />
+                  <td colSpan={4} className="!text-center py-4">
+                    <div className="flex justify-center items-center">
+                      <LoadMore
+                        className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                        isFetchingNextPage={isFetchingNextPage}
+                        fetchNextPage={fetchNextPage}
+                      />
+                    </div>
                   </td>
                 </tr>
               </RenderIf>

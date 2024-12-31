@@ -66,7 +66,7 @@ const useDocumentMenuList = ({
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
-        setEditorMode("preview");
+        setEditorMode("edit");
         setEditorModal(true);
         setShowVersionList(false);
         if (document) {

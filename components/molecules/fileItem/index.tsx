@@ -27,7 +27,7 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
           <a
             className="p-0 bg-transparent"
             download
-            href={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userToken}&time=${Date.now()}`}
+            href={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userToken}&time=${Date.now()}`}
             onClick={(e) => {
               return e.stopPropagation();
             }}

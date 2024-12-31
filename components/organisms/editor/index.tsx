@@ -19,6 +19,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
+import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
 
 interface IProps {
   getEditorConfig: () => {
@@ -29,6 +30,8 @@ interface IProps {
 }
 
 const EditorComponent = ({ getEditorConfig, version }: IProps) => {
+  const [openTemplateDialog, setOpenTemplateDialog] = useState(false);
+
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
@@ -103,6 +106,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         loadData={getLoadData() as any}
         onGetConfig={handleSaveConfig}
         onChange={handleChange}
+        loadHtml={() => {
+          return setOpenTemplateDialog(true);
+        }}
       />
     );
   };
@@ -119,7 +125,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     <div className="flex h-full relative bg-primary">
       {listDrawer && getEditorConfig().ref ? (
         <div className="w-full xs:w-[300px]">
-          <EditorDrawer version={versionData} editorRef={getEditorConfig().ref} />
+          <EditorDrawer
+            version={versionData}
+            editorRef={getEditorConfig().ref}
+          />
         </div>
       ) : null}
       <div
@@ -128,6 +137,12 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         {renderContent()}
         <FloatingButtons version={version} />
       </div>
+      {openTemplateDialog ? (
+        <TemplateContentDialog
+          setOpen={setOpenTemplateDialog}
+          editorRef={getEditorConfig().ref}
+        />
+      ) : null}
     </div>
   );
 };

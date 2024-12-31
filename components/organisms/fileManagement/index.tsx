@@ -175,7 +175,7 @@ const Files = ({
   };
 
   const generateDownloadLink = (file: IFile) => {
-    return `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`;
+    return `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`;
   };
 
   const handleSelect = () => {

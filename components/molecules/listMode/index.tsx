@@ -17,7 +17,7 @@ const ListMode: React.FC = () => {
           setListMode(EListMode.table);
         }}
       >
-        <MoreLineIcon className="h-4 w-4" />
+        <MoreLineIcon className="h-4 w-4 stroke-icon-active" />
       </Button>
       <Button
         className={`rounded-lg p-1  flex justify-center items-center h-9 w-9

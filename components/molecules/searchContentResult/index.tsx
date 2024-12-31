@@ -1,13 +1,6 @@
 import EmptyList, { EEmptyList } from "../emptyList";
-import React, {
- Fragment,
- useRef,
- useState
-} from "react";
-import {
- Spinner,
- Typography
-} from "@material-tailwind/react";
+import React, { Fragment, useRef, useState } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
 
 import RenderIf from "@components/atoms/renderIf";
 import { ResultItem } from "../searchContentItem";
@@ -19,8 +12,8 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
   const listInnerRef = useRef(null);
   const [, setDisabled] = useState(false);
 
-
   const getSearchParam = useRecoilValue(categorySearchContentParamAtom);
+
   const {
     isLoading,
     data: searchResult,
@@ -30,9 +23,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
 
   const onScroll = () => {
     if (listInnerRef.current) {
-      const {
- scrollTop, scrollHeight, clientHeight 
-} = listInnerRef.current;
+      const { scrollTop, scrollHeight, clientHeight } = listInnerRef.current;
       if (scrollTop + clientHeight + 30 > scrollHeight && !isFetchingNextPage) {
         fetchNextPage();
       }

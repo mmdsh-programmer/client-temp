@@ -46,7 +46,7 @@ const AdminFeedbackDialog = ({ setOpen, feedback }: IProps) => {
                     target="_blank"
                     href={`${
                       process.env.NEXT_PUBLIC_PODSPACE_API
-                    }files/${item}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`}
+                    }/files/${item}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`}
                     rel="noreferrer"
                   >
                     دانلود فایل

@@ -18,7 +18,7 @@ const PublishHeader = ({ themeInfo }: IProps) => {
             {themeInfo?.logo ? (
               <ImageComponent
                 alt="repo-image"
-                src={`${process.env.NEXT_PUBLIC_PODSPACE_API}files/${themeInfo.logo}`}
+                src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${themeInfo.logo}`}
                 className="h-8 w-10"
               />
             ) : (

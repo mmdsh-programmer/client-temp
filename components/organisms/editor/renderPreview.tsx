@@ -22,7 +22,7 @@ const RenderPreview = ({ file, isPublic, displayLabel = true }: IProps) => {
 
   const token = userInfo?.access_token;
 
-  let fileLink = `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${file.hash}`;
+  let fileLink = `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${file.hash}`;
   if (!isPublic) {
     fileLink += `?&checkUserGroupAccess=true&Authorization=${token}&time=${Date.now()}`;
   }

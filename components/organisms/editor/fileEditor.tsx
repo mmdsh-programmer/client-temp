@@ -31,7 +31,7 @@ const FileEditor = () => {
   const { data: userInfo } = useGetUser();
   const token: string | undefined = userInfo?.access_token;
 
-  const source = `${process.env.NEXT_PUBLIC_PODSPACE_API}files/${
+  const source = `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${
     getSelectedFile?.hash
   }?&checkUserGroupAccess=true&Authorization=${token}&time=${Date.now()}`;
 
