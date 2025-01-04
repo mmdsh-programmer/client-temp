@@ -63,6 +63,7 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
+import { getRedisClient } from "cacheHandler.mjs";
 
 const { BACKEND_URL, API_TOKEN } = process.env;
 
@@ -140,6 +141,13 @@ export const getToken = async (code: string, redirectUrl: string) => {
 };
 
 export const userInfo = async (accessToken: string) => {
+  const redisClient = await getRedisClient();
+  const cachedUser = await redisClient?.get(`user:${accessToken}`);
+
+  if (cachedUser) {
+    return JSON.parse(cachedUser);
+  }
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
@@ -148,6 +156,12 @@ export const userInfo = async (accessToken: string) => {
           Authorization: `Bearer ${accessToken}`,
         },
       }
+    );
+
+    await redisClient?.set(
+      `user:${accessToken}`,
+      JSON.stringify(response.data.data),
+      { EX: 840 }
     );
 
     return response.data.data;
@@ -280,11 +294,21 @@ export const getAllRepositories = async (
 };
 
 export const getPublishRepositoryInfo = async (repoId: number) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishRepositoryInfo-repoId:${repoId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
       `repositories/${repoId}/publish`
     );
 
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data));
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -499,6 +523,15 @@ export const editRepo = async (
   name: string,
   description: string
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishRepositoryInfo-repoId:${repoId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    await redisClient?.del(cacheKey);
+  }
+
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -520,6 +553,15 @@ export const editRepo = async (
 };
 
 export const deleteRepository = async (accessToken: string, repoId: number) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishRepositoryInfo-repoId:${repoId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    await redisClient?.del(cacheKey);
+  }
+
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -1209,6 +1251,16 @@ export const editCategory = async (
   order: number | null,
   isHidden: boolean
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishChildren-repoId:${repoId}*`;
+
+  const keys = await redisClient?.keys(cacheKey);
+
+  if (keys) {
+     keys.map((key)=>{
+      return redisClient?.del(key);
+    });
+  }
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
@@ -1232,6 +1284,16 @@ export const deleteCategory = async (
   categoryId: number,
   forceDelete: boolean
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishChildren-repoId:${repoId}*`;
+
+  const keys = await redisClient?.keys(cacheKey);
+
+  if (keys) {
+     keys.map((key)=>{
+      return redisClient?.del(key);
+    });
+  }
   try {
     const response = await axiosClasorInstance.delete<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
@@ -1489,6 +1551,15 @@ export const getPublishDocumentVersion = async (
   password?: string,
   accessToken?: string
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishDocumentVersion-repoId:${repoId}-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
@@ -1503,7 +1574,7 @@ export const getPublishDocumentVersion = async (
         },
       }
     );
-
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data));
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1516,6 +1587,14 @@ export const getPublishDocumentLastVersion = async (
   password?: string,
   accessToken?: string
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishDocumentLastVersion-repoId:${repoId}-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
@@ -1530,6 +1609,7 @@ export const getPublishDocumentLastVersion = async (
       },
     });
 
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data));
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1543,6 +1623,14 @@ export const getPublishDocumentVersions = async (
   size: number,
   ssoId?: number
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishDocumentVersions-repoId:${repoId}-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IVersion>>
@@ -1553,7 +1641,7 @@ export const getPublishDocumentVersions = async (
         userssoid: ssoId,
       },
     });
-
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data));
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1565,6 +1653,15 @@ export const getPublishDocumentInfo = async (
   documentId: number,
   disableVersions?: boolean
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishDocumentInfo-repoId:${repoId}-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IDocumentMetadata>
@@ -1574,6 +1671,7 @@ export const getPublishDocumentInfo = async (
       },
     });
 
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data));
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1710,6 +1808,16 @@ export const editDocument = async (
   isHidden?: boolean,
   tagIds?: number[]
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishChildren-repoId:${repoId}*`;
+
+  const keys = await redisClient?.keys(cacheKey);
+
+  if (keys) {
+     keys.map((key)=>{
+      return redisClient?.del(key);
+    });
+  }
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
@@ -1732,6 +1840,16 @@ export const deleteDocument = async (
   repoId: number,
   documentId: number
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishChildren-repoId:${repoId}*`;
+
+  const keys = await redisClient?.keys(cacheKey);
+
+  if (keys) {
+     keys.map((key)=>{
+      return redisClient?.del(key);
+    });
+  }
   try {
     const response = await axiosClasorInstance.delete<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
@@ -2539,6 +2657,15 @@ export const createRepoPublishLink = async (
   expireTime?: number,
   password?: string
 ) => {
+  const redisClient = await getRedisClient();
+  const pattern = "getPublishRepoListType:clasor-*";
+  const keys = await redisClient?.keys(pattern);
+  if (keys) {
+    for (const key of keys) {
+      await redisClient?.del(key);
+    }
+  }
+
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `repositories/${repoId}/publish`,
@@ -2562,6 +2689,15 @@ export const deletePublishLink = async (
   accessToken: string,
   repoId: number
 ) => {
+  const redisClient = await getRedisClient();
+  const pattern = "getPublishRepoListType:clasor-*";
+  const keys = await redisClient?.keys(pattern);
+  if (keys) {
+    for (const key of keys) {
+      await redisClient?.del(key);
+    }
+  }
+
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/publish`,
@@ -2971,6 +3107,15 @@ export const getPublishRepoList = async (
   size: number,
   repoTypes?: string
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishRepoListType:${repoTypes}-offset:${offset}-size:${size}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IRepo>>
@@ -2983,6 +3128,18 @@ export const getPublishRepoList = async (
         size,
         repoTypes,
       },
+    });
+
+    const { list, total } = response.data.data;
+
+    await redisClient.hset(cacheKey, {
+      list: JSON.stringify(list),
+      offset: offset.toString(),
+      size: size.toString(),
+      total: total.toString(),
+    });
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data), {
+      EX: 3600,
     });
     return response.data.data;
   } catch (error) {
@@ -2997,6 +3154,15 @@ export const getPublishChildren = async (
   categoryId?: number,
   ssoId?: number
 ) => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `getPublishChildren-repoId:${repoId}-categoryId-${categoryId}-offset:${offset}-size:${size}`;
+
+  const cachedData = await redisClient?.get(cacheKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
@@ -3035,6 +3201,8 @@ export const getPublishChildren = async (
         },
       }
     );
+
+    await redisClient?.set(cacheKey, JSON.stringify(response.data.data));
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

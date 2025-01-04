@@ -27,6 +27,10 @@ const nextConfig = {
     }
     return newConfig;
   },
+  // cacheHandler:
+  // process.env.NODE_ENV === "production"
+  //   ? require.resolve("./cacheHandler.mjs")
+  //   : undefined,
 };
 
 export default nextConfig;

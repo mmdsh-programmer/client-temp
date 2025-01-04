@@ -90,12 +90,13 @@ export const getMe = async () => {
   try {
     const userData = await userInfo(`${tokenInfo.access_token}`);
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
-    return {
+    const userDataWithPrivate = {
       ...userData,
       private: mySocialProfile.result.private,
       access_token: tokenInfo.access_token,
       refresh_token: tokenInfo.refresh_token,
     };
+    return userDataWithPrivate;
   } catch (error: unknown) {
     if ((error as IActionError)?.errorCode === 401) {
       try {

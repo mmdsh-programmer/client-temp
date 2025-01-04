@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { generateKey, toEnglishDigit } from "./utils";
-import { getCustomPostByDomain } from "@service/social";
+// import { getCustomPostByDomain } from "@service/social";
 import { headers } from "next/headers";
 
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
@@ -113,11 +113,11 @@ export async function middleware(request: NextRequest) {
     }
     if (url.pathname === "/") {
       const domainKey = generateKey(domain);
-      const data = await getCustomPostByDomain(domain);
-      if (data.enablePublishPage) {
-        url.pathname = `/${domainKey}/publish`;
-        return NextResponse.rewrite(url);
-      }
+      // const data = await getCustomPostByDomain(domain);
+      // if (data.enablePublishPage) {
+      //   url.pathname = `/${domainKey}/publish`;
+      //   return NextResponse.rewrite(url);
+      // }
       url.pathname = `/${domainKey}/signin`;
       return NextResponse.rewrite(url);
     }

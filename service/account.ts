@@ -1,4 +1,12 @@
-import { AuthorizationError, ForbiddenError, IOriginalError, InputError, NotFoundError, ServerError, UnprocessableError } from "@utils/error";
+import {
+  AuthorizationError,
+  ForbiddenError,
+  IOriginalError,
+  InputError,
+  NotFoundError,
+  ServerError,
+  UnprocessableError,
+} from "@utils/error";
 import axios, { AxiosError, isAxiosError } from "axios";
 
 import { IGetTokenResponse } from "@interface/app.interface";
@@ -95,9 +103,9 @@ export const getPodAccessToken = async (
 };
 
 export const revokePodToken = async (
-  username, 
-  password, 
-  token: string, 
+  username,
+  password,
+  token: string,
   type: string
 ): Promise<void> => {
   try {
@@ -124,11 +132,10 @@ export const revokePodToken = async (
   }
 };
 
-
 export const refreshPodAccessToken = async (
   refreshToken: string,
   clientId: string,
-  clientSecret: string,
+  clientSecret: string
 ) => {
   try {
     const url = "/oauth2/token";
@@ -149,6 +156,7 @@ export const refreshPodAccessToken = async (
         },
       }
     );
+
     return result.data as { access_token: string; refresh_token: string };
   } catch (error) {
     return handleAccountStatusError(error as AxiosError<any>);

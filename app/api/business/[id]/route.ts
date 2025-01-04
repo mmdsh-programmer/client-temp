@@ -20,7 +20,6 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
         if(!id){
             throw new InputError(["Id is required"]);
         }
-        const response = await getCustomPostById(+id);
 
         const { 
             domain, 
@@ -32,6 +31,8 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             content,
             enablePublishPage
         } = await request.json();
+
+        const response = await getCustomPostById(domain, +id);
         
         await updateCustomPostByEntityId({  
             domain: domain ?? response.domain, 
