@@ -10,11 +10,12 @@ const useAcceptVersion = () => {
     mutationKey: ["acceptVersion"],
     mutationFn: async (values: {
       repoId: number;
+      docId: number;
       versionId: number;
       callBack?: () => void;
     }) => {
-      const { repoId, versionId } = values;
-      const response = await acceptVersionAction(repoId, versionId);
+      const { repoId, versionId, docId } = values;
+      const response = await acceptVersionAction(repoId,docId, versionId);
       handleClientSideHookError(response as IActionError);
       return response;
     },

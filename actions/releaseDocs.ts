@@ -11,6 +11,8 @@ import {
   rejectVersion,
 } from "@service/clasor";
 import { IActionError } from "@interface/app.interface";
+import { headers } from "next/dist/client/components/headers";
+import { getCustomPostByDomain } from "@service/social";
 
 export const getPendingDraftsAction = async (
   repoId: number,
@@ -58,8 +60,15 @@ export const acceptDraftAction = async (
   draftId: number
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await acceptDraft(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       docId,
@@ -95,13 +104,22 @@ export const rejectDraftAction = async (
 export const acceptVersionAction = async (
   repoId: number,
   docId: number,
+  versionId: number
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await acceptVersion(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       docId,
+      versionId
     );
 
     return response;
@@ -110,17 +128,10 @@ export const acceptVersionAction = async (
   }
 };
 
-export const rejectVersionAction = async (
-  repoId: number,
-  docId: number,
-) => {
+export const rejectVersionAction = async (repoId: number, docId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await rejectVersion(
-      userInfo.access_token,
-      repoId,
-      docId,
-    );
+    const response = await rejectVersion(userInfo.access_token, repoId, docId);
 
     return response;
   } catch (error) {

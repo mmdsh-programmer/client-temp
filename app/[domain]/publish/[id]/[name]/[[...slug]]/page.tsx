@@ -14,6 +14,8 @@ import { ServerError } from "@utils/error";
 import { notFound } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
 import RedirectPage from "@components/pages/redirectPage";
+import { headers } from "next/dist/client/components/headers";
+import { getCustomPostByDomain } from "@service/social";
 
 type PageParams = {
   name: string;
@@ -28,6 +30,8 @@ export default async function PublishContentPage({
 }) {
   try {
     const { id: repoId, slug } = params;
+    const domain = headers().get("host");
+
     const parsedRepoId = Number.parseInt(
       toEnglishDigit(decodeURIComponent(repoId)),
       10
@@ -37,8 +41,16 @@ export default async function PublishContentPage({
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getPublishRepositoryInfo(parsedRepoId);
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
 
+    const domainInfo = await getCustomPostByDomain(domain);
+
+    const repository = await getPublishRepositoryInfo(
+      domainInfo.type,
+      parsedRepoId
+    );
 
     if (!slug?.length) {
       return <RepositoryInfo repository={repository} />;
@@ -61,6 +73,7 @@ export default async function PublishContentPage({
     }
 
     const documentInfo = await getPublishDocumentInfo(
+      domainInfo.type,
       parsedRepoId,
       documentId,
       true
@@ -77,12 +90,14 @@ export default async function PublishContentPage({
 
     if (hasVersion && versionId && !Number.isNaN(versionId)) {
       versionData = await getPublishDocumentVersion(
+        domainInfo.type,
         repository.id,
         documentId,
         versionId
       );
     } else {
       const lastVersionInfo = await getPublishDocumentLastVersion(
+        domainInfo.type,
         repository.id,
         documentId
       );
@@ -91,6 +106,7 @@ export default async function PublishContentPage({
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
 
       versionData = await getPublishDocumentVersion(
+        domainInfo.type,
         repository.id,
         documentId,
         lastVersionInfo.id

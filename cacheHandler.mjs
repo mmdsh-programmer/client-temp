@@ -1,7 +1,7 @@
 // eslint-disable-next-line unicorn/filename-case
 
 import { CacheHandler } from "@neshca/cache-handler";
-import { createClient } from "redis";
+import { createCluster } from "redis";
 import createLruHandler from "@neshca/cache-handler/local-lru";
 import createRedisHandler from "@neshca/cache-handler/redis-stack";
 
@@ -12,11 +12,31 @@ export const getRedisClient = async () => {
       return client;
     }
     console.log("Starting Redis connection");
-    client = createClient({
-      url: "redis://192.168.1.103:6379",
-      socket: {
-        reconnectStrategy: (retries) => {
-          return Math.min(retries * 50, 2000);
+    // client = createClient({
+    //   url: "redis://192.168.1.103:6379",
+    //   socket: {
+    //     reconnectStrategy: (retries) => {
+    //       return Math.min(retries * 50, 2000);
+    //     },
+    //   },
+    // });
+
+    client = createCluster({
+      rootNodes: [
+        { url: "redis://10.248.34.142:6379" },
+        { url: "redis://10.248.34.142:6380" },
+        { url: "redis://10.248.34.142:6381" },
+        { url: "redis://10.248.34.142:6382" },
+        { url: "redis://10.248.34.142:6383" },
+        { url: "redis://10.248.34.142:6384" },
+      ],
+      defaults: {
+        username: "clasorclient",
+        password: process.env.REDIS_PASS,
+        socket: {
+          reconnectStrategy: () => {
+            return false;
+          },
         },
       },
     });
@@ -52,7 +72,9 @@ CacheHandler.onCreation(async () => {
     // Fallback to LRU handler if Redis client is not available.
     // The application will still work, but the cache will be in memory only and not shared.
     handler = createLruHandler();
-    console.warn("Falling back to LRU handler because Redis client is not available.");
+    console.warn(
+      "Falling back to LRU handler because Redis client is not available."
+    );
   }
 
   return {

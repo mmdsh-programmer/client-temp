@@ -77,7 +77,7 @@ export const getMyRepositoryList = async (
   size: number,
   archived: boolean,
   name?: string,
-  isPublished?: boolean,
+  isPublished?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -174,8 +174,15 @@ export const editRepoAction = async (
   description: string
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await editRepo(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       name,
@@ -211,8 +218,18 @@ export const createRepoAction = async (name: string, description?: string) => {
 
 export const deleteRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
-    const response = await deleteRepository(userInfo.access_token, repoId);
+    const response = await deleteRepository(
+      domainInfo.type,
+      userInfo.access_token,
+      repoId
+    );
 
     return response;
   } catch (error) {
@@ -372,7 +389,7 @@ export const transferOwnershipRepositoryAction = async (
 
 export const getPublishRepositoriesAction = async (
   offset: number,
-  size: number,
+  size: number
 ) => {
   const domain = headers().get("host");
   if (!domain) {
