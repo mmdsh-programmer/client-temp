@@ -1,7 +1,7 @@
 // eslint-disable-next-line unicorn/filename-case
 
 import { CacheHandler } from "@neshca/cache-handler";
-import { createCluster, createClient } from "redis";
+import { createCluster } from "redis";
 import createLruHandler from "@neshca/cache-handler/local-lru";
 import createRedisHandler from "@neshca/cache-handler/redis-stack";
 
@@ -32,7 +32,7 @@ export const getRedisClient = async () => {
       ],
       defaults: {
         username: "clasorclient",
-        password: process.env.REDIS_PASS,
+        password: "YYhi16j",
         socket: {
           reconnectStrategy: (retries) => {
             console.log("---------------------------- retries --------------------------", retries);
@@ -42,11 +42,18 @@ export const getRedisClient = async () => {
       },
     });
     // Redis won't work without error handling.
-    client.on("error", () => {
-      console.error("Redis client error");
+    client.on("error", (err) => {
+      console.error("Redis Client Error:", err);
     });
     client.on("connect", () => {
-      console.log("Redis client connected");
+      console.log("Redis Client Connected");
+    });
+    // Add these cluster-specific event handlers
+    client.on("nodeError", (err, node) => {
+      console.error(`Redis Node ${node} Error:`, err);
+    });
+    client.on("clusterDown", () => {
+      console.error("Redis Cluster is down");
     });
     await client.connect();
     return client;
