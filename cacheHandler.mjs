@@ -8,7 +8,7 @@ import createRedisHandler from "@neshca/cache-handler/redis-stack";
 let client = null;
 export const getRedisClient = async () => {
   try {
-    if (client && client.isReady) {
+    if (client && client.isOpen) {
       return client;
     }
     console.log("Starting Redis connection");
@@ -23,36 +23,26 @@ export const getRedisClient = async () => {
 
     client = createCluster({
       rootNodes: [
-        { url: "redis://10.248.34.142:6382" },
-        { url: "redis://10.248.34.142:6380" },
-        { url: "redis://10.248.34.142:6381" },
+        { url: "redis://redis-node-1:6379" },
+        { url: "redis://redis-node-2:6380" },
+        { url: "redis://redis-node-3:6381" },
+        { url: "redis://redis-node-4:6382" },
+        { url: "redis://redis-node-5:6383" },
+        { url: "redis://redis-node-6:6384" },
       ],
       defaults: {
         username: "clasorclient",
         password: "YYhi16j",
         socket: {
           reconnectStrategy: (retries) => {
-            console.log("---------------------------- retries --------------------------", retries);
+            console.log("Retry redis connection", retries);
             return 1000;
           },
         },
       },
     });
-    // Redis won't work without error handling.
-    client.on("error", (err) => {
-      console.error("Redis Client Error:", err);
-    });
-    client.on("connect", () => {
-      console.log("Redis Client Connected");
-    });
-    // Add these cluster-specific event handlers
-    client.on("nodeError", (err, node) => {
-      console.error(`Redis Node ${node} Error:`, err);
-    });
-    client.on("clusterDown", () => {
-      console.error("Redis Cluster is down");
-    });
     await client.connect();
+    console.log("Redis connected");
     return client;
   } catch (error) {
     console.error(error);
@@ -66,7 +56,7 @@ CacheHandler.onCreation(async () => {
   /** @type {import("@neshca/cache-handler").Handler | null} */
   let handler;
 
-  if (redisClient?.isReady) {
+  if (redisClient?.isOpen) {
     // Create the `redis-stack` Handler if the client is available and connected.
     handler = await createRedisHandler({
       client: redisClient,

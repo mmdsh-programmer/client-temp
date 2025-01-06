@@ -75,24 +75,3 @@ export async function GET(req) {
     );
   }
 }
-
-export async function POST(req) {
-  try {
-    const redisHandler = await getRedisClient();
-    const { key, value } = await req.json();
-
-    if (!key || !value) {
-      return NextResponse.json(
-        { error: "Key and Value are required" },
-        { status: 400 }
-      );
-    }
-
-    await redisHandler.set(key, value);
-
-    return NextResponse.json({ key, value });
-  } catch (error) {
-    console.error("Redis POST Error:", error);
-    return NextResponse.json({ error: "Failed to set data" }, { status: 500 });
-  }
-}
