@@ -31,6 +31,7 @@ const nextConfig = {
   process.env.NODE_ENV === "production"
     ? require.resolve("./cacheHandler.mjs")
     : undefined,
+  cacheMaxMemorySize: 0, // disable default in-memory caching
 };
 
-export default nextConfig;
+module.exports = nextConfig;
