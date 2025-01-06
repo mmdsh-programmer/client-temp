@@ -7,12 +7,7 @@ export async function GET() {
     if(!client || !client.isOpen){
       return NextResponse.json({ error: "Failed to retrieve data" }, { status: 500 });
     }
-
-    await client.connect();
-    
-    client.on("error", (err) => {
-      console.error("Redis Client Error:", err);
-    });
+  
     
     if(client && client.isOpen){
       await client.set("ping", "pong");
