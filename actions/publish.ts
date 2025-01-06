@@ -14,8 +14,10 @@ import { IActionError } from "@interface/app.interface";
 import {
   confirmComment,
   createComment,
+  getCustomPostByDomain,
   getPublishCommentList,
 } from "@service/social";
+import { headers } from "next/dist/client/components/headers";
 
 const { API_TOKEN } = process.env;
 
@@ -41,8 +43,18 @@ export const createRepoPublishLinkAction = async (
 
 export const deletePublishLinkAction = async (repoId: number) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
-    const response = await deletePublishLink(userInfo.access_token, repoId);
+    const response = await deletePublishLink(
+      domainInfo.type,
+      userInfo.access_token,
+      repoId
+    );
 
     return response;
   } catch (error) {
@@ -110,7 +122,14 @@ export const getPublishDocumentVersionsAction = async (
   try {
     const ssoId =
       userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const domainInfo = await getCustomPostByDomain(domain);
+
     const response = await getPublishDocumentVersions(
+      domainInfo.type,
       repoId,
       documentId,
       offset,

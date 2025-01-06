@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
             }];
         }
 
-        const result = await getCustomPost(metaQuery, size ?? "10", offset ?? "0");
+        const result = await getCustomPost(domain, metaQuery, size ?? "10", offset ?? "0");
 
         return NextResponse.json({ result });
     } catch (error) {

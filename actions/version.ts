@@ -16,6 +16,8 @@ import { getMe } from "./auth";
 import { IFileVersion } from "@interface/version.interface";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+import { headers } from "next/dist/client/components/headers";
+import { getCustomPostByDomain } from "@service/social";
 
 export const getVersionAction = async (
   repoId: number,
@@ -96,8 +98,15 @@ export const deleteVersionAction = async (
   state: string
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await deleteVersion(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -116,8 +125,15 @@ export const getLastVersionAction = async (
   documentId: number
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await getLastVersion(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId
@@ -135,8 +151,15 @@ export const setLastVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await setLastVersion(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -155,8 +178,15 @@ export const publicVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await publicVersion(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -195,8 +225,15 @@ export const confirmVersionAction = async (
   versionId: number
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await confirmVersion(
+      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,

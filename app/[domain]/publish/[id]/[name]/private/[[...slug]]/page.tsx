@@ -16,6 +16,8 @@ import { getDocumentPasswordAction } from "@actions/cookies";
 import PublishDocumentSignin from "@components/pages/publish/publishDocumentSignin";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
 import { userInfoAction } from "@actions/auth";
+import { headers } from "next/dist/client/components/headers";
+import { getCustomPostByDomain } from "@service/social";
 
 type PageParams = {
   name: string;
@@ -24,6 +26,7 @@ type PageParams = {
 };
 
 async function fetchDocumentVersion(
+  repoType: string,
   repositoryId: number,
   documentId: number,
   versionId: number | undefined,
@@ -32,6 +35,7 @@ async function fetchDocumentVersion(
 ) {
   if (versionId) {
     return getPublishDocumentVersion(
+      repoType,
       repositoryId,
       documentId,
       versionId,
@@ -41,6 +45,7 @@ async function fetchDocumentVersion(
   }
 
   const lastVersion = await getPublishDocumentLastVersion(
+    repoType,
     repositoryId,
     documentId,
     documentPassword,
@@ -52,6 +57,7 @@ async function fetchDocumentVersion(
   }
 
   return getPublishDocumentVersion(
+    repoType,
     repositoryId,
     documentId,
     lastVersion.id,
@@ -67,16 +73,27 @@ export default async function PublishContentPage({
 }) {
   try {
     const { id: repoId, slug } = params;
+    const domain = headers().get("host");
+
     const parsedRepoId = Number.parseInt(
       toEnglishDigit(decodeURIComponent(repoId)),
       10
     );
 
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const domainInfo = await getCustomPostByDomain(domain);
+
     if (Number.isNaN(parsedRepoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getPublishRepositoryInfo(parsedRepoId);
+    const repository = await getPublishRepositoryInfo(
+      domainInfo.type,
+      parsedRepoId
+    );
 
     if (!slug?.length) {
       return <RepositoryInfo repository={repository} />;
@@ -97,6 +114,7 @@ export default async function PublishContentPage({
     }
 
     const documentInfo = await getPublishDocumentInfo(
+      domainInfo.type,
       parsedRepoId,
       documentId,
       true
@@ -135,6 +153,7 @@ export default async function PublishContentPage({
 
     try {
       const version = await fetchDocumentVersion(
+        domainInfo.type,
         repository.id,
         documentId,
         hasVersion ? versionId : undefined,

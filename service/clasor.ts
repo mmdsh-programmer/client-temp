@@ -63,6 +63,7 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
+import { getRedisClient } from "cacheHandler.mjs";
 
 const { BACKEND_URL, API_TOKEN } = process.env;
 
@@ -140,6 +141,13 @@ export const getToken = async (code: string, redirectUrl: string) => {
 };
 
 export const userInfo = async (accessToken: string) => {
+  const redisClient = await getRedisClient();
+  const cachedUser = await redisClient?.get(`user:${accessToken}`);
+
+  if (cachedUser) {
+    return JSON.parse(cachedUser);
+  }
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
@@ -148,6 +156,12 @@ export const userInfo = async (accessToken: string) => {
           Authorization: `Bearer ${accessToken}`,
         },
       }
+    );
+
+    await redisClient?.set(
+      `user:${accessToken}`,
+      JSON.stringify(response.data.data),
+      { EX: 840 }
     );
 
     return response.data.data;
@@ -279,11 +293,28 @@ export const getAllRepositories = async (
   }
 };
 
-export const getPublishRepositoryInfo = async (repoId: number) => {
+export const getPublishRepositoryInfo = async (
+  repoType: string,
+  repoId: number
+) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = "getPublishRepositoryInfo";
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
       `repositories/${repoId}/publish`
     );
+
+    await redisClient.hSet(cacheKey, {
+      [fieldKey]: JSON.stringify(response.data.data),
+    });
 
     return response.data.data;
   } catch (error) {
@@ -494,11 +525,19 @@ export const getBookmarkRepositories = async (
 };
 
 export const editRepo = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   name: string,
   description: string
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = "getPublishRepositoryInfo";
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -513,13 +552,25 @@ export const editRepo = async (
       }
     );
 
+    if (cachedData) {
+      await redisClient?.hDel(cacheKey, fieldKey);
+    }
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
-export const deleteRepository = async (accessToken: string, repoId: number) => {
+export const deleteRepository = async (
+  repoType: string,
+  accessToken: string,
+  repoId: number
+) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -529,6 +580,10 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
         },
       }
     );
+
+    if (cacheKey) {
+      await redisClient?.del(cacheKey);
+    }
 
     return response.data.data;
   } catch (error) {
@@ -601,10 +656,6 @@ export const createRepo = async (
 
     return response.data.data;
   } catch (error) {
-    console.log(
-      "==================== clasor create repo ===================",
-      error
-    );
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
@@ -1483,12 +1534,24 @@ export const getDocument = async (
 };
 
 export const getPublishDocumentVersion = async (
+  repoType: string,
   repoId: number,
   documentId: number,
   versionId: number,
   password?: string,
   accessToken?: string
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = `getPublishDocumentVersion-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
@@ -1503,7 +1566,9 @@ export const getPublishDocumentVersion = async (
         },
       }
     );
-
+    await redisClient.hSet(cacheKey, {
+      [fieldKey]: JSON.stringify(response.data.data),
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1511,11 +1576,23 @@ export const getPublishDocumentVersion = async (
 };
 
 export const getPublishDocumentLastVersion = async (
+  repoType: string,
   repoId: number,
   documentId: number,
   password?: string,
   accessToken?: string
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = `getPublishDocumentLastVersion-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
@@ -1530,6 +1607,9 @@ export const getPublishDocumentLastVersion = async (
       },
     });
 
+    await redisClient.hSet(cacheKey, {
+      [fieldKey]: JSON.stringify(response.data.data),
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1537,12 +1617,24 @@ export const getPublishDocumentLastVersion = async (
 };
 
 export const getPublishDocumentVersions = async (
+  repoType: string,
   repoId: number,
   documentId: number,
   offset: number,
   size: number,
   ssoId?: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = `getPublishDocumentVersions-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
+
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IVersion>>
@@ -1553,7 +1645,9 @@ export const getPublishDocumentVersions = async (
         userssoid: ssoId,
       },
     });
-
+    await redisClient.hSet(cacheKey, {
+      [fieldKey]: JSON.stringify(response.data.data),
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1561,10 +1655,21 @@ export const getPublishDocumentVersions = async (
 };
 
 export const getPublishDocumentInfo = async (
+  repoType: string,
   repoId: number,
   documentId: number,
   disableVersions?: boolean
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = `getPublishDocumentInfo-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IDocumentMetadata>
@@ -1574,6 +1679,9 @@ export const getPublishDocumentInfo = async (
       },
     });
 
+    await redisClient.hSet(cacheKey, {
+      [fieldKey]: JSON.stringify(response.data.data),
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1699,6 +1807,7 @@ export const createDocumentTemplate = async (
 };
 
 export const editDocument = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -1710,6 +1819,16 @@ export const editDocument = async (
   isHidden?: boolean,
   tagIds?: number[]
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentInfo-documentId:${documentId}`,
+    `getPublishDocumentVersion-documentId:${documentId}`,
+    `getPublishDocumentVersions-documentId:${documentId}`,
+    `getPublishDocumentLastVersion-documentId:${documentId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
@@ -1721,6 +1840,12 @@ export const editDocument = async (
       }
     );
 
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1728,10 +1853,21 @@ export const editDocument = async (
 };
 
 export const deleteDocument = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentInfo-documentId:${documentId}`,
+    `getPublishDocumentVersion-documentId:${documentId}`,
+    `getPublishDocumentVersions-documentId:${documentId}`,
+    `getPublishDocumentLastVersion-documentId:${documentId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.delete<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
@@ -1741,6 +1877,12 @@ export const deleteDocument = async (
         },
       }
     );
+
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
 
     return response.data.data;
   } catch (error) {
@@ -2071,12 +2213,22 @@ export const createFileVersion = async (
 };
 
 export const deleteVersion = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number,
   state: string
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentVersion-documentId:${documentId}`,
+    `getPublishDocumentVersions-documentId:${documentId}`,
+    `getPublishDocumentLastVersion-documentId:${documentId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
@@ -2088,6 +2240,11 @@ export const deleteVersion = async (
         },
       }
     );
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
 
     return response.data.data;
   } catch (error) {
@@ -2096,10 +2253,21 @@ export const deleteVersion = async (
 };
 
 export const getLastVersion = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = `getPublishDocumentLastVersion-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  }
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
       `repositories/${repoId}/documents/${documentId}/lastVersion`,
@@ -2109,7 +2277,9 @@ export const getLastVersion = async (
         },
       }
     );
-
+    await redisClient.hSet(cacheKey, {
+      [fieldKey]: JSON.stringify(response.data.data),
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2117,11 +2287,19 @@ export const getLastVersion = async (
 };
 
 export const setLastVersion = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldKey = `getPublishDocumentLastVersion-documentId:${documentId}`;
+
+  const cachedData = await redisClient?.hGet(cacheKey, fieldKey);
+
   try {
     const response = await axiosClasorInstance.patch<IServerResult<IVersion>>(
       `repositories/${repoId}/documents/${documentId}/lastVersion`,
@@ -2133,6 +2311,10 @@ export const setLastVersion = async (
       }
     );
 
+    if (cachedData) {
+      await redisClient?.hDel(cacheKey, fieldKey);
+    }
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2140,11 +2322,20 @@ export const setLastVersion = async (
 };
 
 export const publicVersion = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentVersion-documentId:${documentId}`,
+    `getPublishDocumentVersions-documentId:${documentId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/publicVersion`,
@@ -2155,6 +2346,12 @@ export const publicVersion = async (
         },
       }
     );
+
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
 
     return response.data.data;
   } catch (error) {
@@ -2186,11 +2383,20 @@ export const cancelPublicVersion = async (
 };
 
 export const confirmVersion = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
   versionId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentVersion-documentId:${documentId}`,
+    `getPublishDocumentLastVersion-documentId:${documentId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.post<IServerResult<IVersion>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/publishDraft`,
@@ -2201,6 +2407,12 @@ export const confirmVersion = async (
         },
       }
     );
+
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
 
     return response.data.data;
   } catch (error) {
@@ -2370,11 +2582,20 @@ export const getPendingVersion = async (
 };
 
 export const acceptDraft = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
   docId: number,
   draftId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentVersion-documentId:${docId}`,
+    `getPublishDocumentLastVersion-documentId:${docId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `repositories/${repoId}/documents/${docId}/versions/${draftId}/accept`,
@@ -2385,6 +2606,13 @@ export const acceptDraft = async (
         },
       }
     );
+
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2392,10 +2620,20 @@ export const acceptDraft = async (
 };
 
 export const acceptVersion = async (
+  repoType: string,
   accessToken: string,
   repoId: number,
+  docId: number,
   versionId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+  const fieldsKey = [
+    `getPublishDocumentVersion-documentId:${docId}`,
+    `getPublishDocumentVersions-documentId:${docId}`,
+  ];
+
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `admin/${repoId}/acceptVersion/${versionId}`,
@@ -2406,6 +2644,12 @@ export const acceptVersion = async (
         },
       }
     );
+
+    if (fieldsKey) {
+      for (const fieldKey of fieldsKey) {
+        await redisClient?.hDel(cacheKey, fieldKey);
+      }
+    }
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2552,6 +2796,7 @@ export const createRepoPublishLink = async (
         },
       }
     );
+
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2559,9 +2804,14 @@ export const createRepoPublishLink = async (
 };
 
 export const deletePublishLink = async (
+  repoType: string,
   accessToken: string,
   repoId: number
 ) => {
+  const redisClient = await getRedisClient();
+
+  const cacheKey = `publishPage-repoType:${repoType}-repoId:${repoId}`;
+
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/publish`,
@@ -2571,6 +2821,10 @@ export const deletePublishLink = async (
         },
       }
     );
+
+    if (cacheKey) {
+      await redisClient?.del(cacheKey);
+    }
 
     return response.data;
   } catch (error) {
@@ -2984,6 +3238,7 @@ export const getPublishRepoList = async (
         repoTypes,
       },
     });
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -3035,6 +3290,7 @@ export const getPublishChildren = async (
         },
       }
     );
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
