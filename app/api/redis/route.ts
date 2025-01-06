@@ -1,8 +1,20 @@
 import { getRedisClient } from "cacheHandler.mjs";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
+    const headersList = headers();
+    const Authorization = headersList.get("Authorization");
+    if (
+      !Authorization ||
+      Authorization.replace("Bearer ", "") !== process.env.API_TOKEN
+    ) {
+      return NextResponse.json(
+        { message: "Client is not authorized" },
+        { status: 401 }
+      );
+    }
     const redisHandler = await getRedisClient();
     const key = req.nextUrl.searchParams.get("key");
 
@@ -10,8 +22,48 @@ export async function GET(req) {
       return NextResponse.json({ error: "Key is required" }, { status: 400 });
     }
 
-    const value = await redisHandler.get(key);
-    return NextResponse.json({ key, value });
+    const keyType = await redisHandler?.type(key);
+
+    let value;
+    switch (keyType) {
+      case "string":
+        value = await redisHandler?.get(key);
+        break;
+
+      case "hash":
+        value = await redisHandler?.hGetAll(key);
+        break;
+
+      case "list":
+        value = await redisHandler?.lRange(key, 0, -1); // Get all elements in the list
+        break;
+
+      case "set":
+        value = await redisHandler?.sMembers(key); // Get all members of the set
+        break;
+
+      case "zset": // Sorted set
+        value = await redisHandler?.zRange(key, 0, -1, { WITHSCORES: true }); // Get all elements with scores
+        break;
+
+      case "stream":
+        value = await redisHandler?.xRange(key, "-", "+"); // Get all entries in the stream
+        break;
+
+      case "none": // Key doesn't exist
+        return NextResponse.json(
+          { error: `Key "${key}" does not exist` },
+          { status: 404 }
+        );
+
+      default:
+        return NextResponse.json(
+          { error: `Unsupported key type: ${keyType}` },
+          { status: 400 }
+        );
+    }
+
+    return NextResponse.json({ key, type: keyType, value });
   } catch (error) {
     console.error("Redis GET Error:", error);
     return NextResponse.json(
