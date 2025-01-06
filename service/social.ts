@@ -20,13 +20,11 @@ import crypto from "crypto";
 import { getRedisClient } from "cacheHandler.mjs";
 import qs from "qs";
 
-const { API_TOKEN, NEXT_PUBLIC_CORE_API } = process.env;
-
 const axiosSocialInstance = axios.create({
-  baseURL: NEXT_PUBLIC_CORE_API,
+  baseURL: process.env.NEXT_PUBLIC_CORE_API,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded",
-    _token_: API_TOKEN,
+    _token_: process.env.API_TOKEN,
     _token_issuer_: "1",
   },
 });
@@ -41,7 +39,13 @@ axiosSocialInstance.interceptors.request.use((request) => {
     data,
   });
   console.log(log);
-  // Logger.info(log);
+  console.log(`
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    ${process.env.NEXT_PUBLIC_CORE_API}  
+    ----
+    ${process.env.API_TOKEN}  
+    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  `);
   return request;
 });
 
