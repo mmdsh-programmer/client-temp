@@ -11,7 +11,6 @@ FROM nrp.devpod.ir:8138/repository/applicationplatform-docker-hosted/node:20.10.
 WORKDIR /app
 
 COPY --from=builder /app/package.json .
-COPY --from=builder /app/cacheHandler.mjs .
 COPY --from=builder /app/package-lock.json .
 COPY --from=builder /app/next.config.mjs .
 COPY --from=builder /app/public ./public
