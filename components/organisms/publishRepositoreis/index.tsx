@@ -2,7 +2,7 @@
 
 import { EEmptyList } from "@components/molecules/emptyList";
 import { IRepoView } from "@interface/repo.interface";
-import PublishCardView from "../repoView/publishCardView";
+import PublishCardView from "../repoView/@publishCardView";
 import React from "react";
 import useGetPublishRepositories from "@hooks/repository/useGetPublishRepositories";
 
