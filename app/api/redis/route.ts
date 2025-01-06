@@ -1,6 +1,6 @@
+import { NextResponse } from "next/server";
 import { getRedisClient } from "cacheHandler.mjs";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
@@ -16,6 +16,9 @@ export async function GET(req) {
       );
     }
     const redisHandler = await getRedisClient();
+    if(!redisHandler || !redisHandler.isReady){
+      return NextResponse.json({ error: "Redis is not ready" }, { status: 400 });
+    }
     const key = req.nextUrl.searchParams.get("key");
 
     if (!key) {
@@ -27,7 +30,7 @@ export async function GET(req) {
     let value;
     switch (keyType) {
       case "string":
-        value = await redisHandler?.get(key);
+        
         break;
 
       case "hash":
