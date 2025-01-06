@@ -23,12 +23,9 @@ export const getRedisClient = async () => {
 
     client = createCluster({
       rootNodes: [
-        { url: "redis://10.248.34.142:6379" },
+        { url: "redis://10.248.34.142:6382" },
         { url: "redis://10.248.34.142:6380" },
         { url: "redis://10.248.34.142:6381" },
-        { url: "redis://10.248.34.142:6382" },
-        { url: "redis://10.248.34.142:6383" },
-        { url: "redis://10.248.34.142:6384" },
       ],
       defaults: {
         username: "clasorclient",
