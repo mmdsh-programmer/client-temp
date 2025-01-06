@@ -1,7 +1,7 @@
 // eslint-disable-next-line unicorn/filename-case
 
 import { CacheHandler } from "@neshca/cache-handler";
-import { createCluster } from "redis";
+import { createCluster, createClient } from "redis";
 import createLruHandler from "@neshca/cache-handler/local-lru";
 import createRedisHandler from "@neshca/cache-handler/redis-stack";
 
@@ -34,8 +34,9 @@ export const getRedisClient = async () => {
         username: "clasorclient",
         password: process.env.REDIS_PASS,
         socket: {
-          reconnectStrategy: () => {
-            return false;
+          reconnectStrategy: (retries) => {
+            console.log("---------------------------- retries --------------------------", retries);
+            return 1000;
           },
         },
       },
