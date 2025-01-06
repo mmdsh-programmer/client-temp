@@ -12,12 +12,13 @@ import {
   ISocialProfile,
   ISocialResponse,
 } from "@interface/app.interface";
-import axios, { AxiosError } from "axios";
-import qs from "qs";
-import crypto from "crypto";
 import { IQAList, IQAResponse } from "@interface/qa.interface";
+import axios, { AxiosError } from "axios";
+
 import { IComment } from "@interface/version.interface";
+import crypto from "crypto";
 import { getRedisClient } from "cacheHandler.mjs";
+import qs from "qs";
 
 const { API_TOKEN, NEXT_PUBLIC_CORE_API } = process.env;
 
@@ -105,10 +106,12 @@ export const getCustomPost = async (
   const redisClient = await getRedisClient();
   const cacheKey = `getCustomPost-${domain}`;
 
-  const cachedData = await redisClient?.get(cacheKey);
+  if(redisClient && redisClient.isReady){
+    const cachedData = await redisClient.get(cacheKey);
 
-  if (cachedData) {
-    return JSON.parse(cachedData);
+    if (cachedData) {
+      return JSON.parse(cachedData);
+    }
   }
 
   const response = await axiosSocialInstance.get(
@@ -134,11 +137,14 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<ICustomPostMetadata> => {
   const redisClient = await getRedisClient();
-  const cachedData = await redisClient?.get(`domain-${domain}`);
-
-  if (cachedData) {
-    return JSON.parse(cachedData);
+  
+  if(redisClient && redisClient.isReady){
+    const cachedData = await redisClient?.get(`domain-${domain}`);
+    if (cachedData) {
+      return JSON.parse(cachedData);
+    }
   }
+
 
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
@@ -180,8 +186,9 @@ export const getCustomPostByDomain = async (
     data: customPost.data ?? "0",
   };
 
-  redisClient?.set(`domain-${domain}`, JSON.stringify(domainInfo));
-
+  if(redisClient && redisClient.isReady){
+    redisClient?.set(`domain-${domain}`, JSON.stringify(domainInfo));
+  }
   return domainInfo;
 };
 
@@ -192,11 +199,13 @@ export const getCustomPostById = async (
   const redisClient = await getRedisClient();
   const cacheKey = `getCustomPostById-${domain}`;
 
-  const cachedData = await redisClient?.get(cacheKey);
-
-  if (cachedData) {
-    return JSON.parse(cachedData);
+  if(redisClient && redisClient.isReady){
+    const cachedData = await redisClient?.get(cacheKey);
+    if (cachedData) {
+      return JSON.parse(cachedData);
+    }
   }
+
 
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
@@ -230,7 +239,10 @@ export const getCustomPostById = async (
     data: customPost.data ?? "0",
   };
 
-  await redisClient?.set(cacheKey, JSON.stringify(customPostData));
+  if(redisClient && redisClient.isReady){
+    await redisClient?.set(cacheKey, JSON.stringify(customPostData));
+  }
+  
   return customPostData;
 };
 
@@ -248,10 +260,13 @@ export const updateCustomPostByEntityId = async (
   content: string
 ) => {
   const redisClient = await getRedisClient();
-  const cachedData = await redisClient?.get(`domain-${metadata.domain}`);
 
-  if (cachedData) {
-    await redisClient?.del(`domain-${metadata.domain}`);
+  if(redisClient && redisClient.isReady){
+    const cachedData = await redisClient?.get(`domain-${metadata.domain}`);
+
+    if (cachedData) {
+      await redisClient?.del(`domain-${metadata.domain}`);
+    }
   }
 
   const response = await axiosSocialInstance.post("/biz/updateCustomPost", {
@@ -641,18 +656,20 @@ export const dislikeComment = async (
 
 export const getMySocialProfile = async (accessToken: string) => {
   const redisClient = await getRedisClient();
-  const socialProfileKeys = await redisClient?.keys("socialProfile:*");
+  if(redisClient && redisClient.isReady){
+    const socialProfileKeys = await redisClient?.keys("socialProfile:*");
 
-  const cachedData = await redisClient?.get(`socialProfile:${accessToken}`);
+    const cachedData = await redisClient?.get(`socialProfile:${accessToken}`);
 
-  if (socialProfileKeys) {
-    socialProfileKeys.map((key) => {
-      return key !== `socialProfile:${accessToken}` && redisClient?.del(key);
-    });
-  }
+    if (socialProfileKeys) {
+      socialProfileKeys.map((key) => {
+        return key !== `socialProfile:${accessToken}` && redisClient?.del(key);
+      });
+    }
 
-  if (cachedData) {
-    return JSON.parse(cachedData);
+    if (cachedData) {
+      return JSON.parse(cachedData);
+    }
   }
 
   const response = await axiosSocialInstance.get<
@@ -667,10 +684,12 @@ export const getMySocialProfile = async (accessToken: string) => {
     return handleSocialStatusError(response.data);
   }
 
-  await redisClient?.set(
-    `socialProfile:${accessToken}`,
-    JSON.stringify(response.data)
-  );
+  if(redisClient && redisClient.isReady){
+    await redisClient?.set(
+      `socialProfile:${accessToken}`,
+      JSON.stringify(response.data)
+    );
+  }
   return response.data;
 };
 
@@ -679,12 +698,14 @@ export const editSocialProfile = async (
   isPrivate: boolean
 ) => {
   const redisClient = await getRedisClient();
-  const cachedData = await redisClient?.keys("socialProfile:*");
+  if(redisClient && redisClient.isReady){
+    const cachedData = await redisClient?.keys("socialProfile:*");
 
-  if (cachedData) {
-    cachedData?.map((key) => {
-      return redisClient?.del(key);
-    });
+    if (cachedData) {
+      cachedData?.map((key) => {
+        return redisClient?.del(key);
+      });
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -705,9 +726,12 @@ export const editSocialProfile = async (
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
   }
-  await redisClient?.set(
-    `socialProfile:${accessToken}`,
-    JSON.stringify(response.data)
-  );
+
+  if(redisClient && redisClient.isReady){
+    await redisClient?.set(
+      `socialProfile:${accessToken}`,
+      JSON.stringify(response.data)
+    );
+  }
   return response.data;
 };
