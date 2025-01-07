@@ -2,18 +2,18 @@
 
 import { CacheHandler } from "@neshca/cache-handler";
 import { createCluster } from "redis";
+import createClusterHandler from "@neshca/cache-handler/experimental-redis-cluster";
 import createLruHandler from "@neshca/cache-handler/local-lru";
-import createRedisHandler from "@neshca/cache-handler/redis-stack";
 
-let client = null;
+let cluster = null;
 export const getRedisClient = async () => {
   try {
-    if (client && client.isOpen) {
-      return client;
+    if (cluster && cluster.isOpen) {
+      return cluster;
     }
     console.log("Starting Redis connection");
     // client = createClient({
-    //   url: "redis://192.168.1.103:6379",
+    //   url: "redis://172.19.24.169:6379",
     //   socket: {
     //     reconnectStrategy: (retries) => {
     //       return Math.min(retries * 50, 2000);
@@ -21,12 +21,14 @@ export const getRedisClient = async () => {
     //   },
     // });
 
-    client = createCluster({
+    cluster  = createCluster({
       rootNodes: [
-        { url: "redis://10.248.34.142:6382" },
+        { url: "redis://10.248.34.142:6379" },
         { url: "redis://10.248.34.142:6380" },
         { url: "redis://10.248.34.142:6381" },
+        { url: "redis://10.248.34.142:6382" },
         { url: "redis://10.248.34.142:6383" },
+        { url: "redis://10.248.34.142:6384" },
       ],
       defaults: {
         username: "clasorclient",
@@ -40,12 +42,12 @@ export const getRedisClient = async () => {
       },
     });
 
-    client.on("error", (err) => {
+    cluster.on("error", (err) => {
       console.error("Redis Client Error:", err);
     });
-    await client.connect();
+    await cluster.connect();
     console.log("Redis connected");
-    return client;
+    return cluster;
   } catch (error) {
     console.error(error);
     return null;
@@ -60,7 +62,7 @@ CacheHandler.onCreation(async () => {
 
   if (redisClient?.isOpen) {
     // Create the `redis-stack` Handler if the client is available and connected.
-    handler = await createRedisHandler({
+    handler = await createClusterHandler({
       client: redisClient,
       keyPrefix: "sample_prefix:", // Do not use a dynamic and unique prefix for each Next.js build because it will create unique cache data for each instance of Next.js, and the cache will not be shared.
       timeoutMs: 1000,
