@@ -119,27 +119,55 @@ const Files = ({
 
       const uploadFile = async (fileData: FormData | any) => {
         try {
-          const response = await axios.put(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${resourceId}/userGroup/${userGroupHash}`,
-            fileData,
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${resourceId}/uploadLink`,
+            {
+              expireTime: (Date.now() + 3600 * 1000).toString(),
+              userGroupHash,
+              isPublic: false,
+            },
             {
               headers: {
-                "Content-Type": "multipart/form-data;",
                 Authorization: `Bearer ${token}`,
                 _token_: token || "",
                 _token_issuer_: "1",
               },
-              onUploadProgress(progressEvent: any) {
-                const progress = Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total
-                );
-                setProcessCount(progress);
-              },
             }
           );
 
-          if (response.data.data.result.hash) {
-            await onSuccess();
+          if (response.data.data.uploadHash) {
+            const uploadLink = response.data.data.uploadHash;
+            try {
+              const result = await axios.post(
+                `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadLink}`,
+                fileData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data;",
+                    Authorization: `Bearer ${token}`,
+                    _token_: token || "",
+                    _token_issuer_: "1",
+                  },
+                  onUploadProgress(progressEvent: any) {
+                    const progress = Math.round(
+                      (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProcessCount(progress);
+                  },
+                }
+              );
+              if (result.data.result) {
+                await onSuccess();
+              }
+            } catch (error: any) {
+              if (error?.result?.status === 401) {
+                refetchUser();
+              }
+              setIsError(true);
+              toast.error("خطا در بارگذاری فایل");
+            } finally {
+              setIsLoading(false);
+            }
           }
 
           queryClient.invalidateQueries({
