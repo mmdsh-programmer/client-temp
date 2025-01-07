@@ -139,7 +139,7 @@ const Files = ({
             const uploadLink = response.data.data.uploadHash;
             try {
               const result = await axios.post(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${resourceId}/uploadLink/${uploadLink}`,
+                `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadLink}`,
                 fileData,
                 {
                   headers: {
@@ -156,8 +156,7 @@ const Files = ({
                   },
                 }
               );
-
-              if (result.data.data.result) {
+              if (result.data.result) {
                 await onSuccess();
               }
             } catch (error: any) {
