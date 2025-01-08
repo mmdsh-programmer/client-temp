@@ -34,6 +34,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
     deletePassword: false,
     documentAccessPublishing: false,
     documentVersionList: false,
+    documentDirectAccess: false
   });
 
   const toggleModal = (modalName: keyof typeof modals, value: boolean) => {
