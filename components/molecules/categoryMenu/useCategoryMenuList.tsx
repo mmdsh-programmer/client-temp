@@ -121,7 +121,7 @@ const useCategoryMenuList = ({
       },
     },
     {
-      text: "دسترسی دسته‌بندی",
+      text: "محدودیت دسترسی روی پنل",
       icon: <LockIcon className="w-4 h-4" />,
       disabled:
         getRepo?.roleName === ERoles.writer ||

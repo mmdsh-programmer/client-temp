@@ -65,10 +65,8 @@ import Logger from "@utils/logger";
 import qs from "qs";
 import { getRedisClient } from "cacheHandler.mjs";
 
-const { BACKEND_URL, API_TOKEN } = process.env;
-
 const axiosClasorInstance = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: process.env.BACKEND_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -1701,7 +1699,7 @@ export const searchPublishContent = async (
       `publicContent/repository/${repoId}/search/${encodeURIComponent(searchText)}`,
       {
         headers: {
-          Authorization: `Bearer ${API_TOKEN}`,
+          Authorization: `Bearer ${process.env.API_TOKEN}`,
         },
         params: {
           offset,
@@ -3341,6 +3339,87 @@ export const getAllPublishChildren = async (
           size,
           userssoid: ssoId,
           title,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// ////////////////////// ACCESS_MANAGEMENT /////////////////////////////
+export const getUsersOfResource = async (
+  accessToken: string,
+  resourceId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IAccessRequestResponse>
+    >(`acl/user/${resourceId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const addAccessToResource = async (
+  accessToken: string,
+  resourceId: number,
+  accessNames: string[],
+  username: string,
+  cascadeToChildren: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `acl/${resourceId}?addToRepoGroupHash=false`,
+      {
+        accessNames,
+        username,
+        cascadeToChildren,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteAccessOfResource = async (
+  accessToken: string,
+  resourceId: number,
+  accessNames: string[],
+  username: string,
+  validate: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `acl/${resourceId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          accessNames,
+          username,
+          validate,
         },
       }
     );
