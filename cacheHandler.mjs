@@ -12,33 +12,33 @@ export const getRedisClient = async () => {
       return client;
     }
     console.log("Starting Redis connection");
-    // client = createClient({
-    //   url: "redis://192.168.1.103:6379",
-    //   socket: {
-    //     reconnectStrategy: (retries) => {
-    //       return Math.min(retries * 50, 2000);
-    //     },
-    //   },
-    // });
-
-    client = createCluster({
-      rootNodes: [
-        { url: "redis://10.248.34.142:6382" },
-        { url: "redis://10.248.34.142:6380" },
-        { url: "redis://10.248.34.142:6381" },
-        { url: "redis://10.248.34.142:6383" },
-      ],
-      defaults: {
-        username: "clasorclient",
-        password: "YYhi16j",
-        socket: {
-          reconnectStrategy: (retries) => {
-            console.log("Retry redis connection", retries);
-            return 1000;
-          },
+    client = createClient({
+      url: "redis://192.168.1.103:6379",
+      socket: {
+        reconnectStrategy: (retries) => {
+          return Math.min(retries * 50, 2000);
         },
       },
     });
+
+    // client = createCluster({
+    //   rootNodes: [
+    //     { url: "redis://10.248.34.142:6382" },
+    //     { url: "redis://10.248.34.142:6380" },
+    //     { url: "redis://10.248.34.142:6381" },
+    //     { url: "redis://10.248.34.142:6383" },
+    //   ],
+    //   defaults: {
+    //     username: "clasorclient",
+    //     password: "YYhi16j",
+    //     socket: {
+    //       reconnectStrategy: (retries) => {
+    //         console.log("Retry redis connection", retries);
+    //         return 1000;
+    //       },
+    //     },
+    //   },
+    // });
 
     client.on("error", (err) => {
       console.error("Redis Client Error:", err);
