@@ -63,7 +63,7 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
-import { getRedisClient } from "cacheHandler.mjs";
+import { getRedisClient } from "cacheHandler.develop.mjs";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -143,6 +143,10 @@ export const userInfo = async (accessToken: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
+    console.log(
+      "userInfo cachedData: ",
+      cachedUser
+    );
     return JSON.parse(cachedUser);
   }
 
