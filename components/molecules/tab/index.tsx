@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Tab,
   TabPanel,
@@ -6,6 +5,8 @@ import {
   TabsBody,
   TabsHeader,
 } from "@material-tailwind/react";
+
+import React from "react";
 
 interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
