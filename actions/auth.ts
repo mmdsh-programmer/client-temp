@@ -98,6 +98,7 @@ export const getMe = async () => {
     };
     return userDataWithPrivate;
   } catch (error: unknown) {
+    console.log("--------------------------- getMe error ----------------------------", error);
     if ((error as IActionError)?.errorCode === 401) {
       try {
         return refreshCookieHeader(
@@ -106,10 +107,10 @@ export const getMe = async () => {
           clientSecret
         );
       } catch (refreshTokenError) {
-        return handleActionError(refreshTokenError as IActionError);
+        return normalizeError(refreshTokenError as IActionError);
       }
     }
-    return handleActionError(error as IActionError);
+    return normalizeError(error as IActionError);
   }
 };
 
@@ -121,6 +122,7 @@ export const userInfoAction = async () => {
     }
     return getMe();
   } catch (error) {
+    console.log("--------------------------- userInfoAction error ----------------------------", error);
     return normalizeError(error as IActionError);
   }
 };

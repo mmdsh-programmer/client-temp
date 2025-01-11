@@ -19,6 +19,7 @@ import { IComment } from "@interface/version.interface";
 import crypto from "crypto";
 import { getRedisClient } from "cacheHandler.mjs";
 import qs from "qs";
+import Logger from "@utils/logger";
 
 const axiosSocialInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CORE_API,
@@ -38,6 +39,7 @@ axiosSocialInstance.interceptors.request.use((request) => {
     url,
     data,
   });
+  Logger.info(log);
   console.log(log);
   console.log(`
     >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -58,13 +60,14 @@ axiosSocialInstance.interceptors.response.use((response) => {
   });
 
   console.log(log);
-  // Logger.info(log);
+  Logger.info(log);
   return response;
 });
 
 export const handleSocialStatusError = (
   error: AxiosError<ISocialError> | ISocialResponse<unknown>
 ) => {
+  console.log("--------------------- social service error ---------------------", error);
   if ("hasError" in error) {
     const message = error.message ?? "خطای نامشخصی رخ داد";
     switch (error.errorCode) {
