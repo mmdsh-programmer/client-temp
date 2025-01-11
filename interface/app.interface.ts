@@ -17,6 +17,20 @@ export interface IUserInfo {
   ssoId: number;
   userId: number;
   username: string;
+  repository: {
+    id: number;
+    repoTypeId: number;
+    userGroupHash: string;
+    owner: {
+      name: string;
+      ssoId: number;
+      userName: string;
+      contactId: number;
+    };
+    repoType: string;
+    chatThreadId: number | null;
+    imageFile: string;
+  };
 }
 
 export type TUserData = Pick<
@@ -30,6 +44,7 @@ export type TUserData = Pick<
   | "userId"
   | "business"
   | "isClasorAdmin"
+  | "repository"
 > & {
   private: boolean;
   access_token: string;

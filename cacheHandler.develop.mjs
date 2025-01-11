@@ -13,10 +13,10 @@ export const getRedisClient = async () => {
     }
     console.log("Starting Redis connection");
     client = createClient({
-      url: "redis://192.168.1.103:6379",
+      url: "redis://172.19.26.114:6379",
       socket: {
         reconnectStrategy: (retries) => {
-          console.log("---------------------------- retries --------------------------", retries);
+          // console.log("---------------------------- retries --------------------------", retries);
           return 1000;
         },
       },
@@ -24,7 +24,7 @@ export const getRedisClient = async () => {
 
     // Redis won't work without error handling.
     client.on("error", (err) => {
-      console.error("Redis Client Error:", err);
+      // console.error("Redis Client Error:", err);
     });
     client.on("connect", () => {
       console.log("Redis Client Connected");

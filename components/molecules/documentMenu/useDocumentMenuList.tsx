@@ -43,6 +43,7 @@ type Modals = {
   updatePassword: boolean;
   deletePassword: boolean;
   documentAccessPublishing: boolean;
+  documentDirectAccess: false
 };
 
 const useDocumentMenuList = ({
@@ -203,6 +204,18 @@ const useDocumentMenuList = ({
           setDocument(document);
           setDocumentShow(document);
         }
+      },
+    },
+    {
+      text: "دسترسی مستقیم به سند",
+      icon: <LockIcon className="w-4 h-4" />,
+      disabled:
+        getRepo?.roleName === ERoles.writer ||
+        getRepo?.roleName === ERoles.viewer ||
+        getRepo?.roleName === ERoles.editor,
+      onClick: () => {
+        toggleModal("documentDirectAccess", true);
+        if (document) setDocument(document);
       },
     },
     {

@@ -3,7 +3,7 @@ import { ERepoGrouping } from "@interface/enums";
 import { atom } from "recoil";
 import { logEffect } from "@utils/index";
 
-export const repoGroupingAtom = atom<ERepoGrouping>({
+export const repoGroupingAtom = atom<null | ERepoGrouping>({
   key: "repoGroupingAtom",
   default: ERepoGrouping.DASHBOARD,
   effects: [logEffect("repoGroupingAtom")],

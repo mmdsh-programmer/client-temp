@@ -63,7 +63,8 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
-import { getRedisClient } from "cacheHandler.mjs";
+import { getRedisClient } from "cacheHandler.develop.mjs";
+import { IGetUserAccesses } from "@interface/access.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -3357,7 +3358,7 @@ export const getUsersOfResource = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<
-      IServerResult<IAccessRequestResponse>
+      IServerResult<IGetUserAccesses>
     >(`acl/user/${resourceId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,

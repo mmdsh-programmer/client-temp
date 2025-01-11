@@ -63,3 +63,8 @@ export const documentDeletePasswordSchema = yup
   .object()
   .shape({oldPassword: yup.string().required("لطفا رمز عبور سند را وارد کنید"),})
   .required();
+
+  export const documentDirectAccessSchema = yup
+  .object()
+  .shape({username: yup.string().required("لطفا شماسه پادی را وارد کنید"),})
+  .required();

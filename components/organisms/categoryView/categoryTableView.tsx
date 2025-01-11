@@ -16,6 +16,7 @@ import RenderIf from "@components/atoms/renderIf";
 import SearchFilter from "@components/molecules/searchFilter";
 import { Spinner } from "@material-tailwind/react";
 import TableHead from "@components/molecules/tableHead";
+import { usePathname } from "next/navigation";
 
 const TableView = ({
   isLoading,
@@ -25,11 +26,12 @@ const TableView = ({
   isFetchingNextPage,
   type,
 }: ICategoryView) => {
+  const currentPath = usePathname();
   const [openFilter, setOpenFilter] = useState(false);
 
   const listLength = getCategoryList?.pages[0].total;
   return (
-    <div className="category-children-table flex flex-col bg-primary min-h-[calc(100vh-340px)] h-full flex-grow flex-shrink-0 rounded-lg shadow-small">
+    <div className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" ? "min-h-[calc(100vh-200px)]" :"min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}>
       <div className="flex items-center py-4 px-5 justify-between">
         <CategoryBreadCrumb />
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />
