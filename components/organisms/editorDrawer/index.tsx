@@ -1,17 +1,19 @@
+import "clasor-content-preview/src/styles/contentPreview.css";
+
+import { IOutline, IVersion } from "@interface/version.interface";
 import React, { RefObject, useState } from "react";
+
+import AttachFile from "./attachFile";
+import Comments from "./comments";
+import { EDocumentTypes } from "@interface/enums";
+import EditorTags from "./editorTags";
+import { IRemoteEditorRef } from "clasor-remote-editor";
+import { Outline } from "clasor-content-preview";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
-import EditorTags from "./editorTags";
-import AttachFile from "./attachFile";
-import { IOutline, IVersion } from "@interface/version.interface";
-import { useRecoilValue } from "recoil";
 import { editorModeAtom } from "@atom/editor";
-import Comments from "./comments";
 import { selectedDocumentAtom } from "@atom/document";
-import { EDocumentTypes } from "@interface/enums";
-import { Outline } from "clasor-content-preview";
-import { IRemoteEditorRef } from "clasor-remote-editor";
-import "clasor-content-preview/src/styles/contentPreview.css";
+import { useRecoilValue } from "recoil";
 
 export enum ETabs {
   OUTLINE = "فهرست",

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getRedisClient } from "cacheHandler.mjs";
 import { headers } from "next/headers";
 
+// forces the route handler to be dynamic
+export const dynamic = "force-dynamic";
+
 export async function GET(req) {
   try {
     const headersList = headers();

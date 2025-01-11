@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server";
 import { getRedisClient } from "cacheHandler.mjs";
 
+// forces the route handler to be dynamic
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const client = await getRedisClient();
-    if(!client || !client.isOpen){
+    if(!client || !client.isReady){
       return NextResponse.json({ error: "Failed to retrieve data" }, { status: 500 });
     }
   
     
-    if(client && client.isOpen){
+    if(client && client.isReady){
       await client.set("ping", "pong");
       const value = await client.get("ping");
       return NextResponse.json({ data : value });

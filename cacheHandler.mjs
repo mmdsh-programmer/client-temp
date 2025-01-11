@@ -1,83 +1,101 @@
-// eslint-disable-next-line unicorn/filename-case
+/* eslint-disable dot-notation */
+/* eslint-disable import/extensions */
 
 import { CacheHandler } from "@neshca/cache-handler";
+import { PHASE_PRODUCTION_BUILD } from "next/constants.js";
 import { createCluster } from "redis";
-import createLruHandler from "@neshca/cache-handler/local-lru";
-import createRedisHandler from "@neshca/cache-handler/redis-stack";
+import createClusterHandler from "@neshca/cache-handler/experimental-redis-cluster";
 
-let client = null;
+let cluster;
 export const getRedisClient = async () => {
-  try {
-    if (client && client.isOpen) {
-      return client;
-    }
-    console.log("Starting Redis connection");
-    // client = createClient({
-    //   url: "redis://192.168.1.103:6379",
-    //   socket: {
-    //     reconnectStrategy: (retries) => {
-    //       return Math.min(retries * 50, 2000);
-    //     },
-    //   },
-    // });
 
-    client = createCluster({
-      rootNodes: [
-        { url: "redis://10.248.34.142:6382" },
-        { url: "redis://10.248.34.142:6380" },
-        { url: "redis://10.248.34.142:6381" },
-        { url: "redis://10.248.34.142:6383" },
-      ],
-      defaults: {
-        username: "clasorclient",
-        password: "YYhi16j",
-        socket: {
-          reconnectStrategy: (retries) => {
-            console.log("Retry redis connection", retries);
-            return 1000;
-          },
+  if(cluster && cluster["isReady"]){
+       return cluster;
+  }
+  cluster = createCluster({
+    rootNodes: [
+      { url: "redis://10.248.34.142:6379" },
+      { url: "redis://10.248.34.142:6380" },
+      { url: "redis://10.248.34.142:6381" },
+      { url: "redis://10.248.34.142:6382" },
+      { url: "redis://10.248.34.142:6383" },
+      { url: "redis://10.248.34.142:6384" },
+    ],
+    defaults: {
+      username: "clasorclient",
+      password: "YYhi16j",
+      socket: {
+        reconnectStrategy: (retries) => {
+          cluster["isReady"] = false;
+          console.log("Retry redis connection", retries);
+          return 1000;
         },
       },
-    });
+    },
+  });
 
-    client.on("error", (err) => {
-      console.error("Redis Client Error:", err);
-    });
-    await client.connect();
-    console.log("Redis connected");
-    return client;
-  } catch (error) {
-    console.error(error);
-    return null;
+  // Redis won't work without error handling.
+  cluster.on("error", (e) => {
+    console.log("Redis Error");
+    throw e;
+  });
+
+
+  if (cluster) {
+    try {
+      console.info("Connecting Redis cluster...");
+
+      // Wait for the cluster to connect.
+      // Caveat: This will block the server from starting until the cluster is connected.
+      // And there is no timeout. Make your own timeout if needed.
+      await cluster.connect();
+      cluster["isReady"] = true;
+      console.info("Redis cluster connected.");
+    } catch (error) {
+      console.warn("Failed to connect Redis cluster:", error);
+      cluster["isReady"] = false;
+
+      console.warn("Disconnecting the Redis cluster...");
+      // Try to disconnect the cluster to stop it from reconnecting.
+      cluster
+        .disconnect()
+        .then(() => {
+          console.info("Redis cluster disconnected.");
+        })
+        .catch(() => {
+          console.warn(
+            "Failed to quit the Redis cluster after failing to connect.",
+          );
+        });
+    }
   }
-};
 
+  return cluster;
+};
+/* from https://caching-tools.github.io/next-shared-cache/redis */
 CacheHandler.onCreation(async () => {
-  const redisClient = await getRedisClient();
+  // use redis cluster during build could cause issue https://github.com/caching-tools/next-shared-cache/issues/284#issuecomment-1919145094
+  if (PHASE_PRODUCTION_BUILD !== process.env.NEXT_PHASE) {
+    try {
+      // Create a Redis cluster.
+      cluster  = await getRedisClient();
+    } catch (error) {
+      console.warn("Failed to create Redis cluster:", error);
+    }
+  }
 
   /** @type {import("@neshca/cache-handler").Handler | null} */
-  let handler;
+  let redisHandler = null;
 
-  if (redisClient?.isOpen) {
-    // Create the `redis-stack` Handler if the client is available and connected.
-    handler = await createRedisHandler({
-      client: redisClient,
-      keyPrefix: "sample_prefix:", // Do not use a dynamic and unique prefix for each Next.js build because it will create unique cache data for each instance of Next.js, and the cache will not be shared.
-      timeoutMs: 1000,
-    });
-  } else {
-    // Fallback to LRU handler if Redis client is not available.
-    // The application will still work, but the cache will be in memory only and not shared.
-    handler = createLruHandler();
-    console.warn(
-      "Falling back to LRU handler because Redis client is not available."
-    );
+  if (cluster) {
+    redisHandler = createClusterHandler(
+    {keyPrefix:"cls:", timeoutMs: 1000, cluster});
   }
 
+
   return {
-    handlers: [handler],
+    handlers: [redisHandler],
   };
 });
 
-// eslint-disable-next-line no-restricted-exports
-export { CacheHandler as default } from "@neshca/cache-handler";
+export default CacheHandler;
