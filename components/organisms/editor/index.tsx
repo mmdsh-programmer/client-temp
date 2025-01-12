@@ -5,7 +5,6 @@ import {
   editorListDrawerAtom,
   editorModeAtom,
 } from "@atom/editor";
-
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
 import FileEditor from "./fileEditor";
@@ -69,21 +68,21 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const repoGroupHash = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.userGroupHash;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.userGroupHash;
-    } else {
-      return getRepo!.userGroupHash;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.userGroupHash;
+    }
+    return getRepo!.userGroupHash;
   };
 
   const getLoadData = () => {

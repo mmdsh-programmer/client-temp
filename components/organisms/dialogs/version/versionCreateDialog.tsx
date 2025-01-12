@@ -46,11 +46,11 @@ const VersionCreateDialog = ({ close }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const onSubmit = async (dataForm: IForm) => {
@@ -61,6 +61,8 @@ const VersionCreateDialog = ({ close }: IProps) => {
       versionNumber: dataForm.name,
       content: "",
       outline: "",
+      isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ? true : undefined,
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();

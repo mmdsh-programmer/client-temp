@@ -13,14 +13,16 @@ const useDeleteVersion = () => {
       documentId: number;
       versionId: number;
       state: string;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, state, versionId } = values;
+      const { repoId, documentId, state, versionId, isDirectAccess } = values;
       const response = await deleteVersionAction(
         repoId,
         documentId,
         versionId,
         state,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;

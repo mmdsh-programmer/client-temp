@@ -25,7 +25,8 @@ export const getVersionAction = async (
   versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
-  innerOutline?: boolean
+  innerOutline?: boolean,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -36,7 +37,8 @@ export const getVersionAction = async (
       versionId,
       state,
       innerDocument,
-      innerOutline
+      innerOutline,
+      isDirectAccess
     );
 
     return response;
@@ -50,7 +52,8 @@ export const createVersionAction = async (
   documentId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -60,7 +63,8 @@ export const createVersionAction = async (
       documentId,
       versionNumber,
       content,
-      outline
+      outline,
+      isDirectAccess
     );
 
     return response;
@@ -73,7 +77,8 @@ export const createFileVersionAction = async (
   repoId: number,
   documentId: number,
   versionNumber: string,
-  fileHash?: IFileVersion
+  fileHash?: IFileVersion,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -82,7 +87,8 @@ export const createFileVersionAction = async (
       repoId,
       documentId,
       versionNumber,
-      fileHash
+      fileHash,
+      isDirectAccess
     );
 
     return response;
@@ -95,7 +101,8 @@ export const deleteVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  state: string
+  state: string,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -111,7 +118,8 @@ export const deleteVersionAction = async (
       repoId,
       documentId,
       versionId,
-      state
+      state,
+      isDirectAccess
     );
 
     return response;
@@ -122,7 +130,8 @@ export const deleteVersionAction = async (
 
 export const getLastVersionAction = async (
   repoId: number,
-  documentId: number
+  documentId: number,
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -136,7 +145,8 @@ export const getLastVersionAction = async (
       domainInfo.type,
       userInfo.access_token,
       repoId,
-      documentId
+      documentId,
+      isDirectAccess
     );
 
     return response;
@@ -148,7 +158,8 @@ export const getLastVersionAction = async (
 export const setLastVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -163,7 +174,8 @@ export const setLastVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     return response;
@@ -175,7 +187,8 @@ export const setLastVersionAction = async (
 export const publicVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -190,7 +203,8 @@ export const publicVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     return response;
@@ -202,7 +216,8 @@ export const publicVersionAction = async (
 export const cancelPublicVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -210,7 +225,8 @@ export const cancelPublicVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     return response;
@@ -222,7 +238,8 @@ export const cancelPublicVersionAction = async (
 export const confirmVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -237,7 +254,8 @@ export const confirmVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     return response;
@@ -249,7 +267,8 @@ export const confirmVersionAction = async (
 export const cancelConfirmVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -257,7 +276,8 @@ export const cancelConfirmVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     return response;

@@ -21,10 +21,13 @@ import { selectedDocumentAtom } from "@atom/document";
 import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const EditorTab = () => {
+  const currentPath = usePathname();
+
   const getRepo = useRecoilValue(repoAtom);
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
@@ -40,6 +43,8 @@ const EditorTab = () => {
   );
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
+  const { data: userInfo } = useGetUser();
+
   const searchParams = useSearchParams();
   const versionId = searchParams.get("versionId");
   const versionState = searchParams.get("versionState");
@@ -52,9 +57,20 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    }
+    return getRepo!.id;
+  };
+
   const { data: getLastVersion } = useGetLastVersion(
-    getRepo!.id,
+    repoId(),
     getSelectedDocument!.id,
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
     !getVersionData
   );
 
@@ -66,12 +82,13 @@ const EditorTab = () => {
     : versionState || getLastVersion?.state;
 
   const { data, isFetching, error, isSuccess } = useGetVersion(
-    getRepo!.id,
+    repoId(),
     getSelectedDocument!.id,
     +vId!,
     vState as "draft" | "version" | "public" | undefined,
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
     true
   );
 
@@ -81,7 +98,7 @@ const EditorTab = () => {
     error: keyError,
     isSuccess: isSuccessKey,
   } = useGetKey(
-    getRepo!.id,
+    repoId(),
     getSelectedDocument?.publicKeyId
       ? +getSelectedDocument.publicKeyId
       : undefined

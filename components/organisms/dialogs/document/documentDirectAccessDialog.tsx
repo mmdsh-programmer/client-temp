@@ -3,7 +3,6 @@ import LoadingButton from "@components/molecules/loadingButton";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
 import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useAddAccessToResource from "@hooks/accessManagement/useAddAccessToResource";
 import { toast } from "react-toastify";
@@ -30,7 +29,6 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
     label: translateRoles(ERoles.admin),
     value: ERoles.admin,
   });
-  const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
 
   const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();

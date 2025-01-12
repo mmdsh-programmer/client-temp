@@ -110,7 +110,7 @@ export const getCustomPost = async (
   const redisClient = await getRedisClient();
   const cacheKey = `getCustomPost-${domain}`;
 
-  if(redisClient && redisClient.isReady){
+  if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient.get(cacheKey);
 
     if (cachedData) {
@@ -141,14 +141,16 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<ICustomPostMetadata> => {
   const redisClient = await getRedisClient();
-  
-  if(redisClient && redisClient.isReady){
+
+  if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(`domain-${domain}`);
     if (cachedData) {
+      console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      console.log(`cached data domain:${domain}: ${cachedData} `);
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       return JSON.parse(cachedData);
     }
   }
-
 
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
@@ -190,7 +192,7 @@ export const getCustomPostByDomain = async (
     data: customPost.data ?? "0",
   };
 
-  if(redisClient && redisClient.isReady){
+  if (redisClient && redisClient.isReady) {
     redisClient?.set(`domain-${domain}`, JSON.stringify(domainInfo));
   }
   return domainInfo;
@@ -203,13 +205,12 @@ export const getCustomPostById = async (
   const redisClient = await getRedisClient();
   const cacheKey = `getCustomPostById-${domain}`;
 
-  if(redisClient && redisClient.isReady){
+  if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(cacheKey);
     if (cachedData) {
       return JSON.parse(cachedData);
     }
   }
-
 
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
@@ -243,10 +244,10 @@ export const getCustomPostById = async (
     data: customPost.data ?? "0",
   };
 
-  if(redisClient && redisClient.isReady){
+  if (redisClient && redisClient.isReady) {
     await redisClient?.set(cacheKey, JSON.stringify(customPostData));
   }
-  
+
   return customPostData;
 };
 
@@ -265,7 +266,7 @@ export const updateCustomPostByEntityId = async (
 ) => {
   const redisClient = await getRedisClient();
 
-  if(redisClient && redisClient.isReady){
+  if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(`domain-${metadata.domain}`);
 
     if (cachedData) {
@@ -678,7 +679,6 @@ export const editSocialProfile = async (
   accessToken: string,
   isPrivate: boolean
 ) => {
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const response = await axiosSocialInstance.get<ISocialResponse<any>>(
     "/editSocialProfile",

@@ -1,6 +1,6 @@
+import React from "react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -49,11 +49,11 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments" && getDocument) {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments" && getDocument) {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const onSubmit = async (dataForm: IForm) => {

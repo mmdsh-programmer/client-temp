@@ -18,30 +18,36 @@ const VersionList = () => {
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
 
   const currentPath = usePathname();
-  
+
   const { data: userInfo } = useGetUser();
 
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    }
+    return getRepo!.id;
   };
-  
+
   const {
     data: versionList,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetVersionList(repoId(), getSelectedDocument!.id, 30);
+  } = useGetVersionList(
+    repoId(),
+    getSelectedDocument!.id,
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    30
+  );
 
   const { data: getLastVersion } = useGetLastVersion(
     repoId(),
     getSelectedDocument!.id,
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
     true
   );
 
@@ -96,7 +102,6 @@ const VersionList = () => {
       <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
         <VersionMobileView {...commonProps} />
       </div>
-
     </div>
   );
 };

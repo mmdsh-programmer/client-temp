@@ -17,13 +17,13 @@ const DocumentEnableUserGroup = () => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
-  
+
   useEffect(() => {
     if (!repoId() || !getDocument) return;
     if (getDocument?.attachmentUserGroup) return;

@@ -1,13 +1,8 @@
-import {
- editorDataAtom, editorModalAtom, editorModeAtom 
-} from "@atom/editor";
-import {
- useRecoilState, useRecoilValue, useSetRecoilState 
-} from "recoil";
-
+import React from "react";
+import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
@@ -22,9 +17,7 @@ export interface IProps {
   disabled?: boolean;
 }
 
-const EditorHeader = ({
- dialogHeader, setOpen, disabled 
-}: IProps) => {
+const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
   const [editorData, setEditorData] = useRecoilState(editorDataAtom);
@@ -39,11 +32,11 @@ const EditorHeader = ({
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const handleClose = () => {
