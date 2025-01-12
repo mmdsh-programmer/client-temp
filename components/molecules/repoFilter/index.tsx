@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { EDocumentTypes } from "@interface/enums";
 import { IOption } from "../select";
 import InputAtom from "@components/atoms/input";
@@ -10,15 +9,14 @@ import { filterReportAtom } from "@atom/filter";
 import useGetTags from "@hooks/tag/useGetTags";
 import { useSetRecoilState } from "recoil";
 
-const RepoFilter = ({ repoId }: { repoId: number | number }) => {
+const RepoFilter = ({ repoId }: { repoId?: number }) => {
   const [documentType, setDocumentType] = useState<EDocumentTypes[]>([]);
   const [tags, setTags] = useState<number[]>([]);
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
   const setMainFilter = useSetRecoilState(filterReportAtom);
 
-  const { data: getTags } = useGetTags(repoId, 30, !!repoId);
-  console.log("------------------- get tags ------------------", getTags);
+  const { data: getTags } = useGetTags(repoId!, 30, !!repoId);
   const tagOptions = getTags?.pages[0].list.map((tag) => {
     return {
       label: tag.name,
