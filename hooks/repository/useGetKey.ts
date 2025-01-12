@@ -15,7 +15,7 @@ const useGetKey = (repoId: number, keyId?: number) => {
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: Infinity,
-    enabled: !!keyId,
+    enabled: !!keyId && repoId !== 0,
   });
 };
 

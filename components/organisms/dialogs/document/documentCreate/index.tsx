@@ -9,6 +9,8 @@ import { documentActiveStepAtom } from "@atom/stepper";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   isTemplate: boolean;
@@ -18,8 +20,14 @@ interface IProps {
 const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
   const getActiveStep = useRecoilValue(documentActiveStepAtom);
   const getRepo = useRecoilValue(repoAtom);
+  const currentPath = usePathname();
 
-  const repoId = getRepo!.id;
+  const { data: userInfo } = useGetUser();
+  const repoId =
+  currentPath === "/admin/myDocuments"
+    ? userInfo!.repository.id
+    : getRepo!.id;
+
   const { close } = useStepperNavigate();
   const handleClose = () => {
     close();

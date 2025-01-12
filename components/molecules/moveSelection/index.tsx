@@ -6,6 +6,8 @@ import MoveChildren from "@components/organisms/moveChildren";
 import { categoryMoveDestAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   target: "category" | "document";
@@ -16,6 +18,14 @@ const MoveSelection = ({ target }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
+
+  const repoId =
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -47,9 +57,7 @@ const MoveSelection = ({ target }: IProps) => {
       {isOpen && (
         <div className="absolute z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
           <MoveBreadCrumb />
-          {getRepo ? (
-            <MoveChildren target={target} repoId={getRepo.id} />
-          ) : null}
+          {repoId ? <MoveChildren target={target} repoId={repoId} /> : null}
         </div>
       )}
     </div>

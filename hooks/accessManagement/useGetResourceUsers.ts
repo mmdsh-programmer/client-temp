@@ -3,6 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { getUsersOfResourceAction } from "@actions/accessManagement";
+import { IGetUserAccesses } from "@interface/access.interface";
 
 const useGetResourceUsers = (resourceId: number, size: number) => {
   return useInfiniteQuery({
@@ -14,7 +15,7 @@ const useGetResourceUsers = (resourceId: number, size: number) => {
         size
       );
       handleClientSideHookError(response as IActionError);
-      return response as any;
+      return response as IGetUserAccesses;
     },
     initialPageParam: 1,
     retry: false,

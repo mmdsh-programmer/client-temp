@@ -64,6 +64,7 @@ import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
 import { getRedisClient } from "cacheHandler.mjs";
+import { IGetUserAccesses } from "@interface/access.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -1384,11 +1385,13 @@ export const getContent = async (
 /// /////////////////////////// REPORT ////////////////////
 export const getUserDocument = async (
   accessToken: string,
-  repoId: number,
+  repoId: number | undefined,
   sortParams: ISortProps,
   offset: number,
   size: number,
-  filters?: IReportFilter | null
+  filters: IReportFilter | null | undefined,
+  reportType: "myDocuments" | "myAccessDocuments" | null,
+  repoType: string,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1424,7 +1427,8 @@ export const getUserDocument = async (
           offset,
           size,
           repoId,
-          repoType: "clasor",
+          repoType,
+          reportType,
           title: filters?.title,
           contentTypes: filters?.contentTypes,
           tagIds: filters?.tagIds,
@@ -3357,8 +3361,8 @@ export const getUsersOfResource = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<
-      IServerResult<IAccessRequestResponse>
-    >(`acl/user/${resourceId}`, {
+      IServerResult<IGetUserAccesses>
+    >(`acl/${resourceId}/users`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

@@ -13,6 +13,9 @@ import SelectAtom, { IOption } from "@components/molecules/select";
 import useGetRoles from "@hooks/user/useGetRoles";
 import { ERoles } from "@interface/enums";
 import { translateRoles } from "@utils/index";
+import DocumentAccessList from "@components/organisms/document/documentAccessList";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { documentDirectAccessSchema } from "./validation.yup";
 
 interface IForm {
   username: string;
@@ -44,10 +47,11 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    clearErrors,
     reset,
-  } = useForm<IForm>();
+    formState: { errors },
+  } = useForm<IForm>({
+    resolver: yupResolver(documentDirectAccessSchema),
+  });
 
   const handleClose = () => {
     setOpen(false);
@@ -55,21 +59,24 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo || !document) return;
+    if (!document) return;
     directAccessDocument.mutate({
-      resourceId: 0,
-      accessNames: [],
-      username: "",
-      cascadeToChildren: false,
-      callBack: () => {},
+      resourceId: document.id,
+      accessNames: [role.value as string],
+      username: dataForm.username,
+      cascadeToChildren: true,
+      callBack: () => {
+        toast.success("دسترسی کاربر به سند انجام شد.");
+        reset();
+        setRole({
+          label: translateRoles(ERoles.admin),
+          value: ERoles.admin,
+        });
+      },
     });
   };
 
-  return isFetchingRoles ? (
-    <div className="flex p-6 justify-center items-center">
-      <Spinner color="deep-purple" />
-    </div>
-  ) : (
+  return (
     <InfoDialog
       dialogHeader="دسترسی مستقیم روی سند"
       setOpen={handleClose}
@@ -77,7 +84,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
     >
       <DialogBody>
         <form className="flex flex-col gap-6">
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
               <InputAtom
                 id="username"
@@ -85,29 +92,39 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 placeholder="شناسه پادی"
                 register={{ ...register("username") }}
               />
-              <SelectAtom
-                className="w-auto"
-                defaultOption={rolesOption?.[0]}
-                options={rolesOption}
-                selectedOption={role}
-                setSelectedOption={(value) => {
-                  return setRole({
-                    label: value.label,
-                    value: value.value,
-                  });
-                }}
-              />
+              {isFetchingRoles ? (
+                <Spinner className="h-3 w-3" color="deep-purple" />
+              ) : (
+                <SelectAtom
+                  className="w-auto"
+                  defaultOption={rolesOption?.[0]}
+                  options={rolesOption}
+                  selectedOption={role}
+                  setSelectedOption={(value) => {
+                    return setRole({
+                      label: value.label,
+                      value: value.value,
+                    });
+                  }}
+                />
+              )}
               <LoadingButton
                 loading={directAccessDocument.isPending}
                 onClick={handleSubmit(onSubmit)}
-                className="!h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+                className="!h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
-                <Typography className="text__label__button !text-primary px-3 font-medium">
+                <Typography className="text__label__button !text-primary font-medium">
                   افزودن
                 </Typography>
               </LoadingButton>
             </div>
+            {errors.username ? (
+              <Typography className="warning_text">
+                {errors.username?.message}
+              </Typography>
+            ) : null}
           </div>
+          <DocumentAccessList />
         </form>
       </DialogBody>
     </InfoDialog>

@@ -1,3 +1,5 @@
+"use server";
+
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";

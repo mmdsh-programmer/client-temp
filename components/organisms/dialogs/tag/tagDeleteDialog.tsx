@@ -5,6 +5,9 @@ import { repoAtom } from "@atom/repository";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import useDeleteTag from "@hooks/tag/useDeleteTag";
 import { selectedTagAtom } from "@atom/tag";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -13,18 +16,32 @@ interface IProps {
 const TagDeleteDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getTag = useRecoilValue(selectedTagAtom);
+  const getDocument = useRecoilValue(selectedDocumentAtom);
 
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const deleteTag = useDeleteTag();
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleDelete = async () => {
-    if (!getRepo || !getTag) return;
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments" && getDocument) {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
 
+  const handleDelete = async () => {
+    if (!repoId() || !getTag) return;
     deleteTag.mutate({
-      repoId: getRepo.id,
+      repoId: repoId(),
       tagId: getTag.id,
       callBack: () => {
         toast.error("تگ حذف شد.");

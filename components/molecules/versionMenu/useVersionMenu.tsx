@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import {
@@ -24,6 +24,7 @@ import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
 import { ERoles } from "@interface/enums";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 interface MenuItem {
   text: string;
@@ -58,11 +59,23 @@ const useVersionMenuList = (
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setVersionData = useSetRecoilState(editorDataAtom);
+  const currentPath = usePathname();
+  const repoId = useRef<number>(0);
 
   const { data: userInfo } = useGetUser();
 
-  const adminOrOwner =
-    getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+  const adminOrOwnerRole = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return true;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return (
+        getDocument?.accesses?.[0] === "admin" ||
+        getDocument?.accesses?.[0] === "owner"
+      );
+    } else if (getRepo) {
+      return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+    }
+  };
 
   const defaultOptions = (otherOption: MenuItem[]) => {
     return [
@@ -104,12 +117,20 @@ const useVersionMenuList = (
           if (getRepo && getDocument && version && compareVersion?.version) {
             setCompareVersion({
               ...compareVersion,
-              compare: { data: version, repo: getRepo, document: getDocument },
+              compare: {
+                data: version,
+                repoId: getRepo!.id,
+                document: getDocument,
+              },
             });
             toggleModal("compare", true);
           } else if (getRepo && getDocument && version) {
             setCompareVersion({
-              version: { data: version, repo: getRepo, document: getDocument },
+              version: {
+                data: version,
+                repoId: getRepo!.id,
+                document: getDocument,
+              },
               compare: null,
             });
           }
@@ -165,11 +186,11 @@ const useVersionMenuList = (
     {
       text: (() => {
         if (version?.status === "editing") {
-          return adminOrOwner
+          return adminOrOwnerRole()
             ? "تایید نسخه"
             : "ارسال درخواست تایید نسخه به مدیر";
         }
-        return adminOrOwner ? "عدم تایید نسخه" : "لغوارسال درخواست تایید نسخه";
+        return adminOrOwnerRole() ? "عدم تایید نسخه" : "لغوارسال درخواست تایید نسخه";
       })(),
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
@@ -185,7 +206,7 @@ const useVersionMenuList = (
   ];
 
   const privateVersionOption = [
-    adminOrOwner
+    adminOrOwnerRole()
       ? {
           text: (() => {
             if (version?.status === "private") {
@@ -196,12 +217,12 @@ const useVersionMenuList = (
           })(),
           icon: <GlobeIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
-            if (version?.status === "private" && adminOrOwner) {
+            if (version?.status === "private" && adminOrOwnerRole()) {
               toggleModal("public", true);
               if (version) {
                 setVersion(version);
               }
-            } else if (version?.status === "pending" && adminOrOwner) {
+            } else if (version?.status === "pending" && adminOrOwnerRole()) {
               toggleModal("cancelPublic", true);
               if (version) {
                 setVersion(version);

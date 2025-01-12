@@ -13,6 +13,8 @@ import { translateVersionStatus } from "@utils/index";
 import { selectedFileAtom } from "@atom/file";
 import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
 import { IVersion } from "@interface/version.interface";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const EditorFileFooter = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -26,9 +28,24 @@ const EditorFileFooter = () => {
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
-
+  
+  const currentPath = usePathname();
+  
   const timeout = 5 * 60; // seconds
+
+  const { data: userInfo } = useGetUser();
   const saveFileEditorHook = useSaveFileEditor();
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
 
   const renderTitle = () => {
     if (!getEditorData) {
@@ -60,7 +77,7 @@ const EditorFileFooter = () => {
   };
 
   const handleSave = () => {
-    if (getEditorData && selectedDocument && getRepo) {
+    if (getEditorData && selectedDocument && repoId()) {
       if (getSelectedFile) {
         const { name, hash, extension } = getSelectedFile;
         const fileHash = {
@@ -70,7 +87,7 @@ const EditorFileFooter = () => {
         };
         saveFileEditorHook.mutate({
           fileHash,
-          repoId: getRepo.id,
+          repoId: repoId(),
           documentId: selectedDocument.id,
           versionId: getEditorData.id,
           versionNumber: getEditorData.versionNumber,

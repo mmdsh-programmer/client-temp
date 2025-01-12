@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import { IVersion } from "@interface/version.interface";
 import { repoAtom } from "@atom/repository";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   children: JSX.Element;
@@ -16,12 +18,24 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   useEffect(() => {
-    if (getRepo && selectedDocument && version && editorMode === "edit") {
-      createBlockHook.mutate({repoId: getRepo.id,
+    if (repoId() && selectedDocument && version && editorMode === "edit") {
+      createBlockHook.mutate({repoId: repoId(),
         documentId: selectedDocument.id,
         versionId: version.id,
         handleError: () => {
@@ -31,7 +45,7 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
       setEditorData(null);
       toast.error("نسخه ای برای این سند پیدا نشد!");
     }
-  }, [getRepo, selectedDocument, version, editorMode]);
+  }, [repoId(), selectedDocument, version, editorMode]);
 
   return (
     <div className="version-list__container h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0">

@@ -1,6 +1,6 @@
+import React from "react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
@@ -10,6 +10,8 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IForm {
   name: string;
@@ -22,14 +24,13 @@ interface IProps {
 const VersionCreateDialog = ({ close }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const createVersion = useCreateVersion();
 
-  const form = useForm<IForm>({resolver: yupResolver(versionSchema),});
-
-  const {
- register, handleSubmit, reset, clearErrors, formState 
-} = form;
+  const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
+  const { register, handleSubmit, reset, clearErrors, formState } = form;
   const { errors } = formState;
 
   const handleReset = () => {
@@ -42,10 +43,20 @@ const VersionCreateDialog = ({ close }: IProps) => {
     close(false);
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo) return;
+    if (!repoId()) return;
     createVersion.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
       content: "",

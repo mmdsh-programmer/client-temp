@@ -20,6 +20,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   getEditorConfig: () => {
@@ -31,6 +32,10 @@ interface IProps {
 
 const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const [openTemplateDialog, setOpenTemplateDialog] = useState(false);
+  const [versionData, setVersionData] = useState(version);
+
+  const timestampRef = useRef(Date.now());
+  const currentPath = usePathname();
 
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(categoryAtom);
@@ -38,9 +43,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const editorMode = useRecoilValue(editorModeAtom);
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
   const listDrawer = useRecoilValue(editorListDrawerAtom);
-  const [versionData, setVersionData] = useState(version);
-
-  const timestampRef = useRef(Date.now());
 
   const { data: userInfo, isLoading } = useGetUser();
   const setUserMetadataHook = useSetUserMetadata();
@@ -64,6 +66,26 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     });
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
+  const repoGroupHash = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.userGroupHash;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.userGroupHash;
+    } else {
+      return getRepo!.userGroupHash;
+    }
+  };
+
   const getLoadData = () => {
     switch (selectedDocument?.contentType) {
       case EDocumentTypes.classic:
@@ -75,9 +97,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             refreshToken: userInfo?.refresh_token,
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
           },
-          publicUserGroupHash: getRepo?.userGroupHash || undefined,
+          publicUserGroupHash: repoGroupHash() || undefined,
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
-          repositoryId: getRepo?.id || undefined,
+          repositoryId: repoId() || undefined,
           resourceId: selectedCategory?.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,

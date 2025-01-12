@@ -6,6 +6,8 @@ import { selectedDocumentAtom } from "@atom/document";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import { versionModalListAtom } from "@atom/version";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const DocumentLastVersion = () => {
   const repository = useRecoilValue(repoAtom);
@@ -15,11 +17,25 @@ const DocumentLastVersion = () => {
   const [getVersionModalList, setVersionModalList] =
     useRecoilState(versionModalListAtom);
 
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    } else {
+      return repository!.id;
+    }
+  };
+  
+
   const {
     data: getLastVersion,
     error,
     isSuccess,
-  } = useGetLastVersion(repository!.id, getSelectedDocument!.id);
+  } = useGetLastVersion(repoId(), getSelectedDocument!.id);
 
   useEffect(() => {
     if (error) {

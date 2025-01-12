@@ -8,6 +8,9 @@ import EditDialog from "@components/templates/dialog/editDialog";
 import { selectedTagAtom } from "@atom/tag";
 import { Typography } from "@material-tailwind/react";
 import FormInput from "@components/atoms/input/formInput";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IForm {
   name: string;
@@ -19,7 +22,13 @@ interface IProps {
 const TagEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getTag = useRecoilValue(selectedTagAtom);
+  const getDocument = useRecoilValue(selectedDocumentAtom);
+
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const { isPending, mutate } = useEditTag();
+
   const {
     register,
     handleSubmit,
@@ -37,10 +46,21 @@ const TagEditDialog = ({ setOpen }: IProps) => {
     handleReset();
     setOpen(false);
   };
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments" && getDocument) {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo || !getTag) return;
+    if (!repoId() || !getTag) return;
     mutate({
-      repoId: getRepo.id,
+      repoId: repoId(),
       name: dataForm.name,
       tagId: getTag.id,
       callBack: () => {

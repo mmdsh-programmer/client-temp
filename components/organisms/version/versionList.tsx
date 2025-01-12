@@ -1,7 +1,7 @@
+import React from "react";
 import { EEmptyList } from "@components/molecules/emptyList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import { IVersionView } from "@interface/version.interface";
-import React from "react";
 import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
 import VersionMobileView from "../versionView/versionMobileView";
 import VersionTableView from "@components/organisms/versionView/versionTableView";
@@ -10,21 +10,37 @@ import { selectedDocumentAtom } from "@atom/document";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersionList from "@hooks/version/useGetVersionList";
 import { useRecoilValue } from "recoil";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const VersionList = () => {
   const getRepo = useRecoilValue(repoAtom);
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
 
+  const currentPath = usePathname();
+  
+  const { data: userInfo } = useGetUser();
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
   const {
     data: versionList,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetVersionList(getRepo!.id, getSelectedDocument!.id, 30);
+  } = useGetVersionList(repoId(), getSelectedDocument!.id, 30);
 
   const { data: getLastVersion } = useGetLastVersion(
-    getRepo!.id,
+    repoId(),
     getSelectedDocument!.id,
     true
   );

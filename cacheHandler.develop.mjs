@@ -13,7 +13,7 @@ export const getRedisClient = async () => {
     }
     console.log("Starting Redis connection");
     client = createClient({
-      url: "redis://192.168.1.103:6379",
+      url: "redis://172.19.26.114:6379",
       socket: {
         reconnectStrategy: (retries) => {
           console.log("---------------------------- retries --------------------------", retries);

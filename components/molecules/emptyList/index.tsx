@@ -28,6 +28,7 @@ export enum EEmptyList {
   COMMENTS = "comments",
   QUESTION_LIST = "question_list",
   ANSWER_LIST = "answer_list",
+  ACCESS_LIST = "access_list",
 }
 
 interface IProps {
@@ -285,6 +286,17 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary"
             >
               برای این سوال، پاسخی وجود ندارد
+            </Typography>
+          </div>
+        );
+      case EEmptyList.ACCESS_LIST:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              شما در حال حاضر لیست مجازی ندارید.
             </Typography>
           </div>
         );

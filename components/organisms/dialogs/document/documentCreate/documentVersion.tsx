@@ -21,6 +21,8 @@ import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   isTemplate: boolean;
@@ -40,6 +42,9 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const getCategory = useRecoilValue(categoryAtom);
   const getCategoryShow = useRecoilValue(categoryShowAtom);
   const getRepo = useRecoilValue(repoAtom);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const createDocumentHook = useCreateDocument();
   const createVersionHook = useCreateVersion();
   const createFileVersionHook = useCreateFileVersion();
@@ -50,19 +55,24 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const { errors } = formState;
 
   const onSubmit = (dataForm: IForm) => {
+    const repoId =
+      currentPath === "/admin/myDocuments"
+        ? userInfo!.repository.id
+        : getRepo!.id;
+
     if (!getDocumentType || !getDocumentInfo) {
       toast.error("نام و اطلاعات سند را وارد کنید");
       return;
     }
 
-    if (!getRepo?.id) {
+    if (!repoId) {
       toast.error("اطلاعات مخزن یافت نشد");
       return;
     }
 
     if (getDocumentTemplate) {
       createDocFromTemplateHook.mutate({
-        repoId: getRepo.id,
+        repoId,
         categoryId: getCategory?.id || getCategoryShow?.id || null,
         title: getDocumentInfo.title,
         contentType: getDocumentType,
@@ -76,7 +86,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
       });
     } else {
       createDocumentHook.mutate({
-        repoId: getRepo.id,
+        repoId,
         categoryId: getCategory?.id || getCategoryShow?.id || null,
         title: getDocumentInfo.title,
         description: getDocumentInfo.description,
@@ -89,7 +99,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
           setOpen(false);
           if (getDocumentType !== EDocumentTypes.file) {
             createVersionHook.mutate({
-              repoId: getRepo.id,
+              repoId,
               documentId: result.id,
               content: "",
               outline: "",
@@ -102,7 +112,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
             });
           } else if (getDocumentType === EDocumentTypes.file) {
             createFileVersionHook.mutate({
-              repoId: getRepo.id,
+              repoId,
               documentId: result.id,
               versionNumber: dataForm.versionNumber,
               callBack: () => {

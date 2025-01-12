@@ -7,6 +7,8 @@ import useDeleteCategory from "@hooks/category/useDeleteCategory";
 import { useRecoilValue } from "recoil";
 import { Checkbox, Typography } from "@material-tailwind/react";
 import { ICategoryMetadata } from "@interface/category.interface";
+import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -19,7 +21,9 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [forceDelete, setForceDelete] = useState(false);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const deleteCategory = useDeleteCategory();
 
   const handleClose = () => {
@@ -30,9 +34,15 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
 
   const handleDelete = async () => {
     const selectedCat = category || getCategory;
-    if (!getRepo || !selectedCat) return;
+    const repoId =
+      currentPath === "/admin/myDocuments"
+        ? userInfo!.repository.id
+        : getRepo!.id;
+    if (!repoId || !selectedCat) {
+      return;
+    }
     deleteCategory.mutate({
-      repoId: getRepo?.id,
+      repoId,
       parentId: selectedCat.parentId,
       categoryId: selectedCat.id,
       forceDelete,
@@ -79,8 +89,8 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
               checked={!!forceDelete}
             />
             <Typography className="warning_text">
-              دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه می‌باشد، آیا
-              می‌خواهید این دسته‌بندی را حذف کنید؟
+              دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه
+              می‌باشد، آیا می‌خواهید این دسته‌بندی را حذف کنید؟
             </Typography>
           </div>
         ) : null}
