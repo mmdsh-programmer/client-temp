@@ -1,6 +1,5 @@
-import ReactDiffViewer, { DiffMethod } from "react-diff-viewer-continued";
-
 import React from "react";
+import ReactDiffViewer, { DiffMethod } from "react-diff-viewer-continued";
 import { compareVersionAtom } from "atom/version";
 import { translateVersionStatus } from "utils";
 import { useRecoilValue } from "recoil";
@@ -43,12 +42,12 @@ const DiffViewerTable = ({
             styles={newStyles}
             leftTitle={
               <h3 className="text-purple-normal text-[13px] ">
-                {`${compareVersionValue.version.repo.name} > ${compareVersionValue.version.document.name} > نسخه ${compareVersionValue?.version?.data?.versionNumber} - ${compareVersionValue?.version && translateVersionStatus(compareVersionValue?.version.data.status, compareVersionValue?.version.data.state).translated}`}
+                {`${compareVersionValue.version.document.name} > نسخه ${compareVersionValue?.version?.data?.versionNumber} - ${compareVersionValue?.version && translateVersionStatus(compareVersionValue?.version.data.status, compareVersionValue?.version.data.state).translated}`}
               </h3>
             }
             rightTitle={
               <h3 className="text-purple-normal text-[13px]">
-                {`${compareVersionValue.compare.repo.name} > ${compareVersionValue.compare.document.name} > نسخه ${compareVersionValue?.compare?.data?.versionNumber} - ${compareVersionValue?.compare && translateVersionStatus(compareVersionValue?.compare.data.status, compareVersionValue?.compare.data.state).translated}`}
+                {`${compareVersionValue.compare.document.name} > نسخه ${compareVersionValue?.compare?.data?.versionNumber} - ${compareVersionValue?.compare && translateVersionStatus(compareVersionValue?.compare.data.status, compareVersionValue?.compare.data.state).translated}`}
               </h3>
             }
           />

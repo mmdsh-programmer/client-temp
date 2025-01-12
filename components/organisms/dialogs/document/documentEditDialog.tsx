@@ -11,6 +11,8 @@ import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { documentEditSchema } from "./validation.yup";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IForm {
   id?: number;
@@ -27,6 +29,9 @@ interface IProps {
 const DocumentEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const editDocument = useEditDocument();
 
   const {
@@ -50,6 +55,16 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return document!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   const onSubmit = async (dataForm: IForm) => {
     if (
       dataForm.description?.trim() === document?.description &&
@@ -61,9 +76,9 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       });
       return;
     }
-    if (!getRepo || !document) return;
+    if (!repoId() || !document) return;
     editDocument.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       categoryId: document.categoryId,
       documentId: document.id,
       contentType: document.contentType,

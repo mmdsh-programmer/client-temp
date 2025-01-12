@@ -13,6 +13,7 @@ import DocumentEnableUserGroup from "./documentEnableUserGroup";
 import FileUpload from "@components/molecules/fileUpload";
 import FileList from "../fileList";
 import { selectedDocumentAtom } from "@atom/document";
+import { usePathname } from "next/navigation";
 
 const fileTablePageSize = 20;
 
@@ -21,6 +22,7 @@ const AttachFile = () => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const currentPath = usePathname();
 
   const queryClient = useQueryClient();
 
@@ -37,13 +39,23 @@ const AttachFile = () => {
     0 * fileTablePageSize
   );
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
   const deleteFile = useDeleteFile();
 
   const handleDeleteFile = (file: IFile) => {
     setIsLoading(true);
-    if (getDocument && getRepo) {
+    if (getDocument && repoId()) {
       deleteFile.mutate({
-        repoId: getRepo.id,
+        repoId: repoId(),
         resourceId: getDocument.id,
         fileHash: file.hash,
         type: "private",

@@ -91,7 +91,7 @@ const DocumentAccessList = () => {
                   );
                 })
               ) : (
-                <EmptyList type={EEmptyList.BLOCKLIST} />
+                <EmptyList type={EEmptyList.ACCESS_LIST} />
               );
             })}
           </div>

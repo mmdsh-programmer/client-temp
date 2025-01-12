@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import usePublicVersion from "@hooks/version/usePublicVersion";
 import { useRecoilValue } from "recoil";
 import { selectedVersionAtom } from "@atom/version";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,11 +21,12 @@ setOpen
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const publicVersion = usePublicVersion();
 
   const form = useForm();
-
   const {
     handleSubmit, reset, clearErrors 
   } = form;
@@ -38,10 +41,20 @@ setOpen
     setOpen(false);
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   const onSubmit = async () => {
-    if (!getRepo || !getVersion) return;
+    if (!repoId() || !getVersion) return;
     publicVersion.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       documentId: getDocument!.id,
       versionId: getVersion.id,
       callBack: () => {

@@ -6,6 +6,8 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
 import { XIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   tagList?: {
@@ -18,12 +20,35 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const setTempDocTag = useSetRecoilState(tempDocTagAtom);
+  const currentPath = usePathname();
 
-  const adminRole =
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
+  const { data: userInfo } = useGetUser();
+
+  const adminOrOwnerRole = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return true;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return (
+        document?.accesses?.[0] === "admin" ||
+        document?.accesses?.[0] === "owner"
+      );
+    } else if (getRepo) {
+      return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+    }
+  };
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return document!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
 
   const handleDelete = (tag: { name: string; id: number }) => {
-    if (!getRepo || !document) return;
+    if (!repoId() || !document) return;
     if (!tag) return;
     setTempDocTag((oldValue) => {
       return [
@@ -49,7 +74,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
                   key={tag.id}
                   className="bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
                   actionIcon={
-                    adminRole ? (
+                    adminOrOwnerRole() ? (
                       <Button
                         className="p-0 bg-transparent"
                         onClick={() => {

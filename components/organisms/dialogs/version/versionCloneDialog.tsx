@@ -1,8 +1,7 @@
+import React from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
@@ -13,6 +12,8 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IForm {
   name: string;
@@ -26,9 +27,22 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
+  
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
 
   const { data: getVersionInfo, isLoading } = useGetVersion(
-    getRepo!.id,
+    repoId(),
     getDocument!.id,
     getVersion?.id,
     getVersion?.state,
@@ -54,9 +68,9 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo) return;
+    if (!repoId()) return;
     createVersion.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
       content: getVersionInfo?.content || "",

@@ -17,7 +17,7 @@ import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
 import crypto from "crypto";
-import { getRedisClient } from "cacheHandler.develop.mjs";
+import { getRedisClient } from "cacheHandler.mjs";
 import qs from "qs";
 
 const axiosSocialInstance = axios.create({
@@ -659,23 +659,6 @@ export const dislikeComment = async (
 };
 
 export const getMySocialProfile = async (accessToken: string) => {
-  const redisClient = await getRedisClient();
-  if(redisClient && redisClient.isReady){
-    const socialProfileKeys = await redisClient?.keys("socialProfile:*");
-
-    const cachedData = await redisClient?.get(`socialProfile:${accessToken}`);
-
-    if (socialProfileKeys) {
-      socialProfileKeys.map((key) => {
-        return key !== `socialProfile:${accessToken}` && redisClient?.del(key);
-      });
-    }
-
-    if (cachedData) {
-      return JSON.parse(cachedData);
-    }
-  }
-
   const response = await axiosSocialInstance.get<
     ISocialResponse<ISocialProfile>
   >("/mySocialProfile", {
@@ -688,12 +671,6 @@ export const getMySocialProfile = async (accessToken: string) => {
     return handleSocialStatusError(response.data);
   }
 
-  if(redisClient && redisClient.isReady){
-    await redisClient?.set(
-      `socialProfile:${accessToken}`,
-      JSON.stringify(response.data)
-    );
-  }
   return response.data;
 };
 
@@ -701,16 +678,6 @@ export const editSocialProfile = async (
   accessToken: string,
   isPrivate: boolean
 ) => {
-  const redisClient = await getRedisClient();
-  if(redisClient && redisClient.isReady){
-    const cachedData = await redisClient?.keys("socialProfile:*");
-
-    if (cachedData) {
-      cachedData?.map((key) => {
-        return redisClient?.del(key);
-      });
-    }
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const response = await axiosSocialInstance.get<ISocialResponse<any>>(
@@ -729,13 +696,6 @@ export const editSocialProfile = async (
 
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
-  }
-
-  if(redisClient && redisClient.isReady){
-    await redisClient?.set(
-      `socialProfile:${accessToken}`,
-      JSON.stringify(response.data)
-    );
   }
   return response.data;
 };

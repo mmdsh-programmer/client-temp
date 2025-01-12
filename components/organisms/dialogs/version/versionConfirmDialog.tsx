@@ -1,5 +1,5 @@
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
@@ -7,6 +7,8 @@ import useConfirmVersion from "@hooks/version/useConfirmVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { selectedVersionAtom } from "@atom/version";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,11 +18,12 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const confirmVersion = useConfirmVersion();
 
   const form = useForm();
-
   const { handleSubmit, reset, clearErrors } = form;
 
   const handleReset = () => {
@@ -32,11 +35,21 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
     handleReset();
     setOpen(false);
   };
+  
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
 
   const onSubmit = async () => {
-    if (!getRepo || !getVersion) return;
+    if (!repoId() || !getVersion) return;
     confirmVersion.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       documentId: getDocument!.id,
       versionId: getVersion.id,
       callBack: () => {

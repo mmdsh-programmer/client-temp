@@ -1,24 +1,21 @@
 "use client";
 
 import React from "react";
-import CategoryList from "@components/organisms/category";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { bulkItemsAtom } from "@atom/bulk";
-import CategoryBulk from "@components/molecules/categoryBulk";
-import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
-import { editorModalAtom } from "@atom/editor";
+import SharedDocumentList from "@components/organisms/sharedDocumentList";
 import Editor from "@components/organisms/dialogs/editor";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { versionModalListAtom } from "@atom/version";
+import { editorModalAtom } from "@atom/editor";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
+import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
 
-const MyDocumentsPage = () => {
+const SharedDocumentsPage = () => {
   const getShowVersionList = useRecoilValue(versionModalListAtom);
-  const getBulkItems = useRecoilValue(bulkItemsAtom);
   const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
 
   return (
     <>
-      <CategoryList />
+      <SharedDocumentList />
       {getShowVersionList ? <VersionDialogView /> : null}
       {getEditorModal ? (
         <Editor
@@ -27,9 +24,9 @@ const MyDocumentsPage = () => {
           }}
         />
       ) : null}
-      {getBulkItems.length ? <CategoryBulk /> : <RepoTypesMobileView />}
+      <RepoTypesMobileView />
     </>
   );
 };
 
-export default MyDocumentsPage;
+export default SharedDocumentsPage;

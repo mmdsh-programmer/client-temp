@@ -7,6 +7,8 @@ import useDeleteVersion from "@hooks/version/useDeleteVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { selectedVersionAtom } from "@atom/version";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,11 +18,12 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const deleteVerion = useDeleteVersion();
 
   const form = useForm();
-
   const { handleSubmit, reset, clearErrors } = form;
 
   const handleReset = () => {
@@ -33,10 +36,20 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   const onSubmit = async () => {
-    if (!getRepo || !getVersion) return;
+    if (!repoId() || !getVersion) return;
     deleteVerion.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       documentId: getDocument!.id,
       versionId: getVersion.id,
       state: getVersion.state,
@@ -46,6 +59,7 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       },
     });
   };
+
   return (
     <DeleteDialog
       isPending={deleteVerion.isPending}

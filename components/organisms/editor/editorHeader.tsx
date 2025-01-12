@@ -13,6 +13,8 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import { selectedVersionAtom } from "@atom/version";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
   dialogHeader?: string;
@@ -29,18 +31,31 @@ const EditorHeader = ({
   const setVersion = useSetRecoilState(selectedVersionAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const freeDraftHook = useFreeDraft();
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
 
   const handleClose = () => {
     setOpen?.(false);
     if (
-      getRepo &&
+      repoId() &&
       getSelectedDocument &&
       editorData &&
       ["edit", "temporaryPreview"].includes(editorMode)
     ) {
       freeDraftHook.mutate({
-        repoId: getRepo!.id,
+        repoId: repoId(),
         documentId: getSelectedDocument.id,
         versionId: editorData.id,
         versionNumber: "",

@@ -31,7 +31,7 @@ const TableView = ({
 
   const listLength = getCategoryList?.pages[0].total;
   return (
-    <div className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" ? "min-h-[calc(100vh-200px)]" :"min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}>
+    <div className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" :"min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}>
       <div className="flex items-center py-4 px-5 justify-between">
         <CategoryBreadCrumb />
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />

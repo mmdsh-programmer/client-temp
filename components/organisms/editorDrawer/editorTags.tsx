@@ -8,29 +8,54 @@ import useEditDocument from "@hooks/document/useEditDocument";
 import LoadingButton from "@components/molecules/loadingButton";
 import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const EditorTags = () => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const getTempDocTag = useRecoilValue(tempDocTagAtom);
-
   const [openCreateTagDialog, setOpenCreateTagDialog] = useState(false);
   const [tagName, setTagName] = useState<string | number>("");
 
-  const adminRole =
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
+  
+  const adminOrOwnerRole = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return true;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return (
+        document?.accesses?.[0] === "admin" ||
+        document?.accesses?.[0] === "owner"
+      );
+    } else if (getRepo) {
+      return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+    }
+  };
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return document!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
   const editDocument = useEditDocument();
 
   const handleSubmit = async () => {
-    if (!getRepo || !document) return;
+    if (!repoId() || !document) return;
     if (!getTempDocTag) return;
     if (getTempDocTag.length > 10) {
       toast.error("بیش از ده آیتم نمی‌توانید به سند منصوب کنید.");
       return;
     }
     editDocument.mutate({
-      repoId: getRepo.id,
+      repoId: repoId(),
       documentId: document.id,
       categoryId: document.categoryId,
       title: document.name,
@@ -53,7 +78,7 @@ const EditorTags = () => {
         setTagName={setTagName}
         setOpen={setOpenCreateTagDialog}
       />
-      {adminRole ? (
+      {adminOrOwnerRole() ? (
         <LoadingButton
           className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit}

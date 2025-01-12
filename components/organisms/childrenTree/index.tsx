@@ -10,6 +10,8 @@ import { repoAtom } from "@atom/repository";
 import { sortAtom } from "@atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import { useRecoilValue } from "recoil";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   move?: boolean;
@@ -30,6 +32,13 @@ const ChildrenTree = ({ move }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const queryParams = useRecoilValue(categoryQueryParamsAtom);
   const getSortParams = useRecoilValue(sortAtom);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
+  const repoId =
+  currentPath === "/admin/myDocuments"
+    ? userInfo!.repository.id
+    : getRepo!.id;
 
   const {
     data: categoryChildren,
@@ -38,7 +47,7 @@ const ChildrenTree = ({ move }: IProps) => {
     isFetchingNextPage,
     isLoading,
   } = useGetCategoryChildren(
-    getRepo!.id,
+    repoId,
     undefined,
     getSortParams,
     queryParams.limit,

@@ -14,7 +14,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
   const compareVersion = useRecoilValue(compareVersionAtom);
 
   const getVersionHook = useGetVersion(
-    compareVersion?.version?.repo?.id ?? 0,
+    compareVersion?.version?.repoId ?? 0,
     compareVersion?.version?.document?.id ?? 0,
     compareVersion?.version?.data?.id ?? 0,
     compareVersion?.version?.data?.state,
@@ -22,7 +22,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
   );
 
   const getCompareHook = useGetVersion(
-    compareVersion?.compare?.repo.id ?? 0,
+    compareVersion?.compare?.repoId ?? 0,
     compareVersion?.compare?.document.id ?? 0,
     compareVersion?.compare?.data.id ?? 0,
     compareVersion?.compare?.data.state,

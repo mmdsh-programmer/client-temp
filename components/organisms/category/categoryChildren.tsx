@@ -1,10 +1,9 @@
+import React from "react";
 import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-
 import { EEmptyList } from "@components/molecules/emptyList";
 import { ICategoryView } from "@interface/category.interface";
 import MobileView from "../categoryView/categoryMobileView";
-import React from "react";
 import TableView from "../categoryView/categoryTableView";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "@atom/sortParam";
@@ -26,7 +25,9 @@ const CategoryChildren = () => {
   const { data: userInfo } = useGetUser();
 
   const repoId =
-    currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const {
     data: childrenData,
@@ -59,6 +60,8 @@ const CategoryChildren = () => {
     getSortParams,
     queryParams.limit,
     getFilterReport,
+    null,
+    "clasor",
     !!getFilterReport && !getFilterChildren
   );
 

@@ -8,17 +8,28 @@ import { Typography } from "@material-tailwind/react";
 import { filterChildrenAtom } from "@atom/filter";
 import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const CategoryFilter = () => {
+  const currentPath = usePathname();
   const getRepo = useRecoilValue(repoAtom);
-  const repoId = getRepo!.id;
-  const { data: getTags } = useGetTags(repoId, 30, true);
+  const setMainFilterChildren = useSetRecoilState(filterChildrenAtom);
+
   const [documentType, setDocumentType] = useState<EDocumentTypes[]>([]);
   const [type, setType] = useState<string[]>([]);
   const [tags, setTags] = useState<number[]>([]);
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
-  const setMainFilterChildren = useSetRecoilState(filterChildrenAtom);
+
+  const { data: userInfo } = useGetUser();
+
+  const repoId =
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
+      
+  const { data: getTags } = useGetTags(repoId, 30, true);
 
   const tagOptions =
     getTags?.pages[0].list.map((tag) => {
@@ -98,7 +109,7 @@ const CategoryFilter = () => {
           </div>
         ) : null}
         <div className="flex flex-grow items-end justify-end w-full">
-        <LoadingButton
+          <LoadingButton
             className="!h-10 !w-full sm:!w-auto !px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
             onClick={handleFilter}
           >
