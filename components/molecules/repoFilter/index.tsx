@@ -8,18 +8,17 @@ import SelectBox from "@components/molecules/selectBox";
 import { Typography } from "@material-tailwind/react";
 import { filterReportAtom } from "@atom/filter";
 import useGetTags from "@hooks/tag/useGetTags";
-import {useSetRecoilState} from "recoil";
+import { useSetRecoilState } from "recoil";
 
-const RepoFilter = ({ repoId }: { repoId: number }) => {
-
-  const { data: getTags } = useGetTags(repoId, 30, true);
-
+const RepoFilter = ({ repoId }: { repoId: number | number }) => {
   const [documentType, setDocumentType] = useState<EDocumentTypes[]>([]);
   const [tags, setTags] = useState<number[]>([]);
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
   const setMainFilter = useSetRecoilState(filterReportAtom);
 
+  const { data: getTags } = useGetTags(repoId, 30, !!repoId);
+  console.log("------------------- get tags ------------------", getTags);
   const tagOptions = getTags?.pages[0].list.map((tag) => {
     return {
       label: tag.name,
@@ -72,13 +71,15 @@ const RepoFilter = ({ repoId }: { repoId: number }) => {
             selectedOptions={documentType}
             setSelectedOptions={setDocumentType}
           />
-          <SelectBox
-            options={tagOptions as IOption[]}
-            className="h-12 xs:!h-10  sm:col-span-auto md:col-span-auto lg:col-span-auto"
-            selectedOptions={tags}
-            setSelectedOptions={setTags}
-            defaultOption="تگ‌ها"
-          />
+          {repoId ? (
+            <SelectBox
+              options={tagOptions as IOption[]}
+              className="h-12 xs:!h-10  sm:col-span-auto md:col-span-auto lg:col-span-auto"
+              selectedOptions={tags}
+              setSelectedOptions={setTags}
+              defaultOption="تگ‌ها"
+            />
+          ) : null}
           <SelectBox
             options={[
               {

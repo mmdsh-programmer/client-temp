@@ -22,6 +22,7 @@ import { translateVersionStatus } from "@utils/index";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
 import EditorFileFooter from "./editorFileFooter";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -40,11 +41,35 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
+  const currentPath = usePathname();
 
   const timeout = 5 * 60; // seconds
 
   const { data: userInfo } = useGetUser();
   const saveEditorHook = useSaveEditor();
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
+  const writerRole = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return true;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return (
+        selectedDocument?.accesses?.[0] === "writer" ||
+        selectedDocument?.accesses?.[0] === "viewer"
+      );
+    } else if (getRepo) {
+      return getRepo?.roleName === "writer" || getRepo?.roleName === "viewer";
+    }
+  };
 
   const renderTitle = () => {
     if (!getVersionData) {
@@ -106,7 +131,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
       encryptedContent = encryptData(content) as string;
     }
 
-    if (getVersionData && selectedDocument && getRepo) {
+    if (getVersionData && selectedDocument && repoId()) {
       saveEditorHook.mutate({
         content: selectedDocument?.publicKeyId
           ? (encryptedContent as string)
@@ -115,7 +140,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           selectedDocument?.contentType === EDocumentTypes.classic
             ? data?.outline
             : "[]",
-        repoId: getRepo.id,
+        repoId: repoId(),
         documentId: selectedDocument.id,
         versionId: getVersionData.id,
         versionNumber: getVersionData.versionNumber,
@@ -193,9 +218,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
       <CancelButton
         onClick={handleChangeEditorMode}
         disabled={
-          getRepo?.roleName === ERoles.viewer ||
-          (getRepo?.roleName === ERoles.writer &&
-            getVersionData?.creator?.userName !== userInfo?.username)
+          writerRole() &&
+          getVersionData?.creator?.userName !== userInfo?.username
         }
       >
         ویرایش
@@ -245,8 +269,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
           disabled={
             saveEditorHook.isPending ||
-            getRepo?.roleName === ERoles.viewer ||
-            (getRepo?.roleName === ERoles.writer &&
+            (writerRole() &&
               getVersionData?.creator?.userName !== userInfo?.username)
           }
         >

@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IForm {
   name: string;
@@ -19,6 +22,11 @@ interface IProps {
 
 const TagCreateDialog = ({ name, setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const getDocument = useRecoilValue(selectedDocumentAtom);
+
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
   const createTag = useCreateTag();
   const {
     register,
@@ -38,10 +46,20 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
     setOpen(false);
   };
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments" && getDocument) {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo) return;
+    if (!repoId()) return;
     createTag.mutate({
-      repoId: getRepo?.id,
+      repoId: repoId(),
       name: dataForm.name,
       callBack: () => {
         toast.success("تگ با موفقیت ایجاد شد.");

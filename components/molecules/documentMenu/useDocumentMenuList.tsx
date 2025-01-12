@@ -23,6 +23,7 @@ import {
 import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 interface UseDocumentMenuListProps {
   document?: IDocumentMetadata;
@@ -43,6 +44,7 @@ type Modals = {
   updatePassword: boolean;
   deletePassword: boolean;
   documentAccessPublishing: boolean;
+  documentDirectAccess: false;
 };
 
 const useDocumentMenuList = ({
@@ -55,6 +57,7 @@ const useDocumentMenuList = ({
   const setShowVersionList = useSetRecoilState(versionModalListAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
+  const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
 
@@ -106,6 +109,8 @@ const useDocumentMenuList = ({
         <HiddenIcon className="w-4 h-4" />
       ),
       disabled:
+        currentPath === "/admin/myDocuments" ||
+        currentPath === "/admin/sharedDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
@@ -117,6 +122,8 @@ const useDocumentMenuList = ({
       text: "محدودیت کاربران",
       icon: <LimitationIcon className="w-4 h-4" />,
       disabled:
+        currentPath === "/admin/myDocuments" ||
+        currentPath === "/admin/sharedDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer ||
         getRepo?.roleName === ERoles.editor,
@@ -131,6 +138,8 @@ const useDocumentMenuList = ({
             text: "ویرایش رمز عبور",
             icon: <PasswordIcon className="w-4 h-4" />,
             disabled:
+              currentPath === "/admin/myDocuments" ||
+              currentPath === "/admin/sharedDocuments" ||
               getRepo?.roleName === ERoles.writer ||
               getRepo?.roleName === ERoles.viewer ||
               getRepo?.roleName === ERoles.editor,
@@ -143,6 +152,8 @@ const useDocumentMenuList = ({
             text: "حذف رمز عبور",
             icon: <PasswordIcon className="w-4 h-4" />,
             disabled:
+              currentPath === "/admin/myDocuments" ||
+              currentPath === "/admin/sharedDocuments" ||
               getRepo?.roleName === ERoles.writer ||
               getRepo?.roleName === ERoles.viewer ||
               getRepo?.roleName === ERoles.editor,
@@ -157,6 +168,8 @@ const useDocumentMenuList = ({
             text: "اعمال رمز عبور",
             icon: <PasswordIcon className="w-4 h-4" />,
             disabled:
+              currentPath === "/admin/myDocuments" ||
+              currentPath === "/admin/sharedDocuments" ||
               getRepo?.roleName === ERoles.writer ||
               getRepo?.roleName === ERoles.viewer ||
               getRepo?.roleName === ERoles.editor,
@@ -178,6 +191,9 @@ const useDocumentMenuList = ({
     {
       text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
       icon: <DocumentBookmarkIcon className="w-4 h-4" />,
+      disabled:
+        currentPath === "/admin/myDocuments" ||
+        currentPath === "/admin/sharedDocuments",
       onClick: () => {
         toggleModal("bookmarkDocument", true);
         if (document) setDocument(document);
@@ -187,6 +203,7 @@ const useDocumentMenuList = ({
       text: "انتقال",
       icon: <ArrowLeftRectangleIcon className="w-4 h-4 fill-icon-active" />,
       disabled:
+        currentPath === "/admin/sharedDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
@@ -206,9 +223,23 @@ const useDocumentMenuList = ({
       },
     },
     {
+      text: "دسترسی مستقیم به سند",
+      icon: <LockIcon className="w-4 h-4" />,
+      disabled:
+        getRepo?.roleName === ERoles.writer ||
+        getRepo?.roleName === ERoles.viewer ||
+        getRepo?.roleName === ERoles.editor,
+      onClick: () => {
+        toggleModal("documentDirectAccess", true);
+        if (document) setDocument(document);
+      },
+    },
+    {
       text: "محدودیت دسترسی در پنل",
       icon: <LockIcon className="w-4 h-4" />,
       disabled:
+        currentPath === "/admin/myDocuments" ||
+        currentPath === "/admin/sharedDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer ||
         getRepo?.roleName === ERoles.editor,
@@ -227,6 +258,7 @@ const useDocumentMenuList = ({
       text: "حذف سند",
       icon: <DeleteIcon className="w-4 h-4" />,
       disabled:
+        currentPath === "/admin/sharedDocuments" ||
         (getRepo?.roleName === ERoles.writer &&
           document?.creator?.userName !== userInfo?.username) ||
         getRepo?.roleName === ERoles.viewer,

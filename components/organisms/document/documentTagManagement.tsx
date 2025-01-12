@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import DocumentTagList from "@components/organisms/document/documentTagList";
 import SearchableDropdown from "../../molecules/searchableDropdown";
 import { Spinner } from "@material-tailwind/react";
@@ -9,6 +8,8 @@ import { repoAtom } from "@atom/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
 import { ERoles } from "@interface/enums";
 import useGetTags from "@hooks/tag/useGetTags";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,20 +20,43 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
+  const currentPath = usePathname();
 
-  const adminRole =
-    getRepo?.roleName === ERoles.owner ||
-    getRepo?.roleName === ERoles.admin ||
-    getRepo?.roleName === ERoles.editor;
-  const repoId = getRepo!.id;
+  const { data: userInfo } = useGetUser();
+
+ 
+  const adminOrOwnerRole = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return true;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return (
+        getDocument?.accesses?.[0] === "admin" ||
+        getDocument?.accesses?.[0] === "owner"
+      );
+    } else if (getRepo) {
+      return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+    }
+  };
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
+
   const { data: getTags, isLoading: isLoadingTags } = useGetTags(
-    repoId,
+    repoId(),
     30,
     true
   );
 
   const { data: documentInfo, isLoading } = useGetDocument(
-    repoId,
+    repoId(),
     getDocument!.id,
     true,
     true,
@@ -72,7 +96,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     <Spinner className="h-5 w-5" color="deep-purple" />
   ) : (
     <div className="flex flex-col gap-2">
-      {adminRole ? (
+      {adminOrOwnerRole() ? (
         <SearchableDropdown
           options={updatedAvailableTags}
           handleSelect={handleTagSelect}

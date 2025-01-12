@@ -8,6 +8,8 @@ import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { useForm } from "react-hook-form";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -19,8 +21,15 @@ const DocumentMoveDialog = ({ setOpen }: IProps) => {
   const categoryShow = useRecoilValue(categoryShowAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
+    const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const moveDocument = useEditDocument();
+
+  const repoId =
+  currentPath === "/admin/myDocuments"
+    ? userInfo!.repository.id
+    : getRepo!.id;
 
   const { handleSubmit, clearErrors, reset } = useForm();
 
@@ -35,9 +44,9 @@ const DocumentMoveDialog = ({ setOpen }: IProps) => {
     if (getCategoryMoveDest?.id === document?.categoryId) {
       toast.error("تغییری در دسته بندی وجود ندارد");
     }
-    if (!getRepo || !document) return;
+    if (!repoId || !document) return;
     moveDocument.mutate({
-      repoId: getRepo?.id,
+      repoId,
       categoryId: getCategoryMoveDest ? getCategoryMoveDest?.id : null,
       title: document.name,
       description: document?.description,

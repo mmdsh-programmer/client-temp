@@ -31,16 +31,16 @@ export interface IGetResourceAccesses {
   total: number;
 }
 
+export interface IResourceUser {
+  userName: string;
+  name: string;
+  ssoId: number;
+  img?: string;
+  userRole: ERoles;
+}
+
 export interface IGetUserAccesses {
-  list: {
-    userInfo: {
-      userName: string;
-      name: string;
-      ssoId: number;
-      img: string;
-    };
-    userRole: ERoles;
-  }[];
+  list: IResourceUser[];
   offset: number;
   size: number;
   total: number;

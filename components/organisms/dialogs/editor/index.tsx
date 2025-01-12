@@ -23,6 +23,8 @@ import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { toast } from "react-toastify";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,6 +48,8 @@ const Editor = ({ setOpen }: IProps) => {
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
   const setListDrawer = useSetRecoilState(editorListDrawerAtom);
   const [getDocumentShow, setDocumentShow] = useRecoilState(documentShowAtom);
+  const currentPath = usePathname();
+  const repoId = useRef<number>(0);
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -54,21 +58,22 @@ const Editor = ({ setOpen }: IProps) => {
     flowchart: useRef<IRemoteEditorRef>(null),
     latex: useRef<IRemoteEditorRef>(null),
   };
+  const { data: userInfo } = useGetUser();
 
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
-    getRepo!.id,
+    repoId.current,
     getSelectedDocument!.id,
-    !getSelectedVersion
+    !getSelectedVersion && repoId.current !== 0
   );
 
   const { data, isLoading, error, isSuccess } = useGetVersion(
-    getRepo!.id,
+    repoId.current,
     getSelectedDocument!.id,
     getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
     getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
-    true
+    repoId.current !== 0
   );
 
   const {
@@ -77,7 +82,7 @@ const Editor = ({ setOpen }: IProps) => {
     error: keyError,
     isSuccess: isSuccessKey,
   } = useGetKey(
-    getRepo!.id,
+    repoId.current,
     getSelectedDocument?.publicKeyId
       ? +getSelectedDocument.publicKeyId
       : undefined
@@ -100,6 +105,16 @@ const Editor = ({ setOpen }: IProps) => {
       getSelectedDocument?.contentType || EDocumentTypes.classic;
     return { url: editors[contentType], ref: editorRefs[contentType] };
   };
+
+  useEffect(() => {
+    if (currentPath === "/admin/myDocuments") {
+      repoId.current = userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      repoId.current = getSelectedDocument!.repoId;
+    } else if (getRepo) {
+      repoId.current = getRepo!.id;
+    }
+  }, []);
 
   useEffect(() => {
     if (lastVersionError) {
@@ -147,6 +162,8 @@ const Editor = ({ setOpen }: IProps) => {
       setVersionModalList(false);
       setDocumentShow(null);
       setSelectedDocument(null);
+    } else if (!getRepo) {
+      setVersionModalList(false);
     } else {
       setVersionModalList(true);
     }

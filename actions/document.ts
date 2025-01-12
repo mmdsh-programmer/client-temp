@@ -191,11 +191,13 @@ export const deleteDocumentAction = async (
 };
 
 export const getUserDocumentAction = async (
-  repoId: number,
+  repoId: number | undefined,
   sortParams: ISortProps,
   offset: number,
   size: number,
-  filters?: IReportFilter | null
+  filters: IReportFilter | null | undefined,
+  reportType: "myDocuments" | "myAccessDocuments" | null,
+  repoType: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -205,7 +207,9 @@ export const getUserDocumentAction = async (
       sortParams,
       offset,
       size,
-      filters
+      filters,
+      reportType,
+      repoType,
     );
 
     return response;

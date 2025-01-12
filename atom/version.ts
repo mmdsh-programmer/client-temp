@@ -1,5 +1,4 @@
 import { IDocumentMetadata } from "@interface/document.interface";
-import { IRepo } from "@interface/repo.interface";
 import { IVersion } from "@interface/version.interface";
 import { atom } from "recoil";
 import { logEffect } from "@utils/index";
@@ -14,12 +13,12 @@ export const compareVersionAtom = atom<{
   version: { 
     data: IVersion;
     document: IDocumentMetadata;
-    repo: IRepo;
+    repoId: number;
   } | null;
   compare: {
     data: IVersion;
     document: IDocumentMetadata;
-    repo: IRepo;
+    repoId: number;
   } | null;
 } | null>({
   key: "compareVersionAtom",

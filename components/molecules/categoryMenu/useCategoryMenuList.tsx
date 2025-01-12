@@ -16,6 +16,7 @@ import {
 } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
+import { usePathname } from "next/navigation";
 
 interface UseCategoryMenuListProps {
   category?: ICategoryMetadata;
@@ -40,6 +41,7 @@ const useCategoryMenuList = ({
 }: UseCategoryMenuListProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const setCategory = useSetRecoilState(categoryAtom);
+  const currentPath = usePathname();
 
   const createOptions = [
     {
@@ -113,6 +115,7 @@ const useCategoryMenuList = ({
         <HiddenIcon className="w-4 h-4" />
       ),
       disabled:
+        currentPath === "/admin/myDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
@@ -124,6 +127,7 @@ const useCategoryMenuList = ({
       text: "محدودیت دسترسی روی پنل",
       icon: <LockIcon className="w-4 h-4" />,
       disabled:
+      currentPath === "/admin/myDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer ||
         getRepo?.roleName === ERoles.editor,

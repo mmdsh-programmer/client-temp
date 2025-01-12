@@ -22,6 +22,8 @@ import { docTemplateFilter } from ".";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "atom/sortParam";
 import useGetChildren from "@hooks/category/useGetChildren";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   catItem: ICategoryTreeItem | IDocumentTreeItem;
@@ -38,6 +40,13 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
   const [categoryId, setCategoryId] = useState<number>(0);
   const [openCategory, setOpenCategory] = useState<null | number>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
+  const repoId =
+  currentPath === "/admin/myDocuments"
+    ? userInfo!.repository.id
+    : getRepo!.id;
 
   const {
     data: categoryChildren,
@@ -46,7 +55,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
     isFetchingNextPage,
     isLoading,
   } = useGetChildren(
-    getRepo?.id || 0,
+    repoId || 0,
     categoryId,
     getSortParams,
     queryParams.limit,

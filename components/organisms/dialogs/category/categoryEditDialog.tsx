@@ -11,6 +11,8 @@ import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IDataForm {
   id?: number;
@@ -27,7 +29,9 @@ interface IProps {
 const CategoryEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getCategory = useRecoilValue(categoryAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const editCategory = useEditCategory();
 
   const form = useForm<IDataForm>({
@@ -53,6 +57,11 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = (dataForm: IDataForm) => {
+    const repoId =
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
+
     if (
       dataForm.description?.trim() === getCategory?.description &&
       dataForm.name.trim() === getCategory?.name &&
@@ -63,9 +72,9 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
       });
       return;
     }
-    if (!getRepo || !getCategory) return;
+    if (!repoId || !getCategory) return;
     editCategory.mutate({
-      repoId: getRepo?.id,
+      repoId,
       categoryId: getCategory?.id,
       parentId: getCategory?.parentId || null,
       name: dataForm.name,

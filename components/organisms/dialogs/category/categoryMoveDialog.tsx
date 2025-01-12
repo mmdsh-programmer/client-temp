@@ -11,6 +11,8 @@ import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -22,7 +24,9 @@ const CategoryMoveDialog = ({ setOpen }: IProps) => {
   const getCategoryShow = useRecoilValue(categoryShowAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
+    const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const moveCategory = useEditCategory();
 
   const { handleSubmit, clearErrors, reset } = useForm();
@@ -35,6 +39,11 @@ const CategoryMoveDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
+    const repoId =
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
+
     if (
       getCategoryMoveDest?.id === getCategory?.parentId ||
       getCategoryMoveDest?.id === getCategory?.id
@@ -42,11 +51,11 @@ const CategoryMoveDialog = ({ setOpen }: IProps) => {
       toast.error("تغییری در دسته بندی وجود ندارد");
     }
 
-    if (!getRepo || !getCategory) {
+    if (!repoId || !getCategory) {
       return;
     }
     moveCategory.mutate({
-      repoId: getRepo.id,
+      repoId,
       categoryId: getCategory?.id,
       parentId: getCategoryMoveDest ? getCategoryMoveDest.id : null,
       description: getCategory.description,

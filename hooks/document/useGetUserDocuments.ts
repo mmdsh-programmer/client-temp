@@ -8,14 +8,18 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { handleClientSideHookError } from "@utils/error";
 
 const useGetUserDocuments = (
-  repoId: number,
+  repoId: number | undefined,
   sortParams: ISortProps,
   size: number,
   filters: IReportFilter | null,
-  enabled: boolean,
+  reportType: "myDocuments" | "myAccessDocuments" | null,
+  repoType: string,
+  enabled: boolean
 ) => {
   return useInfiniteQuery({
-    queryKey: [`repo-${repoId}-children-user-document-${JSON.stringify(filters)}`],
+    queryKey: [
+      `repo-${repoId}-children-user-document-${JSON.stringify(filters)}`,
+    ],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getUserDocumentAction(
         repoId,
@@ -23,6 +27,8 @@ const useGetUserDocuments = (
         (pageParam - 1) * size,
         size,
         filters,
+        reportType,
+        repoType,
       );
       handleClientSideHookError(response as IActionError);
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;

@@ -3,19 +3,33 @@ import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useEnableGroupHash from "@hooks/document/useEnableGroupHash";
 import { repoAtom } from "@atom/repository";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const DocumentEnableUserGroup = () => {
   const getRepo = useRecoilValue(repoAtom);
   const [getDocument, setDocument] = useRecoilState(selectedDocumentAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const enableUserGroup = useEnableGroupHash();
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    } else if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    } else {
+      return getRepo!.id;
+    }
+  };
+  
   useEffect(() => {
-    if (!getRepo || !getDocument) return;
+    if (!repoId() || !getDocument) return;
     if (getDocument?.attachmentUserGroup) return;
 
     enableUserGroup.mutate({
-      repoId: getRepo.id,
+      repoId: repoId(),
       documentId: getDocument.id,
       callBack: (result) => {
         setDocument({

@@ -686,17 +686,6 @@ export const editSocialProfile = async (
   accessToken: string,
   isPrivate: boolean
 ) => {
-  const redisClient = await getRedisClient();
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.keys("socialProfile:*");
-
-    if (cachedData) {
-      cachedData?.map((key) => {
-        return redisClient?.del(key);
-      });
-    }
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const response = await axiosSocialInstance.get<ISocialResponse<any>>(
     "/editSocialProfile",
@@ -714,13 +703,6 @@ export const editSocialProfile = async (
 
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
-  }
-
-  if (redisClient && redisClient.isReady) {
-    await redisClient?.set(
-      `socialProfile:${accessToken}`,
-      JSON.stringify(response.data)
-    );
   }
   return response.data;
 };

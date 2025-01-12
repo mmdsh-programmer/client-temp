@@ -9,7 +9,11 @@ import {
 } from "@service/account";
 
 import { IActionError } from "@interface/app.interface";
-import { editSocialProfile, getCustomPostByDomain, getMySocialProfile } from "@service/social";
+import {
+  editSocialProfile,
+  getCustomPostByDomain,
+  getMySocialProfile,
+} from "@service/social";
 import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -101,6 +105,10 @@ export const getMe = async () => {
     console.log("--------------------------- getMe error ----------------------------", error);
     if ((error as IActionError)?.errorCode === 401) {
       try {
+        console.log(
+          "----------------------- getMe error ---------------------",
+          error
+        );
         return refreshCookieHeader(
           tokenInfo.refresh_token,
           clientId,

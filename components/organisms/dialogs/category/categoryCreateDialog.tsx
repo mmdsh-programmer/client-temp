@@ -1,8 +1,7 @@
+import React from "react";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categorySchema } from "./validation.yup";
@@ -12,6 +11,8 @@ import useCreateCategory from "@hooks/category/useCreateCategory";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IForm {
   name: string;
@@ -27,7 +28,9 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getCategory = useRecoilValue(categoryAtom);
   const getCategoryShow = useRecoilValue(categoryShowAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const createCategory = useCreateCategory();
 
   const form = useForm<IForm>({
@@ -52,9 +55,14 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!getRepo) return;
+    const repoId =
+      currentPath === "/admin/myDocuments"
+        ? userInfo!.repository.id
+        : getRepo!.id;
+
+    if (!repoId) return;
     createCategory.mutate({
-      repoId: getRepo?.id,
+      repoId,
       parentId: getCategory?.id || getCategoryShow?.id || null,
       name: dataForm.name,
       description: dataForm?.description || "",
