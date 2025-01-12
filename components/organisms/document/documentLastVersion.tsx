@@ -23,13 +23,12 @@ const DocumentLastVersion = () => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    } else {
-      return repository!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    }
+    return repository!.id;
   };
-  
 
   const {
     data: getLastVersion,

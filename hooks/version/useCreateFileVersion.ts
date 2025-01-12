@@ -14,14 +14,17 @@ const useCreateFileVersion = () => {
       documentId: number;
       versionNumber: string;
       fileHash?: IFileVersion;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, versionNumber, fileHash } = values;
+      const { repoId, documentId, versionNumber, fileHash, isDirectAccess } =
+        values;
       const response = await createFileVersionAction(
         repoId,
         documentId,
         versionNumber,
         fileHash,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;

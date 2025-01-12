@@ -39,11 +39,11 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const onSubmit = async () => {
@@ -53,6 +53,8 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       documentId: getDocument!.id,
       versionId: getVersion.id,
       state: getVersion.state,
+      isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.error(" نسخه حذف شد.");
         handleClose();

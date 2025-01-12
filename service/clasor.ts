@@ -144,10 +144,9 @@ export const userInfo = async (accessToken: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    console.log(
-      "userInfo cachedData: ",
-      cachedUser
-    );
+    console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    console.log(`cached data user:${accessToken}: ${cachedUser} `);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     return JSON.parse(cachedUser);
   }
 
@@ -401,7 +400,8 @@ export const createRepositoryKey = async (
 export const getKey = async (
   accessToken: string,
   repoId: number,
-  keyId: number
+  keyId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.get<IPublicKey>(
@@ -409,6 +409,9 @@ export const getKey = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -1395,7 +1398,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string,
+  repoType: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1513,6 +1516,7 @@ export const getDocument = async (
   accessToken: string,
   repoId: number,
   documentId: number,
+  isDirectAccess?: boolean,
   offset?: number,
   size?: number,
   disableVersions?: boolean
@@ -1529,6 +1533,7 @@ export const getDocument = async (
         params: {
           offset,
           size,
+          isDirectAccess,
         },
       }
     );
@@ -2147,7 +2152,8 @@ export const getVersion = async (
   versionId: number | undefined,
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
-  innerOutline?: boolean
+  innerOutline?: boolean,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
@@ -2159,6 +2165,7 @@ export const getVersion = async (
         params: {
           innerDocument,
           innerOutline,
+          isDirectAccess,
         },
       }
     );
@@ -2175,7 +2182,8 @@ export const createVersion = async (
   documentId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IAddVersion>>(
@@ -2184,6 +2192,9 @@ export const createVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2199,7 +2210,8 @@ export const createFileVersion = async (
   repoId: number,
   documentId: number,
   versionNumber: string,
-  fileHash?: IFileVersion
+  fileHash?: IFileVersion,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2208,6 +2220,9 @@ export const createFileVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2224,7 +2239,8 @@ export const deleteVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  state: string
+  state: string,
+  isDirectAccess?: boolean
 ) => {
   const redisClient = await getRedisClient();
 
@@ -2244,6 +2260,9 @@ export const deleteVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          isDirectAccess,
+        },
       }
     );
     if (fieldsKey) {
@@ -2262,7 +2281,8 @@ export const getLastVersion = async (
   repoType: string,
   accessToken: string,
   repoId: number,
-  documentId: number
+  documentId: number,
+  isDirectAccess?: boolean
 ) => {
   const redisClient = await getRedisClient();
 
@@ -2281,6 +2301,9 @@ export const getLastVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          isDirectAccess,
+        },
       }
     );
     await redisClient.hSet(cacheKey, {
@@ -2297,7 +2320,8 @@ export const setLastVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const redisClient = await getRedisClient();
 
@@ -2313,6 +2337,9 @@ export const setLastVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2332,7 +2359,8 @@ export const publicVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const redisClient = await getRedisClient();
 
@@ -2349,6 +2377,9 @@ export const publicVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2369,7 +2400,8 @@ export const cancelPublicVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2378,6 +2410,9 @@ export const cancelPublicVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2393,7 +2428,8 @@ export const confirmVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const redisClient = await getRedisClient();
 
@@ -2410,6 +2446,9 @@ export const confirmVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2430,7 +2469,8 @@ export const cancelConfirmVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2439,6 +2479,9 @@ export const cancelConfirmVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );

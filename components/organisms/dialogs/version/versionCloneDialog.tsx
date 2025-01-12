@@ -30,15 +30,15 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
-  
+
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const { data: getVersionInfo, isLoading } = useGetVersion(
@@ -47,7 +47,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     getVersion?.id,
     getVersion?.state,
     true,
-    true,
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
     true
   );
   const createVersion = useCreateVersion();
@@ -75,6 +75,8 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       versionNumber: dataForm.name,
       content: getVersionInfo?.content || "",
       outline: getVersionInfo?.outline || "",
+      isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ? true : undefined,
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();

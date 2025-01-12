@@ -58,11 +58,11 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return document!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return document!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const onSubmit = async (dataForm: IForm) => {

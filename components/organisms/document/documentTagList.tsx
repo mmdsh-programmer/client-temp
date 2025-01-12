@@ -27,12 +27,14 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return true;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    }
+    if (currentPath === "/admin/sharedDocuments") {
       return (
         document?.accesses?.[0] === "admin" ||
         document?.accesses?.[0] === "owner"
       );
-    } else if (getRepo) {
+    }
+    if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
     }
   };
@@ -40,11 +42,11 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return document!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return document!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const handleDelete = (tag: { name: string; id: number }) => {

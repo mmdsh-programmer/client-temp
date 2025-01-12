@@ -11,6 +11,7 @@ const useGetVersion = (
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
+  isDirectAccess?: boolean,
   enabled?: boolean
 ) => {
   return useQuery({
@@ -24,7 +25,8 @@ const useGetVersion = (
         versionId,
         state,
         innerDocument,
-        innerOutline
+        innerOutline,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response as IVersion;

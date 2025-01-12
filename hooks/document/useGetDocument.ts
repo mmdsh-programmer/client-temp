@@ -18,6 +18,7 @@ const useGetDocument = (
         const response = await getDocumentAction(
           repoId,
           documentId,
+          undefined, // isDirectAccess
           undefined,
           undefined,
           disableVersions

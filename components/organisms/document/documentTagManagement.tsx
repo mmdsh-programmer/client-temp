@@ -6,7 +6,6 @@ import SearchableDropdown from "../../molecules/searchableDropdown";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
-import { ERoles } from "@interface/enums";
 import useGetTags from "@hooks/tag/useGetTags";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -24,16 +23,17 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   const { data: userInfo } = useGetUser();
 
- 
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return true;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    }
+    if (currentPath === "/admin/sharedDocuments") {
       return (
         getDocument?.accesses?.[0] === "admin" ||
         getDocument?.accesses?.[0] === "owner"
       );
-    } else if (getRepo) {
+    }
+    if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
     }
   };
@@ -41,13 +41,12 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
-  
 
   const { data: getTags, isLoading: isLoadingTags } = useGetTags(
     repoId(),

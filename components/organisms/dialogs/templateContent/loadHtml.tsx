@@ -6,6 +6,7 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import { documentTemplateAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -13,6 +14,8 @@ interface IProps {
 }
 
 const LoadHtml = ({ editorRef, handleClose }: IProps) => {
+  const currentPath = usePathname();
+
   const getRepo = useRecoilValue(repoAtom);
   const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
 
@@ -29,6 +32,7 @@ const LoadHtml = ({ editorRef, handleClose }: IProps) => {
     getLastVersion?.state, // state
     false, // innerDocument
     false, // innerOutline
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
     !!getDocumentTemplate?.id && !!getLastVersion?.id
   );
 

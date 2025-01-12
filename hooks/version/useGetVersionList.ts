@@ -8,6 +8,7 @@ import { IDocumentMetadata } from "@interface/document.interface";
 const useGetVersionList = (
   repoId: number,
   documentId: number,
+  isDirectAccess: boolean | undefined,
   size: number
 ) => {
   return useInfiniteQuery({
@@ -16,6 +17,7 @@ const useGetVersionList = (
       const response = await getDocumentAction(
         repoId,
         documentId,
+        isDirectAccess,
         (pageParam - 1) * size,
         size
       );

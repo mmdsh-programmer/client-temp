@@ -35,11 +35,11 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    } else {
-      return repository!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    }
+    return repository!.id;
   };
 
   const stopWorker = () => {

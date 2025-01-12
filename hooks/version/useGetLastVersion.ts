@@ -7,12 +7,13 @@ import { handleClientSideHookError } from "@utils/error";
 const useGetLastVersion = (
   repoId: number,
   documentId: number,
+  isDirectAccess?: boolean,
   enabled?: boolean
 ) => {
   return useQuery({
     queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
     queryFn: async ({ signal }) => {
-      const response = await getLastVersionAction(repoId, documentId);
+      const response = await getLastVersionAction(repoId, documentId, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response as IVersion;
     },

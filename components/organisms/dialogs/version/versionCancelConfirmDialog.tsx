@@ -39,11 +39,11 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const onSubmit = async () => {
@@ -52,6 +52,8 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
       repoId: repoId(),
       documentId: getDocument!.id,
       versionId: getVersion.id,
+      isDirectAccess:
+      currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.error(" .تایید نسخه لغو شد");
         handleClose();

@@ -30,13 +30,12 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments" && getDocument) {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments" && getDocument) {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
-  
 
   const handleDelete = async () => {
     if (!repoId() || !getTag) return;
@@ -49,6 +48,7 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
       },
     });
   };
+  
   return (
     <DeleteDialog
       isPending={deleteTag.isPending}

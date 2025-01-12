@@ -16,40 +16,56 @@ const useCreateVersion = () => {
       versionNumber: string;
       content: string;
       outline: string;
+      isDirectAccess?: boolean;
       onSuccessHandler?: () => void;
     }) => {
-      const { repoId, documentId, versionNumber, content, outline } = values;
+      const {
+        repoId,
+        documentId,
+        versionNumber,
+        content,
+        outline,
+        isDirectAccess,
+      } = values;
       const response = await createVersionAction(
         repoId,
         documentId,
         versionNumber,
         content,
         outline,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response as IAddVersion;
     },
-    onSuccess: async(response, values) => {
+    onSuccess: async (response, values) => {
       const { onSuccessHandler, repoId, documentId } = values;
       const queryKey = [`version-list-${repoId}-${documentId}`];
       const cachedData = await queryClient.getQueriesData({ queryKey });
-      const cachePages = cachedData?.[0]?.[1] as { pages: { list: IVersionMetadata[]; offset: number; size: number; total: number }[] };
+      const cachePages = cachedData?.[0]?.[1] as {
+        pages: {
+          list: IVersionMetadata[];
+          offset: number;
+          size: number;
+          total: number;
+        }[];
+      };
       if (cachePages) {
         const newVersion = {
           ...response,
-          createDate:  +new Date(),
+          createDate: +new Date(),
           state: "draft",
           status: "editing",
-          newOne: true
+          newOne: true,
         };
 
         const newData = {
           ...cachePages,
-          pages: cachePages.pages.map((page, index) => 
-            {return index === 0 
-              ? { ...page, list: [newVersion, ...page.list] } 
-              : page;}
-          )
+          pages: cachePages.pages.map((page, index) => {
+            return index === 0
+              ? { ...page, list: [newVersion, ...page.list] }
+              : page;
+          }),
         };
 
         queryClient.setQueriesData({ queryKey }, newData);

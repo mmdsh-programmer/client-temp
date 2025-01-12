@@ -13,13 +13,15 @@ const useConfirmVersion = () => {
       repoId: number;
       documentId: number;
       versionId: number;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, versionId } = values;
+      const { repoId, documentId, versionId, isDirectAccess } = values;
       const response = await confirmVersionAction(
         repoId,
         documentId,
         versionId,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response as IAddVersion;
@@ -30,7 +32,9 @@ const useConfirmVersion = () => {
         queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`document-${documentId}-version-${versionId}-state-version-innerDocument-true-innerOutline-true`],
+        queryKey: [
+          `document-${documentId}-version-${versionId}-state-version-innerDocument-true-innerOutline-true`,
+        ],
       });
       queryClient.invalidateQueries({
         queryKey: [`version-list-${repoId}-${documentId}`],

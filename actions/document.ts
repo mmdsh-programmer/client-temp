@@ -41,6 +41,7 @@ export const getClasorFieldAction = async () => {
 export const getDocumentAction = async (
   repoId: number,
   documentId: number,
+  isDirectAccess?: boolean,
   offset?: number,
   size?: number,
   disableVersions?: boolean
@@ -51,6 +52,7 @@ export const getDocumentAction = async (
       userInfo.access_token,
       repoId,
       documentId,
+      isDirectAccess,
       offset,
       size,
       disableVersions

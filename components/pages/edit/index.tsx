@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { repoAtom } from "@atom/repository";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
@@ -11,6 +11,8 @@ import EditorTab from "@components/organisms/editorTab";
 import { Spinner, Typography } from "@material-tailwind/react";
 
 const EditPage = () => {
+  const currentPath = usePathname();
+
   const getRepo = useRecoilValue(repoAtom);
   const [getSelectedDocument, setDocument] =
     useRecoilState(selectedDocumentAtom);
@@ -18,13 +20,23 @@ const EditPage = () => {
   const searchParams = useSearchParams();
   const documentId = searchParams.get("documentId");
 
-  const { isFetching } = useGetUser();
+  const { data: userInfo, isFetching } = useGetUser();
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    }
+    return getRepo!.id;
+  };
 
   const {
     data: getDocument,
     isFetching: isFetchingDocument,
     error,
-  } = useGetDocument(getRepo!.id, +documentId!, true, true);
+  } = useGetDocument(repoId(), +documentId!, true, true);
 
   useEffect(() => {
     if (getDocument) {

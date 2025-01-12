@@ -11,7 +11,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   children: JSX.Element;
-  version: IVersion
+  version: IVersion;
 }
 const BlockDraft = React.memo(({ children, version }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
@@ -26,22 +26,24 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   useEffect(() => {
     if (repoId() && selectedDocument && version && editorMode === "edit") {
-      createBlockHook.mutate({repoId: repoId(),
+      createBlockHook.mutate({
+        repoId: repoId(),
         documentId: selectedDocument.id,
         versionId: version.id,
         handleError: () => {
           setEditorData(null);
-        },});
-    } else if ((!version || JSON.stringify(version) === "{}")) {
+        },
+      });
+    } else if (!version || JSON.stringify(version) === "{}") {
       setEditorData(null);
       toast.error("نسخه ای برای این سند پیدا نشد!");
     }

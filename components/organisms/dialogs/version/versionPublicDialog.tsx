@@ -44,11 +44,11 @@ setOpen
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    } if (currentPath === "/admin/sharedDocuments") {
       return getDocument!.repoId;
-    } else {
+    } 
       return getRepo!.id;
-    }
+    
   };
 
   const onSubmit = async () => {
@@ -57,6 +57,8 @@ setOpen
       repoId: repoId(),
       documentId: getDocument!.id,
       versionId: getVersion.id,
+      isDirectAccess:
+      currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.success(" نسخه با موفقیت عمومی شد.");
         handleClose();

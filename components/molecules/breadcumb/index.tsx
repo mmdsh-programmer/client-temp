@@ -5,7 +5,7 @@ import { repoAtom, repoGroupingAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
 
-const Breadcrumb: React.FC = () => {
+const Breadcrumb = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
   const getRepo = useRecoilValue(repoAtom);
 
@@ -34,7 +34,7 @@ const Breadcrumb: React.FC = () => {
               <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
             </div>
           </div>
-          {list.slice(-2).map((breadcrumbItem, index) => {
+          {list.slice(-2).map((breadcrumbItem , index) => {
             const realIndex = list.length - 2 + index;
             return (
               <div key={breadcrumbItem}>
@@ -48,7 +48,7 @@ const Breadcrumb: React.FC = () => {
                 >
                   <div className="flex items-center">
                     <Typography
-                      title={breadcrumbItem}
+                      title={breadcrumbItem as string}
                       className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap max-w-[80px]
                       ${
                         realIndex === list.length - 1
@@ -85,7 +85,7 @@ const Breadcrumb: React.FC = () => {
           >
             <div className="flex items-center">
               <Typography
-                title={breadcrumbItem}
+                title={breadcrumbItem as string}
                 className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap max-w-[80px]
               ${index === list.length - 1 ? "text-primary" : "text-secondary"}`}
               >

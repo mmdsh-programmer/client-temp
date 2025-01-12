@@ -28,9 +28,9 @@ const EditorFileFooter = () => {
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
-  
+
   const currentPath = usePathname();
-  
+
   const timeout = 5 * 60; // seconds
 
   const { data: userInfo } = useGetUser();
@@ -39,13 +39,12 @@ const EditorFileFooter = () => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    }
+    return getRepo!.id;
   };
-  
 
   const renderTitle = () => {
     if (!getEditorData) {
@@ -69,7 +68,7 @@ const EditorFileFooter = () => {
         id: getEditorData.draftId ?? getEditorData.id,
         state: "draft",
       } as IVersion;
- 
+
       setVersion(item);
       setEditorData(item);
     }

@@ -10,7 +10,7 @@ import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import { EDocumentTypes, ERoles } from "@interface/enums";
+import { EDocumentTypes } from "@interface/enums";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -51,22 +51,24 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const writerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return true;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    }
+    if (currentPath === "/admin/sharedDocuments") {
       return (
         selectedDocument?.accesses?.[0] === "writer" ||
         selectedDocument?.accesses?.[0] === "viewer"
       );
-    } else if (getRepo) {
+    }
+    if (getRepo) {
       return getRepo?.roleName === "writer" || getRepo?.roleName === "viewer";
     }
   };

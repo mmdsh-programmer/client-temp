@@ -358,10 +358,17 @@ export const createRepoKeyAction = async (
   }
 };
 
-export const getKeyAction = async (repoId: number, keyId: number) => {
+export const getKeyAction = async (
+  repoId: number,
+  keyId: number,
+) => {
   const userInfo = await getMe();
   try {
-    const response = await getKey(userInfo.access_token, repoId, keyId);
+    const response = await getKey(
+      userInfo.access_token,
+      repoId,
+      keyId,
+    );
 
     return response;
   } catch (error) {

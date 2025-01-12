@@ -49,7 +49,6 @@ const Editor = ({ setOpen }: IProps) => {
   const setListDrawer = useSetRecoilState(editorListDrawerAtom);
   const [getDocumentShow, setDocumentShow] = useRecoilState(documentShowAtom);
   const currentPath = usePathname();
-  const repoId = useRef<number>(0);
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -60,20 +59,31 @@ const Editor = ({ setOpen }: IProps) => {
   };
   const { data: userInfo } = useGetUser();
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getSelectedDocument!.repoId;
+    }
+    return getRepo!.id;
+  };
+
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
-    repoId.current,
+    repoId(),
     getSelectedDocument!.id,
-    !getSelectedVersion && repoId.current !== 0
+    !getSelectedVersion && repoId() !== 0
   );
 
   const { data, isLoading, error, isSuccess } = useGetVersion(
-    repoId.current,
+    repoId(),
     getSelectedDocument!.id,
     getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
     getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
-    repoId.current !== 0
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    true
   );
 
   const {
@@ -82,7 +92,7 @@ const Editor = ({ setOpen }: IProps) => {
     error: keyError,
     isSuccess: isSuccessKey,
   } = useGetKey(
-    repoId.current,
+    repoId(),
     getSelectedDocument?.publicKeyId
       ? +getSelectedDocument.publicKeyId
       : undefined
@@ -105,16 +115,6 @@ const Editor = ({ setOpen }: IProps) => {
       getSelectedDocument?.contentType || EDocumentTypes.classic;
     return { url: editors[contentType], ref: editorRefs[contentType] };
   };
-
-  useEffect(() => {
-    if (currentPath === "/admin/myDocuments") {
-      repoId.current = userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      repoId.current = getSelectedDocument!.repoId;
-    } else if (getRepo) {
-      repoId.current = getRepo!.id;
-    }
-  }, []);
 
   useEffect(() => {
     if (lastVersionError) {

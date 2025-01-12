@@ -25,12 +25,12 @@ const EditorTags = () => {
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return true;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    } if (currentPath === "/admin/sharedDocuments") {
       return (
         document?.accesses?.[0] === "admin" ||
         document?.accesses?.[0] === "owner"
       );
-    } else if (getRepo) {
+    } if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
     }
   };
@@ -38,11 +38,11 @@ const EditorTags = () => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    } if (currentPath === "/admin/sharedDocuments") {
       return document!.repoId;
-    } else {
+    } 
       return getRepo!.id;
-    }
+    
   };
   
   const editDocument = useEditDocument();

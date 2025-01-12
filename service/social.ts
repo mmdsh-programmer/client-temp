@@ -151,10 +151,9 @@ export const getCustomPostByDomain = async (
   if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(`domain-${domain}`);
     if (cachedData) {
-      console.log(
-        "getCustomPostByDomain cachedData: ",
-        cachedData
-      );
+      console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+      console.log(`cached data domain:${domain}: ${cachedData} `);
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       return JSON.parse(cachedData);
     }
   }

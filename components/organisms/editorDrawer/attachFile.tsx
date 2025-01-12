@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ChangeEvent, useState } from "react";
-import axios, { AxiosProgressEvent } from "axios";
+import axios from "axios";
 import { IFile } from "cls-file-management";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -42,13 +42,13 @@ const AttachFile = () => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
-  
+
   const deleteFile = useDeleteFile();
 
   const handleDeleteFile = (file: IFile) => {
@@ -90,30 +90,54 @@ const AttachFile = () => {
       const fileData = new FormData();
       fileData.append("file", fileItem, encodeURIComponent(fileItem.name));
       axios
-        .put(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${getDocument?.id}/userGroup/${getDocument?.attachmentUserGroup}`,
-          fileData,
+        .post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${getDocument?.id}/uploadLink`,
+          {
+            expireTime: (Date.now() + 3600 * 1000).toString(),
+            userGroupHash: getDocument?.userGroupHash,
+            isPublic: false,
+          },
           {
             headers: {
-              "Content-Type": "multipart/form-data;",
               Authorization: `Bearer ${token}`,
               _token_: token || "",
               _token_issuer_: "1",
             },
-            onUploadProgress(progressEvent: AxiosProgressEvent) {
-              if (progressEvent.total) {
-                const process = Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total
-                );
-               setProcessCount(process);
-              }
-            },
           }
         )
-        .then(async (res: { data: { data: { result: { hash: string } } } }) => {
-          if (res.data.data.result.hash) {
-            onSuccess();
-            setIsLoading(false);
+        .then(async (res) => {
+          if (res.data.data.uploadHash) {
+            const uploadLink = res.data.data.uploadHash;
+            try {
+              const result = await axios.post(
+                `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadLink}`,
+                fileData,
+                {
+                  headers: {
+                    "Content-Type": "multipart/form-data;",
+                    Authorization: `Bearer ${token}`,
+                    _token_: token || "",
+                    _token_issuer_: "1",
+                  },
+                  onUploadProgress(progressEvent: any) {
+                    const progress = Math.round(
+                      (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProcessCount(progress);
+                  },
+                }
+              );
+              if (result.data.result) {
+                await onSuccess();
+              }
+            } catch (error: any) {
+              if (error?.result?.status === 401) {
+                refetchUser();
+              }
+              toast.error("خطا در بارگذاری فایل");
+            } finally {
+              setIsLoading(false);
+            }
           }
           queryClient.invalidateQueries({
             queryKey: [`getReport-${getDocument?.attachmentUserGroup}`],

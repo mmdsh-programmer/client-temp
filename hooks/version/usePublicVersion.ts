@@ -13,10 +13,16 @@ const usePublicVersion = () => {
       repoId: number;
       documentId: number;
       versionId: number;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, versionId } = values;
-      const response = await publicVersionAction(repoId, documentId, versionId);
+      const { repoId, documentId, versionId, isDirectAccess } = values;
+      const response = await publicVersionAction(
+        repoId,
+        documentId,
+        versionId,
+        isDirectAccess
+      );
       handleClientSideHookError(response as IActionError);
       return response as IAddVersion;
     },

@@ -50,11 +50,11 @@ const TagEditDialog = ({ setOpen }: IProps) => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } else if (currentPath === "/admin/sharedDocuments" && getDocument) {
-      return getDocument!.repoId;
-    } else {
-      return getRepo!.id;
     }
+    if (currentPath === "/admin/sharedDocuments" && getDocument) {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const onSubmit = async (dataForm: IForm) => {

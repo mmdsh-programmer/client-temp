@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import {
@@ -22,7 +22,6 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
-import { ERoles } from "@interface/enums";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 
@@ -60,21 +59,47 @@ const useVersionMenuList = (
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setVersionData = useSetRecoilState(editorDataAtom);
   const currentPath = usePathname();
-  const repoId = useRef<number>(0);
 
   const { data: userInfo } = useGetUser();
 
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return true;
-    } else if (currentPath === "/admin/sharedDocuments") {
+    }
+    if (currentPath === "/admin/sharedDocuments") {
       return (
         getDocument?.accesses?.[0] === "admin" ||
         getDocument?.accesses?.[0] === "owner"
       );
-    } else if (getRepo) {
+    }
+    if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
     }
+  };
+
+  const viewerRole = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return true;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return (
+        getDocument?.accesses?.[0] === "viewer" ||
+        getDocument?.accesses?.[0] === "writer"
+      );
+    }
+    if (getRepo) {
+      return getRepo?.roleName === "viewer" || getRepo?.roleName === "writer";
+    }
+  };
+
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return getDocument!.repoId;
+    }
+    return getRepo!.id;
   };
 
   const defaultOptions = (otherOption: MenuItem[]) => {
@@ -82,9 +107,7 @@ const useVersionMenuList = (
       {
         text: "ایجاد نسخه جدید از نسخه",
         icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
-        disabled:
-          getRepo?.roleName === ERoles.viewer ||
-          getRepo?.roleName === ERoles.writer,
+        disabled: viewerRole(),
         onClick: () => {
           toggleModal("clone", true);
           if (version) {
@@ -96,9 +119,7 @@ const useVersionMenuList = (
         text: "ویرایش",
         icon: <EditIcon className="h-4 w-4" />,
         disabled:
-          getRepo?.roleName === ERoles.viewer ||
-          (getRepo?.roleName === ERoles.writer &&
-            version?.creator?.userName !== userInfo?.username),
+          viewerRole() && version?.creator?.userName !== userInfo?.username,
         onClick: () => {
           setVersion(version);
           setEditorMode("edit");
@@ -114,12 +135,12 @@ const useVersionMenuList = (
           if (version) {
             setVersion(version);
           }
-          if (getRepo && getDocument && version && compareVersion?.version) {
+          if (repoId() && getDocument && version && compareVersion?.version) {
             setCompareVersion({
               ...compareVersion,
               compare: {
                 data: version,
-                repoId: getRepo!.id,
+                repoId: repoId(),
                 document: getDocument,
               },
             });
@@ -128,7 +149,7 @@ const useVersionMenuList = (
             setCompareVersion({
               version: {
                 data: version,
-                repoId: getRepo!.id,
+                repoId: repoId(),
                 document: getDocument,
               },
               compare: null,
@@ -169,9 +190,7 @@ const useVersionMenuList = (
       {
         text: version?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه",
         icon: <DeleteIcon className="h-4 w-4" />,
-        disabled:
-          getRepo?.roleName === ERoles.viewer ||
-          getRepo?.roleName === ERoles.writer,
+        disabled: viewerRole(),
         onClick: () => {
           toggleModal("delete", true);
           if (version) {
@@ -190,7 +209,9 @@ const useVersionMenuList = (
             ? "تایید نسخه"
             : "ارسال درخواست تایید نسخه به مدیر";
         }
-        return adminOrOwnerRole() ? "عدم تایید نسخه" : "لغوارسال درخواست تایید نسخه";
+        return adminOrOwnerRole()
+          ? "عدم تایید نسخه"
+          : "لغوارسال درخواست تایید نسخه";
       })(),
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
