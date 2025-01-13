@@ -24,13 +24,15 @@ import { sortAtom } from "atom/sortParam";
 import useGetChildren from "@hooks/category/useGetChildren";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 
 interface IProps {
   catItem: ICategoryTreeItem | IDocumentTreeItem;
   move?: boolean;
+  enableAction?: boolean;
 }
 
-const TreeCatItem = ({ catItem, move }: IProps) => {
+const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const queryParams = useRecoilValue(categoryQueryParamsAtom);
   const getSortParams = useRecoilValue(sortAtom);
@@ -44,9 +46,9 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
 
   const { data: userInfo } = useGetUser();
   const repoId =
-  currentPath === "/admin/myDocuments"
-    ? userInfo!.repository.id
-    : getRepo!.id;
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const {
     data: categoryChildren,
@@ -61,7 +63,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
     queryParams.limit,
     undefined,
     move ? "category" : undefined,
-    move ? undefined : docTemplateFilter,
+    move || !!enableAction ? undefined : docTemplateFilter
   );
 
   const handleClick = () => {
@@ -81,7 +83,9 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
   return (
     <div>
       {catItem.type === "category" ? (
-        <div className={`flex flex-col items-start ${catItem.active ? "" : "bg-red-500"}`}>
+        <div
+          className={`flex flex-col items-start ${catItem.active ? "" : "bg-red-500"}`}
+        >
           <div className="flex">
             {move && (
               <Radio
@@ -117,6 +121,11 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
               >
                 {catItem.name}
               </Typography>
+              {enableAction ? (
+                <div className="mr-4">
+                  <CategoryMenu />
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="flex flex-col pr-6">
@@ -129,7 +138,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
                       (item: ICategoryMetadata | IDocumentMetadata) => {
                         if (item.type === "document") {
                           return !move ? (
-                            <TreeDocItem key={item.id} docItem={item} />
+                            <TreeDocItem key={item.id} docItem={item} enableAction />
                           ) : null;
                         }
                         return (
@@ -139,7 +148,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
                             move={move}
                           />
                         );
-                      },
+                      }
                     );
                   }
                   return (
@@ -163,7 +172,7 @@ const TreeCatItem = ({ catItem, move }: IProps) => {
           </div>
         </div>
       ) : (
-        <TreeDocItem key={catItem.id} docItem={catItem} />
+        <TreeDocItem key={catItem.id} docItem={catItem} enableAction />
       )}
     </div>
   );

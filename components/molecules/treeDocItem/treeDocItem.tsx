@@ -4,12 +4,14 @@ import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
 import { IDocumentTreeItem } from "atom/category";
 import { documentTemplateAtom } from "atom/document";
 import { useRecoilState } from "recoil";
+import DocumentMenu from "../documentMenu";
 
 interface IProps {
   docItem: IDocumentTreeItem;
+  enableAction?: boolean;
 }
 
-const TreeDocItem = ({ docItem }: IProps) => {
+const TreeDocItem = ({ docItem, enableAction }: IProps) => {
   const [getDocumentTemplate, setDocumentTemplate] =
     useRecoilState(documentTemplateAtom);
 
@@ -39,6 +41,11 @@ const TreeDocItem = ({ docItem }: IProps) => {
           <Typography className="text-primary lowercase mr-2" key={docItem.id}>
             {docItem.name}
           </Typography>
+          {enableAction ? (
+            <div className="mr-4">
+              <DocumentMenu />
+            </div>
+          ) : null}
         </Button>
       </div>
     </div>

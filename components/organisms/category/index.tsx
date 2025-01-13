@@ -10,6 +10,7 @@ import FilterMobileView from "../advancedFilterView/filterMobileView";
 import { activeTourAtom, ETourSection } from "@atom/tour";
 import { InfoIcon } from "@components/atoms/icons";
 import { useSetRecoilState } from "recoil";
+import CategoryListMode from "@components/molecules/categoryListMode";
 
 const CategoryList = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -30,7 +31,10 @@ const CategoryList = () => {
               <InfoIcon className="w-5 h-5 stroke-purple-normal" />
             </Button>
           </div>
-          <CategoryDocumentCreateMenu />
+          <div className="flex gap-2">
+            <CategoryDocumentCreateMenu />
+            <CategoryListMode />
+          </div>
           <div className="flex xs:!hidden">
             <FilterMobileView />
           </div>
