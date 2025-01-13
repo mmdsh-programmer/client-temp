@@ -16,7 +16,7 @@ const RepoFilter = ({ repoId }: { repoId?: number }) => {
   const [searchTitle, setSearchTitle] = useState("");
   const setMainFilter = useSetRecoilState(filterReportAtom);
 
-  const { data: getTags } = useGetTags(repoId!, 30, !!repoId);
+  const { data: getTags } = useGetTags(repoId!, undefined, 30, !!repoId);
   const tagOptions = getTags?.pages[0].list.map((tag) => {
     return {
       label: tag.name,

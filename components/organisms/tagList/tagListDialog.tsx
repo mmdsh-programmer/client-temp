@@ -29,7 +29,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
 
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
 
-  const { data: getTags, isLoading } = useGetTags(repoId, 20, true);
+  const { data: getTags, isLoading } = useGetTags(repoId, undefined, 20, true);
 
   const handleClose = () => {
     setOpen(false);

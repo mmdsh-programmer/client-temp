@@ -29,8 +29,12 @@ const CategoryFilter = () => {
       ? userInfo!.repository.id
       : getRepo!.id;
       
-  const { data: getTags } = useGetTags(repoId, 30, true);
-
+      const { data: getTags } = useGetTags(
+        repoId,
+        currentPath === "/admin/sharedDocuments" ? true : undefined,
+        30,
+        true
+      );
   const tagOptions =
     getTags?.pages[0].list.map((tag) => {
       return { label: tag.name, value: tag.id };
