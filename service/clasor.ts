@@ -63,7 +63,7 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
-import { getRedisClient } from "cacheHandler.develop.mjs";
+import { getRedisClient } from "cacheHandler.mjs";
 import { IGetUserAccesses } from "@interface/access.interface";
 
 const axiosClasorInstance = axios.create({

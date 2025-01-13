@@ -17,7 +17,7 @@ import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
 import crypto from "crypto";
-import { getRedisClient } from "cacheHandler.develop.mjs";
+import { getRedisClient } from "cacheHandler.mjs";
 import qs from "qs";
 
 const axiosSocialInstance = axios.create({
