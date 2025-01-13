@@ -22,6 +22,7 @@ const useEditDocument = () => {
       isHidden?: boolean;
       tagIds?: number[];
       currentParentId?: number | null;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
       const {
@@ -34,6 +35,7 @@ const useEditDocument = () => {
         isHidden,
         description,
         title,
+        isDirectAccess
       } = values;
       const response = await editDocumentAction(
         repoId,
@@ -45,6 +47,7 @@ const useEditDocument = () => {
         order,
         isHidden,
         tagIds,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response as IDocument;

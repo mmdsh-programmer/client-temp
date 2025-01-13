@@ -39,6 +39,8 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
         repoId: repoId(),
         documentId: selectedDocument.id,
         versionId: version.id,
+        isDirectAccess:
+          currentPath === "/admin/sharedDocuments" ? true : undefined,
         handleError: () => {
           setEditorData(null);
         },

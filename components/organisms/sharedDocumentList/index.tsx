@@ -32,7 +32,6 @@ const SharedDocumentList = () => {
     queryParams.limit,
     getFilterReport,
     "myAccessDocuments",
-    "clasor",
     true
   );
 

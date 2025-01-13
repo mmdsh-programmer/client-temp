@@ -5,14 +5,20 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 
-const useGetTags = (repoId: number, size: number, enabled?: boolean) => {
+const useGetTags = (
+  repoId: number,
+  isDirectAccess: boolean | undefined,
+  size: number,
+  enabled?: boolean
+) => {
   return useInfiniteQuery({
     queryKey: [`getTags-${repoId}`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getRepositoryTagAction(
         repoId,
+        isDirectAccess,
         (pageParam - 1) * size,
-        size,
+        size
       );
       handleClientSideHookError(response as IActionError);
       return response as IListResponse<ITag>;

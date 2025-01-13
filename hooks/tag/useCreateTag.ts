@@ -11,10 +11,11 @@ const useCreateTag = () => {
     mutationFn: async (values: {
       repoId: number;
       name: string;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { name, repoId } = values;
-      const response = await createTagAction(repoId, name);
+      const { name, repoId, isDirectAccess } = values;
+      const response = await createTagAction(repoId, name, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response;
     },

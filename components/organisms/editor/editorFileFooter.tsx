@@ -90,6 +90,8 @@ const EditorFileFooter = () => {
           documentId: selectedDocument.id,
           versionId: getEditorData.id,
           versionNumber: getEditorData.versionNumber,
+          isDirectAccess:
+          currentPath === "/admin/sharedDocuments" ? true : undefined,    
           callBack: () => {},
         });
       } else {

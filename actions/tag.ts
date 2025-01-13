@@ -12,6 +12,7 @@ import { normalizeError } from "@utils/normalizeActionError";
 
 export const getRepositoryTagAction = async (
   repoId: number,
+  isDirectAccess: boolean | undefined,
   offset: number,
   size: number
 ) => {
@@ -22,7 +23,8 @@ export const getRepositoryTagAction = async (
       userInfo.access_token,
       repoId,
       offset,
-      size
+      size,
+      isDirectAccess
     );
 
     return response;
@@ -31,11 +33,20 @@ export const getRepositoryTagAction = async (
   }
 };
 
-export const createTagAction = async (repoId: number, name: string) => {
+export const createTagAction = async (
+  repoId: number,
+  name: string,
+  isDirectAccess?: boolean
+) => {
   const userInfo = await getMe();
 
   try {
-    const response = await createTag(userInfo.access_token, repoId, name);
+    const response = await createTag(
+      userInfo.access_token,
+      repoId,
+      name,
+      isDirectAccess
+    );
 
     return response;
   } catch (error) {
@@ -46,12 +57,19 @@ export const createTagAction = async (repoId: number, name: string) => {
 export const editTagAction = async (
   repoId: number,
   tagId: number,
-  name: string
+  name: string,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
 
   try {
-    const response = await editTag(userInfo.access_token, repoId, tagId, name);
+    const response = await editTag(
+      userInfo.access_token,
+      repoId,
+      tagId,
+      name,
+      isDirectAccess
+    );
 
     return response;
   } catch (error) {
@@ -59,11 +77,20 @@ export const editTagAction = async (
   }
 };
 
-export const deleteTagAction = async (repoId: number, tagId: number) => {
+export const deleteTagAction = async (
+  repoId: number,
+  tagId: number,
+  isDirectAccess?: boolean
+) => {
   const userInfo = await getMe();
 
   try {
-    const response = await deleteTag(userInfo.access_token, repoId, tagId);
+    const response = await deleteTag(
+      userInfo.access_token,
+      repoId,
+      tagId,
+      isDirectAccess
+    );
 
     return response;
   } catch (error) {

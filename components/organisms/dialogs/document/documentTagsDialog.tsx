@@ -26,25 +26,30 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
   const { data: userInfo } = useGetUser();
   const editDocument = useEditDocument();
 
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments" && document) {
+      return document!.repoId;
+    }
+    return getRepo!.id;
+  };
+
   const handleClose = () => {
     setOpen(false);
     setTempDocTag([]);
   };
 
   const handleSubmit = async () => {
-    const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
-
-    if (!repoId || !document) return;
+    if (!repoId() || !document) return;
     if (!getTempDocTag) return;
     if (getTempDocTag.length > 10) {
       toast.error("بیش از ده آیتم نمی‌توانید به سند منصوب کنید.");
       return;
     }
     editDocument.mutate({
-      repoId,
+      repoId: repoId(),
       documentId: document.id,
       categoryId: document.categoryId,
       title: document.name,
@@ -52,6 +57,8 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
       tagIds: getTempDocTag.map((tag) => {
         return tag.id;
       }),
+      isDirectAccess:
+      currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },

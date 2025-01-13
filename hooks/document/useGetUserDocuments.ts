@@ -13,7 +13,6 @@ const useGetUserDocuments = (
   size: number,
   filters: IReportFilter | null,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string,
   enabled: boolean
 ) => {
   return useInfiniteQuery({
@@ -28,7 +27,6 @@ const useGetUserDocuments = (
         size,
         filters,
         reportType,
-        repoType,
       );
       handleClientSideHookError(response as IActionError);
       return response as IListResponse<ICategoryMetadata | IDocumentMetadata>;

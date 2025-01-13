@@ -147,6 +147,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
         versionId: getVersionData.id,
         versionNumber: getVersionData.versionNumber,
         versionState: getVersionData.state,
+        isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ? true : undefined,
         callBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
         },

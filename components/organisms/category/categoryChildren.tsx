@@ -25,7 +25,7 @@ const CategoryChildren = () => {
   const { data: userInfo } = useGetUser();
 
   const repoId =
-    currentPath === "/admin/myDocuments"
+    currentPath === "/admin/myDocuments" && !getRepo
       ? userInfo!.repository.id
       : getRepo!.id;
 
@@ -61,7 +61,6 @@ const CategoryChildren = () => {
     queryParams.limit,
     getFilterReport,
     null,
-    "clasor",
     !!getFilterReport && !getFilterChildren
   );
 

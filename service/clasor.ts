@@ -63,7 +63,7 @@ import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import qs from "qs";
-import { getRedisClient } from "cacheHandler.mjs";
+import { getRedisClient } from "cacheHandler.develop.mjs";
 import { IGetUserAccesses } from "@interface/access.interface";
 
 const axiosClasorInstance = axios.create({
@@ -1041,7 +1041,8 @@ export const getRepositoryTags = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1053,6 +1054,7 @@ export const getRepositoryTags = async (
       params: {
         offset,
         size,
+        isDirectAccess,
       },
     });
 
@@ -1065,7 +1067,8 @@ export const getRepositoryTags = async (
 export const createTag = async (
   accessToken: string,
   repoId: number,
-  name: string
+  name: string,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -1074,6 +1077,9 @@ export const createTag = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -1088,7 +1094,8 @@ export const editTag = async (
   accessToken: string,
   repoId: number,
   tagId: number,
-  name: string
+  name: string,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -1097,6 +1104,9 @@ export const editTag = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -1110,7 +1120,8 @@ export const editTag = async (
 export const deleteTag = async (
   accessToken: string,
   repoId: number,
-  idTag: number
+  idTag: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -1118,6 +1129,9 @@ export const deleteTag = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -1828,7 +1842,8 @@ export const editDocument = async (
   description?: string,
   order?: number | null,
   isHidden?: boolean,
-  tagIds?: number[]
+  tagIds?: number[],
+  isDirectAccess?: boolean
 ) => {
   const redisClient = await getRedisClient();
 
@@ -1847,6 +1862,9 @@ export const editDocument = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2962,7 +2980,8 @@ export const saveVersion = async (
   versionId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -2971,6 +2990,9 @@ export const saveVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2991,7 +3013,8 @@ export const saveFileVersion = async (
     hash: string;
     fileName: string;
     fileExtension: string;
-  }
+  },
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3001,6 +3024,9 @@ export const saveFileVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          isDirectAccess
+        }
       }
     );
 
@@ -3017,7 +3043,8 @@ export const freeDraftVersion = async (
   versionId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3026,6 +3053,9 @@ export const freeDraftVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -3040,7 +3070,8 @@ export const createBlockVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<
@@ -3051,6 +3082,9 @@ export const createBlockVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );

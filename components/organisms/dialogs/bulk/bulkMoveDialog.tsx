@@ -8,6 +8,8 @@ import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useMoveBulk from "@hooks/bulk/useMoveBulk";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -19,8 +21,15 @@ const BulkMoveDialog = ({ setOpen }: IProps) => {
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
+  const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
   const moveBulkHook = useMoveBulk();
+
+  const repoId =
+  currentPath === "/admin/myDocuments"
+    ? userInfo!.repository.id
+    : getRepo!.id;
 
   const { handleSubmit, clearErrors, reset } = useForm();
 
@@ -37,11 +46,11 @@ const BulkMoveDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !getBulkItems.length) return;
+    if (!repoId || !getBulkItems.length) return;
     moveBulkHook.mutate({
-      repoId: getRepo.id,
+      repoId,
       destCategory: getCategoryMoveDest ? getCategoryMoveDest.id : null,
-      currentParentId: getCategoryShow ?getCategoryShow.id : null,
+      currentParentId: getCategoryShow ? getCategoryShow.id : null,
       children: getBulkItems.map((item) => {
         return item.id;
       }),

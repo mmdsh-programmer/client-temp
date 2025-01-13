@@ -42,6 +42,8 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
     deleteTag.mutate({
       repoId: repoId(),
       tagId: getTag.id,
+      isDirectAccess:
+      currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.error("تگ حذف شد.");
         handleClose();

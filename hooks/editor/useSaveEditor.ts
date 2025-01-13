@@ -17,17 +17,26 @@ const useSaveEditor = () => {
       content: string;
       outline: string;
       versionState: string;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, versionId, versionNumber, content, outline } =
-        values;
+      const {
+        repoId,
+        documentId,
+        versionId,
+        isDirectAccess,
+        versionNumber,
+        content,
+        outline,
+      } = values;
       const response = await saveVersionAction(
         repoId,
         documentId,
         versionId,
         versionNumber,
         content,
-        outline
+        outline,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;
@@ -45,7 +54,7 @@ const useSaveEditor = () => {
           `document-${documentId}-version-${versionId}-state-${versionState}-innerDocument-false-innerOutline-false`,
         ],
       });
-      
+
       callBack?.();
     },
     onError: (error) => {

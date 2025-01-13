@@ -63,6 +63,8 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       repoId: repoId(),
       name: dataForm.name,
       tagId: getTag.id,
+      isDirectAccess:
+      currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.success("تگ با موفقیت به روز رسانی شد.");
         handleClose();

@@ -12,10 +12,11 @@ const useEditTag = () => {
       repoId: number;
       tagId: number;
       name: string;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { name, repoId, tagId } = values;
-      const response = await editTagAction(repoId, tagId, name);
+      const { name, repoId, tagId, isDirectAccess } = values;
+      const response = await editTagAction(repoId, tagId, name, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response;
     },
