@@ -11,10 +11,11 @@ const useDeleteTag = () => {
     mutationFn: async (values: {
       repoId: number;
       tagId: number;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, tagId } = values;
-      const response = await deleteTagAction(repoId, tagId);
+      const { repoId, tagId, isDirectAccess } = values;
+      const response = await deleteTagAction(repoId, tagId, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response;
     },

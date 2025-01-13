@@ -1,7 +1,4 @@
-import {
- useMutation,
- useQueryClient
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { freeDraftVersionAction } from "@actions/editor";
@@ -18,10 +15,17 @@ const useFreeDraft = () => {
       versionNumber: string;
       content: string;
       outline: string;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
       const {
-        repoId, documentId, versionId, versionNumber, content, outline
+        repoId,
+        documentId,
+        versionId,
+        versionNumber,
+        isDirectAccess,
+        content,
+        outline,
       } = values;
       const response = await freeDraftVersionAction(
         repoId,
@@ -29,16 +33,17 @@ const useFreeDraft = () => {
         versionId,
         versionNumber,
         content,
-        outline
+        outline,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const {
- callBack, repoId, documentId 
-} = values;
-      queryClient.invalidateQueries({queryKey: [`version-list-${repoId}-${documentId}`],});
+      const { callBack, repoId, documentId } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`version-list-${repoId}-${documentId}`],
+      });
 
       callBack?.();
     },

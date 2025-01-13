@@ -13,15 +13,17 @@ const useCreateBlock = () => {
       repoId: number;
       documentId: number;
       versionId: number;
+      isDirectAccess?: boolean;
       callBack?: (result: IBLockDocument) => void;
       handleError?: () => void;
     }) => {
-      const { repoId, documentId, versionId} =
+      const { repoId, documentId, versionId, isDirectAccess} =
         values;
       const response = await createBlockVersionAction(
         repoId,
         documentId,
         versionId,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;

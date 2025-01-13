@@ -137,7 +137,8 @@ export const editDocumentAction = async (
   description?: string,
   order?: number | null,
   isHidden?: boolean,
-  tagIds?: number[]
+  tagIds?: number[],
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -158,7 +159,8 @@ export const editDocumentAction = async (
       description,
       order,
       isHidden,
-      tagIds
+      tagIds,
+      isDirectAccess
     );
 
     return response;
@@ -199,9 +201,14 @@ export const getUserDocumentAction = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string,
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  const domainInfo = await getCustomPostByDomain(domain);
+
   try {
     const response = await getUserDocument(
       userInfo.access_token,
@@ -211,7 +218,7 @@ export const getUserDocumentAction = async (
       size,
       filters,
       reportType,
-      repoType,
+      domainInfo.type,
     );
 
     return response;

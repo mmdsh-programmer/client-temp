@@ -13,38 +13,40 @@ interface IProps {
 }
 
 const Start = ({ children }: IProps) => {
-  const {
- isLoading, isError, error, refetch,data
-} = useGetUser();
+  const { isLoading, isError, error, refetch, data } = useGetUser();
 
-    if (isError) {
-      console.log(error);
-      return (
-        <div>
-          <Error
-            error={error}
-            reset={() => {
-              refetch();
-            }}
-          />
-        </div>
-      );
-    }
-  
-    if (isLoading) {
-      return <div className="flex items-center justify-center h-screen"><SpinnerText text="در حال دریافت اطلاعات" /></div>;
-    }
-
-    if(!data){
-      return redirect("/signin");
-    }
-  
+  if (isError) {
+    console.log(error);
     return (
-      <>
-        <PanelUrl />
-        {children}
-      </>
-    ); 
+      <div>
+        <Error
+          error={error}
+          reset={() => {
+            refetch();
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <SpinnerText text="در حال دریافت اطلاعات" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return redirect("/signin");
+  }
+
+  return (
+    <>
+      <PanelUrl />
+      {children}
+    </>
+  );
 };
 
 export default Start;

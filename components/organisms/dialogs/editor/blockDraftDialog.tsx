@@ -72,6 +72,8 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         documentId: selectedDocument.id,
         versionId: editorData.id,
         versionNumber: editorData?.versionNumber,
+        isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ? true : undefined,  
         callBack: () => {
           setShowFreeDraftModal(false);
           stopWorker();
@@ -92,6 +94,8 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
       setShowFreeDraftModal(false);
       createBlockHook.mutate({
         ...data,
+        isDirectAccess:
+          currentPath === "/admin/sharedDocuments" ? true : undefined,
         callBack: () => {
           startWorker(timeout);
         },

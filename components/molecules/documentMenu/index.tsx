@@ -7,6 +7,7 @@ import { documentDrawerAtom, selectedDocumentAtom } from "@atom/document";
 import { InvisibleIcon, MoreDotIcon, StarIcon } from "@components/atoms/icons";
 import DocumentDialogs from "../documentDialogs";
 import useDocumentMenuList from "./useDocumentMenuList";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   document?: IDocumentMetadata;
@@ -14,8 +15,8 @@ interface IProps {
 }
 
 const DocumentMenu = ({ document, showDrawer }: IProps) => {
+  const currentPath = usePathname();
   const setDocument = useSetRecoilState(selectedDocumentAtom);
-
   const [openDocumentActionDrawer, setOpenDocumentActionDrawer] =
     useRecoilState(documentDrawerAtom);
 
@@ -34,7 +35,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
     deletePassword: false,
     documentAccessPublishing: false,
     documentVersionList: false,
-    documentDirectAccess: false
+    documentDirectAccess: false,
   });
 
   const toggleModal = (modalName: keyof typeof modals, value: boolean) => {
@@ -60,7 +61,8 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
           {document?.isHidden ? (
             <InvisibleIcon className="w-4 h-4 flex-none" />
           ) : null}
-          {document?.isBookmarked ? (
+          {currentPath !== "/admin/sharedDocuments" &&
+          document?.isBookmarked ? (
             <StarIcon className="w-4 h-4  fill-amber-600 stroke-amber-600" />
           ) : null}
           <MenuTemplate

@@ -50,6 +50,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   const { data: getTags, isLoading: isLoadingTags } = useGetTags(
     repoId(),
+    currentPath === "/admin/sharedDocuments" ? true : undefined,
     30,
     true
   );

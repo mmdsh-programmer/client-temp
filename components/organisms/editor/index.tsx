@@ -20,6 +20,7 @@ import { useRecoilValue } from "recoil";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
 import { usePathname } from "next/navigation";
+import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 
 interface IProps {
   getEditorConfig: () => {
@@ -144,6 +145,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="flex h-full relative bg-primary">
+      {currentPath === "/admin/sharedDocuments" ? (
+        <DocumentEnableUserGroup />
+      ) : null}
       {listDrawer && getEditorConfig().ref ? (
         <div className="w-full xs:w-[300px]">
           <EditorDrawer

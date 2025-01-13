@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
@@ -9,27 +9,27 @@ import { selectedDocumentAtom } from "@atom/document";
 
 const SidebarDocuments = () => {
   const router = useRouter();
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
+  const pathname = usePathname();
   const setRepo = useSetRecoilState(repoAtom);
+  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
   const setCategory = useSetRecoilState(categoryAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
 
-  const [isNavigating, setIsNavigating] = useState(false);
-  const currentPath = usePathname();
+  const resetAtoms = () => {
+    setRepo(null);
+    setRepoGroup(null);
+    setCategory(null);
+    setDocument(null);
+  };
 
   useEffect(() => {
     if (
-      isNavigating &&
-      (currentPath === "/admin/myDocuments" ||
-        currentPath === "admin/sharedDocuments")
+      pathname === "/admin/myDocuments" ||
+      pathname === "/admin/sharedDocuments"
     ) {
-      setRepo(null);
-      setCategory(null);
-      setRepoGroup(null);
-      setDocument(null);
-      setIsNavigating(false);
+      resetAtoms();
     }
-  }, [currentPath, isNavigating, setRepo]);
+  }, [pathname]);
 
   return (
     <List placeholder="sidebar-list" className="min-w-[200px] p-0 gap-1">
@@ -40,14 +40,12 @@ const SidebarDocuments = () => {
       >
         <Button
           placeholder="sidebar-button"
-          className={` bg-transparent justify-start w-full 
-                   text-secondary gap-1 px-3 h-[44px]
-                  active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
-                hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+          className={`bg-transparent justify-start w-full 
+            text-secondary gap-1 px-3 h-[44px]
+            active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
+            hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
-            if (isNavigating) return;
-            setIsNavigating(true);
-            router.push("/admin/myDocuments");
+            return router.push("/admin/myDocuments");
           }}
         >
           <DocumentIcon className="h-6 w-6 stroke-icon-hover" />
@@ -63,14 +61,12 @@ const SidebarDocuments = () => {
       >
         <Button
           placeholder="sidebar-button"
-          className={` bg-transparent justify-start w-full 
-                   text-secondary gap-1 px-3 h-[44px]
-                  active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
-                hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+          className={`bg-transparent justify-start w-full 
+            text-secondary gap-1 px-3 h-[44px]
+            active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
+            hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
-            if (isNavigating) return;
-            setIsNavigating(true);
-            router.push("/admin/sharedDocuments");
+            return router.push("/admin/sharedDocuments");
           }}
         >
           <DocumentIcon className="h-6 w-6 stroke-icon-hover" />

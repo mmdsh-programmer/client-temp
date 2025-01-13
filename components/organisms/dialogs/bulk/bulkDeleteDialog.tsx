@@ -8,17 +8,26 @@ import { useForm } from "react-hook-form";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import CategoryDeleteDialog from "../category/categoryDeleteDialog";
 import DocumentDeleteDialog from "../document/documentDeleteDialog";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BulkDeleteDialog = ({ setOpen }: IProps) => {
-  const bulkDeleteHook = useDeleteBulk();
-
   const getRepo = useRecoilValue(repoAtom);
   const getCategoryShow = useRecoilValue(categoryShowAtom);
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
+  const currentPath = usePathname();
+
+  const { data: userInfo } = useGetUser();
+  const bulkDeleteHook = useDeleteBulk();
+
+  const repoId =
+  currentPath === "/admin/myDocuments"
+    ? userInfo!.repository.id
+    : getRepo!.id;
 
   const { handleSubmit, clearErrors, reset } = useForm();
 
@@ -33,9 +42,9 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = () => {
-    if (!getRepo) return;
+    if (!repoId) return;
     bulkDeleteHook.mutate({
-      repoId: getRepo.id,
+      repoId,
       children: getBulkItems.map((item) => {
         return item.id;
       }),

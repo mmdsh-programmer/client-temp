@@ -16,7 +16,8 @@ export const saveVersionAction = async (
   versionId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -27,7 +28,8 @@ export const saveVersionAction = async (
       versionId,
       versionNumber,
       content,
-      outline
+      outline,
+      isDirectAccess
     );
 
     return response;
@@ -45,7 +47,8 @@ export const saveFileVersionAction = async (
     hash: string;
     fileName: string;
     fileExtension: string;
-  }
+  },
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -55,7 +58,8 @@ export const saveFileVersionAction = async (
       documentId,
       versionId,
       versionNumber,
-      fileHash
+      fileHash,
+      isDirectAccess
     );
 
     return response;
@@ -70,7 +74,8 @@ export const freeDraftVersionAction = async (
   versionId: number,
   versionNumber: string,
   content: string,
-  outline: string
+  outline: string,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -81,7 +86,8 @@ export const freeDraftVersionAction = async (
       versionId,
       versionNumber,
       content,
-      outline
+      outline,
+      isDirectAccess
     );
 
     return response;
@@ -93,7 +99,8 @@ export const freeDraftVersionAction = async (
 export const createBlockVersionAction = async (
   repoId: number,
   documentId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -101,7 +108,8 @@ export const createBlockVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     return response;

@@ -17,15 +17,24 @@ const useSaveFileEditor = () => {
         fileName: string;
         fileExtension: string;
       };
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, versionId, versionNumber, fileHash } = values;
+      const {
+        repoId,
+        documentId,
+        versionId,
+        isDirectAccess,
+        versionNumber,
+        fileHash,
+      } = values;
       const response = await saveFileVersionAction(
         repoId,
         documentId,
         versionId,
         versionNumber,
-        fileHash
+        fileHash,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;

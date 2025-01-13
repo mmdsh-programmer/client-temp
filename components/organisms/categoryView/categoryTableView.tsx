@@ -18,6 +18,13 @@ import { Spinner } from "@material-tailwind/react";
 import TableHead from "@components/molecules/tableHead";
 import { usePathname } from "next/navigation";
 
+interface ITableHead {
+  key: string;
+  value: string;
+  isSorted?: boolean;
+  className?: string;
+}
+
 const TableView = ({
   isLoading,
   getCategoryList,
@@ -31,7 +38,9 @@ const TableView = ({
 
   const listLength = getCategoryList?.pages[0].total;
   return (
-    <div className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" :"min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}>
+    <div
+      className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+    >
       <div className="flex items-center py-4 px-5 justify-between">
         <CategoryBreadCrumb />
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />
@@ -46,32 +55,40 @@ const TableView = ({
           <div className="w-full border-[0.5px] overflow-auto border-normal rounded-lg">
             <table className="w-full overflow-hidden min-w-max ">
               <TableHead
-                tableHead={[
-                  { key: "select", value: "انتخاب", className: "categoryBulk" },
-                  {
-                    key: "order",
-                    value: "اولویت",
-                    isSorted: true,
-                    className: "categoryOrder hidden xl:table-cell",
-                  },
-                  { key: "name", value: "نام دسته", isSorted: true },
-                  { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
-                  {
-                    key: "editDate",
-                    value: "تاریخ ویرایش",
-                    className: "hidden xl:table-cell",
-                  },
-                  {
-                    key: "creator",
-                    value: "نام سازنده",
-                    className: "hidden lg:table-cell",
-                  },
-                  {
-                    key: "action",
-                    value: "عملیات",
-                    className: "category-action ",
-                  },
-                ]}
+                tableHead={
+                  [
+                    currentPath !== "/admin/sharedDocuments"
+                      ? {
+                          key: "select",
+                          value: "انتخاب",
+                          className: "categoryBulk",
+                        }
+                      : null,
+                    {
+                      key: "order",
+                      value: "اولویت",
+                      isSorted: true,
+                      className: "categoryOrder hidden xl:table-cell",
+                    },
+                    { key: "name", value: "نام دسته", isSorted: true },
+                    { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
+                    {
+                      key: "editDate",
+                      value: "تاریخ ویرایش",
+                      className: "hidden xl:table-cell",
+                    },
+                    {
+                      key: "creator",
+                      value: "نام سازنده",
+                      className: "hidden lg:table-cell",
+                    },
+                    {
+                      key: "action",
+                      value: "عملیات",
+                      className: "category-action ",
+                    },
+                  ].filter(Boolean) as ITableHead[]
+                }
               />
               <tbody>
                 {getCategoryList?.pages.map((page) => {

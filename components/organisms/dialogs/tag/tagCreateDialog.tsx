@@ -61,6 +61,8 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
     createTag.mutate({
       repoId: repoId(),
       name: dataForm.name,
+      isDirectAccess:
+      currentPath === "/admin/sharedDocuments" ? true : undefined,
       callBack: () => {
         toast.success("تگ با موفقیت ایجاد شد.");
         handleClose();
