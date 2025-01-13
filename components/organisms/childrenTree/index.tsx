@@ -15,6 +15,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   move?: boolean;
+  enableAction?: boolean;
 }
 
 export const docTemplateFilter: IChildrenFilter = {
@@ -28,7 +29,7 @@ export const docTemplateFilter: IChildrenFilter = {
   bookmarked: false,
 };
 
-const ChildrenTree = ({ move }: IProps) => {
+const ChildrenTree = ({ move, enableAction }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const queryParams = useRecoilValue(categoryQueryParamsAtom);
   const getSortParams = useRecoilValue(sortAtom);
@@ -36,9 +37,9 @@ const ChildrenTree = ({ move }: IProps) => {
 
   const { data: userInfo } = useGetUser();
   const repoId =
-  currentPath === "/admin/myDocuments"
-    ? userInfo!.repository.id
-    : getRepo!.id;
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const {
     data: categoryChildren,
@@ -53,14 +54,14 @@ const ChildrenTree = ({ move }: IProps) => {
     queryParams.limit,
     undefined,
     move ? "category" : undefined,
-    move ? undefined : docTemplateFilter,
-    !!move
+    move || enableAction ? undefined : docTemplateFilter,
+    enableAction ? undefined : !!move
   );
 
   return (
     <div className="tree-wrapper !h-[400px] xs:!h-[300px] min-h-[300px]">
       <div className="h-full flex flex-col overflow-auto items-start">
-         {/* eslint-disable-next-line no-nested-ternary */}
+        {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="w-full justify-center items-center flex h-[50px]">
             <Spinner color="deep-purple" />
@@ -73,7 +74,7 @@ const ChildrenTree = ({ move }: IProps) => {
               }
               return (
                 <div className="tree-item-wrapper" key={item.id}>
-                  <TreeCatItem catItem={item} move={move} />
+                  <TreeCatItem catItem={item} move={move} enableAction />
                 </div>
               );
             });

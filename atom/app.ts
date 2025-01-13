@@ -7,3 +7,9 @@ export const listModeAtom = atom<EListMode>({
   default: EListMode.table,
   effects: [logEffect("listModeAtom")],
 });
+
+export const categoryListModeAtom = atom<"table" | "tree">({
+  key: "categoryListModeAtom",
+  default: "table",
+  effects: [logEffect("categoryListModeAtom")],
+});

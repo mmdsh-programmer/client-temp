@@ -12,8 +12,12 @@ import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { useRecoilValue } from "recoil";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { categoryListModeAtom } from "@atom/app";
+import RenderIf from "@components/atoms/renderIf";
+import ChildrenTree from "../childrenTree";
 
 const CategoryChildren = () => {
+  const getListMode = useRecoilValue(categoryListModeAtom);
   const getRepo = useRecoilValue(repoAtom);
   const getSortParams = useRecoilValue(sortAtom);
   const getCategoryShow = useRecoilValue(categoryShowAtom);
@@ -82,12 +86,22 @@ const CategoryChildren = () => {
   };
   return (
     <>
-      <div className="category-children hidden xs:block">
-        <TableView {...commonProps} />
-      </div>
-      <div className="block xs:hidden">
-        <MobileView {...commonProps} />
-      </div>
+      <RenderIf isTrue={getListMode === "table"}>
+        <>
+          <div className="category-children hidden xs:block">
+            <TableView {...commonProps} />
+          </div>
+          <div className="block xs:hidden">
+            <MobileView {...commonProps} />
+          </div>
+        </>
+      </RenderIf>
+      <RenderIf isTrue={getListMode === "tree"}>
+        <div className="bg-white">
+
+        <ChildrenTree enableAction />
+        </div>
+      </RenderIf>
     </>
   );
 };

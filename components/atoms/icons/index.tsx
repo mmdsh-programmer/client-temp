@@ -3396,6 +3396,25 @@ export const ThemeDarkIcon = (props: IProps) => {
   );
 };
 
+export const TreeIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      className={className}
+      version="1.1"
+      id="Capa_1"
+      viewBox="0 0 14.069 14.069"
+      xmlSpace="preserve"
+    >
+      <g>
+        <polygon points="14.069,5.304 14.069,0.16 8.926,0.16 8.926,2.533 5.143,4.861 5.143,4.064 0,4.064 0,9.208    5.143,9.208 5.143,8.26 8.926,11.069 8.926,13.91 14.069,13.91 14.069,8.766 8.926,8.766 8.926,9.939 5.143,7.128 5.143,5.927    8.926,3.599 8.926,5.304  " />
+      </g>
+    </svg>
+  );
+};
+
 export const UpdateIcon = (props: IProps) => {
   const { className } = props;
   return (
