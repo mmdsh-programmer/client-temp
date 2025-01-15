@@ -1,6 +1,6 @@
 import { IActionError } from "@interface/app.interface";
-import { getCustomPostById, updateCustomPostByEntityId } from "@service/social";
-import { handleRouteError, InputError } from "@utils/error";
+import { getCustomPostByDomain, updateCustomPost } from "@service/social";
+import { handleRouteError, InputError, NotFoundError } from "@utils/error";
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -18,7 +18,7 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
 
         const { id } = params;
         if(!id){
-            throw new InputError(["Id is required"]);
+            throw new InputError(["فیلد شناسه اجباری می باشد."]);
         }
 
         const { 
@@ -32,9 +32,12 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             enablePublishPage
         } = await request.json();
 
-        const response = await getCustomPostById(domain, +id);
+        const response = await getCustomPostByDomain(domain);
+        if(response.id !== +id){
+          throw new NotFoundError(["دامنه مورد نظر پیدا نشد."]);
+        }
         
-        await updateCustomPostByEntityId({  
+        await updateCustomPost({  
             domain: domain ?? response.domain, 
             clientId: clientId ?? response.clientId, 
             type: type ?? response.type, 

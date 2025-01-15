@@ -1,23 +1,20 @@
-// eslint-disable-next-line unicorn/filename-case
-
 import { CacheHandler } from "@neshca/cache-handler";
 import { createClient } from "redis";
 import createLruHandler from "@neshca/cache-handler/local-lru";
 import createRedisHandler from "@neshca/cache-handler/redis-stack";
 
 let client = null;
-export const getRedisClient = async () => {
+export const getClient = async () => {
   try {
     if (client && client.isReady) {
       return client;
     }
     console.log("Starting Redis connection");
     client = createClient({
-      url: "redis://172.19.26.114:6379",
+      url: `redis://${process.env.REDIS_NODE}`,
       socket: {
-        reconnectStrategy: (retries) => {
-          console.log("---------------------------- retries --------------------------", retries);
-          return 1000;
+        reconnectStrategy: () => {
+          return false;
         },
       },
     });
@@ -45,7 +42,7 @@ export const getRedisClient = async () => {
 };
 
 CacheHandler.onCreation(async () => {
-  const redisClient = await getRedisClient();
+  const redisClient = await getClient();
 
   /** @type {import("@neshca/cache-handler").Handler | null} */
   let handler;
@@ -54,7 +51,7 @@ CacheHandler.onCreation(async () => {
     // Create the `redis-stack` Handler if the client is available and connected.
     handler = await createRedisHandler({
       client: redisClient,
-      keyPrefix: "sample_prefix:", // Do not use a dynamic and unique prefix for each Next.js build because it will create unique cache data for each instance of Next.js, and the cache will not be shared.
+      keyPrefix: "cls:", // Do not use a dynamic and unique prefix for each Next.js build because it will create unique cache data for each instance of Next.js, and the cache will not be shared.
       timeoutMs: 1000,
     });
   } else {
