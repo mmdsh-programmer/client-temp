@@ -58,13 +58,13 @@ import axios, { AxiosError, isAxiosError } from "axios";
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
+import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
+import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import { getRedisClient } from "cacheHandler.mjs";
-import { IGetUserAccesses } from "@interface/access.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -144,9 +144,10 @@ export const userInfo = async (accessToken: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-    console.log(`cached data user:${accessToken}: ${cachedUser} `);
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    console.log({
+      type: "Redis cache data",
+      data: cachedUser
+    });
     return JSON.parse(cachedUser);
   }
 
