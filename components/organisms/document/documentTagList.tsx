@@ -6,7 +6,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
 import { XIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -21,6 +21,8 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const document = useRecoilValue(selectedDocumentAtom);
   const setTempDocTag = useSetRecoilState(tempDocTagAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
 
@@ -43,7 +45,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
       return document!.repoId;
     }
     return getRepo!.id;

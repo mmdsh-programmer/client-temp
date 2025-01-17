@@ -138,7 +138,7 @@ export const editDocumentAction = async (
   order?: number | null,
   isHidden?: boolean,
   tagIds?: number[],
-  isDirectAccess?: boolean,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -200,7 +200,7 @@ export const getUserDocumentAction = async (
   offset: number,
   size: number,
   filters: IReportFilter | null | undefined,
-  reportType: "myDocuments" | "myAccessDocuments" | null,
+  reportType: "myDocuments" | "myAccessDocuments" | null
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -218,7 +218,7 @@ export const getUserDocumentAction = async (
       size,
       filters,
       reportType,
-      domainInfo.type,
+      domainInfo.type
     );
 
     return response;
@@ -413,14 +413,16 @@ export const deleteDocumentPasswordAction = async (
 
 export const documentEnableUserGroupHashAction = async (
   repoId: number,
-  documentId: number
+  documentId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
     const response = await documentEnableUserGroupHash(
       userInfo.access_token,
       repoId,
-      documentId
+      documentId,
+      isDirectAccess
     );
 
     return response;

@@ -1,14 +1,24 @@
+"use client";
+
 import React, { Suspense } from "react";
 import EditPage from "@components/pages/edit";
 import CheckRepoInfo from "@components/templates/checkRepoInfo";
+import { useSearchParams } from "next/navigation";
 
 const Edit = () => {
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
+
   return (
     <Suspense>
       <div className="h-screen">
-        <CheckRepoInfo>
+        {sharedDocuments === "true" ? (
           <EditPage />
-        </CheckRepoInfo>
+        ) : (
+          <CheckRepoInfo>
+            <EditPage />
+          </CheckRepoInfo>
+        )}
       </div>
     </Suspense>
   );

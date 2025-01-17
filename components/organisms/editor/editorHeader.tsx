@@ -8,7 +8,7 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import { selectedVersionAtom } from "@atom/version";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
@@ -25,6 +25,9 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const editorMode = useRecoilValue(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const getRepoId = searchParams.get("repoId");
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const freeDraftHook = useFreeDraft();
@@ -35,6 +38,9 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
     }
     if (currentPath === "/admin/sharedDocuments") {
       return getSelectedDocument!.repoId;
+    }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
     }
     return getRepo!.id;
   };
@@ -54,6 +60,9 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
         versionNumber: "",
         content: "",
         outline: "",
+        isDirectAccess:
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments",
       });
     }
     setVersion(null);

@@ -24,6 +24,7 @@ import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { EDocumentTypes } from "@interface/enums";
 import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface ITableCell {
   data: string | React.ReactNode;
@@ -45,6 +46,8 @@ const DocumentTableRow = ({ document }: IProps) => {
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
   const getRepo = useRecoilValue(repoAtom);
   const selectedCat = useRecoilValue(categoryAtom);
+
+  const { data: userInfo } = useGetUser();
 
   const renderIcon = () => {
     switch (document.contentType) {
@@ -83,12 +86,17 @@ const DocumentTableRow = ({ document }: IProps) => {
     }
   };
 
+  const repoUserGroupHash =
+    currentPath === "/admin/myDocuments"
+      ? userInfo?.repository.userGroupHash
+      : getRepo?.userGroupHash;
+
   const handleRowClick = () => {
     const path = selectedCat
       ? `edit?repoId=${document.repoId}&categoryId=${
           selectedCat.id
         }&documentId=${document.id}&repoGroupHash=${
-          getRepo?.userGroupHash
+          repoUserGroupHash
         }&catGroupHash=${selectedCat.userGroupHash}&type=${
           document?.contentType
         }${
@@ -96,11 +104,9 @@ const DocumentTableRow = ({ document }: IProps) => {
         }`
       : `edit?repoId=${document.repoId}&documentId=${
           document.id
-        }&repoGroupHash=${getRepo?.userGroupHash}&type=${
-          document?.contentType
-        }${
+        }&repoGroupHash=${repoUserGroupHash}&type=${document?.contentType}${
           document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }`;
+        }${currentPath === "/admin/sharedDocuments" ? "&sharedDocuments=true" : ""}`;
 
     window.open(path, "_blank");
   };

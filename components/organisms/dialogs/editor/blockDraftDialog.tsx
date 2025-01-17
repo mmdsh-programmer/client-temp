@@ -8,7 +8,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import { useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 const timeout = 5 * 60; // seconds
@@ -27,6 +27,10 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);
   const workerRef = useRef<Worker>();
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+
+  const getRepoId = searchParams.get("repoId");
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();
@@ -38,6 +42,9 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
     }
     if (currentPath === "/admin/sharedDocuments") {
       return selectedDocument!.repoId;
+    }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
     }
     return repository!.id;
   };
@@ -73,7 +80,8 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         versionId: editorData.id,
         versionNumber: editorData?.versionNumber,
         isDirectAccess:
-        currentPath === "/admin/sharedDocuments" ? true : undefined,  
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments",
         callBack: () => {
           setShowFreeDraftModal(false);
           stopWorker();
@@ -95,7 +103,8 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
       createBlockHook.mutate({
         ...data,
         isDirectAccess:
-          currentPath === "/admin/sharedDocuments" ? true : undefined,
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments",
         callBack: () => {
           startWorker(timeout);
         },

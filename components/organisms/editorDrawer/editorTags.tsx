@@ -8,7 +8,7 @@ import useEditDocument from "@hooks/document/useEditDocument";
 import LoadingButton from "@components/molecules/loadingButton";
 import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 const EditorTags = () => {
@@ -19,18 +19,25 @@ const EditorTags = () => {
   const [tagName, setTagName] = useState<string | number>("");
 
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
-  
+
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return true;
-    } if (currentPath === "/admin/sharedDocuments") {
+    }
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true"
+    ) {
       return (
         document?.accesses?.[0] === "admin" ||
         document?.accesses?.[0] === "owner"
       );
-    } if (getRepo) {
+    }
+    if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
     }
   };
@@ -38,13 +45,16 @@ const EditorTags = () => {
   const repoId = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
-    } if (currentPath === "/admin/sharedDocuments") {
+    }
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true"
+    ) {
       return document!.repoId;
-    } 
-      return getRepo!.id;
-    
+    }
+    return getRepo!.id;
   };
-  
+
   const editDocument = useEditDocument();
 
   const handleSubmit = async () => {
@@ -63,6 +73,8 @@ const EditorTags = () => {
       tagIds: getTempDocTag.map((tag) => {
         return tag.id;
       }),
+      isDirectAccess:
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
         toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },
