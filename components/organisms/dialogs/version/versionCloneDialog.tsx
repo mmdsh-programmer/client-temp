@@ -47,6 +47,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     getVersion?.id,
     getVersion?.state,
     true,
+    true,
     currentPath === "/admin/sharedDocuments" ? true : undefined,
     true
   );

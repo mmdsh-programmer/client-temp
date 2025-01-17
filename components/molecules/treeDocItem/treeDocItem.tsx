@@ -30,7 +30,7 @@ const TreeDocItem = ({ docItem, enableAction }: IProps) => {
           onClick={handleDocClick}
         >
           <div className="flex">
-            {getDocumentTemplate?.id === docItem.id ? (
+            {!enableAction && getDocumentTemplate?.id === docItem.id ? (
               <TickIcon className="fill-purple-normal w-5 h-5 flex-none" />
             ) : null}
             <DocIcon className="fill-gray-300 w-5 h-5 flex-none" />
@@ -43,7 +43,7 @@ const TreeDocItem = ({ docItem, enableAction }: IProps) => {
           </Typography>
           {enableAction ? (
             <div className="mr-4">
-              <DocumentMenu />
+              <DocumentMenu document={docItem} />
             </div>
           ) : null}
         </Button>

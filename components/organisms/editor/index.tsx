@@ -19,7 +19,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 
 interface IProps {
@@ -36,6 +36,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   const timestampRef = useRef(Date.now());
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const getRepoId = searchParams.get("repoId");
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
   const selectedCategory = useRecoilValue(categoryAtom);
@@ -73,6 +76,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     if (currentPath === "/admin/sharedDocuments") {
       return selectedDocument!.repoId;
     }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
     return getRepo!.id;
   };
 
@@ -80,7 +86,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.userGroupHash;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true"
+    ) {
       return selectedDocument!.userGroupHash;
     }
     return getRepo!.userGroupHash;
@@ -145,7 +154,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="flex h-full relative bg-primary">
-      {currentPath === "/admin/sharedDocuments" ? (
+      {currentPath === "/admin/sharedDocuments" || sharedDocuments === "true" ? (
         <DocumentEnableUserGroup />
       ) : null}
       {listDrawer && getEditorConfig().ref ? (

@@ -22,7 +22,7 @@ import { translateVersionStatus } from "@utils/index";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
 import EditorFileFooter from "./editorFileFooter";
 import useGetUser from "@hooks/auth/useGetUser";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -42,6 +42,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const autoSaveRef = useRef<Worker>();
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const getRepoId = searchParams.get("repoId");
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const timeout = 5 * 60; // seconds
 
@@ -55,14 +58,17 @@ const EditorFooter = ({ editorRef }: IProps) => {
     if (currentPath === "/admin/sharedDocuments") {
       return selectedDocument!.repoId;
     }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
     return getRepo!.id;
   };
 
   const writerRole = () => {
     if (currentPath === "/admin/myDocuments") {
-      return true;
+      return false;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
       return (
         selectedDocument?.accesses?.[0] === "writer" ||
         selectedDocument?.accesses?.[0] === "viewer"
@@ -148,7 +154,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         versionNumber: getVersionData.versionNumber,
         versionState: getVersionData.state,
         isDirectAccess:
-        currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
         callBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
         },
@@ -161,7 +167,6 @@ const EditorFooter = ({ editorRef }: IProps) => {
       autoSaveRef.current = new Worker(
         new URL("../../../hooks/worker/autoSave.worker.ts", import.meta.url)
       );
-
       autoSaveRef.current?.postMessage({ action: "START", time });
       if (autoSaveRef.current) {
         autoSaveRef.current.onmessage = (event) => {

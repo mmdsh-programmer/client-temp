@@ -12,7 +12,6 @@ import {
 } from "atom/category";
 import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
@@ -98,15 +97,13 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                 checked={getCategoryMoveDest?.id === catItem.id}
               />
             )}
-            <div
-              className="flex items-center p-2 bg-transparent "
-              onClick={handleClick}
-            >
+            <div className="flex items-center p-2 bg-transparent ">
               <div className="flex items-center">
                 <div
                   className={`flex items-center justify-center cursor-pointer h-6 w-6 ${
                     isOpen ? "-rotate-90" : ""
                   }`}
+                  onClick={handleClick}
                 >
                   <ChevronLeftIcon className="h-3 w-3 stroke-icon-hover" />
                 </div>
@@ -123,7 +120,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
               </Typography>
               {enableAction ? (
                 <div className="mr-4">
-                  <CategoryMenu />
+                  <CategoryMenu category={catItem} />
                 </div>
               ) : null}
             </div>
@@ -138,7 +135,11 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                       (item: ICategoryMetadata | IDocumentMetadata) => {
                         if (item.type === "document") {
                           return !move ? (
-                            <TreeDocItem key={item.id} docItem={item} enableAction />
+                            <TreeDocItem
+                              key={item.id}
+                              docItem={item}
+                              enableAction
+                            />
                           ) : null;
                         }
                         return (
@@ -146,6 +147,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                             catItem={item}
                             key={item.id}
                             move={move}
+                            enableAction
                           />
                         );
                       }

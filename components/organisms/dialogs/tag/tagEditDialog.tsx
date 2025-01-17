@@ -8,7 +8,7 @@ import EditDialog from "@components/templates/dialog/editDialog";
 import { selectedTagAtom } from "@atom/tag";
 import { Typography } from "@material-tailwind/react";
 import FormInput from "@components/atoms/input/formInput";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 import { selectedDocumentAtom } from "@atom/document";
 
@@ -25,6 +25,8 @@ const TagEditDialog = ({ setOpen }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const { isPending, mutate } = useEditTag();
@@ -51,7 +53,11 @@ const TagEditDialog = ({ setOpen }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments" && getDocument) {
+    if (
+      (currentPath === "/admin/sharedDocuments" ||
+        sharedDocuments === "true") &&
+      getDocument
+    ) {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -64,7 +70,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       name: dataForm.name,
       tagId: getTag.id,
       isDirectAccess:
-      currentPath === "/admin/sharedDocuments" ? true : undefined,
+        currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
       callBack: () => {
         toast.success("تگ با موفقیت به روز رسانی شد.");
         handleClose();

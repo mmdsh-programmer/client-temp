@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
@@ -9,27 +9,33 @@ import { selectedDocumentAtom } from "@atom/document";
 
 const SidebarDocuments = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  const currentPath = usePathname();
   const setRepo = useSetRecoilState(repoAtom);
   const setRepoGroup = useSetRecoilState(repoGroupingAtom);
   const setCategory = useSetRecoilState(categoryAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const [isNavigating, setIsNavigating] = useState(false);
 
-  const resetAtoms = () => {
-    setRepo(null);
-    setRepoGroup(null);
-    setCategory(null);
-    setDocument(null);
+  const handleNavigation = async (path: string) => {
+    if (isNavigating) return;
+
+    setIsNavigating(true);
+    router.push(path);
   };
-
+  
   useEffect(() => {
     if (
-      pathname === "/admin/myDocuments" ||
-      pathname === "/admin/sharedDocuments"
+      isNavigating &&
+      (currentPath === "/admin/myDocuments" ||
+        currentPath === "/admin/sharedDocuments")
     ) {
-      resetAtoms();
+      setRepo(null);
+      setRepoGroup(null);
+      setCategory(null);
+      setDocument(null);
+      setIsNavigating(false);
     }
-  }, [pathname]);
+  }, [currentPath, isNavigating, setRepo]);
 
   return (
     <List placeholder="sidebar-list" className="min-w-[200px] p-0 gap-1">
@@ -45,7 +51,7 @@ const SidebarDocuments = () => {
             active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
             hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
-            return router.push("/admin/myDocuments");
+            return handleNavigation("/admin/myDocuments");
           }}
         >
           <DocumentIcon className="h-6 w-6 stroke-icon-hover" />
@@ -66,7 +72,7 @@ const SidebarDocuments = () => {
             active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
             hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
-            return router.push("/admin/sharedDocuments");
+            return handleNavigation("/admin/sharedDocuments");
           }}
         >
           <DocumentIcon className="h-6 w-6 stroke-icon-hover" />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
 import { EEmptyList } from "@components/molecules/emptyList";
@@ -28,10 +28,12 @@ const CategoryChildren = () => {
 
   const { data: userInfo } = useGetUser();
 
-  const repoId =
-    currentPath === "/admin/myDocuments" && !getRepo
-      ? userInfo!.repository.id
-      : getRepo!.id;
+  const repoId = useMemo(() => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo?.repository?.id;
+    }
+    return getRepo?.id;
+  }, [currentPath, userInfo, getRepo]);
 
   const {
     data: childrenData,
@@ -41,7 +43,7 @@ const CategoryChildren = () => {
     isLoading: childrenIsLoading,
     isFetching: childrenIsFetching,
   } = useGetCategoryChildren(
-    repoId,
+    repoId ?? 0,
     getCategoryShow?.id,
     getSortParams,
     queryParams.limit,
@@ -49,7 +51,7 @@ const CategoryChildren = () => {
     undefined,
     getFilterChildren,
     false,
-    !getFilterReport
+    !!repoId && !getFilterReport
   );
 
   const {
@@ -65,7 +67,7 @@ const CategoryChildren = () => {
     queryParams.limit,
     getFilterReport,
     null,
-    !!getFilterReport && !getFilterChildren
+    !!repoId && !!getFilterReport && !getFilterChildren
   );
 
   const commonProps: ICategoryView = {
