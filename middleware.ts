@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { generateKey, toEnglishDigit } from "./utils";
-// import { getCustomPostByDomain } from "@service/social";
+
 import { headers } from "next/headers";
+
+// import { getCustomPostByDomain } from "@service/social";
+
 
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
 
@@ -66,6 +68,9 @@ function convertDocsUrlToPublishUrl(url: string): string | null {
 }
 
 export async function middleware(request: NextRequest) {
+  const headersList = await headers();
+  const domain = headersList.get("host");
+ try {
   // Check the origin from the request
   const origin = request.headers.get("origin") ?? "";
   const isAllowedOrigin = allowedOrigins.includes(origin);
@@ -100,8 +105,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  const headersList = await headers();
-  const domain = headersList.get("host");
+
   if (domain) {
     const isInPages = pages.find((page) => {
       return url.pathname.startsWith(page);
@@ -123,6 +127,10 @@ export async function middleware(request: NextRequest) {
     }
   }
   return response;
+ } catch (error) {
+  console.log(error);
+  return NextResponse.next();
+ }
 }
 
 export const config = {

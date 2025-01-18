@@ -20,7 +20,6 @@ export async function GET(request: NextRequest) {
         const domain = searchParams.get("domain");
         const size = searchParams.get("size");
         const offset = searchParams.get("offset");
-
         const metaQuery: IMetaQuery = {
             field: "CUSTOM_POST_TYPE",
             is: "DOMAIN_BUSINESS"
@@ -31,9 +30,7 @@ export async function GET(request: NextRequest) {
                 is: domain
             }];
         }
-
-        const result = await getCustomPost(domain, metaQuery, size ?? "10", offset ?? "0");
-
+        const result = await getCustomPost(metaQuery, size ?? "10", offset ?? "0");
         return NextResponse.json({ result });
     } catch (error) {
         return handleRouteError(error as IActionError);

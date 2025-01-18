@@ -103,16 +103,16 @@ export const getMe = async () => {
   } catch (error: unknown) {
     if ((error as IActionError)?.errorCode === 401) {
       try {
-        console.log(
-          "----------------------- getMe error ---------------------",
-          error
-        );
         return refreshCookieHeader(
           tokenInfo.refresh_token,
           clientId,
           clientSecret
         );
       } catch (refreshTokenError) {
+        console.log({
+          type: "Refresh Cookie Header",
+          error: JSON.stringify(refreshTokenError),
+        });
         return handleActionError(refreshTokenError as IActionError);
       }
     }

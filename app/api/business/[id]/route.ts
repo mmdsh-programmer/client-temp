@@ -1,5 +1,5 @@
 import { IActionError } from "@interface/app.interface";
-import { getCustomPostByDomain, updateCustomPost } from "@service/social";
+import { getCustomPostById, updateCustomPost } from "@service/social";
 import { handleRouteError, InputError, NotFoundError } from "@utils/error";
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
@@ -32,7 +32,7 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             enablePublishPage
         } = await request.json();
 
-        const response = await getCustomPostByDomain(domain);
+        const response = await getCustomPostById(+id);
         if(response.id !== +id){
           throw new NotFoundError(["دامنه مورد نظر پیدا نشد."]);
         }
@@ -45,8 +45,8 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             cryptoSecretKey: cryptoSecretKey ?? response.cryptoSecretKey,
             cryptoInitVectorKey: cryptoInitVectorKey ?? response.cryptoInitVectorKey,
             enablePublishPage: enablePublishPage ?? response.enablePublishPage,
-        }, +response.entityId, content ?? response.data);
-
+        }, +response.entityId, content ? JSON.stringify(content) : response.data);
+       
         return NextResponse.json({});
     } catch (error) {
         return handleRouteError(error as IActionError);

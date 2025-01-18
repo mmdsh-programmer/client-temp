@@ -3,10 +3,10 @@
 import React, { ReactNode } from "react";
 
 import Error from "@app/error";
+import PanelUrl from "../panelUrl";
 import SpinnerText from "@components/molecules/spinnerText";
 import { redirect } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
-import PanelUrl from "../panelUrl";
 
 interface IProps {
   children: ReactNode;
@@ -16,7 +16,10 @@ const Start = ({ children }: IProps) => {
   const { isLoading, isError, error, refetch, data } = useGetUser();
 
   if (isError) {
-    console.log(error);
+    console.log({
+      type: "error",
+      error: JSON.stringify(error),
+    });
     return (
       <div>
         <Error
