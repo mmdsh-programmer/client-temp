@@ -1,7 +1,8 @@
-import Error from "@components/organisms/error";
+import { IThemeInfo } from "@interface/app.interface";
 import React from "react";
+import { decodeKey } from "@utils/index";
+import { getCustomPostByDomain } from "@service/social";
 import localFont from "next/font/local";
-import { themeLoaderAction } from "@actions/themeLoader";
 
 interface IProps {
   children: React.ReactNode;
@@ -32,24 +33,14 @@ const iranYekanFont = localFont({
 });
 
 const ThemeLoader = async ({ children, domain }: IProps) => {
-  const data = await themeLoaderAction(domain);
-  if (data && "error" in data) {
-    return (
-      <body
-        className={`${iranYekanFont.variable} !font-iranYekan h-full w-full`}
-      >
-        <div className="w-full h-full flex justify-center items-center">
-          <Error
-            error={{ message: data.errorList?.[0] ?? "خطا در دریافت اطلاعات" }}
-          />
-        </div>
-      </body>
-    );
-  }
+  const domainHash = decodeKey(domain);
+  const { data } = await getCustomPostByDomain(domainHash);
+  const { theme } = JSON.parse(data ?? "{}");
+
   return (
     <body
       className={`${iranYekanFont.variable} !font-iranYekan h-full w-full`}
-      style={data}
+      style={theme as IThemeInfo}
     >
       {children}
     </body>

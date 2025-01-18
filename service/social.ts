@@ -1,6 +1,7 @@
 import {
   AuthorizationError,
   InputError,
+  NotFoundError,
   ServerError,
 } from "@utils/error";
 import {
@@ -51,7 +52,6 @@ axiosSocialInstance.interceptors.response.use((response) => {
   });
 
   console.log(log);
-  // Logger.info(log);
   return response;
 });
 
@@ -95,22 +95,10 @@ export const createCustomPost = async (metadata: string, domain: string) => {
 };
 
 export const getCustomPost = async (
-  domain: string | null,
   metaQuery: IMetaQuery,
   size: string,
   offset: string
 ) : Promise<ISocialResponse<ICustomPostResult[]>> => {
-  const redisClient = await getRedisClient();
-  const cacheKey = `domain-${domain}`;
-
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient.get(cacheKey);
-
-    if (cachedData) {
-      return JSON.parse(cachedData);
-    }
-  }
-
   const response = await axiosSocialInstance.get(
     "/biz/searchTimelineByMetadata",
     {
@@ -126,8 +114,7 @@ export const getCustomPost = async (
     return handleSocialStatusError(response.data);
   }
 
-  await redisClient?.set(cacheKey, JSON.stringify(response.data));
-  return response.data ;
+  return response.data;
 };
 
 export const getCustomPostByDomain = async (
@@ -149,7 +136,7 @@ export const getCustomPostByDomain = async (
   const offset = "0";
 
  
-  const response = await getCustomPost(domain, metaQuery, size, offset);
+  const response = await getCustomPost(metaQuery, size, offset);
   const { item } = response.result[0];
   const domainInfo = {
     ...JSON.parse(item.metadata),
@@ -157,6 +144,58 @@ export const getCustomPostByDomain = async (
     data: item.data ?? "0",
   };
   return domainInfo;
+};
+
+export const getCustomPostById = async (
+  id: number
+): Promise<IDomainMetadata> => {
+  const redisClient = await getRedisClient();
+  const cacheKey = `domain-id-${id}`;
+
+  if (redisClient && redisClient.isReady) {
+    const cachedData = await redisClient?.get(cacheKey);
+    if (cachedData) {
+      return JSON.parse(cachedData);
+    }
+  }
+
+  const metaQuery: IMetaQuery = {
+    field: "CUSTOM_POST_TYPE",
+    is: "DOMAIN_BUSINESS",
+  };
+
+  const response = await axiosSocialInstance.get(
+    "/biz/searchTimelineByMetadata",
+    {
+      params: {
+        metaQuery: JSON.stringify(metaQuery),
+        postIds: id,
+      },
+    }
+  );
+
+  if (response.data.hasError) {
+    return handleSocialStatusError(response.data);
+  }
+
+  if (!response.data.result.length) {
+    throw new NotFoundError(["Post not found"]);
+  }
+  const customPost = response.data.result[0]?.item;
+  const { metadata } = customPost;
+
+  const customPostData = {
+    ...JSON.parse(metadata),
+    id: customPost.id,
+    entityId: customPost.entityId,
+    data: customPost.data ?? "0",
+  };
+
+  if (redisClient && redisClient.isReady) {
+    await redisClient?.set(cacheKey, JSON.stringify(customPostData));
+  }
+
+  return customPostData;
 };
 
 export const updateCustomPost = async (

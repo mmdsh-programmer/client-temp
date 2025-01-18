@@ -248,19 +248,35 @@ export const fileSize = (size: number) => {
 };
 
 export const generateKey = (domain: string) => {
-  return domain
+  try {
+    return domain
     .split("")
     .map((char) => {
       return char.charCodeAt(0);
     })
     .join("_");
+  } catch (error) {
+    console.log({
+      type: "generateKey",
+      error: JSON.stringify(error),
+    });
+    return "";
+  }
 };
 
 export const decodeKey = (domainKey: string) => {
-  return domainKey
+  try {
+    return domainKey
     .split("_") // Split the encoded string by "_"
     .map((charCode) => {
       return String.fromCharCode(Number(charCode));
     }) // Convert each code back to a character
     .join(""); // Join characters to form the original domain
+  } catch (error) {
+    console.log({
+      type: "decodeKey",
+      error: JSON.stringify(error),
+    });
+    return "";
+  }
 };
