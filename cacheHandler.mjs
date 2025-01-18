@@ -7,28 +7,22 @@ import { createCluster } from "redis";
 import createClusterHandler from "@neshca/cache-handler/experimental-redis-cluster";
 
 let cluster;
-export const getRedisClient = async () => {
+export const getClient = async () => {
 
   if(cluster && cluster["isReady"]){
        return cluster;
   }
+
+  const rootNodes = process.env.REDIS_PORT.split(",").map((item) => {return { url: `redis://${process.env.REDIS_NODE}:${item}` };});
   cluster = createCluster({
-    rootNodes: [
-      { url: "redis://10.248.34.142:6379" },
-      { url: "redis://10.248.34.142:6380" },
-      { url: "redis://10.248.34.142:6381" },
-      { url: "redis://10.248.34.142:6382" },
-      { url: "redis://10.248.34.142:6383" },
-      { url: "redis://10.248.34.142:6384" },
-    ],
+    rootNodes,
     defaults: {
-      username: "clasorclient",
-      password: "YYhi16j",
+      username: process.env.REDIS_USER,
+      password: process.env.REDIS_PASS,
       socket: {
-        reconnectStrategy: (retries) => {
+        reconnectStrategy: () => {
           cluster["isReady"] = false;
-          console.log("Retry redis connection", retries);
-          return 1000;
+          return false;
         },
       },
     },
@@ -78,7 +72,7 @@ CacheHandler.onCreation(async () => {
   if (PHASE_PRODUCTION_BUILD !== process.env.NEXT_PHASE) {
     try {
       // Create a Redis cluster.
-      cluster  = await getRedisClient();
+      cluster  = await getClient();
     } catch (error) {
       console.warn("Failed to create Redis cluster:", error);
     }

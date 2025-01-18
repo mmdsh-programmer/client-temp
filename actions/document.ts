@@ -1,5 +1,6 @@
 "use server";
 
+import { IActionError, IReportFilter } from "@interface/app.interface";
 import {
   addToDocumentBlackList,
   addToDocumentWhiteList,
@@ -19,13 +20,13 @@ import {
   getUserDocument,
   updateDocumentPassword,
 } from "@service/clasor";
-import { getMe } from "./auth";
+
 import { EDocumentTypes } from "@interface/enums";
 import { ISortProps } from "@atom/sortParam";
-import { IActionError, IReportFilter } from "@interface/app.interface";
-import { normalizeError } from "@utils/normalizeActionError";
-import { headers } from "next/dist/client/components/headers";
 import { getCustomPostByDomain } from "@service/social";
+import { getMe } from "./auth";
+import { headers } from "next/dist/client/components/headers";
+import { normalizeError } from "@utils/normalizeActionError";
 
 export const getClasorFieldAction = async () => {
   const userInfo = await getMe();
@@ -145,11 +146,9 @@ export const editDocumentAction = async (
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const domainInfo = await getCustomPostByDomain(domain);
 
   try {
     const response = await editDocument(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -178,11 +177,8 @@ export const deleteDocumentAction = async (
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await deleteDocument(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId
