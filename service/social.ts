@@ -4,7 +4,8 @@ import {
   ServerError,
 } from "@utils/error";
 import {
-  ICustomPostMetadata,
+  ICustomPostResult,
+  IDomainMetadata,
   IMetaQuery,
   IPostInfo,
   ISocialError,
@@ -98,7 +99,7 @@ export const getCustomPost = async (
   metaQuery: IMetaQuery,
   size: string,
   offset: string
-) => {
+) : Promise<ISocialResponse<ICustomPostResult[]>> => {
   const redisClient = await getRedisClient();
   const cacheKey = `domain-${domain}`;
 
@@ -126,12 +127,12 @@ export const getCustomPost = async (
   }
 
   await redisClient?.set(cacheKey, JSON.stringify(response.data));
-  return response.data;
+  return response.data ;
 };
 
 export const getCustomPostByDomain = async (
   domain: string
-): Promise<ICustomPostMetadata> => {
+): Promise<IDomainMetadata> => {
 
 
   const metaQuery: IMetaQuery = {
@@ -148,12 +149,12 @@ export const getCustomPostByDomain = async (
   const offset = "0";
 
  
-  const customPost = await getCustomPost(domain, metaQuery, size, offset);
-  const { metadata } = customPost;
+  const response = await getCustomPost(domain, metaQuery, size, offset);
+  const { item } = response.result[0];
   const domainInfo = {
-    ...JSON.parse(metadata),
-    id: customPost.entityId,
-    data: customPost.data ?? "0",
+    ...JSON.parse(item.metadata),
+    id: item.entityId,
+    data: item.data ?? "0",
   };
   return domainInfo;
 };
