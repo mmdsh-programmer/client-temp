@@ -147,6 +147,11 @@ export const handleClientSideHookError = (errorObject?: IActionError) => {
 };
 
 export const handleRouteError = (error: IActionError) => {
+  // TODO: ADD LOGGER
+  console.log({
+    type: "ROUTE_ERROR",
+    error: JSON.stringify(error),
+  });
   const message = error.errorList?.[0] ?? "خطای ناشناخته ای رخ داده است";
   return NextResponse.json({ message }, { status: error.errorCode ?? 500 });
 };
