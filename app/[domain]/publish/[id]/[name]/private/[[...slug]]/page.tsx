@@ -13,7 +13,6 @@ import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
 import RepositoryInfo from "@components/organisms/repositoryInfo";
-import { getCustomPostByDomain } from "@service/social";
 import { getDocumentPasswordAction } from "@actions/cookies";
 import { headers } from "next/dist/client/components/headers";
 import { notFound } from "next/navigation";
@@ -27,7 +26,6 @@ type PageParams = {
 };
 
 async function fetchDocumentVersion(
-  repoType: string,
   repositoryId: number,
   documentId: number,
   versionId: number | undefined,
@@ -36,7 +34,6 @@ async function fetchDocumentVersion(
 ) {
   if (versionId) {
     return getPublishDocumentVersion(
-      repoType,
       repositoryId,
       documentId,
       versionId,
@@ -46,7 +43,6 @@ async function fetchDocumentVersion(
   }
 
   const lastVersion = await getPublishDocumentLastVersion(
-    repoType,
     repositoryId,
     documentId,
     documentPassword,
@@ -58,7 +54,6 @@ async function fetchDocumentVersion(
   }
 
   return getPublishDocumentVersion(
-    repoType,
     repositoryId,
     documentId,
     lastVersion.id,
@@ -85,16 +80,11 @@ export default async function PublishContentPage({
       throw new Error("Domain is not found");
     }
 
-    const domainInfo = await getCustomPostByDomain(domain);
-
     if (Number.isNaN(parsedRepoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getPublishRepositoryInfo(
-      domainInfo.type,
-      parsedRepoId
-    );
+    const repository = await getPublishRepositoryInfo(parsedRepoId);
 
     if (!slug?.length) {
       return <RepositoryInfo repository={repository} />;
@@ -115,7 +105,6 @@ export default async function PublishContentPage({
     }
 
     const documentInfo = await getPublishDocumentInfo(
-      domainInfo.type,
       parsedRepoId,
       documentId,
       true
@@ -154,7 +143,6 @@ export default async function PublishContentPage({
 
     try {
       const version = await fetchDocumentVersion(
-        domainInfo.type,
         repository.id,
         documentId,
         hasVersion ? versionId : undefined,

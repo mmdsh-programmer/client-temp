@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
-import { handleClientSideHookError } from "@utils/error";
 import { acceptVersionAction } from "@actions/releaseDocs";
+import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useAcceptVersion = () => {
   const queryClient = useQueryClient();
@@ -10,12 +11,11 @@ const useAcceptVersion = () => {
     mutationKey: ["acceptVersion"],
     mutationFn: async (values: {
       repoId: number;
-      docId: number;
       versionId: number;
       callBack?: () => void;
     }) => {
-      const { repoId, versionId, docId } = values;
-      const response = await acceptVersionAction(repoId,docId, versionId);
+      const { repoId, versionId } = values;
+      const response = await acceptVersionAction(repoId, versionId);
       handleClientSideHookError(response as IActionError);
       return response;
     },

@@ -1,6 +1,12 @@
 "use server";
 
 import {
+  confirmComment,
+  createComment,
+  getCustomPostByDomain,
+  getPublishCommentList,
+} from "@service/social";
+import {
   createRepoPublishLink,
   deletePublishLink,
   getAllPublishChildren,
@@ -9,15 +15,10 @@ import {
   searchPublishContent,
 } from "@service/clasor";
 import { getMe, userInfoAction } from "./auth";
-import { normalizeError } from "@utils/normalizeActionError";
+
 import { IActionError } from "@interface/app.interface";
-import {
-  confirmComment,
-  createComment,
-  getCustomPostByDomain,
-  getPublishCommentList,
-} from "@service/social";
 import { headers } from "next/dist/client/components/headers";
+import { normalizeError } from "@utils/normalizeActionError";
 
 const { API_TOKEN } = process.env;
 
@@ -43,15 +44,8 @@ export const createRepoPublishLinkAction = async (
 
 export const deletePublishLinkAction = async (repoId: number) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await deletePublishLink(
-      domainInfo.type,
       userInfo.access_token,
       repoId
     );
@@ -126,10 +120,8 @@ export const getPublishDocumentVersionsAction = async (
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const domainInfo = await getCustomPostByDomain(domain);
 
     const response = await getPublishDocumentVersions(
-      domainInfo.type,
       repoId,
       documentId,
       offset,
