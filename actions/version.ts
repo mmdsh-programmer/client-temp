@@ -12,12 +12,13 @@ import {
   publicVersion,
   setLastVersion,
 } from "@service/clasor";
-import { getMe } from "./auth";
-import { IFileVersion } from "@interface/version.interface";
-import { normalizeError } from "@utils/normalizeActionError";
+
 import { IActionError } from "@interface/app.interface";
-import { headers } from "next/dist/client/components/headers";
+import { IFileVersion } from "@interface/version.interface";
 import { getCustomPostByDomain } from "@service/social";
+import { getMe } from "./auth";
+import { headers } from "next/dist/client/components/headers";
+import { normalizeError } from "@utils/normalizeActionError";
 
 export const getVersionAction = async (
   repoId: number,
@@ -105,15 +106,8 @@ export const deleteVersionAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await deleteVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -134,15 +128,8 @@ export const getLastVersionAction = async (
   isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await getLastVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -162,15 +149,8 @@ export const setLastVersionAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await setLastVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
@@ -242,15 +222,8 @@ export const confirmVersionAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await confirmVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,

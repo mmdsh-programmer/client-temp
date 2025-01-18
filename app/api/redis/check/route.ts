@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getRedisClient } from "cacheHandler.mjs";
+import { getRedisClient } from "@utils/redis";
 
 // forces the route handler to be dynamic
 export const dynamic = "force-dynamic";

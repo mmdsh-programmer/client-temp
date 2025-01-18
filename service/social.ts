@@ -1,11 +1,11 @@
 import {
   AuthorizationError,
   InputError,
-  NotFoundError,
   ServerError,
 } from "@utils/error";
 import {
-  ICustomPostMetadata,
+  ICustomPostResult,
+  IDomainMetadata,
   IMetaQuery,
   IPostInfo,
   ISocialError,
@@ -17,7 +17,7 @@ import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
 import crypto from "crypto";
-import { getRedisClient } from "cacheHandler.mjs";
+import { getRedisClient } from "@utils/redis";
 import qs from "qs";
 
 const axiosSocialInstance = axios.create({
@@ -39,13 +39,6 @@ axiosSocialInstance.interceptors.request.use((request) => {
     data,
   });
   console.log(log);
-  console.log(`
-    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    ${process.env.NEXT_PUBLIC_CORE_API}  
-    ----
-    ${process.env.API_TOKEN}  
-    >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-  `);
   return request;
 });
 
@@ -106,9 +99,9 @@ export const getCustomPost = async (
   metaQuery: IMetaQuery,
   size: string,
   offset: string
-) => {
+) : Promise<ISocialResponse<ICustomPostResult[]>> => {
   const redisClient = await getRedisClient();
-  const cacheKey = `getCustomPost-${domain}`;
+  const cacheKey = `domain-${domain}`;
 
   if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient.get(cacheKey);
@@ -134,23 +127,13 @@ export const getCustomPost = async (
   }
 
   await redisClient?.set(cacheKey, JSON.stringify(response.data));
-  return response.data;
+  return response.data ;
 };
 
 export const getCustomPostByDomain = async (
   domain: string
-): Promise<ICustomPostMetadata> => {
-  const redisClient = await getRedisClient();
+): Promise<IDomainMetadata> => {
 
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.get(`domain-${domain}`);
-    if (cachedData) {
-      console.log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-      console.log(`cached data domain:${domain}: ${cachedData} `);
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      return JSON.parse(cachedData);
-    }
-  }
 
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
@@ -165,93 +148,18 @@ export const getCustomPostByDomain = async (
   const size = "1";
   const offset = "0";
 
-  const response = await axiosSocialInstance.get(
-    "/biz/searchTimelineByMetadata",
-    {
-      params: {
-        metaQuery: JSON.stringify(metaQuery),
-        activityInfo: false,
-        size,
-        offset,
-      },
-    }
-  );
-
-  if (response.data.hasError) {
-    return handleSocialStatusError(response.data);
-  }
-
-  if (!response.data.result.length) {
-    throw new NotFoundError(["این دامنه در سیستم ثبت نشده است."]);
-  }
-  const customPost = response.data.result[0]?.item;
-  const { metadata } = customPost;
+ 
+  const response = await getCustomPost(domain, metaQuery, size, offset);
+  const { item } = response.result[0];
   const domainInfo = {
-    ...JSON.parse(metadata),
-    id: customPost.entityId,
-    data: customPost.data ?? "0",
+    ...JSON.parse(item.metadata),
+    id: item.entityId,
+    data: item.data ?? "0",
   };
-
-  if (redisClient && redisClient.isReady) {
-    redisClient?.set(`domain-${domain}`, JSON.stringify(domainInfo));
-  }
   return domainInfo;
 };
 
-export const getCustomPostById = async (
-  domain: string,
-  id: number
-): Promise<ICustomPostMetadata> => {
-  const redisClient = await getRedisClient();
-  const cacheKey = `getCustomPostById-${domain}`;
-
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.get(cacheKey);
-    if (cachedData) {
-      return JSON.parse(cachedData);
-    }
-  }
-
-  const metaQuery: IMetaQuery = {
-    field: "CUSTOM_POST_TYPE",
-    is: "DOMAIN_BUSINESS",
-  };
-
-  const response = await axiosSocialInstance.get(
-    "/biz/searchTimelineByMetadata",
-    {
-      params: {
-        metaQuery: JSON.stringify(metaQuery),
-        postIds: id,
-      },
-    }
-  );
-
-  if (response.data.hasError) {
-    return handleSocialStatusError(response.data);
-  }
-
-  if (!response.data.result.length) {
-    throw new NotFoundError(["Post not found"]);
-  }
-  const customPost = response.data.result[0]?.item;
-  const { metadata } = customPost;
-
-  const customPostData = {
-    ...JSON.parse(metadata),
-    id: customPost.id,
-    entityId: customPost.entityId,
-    data: customPost.data ?? "0",
-  };
-
-  if (redisClient && redisClient.isReady) {
-    await redisClient?.set(cacheKey, JSON.stringify(customPostData));
-  }
-
-  return customPostData;
-};
-
-export const updateCustomPostByEntityId = async (
+export const updateCustomPost = async (
   metadata: {
     domain: string;
     clientId: string;
@@ -264,15 +172,6 @@ export const updateCustomPostByEntityId = async (
   entityId: number,
   content: string
 ) => {
-  const redisClient = await getRedisClient();
-
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.get(`domain-${metadata.domain}`);
-
-    if (cachedData) {
-      await redisClient?.del(`domain-${metadata.domain}`);
-    }
-  }
 
   const response = await axiosSocialInstance.post("/biz/updateCustomPost", {
     metadata: JSON.stringify({
@@ -282,6 +181,16 @@ export const updateCustomPostByEntityId = async (
     entityId,
     content,
   });
+
+  // update redis cache
+  const redisClient = await getRedisClient();
+  if (redisClient && redisClient.isReady) {
+    const cachedData = await redisClient?.get(`domain-${metadata.domain}`);
+
+    if (cachedData) {
+      await redisClient?.del(`domain-${metadata.domain}`);
+    }
+  }
 
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);

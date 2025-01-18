@@ -1,7 +1,5 @@
 "use server";
 
-import { normalizeError } from "@utils/normalizeActionError";
-import { getMe } from "./auth";
 import {
   acceptDraft,
   acceptVersion,
@@ -10,9 +8,12 @@ import {
   rejectDraft,
   rejectVersion,
 } from "@service/clasor";
+
 import { IActionError } from "@interface/app.interface";
-import { headers } from "next/dist/client/components/headers";
 import { getCustomPostByDomain } from "@service/social";
+import { getMe } from "./auth";
+import { headers } from "next/dist/client/components/headers";
+import { normalizeError } from "@utils/normalizeActionError";
 
 export const getPendingDraftsAction = async (
   repoId: number,
@@ -60,15 +61,8 @@ export const acceptDraftAction = async (
   draftId: number
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await acceptDraft(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       docId,
@@ -103,22 +97,13 @@ export const rejectDraftAction = async (
 
 export const acceptVersionAction = async (
   repoId: number,
-  docId: number,
   versionId: number
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await acceptVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
-      docId,
       versionId
     );
 
