@@ -15,7 +15,6 @@ import {
 import { userInfo, userMetadata } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
-import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
@@ -101,13 +100,8 @@ export const getMe = async () => {
     };
     return userDataWithPrivate;
   } catch (error: unknown) {
-    console.log("--------------------------- getMe error ----------------------------", error);
     if ((error as IActionError)?.errorCode === 401) {
       try {
-        console.log(
-          "----------------------- getMe error ---------------------",
-          error
-        );
         return refreshCookieHeader(
           tokenInfo.refresh_token,
           clientId,
