@@ -1,8 +1,11 @@
-import React from "react";
-import Link from "next/link";
-import { IDocumentMetadata } from "@interface/document.interface";
-import { usePathname } from "next/navigation";
+"use client";
+
 import { DocumentIcon, LockIcon } from "@components/atoms/icons";
+
+import { IDocumentMetadata } from "@interface/document.interface";
+import Link from "next/link";
+import React from "react";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   document: IDocumentMetadata;

@@ -1,11 +1,11 @@
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
 import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { selectedRequestAtom } from "@atom/releaseDocs";
-import { useForm } from "react-hook-form";
-import useAcceptVersion from "@hooks/release/useAcceptVersion";
 import { toast } from "react-toastify";
+import useAcceptVersion from "@hooks/release/useAcceptVersion";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -29,7 +29,6 @@ const RejectDraft = ({ setOpen }: IProps) => {
     if (!getRepo || !getRequest) return;
     acceptRequest.mutate({
       repoId: getRepo.id,
-      docId: getRequest.documentId,
       versionId: getRequest.id,
       callBack: () => {
         toast.success("نسخه با موفقیت عمومی شد.");

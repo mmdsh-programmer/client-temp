@@ -222,11 +222,8 @@ export const deleteRepoAction = async (repoId: number) => {
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const domainInfo = await getCustomPostByDomain(domain);
-
   try {
     const response = await deleteRepository(
-      domainInfo.type,
       userInfo.access_token,
       repoId
     );

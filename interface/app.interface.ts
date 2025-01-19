@@ -231,6 +231,8 @@ export interface ISocialResponse<T> {
   result: T;
 }
 
+
+
 export interface ISocialProfile {
   id: number;
   firstName: string;
@@ -271,7 +273,19 @@ export interface IGetTokenResponse {
   refresh_token: string;
 }
 
-export interface ICustomPostMetadata {
+export interface ICustomPostItem {
+ data: string;
+ metadata: string;
+ uniqueId: string;
+ entityId: number;
+}
+
+export interface ICustomPostResult {
+   item: ICustomPostItem;
+   type: number;
+}
+
+export interface IDomainMetadata {
   id: number;
   domain: string;
   clientId: string;

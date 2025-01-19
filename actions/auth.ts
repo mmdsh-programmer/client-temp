@@ -3,22 +3,22 @@
 import { cookies, headers } from "next/dist/client/components/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
-  getPodAccessToken,
-  refreshPodAccessToken,
-  revokePodToken,
-} from "@service/account";
-
-import { IActionError } from "@interface/app.interface";
-import {
   editSocialProfile,
   getCustomPostByDomain,
   getMySocialProfile,
 } from "@service/social";
+import {
+  getPodAccessToken,
+  refreshPodAccessToken,
+  revokePodToken,
+} from "@service/account";
+import { userInfo, userMetadata } from "@service/clasor";
+
+import { IActionError } from "@interface/app.interface";
 import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
-import { userInfo, userMetadata } from "@service/clasor";
 
 const refreshCookieHeader = async (
   rToken: string,
@@ -27,7 +27,6 @@ const refreshCookieHeader = async (
 ) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
   const { access_token, refresh_token } = response;
-
   // get domain and find proper custom post base on domain
   const domain = headers().get("host");
   if (!domain) {
@@ -104,16 +103,16 @@ export const getMe = async () => {
   } catch (error: unknown) {
     if ((error as IActionError)?.errorCode === 401) {
       try {
-        console.log(
-          "----------------------- getMe error ---------------------",
-          error
-        );
         return refreshCookieHeader(
           tokenInfo.refresh_token,
           clientId,
           clientSecret
         );
       } catch (refreshTokenError) {
+        console.log({
+          type: "Refresh Cookie Header",
+          error: JSON.stringify(refreshTokenError),
+        });
         return handleActionError(refreshTokenError as IActionError);
       }
     }

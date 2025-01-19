@@ -119,6 +119,10 @@ export class UnprocessableError extends BasicError {
 }
 
 export const handleActionError = (errorObject: IActionError) => {
+  console.log({
+    type: "Handle Action Error",
+    error: JSON.stringify(errorObject),
+  });
   const messages = [
     ...(errorObject?.errorList ?? "خطای ناشناخته ای رخ داده است"),
   ];
@@ -147,6 +151,11 @@ export const handleClientSideHookError = (errorObject?: IActionError) => {
 };
 
 export const handleRouteError = (error: IActionError) => {
-  const message = error.errorList?.[0] ?? "خطای ناشناخته ای رخ داده است";
+  // TODO: ADD LOGGER
+  console.log({
+    type: "Route Error",
+    error: JSON.stringify(error),
+  });
+  const message = error. errorList?.[0] ?? "خطای ناشناخته ای رخ داده است";
   return NextResponse.json({ message }, { status: error.errorCode ?? 500 });
 };
