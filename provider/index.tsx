@@ -31,7 +31,7 @@ const Providers = ({ children }: IProps) => {
       </QueryClientProvider>
       <ToastContainer
         position="bottom-left"
-        autoClose={2000}
+        autoClose={50000}
         hideProgressBar
         newestOnTop
         closeOnClick
@@ -42,14 +42,35 @@ const Providers = ({ children }: IProps) => {
         style={{
           zIndex: 99_999,
         }}
+        toastStyle={{
+          borderRadius: "8px",
+          fontSize: "14px",
+          fontFamily: "iranYekan !important",
+          display: "flex",
+          alignItems: "center",
+          color: "white",
+          border: "0.5px solid rgba(0, 0, 0, 0.12)",
+          boxShadow:
+            "0px 2px 7px 0px rgba(16, 185, 129, 0.15), 0px 5px 17px 0px rgba(16, 185, 129, 0.20)",
+        }}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        toastClassName={({ type }: any) => {
+          switch (type) {
+            case "success":
+              return "toast-success";
+            case "error":
+              return "toast-error";
+            default:
+              return "bg-[#00C853] text-white";
+          }
+        }}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
         }}
-        toastClassName="prevent-toast-click"
+        closeButton
       />
     </ThemeProvider>
   );
 };
-
 export default Providers;

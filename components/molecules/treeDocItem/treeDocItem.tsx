@@ -1,10 +1,11 @@
 import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { DocIcon, InvisibleIcon, TickIcon } from "@components/atoms/icons";
+import { InvisibleIcon, TickIcon } from "@components/atoms/icons";
 import { IDocumentTreeItem } from "atom/category";
 import { documentTemplateAtom } from "atom/document";
 import { useRecoilState } from "recoil";
 import DocumentMenu from "../documentMenu";
+import DocumentIcon from "../documentIcon";
 
 interface IProps {
   docItem: IDocumentTreeItem;
@@ -33,11 +34,11 @@ const TreeDocItem = ({ docItem, enableAction }: IProps) => {
             {!enableAction && getDocumentTemplate?.id === docItem.id ? (
               <TickIcon className="fill-purple-normal w-5 h-5 flex-none" />
             ) : null}
-            <DocIcon className="fill-gray-300 w-5 h-5 flex-none" />
             {docItem.isHidden && (
               <InvisibleIcon className="w-5 h-5 stroke-neutral-content flex-none" />
             )}
           </div>
+          <DocumentIcon document={docItem} />
           <Typography className="text-primary lowercase mr-2" key={docItem.id}>
             {docItem.name}
           </Typography>

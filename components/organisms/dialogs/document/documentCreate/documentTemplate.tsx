@@ -14,7 +14,7 @@ const DocumentTemplate = () => {
       >
         <div className="flex flex-col gap-2">
           <Typography className="form_label">انتخاب نمونه سند</Typography>
-          <ChildrenTree move={false} />
+          <ChildrenTree move={false} enableAction={false} />
         </div>
       </DialogBody>
       <DialogStepperFooter

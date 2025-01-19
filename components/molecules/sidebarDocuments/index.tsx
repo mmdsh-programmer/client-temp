@@ -15,6 +15,7 @@ const SidebarDocuments = () => {
   const setCategory = useSetRecoilState(categoryAtom);
   const setDocument = useSetRecoilState(selectedDocumentAtom);
   const [isNavigating, setIsNavigating] = useState(false);
+  const [documentType, setDocumentType] = useState("");
 
   const handleNavigation = async (path: string) => {
     if (isNavigating) return;
@@ -22,7 +23,7 @@ const SidebarDocuments = () => {
     setIsNavigating(true);
     router.push(path);
   };
-  
+
   useEffect(() => {
     if (
       isNavigating &&
@@ -48,9 +49,11 @@ const SidebarDocuments = () => {
           placeholder="sidebar-button"
           className={`bg-transparent justify-start w-full 
             text-secondary gap-1 px-3 h-[44px]
+             ${documentType === "سندهای من" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
             active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
             hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
+            setDocumentType("سندهای من");
             return handleNavigation("/admin/myDocuments");
           }}
         >
@@ -69,9 +72,12 @@ const SidebarDocuments = () => {
           placeholder="sidebar-button"
           className={`bg-transparent justify-start w-full 
             text-secondary gap-1 px-3 h-[44px]
+             ${documentType === "سندهای اشتراکی" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
             active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
             hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
+            setDocumentType("سندهای اشتراکی");
+
             return handleNavigation("/admin/sharedDocuments");
           }}
         >

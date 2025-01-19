@@ -1,7 +1,6 @@
-import DashboardTemplate from "@components/templates/dashboardTemplate";
+import React from "react";
 import ErrorBoundary from "@components/errorBoundry";
 import type { Metadata } from "next";
-import React from "react";
 import Tour from "@components/tour";
 
 interface IProps {
@@ -15,11 +14,9 @@ export const metadata: Metadata = {
 
 const DashboardLayout = ({ children }: IProps) => {
   return (
-    <ErrorBoundary> 
+    <ErrorBoundary>
       <Tour />
-      <DashboardTemplate>
-        {children}
-      </DashboardTemplate>
+      {children}
     </ErrorBoundary>
   );
 };

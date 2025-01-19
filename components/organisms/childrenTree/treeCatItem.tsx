@@ -62,7 +62,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
     queryParams.limit,
     undefined,
     move ? "category" : undefined,
-    move || !!enableAction ? undefined : docTemplateFilter
+    move || enableAction ? undefined : docTemplateFilter
   );
 
   const handleClick = () => {
@@ -138,7 +138,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                             <TreeDocItem
                               key={item.id}
                               docItem={item}
-                              enableAction
+                              enableAction={enableAction}
                             />
                           ) : null;
                         }
@@ -147,7 +147,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                             catItem={item}
                             key={item.id}
                             move={move}
-                            enableAction
+                            enableAction={enableAction}
                           />
                         );
                       }
@@ -174,7 +174,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
           </div>
         </div>
       ) : (
-        <TreeDocItem key={catItem.id} docItem={catItem} enableAction />
+        <TreeDocItem key={catItem.id} docItem={catItem} enableAction={enableAction} />
       )}
     </div>
   );
