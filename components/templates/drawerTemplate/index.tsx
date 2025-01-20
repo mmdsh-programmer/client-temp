@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Collapse, Drawer, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 

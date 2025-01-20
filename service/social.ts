@@ -65,6 +65,8 @@ export const handleSocialStatusError = (
         throw new InputError([message]);
       case 40: // Unauthorized
         throw new AuthorizationError([message]);
+      case 21:
+          throw new AuthorizationError([message]);
       default:
         throw new ServerError([message]);
     }

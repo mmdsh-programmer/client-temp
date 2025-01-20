@@ -3,7 +3,6 @@
 import {
   confirmComment,
   createComment,
-  getCustomPostByDomain,
   getPublishCommentList,
 } from "@service/social";
 import {

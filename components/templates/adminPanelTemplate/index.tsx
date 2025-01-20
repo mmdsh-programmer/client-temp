@@ -1,6 +1,8 @@
+"use client";
+
+import Header from "@components/organisms/header";
 import React from "react";
 import Start from "../start";
-import Header from "@components/organisms/header";
 
 interface IProps {
   children: React.ReactNode;

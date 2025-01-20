@@ -1,11 +1,14 @@
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import useGetCategory from "@hooks/category/useGetCategory";
-import useGetDocument from "@hooks/document/useGetDocument";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+"use client";
+
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import { useEffect } from "react";
+import useGetCategory from "@hooks/category/useGetCategory";
+import useGetDocument from "@hooks/document/useGetDocument";
+import { useSearchParams } from "next/navigation";
 
 const CheckPanelUrlData = () => {
   const setCategory = useSetRecoilState(categoryAtom);

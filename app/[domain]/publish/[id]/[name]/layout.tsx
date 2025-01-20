@@ -1,7 +1,7 @@
 import { decodeKey, toEnglishDigit } from "@utils/index";
 
 import Error from "@components/organisms/error";
-import { IThemeInfo } from "@interface/app.interface";
+import { ICustomPostData } from "@interface/app.interface";
 import PublishSlugTemplate from "@components/templates/publishTemplate/publishSlugTemplate";
 import React from "react";
 import { getCustomPostByDomain } from "@service/social";
@@ -21,11 +21,14 @@ const PublishSlugLayout = async ({ children, params: { id, domain } }: IProps) =
       ),
     ]);
 
+    const { projectName, logo } = JSON.parse(data.data) as ICustomPostData;
+
     return (
       <PublishSlugTemplate
         repoId={repository.id}
         repoName={repository.name}
-        themeInfo={data as IThemeInfo}
+        projectName={projectName}
+        logo={logo}
       >
         {children}
       </PublishSlugTemplate>

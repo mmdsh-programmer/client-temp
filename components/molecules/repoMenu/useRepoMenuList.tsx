@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ArchiveActionIcon,
   BookmarkRepoIcon,
@@ -13,10 +12,12 @@ import {
   RestoreIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import { useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { IRepo } from "@interface/repo.interface";
+
 import { ERoles } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { useSetRecoilState } from "recoil";
 
 type ModalType =
   | "delete"
@@ -111,7 +112,7 @@ const useMenuList = (
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {
-            window.open(`/publish/${repo.name}/${repo.id}`, "_blank");
+            window.open(`/publish/${repo.id}/${(repo.name).replace(/ /g, "-")}`, "_blank");
           }
         ),
     ].filter(Boolean) as MenuItem[];

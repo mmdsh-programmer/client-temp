@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import "react-toastify/dist/ReactToastify.min.css";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, { useState } from "react";
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "@material-tailwind/react";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 interface IProps {
   children: React.ReactNode;
 }
 
-const Providers = ({ children }: IProps) => {
+const MainProvider = ({ children }: IProps) => {
   const [queryClient] = useState(() => {
     return new QueryClient({
       defaultOptions: {
@@ -52,4 +54,4 @@ const Providers = ({ children }: IProps) => {
   );
 };
 
-export default Providers;
+export default MainProvider;

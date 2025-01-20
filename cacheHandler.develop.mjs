@@ -11,7 +11,7 @@ export const getClient = async () => {
     }
     console.log("Starting Redis connection");
     client = createClient({
-      url: `redis://${process.env.REDIS_NODE}`,
+      url: `redis://${process.env.REDIS_NODE}:${process.env.REDIS_PORT}`,
       socket: {
         reconnectStrategy: () => {
           return false;
