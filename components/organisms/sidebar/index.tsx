@@ -1,21 +1,26 @@
-import React, { useState } from "react";
-import SidebarHeader from "@components/molecules/sidebarHeader";
+"use client";
+
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   Typography,
 } from "@material-tailwind/react";
-import SidebarRepoList from "@components/molecules/sidebarRepoList";
+import React, { useState } from "react";
+
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import SidebarDocuments from "@components/molecules/sidebarDocuments";
+import SidebarRepoList from "@components/molecules/sidebarRepoList";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
   unmount: { scale: 0.9 },
 };
+interface IProps {
+  children: React.ReactNode;
+}
 
-const Sidebar = () => {
+const Sidebar = ({ children }: IProps) => {
   const [open, setOpen] = useState(0);
 
   const handleOpen = (value) => {
@@ -25,7 +30,7 @@ const Sidebar = () => {
   return (
     <aside className="hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
       <div className="p-4 h-[80px] flex items-center justify-center ">
-        <SidebarHeader />
+        {children}
       </div>
       <hr className="" />
       <Accordion
@@ -39,7 +44,7 @@ const Sidebar = () => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className="px-3 flex-row-reverse justify-end"
+          className={`px-3 flex-row-reverse justify-end ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(1);
           }}
@@ -47,7 +52,7 @@ const Sidebar = () => {
           <Typography className="title_t4">اسناد شخصی</Typography>
         </AccordionHeader>
         <AccordionBody>
-          <div className="px-3">
+          <div className="px-3 pb-3 border-b-2 border-normal">
             <SidebarDocuments />
           </div>
         </AccordionBody>
@@ -63,7 +68,7 @@ const Sidebar = () => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className="px-3 flex-row-reverse justify-end"
+          className={`px-3 flex-row-reverse justify-end ${open === 2 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(2);
           }}
@@ -71,7 +76,7 @@ const Sidebar = () => {
           <Typography className="title_t4">مدیریت مخزن‌ها</Typography>
         </AccordionHeader>
         <AccordionBody>
-          <div className="px-3">
+          <div className="px-3 pb-3 border-b-2 border-normal">
             <SidebarRepoList />
           </div>
         </AccordionBody>
@@ -87,7 +92,7 @@ const Sidebar = () => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className="px-3 flex-row-reverse justify-end"
+          className={`px-3 flex-row-reverse justify-end ${open === 3 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(3);
           }}

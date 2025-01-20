@@ -1,7 +1,5 @@
-import React from "react";
-import ErrorBoundary from "@components/errorBoundry";
 import type { Metadata } from "next";
-import Tour from "@components/tour";
+import React from "react";
 import RepositoryTemplate from "@components/templates/repositoryTemplate";
 
 interface IProps {
@@ -14,12 +12,8 @@ export const metadata: Metadata = {
 };
 
 const RepositoryLayout = ({ children }: IProps) => {
-  return (
-    <ErrorBoundary>
-      <Tour />
-      <RepositoryTemplate>{children}</RepositoryTemplate>
-    </ErrorBoundary>
-  );
+
+  return  <RepositoryTemplate>{children}</RepositoryTemplate>;
 };
 
 export default RepositoryLayout;

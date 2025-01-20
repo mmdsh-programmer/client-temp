@@ -47,7 +47,7 @@ interface LayoutTransitionProps {
   exit: React.ComponentProps<typeof motion.div>["exit"];
 }
  
-export const LayoutTransition = ({
+const LayoutTransitionProvider = ({
   children,
   className,
   style,
@@ -72,3 +72,5 @@ export const LayoutTransition = ({
     </AnimatePresence>
   );
 };
+
+export default LayoutTransitionProvider;

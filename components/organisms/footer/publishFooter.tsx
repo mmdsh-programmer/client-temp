@@ -5,8 +5,9 @@ import React from "react";
 
 interface IProps {
   themeInfo?: IThemeInfo;
+  projectDescription?: string;
 }
-const PublishFooter = ({ themeInfo }: IProps) => {
+const PublishFooter = ({ themeInfo, projectDescription }: IProps) => {
   return (
     <div className="h-[75px] bg-secondary flex items-center px-11">
       <div className="flex h-8 w-full m-auto items-center max-w-3xl justify-between">
@@ -23,7 +24,7 @@ const PublishFooter = ({ themeInfo }: IProps) => {
             </div>
           )}
           <p className="gray-500 text-sm mt-1 mr-2">
-            {themeInfo?.projectDescription ?? "توضیحات پروژه"}
+            {projectDescription ?? "توضیحات پروژه"}
           </p>
         </div>
         <small className="text-xs">1.16.2.3</small>

@@ -293,3 +293,15 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 .word-break {
   word-break: break-word;
 }
+
+.toast-error {
+  @apply !bg-error !font-iranYekan
+}
+
+.toast-success {
+  @apply !bg-success-normal !font-iranYekan
+}
+
+.Toastify__toast-icon+div {
+  @apply text-white
+}

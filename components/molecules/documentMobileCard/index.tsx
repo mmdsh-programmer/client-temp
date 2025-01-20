@@ -11,6 +11,7 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { editorModeAtom } from "@atom/editor";
 import DocumentMenu from "../documentMenu";
+import DocumentIcon from "../documentIcon";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -87,9 +88,15 @@ const DocumentMobileCard = ({ document }: IProps) => {
               return bulkItem.id === document.id;
             })}
           />
-          <Typography className="text-primary title_t2">
-            {document.name}
-          </Typography>
+          <div className="flex">
+            <DocumentIcon document={document} />
+            <Typography
+              className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+              title={document.name}
+            >
+              {document.name}
+            </Typography>
+          </div>
         </div>
       }
       description={[

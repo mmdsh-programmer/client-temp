@@ -10,9 +10,7 @@ import {
 } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
-import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
-import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 
 export const getPendingDraftsAction = async (

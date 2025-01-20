@@ -8,6 +8,7 @@ import MobileCard from "../mobileCard";
 import { Checkbox, Typography } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
 import CategoryMenu from "../categoryMenu/categoryMenu";
+import { FolderIcon } from "@components/atoms/icons";
 
 interface IProps {
   category: ICategoryMetadata;
@@ -60,9 +61,15 @@ const CategoryMobileCard = ({ category }: IProps) => {
               return bulkItem.id === category.id;
             })}
           />
-          <Typography className="text-primary title_t2">
-            {category.name}
-          </Typography>
+            <div className="flex">
+              <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
+              <Typography
+                className="flex gap-2 mr-2 text-ellipsis overflow-hidden sm:w-20 md:w-auto"
+                title={category.name}
+              >
+                {category.name}
+              </Typography>
+            </div>
         </div>
       }
       description={[

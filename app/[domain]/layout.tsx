@@ -1,10 +1,10 @@
 import "@styles/globals.css";
 
-import { LayoutTransition } from "provider/layoutTransition";
+import LayoutTransitionProvider from "provider/layoutTransition";
+import MainProvider from "provider/mainProvider";
 import type { Metadata } from "next";
-import Providers from "provider";
 import React from "react";
-import ThemeLoader from "provider/themeLoader";
+import ThemeLoaderProvider from "provider/themeLoaderProvider";
 
 interface IProps {
   children: React.ReactNode;
@@ -21,17 +21,17 @@ export const metadata: Metadata = {
 const RootLayout = ({ children, params }: IProps) => {
   return (
     <html lang="fa">
-      <ThemeLoader domain={params.domain}>
-      <Providers>
-          <LayoutTransition
+      <ThemeLoaderProvider domain={params.domain}>
+        <MainProvider>
+          <LayoutTransitionProvider
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             {children}
-          </LayoutTransition>
-        </Providers>
-      </ThemeLoader>
+          </LayoutTransitionProvider>
+        </MainProvider>
+      </ThemeLoaderProvider>
     </html>
   );
 };

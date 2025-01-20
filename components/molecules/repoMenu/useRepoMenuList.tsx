@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ArchiveActionIcon,
   BookmarkRepoIcon,
@@ -13,11 +12,13 @@ import {
   RestoreIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import { useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { IRepo } from "@interface/repo.interface";
+
 import { ERoles } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import React from "react";
+import { repoAtom } from "@atom/repository";
 import { toPersinaDigit } from "@utils/index";
+import { useSetRecoilState } from "recoil";
 
 type ModalType =
   | "delete"

@@ -1,11 +1,11 @@
-import React from "react";
-import ErrorBoundary from "@components/errorBoundry";
 import type { Metadata } from "next";
-import Tour from "@components/tour";
-import DocumentsTemplate from "@components/templates/documentsTemplate";
+import React from "react";
 
 interface IProps {
   children: React.ReactNode;
+  params: {
+    domain: string;
+  };
 }
 
 export const metadata: Metadata = {
@@ -14,14 +14,7 @@ export const metadata: Metadata = {
 };
 
 const SharedDocumentsLayout = ({ children }: IProps) => {
-  return (
-    <ErrorBoundary> 
-      <Tour />
-      <DocumentsTemplate>
-        {children}
-      </DocumentsTemplate>
-    </ErrorBoundary>
-  );
+  return children;
 };
 
 export default SharedDocumentsLayout;
