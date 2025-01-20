@@ -65,6 +65,7 @@ import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
+import { IFeedItem } from "@interface/feeds.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -3270,6 +3271,29 @@ export const deleteAccessOfResource = async (
         },
       }
     );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// FEEDS SERVICES //////////////////////
+
+export const getDomainPublicFeeds = async (
+  domainId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IFeedItem>>
+    >(`domain/${domainId}/feeds`, {
+      params: {
+        offset,
+        size,
+      },
+    });
+
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

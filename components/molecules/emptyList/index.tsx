@@ -29,6 +29,7 @@ export enum EEmptyList {
   QUESTION_LIST = "question_list",
   ANSWER_LIST = "answer_list",
   ACCESS_LIST = "access_list",
+  FEED_LIST = "feed-list",
 }
 
 interface IProps {
@@ -297,6 +298,17 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary"
             >
               شما در حال حاضر لیست مجازی ندارید.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.FEED_LIST:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              خبرنامه ای برای نمایش وجود ندارد.
             </Typography>
           </div>
         );
