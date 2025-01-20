@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
-import { handleClientSideHookError } from "@utils/error";
 import { acceptDraftAction } from "@actions/releaseDocs";
+import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useAcceptDraft = () => {
   const queryClient = useQueryClient();
@@ -15,6 +16,7 @@ const useAcceptDraft = () => {
       callBack?: () => void;
     }) => {
       const { repoId, docId, draftId } = values;
+      debugger;
       const response = await acceptDraftAction(repoId, docId, draftId);
       handleClientSideHookError(response as IActionError);
       return response;

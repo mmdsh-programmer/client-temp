@@ -12,6 +12,7 @@ import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
 import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { ServerError } from "@utils/error";
+import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
 
@@ -92,8 +93,10 @@ export default async function PublishContentPage({
         documentId
       );
 
-      if (!lastVersionInfo)
+      if (!lastVersionInfo){
+        await generateCachePageTag(`em-${documentId}`);
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
+      }
 
       versionData = await getPublishDocumentVersion(
         repository.id,

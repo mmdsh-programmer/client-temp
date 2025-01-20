@@ -29,6 +29,7 @@ import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";
+import { revalidateTag } from "next/dist/server/web/spec-extension/revalidate";
 
 export const getMyInfoAction = async () => {
   const userInfo = await getMe();
@@ -188,6 +189,8 @@ export const editRepoAction = async (
       name,
       description
     );
+
+    revalidateTag(`rp-${repoId}`);
 
     return response;
   } catch (error) {
