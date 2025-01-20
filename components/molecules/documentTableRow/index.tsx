@@ -1,17 +1,4 @@
 import React from "react";
-import {
-  DocIcon,
-  DocumentClassicIcon,
-  DocumentExcelIcon,
-  DocumentFileIcon,
-  DocumentFlowchartIcon,
-  DocumentWordIcon,
-  TemplateClassicIcon,
-  TemplateExcelIcon,
-  TemplateFileIcon,
-  TemplateFlowchartIcon,
-  TemplateWordIcon,
-} from "@components/atoms/icons";
 import { Checkbox } from "@material-tailwind/react";
 import DocumentMenu from "../documentMenu";
 import { FaDateFromTimestamp } from "@utils/index";
@@ -22,8 +9,9 @@ import { toast } from "react-toastify";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
-import { EDocumentTypes } from "@interface/enums";
 import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
+import DocumentIcon from "../documentIcon";
 
 interface ITableCell {
   data: string | React.ReactNode;
@@ -46,49 +34,19 @@ const DocumentTableRow = ({ document }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const selectedCat = useRecoilValue(categoryAtom);
 
-  const renderIcon = () => {
-    switch (document.contentType) {
-      case EDocumentTypes.classic:
-        return document.isTemplate ? (
-          <TemplateClassicIcon className="fill-icon-hover w-5 h-5" />
-        ) : (
-          <DocumentClassicIcon className="fill-icon-hover w-5 h-5" />
-        );
-      case EDocumentTypes.word:
-        return document.isTemplate ? (
-          <TemplateWordIcon className="fill-icon-hover w-5 h-5" />
-        ) : (
-          <DocumentWordIcon className="fill-icon-hover w-5 h-5" />
-        );
-      case EDocumentTypes.excel:
-        return document.isTemplate ? (
-          <TemplateExcelIcon className="fill-icon-hover w-5 h-5" />
-        ) : (
-          <DocumentExcelIcon className="fill-icon-hover w-5 h-5" />
-        );
-      case EDocumentTypes.flowchart:
-        return document.isTemplate ? (
-          <TemplateFlowchartIcon className="fill-icon-hover w-5 h-5" />
-        ) : (
-          <DocumentFlowchartIcon className="fill-icon-hover w-5 h-5" />
-        );
-      case EDocumentTypes.file:
-        return document.isTemplate ? (
-          <TemplateFileIcon className="fill-icon-hover w-5 h-5" />
-        ) : (
-          <DocumentFileIcon className="fill-icon-hover w-5 h-5" />
-        );
-      default:
-        return <DocIcon className="fill-icon-hover w-5 h-5" />;
-    }
-  };
+  const { data: userInfo } = useGetUser();
+
+  const repoUserGroupHash =
+    currentPath === "/admin/myDocuments"
+      ? userInfo?.repository.userGroupHash
+      : getRepo?.userGroupHash;
 
   const handleRowClick = () => {
     const path = selectedCat
       ? `edit?repoId=${document.repoId}&categoryId=${
           selectedCat.id
         }&documentId=${document.id}&repoGroupHash=${
-          getRepo?.userGroupHash
+          repoUserGroupHash
         }&catGroupHash=${selectedCat.userGroupHash}&type=${
           document?.contentType
         }${
@@ -96,11 +54,9 @@ const DocumentTableRow = ({ document }: IProps) => {
         }`
       : `edit?repoId=${document.repoId}&documentId=${
           document.id
-        }&repoGroupHash=${getRepo?.userGroupHash}&type=${
-          document?.contentType
-        }${
+        }&repoGroupHash=${repoUserGroupHash}&type=${document?.contentType}${
           document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }`;
+        }${currentPath === "/admin/sharedDocuments" ? "&sharedDocuments=true" : ""}`;
 
     window.open(path, "_blank");
   };
@@ -151,7 +107,7 @@ const DocumentTableRow = ({ document }: IProps) => {
           {
             data: (
               <div className="flex">
-                {renderIcon()}
+                <DocumentIcon document={document} />
                 <span
                   className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
                   title={document.name}

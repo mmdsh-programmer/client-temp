@@ -48,6 +48,8 @@ const EditorTab = () => {
   const searchParams = useSearchParams();
   const versionId = searchParams.get("versionId");
   const versionState = searchParams.get("versionState");
+  const getRepoId = searchParams.get("repoId");
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -64,13 +66,16 @@ const EditorTab = () => {
     if (currentPath === "/admin/sharedDocuments") {
       return getSelectedDocument!.repoId;
     }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
     return getRepo!.id;
   };
 
   const { data: getLastVersion } = useGetLastVersion(
     repoId(),
     getSelectedDocument!.id,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     !getVersionData
   );
 
@@ -88,7 +93,7 @@ const EditorTab = () => {
     vState as "draft" | "version" | "public" | undefined,
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true
   );
 

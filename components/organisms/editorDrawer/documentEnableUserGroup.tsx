@@ -3,13 +3,15 @@ import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
 import useEnableGroupHash from "@hooks/document/useEnableGroupHash";
 import { repoAtom } from "@atom/repository";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 const DocumentEnableUserGroup = () => {
   const getRepo = useRecoilValue(repoAtom);
   const [getDocument, setDocument] = useRecoilState(selectedDocumentAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const enableUserGroup = useEnableGroupHash();
@@ -18,7 +20,10 @@ const DocumentEnableUserGroup = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true"
+    ) {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -31,6 +36,8 @@ const DocumentEnableUserGroup = () => {
     enableUserGroup.mutate({
       repoId: repoId(),
       documentId: getDocument.id,
+      isDirectAccess:
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: (result) => {
         setDocument({
           ...getDocument,

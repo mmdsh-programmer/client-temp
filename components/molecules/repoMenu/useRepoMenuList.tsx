@@ -14,10 +14,7 @@ import {
 } from "@components/atoms/icons";
 
 import { ERoles } from "@interface/enums";
-import { IRepo } from "@interface/repo.interface";
-import React from "react";
-import { repoAtom } from "@atom/repository";
-import { useSetRecoilState } from "recoil";
+import { toPersinaDigit } from "@utils/index";
 
 type ModalType =
   | "delete"
@@ -89,30 +86,47 @@ const useMenuList = (
               }
             }
           ),
-      createMenuItem("اشتراک گذاری", <ShareIcon className="w-4 h-4 stroke-icon-active" />, () => {
-        setModalState("share", true);
-        if (repo) {
-          setRepo(repo);
+      createMenuItem(
+        "اشتراک گذاری",
+        <ShareIcon className="w-4 h-4 stroke-icon-active" />,
+        () => {
+          setModalState("share", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
-      }),
-      createMenuItem("مدیریت فایل", <FileManagementIcon className="w-4 h-4 fill-icon-active" />, () => {
-        setModalState("fileManagement", true);
-        if (repo) {
-          setRepo(repo);
+      ),
+      createMenuItem(
+        "مدیریت فایل",
+        <FileManagementIcon className="w-4 h-4 fill-icon-active" />,
+        () => {
+          setModalState("fileManagement", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
-      }),
-      createMenuItem("درخواست‌ها", <LastVersionIcon className="w-4 h-4" />, () => {
-        setModalState("versionRequests", true);
-        if (repo) {
-          setRepo(repo);
+      ),
+      createMenuItem(
+        "درخواست‌ها",
+        <LastVersionIcon className="w-4 h-4" />,
+        () => {
+          setModalState("versionRequests", true);
+          if (repo) {
+            setRepo(repo);
+          }
         }
-      }),
+      ),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {
-            window.open(`/publish/${repo.id}/${(repo.name).replace(/ /g, "-")}`, "_blank");
+            window.open(
+              `/publish/${repo.id}/${toPersinaDigit(
+                `${repo.name.replaceAll(/\s+/g, "-")}`
+              )}`,
+              "_blank"
+            );
           }
         ),
     ].filter(Boolean) as MenuItem[];

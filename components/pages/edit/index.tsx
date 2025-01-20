@@ -19,6 +19,8 @@ const EditPage = () => {
 
   const searchParams = useSearchParams();
   const documentId = searchParams.get("documentId");
+  const getRepoId = searchParams.get("repoId");
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo, isFetching } = useGetUser();
 
@@ -29,6 +31,9 @@ const EditPage = () => {
     if (currentPath === "/admin/sharedDocuments") {
       return getSelectedDocument!.repoId;
     }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
     return getRepo!.id;
   };
 
@@ -36,7 +41,13 @@ const EditPage = () => {
     data: getDocument,
     isFetching: isFetchingDocument,
     error,
-  } = useGetDocument(repoId(), +documentId!, true, true);
+  } = useGetDocument(
+    repoId(),
+    +documentId!,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    true,
+    true
+  );
 
   useEffect(() => {
     if (getDocument) {

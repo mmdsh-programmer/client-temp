@@ -20,6 +20,8 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.version?.document?.id ?? 0,
     compareVersion?.version?.data?.id ?? 0,
     compareVersion?.version?.data?.state,
+    true,
+    true,
     currentPath === "/admin/sharedDocuments" ? true : undefined,
     true
   );
@@ -29,6 +31,8 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.compare?.document.id ?? 0,
     compareVersion?.compare?.data.id ?? 0,
     compareVersion?.compare?.data.state,
+    true,
+    true,
     currentPath === "/admin/sharedDocuments" ? true : undefined,
     true
   );

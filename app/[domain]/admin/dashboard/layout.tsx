@@ -1,4 +1,3 @@
-import DashboardTemplate from "@components/templates/dashboardTemplate";
 import ErrorBoundary from "@components/errorBoundry";
 import { ICustomPostData } from "@interface/app.interface";
 import type { Metadata } from "next";
@@ -25,11 +24,9 @@ const DashboardLayout = async({ children, params }: IProps) => {
   const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
   
   return (
-    <ErrorBoundary> 
+    <ErrorBoundary>
       <Tour />
-      <DashboardTemplate domainInfo={domainInfo}>
-        {children}
-      </DashboardTemplate>
+      {children}
     </ErrorBoundary>
   );
 };

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 import { selectedDocumentAtom } from "@atom/document";
 
@@ -25,6 +25,8 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const createTag = useCreateTag();
@@ -50,7 +52,11 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments" && getDocument) {
+    if (
+      (currentPath === "/admin/sharedDocuments" ||
+        sharedDocuments === "true") &&
+      getDocument
+    ) {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -62,7 +68,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
       repoId: repoId(),
       name: dataForm.name,
       isDirectAccess:
-      currentPath === "/admin/sharedDocuments" ? true : undefined,
+        currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
       callBack: () => {
         toast.success("تگ با موفقیت ایجاد شد.");
         handleClose();

@@ -1,11 +1,7 @@
-import DocumentsTemplate from "@components/templates/documentsTemplate";
 import ErrorBoundary from "@components/errorBoundry";
-import { ICustomPostData } from "@interface/app.interface";
 import type { Metadata } from "next";
 import React from "react";
 import Tour from "@components/tour";
-import { decodeKey } from "@utils/index";
-import { getCustomPostByDomain } from "@service/social";
 
 interface IProps {
   children: React.ReactNode;
@@ -27,7 +23,7 @@ const MyDocumentsLayout = async ({ children, params }: IProps) => {
   return (
     <ErrorBoundary>
       <Tour />
-      <DocumentsTemplate domainInfo={domainInfo}>{children}</DocumentsTemplate>
+      {children}
     </ErrorBoundary>
   );
 };

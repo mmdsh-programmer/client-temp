@@ -44,7 +44,7 @@ const Sidebar = ({ children }: IProps) => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className="px-3 flex-row-reverse justify-end"
+          className={`px-3 flex-row-reverse justify-end ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(1);
           }}
@@ -52,7 +52,7 @@ const Sidebar = ({ children }: IProps) => {
           <Typography className="title_t4">اسناد شخصی</Typography>
         </AccordionHeader>
         <AccordionBody>
-          <div className="px-3">
+          <div className="px-3 pb-3 border-b-2 border-normal">
             <SidebarDocuments />
           </div>
         </AccordionBody>
@@ -68,7 +68,7 @@ const Sidebar = ({ children }: IProps) => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className="px-3 flex-row-reverse justify-end"
+          className={`px-3 flex-row-reverse justify-end ${open === 2 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(2);
           }}
@@ -76,7 +76,7 @@ const Sidebar = ({ children }: IProps) => {
           <Typography className="title_t4">مدیریت مخزن‌ها</Typography>
         </AccordionHeader>
         <AccordionBody>
-          <div className="px-3">
+          <div className="px-3 pb-3 border-b-2 border-normal">
             <SidebarRepoList />
           </div>
         </AccordionBody>
@@ -92,7 +92,7 @@ const Sidebar = ({ children }: IProps) => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className="px-3 flex-row-reverse justify-end"
+          className={`px-3 flex-row-reverse justify-end ${open === 3 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(3);
           }}

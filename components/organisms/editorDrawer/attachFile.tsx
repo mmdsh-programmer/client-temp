@@ -13,7 +13,7 @@ import DocumentEnableUserGroup from "./documentEnableUserGroup";
 import FileUpload from "@components/molecules/fileUpload";
 import FileList from "../fileList";
 import { selectedDocumentAtom } from "@atom/document";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const fileTablePageSize = 20;
 
@@ -23,6 +23,8 @@ const AttachFile = () => {
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams.get("sharedDocuments");
 
   const queryClient = useQueryClient();
 
@@ -43,7 +45,7 @@ const AttachFile = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -94,7 +96,7 @@ const AttachFile = () => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${getDocument?.id}/uploadLink`,
           {
             expireTime: (Date.now() + 3600 * 1000).toString(),
-            userGroupHash: getDocument?.userGroupHash,
+            userGroupHash: getDocument?.attachmentUserGroup,
             isPublic: false,
           },
           {

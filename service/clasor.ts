@@ -2019,7 +2019,8 @@ export const deleteDocumentPassword = async (
 export const documentEnableUserGroupHash = async (
   access_token: string,
   repoId: number,
-  documentId: number
+  documentId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2028,6 +2029,9 @@ export const documentEnableUserGroupHash = async (
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );
@@ -2050,8 +2054,14 @@ export const getVersion = async (
   isDirectAccess?: boolean
 ) => {
   try {
+    let versionPath = "";
+    if (state === "draft") {
+      versionPath = "/draft";
+    } else if (state === "public") {
+      versionPath = "/publicVersion";
+    }
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : state === "public" ? "/publicVersion" : ""}`,
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${versionPath}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

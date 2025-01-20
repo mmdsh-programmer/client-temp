@@ -11,12 +11,14 @@ const useEnableGroupHash = () => {
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
+      isDirectAccess?: boolean;
       callBack?: (result) => void;
     }) => {
-      const { repoId, documentId } = values;
+      const { repoId, documentId, isDirectAccess } = values;
       const response = await documentEnableUserGroupHashAction(
         repoId,
-        documentId
+        documentId,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response as IDocument;

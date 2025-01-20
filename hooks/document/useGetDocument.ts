@@ -7,9 +7,10 @@ import { handleClientSideHookError } from "@utils/error";
 const useGetDocument = (
   repoId: number,
   documentId?: number,
+  isDirectAccess?: boolean,
   enabled?: boolean,
   disableVersions?: boolean,
-  queryKey?: string
+  queryKey?: string,
 ) => {
   return useQuery({
     queryKey: [queryKey ?? `document-${documentId}-info`],
@@ -18,10 +19,10 @@ const useGetDocument = (
         const response = await getDocumentAction(
           repoId,
           documentId,
-          undefined, // isDirectAccess
+          isDirectAccess, // isDirectAccess
           undefined,
           undefined,
-          disableVersions
+          disableVersions,
         );
         handleClientSideHookError(response as IActionError);
         return response as IDocumentMetadata;
