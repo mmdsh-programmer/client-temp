@@ -19,6 +19,7 @@ import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
+import { revalidateTag } from "next/cache";
 
 export const getVersionAction = async (
   repoId: number,
@@ -116,6 +117,8 @@ export const deleteVersionAction = async (
       isDirectAccess
     );
 
+    revalidateTag(`vr-${versionId}`);
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -187,6 +190,9 @@ export const publicVersionAction = async (
       isDirectAccess
     );
 
+    revalidateTag(`vr-${versionId}`);
+    revalidateTag(`em-${documentId}`);
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -230,6 +236,8 @@ export const confirmVersionAction = async (
       versionId,
       isDirectAccess
     );
+    revalidateTag(`vr-${response.id}`);
+    revalidateTag(`em-${documentId}`);
 
     return response;
   } catch (error) {

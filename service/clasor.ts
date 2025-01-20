@@ -299,7 +299,6 @@ export const getAllRepositories = async (
 export const getPublishRepositoryInfo = async (
   repoId: number
 ) => {
-
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
       `repositories/${repoId}/publish`

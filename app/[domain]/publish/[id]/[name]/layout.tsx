@@ -33,10 +33,11 @@ const PublishSlugLayout = async ({ children, params: { id, domain } }: IProps) =
         {children}
       </PublishSlugTemplate>
     );
-  } catch {
+  } catch (error: unknown) {
+    const errorMessage = (error as { message: string }).message ?? "خطای غیر منتظره رخ داده است";
     return (
       <div className="w-screen h-screen grid place-content-center">
-        <Error error={{ message: "خطای غیر منتظره رخ داده است" }} />
+        <Error error={{ message: errorMessage }} />
       </div>
     );
   }
