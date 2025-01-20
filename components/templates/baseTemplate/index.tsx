@@ -1,27 +1,44 @@
 "use client";
 
-import React from "react";
 import Header from "@components/organisms/header";
+import { ICustomPostData } from "@interface/app.interface";
+import React from "react";
 import Sidebar from "@components/organisms/sidebar";
+import SidebarHeader from "@components/molecules/sidebarHeader";
 import Start from "../start";
+import Tour from "@components/tour";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   children: React.ReactNode;
+  domainInfo: ICustomPostData;
 }
 
-const BaseTemplate = ({ children }: IProps) => {
+const BaseTemplate = ({ children, domainInfo }: IProps) => {
+
+  const pathname = usePathname();
+
+  if (pathname?.includes("/admin/edit")) {
+    return children;
+  }
+  
   return (
-    <Start>
-      <div className="flex max-w-screen-2xl m-auto">
-        <Sidebar />
-        <main className="bg-secondary flex-grow h-screen overflow-hidden">
-          <Header />
-          <div className="overflow-auto h-[calc(100vh-195px)] xs:h-[calc(100vh-80px)] flex flex-col px-0 py-0 xs:px-8 xs:pt-6 xs:pb-8">
-            {children}
-          </div>
-        </main>
-      </div>
-    </Start>
+    <>
+      <Tour />
+      <Start>
+        <div className="flex max-w-screen-2xl m-auto">
+          <Sidebar>
+            <SidebarHeader domainInfo={domainInfo} />
+          </Sidebar>
+          <main className="bg-secondary flex-grow h-screen overflow-hidden">
+            <Header />
+            <div className="overflow-auto h-[calc(100vh-195px)] xs:h-[calc(100vh-80px)] flex flex-col px-0 py-0 xs:px-8 xs:pt-6 xs:pb-8">
+              {children}
+            </div>
+          </main>
+        </div>
+      </Start>
+    </>
   );
 };
 

@@ -14,7 +14,11 @@ import {
 } from "@components/atoms/icons";
 
 import { ERoles } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import React from "react";
+import { repoAtom } from "@atom/repository";
 import { toPersinaDigit } from "@utils/index";
+import { useSetRecoilState } from "recoil";
 
 type ModalType =
   | "delete"

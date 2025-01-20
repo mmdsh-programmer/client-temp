@@ -1,26 +1,25 @@
-"use client";
-
-import React from "react";
-import ErrorBoundary from "@components/errorBoundry";
-import Tour from "@components/tour";
 import BaseTemplate from "@components/templates/baseTemplate";
-import { usePathname } from "next/navigation";
+import ErrorBoundary from "@components/errorBoundry";
+import { ICustomPostData } from "@interface/app.interface";
+import React from "react";
+import { decodeKey } from "@utils/index";
+import { getCustomPostByDomain } from "@service/social";
 
 interface IProps {
   children: React.ReactNode;
+  params: {
+    domain: string;
+  };
 }
 
-const AdminLayout = ({ children }: IProps) => {
-  const pathname = usePathname();
-
-  if (pathname?.includes("/admin/edit")) {
-    return children;
-  }
+const AdminLayout = async ({ children, params }: IProps) => {
+  const { domain } = params;
+  const { data } = await getCustomPostByDomain(decodeKey(domain));
+  const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
   
   return (
     <ErrorBoundary>
-      <Tour />
-      <BaseTemplate>{children}</BaseTemplate>
+      <BaseTemplate domainInfo={domainInfo}>{children}</BaseTemplate>
     </ErrorBoundary>
   );
 };
