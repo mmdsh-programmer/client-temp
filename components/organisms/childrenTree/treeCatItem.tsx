@@ -1,8 +1,4 @@
-import {
-  ChevronLeftIcon,
-  FolderIcon,
-  InvisibleIcon,
-} from "@components/atoms/icons";
+import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import { Collapse, Radio, Typography } from "@material-tailwind/react";
 import {
   ICategoryTreeItem,
@@ -108,9 +104,6 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                   <ChevronLeftIcon className="h-3 w-3 stroke-icon-hover" />
                 </div>
                 <FolderIcon className="fill-gray-400 w-5 h-5" />
-                {catItem.isHidden && (
-                  <InvisibleIcon className="w-5 h-5 stroke-neutral-content flex-none" />
-                )}
               </div>
               <Typography
                 className="text-primary lowercase mr-2"
@@ -174,7 +167,11 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
           </div>
         </div>
       ) : (
-        <TreeDocItem key={catItem.id} docItem={catItem} enableAction={enableAction} />
+        <TreeDocItem
+          key={catItem.id}
+          docItem={catItem}
+          enableAction={enableAction}
+        />
       )}
     </div>
   );

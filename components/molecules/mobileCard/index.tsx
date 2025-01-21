@@ -25,18 +25,20 @@ const MobileCard = ({
       onClick={onClick}
     >
       <div className="flex justify-between items-center w-full gap-[10px]">
-        <div className="flex items-center gap-3">
+        <div className="flex items-start max-w-[70%] gap-3 flex-grow">
           {icon}
           {typeof name === "string" ? (
-            <Typography className="text-primary title_t2 flex-grow text-ellipsis whitespace-nowrap">
+            <Typography className="title_t2 !text-primary max-w-full truncate">
               {name}
             </Typography>
           ) : (
-            name
+            <Typography className="text-primary title_t2 max-w-full truncate">
+              {name}
+            </Typography>
           )}
         </div>
         <div
-          className="flex"
+          className="flex shrink-0"
           onClick={(e) => {
             return e.stopPropagation();
           }}
@@ -44,17 +46,18 @@ const MobileCard = ({
           {cardAction}
         </div>
       </div>
-      {description.map((desc) => {
-        return (
-          <div key={desc.value} className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3">
+        {description.map((desc) => {
+          return (
             <CardItemRow
+              key={desc.value}
               title={desc.title}
               value={desc.value}
               className={desc.className}
             />
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };

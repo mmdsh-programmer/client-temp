@@ -30,11 +30,11 @@ const RepoCardMode = ({ repo }: IProps) => {
       }}
     >
       <div className="flex p-4 justify-between items-center">
-        <div className="flex items-center gap-3 ">
+        <div className="flex items-center gap-3 max-w-[70%]">
           <div className="h-12 w-12">
             <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
-          <Typography className="title_t2 w-full sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]">
+          <Typography className="title_t2 max-w-[70%] truncate font-[450]">
             {repo.name}
           </Typography>
         </div>

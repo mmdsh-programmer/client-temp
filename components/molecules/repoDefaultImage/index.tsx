@@ -46,7 +46,7 @@ const RepoDefaultImage = ({ imageHash }: IProps) => {
     }
   };
 
-  return imageHash ? generateImage() : <RepoIcon className="w-full h-full" />;
+  return generateImage();
 };
 
 export default RepoDefaultImage;

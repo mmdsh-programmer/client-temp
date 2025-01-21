@@ -59,8 +59,12 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
   );
 
   return (
-    <div className="tree-wrapper !h-[400px] xs:!h-[300px] min-h-[300px]">
-      <div className="h-full flex flex-col overflow-auto items-start">
+    <div
+      className={`tree-wrapper ${enableAction ? "" : "!h-[400px] xs:!h-[300px] min-h-[300px]"}`}
+    >
+      <div
+        className={`h-full flex flex-col ${enableAction ? "overflow-hidden" : "overflow-auto"} items-start`}
+      >
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="w-full justify-center items-center flex h-[50px]">
@@ -74,7 +78,11 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
               }
               return (
                 <div className="tree-item-wrapper" key={item.id}>
-                  <TreeCatItem catItem={item} move={move} enableAction={enableAction} />
+                  <TreeCatItem
+                    catItem={item}
+                    move={move}
+                    enableAction={enableAction}
+                  />
                 </div>
               );
             });

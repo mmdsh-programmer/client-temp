@@ -23,9 +23,7 @@ const CategoryMobileCard = ({ category }: IProps) => {
     setBulkItems([]);
   };
 
-  const handleCheckItem = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     if (isChecked && getBulkItems.length + 1 > 10) {
       e.target.checked = false;
@@ -44,7 +42,7 @@ const CategoryMobileCard = ({ category }: IProps) => {
   return (
     <MobileCard
       name={
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full">
           <Checkbox
             color="deep-purple"
             containerProps={{
@@ -61,15 +59,15 @@ const CategoryMobileCard = ({ category }: IProps) => {
               return bulkItem.id === category.id;
             })}
           />
-            <div className="flex">
-              <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
-              <Typography
-                className="flex gap-2 mr-2 text-ellipsis overflow-hidden sm:w-20 md:w-auto"
-                title={category.name}
-              >
-                {category.name}
-              </Typography>
-            </div>
+          <div className="flex gap-2 max-w-full">
+            <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
+            <Typography
+              className="flex text-ellipsis overflow-hidden truncate flex-grow max-w-[80%]"
+              title={category.name}
+            >
+              {category.name}
+            </Typography>
+          </div>
         </div>
       }
       description={[

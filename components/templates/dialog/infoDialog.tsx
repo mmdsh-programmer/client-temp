@@ -12,7 +12,13 @@ export interface IProps {
   customSize?: size;
 }
 
-const InfoDialog = ({ children, dialogHeader, setOpen, className, customSize }: IProps) => {
+const InfoDialog = ({
+  children,
+  dialogHeader,
+  setOpen,
+  className,
+  customSize,
+}: IProps) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -33,7 +39,12 @@ const InfoDialog = ({ children, dialogHeader, setOpen, className, customSize }: 
           <div className="block xs:hidden">
             <BackButton onClick={handleClose} />
           </div>
-          <Typography className="form__title">{dialogHeader}</Typography>
+          <Typography
+            className="form__title truncate flex-grow"
+            title={dialogHeader}
+          >
+            {dialogHeader}
+          </Typography>
         </div>
         <CloseButton onClose={handleClose} />
       </DialogHeader>
