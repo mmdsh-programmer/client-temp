@@ -1,10 +1,8 @@
-import { decodeKey } from "@utils/index";
-
 import Error from "@components/organisms/error";
-import { IThemeInfo } from "@interface/app.interface";
-import React from "react";
-import { getCustomPostByDomain } from "@service/social";
 import PublishHeader from "@components/organisms/header/publishHeader";
+import React from "react";
+import { decodeKey } from "@utils/index";
+import { getCustomPostByDomain } from "@service/social";
 
 interface IProps {
   children: React.ReactNode;
@@ -13,11 +11,11 @@ interface IProps {
 
 const PublicFeedsLayout = async ({ children, params: { domain } }: IProps) => {
   try {
-    const data = await getCustomPostByDomain(decodeKey(domain));
-
+    const { data } = await getCustomPostByDomain(decodeKey(domain));
+    const { projectName, logo } = JSON.parse(data);
     return (
       <>
-        <PublishHeader themeInfo={data as IThemeInfo} />
+        <PublishHeader projectName={projectName} logo={logo} />
         <main className="flex w-full h-[calc(100vh-81px)]">
           <section className="h-full w-full px-4 xs:px-8">{children}</section>
         </main>

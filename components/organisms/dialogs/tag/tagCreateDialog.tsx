@@ -1,15 +1,16 @@
-import React from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRecoilValue } from "recoil";
 
 interface IForm {
   name: string;
@@ -26,7 +27,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const createTag = useCreateTag();

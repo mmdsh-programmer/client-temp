@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { editorDataAtom, editorModeAtom } from "atom/editor";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import { IVersion } from "@interface/version.interface";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "atom/document";
 import { toast } from "react-toastify";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
-import { IVersion } from "@interface/version.interface";
-import { repoAtom } from "@atom/repository";
-import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -21,8 +22,8 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   const currentPath = usePathname();
 
   const searchParams = useSearchParams();
-  const getRepoId = searchParams.get("repoId");
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();

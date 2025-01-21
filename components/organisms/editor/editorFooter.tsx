@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Typography } from "@material-tailwind/react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   editorDataAtom,
   editorModalAtom,
@@ -7,10 +7,13 @@ import {
   editorPublicKeyAtom,
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { EDocumentTypes } from "@interface/enums";
+import EditorFileFooter from "./editorFileFooter";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -19,10 +22,8 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
-import useSaveEditor from "@hooks/editor/useSaveEditor";
-import EditorFileFooter from "./editorFileFooter";
 import useGetUser from "@hooks/auth/useGetUser";
-import { usePathname, useSearchParams } from "next/navigation";
+import useSaveEditor from "@hooks/editor/useSaveEditor";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -43,8 +44,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepoId = searchParams.get("repoId");
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const timeout = 5 * 60; // seconds
 
