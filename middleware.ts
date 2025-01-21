@@ -21,6 +21,7 @@ const pages = [
   "/sampleError",
   "/signin",
   "/subscribe",
+  "/feeds"
 ];
 
 function convertDocsUrlToPublishUrl(url: string): string | null {
@@ -146,5 +147,6 @@ export const config = {
     "/api/:path*",
     "/page/:path*",
     "/private/:path*",
+    "/feeds/:path*",
   ],
 };
