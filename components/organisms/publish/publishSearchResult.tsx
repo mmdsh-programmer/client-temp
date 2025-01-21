@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import LoadMore from "@components/molecules/loadMore";
-import useSearchPublishContent from "@hooks/publish/useSearchPublishContent";
 import { List, ListItem, Spinner } from "@material-tailwind/react";
-import { useParams } from "next/navigation";
-import PublishSearchResultItem from "./publishSearchResultItem";
+import React, { useState } from "react";
+
 import Error from "@components/organisms/error";
+import LoadMore from "@components/molecules/loadMore";
+import PublishSearchResultItem from "./publishSearchResultItem";
+import useSearchPublishContent from "@hooks/publish/useSearchPublishContent";
 
 export interface ISearchResultItem {
   versionId: number;
@@ -18,11 +18,11 @@ export interface ISearchResultItem {
 
 interface IProps {
   searchText: string;
+  id: number;
 }
 
-const PublishSearchResult = ({ searchText }: IProps) => {
+const PublishSearchResult = ({ searchText, id }: IProps) => {
   const [disableItems, setDisableItems] = useState(false);
-  const params = useParams();
   const {
     data: searchData,
     isLoading,
@@ -32,7 +32,7 @@ const PublishSearchResult = ({ searchText }: IProps) => {
     isError,
     error,
     refetch,
-  } = useSearchPublishContent(+params.id, searchText, 10);
+  } = useSearchPublishContent(id, searchText, 10);
 
   const onResultItemClick = (value: boolean) => {
     setDisableItems(value);

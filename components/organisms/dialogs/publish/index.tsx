@@ -1,14 +1,16 @@
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+
 import FormInput from "@components/atoms/input/formInput";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import { Button, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { publishSearchContentSchema } from "./validation.yup";
-import { SearchIcon } from "@components/atoms/icons";
 import PublishSearchResult from "@components/organisms/publish/publishSearchResult";
-import { useSetRecoilState } from "recoil";
+import { SearchIcon } from "@components/atoms/icons";
 import { openPublishPageSearchContent } from "@atom/publish";
+import { publishSearchContentSchema } from "./validation.yup";
+import { useForm } from "react-hook-form";
+import { useParams } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   searchText: string;
@@ -18,6 +20,7 @@ const PublishSearchContent = () => {
   const setOpen = useSetRecoilState(openPublishPageSearchContent);
   const [showResult, setShowResult] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const params = useParams();
 
   const form = useForm<IForm>({
     mode: "onChange",
@@ -64,7 +67,7 @@ const PublishSearchContent = () => {
             ) : null}
           </form>
 
-          {showResult ? <PublishSearchResult searchText={searchText} /> : null}
+          {showResult && params?.id ? <PublishSearchResult searchText={searchText} id={+params.id} /> : null}
         </div>
       </div>
     </InfoDialog>

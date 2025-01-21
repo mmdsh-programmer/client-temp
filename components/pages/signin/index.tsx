@@ -57,7 +57,7 @@ const SignInComponent = () => {
     const paramError = searchParams?.get("error");
     if (paramError) {
       const error_description = searchParams?.get("error_description");
-      setError(error_description);
+      setError(error_description ?? "خطا در دریافت اطلاعات کاربری");
     } else if (code) {
       try {
         await sendCode(code);
