@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { ChangeEvent, useState } from "react";
-import axios from "axios";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import DocumentEnableUserGroup from "./documentEnableUserGroup";
+import FileList from "../fileList";
+import FileUpload from "@components/molecules/fileUpload";
 import { IFile } from "cls-file-management";
+import axios from "axios";
 import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
-import DocumentEnableUserGroup from "./documentEnableUserGroup";
-import FileUpload from "@components/molecules/fileUpload";
-import FileList from "../fileList";
-import { selectedDocumentAtom } from "@atom/document";
-import { usePathname, useSearchParams } from "next/navigation";
 
 const fileTablePageSize = 20;
 
@@ -24,7 +26,7 @@ const AttachFile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const queryClient = useQueryClient();
 

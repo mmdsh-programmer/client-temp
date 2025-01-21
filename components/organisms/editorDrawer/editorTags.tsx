@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { Typography } from "@material-tailwind/react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { useRecoilValue } from "recoil";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
+import LoadingButton from "@components/molecules/loadingButton";
+import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
+import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
-import LoadingButton from "@components/molecules/loadingButton";
-import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
-import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
-import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
 
 const EditorTags = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -20,7 +21,7 @@ const EditorTags = () => {
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
 

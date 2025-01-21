@@ -1,14 +1,15 @@
-import React from "react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import useFreeDraft from "@hooks/editor/useFreeDraft";
 import { selectedVersionAtom } from "@atom/version";
-import { usePathname, useSearchParams } from "next/navigation";
+import useFreeDraft from "@hooks/editor/useFreeDraft";
 import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
@@ -26,8 +27,8 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepoId = searchParams.get("repoId");
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const freeDraftHook = useFreeDraft();

@@ -17,9 +17,9 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ message: "Client is not authorized" }, { status: 401 });
         }
         const {searchParams} = request.nextUrl;
-        const domain = searchParams.get("domain");
-        const size = searchParams.get("size");
-        const offset = searchParams.get("offset");
+        const domain = searchParams?.get("domain");
+        const size = searchParams?.get("size");
+        const offset = searchParams?.get("offset");
         const metaQuery: IMetaQuery = {
             field: "CUSTOM_POST_TYPE",
             is: "DOMAIN_BUSINESS"

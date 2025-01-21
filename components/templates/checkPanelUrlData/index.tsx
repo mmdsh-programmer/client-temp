@@ -19,11 +19,11 @@ const CheckPanelUrlData = () => {
   const setShowVersionList = useSetRecoilState(versionModalListAtom);
 
   const searchParams = useSearchParams();
-  const repoId = searchParams.get("repoId");
-  const categoryId = searchParams.get("categoryId");
-  const documentId = searchParams.get("documentId");
-  const versionId = searchParams.get("versionId");
-  const versionState = searchParams.get("versionState");
+  const repoId = searchParams?.get("repoId");
+  const categoryId = searchParams?.get("categoryId");
+  const documentId = searchParams?.get("documentId");
+  const versionId = searchParams?.get("versionId");
+  const versionState = searchParams?.get("versionState");
 
   const { data: getCategory } = useGetCategory(
     +repoId!,
