@@ -18,6 +18,7 @@ import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
 import MobileView from "../repoView/mobileView";
 import { listModeAtom } from "@atom/app";
 import CardView from "../repoView/cardView";
+import useBreakpoint from "@hooks/useBreakpoint";
 
 const AllRepoList = () => {
   const mode = useRecoilValue(listModeAtom);
@@ -25,6 +26,7 @@ const AllRepoList = () => {
   const repoType = getSearchParam?.repoType;
   const search = getSearchParam?.search;
 
+  const breakpoint = useBreakpoint();
   const allRepos = useGetAllRepositories(20, undefined, true);
   const searchAllRepos = useGetAllRepositories(20, search, true);
   const myRepos = useGetMyRepoList(
@@ -81,10 +83,13 @@ const AllRepoList = () => {
   const listLength = useMemo(() => {
     return repoList?.pages[0]?.total || 0;
   }, [repoList]);
+
   const listLengthAllRepos = useMemo(() => {
     return allRepos?.data?.pages[0]?.total || 0;
   }, [allRepos]);
+
   const isLoadingAllRepos = allRepos?.isLoading;
+
   const renderTableRows = () => {
     return repoList?.pages.map((page) => {
       return page.list.map((repo) => {
@@ -97,7 +102,11 @@ const AllRepoList = () => {
                 : undefined
             }
             tableCell={[
-              { data: repo.name },
+              {
+                data: repo.name,
+                className: "max-w-[200px] truncate",
+                title: repo.name,
+              },
               { data: FaDateFromTimestamp(+new Date(repo.createDate)) },
               { data: translateRoles(repo.roleName) },
               {
@@ -163,7 +172,7 @@ const AllRepoList = () => {
           </RenderIf>
           <RenderIf isTrue={mode === EListMode.card}>
             <CardView
-              isLoading={isLoadingAllRepos || isLoading}
+              isLoading={isLoadingAllRepos}
               getRepoList={repoList}
               hasNextPage={hasNextPage}
               fetchNextPage={fetchNextPage}
@@ -199,14 +208,9 @@ const AllRepoList = () => {
     );
   };
 
-  return (
-    <>
-      <div className="hidden xs:block">
-        <div className="flex flex-col h-full bg-primary p-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
-          {handleList()}
-        </div>
-      </div>
-      <div className="flex flex-col h-full min-h-[calc(100vh-340px)] xs:hidden gap-y-4">
+  return breakpoint  === "mobile" ? (
+    <div className="flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4">
+      <RenderIf isTrue={mode === EListMode.table}>
         <MobileView
           isLoading={isLoadingAllRepos || isLoading}
           getRepoList={repoList}
@@ -215,8 +219,24 @@ const AllRepoList = () => {
           isFetchingNextPage={isFetchingNextPage}
           type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
         />
+      </RenderIf>
+      <RenderIf isTrue={mode === EListMode.card}>
+        <CardView
+          isLoading={isLoadingAllRepos || isLoading}
+          getRepoList={repoList}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
+        />
+      </RenderIf>
+    </div>
+  ) : (
+    <div className="hidden xs:flex flex-col">
+      <div className="flex flex-col h-full bg-primary p-5 min-h-[calc(100vh-340px)] flex-grow flex-shrink-0 rounded-lg shadow-small">
+        {handleList()}
       </div>
-    </>
+    </div>
   );
 };
 

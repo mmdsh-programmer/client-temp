@@ -37,7 +37,7 @@ const CardView = ({
               })}
             </div>
             <RenderIf isTrue={!!hasNextPage}>
-              <div className="m-auto">
+              <div className="w-full flex justify-center items-center m-auto">
                 <LoadMore
                   isFetchingNextPage={isFetchingNextPage}
                   fetchNextPage={fetchNextPage}

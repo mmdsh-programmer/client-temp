@@ -22,7 +22,7 @@ const MyRepoList = ({ archived }: IProps) => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
-  } = useGetMyRepoList(20, archived, undefined, false, true);
+  } = useGetMyRepoList(20, archived, undefined, undefined, true);
 
   const commonProps: IRepoView = {
     isLoading,

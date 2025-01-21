@@ -101,7 +101,10 @@ const VersionTableView = ({
                         }
                       }}
                       tableCell={[
-                        { data: version.versionNumber },
+                        {
+                          data: version.versionNumber,
+                          className: "max-w-[200px] truncate",
+                        },
                         {
                           data: version.creator?.name,
                           className: "hidden md:table-cell",
