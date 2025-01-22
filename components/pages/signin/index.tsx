@@ -53,11 +53,11 @@ const SignInComponent = () => {
   };
 
   const init = useDebouncedCallback(async () => {
-    const code = searchParams.get("code");
-    const paramError = searchParams.get("error");
+    const code = searchParams?.get("code");
+    const paramError = searchParams?.get("error");
     if (paramError) {
-      const error_description = searchParams.get("error_description");
-      setError(error_description);
+      const error_description = searchParams?.get("error_description");
+      setError(error_description ?? "خطا در دریافت اطلاعات کاربری");
     } else if (code) {
       try {
         await sendCode(code);

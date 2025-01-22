@@ -1,7 +1,7 @@
 import { decodeKey, toEnglishDigit } from "@utils/index";
 
 import Error from "@components/organisms/error";
-import { IThemeInfo } from "@interface/app.interface";
+import { ICustomPostData } from "@interface/app.interface";
 import PublishSlugTemplate from "@components/templates/publishTemplate/publishSlugTemplate";
 import React from "react";
 import { getCustomPostByDomain } from "@service/social";
@@ -21,19 +21,23 @@ const PublishSlugLayout = async ({ children, params: { id, domain } }: IProps) =
       ),
     ]);
 
+    const { projectName, logo } = JSON.parse(data.data) as ICustomPostData;
+
     return (
       <PublishSlugTemplate
         repoId={repository.id}
         repoName={repository.name}
-        themeInfo={data as IThemeInfo}
+        projectName={projectName}
+        logo={logo}
       >
         {children}
       </PublishSlugTemplate>
     );
-  } catch {
+  } catch (error: unknown) {
+    const errorMessage = (error as { message: string }).message ?? "خطای غیر منتظره رخ داده است";
     return (
       <div className="w-screen h-screen grid place-content-center">
-        <Error error={{ message: "خطای غیر منتظره رخ داده است" }} />
+        <Error error={{ message: errorMessage }} />
       </div>
     );
   }

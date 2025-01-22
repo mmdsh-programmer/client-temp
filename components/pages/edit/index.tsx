@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { repoAtom } from "@atom/repository";
 import { useRecoilState, useRecoilValue } from "recoil";
+
+import EditorTab from "@components/organisms/editorTab";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetUser from "@hooks/auth/useGetUser";
-import EditorTab from "@components/organisms/editorTab";
-import { Spinner, Typography } from "@material-tailwind/react";
 
 const EditPage = () => {
   const currentPath = usePathname();
@@ -18,7 +19,9 @@ const EditPage = () => {
     useRecoilState(selectedDocumentAtom);
 
   const searchParams = useSearchParams();
-  const documentId = searchParams.get("documentId");
+  const documentId = searchParams?.get("documentId");
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo, isFetching } = useGetUser();
 
@@ -29,6 +32,9 @@ const EditPage = () => {
     if (currentPath === "/admin/sharedDocuments") {
       return getSelectedDocument!.repoId;
     }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
     return getRepo!.id;
   };
 
@@ -36,7 +42,13 @@ const EditPage = () => {
     data: getDocument,
     isFetching: isFetchingDocument,
     error,
-  } = useGetDocument(repoId(), +documentId!, true, true);
+  } = useGetDocument(
+    repoId(),
+    +documentId!,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    true,
+    true
+  );
 
   useEffect(() => {
     if (getDocument) {

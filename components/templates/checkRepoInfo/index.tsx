@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { repoAtom, repositoryIdAtom } from "atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useRouter, useSearchParams } from "next/navigation";
+
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
 import { Spinner } from "@material-tailwind/react";
@@ -23,7 +24,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const repoId = searchParams.get("repoId");
+  const repoId = searchParams?.get("repoId");
 
   const setRepository = useSetRecoilState(repoAtom);
 

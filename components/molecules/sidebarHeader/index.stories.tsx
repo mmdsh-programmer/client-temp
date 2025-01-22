@@ -24,7 +24,7 @@ export const ArchiveFolder: Story = {
   render: function Render() {
     return (
       <div dir="rtl">
-        <SiderbarHeader />
+        <SiderbarHeader domainInfo={{}} />
       </div>
     );
   },

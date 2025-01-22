@@ -12,9 +12,13 @@ import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
 import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { ServerError } from "@utils/error";
-import { headers } from "next/dist/client/components/headers";
+import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
+
+export const generateStaticParams = async () => {
+   return [];
+};
 
 type PageParams = {
   name: string;
@@ -27,9 +31,9 @@ export default async function PublishContentPage({
 }: {
   params: PageParams;
 }) {
+  const time = Date.now();
   try {
     const { id: repoId, slug } = params;
-    const domain = headers().get("host");
 
     const parsedRepoId = Number.parseInt(
       toEnglishDigit(decodeURIComponent(repoId)),
@@ -38,10 +42,6 @@ export default async function PublishContentPage({
 
     if (Number.isNaN(parsedRepoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
-    }
-
-    if (!domain) {
-      throw new Error("Domain is not found");
     }
 
     const repository = await getPublishRepositoryInfo(parsedRepoId);
@@ -93,8 +93,10 @@ export default async function PublishContentPage({
         documentId
       );
 
-      if (!lastVersionInfo)
+      if (!lastVersionInfo){
+        await generateCachePageTag(`em-${documentId}`);
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
+      }
 
       versionData = await getPublishDocumentVersion(
         repository.id,
@@ -104,7 +106,10 @@ export default async function PublishContentPage({
     }
 
     return (
-      <PublishVersionContent document={documentInfo} version={versionData} />
+      <>
+        <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
+        <PublishVersionContent document={documentInfo} version={versionData} />
+      </>
     );
   } catch (error) {
     return (

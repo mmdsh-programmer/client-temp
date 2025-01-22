@@ -4,7 +4,7 @@ import { IChildrenFilter } from "@interface/app.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
-import TreeCatItem from "./trreCatItem";
+import TreeCatItem from "./treeCatItem";
 import { categoryQueryParamsAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "@atom/sortParam";
@@ -74,7 +74,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
               }
               return (
                 <div className="tree-item-wrapper" key={item.id}>
-                  <TreeCatItem catItem={item} move={move} enableAction />
+                  <TreeCatItem catItem={item} move={move} enableAction={enableAction} />
                 </div>
               );
             });

@@ -1,21 +1,24 @@
-import React, { Fragment, useEffect, useRef, useState, useMemo } from "react";
+"use client";
+
+import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { SearchIcon, XIcon } from "@components/atoms/icons";
 import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
-import { TUserData } from "@interface/app.interface";
-import useDebounce from "@hooks/custom/useDebounce";
-import { ISortProps } from "@atom/sortParam";
-import useGetUser from "@hooks/auth/useGetUser";
-import SidebarCollapse from "./sidebarCollapse";
+
+import Error from "@components/organisms/error";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
-import SidebarCategoryItem from "./sidebarCategoryItem";
-import SidebarDocumentItem from "./sidebarDocumentItem";
-import { SearchIcon, XIcon } from "@components/atoms/icons";
-import { Spinner } from "@material-tailwind/react";
-import Error from "@components/organisms/error";
-import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
-import useGetAllPublishChildren from "@hooks/publish/useGetAllPublishChildren";
 import { IListResponse } from "@interface/repo.interface";
+import { ISortProps } from "@atom/sortParam";
+import Link from "next/link";
+import SidebarCategoryItem from "./sidebarCategoryItem";
+import SidebarCollapse from "./sidebarCollapse";
+import SidebarDocumentItem from "./sidebarDocumentItem";
+import { Spinner } from "@material-tailwind/react";
+import { TUserData } from "@interface/app.interface";
+import useDebounce from "@hooks/custom/useDebounce";
+import useGetAllPublishChildren from "@hooks/publish/useGetAllPublishChildren";
+import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   repoId: number;

@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { IFile } from "@interface/file.interface";
-import { editorDataAtom, editorModeAtom } from "atom/editor";
-import { pdfjs } from "react-pdf";
-import { useRecoilState, useRecoilValue } from "recoil";
-import Files from "../fileManagement";
-import { repoAtom } from "@atom/repository";
-import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
-import RenderIf from "@components/atoms/renderIf";
-import useGetUser from "@hooks/auth/useGetUser";
-import PreviewFile from "./previewFile";
-import { selectedFileAtom } from "@atom/file";
 import { Button, Typography } from "@material-tailwind/react";
+import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
+import React, { useEffect, useState } from "react";
+import { editorDataAtom, editorModeAtom } from "atom/editor";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import Files from "../fileManagement";
+import { IFile } from "@interface/file.interface";
+import PreviewFile from "./previewFile";
+import RenderIf from "@components/atoms/renderIf";
+import { pdfjs } from "react-pdf";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { selectedFileAtom } from "@atom/file";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IFileHash {
   hash: string;
@@ -22,11 +25,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 
 const FileEditor = () => {
   const [showFilePicker, setShowFilePicker] = useState(false);
+  const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
   const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const [getSelectedFile, setSelectedFile] = useRecoilState(selectedFileAtom);
+  const selectedDocument = useRecoilValue(selectedDocumentAtom);
 
   const { data: userInfo } = useGetUser();
   const token: string | undefined = userInfo?.access_token;
@@ -48,8 +56,31 @@ const FileEditor = () => {
     }
   }, []);
 
-  const repoId = getRepo!.id;
-  const { userGroupHash } = getRepo!;
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return selectedDocument!.repoId;
+    }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
+    return getRepo!.id;
+  };
+
+  const userGroupHash = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.userGroupHash;
+    }
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true"
+    ) {
+      return selectedDocument!.userGroupHash as string;
+    }
+    return getRepo!.userGroupHash;
+  };
 
   return (
     <div className="file-Editor h-full">
@@ -105,15 +136,17 @@ const FileEditor = () => {
               }}
             >
               <UploadIcon className="h-4 w-4 stroke-white" />
-              <Typography className="title_t2 text-white">انتخاب فایل</Typography>
+              <Typography className="title_t2 text-white">
+                انتخاب فایل
+              </Typography>
             </Button>
           </div>
 
           {showFilePicker ? (
             <div className="py-4 overflow-auto">
               <Files
-                userGroupHash={userGroupHash}
-                resourceId={repoId}
+                userGroupHash={userGroupHash()}
+                resourceId={repoId()}
                 type="public"
                 setSelectedFile={(file) => {
                   setSelectedFile(file);

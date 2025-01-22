@@ -65,6 +65,8 @@ export const handleSocialStatusError = (
         throw new InputError([message]);
       case 40: // Unauthorized
         throw new AuthorizationError([message]);
+      case 21:
+          throw new AuthorizationError([message]);
       default:
         throw new ServerError([message]);
     }
@@ -121,6 +123,19 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
 
+  const redisClient = await getRedisClient();
+  const cacheKey = `domain-${domain}`;
+
+  if (redisClient && redisClient.isReady) {
+    const cachedData = await redisClient?.get(cacheKey);
+    if (cachedData) {
+      console.log({
+        type: "Redis cache data",
+        data: cachedData
+      });
+      return JSON.parse(cachedData);
+    }
+  }
 
   const metaQuery: IMetaQuery = {
     field: "CUSTOM_POST_TYPE",
@@ -143,6 +158,12 @@ export const getCustomPostByDomain = async (
     id: item.entityId,
     data: item.data ?? "0",
   };
+
+  
+  if (redisClient && redisClient.isReady) {
+    await redisClient?.set(cacheKey, JSON.stringify(domainInfo));
+  }
+
   return domainInfo;
 };
 
@@ -155,6 +176,10 @@ export const getCustomPostById = async (
   if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(cacheKey);
     if (cachedData) {
+      console.log({
+        type: "Redis cache data",
+        data: cachedData
+      });
       return JSON.parse(cachedData);
     }
   }
@@ -224,11 +249,11 @@ export const updateCustomPost = async (
   // update redis cache
   const redisClient = await getRedisClient();
   if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.get(`domain-${metadata.domain}`);
-
-    if (cachedData) {
-      await redisClient?.del(`domain-${metadata.domain}`);
-    }
+    console.log({
+      type: "Redis remove data"
+    });
+    await redisClient?.del(`domain-${metadata.domain}`);
+    await redisClient?.del(`domain-id-${entityId}`);
   }
 
   if (response.data.hasError) {

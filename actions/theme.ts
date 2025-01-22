@@ -1,6 +1,6 @@
 "use server";
 
-import { IActionError, IThemeInfo } from "@interface/app.interface";
+import { IActionError, ICustomPostData } from "@interface/app.interface";
 
 import { getCustomPostByDomain } from "@service/social";
 import { headers } from "next/headers";
@@ -15,9 +15,9 @@ export const getThemeAction = async () => {
     }
 
     const { data } = await getCustomPostByDomain(domain);
-    const { projectDescription, projectName, logo, heroImage } = JSON.parse(data) as IThemeInfo;
+    const { projectDescription, projectName, logo, heroImage, theme } = JSON.parse(data) as ICustomPostData;
 
-    return { projectDescription, projectName, logo, heroImage };
+    return { projectDescription, projectName, logo, heroImage, theme };
   } catch (error) {
     return normalizeError(error as IActionError);
   }

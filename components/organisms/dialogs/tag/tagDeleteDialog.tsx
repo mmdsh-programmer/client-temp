@@ -1,13 +1,14 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
+import { usePathname, useSearchParams } from "next/navigation";
+
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import useDeleteTag from "@hooks/tag/useDeleteTag";
-import { selectedTagAtom } from "@atom/tag";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import React from "react";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedTagAtom } from "@atom/tag";
+import { toast } from "react-toastify";
+import useDeleteTag from "@hooks/tag/useDeleteTag";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -19,6 +20,8 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const deleteTag = useDeleteTag();
@@ -31,7 +34,11 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments" && getDocument) {
+    if (
+      (currentPath === "/admin/sharedDocuments" ||
+        sharedDocuments === "true") &&
+      getDocument
+    ) {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -43,14 +50,14 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
       repoId: repoId(),
       tagId: getTag.id,
       isDirectAccess:
-      currentPath === "/admin/sharedDocuments" ? true : undefined,
+      currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
       callBack: () => {
         toast.error("تگ حذف شد.");
         handleClose();
       },
     });
   };
-  
+
   return (
     <DeleteDialog
       isPending={deleteTag.isPending}

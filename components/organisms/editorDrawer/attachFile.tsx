@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { ChangeEvent, useState } from "react";
-import axios from "axios";
+import { usePathname, useSearchParams } from "next/navigation";
+
+import DocumentEnableUserGroup from "./documentEnableUserGroup";
+import FileList from "../fileList";
+import FileUpload from "@components/molecules/fileUpload";
 import { IFile } from "cls-file-management";
+import axios from "axios";
 import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
-import DocumentEnableUserGroup from "./documentEnableUserGroup";
-import FileUpload from "@components/molecules/fileUpload";
-import FileList from "../fileList";
-import { selectedDocumentAtom } from "@atom/document";
-import { usePathname } from "next/navigation";
 
 const fileTablePageSize = 20;
 
@@ -23,6 +25,8 @@ const AttachFile = () => {
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const queryClient = useQueryClient();
 
@@ -43,7 +47,7 @@ const AttachFile = () => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -94,7 +98,7 @@ const AttachFile = () => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${getDocument?.id}/uploadLink`,
           {
             expireTime: (Date.now() + 3600 * 1000).toString(),
-            userGroupHash: getDocument?.userGroupHash,
+            userGroupHash: getDocument?.attachmentUserGroup,
             isPublic: false,
           },
           {

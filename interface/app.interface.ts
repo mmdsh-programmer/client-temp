@@ -299,6 +299,13 @@ export interface IDomainMetadata {
   enablePublishPage: false;
 }
 
+export interface ICustomPostData {
+  logo?: string;
+  projectName?: string;
+  projectDescription?: string;
+  heroImage?: string;
+  theme?: IThemeInfo;
+}
 export interface IThemeInfo {
   primaryColor?: string;
   secondaryColor?: string;
@@ -310,9 +317,6 @@ export interface IThemeInfo {
   borderColor?: string;
   backgroundColor?: string;
   logo?: string;
-  projectName?: string;
-  projectDescription?: string;
-  heroImage?: string;
 }
 
 export interface IEditorValue {

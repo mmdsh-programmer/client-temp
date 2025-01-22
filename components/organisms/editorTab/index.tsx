@@ -6,7 +6,9 @@ import {
   editorPublicKeyAtom,
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
@@ -18,12 +20,11 @@ import { IRemoteEditorRef } from "clasor-remote-editor";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import useGetVersion from "@hooks/version/useGetVersion";
-import { usePathname, useSearchParams } from "next/navigation";
-import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
+import useGetVersion from "@hooks/version/useGetVersion";
 
 const EditorTab = () => {
   const currentPath = usePathname();
@@ -46,8 +47,10 @@ const EditorTab = () => {
   const { data: userInfo } = useGetUser();
 
   const searchParams = useSearchParams();
-  const versionId = searchParams.get("versionId");
-  const versionState = searchParams.get("versionState");
+  const versionId = searchParams?.get("versionId");
+  const versionState = searchParams?.get("versionState");
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -64,13 +67,16 @@ const EditorTab = () => {
     if (currentPath === "/admin/sharedDocuments") {
       return getSelectedDocument!.repoId;
     }
+    if (sharedDocuments === "true") {
+      return +getRepoId!;
+    }
     return getRepo!.id;
   };
 
   const { data: getLastVersion } = useGetLastVersion(
     repoId(),
     getSelectedDocument!.id,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     !getVersionData
   );
 
@@ -88,7 +94,7 @@ const EditorTab = () => {
     vState as "draft" | "version" | "public" | undefined,
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true
   );
 

@@ -34,7 +34,7 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
       setOpen={handleClose}
       onSubmit={handleSubmit}
     >
-      <ChildrenTree move={false} />
+      <ChildrenTree move={false} enableAction={false} />
       {loading ? (
         <LoadHtml handleClose={handleClose} editorRef={editorRef} />
       ) : null}

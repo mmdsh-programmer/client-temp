@@ -1,25 +1,25 @@
-import { IThemeInfo } from "@interface/app.interface";
 import ImageComponent from "@components/atoms/image";
 import { InfoIcon } from "@components/atoms/icons";
 import LoginPanelButton from "@components/molecules/loginPanelButton";
 import ProfileMenu from "@components/molecules/profileMenu";
-import React from "react";
-import PublishSearchButton from "@components/molecules/publishSearchButton";
 import PublicFeedsButton from "@components/molecules/publicFeedsButton";
+import PublishSearchButton from "@components/molecules/publishSearchButton";
+import React from "react";
 
 interface IProps {
-  themeInfo?: IThemeInfo;
+  projectName?: string;
+  logo?: string;
 }
-const PublishHeader = ({ themeInfo }: IProps) => {
+const PublishHeader = ({ projectName, logo }: IProps) => {
   return (
     <>
       <header className="w-full h-auto xs:h-20 px-0 xs:px-8 bg-white xs:bg-secondary flex flex-col xs:flex-row justify-between items-center">
         <div className="order-1 xs:order-2 min-w-full xs:w-auto h-[60px] px-4 xs:p-0 flex justify-between items-center border-b-2 border-gray-200 xs:border-b-0">
           <div className="flex h-8 w-8 mr-7 ml-auto items-center md:mr-0">
-            {themeInfo?.logo ? (
+            {logo ? (
               <ImageComponent
                 alt="repo-image"
-                src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${themeInfo.logo}`}
+                src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${logo}`}
                 className="h-8 w-10"
               />
             ) : (
@@ -28,9 +28,9 @@ const PublishHeader = ({ themeInfo }: IProps) => {
               </div>
             )}
 
-            {themeInfo?.projectName ? (
+            {projectName ? (
               <h1 className="text-base font-bold mr-2">
-                {themeInfo.projectName}
+                {projectName}
               </h1>
             ) : null}
           </div>

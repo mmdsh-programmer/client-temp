@@ -6,12 +6,12 @@ interface IProps {
 }
 
 export const metadata: Metadata = {
-  title: " داشبورد",
-  description: "پنل مدیریت محتوا",
+  title: "ویرایش",
+  description: "ویرایش محتوا",
 };
 
-const DashboardLayout = ({ children }: IProps) => {
+const EditLayout = ({ children }: IProps) => {
   return children;
 };
 
-export default DashboardLayout;
+export default EditLayout;

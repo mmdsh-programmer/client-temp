@@ -1,12 +1,3 @@
-import React from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
-import {
-  compareVersionAtom,
-  selectedVersionAtom,
-  versionModalListAtom,
-} from "@atom/version";
-import { IVersion } from "@interface/version.interface";
 import {
   ComparisionIcon,
   ConfirmationVersionIcon,
@@ -18,9 +9,19 @@ import {
   LastVersionIcon,
   ShareIcon,
 } from "@components/atoms/icons";
+import {
+  compareVersionAtom,
+  selectedVersionAtom,
+  versionModalListAtom,
+} from "@atom/version";
+import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
+import { IVersion } from "@interface/version.interface";
+import React from "react";
+import copy from "copy-to-clipboard";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
@@ -206,12 +207,12 @@ const useVersionMenuList = (
       text: (() => {
         if (version?.status === "editing") {
           return adminOrOwnerRole()
-            ? "تایید نسخه"
+            ? "تایید پیش نویس"
             : "ارسال درخواست تایید نسخه به مدیر";
         }
         return adminOrOwnerRole()
-          ? "عدم تایید نسخه"
-          : "لغوارسال درخواست تایید نسخه";
+          ? "عدم تایید پیش نویس"
+          : "لغوارسال درخواست تایید پیش نویس";
       })(),
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
