@@ -17,9 +17,11 @@ import {
   getPublishRepoList,
   getRepository,
   getRepositoryKeys,
+  getRepositorySubscription,
   imageRepository,
   leaveRepository,
   restoreRepository,
+  subscribeToRepository,
   transferOwnershipRepository,
 } from "@service/clasor";
 
@@ -223,10 +225,7 @@ export const deleteRepoAction = async (repoId: number) => {
     throw new Error("Domain is not found");
   }
   try {
-    const response = await deleteRepository(
-      userInfo.access_token,
-      repoId
-    );
+    const response = await deleteRepository(userInfo.access_token, repoId);
 
     return response;
   } catch (error) {
@@ -355,17 +354,10 @@ export const createRepoKeyAction = async (
   }
 };
 
-export const getKeyAction = async (
-  repoId: number,
-  keyId: number,
-) => {
+export const getKeyAction = async (repoId: number, keyId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await getKey(
-      userInfo.access_token,
-      repoId,
-      keyId,
-    );
+    const response = await getKey(userInfo.access_token, repoId, keyId);
 
     return response;
   } catch (error) {
@@ -385,6 +377,37 @@ export const transferOwnershipRepositoryAction = async (
       userName
     );
 
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const subscribeToRepoAction = async (
+  repoId: number,
+  isDirectAccess?: boolean
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await subscribeToRepository(
+      userInfo.access_token,
+      repoId,
+      isDirectAccess
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getRepoSubscriptionAction = async (repoId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getRepositorySubscription(
+      userInfo.access_token,
+      repoId
+    );
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

@@ -135,3 +135,9 @@ export enum ERepoGrouping {
   ARCHIVE_REPO = "‌‌مخزن‌های بایگانی‌شده",
   PUBLISHED_REPO = "مخزن های منتشر شده",
 }
+
+export enum ERepoSubscriptionStatus {
+  FOLLOW_REQUEST_ACCEPTED = "FOLLOW_REQUEST_ACCEPTED",
+  FOLLOW_REQUEST_SENT = "FOLLOW_REQUEST_SENT",
+  FOLLOW_REQUEST_REJECTED = "FOLLOW_REQUEST_REJECTED",
+}

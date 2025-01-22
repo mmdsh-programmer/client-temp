@@ -50,6 +50,7 @@ import {
   IListResponse,
   IPublicKey,
   IRepo,
+  IRepoSubscriptionStatus,
   IReport,
 } from "@interface/repo.interface";
 import { IRoles, IUser } from "@interface/users.interface";
@@ -147,7 +148,7 @@ export const userInfo = async (accessToken: string) => {
   if (cachedUser) {
     console.log({
       type: "Redis cache data",
-      data: cachedUser
+      data: cachedUser,
     });
     return JSON.parse(cachedUser);
   }
@@ -297,10 +298,7 @@ export const getAllRepositories = async (
   }
 };
 
-export const getPublishRepositoryInfo = async (
-  repoId: number
-) => {
-
+export const getPublishRepositoryInfo = async (repoId: number) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
       `repositories/${repoId}/publish`
@@ -525,7 +523,6 @@ export const editRepo = async (
   name: string,
   description: string
 ) => {
-
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -546,10 +543,7 @@ export const editRepo = async (
   }
 };
 
-export const deleteRepository = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const deleteRepository = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}`,
@@ -718,6 +712,50 @@ export const transferOwnershipRepository = async (
     );
 
     return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const subscribeToRepository = async (
+  accessToken: string,
+  repoId: number,
+  isDirectAccess?: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.post(
+      `repositories/${repoId}/subscription`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getRepositorySubscription = async (
+  accessToken: string,
+  repoId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IRepoSubscriptionStatus>
+    >(`repositories/${repoId}/subscription/userStatus`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -1560,7 +1598,6 @@ export const getPublishDocumentLastVersion = async (
   password?: string,
   accessToken?: string
 ) => {
-
   const headers = accessToken
     ? { Authorization: `Bearer ${accessToken}` }
     : undefined;
@@ -1609,7 +1646,6 @@ export const getPublishDocumentInfo = async (
   documentId: number,
   disableVersions?: boolean
 ) => {
-
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IDocumentMetadata>
@@ -2788,8 +2824,8 @@ export const saveFileVersion = async (
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          isDirectAccess
-        }
+          isDirectAccess,
+        },
       }
     );
 
@@ -3288,6 +3324,30 @@ export const getDomainPublicFeeds = async (
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IFeedItem>>
     >(`domain/${domainId}/feeds`, {
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDomainPrivateFeeds = async (
+  accessToken: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IFeedItem>>
+    >("report/social/userPosts", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
       params: {
         offset,
         size,
