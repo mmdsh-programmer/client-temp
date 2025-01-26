@@ -93,12 +93,12 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
                     </Typography>
                     <ArrowDownIcon className="w-5 h-5" />
                   </div>
-                  <div className="hidden xs:flex md:!hidden">
+                  <div className="hidden xs:flex md:!hidden justify-center items-center">
                     <AddIcon className="w-5 h-5 stroke-white" />
                   </div>
                 </>
               }
-              className="rounded-lg h-9 w-9 xs:w-auto !px-[6px] !bg-purple-normal "
+              className="rounded-lg h-9 w-9 md:w-auto !px-[6px] !bg-purple-normal "
             />
           </div>
           <div className="absolute z-[999] bottom-20 left-6 xs:hidden">

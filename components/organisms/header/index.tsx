@@ -3,6 +3,7 @@ import {
   BackIcon,
   LogoMobileIcon,
   ThemeIcon,
+  UserFillIcon,
 } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
@@ -68,11 +69,10 @@ const Header = () => {
             currentPath !== "/panel-admin-clasor" ? (
               <Button
                 onClick={handleAdminPanelNavigation}
-                className="w-max rounded-lg bg-white py-1 px-2 shadow-lg h-10 border-[1px] border-normal"
+                className="panel-admin rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+                title="پنل ادمین"
               >
-                <Typography className="text-secondary title_t4">
-                  پنل ادمین
-                </Typography>
+                <UserFillIcon className=" h-4 w-4 fill-[#9AA6B1]" />
               </Button>
             ) : null}
             <Button

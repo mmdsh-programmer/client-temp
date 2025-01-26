@@ -14,9 +14,12 @@ import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import SearchFilter from "@components/molecules/searchFilter";
-import { Spinner } from "@material-tailwind/react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import TableHead from "@components/molecules/tableHead";
 import { usePathname } from "next/navigation";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+import { DeleteIcon } from "@components/atoms/icons";
 
 interface ITableHead {
   key: string;
@@ -35,6 +38,9 @@ const TableView = ({
 }: ICategoryView) => {
   const currentPath = usePathname();
   const [openFilter, setOpenFilter] = useState(false);
+  const [getFilterChildren, setFilterChildren] =
+    useRecoilState(filterChildrenAtom);
+  const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
 
   const listLength = getCategoryList?.pages[0].total;
   return (
@@ -45,7 +51,21 @@ const TableView = ({
         <CategoryBreadCrumb />
         <SearchFilter open={openFilter} setOpen={setOpenFilter} />
       </div>
-      {openFilter ? <AdvancedFilter /> : null}
+      {openFilter ? <AdvancedFilter setOpen={setOpenFilter} /> : null}
+      {!openFilter && (getFilterChildren || getFilterReport) ? (
+        <div className="px-5">
+          <Button
+            className="bg-error h-7 w-max rounded-full gap-1 px-3"
+            onClick={() => {
+              setFilterChildren(null);
+              setFilterReport(null);
+            }}
+          >
+            <DeleteIcon className="h-4 w-4 fill-white" />
+            <Typography className="label text-white">حذف فیلتر</Typography>
+          </Button>
+        </div>
+      ) : null}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

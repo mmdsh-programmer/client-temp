@@ -56,7 +56,6 @@ const MainProvider = ({ children }: IProps) => {
           color: "white",
           border: "0.5px solid rgba(0, 0, 0, 0.12)",
           marginBottom: "16px",
-         
         }}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         toastClassName={({ type }: any) => {
@@ -67,6 +66,8 @@ const MainProvider = ({ children }: IProps) => {
               return "toast-error";
             case "warning":
               return "toast-warning";
+            case "dark":
+              return "toast-dark";
             default:
               return "toast-success";
           }
