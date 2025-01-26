@@ -7,12 +7,12 @@ import { useMutation } from "@tanstack/react-query";
 const useLogout = () => {
   return useMutation({
     mutationKey: ["logout"],
-    mutationFn: async (values: { callBack?: () => void }) => {
+    mutationFn: async (_values: { callBack?: () => void }) => {
       const response = await logoutAction();
       handleClientSideHookError(response as IActionError);
     },
-    onSuccess: (response, values) => {
-      const { callBack } = values;
+    onSuccess: (response, _values) => {
+      const { callBack } = _values;
       callBack?.();
     },
     onError: (error) => {

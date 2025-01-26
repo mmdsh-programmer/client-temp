@@ -4,7 +4,7 @@ import { IRepo } from "@interface/repo.interface";
 import Link from "next/link";
 import React from "react";
 import RepoDefaultImage from "../repoDefaultImage";
-import { toPersinaDigit } from "@utils/index";
+import { toPersianDigit } from "@utils/index";
 
 interface IProps {
   repo: IRepo;
@@ -20,7 +20,7 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
       <Link
         className="h-full"
         key={`repo-link-${repo.id}`}
-        href={`/publish/${repo.id}/${toPersinaDigit(
+        href={`/publish/${repo.id}/${toPersianDigit(
           `${repo.name.replaceAll(/\s+/g, "-")}`
         )}`}
         prefetch={false}

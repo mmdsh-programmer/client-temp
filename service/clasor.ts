@@ -59,6 +59,7 @@ import axios, { AxiosError, isAxiosError } from "axios";
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IClasorReport } from "@interface/clasorReport";
+import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
@@ -66,7 +67,6 @@ import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import { IFeedItem } from "@interface/feeds.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -1960,7 +1960,6 @@ export const addToDocumentWhiteList = async (
   documentId: number,
   usernameList: string[]
 ) => {
-  console.log("---------------------- white list -------------", usernameList);
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/whitelist`,
@@ -2508,7 +2507,7 @@ export const acceptDraft = async (
   draftId: number
 ) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<any>>(
+    const response = await axiosClasorInstance.post<IServerResult<IVersion>>(
       `repositories/${repoId}/documents/${docId}/versions/${draftId}/accept`,
       {},
       {
@@ -2672,7 +2671,7 @@ export const createRepoPublishLink = async (
   password?: string
 ) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<any>>(
+    const response = await axiosClasorInstance.post<IServerResult<void>>(
       `repositories/${repoId}/publish`,
       {
         expireTime,
@@ -2684,7 +2683,6 @@ export const createRepoPublishLink = async (
         },
       }
     );
-
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

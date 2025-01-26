@@ -16,7 +16,6 @@ const useAcceptDraft = () => {
       callBack?: () => void;
     }) => {
       const { repoId, docId, draftId } = values;
-      debugger;
       const response = await acceptDraftAction(repoId, docId, draftId);
       handleClientSideHookError(response as IActionError);
       return response;

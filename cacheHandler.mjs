@@ -1,6 +1,3 @@
-/* eslint-disable dot-notation */
-/* eslint-disable import/extensions */
-
 import { CacheHandler } from "@neshca/cache-handler";
 import { PHASE_PRODUCTION_BUILD } from "next/constants.js";
 import { createCluster } from "redis";
@@ -9,7 +6,7 @@ import createClusterHandler from "@neshca/cache-handler/experimental-redis-clust
 let cluster;
 export const getClient = async () => {
   try {
-    if (cluster && cluster["isReady"]) {
+    if (cluster && cluster.isReady) {
       return cluster;
     }
 
@@ -23,7 +20,7 @@ export const getClient = async () => {
         password: process.env.REDIS_PASS,
         socket: {
           reconnectStrategy: () => {
-            cluster["isReady"] = false;
+            cluster.isReady = false;
             return false;
           },
         },
@@ -44,11 +41,11 @@ export const getClient = async () => {
         // Caveat: This will block the server from starting until the cluster is connected.
         // And there is no timeout. Make your own timeout if needed.
         await cluster.connect();
-        cluster["isReady"] = true;
+        cluster.isReady = true;
         console.info("Redis cluster connected.");
       } catch (error) {
         console.warn("Failed to connect Redis cluster:", error);
-        cluster["isReady"] = false;
+        cluster.isReady = false;
 
         console.warn("Disconnecting the Redis cluster...");
         // Try to disconnect the cluster to stop it from reconnecting.

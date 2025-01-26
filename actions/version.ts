@@ -116,7 +116,7 @@ export const deleteVersionAction = async (
       state,
       isDirectAccess
     );
-
+    // revalidate page of version if exists
     revalidateTag(`vr-${versionId}`);
 
     return response;
@@ -190,8 +190,11 @@ export const publicVersionAction = async (
       isDirectAccess
     );
 
+    // revalidate page of version if exists
     revalidateTag(`vr-${versionId}`);
-    revalidateTag(`em-${documentId}`);
+
+    // revalidate empty page of document if exists
+    revalidateTag(`dc-${documentId}`);
 
     return response;
   } catch (error) {
@@ -236,8 +239,11 @@ export const confirmVersionAction = async (
       versionId,
       isDirectAccess
     );
+    // revalidate page of version if exists
     revalidateTag(`vr-${response.id}`);
-    revalidateTag(`em-${documentId}`);
+
+    // revalidate empty page of document if exists
+    revalidateTag(`dc-${documentId}`);
 
     return response;
   } catch (error) {

@@ -5,9 +5,10 @@ import {
   deletePublicLink,
   subscribeRepo,
 } from "@service/clasor";
+
+import { IActionError } from "@interface/app.interface";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
-import { IActionError } from "@interface/app.interface";
 
 export const createRepoPublicLinkAction = async (
   repoId: number,
