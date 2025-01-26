@@ -41,9 +41,11 @@ const CategoryList = () => {
         </div>
         <CategoryChildren />
       </div>
-      <CategoryDocumentCreateMenu showDrawer />
-      <CategoryMenu showDrawer />
-      <DocumentMenu showDrawer />
+      <div className="xs:hidden flex">
+        <CategoryDocumentCreateMenu showDrawer />
+        <CategoryMenu showDrawer />
+        <DocumentMenu showDrawer />
+      </div>
     </>
   );
 };

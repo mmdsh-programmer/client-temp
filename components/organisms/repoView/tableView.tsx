@@ -57,7 +57,11 @@ const TableView = ({
                           : `/admin/repositories?repoId=${repo.id}`
                       }
                       tableCell={[
-                        { data: repo.name },
+                        {
+                          data: repo.name,
+                          className: "max-w-[200px] truncate",
+                          title: repo.name,
+                        },
                         {
                           data: FaDateFromTimestamp(+new Date(repo.createDate)),
                         },

@@ -1,5 +1,4 @@
 import Shepherd, { StepOptions } from "shepherd.js";
-
 import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
@@ -143,7 +142,7 @@ const CategoryTour = () => {
         "bottom",
       ),
       createStep(
-        "step5",
+        "step4",
         `
           <div class="tour-step-container">
             <h1 class="tour-step-header"> انتخاب </h1>
@@ -157,7 +156,7 @@ const CategoryTour = () => {
         "bottom",
       ),
       createStep(
-        "step6",
+        "step5",
         `
           <div class="tour-step-container">
             <h1 class="tour-step-header"> الویت</h1>

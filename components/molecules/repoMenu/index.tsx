@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { BookmarkIcon, InfoIcon, MoreDotIcon } from "@components/atoms/icons";
 import { repoActionDrawerAtom, repoAtom, repoInfoAtom } from "@atom/repository";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { Button } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
-import { EListMode } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
-import { listModeAtom } from "@atom/app";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import RepoDialogs from "../repoDialogs";
 import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
 import { activeTourAtom, ETourSection } from "@atom/tour";
@@ -19,11 +17,9 @@ interface IProps {
 }
 
 const RepoMenu = ({ repo, showDrawer }: IProps) => {
-  const router = useRouter();
   const currentPath = usePathname();
 
   const [getRepo, setRepo] = useRecoilState(repoAtom);
-  const mode = useRecoilValue(listModeAtom);
   const setRepoInfo = useSetRecoilState(repoInfoAtom);
   const setActiveTour = useSetRecoilState(activeTourAtom);
 
@@ -50,8 +46,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   };
 
   const handleRepoInfo = () => {
-    if (mode === EListMode.card) setRepoInfo(repo);
-    else router.push(`/admin/repositories?repoId=${repo?.id}`);
+   setRepoInfo(repo);
   };
 
   const menuList = useRepoMenuList(

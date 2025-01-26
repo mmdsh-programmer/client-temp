@@ -9,6 +9,7 @@ interface IProps {
   setSelectedOptions: (options: any[]) => void;
   defaultOption: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const SelectBox = ({
@@ -17,6 +18,7 @@ const SelectBox = ({
   setSelectedOptions,
   defaultOption,
   className,
+  disabled
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -57,7 +59,10 @@ const SelectBox = ({
     >
       <button
         onClick={toggleDropdown}
-        className="w-full h-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 flex justify-between font-normal items-center text-left bg-white border-2 border-normal rounded-md focus:outline-none"
+        className={`w-full h-full truncate text-[13px] font-iranYekan py-1 pl-1 pr-2 
+          flex justify-between font-normal items-center text-left bg-white border-2 border-normal
+          ${disabled ? "!bg-gray-100 text-gray-300" : ""} rounded-md focus:outline-none`}
+        disabled={disabled}
       >
         <span className="max-w-min truncate">
           {selectedOptions.length > 0

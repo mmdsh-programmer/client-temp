@@ -267,6 +267,10 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   .rdp__modal.css-1e0sis0 {
     @apply z-[99999];
   }
+
+  .pause-animation {
+    animation-play-state: paused;
+  }
 }
 
 .bullet:before {
@@ -295,13 +299,31 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 .toast-error {
-  @apply !bg-error !font-iranYekan
+  box-shadow: 0px 2px 7px 0px rgba(240, 73, 61, 0.15), 0px 5px 17px 0px rgba(224, 62, 26, 0.20) !important;
+  @apply !bg-[#E03E1A] !font-iranYekan
 }
 
 .toast-success {
-  @apply !bg-success-normal !font-iranYekan
+  box-shadow: 0px 2px 7px 0px rgba(16, 185, 129, 0.15), 0px 5px 17px 0px rgba(16, 185, 129, 0.20) !important;
+  @apply !bg-[#10B981] !font-iranYekan
 }
 
-.Toastify__toast-icon+div {
+.toast-warning {
+  background: "#FF9500" !important;
+  box-shadow: 0px 2px 7px 0px rgba(255, 149, 0, 0.15), 0px 5px 17px 0px rgba(255, 149, 0, 0.20) !important;
+  font-family: "iranYekan" !important;
+}
+
+.toast-dark {
+  background: "#222222" !important;
+  box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.15), 0px 5px 17px 0px rgba(0, 0, 0, 0.20) !important;
+  font-family: "iranYekan" !important;
+}
+
+.Toastify__toast-icon > svg {
+  @apply fill-white
+}
+
+.Toastify__toast-icon + div {
   @apply text-white
 }

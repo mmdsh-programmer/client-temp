@@ -1,16 +1,21 @@
 "use client";
 
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
+  Button,
+  ListItem,
   Typography,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
-
-import { ChevronLeftIcon } from "@components/atoms/icons";
+import { ChevronLeftIcon, DashboardIcon } from "@components/atoms/icons";
 import SidebarDocuments from "@components/molecules/sidebarDocuments";
 import SidebarRepoList from "@components/molecules/sidebarRepoList";
+import { useRouter } from "next/navigation";
+import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { ERepoGrouping } from "@interface/enums";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -21,7 +26,10 @@ interface IProps {
 }
 
 const Sidebar = ({ children }: IProps) => {
+  const router = useRouter();
   const [open, setOpen] = useState(0);
+  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
+  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
 
   const handleOpen = (value) => {
     return setOpen(open === value ? 0 : value);
@@ -32,6 +40,30 @@ const Sidebar = ({ children }: IProps) => {
       <div className="p-4 h-[80px] flex items-center justify-center ">
         {children}
       </div>
+      <hr className="" />
+      <ListItem
+        key={ERepoGrouping.DASHBOARD}
+        placeholder="sidebar-item"
+        className="p-2 dashboard hover:!bg-transparent"
+      >
+        <Button
+          placeholder="sidebar-button"
+          className={` bg-transparent justify-start w-full 
+                     text-secondary gap-1 px-3 h-[44px]
+                   ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
+                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+          onClick={() => {
+            router.push("/admin/dashboard");
+            setRepoGroup(ERepoGrouping.DASHBOARD);
+            setSearchParam(null);
+          }}
+        >
+          <DashboardIcon className="h-6 w-6" />
+          <Typography placeholder="sidebar-text" className="title_t3">
+            {ERepoGrouping.DASHBOARD}
+          </Typography>
+        </Button>
+      </ListItem>
       <hr className="" />
       <Accordion
         className="max-w-full w-full "

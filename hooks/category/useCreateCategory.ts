@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { IActionError } from "@interface/app.interface";
 import { ICategory } from "@interface/category.interface";
 import { createCategoryAction } from "@actions/category";

@@ -2,7 +2,6 @@ import React from "react";
 import {
   ArchiveIcon,
   BookmarkRepoIcon,
-  DashboardIcon,
   FolderShareIcon,
   MyFolderIcon,
   PublishIcon,
@@ -17,15 +16,8 @@ const SidebarRepoList = () => {
   const router = useRouter();
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
+
   const sidebarList = [
-    {
-      text: ERepoGrouping.DASHBOARD,
-      icon: <DashboardIcon className="h-6 w-6" />,
-      className: "dashboard",
-      onClick: () => {
-        setRepoGroup(ERepoGrouping.DASHBOARD);
-      },
-    },
     {
       text: ERepoGrouping.MY_REPO,
       icon: <MyFolderIcon className="h-6 w-6 stroke-icon-hover" />,

@@ -72,7 +72,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
             <div className="flex">
               <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
               <span
-                className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+                className="max-w-[150px] truncate flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
                 title={categoryProp.name}
               >
                 {categoryProp.name}
