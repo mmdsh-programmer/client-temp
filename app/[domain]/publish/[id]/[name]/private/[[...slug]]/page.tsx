@@ -5,6 +5,7 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
+import { toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
@@ -12,12 +13,9 @@ import PublishDocumentSignin from "@components/pages/publish/publishDocumentSign
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
-import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { getDocumentPasswordAction } from "@actions/cookies";
-import { headers } from "next/dist/client/components/headers";
+import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
-import { toEnglishDigit } from "@utils/index";
-import { userInfoAction } from "@actions/auth";
 
 type PageParams = {
   name: string;
@@ -67,33 +65,36 @@ export default async function PublishContentPage({
 }: {
   params: PageParams;
 }) {
+  const time = Date.now();
   try {
-    const { id: repoId, slug } = params;
-    const domain = headers().get("host");
+    const { id, name, slug } = params;
+    const repoId = toEnglishDigit(id);
+    const enSlug = slug?.map(s => {return toEnglishDigit(s);});
 
     const parsedRepoId = Number.parseInt(
       toEnglishDigit(decodeURIComponent(repoId)),
       10
     );
 
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-
     if (Number.isNaN(parsedRepoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
     const repository = await getPublishRepositoryInfo(parsedRepoId);
-
-    if (!slug?.length) {
-      return <RepositoryInfo repository={repository} />;
+    const decodeName = decodeURIComponent(name);
+    const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
+    if(decodeName !== repoName){
+      return notFound();
     }
 
-    const lastSlug = slug[slug.length - 1];
+    if (!enSlug?.length) {
+      return notFound();
+    }
+
+    const lastSlug = enSlug[enSlug.length - 1];
     const hasVersion = lastSlug.startsWith("v-");
     const documentId = parseInt(
-      hasVersion ? slug[slug.length - 3] : lastSlug,
+      hasVersion ? enSlug[enSlug.length - 3] : lastSlug,
       10
     );
     const versionId = hasVersion
@@ -110,12 +111,17 @@ export default async function PublishContentPage({
       true
     );
 
+
+    if(documentInfo.name.replaceAll(/\s+/g, "-") !== decodeName){
+      return notFound();
+    }
+
     if (
       !documentInfo?.hasPassword &&
       !documentInfo?.hasWhiteList &&
       !documentInfo?.hasBlackList
     ) {
-      const publicSlug = slug?.filter((segment) => {
+      const publicSlug = enSlug?.filter((segment) => {
         return segment !== "private";
       });
       return (
@@ -125,7 +131,7 @@ export default async function PublishContentPage({
       );
     }
 
-    const userInfo = await userInfoAction();
+    const userInfo = await getMe();
     const accessToken =
       userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
     const documentPassword = await getDocumentPasswordAction(documentId);
@@ -150,6 +156,12 @@ export default async function PublishContentPage({
         accessToken
       );
 
+      const versionNumber = enSlug[enSlug.length - 2];
+  
+      if(hasVersion && version && version.versionNumber.replaceAll(/\s+/g, "-") !== versionNumber){
+        return notFound();
+      }
+
       if (!version) {
         throw new ServerError(["سند مورد نظر فاقد نسخه میباشد."]);
       }
@@ -170,9 +182,14 @@ export default async function PublishContentPage({
       throw error;
     }
   } catch (error) {
+    const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    if(message === "NEXT_NOT_FOUND"){
+        return notFound();
+    }
     return (
       <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">
         <div className="flex flex-col justify-center items-center">
+          <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
           <FolderEmptyIcon />
           {error instanceof Error ? error.message : "خطای نامشخصی رخ داد"}
         </div>

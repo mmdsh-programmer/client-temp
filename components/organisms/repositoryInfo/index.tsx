@@ -9,10 +9,8 @@ import {
 import { IRepo } from "@interface/repo.interface";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
-import { generateCachePageTag } from "@utils/redis";
 
 const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
-  await generateCachePageTag(`rp-${repository.id}`);
   const getImage = async () => {
     if (
       ["purple", "red", "blue", "yellow"].includes(repository.imageFileHash)
