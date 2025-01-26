@@ -1,19 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState } from "react";
 import { SearchIcon } from "@components/atoms/icons";
 import InputAtom from "@components/atoms/input";
 import SelectAtom from "@components/molecules/select";
 import { ERepoGrouping } from "@interface/enums";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 
 const RepoSearch = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
-  const [getSearchParam, setSearchParam] = useRecoilState(repoSearchParamAtom);
+  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
   const [search, setSearch] = useState<string>("");
   const [repoType, setRepoType] = useState<ERepoGrouping>(
     getRepoGroup === ERepoGrouping.DASHBOARD
       ? ERepoGrouping.ALL_REPO
-      : getRepoGroup ?? ERepoGrouping.ALL_REPO
+      : (getRepoGroup ?? ERepoGrouping.ALL_REPO)
   );
 
   const repoTypeOptions = () => {
@@ -38,6 +40,14 @@ const RepoSearch = () => {
         ];
       case ERepoGrouping.ARCHIVE_REPO:
         return [
+          { value: ERepoGrouping.ARCHIVE_REPO, label: "مخزن‌های بایگانی" },
+        ];
+      default:
+        return [
+          { value: ERepoGrouping.ALL_REPO, label: "همه‌ی مخزن‌ها" },
+          { value: ERepoGrouping.MY_REPO, label: "مخزن‌های من" },
+          { value: ERepoGrouping.ACCESS_REPO, label: "مخزن‌های اشتراکی" },
+          { value: ERepoGrouping.BOOKMARK_REPO, label: "مخزن‌های نشان‌شده" },
           { value: ERepoGrouping.ARCHIVE_REPO, label: "مخزن‌های بایگانی" },
         ];
     }
@@ -69,10 +79,18 @@ const RepoSearch = () => {
         />
         <SelectAtom
           className="w-[150px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 "
-          defaultOption={getRepoGroup ? { value: getRepoGroup, label: getRepoGroup } : undefined}
+          defaultOption={
+            getRepoGroup
+              ? { value: getRepoGroup, label: getRepoGroup }
+              : undefined
+          }
           options={repoTypeOptions()}
-          selectedOption={repoType ? { value: repoType, label: repoType } : undefined}
-          setSelectedOption={(option) => setRepoType(option.value as ERepoGrouping)}
+          selectedOption={
+            repoType ? { value: repoType, label: repoType } : undefined
+          }
+          setSelectedOption={(option) => {
+            return setRepoType(option.value as ERepoGrouping);
+          }}
         />
       </div>
     </div>

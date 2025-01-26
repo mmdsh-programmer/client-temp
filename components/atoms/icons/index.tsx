@@ -441,7 +441,7 @@ export const ChevronLeftIcon = (props: IProps) => {
 };
 
 export const CircleIcon = (props: IProps) => {
-  const { className, stroke } = props;
+  const { className } = props;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -3498,8 +3498,8 @@ export const UserFillIcon = (props: IProps) => {
       fill={fill}
     >
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M18 8C18 11.3137 15.3137 14 12 14C8.68628 14 6 11.3137 6 8C6 4.68628 8.68628 2 12 2C15.3137 2 18 4.68628 18 8ZM3 21.25C3 18.36 5.35001 16 8.25 16H15.75C18.64 16 21 18.36 21 21.25C21 21.66 20.66 22 20.25 22H3.75C3.34 22 3 21.66 3 21.25Z"
         fill={fill}
       />

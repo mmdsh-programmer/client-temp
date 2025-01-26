@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import React from "react";
 import CardView from "../repoView/cardView";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";

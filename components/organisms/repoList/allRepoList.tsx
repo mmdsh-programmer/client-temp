@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import React, { useMemo } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { useRecoilValue } from "recoil";
@@ -8,12 +10,10 @@ import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
-import { listModeAtom } from "@atom/app";
 import CardView from "../repoView/cardView";
 import { Spinner } from "@material-tailwind/react";
 
 const AllRepoList = () => {
-  const mode = useRecoilValue(listModeAtom);
   const getSearchParam = useRecoilValue(repoSearchParamAtom);
   const repoType = getSearchParam?.repoType;
   const search = getSearchParam?.search;

@@ -17,7 +17,7 @@ import SearchFilter from "@components/molecules/searchFilter";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import TableHead from "@components/molecules/tableHead";
 import { usePathname } from "next/navigation";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
 import { DeleteIcon } from "@components/atoms/icons";
 
