@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Button,
   Menu,
@@ -9,12 +8,14 @@ import {
   MenuList,
   Spinner,
 } from "@material-tailwind/react";
-import { useRecoilValue } from "recoil";
-import { publishVersionAtom } from "@atom/publish";
-import { ChevronLeftIcon } from "@components/atoms/icons";
-import useGetPublishDocumentVersions from "@hooks/publish/useGetPublishDocumentVersions";
-import { IVersion } from "@interface/version.interface";
+import React, { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+
+import { ChevronLeftIcon } from "@components/atoms/icons";
+import { IVersion } from "@interface/version.interface";
+import { publishVersionAtom } from "@atom/publish";
+import useGetPublishDocumentVersions from "@hooks/publish/useGetPublishDocumentVersions";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   repoId: number;
@@ -40,7 +41,7 @@ const PublishChangeVersion = ({
   );
 
   const handleSelectVersion = (versionItem: IVersion) => {
-    if (versionItem.id !== selectedVersionId) {
+    if (pathname && versionItem.id !== selectedVersionId) {
       const pathArray = pathname.split("/");
 
       if (pathArray[pathArray.length - 1].startsWith("v-")) {

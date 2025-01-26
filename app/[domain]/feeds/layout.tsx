@@ -16,7 +16,7 @@ const PublicFeedsLayout = async ({ children, params: { domain } }: IProps) => {
     return (
       <>
         <PublishHeader projectName={projectName} logo={logo} />
-        <main className="flex w-full h-[calc(100vh-81px)]">
+        <main className="flex w-full h-[calc(100vh-81px)] bg-white">
           <section className="h-full w-full px-4 xs:px-8">{children}</section>
         </main>
       </>
