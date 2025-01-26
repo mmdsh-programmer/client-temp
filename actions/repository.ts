@@ -213,7 +213,7 @@ export const createRepoAction = async (name: string, description?: string) => {
       userInfo.access_token,
       name,
       description,
-      [type]
+      Array.isArray(type) ? [type[0]] : [type]
     );
     return response;
   } catch (error) {
