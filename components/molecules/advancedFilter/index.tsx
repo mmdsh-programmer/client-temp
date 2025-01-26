@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";

@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import React from "react";
 import CardView from "../repoView/cardView";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
@@ -27,17 +29,15 @@ const MyRepoList = ({ archived }: IProps) => {
   const type = () => {
     if (search) {
       return EEmptyList.FILTER;
-    } else {
-      if (archived) {
-        return EEmptyList.ARCHIVE_REPO;
-      } else {
-        return EEmptyList.MY_REPO;
-      }
     }
+    if (archived) {
+      return EEmptyList.ARCHIVE_REPO;
+    }
+    return EEmptyList.MY_REPO;
   };
 
   const commonProps: IRepoView = {
-    isLoading: isLoading,
+    isLoading,
     getRepoList: getMyRepoList,
     hasNextPage,
     fetchNextPage,
