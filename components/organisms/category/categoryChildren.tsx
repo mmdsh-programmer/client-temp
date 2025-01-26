@@ -99,8 +99,7 @@ const CategoryChildren = () => {
         </>
       </RenderIf>
       <RenderIf isTrue={getListMode === "tree"}>
-        <div className="bg-white">
-
+        <div className="bg-white min-h-[calc(100vh-340px)] h-full">
         <ChildrenTree move={false} enableAction />
         </div>
       </RenderIf>

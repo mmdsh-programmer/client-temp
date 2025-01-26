@@ -60,10 +60,10 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
 
   return (
     <div
-      className={`tree-wrapper ${enableAction ? "" : "!h-[400px] xs:!h-[300px] min-h-[300px]"}`}
+      className={`tree-wrapper ${enableAction ? "!h-full min-h-[calc(100vh-340px)]" : "!h-[400px] xs:!h-[300px] min-h-[300px]"}`}
     >
       <div
-        className={`h-full flex flex-col ${enableAction ? "overflow-hidden" : "overflow-auto"} items-start`}
+        className={`h-full flex flex-col ${enableAction ? "min-h-[calc(100vh-340px)] overflow-hidden" : "overflow-auto"} items-start`}
       >
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
@@ -88,7 +88,16 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
             });
           })
         ) : (
-          <EmptyList type={move ? EEmptyList.CATEGORY : EEmptyList.TEMPLATE} />
+          <EmptyList
+            type={
+              // eslint-disable-next-line no-nested-ternary
+              move
+                ? EEmptyList.CATEGORY
+                : enableAction
+                  ? EEmptyList.CHILDREN
+                  : EEmptyList.TEMPLATE
+            }
+          />
         )}
         <RenderIf isTrue={!!hasNextPage}>
           <LoadMore

@@ -299,27 +299,25 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 .toast-error {
-  background: "#E03E1A";
-  box-shadow: 0px 2px 7px 0px rgba(240, 73, 61, 0.15), 0px 5px 17px 0px rgba(224, 62, 26, 0.20);
-  font-family: "iranYekan";
+  box-shadow: 0px 2px 7px 0px rgba(240, 73, 61, 0.15), 0px 5px 17px 0px rgba(224, 62, 26, 0.20) !important;
+  @apply !bg-[#E03E1A] !font-iranYekan
 }
 
 .toast-success {
-  background: "#10B981";
-  box-shadow: 0px 2px 7px 0px rgba(16, 185, 129, 0.15), 0px 5px 17px 0px rgba(16, 185, 129, 0.20);
-  font-family: "iranYekan";
+  box-shadow: 0px 2px 7px 0px rgba(16, 185, 129, 0.15), 0px 5px 17px 0px rgba(16, 185, 129, 0.20) !important;
+  @apply !bg-[#10B981] !font-iranYekan
 }
 
 .toast-warning {
-  background: "#FF9500";
-  box-shadow: 0px 2px 7px 0px rgba(255, 149, 0, 0.15), 0px 5px 17px 0px rgba(255, 149, 0, 0.20);
-  font-family: "iranYekan";
+  background: "#FF9500" !important;
+  box-shadow: 0px 2px 7px 0px rgba(255, 149, 0, 0.15), 0px 5px 17px 0px rgba(255, 149, 0, 0.20) !important;
+  font-family: "iranYekan" !important;
 }
 
 .toast-dark {
-  background: "#222222";
-  box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.15), 0px 5px 17px 0px rgba(0, 0, 0, 0.20);
-  font-family: "iranYekan";
+  background: "#222222" !important;
+  box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.15), 0px 5px 17px 0px rgba(0, 0, 0, 0.20) !important;
+  font-family: "iranYekan" !important;
 }
 
 .Toastify__toast-icon > svg {

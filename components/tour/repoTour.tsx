@@ -1,5 +1,4 @@
 import Shepherd, { StepOptions } from "shepherd.js";
-
 import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
@@ -57,24 +56,26 @@ const RepoTour = () => {
         },
         buttons: [
           {
-            text: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-      </svg>        
-              `,
+            text: `
+            <svg style="display:${id === "step1" ? "none" : "inherit"}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+            </svg>        
+          `,
             action: () => {
               repoTour.back();
             },
-            disabled: disabled === "back" && true,
+            disabled: disabled === "back",
           },
           {
             action: () => {
               repoTour.next();
             },
-            text: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            text: `
+            <svg style="display:${id === "step-last" ? "none" : "inherit"}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
             </svg>
-            `,
-            disabled: disabled === "next" && true,
+          `,
+            disabled: disabled === "next",
           },
         ],
       };
@@ -131,19 +132,19 @@ const RepoTour = () => {
 
     //     "bottom",
     //   ),
-      createStep(
-        "step3",
-        `
-          <div class="tour-step-container">
-          <h1 class="tour-step-header"> نشان کردن مخزن </h1>
-          <p class="tour-step-text">
-          مخزن های پر کاربرد خود را نشان کنید تا راحت تر و سریع تر در بخش مخزن های
-          نشان شده پنل نمایش داده شود.
-          </p>
-        </div>`,
-        ".repo-bookmark",
-        "bottom",
-      ),
+      // createStep(
+      //   "step3",
+      //   `
+      //     <div class="tour-step-container">
+      //     <h1 class="tour-step-header"> نشان کردن مخزن </h1>
+      //     <p class="tour-step-text">
+      //     مخزن های پر کاربرد خود را نشان کنید تا راحت تر و سریع تر در بخش مخزن های
+      //     نشان شده پنل نمایش داده شود.
+      //     </p>
+      //   </div>`,
+      //   ".repo-bookmark",
+      //   "bottom",
+      // ),
     //   createStep(
     //     "step5",
     //     `

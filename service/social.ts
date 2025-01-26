@@ -153,6 +153,7 @@ export const getCustomPostByDomain = async (
  
   const response = await getCustomPost(metaQuery, size, offset);
   const { item } = response.result[0];
+
   const domainInfo = {
     ...JSON.parse(item.metadata),
     id: item.entityId,

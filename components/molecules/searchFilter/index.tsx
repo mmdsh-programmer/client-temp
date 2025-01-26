@@ -1,11 +1,10 @@
-import { FilterIcon, SearchIcon } from "@components/atoms/icons";
 import React, { useState } from "react";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-
+import { FilterIcon, SearchIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
 import SearchContent from "@components/molecules/searchContent";
-import { useSetRecoilState } from "recoil";
 import { usePathname } from "next/navigation";
+import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   open: boolean;
@@ -14,8 +13,9 @@ interface IProps {
 
 const SearchFilter = ({ open, setOpen }: IProps) => {
   const currentPath = usePathname();
-  const setFilterChildren = useSetRecoilState(filterChildrenAtom);
-  const setFilterReport = useSetRecoilState(filterReportAtom);
+  const [getFilterChildren, setFilterChildren] =
+    useRecoilState(filterChildrenAtom);
+  const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
   const [openSearchModal, setOpenSearchModal] = useState(false);
 
   return (
@@ -27,7 +27,7 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
             onClick={() => {
               setOpenSearchModal(true);
             }}
-            placeholder=""
+            placeholder="categorySearchContent"
             className="categorySearchContent bg-white shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
           >
             <SearchIcon className="h-5 w-5 stroke-gray-500" />
@@ -35,10 +35,12 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
         )}
         <Button
           onClick={() => {
-            setOpen(!open);
-            if (open) {
+            if ((getFilterReport || getFilterChildren) && open) {
               setFilterChildren(null);
               setFilterReport(null);
+              setOpen(false);
+            } else {
+              setOpen(!open);
             }
           }}
           placeholder=""
