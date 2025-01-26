@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { InvisibleIcon, TickIcon } from "@components/atoms/icons";
+import { TickIcon } from "@components/atoms/icons";
 import { IDocumentTreeItem } from "atom/category";
 import { documentTemplateAtom } from "atom/document";
 import { useRecoilState } from "recoil";
@@ -34,9 +34,6 @@ const TreeDocItem = ({ docItem, enableAction }: IProps) => {
             {!enableAction && getDocumentTemplate?.id === docItem.id ? (
               <TickIcon className="fill-purple-normal w-5 h-5 flex-none" />
             ) : null}
-            {docItem.isHidden && (
-              <InvisibleIcon className="w-5 h-5 stroke-neutral-content flex-none" />
-            )}
           </div>
           <DocumentIcon document={docItem} />
           <Typography className="text-primary lowercase mr-2" key={docItem.id}>

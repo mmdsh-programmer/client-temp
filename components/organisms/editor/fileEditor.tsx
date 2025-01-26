@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { IFile } from "@interface/file.interface";
-import { editorDataAtom, editorModeAtom } from "atom/editor";
-import { pdfjs } from "react-pdf";
-import { useRecoilState, useRecoilValue } from "recoil";
-import Files from "../fileManagement";
-import { repoAtom } from "@atom/repository";
-import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
-import RenderIf from "@components/atoms/renderIf";
-import useGetUser from "@hooks/auth/useGetUser";
-import PreviewFile from "./previewFile";
-import { selectedFileAtom } from "@atom/file";
 import { Button, Typography } from "@material-tailwind/react";
+import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
+import React, { useEffect, useState } from "react";
+import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import Files from "../fileManagement";
+import { IFile } from "@interface/file.interface";
+import PreviewFile from "./previewFile";
+import RenderIf from "@components/atoms/renderIf";
+import { pdfjs } from "react-pdf";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedFileAtom } from "@atom/file";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IFileHash {
   hash: string;
@@ -26,8 +27,8 @@ const FileEditor = () => {
   const [showFilePicker, setShowFilePicker] = useState(false);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepoId = searchParams.get("repoId");
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const getRepoId = searchParams?.get("repoId");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
   const editorData = useRecoilValue(editorDataAtom);

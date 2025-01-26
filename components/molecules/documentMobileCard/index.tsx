@@ -71,7 +71,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
   return (
     <MobileCard
       name={
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full">
           <Checkbox
             color="deep-purple"
             containerProps={{
@@ -88,10 +88,10 @@ const DocumentMobileCard = ({ document }: IProps) => {
               return bulkItem.id === document.id;
             })}
           />
-          <div className="flex">
+          <div className="flex gap-2 max-w-full">
             <DocumentIcon document={document} />
             <Typography
-              className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+              className="flex text-ellipsis overflow-hidden truncate flex-grow max-w-[80%]"
               title={document.name}
             >
               {document.name}

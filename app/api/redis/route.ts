@@ -22,7 +22,7 @@ export async function GET(req) {
     if(!redisHandler || !redisHandler.isOpen){
       return NextResponse.json({ error: "Redis is not ready" }, { status: 400 });
     }
-    const key = req.nextUrl.searchParams.get("key");
+    const key = req.nextUrl.searchParams?.get("key");
 
     if (!key) {
       return NextResponse.json({ error: "Key is required" }, { status: 400 });

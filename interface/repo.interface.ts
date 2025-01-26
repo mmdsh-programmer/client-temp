@@ -1,5 +1,5 @@
 import { EEmptyList } from "@components/molecules/emptyList";
-import { ERoles } from "./enums";
+import { ERepoSubscriptionStatus, ERoles } from "./enums";
 import {
   FetchNextPageOptions,
   InfiniteData,
@@ -93,7 +93,7 @@ export interface IRepoView {
   getRepoList: InfiniteData<IListResponse<IRepo>, unknown> | undefined;
   hasNextPage: boolean;
   fetchNextPage: (
-    options?: FetchNextPageOptions,
+    options?: FetchNextPageOptions
   ) => Promise<
     InfiniteQueryObserverResult<
       InfiniteData<IListResponse<IRepo>, unknown>,
@@ -103,4 +103,22 @@ export interface IRepoView {
   isFetchingNextPage: boolean;
   isFetching?: boolean;
   type: EEmptyList;
+}
+
+export interface IRepoSubscriptionStatus {
+  status: {
+    userSrv: {
+      id: number;
+      firstName: string;
+      lastName: string;
+      username: string;
+      profileImage: string;
+      numOfStories: number;
+      private: boolean;
+    };
+    myFollowing: boolean;
+    myFollowRequestStatus?: ERepoSubscriptionStatus;
+    myFollower: boolean;
+    userFollowRequestStatus?: ERepoSubscriptionStatus;
+  };
 }

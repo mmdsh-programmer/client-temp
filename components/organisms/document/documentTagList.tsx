@@ -1,12 +1,13 @@
-import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import ChipMolecule from "@components/molecules/chip";
+import React from "react";
 import { XIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
-import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -22,7 +23,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const setTempDocTag = useSetRecoilState(tempDocTagAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
 

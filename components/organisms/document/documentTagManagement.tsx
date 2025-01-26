@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
+
 import DocumentTagList from "@components/organisms/document/documentTagList";
 import SearchableDropdown from "../../molecules/searchableDropdown";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetTags from "@hooks/tag/useGetTags";
-import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -21,7 +22,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
 

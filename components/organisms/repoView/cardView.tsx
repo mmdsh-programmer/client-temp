@@ -24,7 +24,7 @@ const CardView = ({
           </div>
         ) : listLength ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 grid-rows-[min-content] gap-4 flex-wrap">
+            <div className="grid grid-cols-1 grid-rows-[min-content] gap-4 flex-wrap">
               {getRepoList?.pages.map((page) => {
                 return page.list.map((repo) => {
                   return (
@@ -37,7 +37,7 @@ const CardView = ({
               })}
             </div>
             <RenderIf isTrue={!!hasNextPage}>
-              <div className="m-auto">
+              <div className="w-full flex justify-center items-center m-auto">
                 <LoadMore
                   isFetchingNextPage={isFetchingNextPage}
                   fetchNextPage={fetchNextPage}

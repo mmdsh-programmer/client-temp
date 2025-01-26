@@ -50,8 +50,8 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   };
 
   const handleRepoInfo = () => {
-    if (mode === EListMode.card) setRepoInfo(repo);
-    else router.push(`/admin/repositories?repoId=${repo?.id}`);
+   setRepoInfo(repo);
+    //  router.push(`/admin/repositories?repoId=${repo?.id}`);
   };
 
   const menuList = useRepoMenuList(

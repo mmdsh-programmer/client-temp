@@ -1,13 +1,14 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import useDeleteTag from "@hooks/tag/useDeleteTag";
-import { selectedTagAtom } from "@atom/tag";
 import { usePathname, useSearchParams } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import React from "react";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedTagAtom } from "@atom/tag";
+import { toast } from "react-toastify";
+import useDeleteTag from "@hooks/tag/useDeleteTag";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -20,7 +21,7 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const deleteTag = useDeleteTag();

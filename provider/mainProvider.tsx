@@ -1,14 +1,13 @@
 "use client";
 
-import "react-toastify/dist/ReactToastify.min.css";
-
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { useState } from "react";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "@material-tailwind/react";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import ToastCloseButton from "@components/atoms/button/toastCloseButton";
 
 interface IProps {
   children: React.ReactNode;
@@ -33,7 +32,7 @@ const MainProvider = ({ children }: IProps) => {
       </QueryClientProvider>
       <ToastContainer
         position="bottom-left"
-        autoClose={50000}
+        autoClose={2000}
         hideProgressBar
         newestOnTop
         closeOnClick
@@ -48,12 +47,15 @@ const MainProvider = ({ children }: IProps) => {
           borderRadius: "8px",
           fontSize: "14px",
           fontFamily: "iranYekan !important",
+          fontWeight: 400,
+          lineHeight: "19.6px",
+          letterSpacing: "-0.14px",
+          padding: "12px",
           display: "flex",
           alignItems: "center",
           color: "white",
           border: "0.5px solid rgba(0, 0, 0, 0.12)",
-          boxShadow:
-            "0px 2px 7px 0px rgba(16, 185, 129, 0.15), 0px 5px 17px 0px rgba(16, 185, 129, 0.20)",
+          marginBottom: "16px",
         }}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         toastClassName={({ type }: any) => {
@@ -62,15 +64,19 @@ const MainProvider = ({ children }: IProps) => {
               return "toast-success";
             case "error":
               return "toast-error";
+            case "warning":
+              return "toast-warning";
+            case "dark":
+              return "toast-dark";
             default:
-              return "bg-[#00C853] text-white";
+              return "toast-success";
           }
         }}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
         }}
-        closeButton
+        closeButton={ToastCloseButton}
       />
     </ThemeProvider>
   );

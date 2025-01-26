@@ -1,8 +1,8 @@
 import React from "react";
-import FeedList from "@components/organisms/feedList";
+import Feeds from "@components/organisms/feeds";
 
 const PublicFeedsPage = async () => {
-  return <FeedList />;
+  return <Feeds />;
 };
 
 export default PublicFeedsPage;

@@ -109,7 +109,7 @@ const DocumentTableRow = ({ document }: IProps) => {
               <div className="flex">
                 <DocumentIcon document={document} />
                 <span
-                  className="flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+                  className="max-w-[150px] truncate flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
                   title={document.name}
                 >
                   {document.name}

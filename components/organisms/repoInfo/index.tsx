@@ -20,10 +20,15 @@ const RepoInfo = () => {
           <RepoImage imageHash={getRepo?.imageFileHash} />
         </div>
         <div className="block py-0 sm:py-2 md:py-0 lg:py-2 sm:flex md:block lg:flex flex-col flex-grow">
-          <div className="flex justify-between">
-            <div className="repoCreationDate flex flex-col">
-              <div className="flex items-center gap-1">
-                <Typography className="title_t1">{getRepo?.name}</Typography>
+          <div className="flex justify-between items-baseline max-w-full">
+            <div className=" flex flex-col flex-grow w-[70%]">
+              <div className="repoCreationDate flex items-center gap-1">
+                <Typography
+                  className="title_t1 !text-primary !font-[450] truncate max-w-[50%]"
+                  title={getRepo?.name}
+                >
+                  {getRepo?.name}
+                </Typography>
                 <ChipMolecule
                   value={translateRoles(getRepo?.roleName)}
                   className="px-2 py-[2px] border-[1px] border-normal bg-purple-light text-purple-normal"

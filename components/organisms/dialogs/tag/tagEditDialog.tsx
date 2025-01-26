@@ -1,16 +1,17 @@
+import { usePathname, useSearchParams } from "next/navigation";
+
+import EditDialog from "@components/templates/dialog/editDialog";
+import FormInput from "@components/atoms/input/formInput";
 import React from "react";
+import { Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { selectedTagAtom } from "@atom/tag";
+import { toast } from "react-toastify";
 import useEditTag from "@hooks/tag/useEditTag";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { toast } from "react-toastify";
-import EditDialog from "@components/templates/dialog/editDialog";
-import { selectedTagAtom } from "@atom/tag";
-import { Typography } from "@material-tailwind/react";
-import FormInput from "@components/atoms/input/formInput";
-import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRecoilValue } from "recoil";
 
 interface IForm {
   name: string;
@@ -26,7 +27,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const sharedDocuments = searchParams.get("sharedDocuments");
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const { isPending, mutate } = useEditTag();

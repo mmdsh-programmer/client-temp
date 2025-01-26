@@ -9,6 +9,7 @@ import {
 import { IRepo } from "@interface/repo.interface";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
+import PublishRepoSubscribe from "../publishRepoSubscribe";
 import { generateCachePageTag } from "@utils/redis";
 
 const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
@@ -33,6 +34,7 @@ const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
       />
     );
   };
+
   return (
     <div className="flex flex-col gap-4 w-full h-full p-5">
       {repository.imageFileHash ? (
@@ -44,6 +46,7 @@ const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
       )}
       <h1 className="text-xl font-bold text-center">{repository.name}</h1>
       <p className="text-center">{repository.description}</p>
+      <PublishRepoSubscribe repository={repository} />
     </div>
   );
 };
