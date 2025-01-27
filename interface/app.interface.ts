@@ -206,10 +206,12 @@ export interface IActionError {
   errorCode: number;
   errorList: string[];
   originalError?: {
-    data: {
-      error: string;
-      message: string[];
-      referenceNumber: string;
+    response: {
+      data: {
+        error: string;
+        message: string[];
+        referenceNumber: string;
+      };
     };
   };
   referenceNumber?: string;

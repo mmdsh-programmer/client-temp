@@ -1,10 +1,21 @@
 import winston from "winston";
 
+winston.addColors({
+  error: "red bold",
+  warn: "yellow underline",
+  info: "green",
+  debug: "cyan"
+});
+
 const logFormat = winston.format.combine(
+  winston.format.colorize({
+    all: true,
+  }),
   winston.format.timestamp(),
   winston.format.printf((info) => {
     const { message } = info;
-    return typeof message === "string" ? message : JSON.stringify(message);
+    // Remove newlines while preserving ANSI codes and spaces
+    return `${(message as string).replace(/\n/g, "")} \n`;
   }),
 );
 

@@ -280,3 +280,11 @@ export const decodeKey = (domainKey: string) => {
     return "";
   }
 };
+
+export const isParsable = (message: string) => {
+  try {
+    return JSON.parse(message);
+  } catch {
+    return false;
+  }
+};

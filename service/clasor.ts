@@ -77,29 +77,47 @@ const axiosClasorInstance = axios.create({
 
 axiosClasorInstance.interceptors.request.use((request) => {
   const { headers, baseURL, method, url, data } = request;
-  const log = JSON.stringify({
+  const log = {
     headers,
     baseURL,
     method,
     url,
     data,
-  });
+  };
 
   Logger.info(log);
   return request;
 });
 
-axiosClasorInstance.interceptors.response.use((response) => {
-  const { data, status } = response;
-
-  const log = JSON.stringify({
-    data,
-    status,
-  });
-
-  Logger.info(log);
-  return response;
-});
+axiosClasorInstance.interceptors.response.use(
+  (response) => {
+    const { data, status } = response;
+    const log = {
+      type: "RESPONSE",
+      data,
+      status,
+    };
+    Logger.info(log);
+    return response;
+  },
+  (error) => {
+    const log = {
+      type: "ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.error(log);
+    return Promise.reject(error);
+  }
+);
 
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   if (isAxiosError(error)) {
@@ -146,7 +164,7 @@ export const userInfo = async (accessToken: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    console.log({
+    Logger.info({
       type: "Redis cache data",
       data: cachedUser,
     });
