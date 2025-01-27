@@ -79,10 +79,10 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
     <div>
       {catItem.type === "category" ? (
         <div
-          className={`flex flex-col items-start ${catItem.active ? "" : "bg-red-500"}`}
+          className={`flex flex-col items-start ${catItem.active ? "" : "bg-gray-400"}`}
         >
           <div className="flex">
-            {move && (
+            {move ? (
               <Radio
                 containerProps={{ className: "!p-0" }}
                 className="transition-all hover:scale-105 hover:before:opacity-0"
@@ -92,7 +92,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                 onChange={handleSelectDestinationCat}
                 checked={getCategoryMoveDest?.id === catItem.id}
               />
-            )}
+            ) : null}
             <div className="flex items-center p-2 bg-transparent ">
               <div className="flex items-center">
                 <div
