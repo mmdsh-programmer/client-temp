@@ -1,12 +1,13 @@
-import axios, { AxiosError } from "axios";
-import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
-import Logger from "@utils/logger";
 import {
   AuthorizationError,
-  InputError,
   DuplicateError,
+  InputError,
   ServerError,
 } from "@utils/error";
+import axios, { AxiosError } from "axios";
+
+import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
+import Logger from "@utils/logger";
 
 const { TINY_LINK_BASE_URL, API_TOKEN } = process.env;
 
@@ -19,13 +20,13 @@ const axiosTinyLinkInstance = axios.create({
 
 axiosTinyLinkInstance.interceptors.request.use((request) => {
   const { headers, baseURL, method, url, data } = request;
-  const log = JSON.stringify({
+  const log = {
     headers,
     baseURL,
     method,
     url,
     data,
-  });
+  };
 
   Logger.info(log);
   return request;
@@ -33,14 +34,28 @@ axiosTinyLinkInstance.interceptors.request.use((request) => {
 
 axiosTinyLinkInstance.interceptors.response.use((response) => {
   const { data, status } = response;
-
-  const log = JSON.stringify({
+  const log = {
     data,
     status,
-  });
-
+  };
   Logger.info(log);
   return response;
+}, (error) => {
+  const log = {
+    type: "ERROR",
+    message: error.message,
+    config: {
+      url: error.config?.url,
+      method: error.config?.method,
+      data: error.config?.data,
+    },
+    response: {
+      status: error.response?.status,
+      data: error.response?.data,
+    },
+  };
+  Logger.error(log);
+  return Promise.reject(error);
 });
 
 export const handleTinyLinkStatusError = (

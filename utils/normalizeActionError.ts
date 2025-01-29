@@ -1,6 +1,7 @@
 "use server";
 
 import { IActionError } from "@interface/app.interface";
+import Logger from "./logger";
 
 export const normalizeError = async (error: IActionError) => {
   // this handler will return an standard object of error
@@ -10,12 +11,14 @@ export const normalizeError = async (error: IActionError) => {
     errorList,
     errorCode,
     error: true,
-    originalError,
     referenceNumber: "NOT_DEFINED",
   };
 
-  if (originalError?.data?.referenceNumber) {
-    actionError.referenceNumber = originalError.data.referenceNumber;
+  if (originalError?.response?.data?.referenceNumber) {
+    actionError.referenceNumber = originalError.response.data.referenceNumber;
+  } else if(!originalError?.response){
+    Logger.error(actionError);
   }
+
   return actionError;
 };
