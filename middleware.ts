@@ -25,47 +25,21 @@ const pages = [
 ];
 
 function convertDocsUrlToPublishUrl(url: string): string | null {
-  const decodedUrl = decodeURIComponent(url);
-  const isPrivate = decodedUrl.startsWith("/private/");
-  
-  // Match pattern that accepts both cases (with and without category)
-  const pagePatternWithCategory = /^\/(?:private\/)?page\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)$/;
-  const pagePatternWithoutCategory = /^\/(?:private\/)?page\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)\/([^/]+)\/([۰-۹\d]+)$/;
-  
-  const matchWithCategory = decodedUrl.match(pagePatternWithCategory);
-  const matchWithoutCategory = decodedUrl.match(pagePatternWithoutCategory);
-
-  if (!matchWithCategory && !matchWithoutCategory) return null;
-
-  let segments: string[];
-
-  if (matchWithCategory) {
-    const [, repoName, repoId, categoryName, categoryId, documentName, documentId, , versionId] = matchWithCategory;
-    segments = [
-      "publish",
-      toEnglishDigit(repoId),
-      encodeURIComponent(repoName),
-      ...(isPrivate ? ["private"] : []),
-      toEnglishDigit(categoryId),
-      encodeURIComponent(categoryName),
-      toEnglishDigit(documentId),
-      encodeURIComponent(documentName),
-      `v-${toEnglishDigit(versionId)}`,
-    ];
-  } else {
-    const [, repoName, repoId, documentName, documentId, , versionId] = matchWithoutCategory!;
-    segments = [
-      "publish",
-      toEnglishDigit(repoId),
-      encodeURIComponent(repoName),
-      ...(isPrivate ? ["private"] : []),
-      toEnglishDigit(documentId),
-      encodeURIComponent(documentName),
-      `v-${toEnglishDigit(versionId)}`,
-    ];
+  if(!url.startsWith("/page")){
+     return null;
   }
 
-  return `/${segments.join("/")}`;
+  const slugs = url.split("/").map(slug => {
+    return (decodeURIComponent(slug)).replace(/\s/g, "-");
+  });
+  const repoId = slugs[3];
+  const repoName = slugs[2];
+  if(repoId && slugs.length === 4){
+     return `/publish/${repoId}/${repoName}`;
+  }
+  const documentId = slugs[slugs.length - 3];
+  console.log(slugs);
+  return null;
 }
 
 export async function middleware(request: NextRequest) {
