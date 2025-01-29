@@ -90,8 +90,8 @@ export default async function PublishContentPage({
       documentInfo?.hasWhiteList ||
       documentInfo?.hasBlackList
     ) {
-      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
-      const privatePath = `/publish/${params.name}/${repoId}/private/${enSlug.join("/")}`;
+      // CHECK THE CACHE
+      const privatePath = `/private/${name}/${id}/${slug?.join("/")}`;
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
@@ -121,11 +121,12 @@ export default async function PublishContentPage({
 
     const versionNumber = enSlug[enSlug.length - 2];
 
+    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`]);
+    
     if(hasVersion && versionData && toEnglishDigit(versionData.versionNumber).replaceAll(/\s+/g, "-") !== versionNumber){
       return notFound();
     }
 
-    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`]);
     return (
       <>
         <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
@@ -142,6 +143,7 @@ export default async function PublishContentPage({
         <div className="flex flex-col justify-center items-center">
           <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
           <FolderEmptyIcon />
+          <p>{message}</p>
         </div>
       </section>
     );

@@ -1,8 +1,8 @@
 "use client";
 
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { SearchIcon, XIcon } from "@components/atoms/icons";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import Error from "@components/organisms/error";
 import { ICategoryMetadata } from "@interface/category.interface";
@@ -40,11 +40,6 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
   const [manualSearch, setManualSearch] = useState<string>("");
   const debouncedValue = useDebounce<string>(searchInput, searchTimeout);
   const searchParams = useSearchParams();
-  const pathname = usePathname();
-
-  const rootUrl = useMemo(() => {
-    return pathname ? pathname.split("/").slice(0, 4).join("/") : "#";
-  }, [pathname]);
 
   useEffect(() => {
     setManualSearch(searchInput);
@@ -122,7 +117,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
                       repoId={repoId}
                       repoName={repoName || " "}
                       category={childItem}
-                      parentUrl={`/publish/${repoName}/${repoId}`}
+                      parentUrl={`/${repoName}/${repoId}`}
                       categoryIds={catIds}
                     />
                   </SidebarCollapse>
@@ -137,7 +132,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
                   <SidebarDocumentItem
                     key={`category-${childItem.categoryId}-document-${childItem.id}-tree-item`}
                     document={childItem}
-                    parentUrl={`/publish/${repoName}/${repoId}`}
+                    parentUrl={`/${repoName}/${repoId}`}
                     categoryIds={categoryIds}
                   />
                 );
@@ -152,8 +147,8 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
   return (
     <div className="h-[calc(100vh-97px)] w-100">
       <div className="text-xl font-bold text-[#3e4a4d] text-center mt-4 mb-4 pb-4 border-b border-solid border-[rgba(0,0,0,0.08)]">
-        <Link className="block whitespace-nowrap text-ellipsis overflow-hidden" prefetch={false} href={rootUrl}>
-          {repoName || ""}
+        <Link className="block whitespace-nowrap text-ellipsis overflow-hidden" prefetch={false} href={`/publish/${repoName}/${repoId}`}>
+          {(repoName)?.replaceAll("-", " ") || ""}
         </Link>
         <div className="search-input flex justify-center w-full group mt-2 border-spacing-1 border-2 rounded-lg text-xs h-9">
           <input

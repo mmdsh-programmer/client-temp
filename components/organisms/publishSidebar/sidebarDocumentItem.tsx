@@ -1,11 +1,11 @@
 "use client";
 
 import { DocumentIcon, LockIcon } from "@components/atoms/icons";
+import { isPrivate, toPersianDigit } from "@utils/index";
 
 import { IDocumentMetadata } from "@interface/document.interface";
 import Link from "next/link";
 import React from "react";
-import { toPersianDigit } from "@utils/index";
 import { usePathname } from "next/navigation";
 
 interface IProps {
@@ -18,7 +18,7 @@ const SidebarDocumentItem = ({ document, parentUrl, categoryIds }: IProps) => {
   const pathname = usePathname();
   const isSelected = pathname.includes(`/${encodeURIComponent(toPersianDigit(document.id))}`);
 
-  const url = toPersianDigit(`${parentUrl}/${document.name}/${document.id}?ids=${categoryIds}`
+  const url = toPersianDigit(`/${isPrivate(document) ? "private" : "publish"}/${parentUrl}/${document.name}/${document.id}?ids=${categoryIds}`
     .replace(/\s+/g, "-"));
 
   return (

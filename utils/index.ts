@@ -1,4 +1,5 @@
 import { ERoles } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import moment from "moment-jalaali";
 
@@ -288,3 +289,7 @@ export const isParsable = (message: string) => {
     return false;
   }
 };
+
+export const isPrivate = (item: IDocumentMetadata) => {
+  return item.hasPassword || item.hasBlackList || item.hasWhiteList;
+ };

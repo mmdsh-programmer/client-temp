@@ -1,4 +1,4 @@
-import BasicError, { ServerError } from "@utils/error";
+import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import {
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
@@ -8,14 +8,16 @@ import {
 import { toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
+import { IActionError } from "@interface/app.interface";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
-import PublishDocumentSignin from "@components/pages/publish/publishDocumentSignin";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
-import { getDocumentPasswordAction } from "@actions/cookies";
+import RepositoryInfo from "@components/organisms/repositoryInfo";
+import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
+import LoginRequiredButton from "@components/molecules/loginRequiredButton";
 
 type PageParams = {
   name: string;
@@ -68,19 +70,17 @@ export default async function PublishContentPage({
   const time = Date.now();
   try {
     const { id, name, slug } = params;
-    const repoId = toEnglishDigit(id);
-    const enSlug = slug?.map(s => {return toEnglishDigit(s);});
+    const decodeId = decodeURIComponent(id);
+    const repoId = parseInt(toEnglishDigit(decodeId), 10);
+    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
-    const parsedRepoId = Number.parseInt(
-      toEnglishDigit(decodeURIComponent(repoId)),
-      10
-    );
-
-    if (Number.isNaN(parsedRepoId)) {
+    if (Number.isNaN(repoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getPublishRepositoryInfo(parsedRepoId);
+    const repository = await getPublishRepositoryInfo(repoId);
+
+
     const decodeName = decodeURIComponent(name);
     const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
     if(decodeName !== repoName){
@@ -88,59 +88,69 @@ export default async function PublishContentPage({
     }
 
     if (!enSlug?.length) {
-      return notFound();
+      return <RepositoryInfo repository={repository} />;
     }
 
     const lastSlug = enSlug[enSlug.length - 1];
     const hasVersion = lastSlug.startsWith("v-");
     const documentId = parseInt(
-      hasVersion ? enSlug[enSlug.length - 3] : lastSlug,
+      hasVersion ? enSlug[1] : lastSlug,
       10
     );
+    const documentName = enSlug[0];
+
     const versionId = hasVersion
       ? parseInt(lastSlug.replace("v-", ""), 10)
       : undefined;
 
     if (!documentId || Number.isNaN(documentId)) {
+      
       return notFound();
     }
 
     const documentInfo = await getPublishDocumentInfo(
-      parsedRepoId,
+      repoId,
       documentId,
       true
     );
 
-
-    if(documentInfo.name.replaceAll(/\s+/g, "-") !== decodeName){
+    const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
+    if(toEnglishDigit(documentInfoName) !== documentName){
       return notFound();
     }
 
+    
     if (
       !documentInfo?.hasPassword &&
       !documentInfo?.hasWhiteList &&
       !documentInfo?.hasBlackList
     ) {
-      const publicSlug = enSlug?.filter((segment) => {
-        return segment !== "private";
-      });
+      const publicSlug = slug?.join("/").replace("/private", "");
       return (
         <RedirectPage
-          redirectUrl={`/publish/${repoId}/${params.name}/${publicSlug?.join("/") || ""}`}
+          redirectUrl={`/publish/${name}/${id}/${publicSlug}`}
         />
       );
     }
 
-    const userInfo = await getMe();
-    const accessToken =
-      userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
-    const documentPassword = await getDocumentPasswordAction(documentId);
 
-    if (
-      (documentInfo?.hasWhiteList || documentInfo?.hasBlackList) &&
-      !accessToken
-    ) {
-      return <PublishDocumentSignin />;
+
+    // check password cookie 
+    // caution: reading cookies will cause server side rendering
+    const documentPassword = cookies().get(`document-${documentId}-password`)?.value;
+
+
+
+
+    const encodedToken = cookies().get("token")?.value;
+    let accessToken: string | undefined;
+    
+    if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && !encodedToken) {
+      throw new AuthorizationError();
+    } else if((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken){
+      const userInfo = await getMe();
+      accessToken =
+        userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
     }
 
     if (documentInfo?.hasPassword && !documentPassword) {
@@ -157,13 +167,12 @@ export default async function PublishContentPage({
       );
 
       const versionNumber = enSlug[enSlug.length - 2];
-  
-      if(hasVersion && version && version.versionNumber.replaceAll(/\s+/g, "-") !== versionNumber){
+      if(hasVersion && version && toEnglishDigit(version.versionNumber).replaceAll(/\s+/g, "-") !== versionNumber){
         return notFound();
       }
 
       if (!version) {
-        throw new ServerError(["سند مورد نظر فاقد نسخه میباشد."]);
+        return notFound();
       }
 
       return (
@@ -183,6 +192,9 @@ export default async function PublishContentPage({
     }
   } catch (error) {
     const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    if((error as unknown as IActionError).errorCode === 401){
+      return <LoginRequiredButton message="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید." />;
+    }
     if(message === "NEXT_NOT_FOUND"){
         return notFound();
     }
@@ -191,7 +203,7 @@ export default async function PublishContentPage({
         <div className="flex flex-col justify-center items-center">
           <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
           <FolderEmptyIcon />
-          {error instanceof Error ? error.message : "خطای نامشخصی رخ داد"}
+          <p>{message}</p>
         </div>
       </section>
     );
