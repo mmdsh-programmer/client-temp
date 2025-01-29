@@ -21,7 +21,6 @@ import Logger from "@utils/logger";
 import crypto from "crypto";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import Logger from "@utils/logger";
 
 const axiosSocialInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CORE_API,
