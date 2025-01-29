@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateKey, toEnglishDigit } from "./utils";
+import { generateKey, toEnglishDigit, toPersianDigit } from "./utils";
 
+import { NextURL } from "next/dist/server/web/next-url";
 import { headers } from "next/headers";
 
 // import { getCustomPostByDomain } from "@service/social";
@@ -24,21 +25,47 @@ const pages = [
   "/feeds"
 ];
 
-function convertDocsUrlToPublishUrl(url: string): string | null {
-  if(!url.startsWith("/page")){
-     return null;
+function convertDocsUrlToPublishUrl(url: NextURL) {
+  const { pathname } = url;
+  if(!pathname.startsWith("/page")){
+     return;
   }
 
-  const slugs = url.split("/").map(slug => {
+  const newUrl = new NextURL(url);
+
+  const slugs = pathname.split("/").map(slug => {
     return (decodeURIComponent(slug)).replace(/\s/g, "-");
   });
+
   const repoId = slugs[3];
   const repoName = slugs[2];
   if(repoId && slugs.length === 4){
-     return `/publish/${repoId}/${repoName}`;
+    newUrl.pathname = `/publish/${repoName}/${repoId}`;
+    return newUrl;
   }
   const documentId = slugs[slugs.length - 3];
-  console.log(slugs);
+  const documentName = slugs[slugs.length - 4];
+
+  const ids: string[] = [];
+  for(let i = 5; i < slugs.length - 4; i += 2){
+    const catId = Number(toEnglishDigit(slugs[i]));
+    if(!Number.isNaN(catId)){
+      ids.push(toPersianDigit(catId));
+    }
+  }
+
+  if(ids.length){
+    newUrl.searchParams.set("ids", ids.join(","));
+  }
+
+
+  const versionId = slugs[slugs.length - 1];
+  const versionName = slugs[slugs.length - 2];
+
+  if(documentId && documentName && versionId){
+    newUrl.pathname = `/publish/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`;
+    return newUrl;
+  }
   return null;
 }
 
@@ -74,23 +101,22 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl;
   const { pathname } = url;
 
-  const newUrl = convertDocsUrlToPublishUrl(pathname);
+  const newUrl = convertDocsUrlToPublishUrl(url);
   if (newUrl) {
-    url.pathname = newUrl;
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(newUrl);
   }
 
 
   if (domain) {
     const isInPages = pages.find((page) => {
-      return url.pathname.startsWith(page);
+      return pathname.startsWith(page);
     });
     if (isInPages) {
       const domainKey = generateKey(domain);
-      url.pathname = `/${domainKey}${url.pathname}`;
+      url.pathname = `/${domainKey}${pathname}`;
       return NextResponse.rewrite(url);
     }
-    if (url.pathname === "/") {
+    if (pathname === "/") {
       const domainKey = generateKey(domain);
       // const data = await getCustomPostByDomain(domain);
       // if (data.enablePublishPage) {

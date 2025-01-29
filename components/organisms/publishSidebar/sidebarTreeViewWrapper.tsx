@@ -122,7 +122,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
                       repoId={repoId}
                       repoName={repoName || " "}
                       category={childItem}
-                      parentUrl={`/publish/${repoId}/${repoName}`}
+                      parentUrl={`/publish/${repoName}/${repoId}`}
                       categoryIds={catIds}
                     />
                   </SidebarCollapse>
@@ -137,7 +137,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
                   <SidebarDocumentItem
                     key={`category-${childItem.categoryId}-document-${childItem.id}-tree-item`}
                     document={childItem}
-                    parentUrl={`/publish/${repoId}/${repoName}`}
+                    parentUrl={`/publish/${repoName}/${repoId}`}
                     categoryIds={categoryIds}
                   />
                 );

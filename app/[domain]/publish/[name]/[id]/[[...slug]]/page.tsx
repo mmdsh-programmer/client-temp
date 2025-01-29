@@ -79,7 +79,9 @@ export default async function PublishContentPage({
       true
     );
 
-    if(documentInfo.name.replaceAll(/\s+/g, "-") !== documentName){
+    const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
+    if(toEnglishDigit(documentInfoName) !== documentName){
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
       return notFound();
     }
 
@@ -89,7 +91,7 @@ export default async function PublishContentPage({
       documentInfo?.hasBlackList
     ) {
       await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
-      const privatePath = `/publish/${repoId}/${params.name}/private/${enSlug.join("/")}`;
+      const privatePath = `/publish/${params.name}/${repoId}/private/${enSlug.join("/")}`;
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
@@ -119,7 +121,7 @@ export default async function PublishContentPage({
 
     const versionNumber = enSlug[enSlug.length - 2];
 
-    if(hasVersion && versionData && versionData.versionNumber.replaceAll(/\s+/g, "-") !== versionNumber){
+    if(hasVersion && versionData && toEnglishDigit(versionData.versionNumber).replaceAll(/\s+/g, "-") !== versionNumber){
       return notFound();
     }
 

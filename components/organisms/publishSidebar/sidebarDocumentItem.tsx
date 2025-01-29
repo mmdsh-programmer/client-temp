@@ -16,14 +16,10 @@ interface IProps {
 
 const SidebarDocumentItem = ({ document, parentUrl, categoryIds }: IProps) => {
   const pathname = usePathname();
-
-  const pathSegments = pathname?.split("/") || [];
-  const isSelected = pathSegments.includes(String(document.id));
+  const isSelected = pathname.includes(`/${encodeURIComponent(toPersianDigit(document.id))}`);
 
   const url = toPersianDigit(`${parentUrl}/${document.name}/${document.id}?ids=${categoryIds}`
-    .replace(/\s+/g, "-")
-    .toLowerCase());
-  console.log(parentUrl);
+    .replace(/\s+/g, "-"));
 
   return (
     <Link
@@ -39,7 +35,7 @@ const SidebarDocumentItem = ({ document, parentUrl, categoryIds }: IProps) => {
       {document.hasPassword ? (
         <LockIcon className="flex-none w-5 h-5 fill-icon-hover" />
       ) : null}
-      <span className="text-sm text-gray-700 font-bold overflow-hidden text-right">
+      <span className="text-xs text-gray-700 font-bold overflow-hidden text-right">
         {document.name}
       </span>
     </Link>
