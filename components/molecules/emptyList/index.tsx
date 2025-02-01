@@ -30,6 +30,7 @@ export enum EEmptyList {
   ANSWER_LIST = "answer_list",
   ACCESS_LIST = "access_list",
   FEED_LIST = "feed-list",
+  BRANCHINFO = "branchinfo",
 }
 
 interface IProps {
@@ -309,6 +310,17 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary"
             >
               خبرنامه ای برای نمایش وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.BRANCHINFO:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              اطلاعاتی برای نمایش وجود ندارد.
             </Typography>
           </div>
         );

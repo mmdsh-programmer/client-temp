@@ -2,14 +2,15 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getAllBranchListAction } from "@actions/branch";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { IBranchList } from "@interface/branch.interface";
 
 const useGetBranchList = (
   parentId: number | undefined,
   ownerSSOID: number | undefined,
-  size: number,
+  size: number
 ) => {
   return useInfiniteQuery({
-    queryKey: [`branches-${parentId}-${ownerSSOID}`],
+    queryKey: [`branch-${parentId || "root"}`],
     queryFn: async ({ pageParam }) => {
       const response = await getAllBranchListAction(
         parentId,
@@ -17,8 +18,9 @@ const useGetBranchList = (
         (pageParam - 1) * size,
         size
       );
+
       handleClientSideHookError(response as IActionError);
-      return response;
+      return response as IBranchList;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
@@ -26,7 +28,6 @@ const useGetBranchList = (
         return pages.length + 1;
       }
     },
-    enabled: !!parentId || !!ownerSSOID,
   });
 };
 

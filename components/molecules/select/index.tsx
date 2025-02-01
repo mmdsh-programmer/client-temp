@@ -80,7 +80,7 @@ const SelectAtom = ({
         />
       </button>
       {isOpen && (
-        <div className="absolute z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
+        <div className="absolute max-h-[150px] overflow-auto z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
           <ul
             className="rounded-md p-1 text-right shadow-menu overflow-auto focus:outline-none"
             role="listbox"

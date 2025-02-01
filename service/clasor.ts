@@ -67,6 +67,7 @@ import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
 import { IFeedItem } from "@interface/feeds.interface";
+import { IBranchList } from "@interface/branch.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -3380,7 +3381,9 @@ export const getBranchList = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<any>(`branch`, {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IBranchList>
+    >("branch", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -3423,7 +3426,7 @@ export const createRootBranch = async (
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
-      `branch`,
+      "branch",
       { name, repoType, username },
       {
         headers: {
@@ -3465,7 +3468,7 @@ export const createSubBranch = async (
 export const updateRootBranch = async (accessToken: string, name: string) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
-      `branch`,
+      "branch",
       { name },
       {
         headers: {
@@ -3703,6 +3706,64 @@ export const deleteMembersFromPosition = async (
     );
 
     return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// ///////////////////////////////REPO TYPE////////////////////////////////////////
+
+export const getRepoTypes = async (accessToken: string) => {
+  try {
+    const response = await axiosClasorInstance.get<any>("admin/repoTypes", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createRepoTypes = async (
+  accessToken: string,
+  name: string,
+  username: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<any>(
+      "admin/repoTypes/user/BlogBox",
+      { name, username },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteRepoType = async (
+  accessToken: string,
+  id: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(
+      `admin/repoTypes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
