@@ -3,7 +3,6 @@ import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { toast } from "react-toastify";
 import { IBranch } from "@interface/branch.interface";
 import useDeleteBranch from "@hooks/branch/useDeleteBranch";
-import useDeleteRepoType from "@hooks/repoType/useDeleteRepoType";
 
 interface IProps {
   branch: IBranch;
@@ -12,7 +11,6 @@ interface IProps {
 
 const BranchDeleteDialog = ({ setOpen, branch }: IProps) => {
   const deleteBranch = useDeleteBranch();
-  const deleteRepoType = useDeleteRepoType();
 
   const handleClose = () => {
     setOpen(false);
@@ -21,11 +19,10 @@ const BranchDeleteDialog = ({ setOpen, branch }: IProps) => {
   const handleDelete = async () => {
     deleteBranch.mutate({
       branchId: branch.id,
+      parentId: branch.parentId,
       callBack: () => {
-        // deleteRepoType.mutate({
-        //   branchId: branch.
-        // })
         toast.success(`شعبه ${branch.title} حذف شد`);
+        handleClose();
       },
     });
   };
@@ -33,7 +30,7 @@ const BranchDeleteDialog = ({ setOpen, branch }: IProps) => {
   return (
     <DeleteDialog
       isPending={deleteBranch.isPending}
-      dialogHeader="حذف دسته بندی"
+      dialogHeader="حذف شعبه"
       onSubmit={handleDelete}
       setOpen={handleClose}
       className=""
@@ -42,10 +39,10 @@ const BranchDeleteDialog = ({ setOpen, branch }: IProps) => {
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
-            title={branch?.name}
+            title={branch?.title}
             className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
           >
-            {branch?.name}
+            {branch?.title}
           </span>
           " اطمینان دارید؟
         </div>

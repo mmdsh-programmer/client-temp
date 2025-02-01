@@ -10,7 +10,6 @@ import { useRecoilValue } from "recoil";
 import { branchIdAtom } from "@atom/branch";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createBranchSchema } from "./validation.yup";
-import useCreateRepoType from "@hooks/repoType/useCreateRepoType";
 
 interface IForm {
   name: string;
@@ -25,7 +24,6 @@ interface IProps {
 const BranchCreateDialog = ({ setOpen }: IProps) => {
   const getBranchId = useRecoilValue(branchIdAtom);
 
-  const createRepoType = useCreateRepoType();
   const createRootBranch = useCreateRootBranch();
   const createSubBranch = useCreateSubBranch();
 
@@ -51,13 +49,6 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    // createRepoType.mutate({
-    //   name: dataForm.repoType,
-    //   callBack: () => {
-
-    //   },
-    // });
-
     if (getBranchId) {
       createSubBranch.mutate({
         branchId: getBranchId,
@@ -83,12 +74,8 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
 
   return (
     <CreateDialog
-      isPending={
-        createRepoType.isPending ||
-        createRootBranch.isPending ||
-        createSubBranch.isPending
-      }
-      dialogHeader="ساخت شعبه"
+      isPending={createRootBranch.isPending || createSubBranch.isPending}
+      dialogHeader={getBranchId ? "ساخت زیرشعبه" : " ساخت شعبه"}
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""

@@ -69,7 +69,7 @@ const BranchEditDialog = ({ branch, setOpen }: IProps) => {
             placeholder="نام شعبه"
             register={{
               ...register("name", {
-                value: branch.name,
+                value: branch.title,
               }),
             }}
           />
@@ -81,14 +81,13 @@ const BranchEditDialog = ({ branch, setOpen }: IProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نوع شعبه</Typography>
-          <FormInput placeholder={branch.type} disabled />
+          <FormInput placeholder={branch.type} readOnly />
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> مالک </Typography>
           <FormInput
             placeholder="مالک شعبه"
             register={{ ...register("username") }}
-            disabled
           />
           {errors.username && (
             <Typography className="warning_text">

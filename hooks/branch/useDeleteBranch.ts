@@ -9,15 +9,21 @@ const useDeleteBranch = () => {
 
   return useMutation({
     mutationKey: ["delete-branch"],
-    mutationFn: async (values: { branchId: number; callBack?: () => void }) => {
+    mutationFn: async (values: {
+      branchId: number;
+      parentId?: number;
+      callBack?: () => void;
+    }) => {
       const { branchId } = values;
       const response = await deleteBranchAction(branchId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (_, values) => {
-      const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+      const { callBack, parentId } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`branch-${parentId || "root"}`],
+      });
       callBack?.();
     },
     onError: (error) => {

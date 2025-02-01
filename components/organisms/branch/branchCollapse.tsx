@@ -6,8 +6,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
-import { useSetRecoilState } from "recoil";
-import { branchIdAtom } from "@atom/branch";
 import BranchMenu from "@components/molecules/branchMenu";
 import { IBranch } from "@interface/branch.interface";
 
@@ -24,17 +22,10 @@ const BranchCollapse = ({
   isActive,
   childItem,
 }: IProps) => {
-  const setBranch = useSetRecoilState(branchIdAtom);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
-    return setOpen(!open);
-  };
-
-  const onButtonClicked = () => {
-    setTimeout(() => {
-      setBranch(childItem.id);
-    }, 10);
+    setOpen(!open);
   };
 
   return (
@@ -57,13 +48,15 @@ const BranchCollapse = ({
               />
             </div>
             <div
-              onClick={onButtonClicked}
               className={`w-auto flex-grow justify-start rounded pr-2 py-1 text-sm font-bold text-right ${
                 isActive ? "text-dashboard-primary" : ""
               }`}
             >
               <div className="flex">
-                <FolderIcon className="w-5 h-5 fill-[#FF9500] ml-2 flex-none self-start" />
+                <FolderIcon
+                  className={`w-5 h-5 ${childItem.parentId ? "fill-[#79B8FF]" : "fill-[#FF9500]"}
+                     ml-2 flex-none self-start`}
+                />
                 <Typography
                   title={childItem.title}
                   className="max-w-[100px] truncate"

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import MenuTemplate from "@components/templates/menuTemplate";
 import { MoreDotIcon } from "@components/atoms/icons";
-import BranchCreateDialog from "@components/organisms/dialogs/branch/branchCreate";
+import BranchCreateDialog from "@components/organisms/dialogs/branch/branchCreateDialog";
 import { IBranch } from "@interface/branch.interface";
 import BranchDeleteDialog from "@components/organisms/dialogs/branch/branchDeleteDialog";
 import BranchEditDialog from "@components/organisms/dialogs/branch/branchEditDialog";
+import { branchIdAtom } from "@atom/branch";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   branchItem: IBranch;
@@ -15,6 +17,8 @@ const BranchMenu = ({ branchItem }: IProps) => {
   const [deleteBranchModal, setDeleteBranchModal] = useState(false);
   const [createBranchModal, setCreateBranchModal] = useState(false);
 
+  const setBranch = useSetRecoilState(branchIdAtom);
+
   const menuList: {
     text: string;
     icon?: React.JSX.Element;
@@ -23,34 +27,32 @@ const BranchMenu = ({ branchItem }: IProps) => {
     {
       text: "ایجاد زیرشعبه",
       onClick: () => {
+        setBranch(branchItem.id);
         setCreateBranchModal(true);
       },
     },
     {
       text: "ویرایش شعبه",
       onClick: () => {
+        setBranch(branchItem.id);
         setEditBranchModal(true);
       },
     },
     {
       text: "حذف شعبه",
       onClick: () => {
+        setBranch(branchItem.id);
         setDeleteBranchModal(true);
       },
     },
   ];
 
   return (
-    <>
-      {/* {!!showDrawer ? (
-        <div className="xs:hidden flex">
-          <DrawerTemplate
-            openDrawer={openBranchActionDrawer}
-            setOpenDrawer={setOpenBranchActionDrawer}
-            menuList={menuList}
-          />
-        </div>
-      ) : ( */}
+    <div
+      onClick={(e) => {
+        return e.stopPropagation();
+      }}
+    >
       <MenuTemplate
         setOpenDrawer={() => {}}
         menuList={menuList}
@@ -60,7 +62,6 @@ const BranchMenu = ({ branchItem }: IProps) => {
           </div>
         }
       />
-      {/* )} */}
       {editBranchModal ? (
         <BranchEditDialog
           branch={branchItem}
@@ -84,7 +85,7 @@ const BranchMenu = ({ branchItem }: IProps) => {
           }}
         />
       ) : null}
-    </>
+    </div>
   );
 };
 
