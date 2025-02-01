@@ -4,6 +4,7 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
+import { toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
@@ -14,7 +15,6 @@ import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { ServerError } from "@utils/error";
 import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
-import { toEnglishDigit } from "@utils/index";
 
 export const generateStaticParams = async () => {
    return [];
@@ -33,51 +33,63 @@ export default async function PublishContentPage({
 }) {
   const time = Date.now();
   try {
-    const { id: repoId, slug } = params;
+    const { id, name, slug } = params;
+    const decodeId = decodeURIComponent(id);
+    const repoId = parseInt(toEnglishDigit(decodeId), 10);
+    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
-    const parsedRepoId = Number.parseInt(
-      toEnglishDigit(decodeURIComponent(repoId)),
-      10
-    );
-
-    if (Number.isNaN(parsedRepoId)) {
+    if (Number.isNaN(repoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getPublishRepositoryInfo(parsedRepoId);
+    const repository = await getPublishRepositoryInfo(repoId);
 
-    if (!slug?.length) {
+    const decodeName = decodeURIComponent(name);
+    const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
+    if(decodeName !== repoName){
+      return notFound();
+    }
+
+    if (!enSlug?.length) {
+      await generateCachePageTag([`rp-${repository.id}`,`rp-ph-${repository.id}`]);
       return <RepositoryInfo repository={repository} />;
     }
 
-    const lastSlug = slug[slug.length - 1];
+    const lastSlug = enSlug[enSlug.length - 1];
     const hasVersion = lastSlug.startsWith("v-");
     const documentId = parseInt(
-      hasVersion ? slug[slug.length - 3] : lastSlug,
+      hasVersion ? enSlug[1] : lastSlug,
       10
     );
+    const documentName = enSlug[0];
+
     const versionId = hasVersion
       ? parseInt(lastSlug.replace("v-", ""), 10)
       : undefined;
 
     let versionData: IVersion;
-
     if (!documentId || Number.isNaN(documentId)) {
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
       return notFound();
     }
 
     const documentInfo = await getPublishDocumentInfo(
-      parsedRepoId,
+      repoId,
       documentId,
       true
     );
+
+    if(documentInfo.name.replaceAll(/\s+/g, "-") !== documentName){
+      return notFound();
+    }
 
     if (
       documentInfo?.hasPassword ||
       documentInfo?.hasWhiteList ||
       documentInfo?.hasBlackList
     ) {
-      const privatePath = `/publish/${repoId}/${params.name}/private/${slug.join("/")}`;
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
+      const privatePath = `/publish/${repoId}/${params.name}/private/${enSlug.join("/")}`;
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
@@ -94,7 +106,7 @@ export default async function PublishContentPage({
       );
 
       if (!lastVersionInfo){
-        await generateCachePageTag(`em-${documentId}`);
+        await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
       }
 
@@ -105,6 +117,13 @@ export default async function PublishContentPage({
       );
     }
 
+    const versionNumber = enSlug[enSlug.length - 2];
+
+    if(hasVersion && versionData && versionData.versionNumber.replaceAll(/\s+/g, "-") !== versionNumber){
+      return notFound();
+    }
+
+    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`]);
     return (
       <>
         <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
@@ -112,11 +131,15 @@ export default async function PublishContentPage({
       </>
     );
   } catch (error) {
+    const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    if(message === "NEXT_NOT_FOUND"){
+       return notFound();
+    }
     return (
       <section className="main w-full h-[calc(100vh-81px)] text-center bg-slate-50 grid justify-items-center place-items-center">
         <div className="flex flex-col justify-center items-center">
+          <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
           <FolderEmptyIcon />
-          {error instanceof Error ? error.message : "خطای نامشخصی رخ داد"}
         </div>
       </section>
     );

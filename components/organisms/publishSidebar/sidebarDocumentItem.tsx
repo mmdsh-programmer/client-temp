@@ -5,24 +5,29 @@ import { DocumentIcon, LockIcon } from "@components/atoms/icons";
 import { IDocumentMetadata } from "@interface/document.interface";
 import Link from "next/link";
 import React from "react";
+import { toPersianDigit } from "@utils/index";
 import { usePathname } from "next/navigation";
 
 interface IProps {
   document: IDocumentMetadata;
   parentUrl: string;
+  categoryIds: number[];
 }
 
-const SidebarDocumentItem = ({ document, parentUrl }: IProps) => {
+const SidebarDocumentItem = ({ document, parentUrl, categoryIds }: IProps) => {
   const pathname = usePathname();
 
   const pathSegments = pathname?.split("/") || [];
   const isSelected = pathSegments.includes(String(document.id));
 
+  const url = toPersianDigit(`${parentUrl}/${document.name}/${document.id}?ids=${categoryIds}`
+    .replace(/\s+/g, "-")
+    .toLowerCase());
+  console.log(parentUrl);
+
   return (
     <Link
-      href={`${parentUrl}/${document.name}/${document.id}`
-        .replace(/\s+/g, "-")
-        .toLowerCase()}
+      href={url}
       key={`document-tree-item-${document.id}`}
       className={`collapse-document py-2 transition-all duration-300 flex gap-2 hover:bg-purple-light rounded-[5px] pl-2.5 w-full text-right pr-[22px] ${
         isSelected ? "bg-purple-light pointer-events-none selected" : ""

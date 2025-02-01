@@ -119,28 +119,24 @@ export class UnprocessableError extends BasicError {
 }
 
 export const handleActionError = (errorObject: IActionError) => {
-  console.log({
-    type: "Handle Action Error",
-    error: JSON.stringify(errorObject),
-  });
   const messages = [
     ...(errorObject?.errorList ?? "خطای ناشناخته ای رخ داده است"),
   ];
   switch (errorObject?.errorCode) {
     case 401:
-      throw new AuthorizationError(messages, errorObject?.originalError);
+      throw new AuthorizationError(messages, errorObject?.originalError?.response);
     case 403:
-      throw new ForbiddenError(messages, errorObject?.originalError);
+      throw new ForbiddenError(messages, errorObject?.originalError?.response);
     case 404:
-      throw new NotFoundError(messages, errorObject?.originalError);
+      throw new NotFoundError(messages, errorObject?.originalError?.response);
     case 400:
-      throw new InputError(messages, errorObject?.originalError);
+      throw new InputError(messages, errorObject?.originalError?.response);
     case 409:
-      throw new DuplicateError(messages, errorObject?.originalError);
+      throw new DuplicateError(messages, errorObject?.originalError?.response);
     case 422:
-      throw new UnprocessableError(messages, errorObject?.originalError);
+      throw new UnprocessableError(messages, errorObject?.originalError?.response);
     default:
-      throw new ServerError(messages, errorObject?.originalError);
+      throw new ServerError(messages, errorObject?.originalError?.response);
   }
 };
 

@@ -1,11 +1,12 @@
-import React from "react";
-import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import { ListItem, Spinner } from "@material-tailwind/react";
-import { useSetRecoilState } from "recoil";
+
+import { IContentSearchListItem } from "@interface/contentSearch.interface";
+import React from "react";
 import { openPublishPageSearchContent } from "@atom/publish";
-import { toPersinaDigit } from "@utils/index";
-import { useRouter } from "next/navigation";
+import { toPersianDigit } from "@utils/index";
 import useCreateDocumentLink from "@hooks/document/useCreateDocumentLink";
+import { useRouter } from "next/navigation";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   resultItem: IContentSearchListItem;
@@ -32,9 +33,9 @@ const PublishSearchResultItem = ({
       repoId: resultItem.repoId,
       documentId: resultItem.documentId,
       callBack: (data) => {
-        const redirectLink = `${window.location.origin}/publish/${data.repoId}/${toPersinaDigit(
+        const redirectLink = `${window.location.origin}/publish/${data.repoId}/${toPersianDigit(
           `${data.repoName.replaceAll(/\s+/g, "-")}`
-        )}/${data.id}/${toPersinaDigit(
+        )}/${data.id}/${toPersianDigit(
           `${data.name.replaceAll(/\s+/g, "-")}`
         )}/v-${resultItem.versionId}`;
 

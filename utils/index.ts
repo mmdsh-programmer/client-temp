@@ -78,7 +78,7 @@ export const translateVersionStatus = (status: string, state: string) => {
   };
 };
 
-export const toPersinaDigit = (digits: number | string): string => {
+export const toPersianDigit = (digits: number | string): string => {
   const fa = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
   return digits.toString().replaceAll(/\d/g, (w) => {
     return fa[+w];
@@ -96,7 +96,7 @@ export const FaDate = (standardTime: string) => {
     moment.loadPersian({
       dialect: "persian-modern",
     });
-    return toPersinaDigit(
+    return toPersianDigit(
       moment(standardTime, "YYYY-MM-DDTHH:mm:ssZ").format(
         "HH:mm:ss | jDD jMMMM jYYYY"
       )
@@ -278,5 +278,13 @@ export const decodeKey = (domainKey: string) => {
       error: JSON.stringify(error),
     });
     return "";
+  }
+};
+
+export const isParsable = (message: string) => {
+  try {
+    return JSON.parse(message);
+  } catch {
+    return false;
   }
 };

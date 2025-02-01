@@ -39,11 +39,6 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
 
   const handleError = (error: IActionError) => {
     const { errorCode: errorCodeData, errorList: errorListData } = error;
-
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Error Boundary");
-    console.log(errorCodeData);
-    console.log(errorListData);
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Error Boundary");
     setErrorCodeState(errorCodeData);
     setErrorListState(errorListData);
   };

@@ -18,6 +18,7 @@ import { getMe, userInfoAction } from "./auth";
 import { IActionError } from "@interface/app.interface";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
+import { revalidateTag } from "next/cache";
 
 const { API_TOKEN } = process.env;
 
@@ -48,6 +49,12 @@ export const deletePublishLinkAction = async (repoId: number) => {
       userInfo.access_token,
       repoId
     );
+
+    // revalidate all links related to repository publish cache if exists
+    revalidateTag(`rp-ph-${repoId}`);
+
+    // revalidate repository publish cache if exists
+    revalidateTag(`rp-${repoId}`);
 
     return response;
   } catch (error) {

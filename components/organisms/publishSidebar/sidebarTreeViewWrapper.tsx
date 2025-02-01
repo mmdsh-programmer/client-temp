@@ -2,7 +2,7 @@
 
 import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { SearchIcon, XIcon } from "@components/atoms/icons";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import Error from "@components/organisms/error";
 import { ICategoryMetadata } from "@interface/category.interface";
@@ -14,7 +14,7 @@ import SidebarCategoryItem from "./sidebarCategoryItem";
 import SidebarCollapse from "./sidebarCollapse";
 import SidebarDocumentItem from "./sidebarDocumentItem";
 import { Spinner } from "@material-tailwind/react";
-import { TUserData } from "@interface/app.interface";
+import { toPersianDigit } from "@utils/index";
 import useDebounce from "@hooks/custom/useDebounce";
 import useGetAllPublishChildren from "@hooks/publish/useGetAllPublishChildren";
 import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
@@ -23,7 +23,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 interface IProps {
   repoId: number;
   repoName: string;
-  userInfo?: TUserData;
+  categoryIds: number[];
 }
 
 export const sortParams = {
@@ -33,12 +33,13 @@ export const sortParams = {
   createdAt: "asc",
 } as ISortProps;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
-  const searchTimeout = 1500;
+const searchTimeout = 1500;
+
+const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [manualSearch, setManualSearch] = useState<string>("");
   const debouncedValue = useDebounce<string>(searchInput, searchTimeout);
+  const searchParams = useSearchParams();
   const pathname = usePathname();
 
   const rootUrl = useMemo(() => {
@@ -93,6 +94,9 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
   const nextPageExist =
     searchInput && manualSearch ? searchHasNextPage : childrenHasNextPage;
 
+
+  const ids = searchParams.get("ids");
+
   const renderItems = (
     page: IListResponse<ICategoryMetadata | IDocumentMetadata>,
     renderTreeIndex: number
@@ -100,23 +104,26 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
     return (
       <Fragment key={`fragment-card-${renderTreeIndex}`}>
         {page.list?.length
-          ? page.list.map((childItem, childIndex: number) => {
+          ? page.list.map((childItem) => {
               if (
                 childItem &&
                 childItem.type === "category" &&
                 !childItem.isHidden
               ) {
+                const catIds = [...categoryIds, childItem.id];
+                const defaultState = ids?.includes(toPersianDigit(childItem.id).toString());
                 return (
                   <SidebarCollapse
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={`category-${childItem.id}-tree-item-${childIndex}`}
+                    key={`category-${childItem.id}-tree-item-${childItem.id}`}
                     title={childItem?.name || "بدون نام"}
+                    defaultOpen={defaultState}
                   >
                     <SidebarCategoryItem
                       repoId={repoId}
                       repoName={repoName || " "}
                       category={childItem}
                       parentUrl={`/publish/${repoId}/${repoName}`}
+                      categoryIds={catIds}
                     />
                   </SidebarCollapse>
                 );
@@ -131,6 +138,7 @@ const SidebarTreeView = ({ repoId, userInfo, repoName }: IProps) => {
                     key={`category-${childItem.categoryId}-document-${childItem.id}-tree-item`}
                     document={childItem}
                     parentUrl={`/publish/${repoId}/${repoName}`}
+                    categoryIds={categoryIds}
                   />
                 );
               }
@@ -267,7 +275,7 @@ const SidebarTreeViewWrapper = ({
     );
   }
   return (
-    <SidebarTreeView repoName={repoName} repoId={repoId} userInfo={userInfo} />
+    <SidebarTreeView repoName={repoName} repoId={repoId} categoryIds={[]} />
   );
 };
 

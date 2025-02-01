@@ -1,15 +1,19 @@
-import React, { Fragment, useState } from "react";
-import SidebarCollapse from "./sidebarCollapse";
-import { Spinner } from "@material-tailwind/react";
-import SidebarDocumentItem from "./sidebarDocumentItem";
+import React, { Fragment } from "react";
+
 import { ICategoryMetadata } from "@interface/category.interface";
+import SidebarCollapse from "./sidebarCollapse";
+import SidebarDocumentItem from "./sidebarDocumentItem";
+import { Spinner } from "@material-tailwind/react";
+import { toPersianDigit } from "@utils/index";
 import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
+import { useSearchParams } from "next/navigation";
 
 interface IProps {
   repoId: number;
   repoName: string;
   category: ICategoryMetadata;
   parentUrl: string;
+  categoryIds: number[];
 }
 
 const SidebarCategoryItem = ({
@@ -17,9 +21,11 @@ const SidebarCategoryItem = ({
   repoName,
   category,
   parentUrl,
+  categoryIds,
 }: IProps) => {
-  const [shouldAddEndpoint, setShouldAddEndpoint] = useState(true);
-  const [baseUrl, setBaseUrl] = useState(parentUrl);
+  const searchParams = useSearchParams();
+  const ids = searchParams.get("ids");
+  const defaultState = ids?.includes(toPersianDigit(category.id).toString());
 
   const {
     data: categoryChildren,
@@ -30,19 +36,6 @@ const SidebarCategoryItem = ({
   } = useGetPublishChildren(repoId, 10, category.id);
 
   const total = categoryChildren?.pages[0].total;
-
-  const buildUrl = (endpointName: string, endpointID: number) => {
-    const fullEndpoint = `/${endpointName}/${endpointID}`;
-    return shouldAddEndpoint
-      ? baseUrl.concat(fullEndpoint)
-      : baseUrl.replace(fullEndpoint, "");
-  };
-
-  const addEndpoint = (endpointName: string, endpointID: number) => {
-    setShouldAddEndpoint(!shouldAddEndpoint);
-    const newUrl = buildUrl(endpointName, endpointID);
-    setBaseUrl(newUrl);
-  };
 
   if (!isLoading && !total) {
     return (
@@ -59,34 +52,29 @@ const SidebarCategoryItem = ({
           <Spinner className="h-5 w-5" color="deep-purple" />
         </div>
       ) : (
-        categoryChildren?.pages.map((page, index) => {
+        categoryChildren?.pages.map((page) => {
           return (
-            // eslint-disable-next-line react/no-array-index-key
-            <Fragment key={`fragment-card-${index}`}>
+            <Fragment key={`fragment-card-${page.list[0]?.id}`}>
               {page.list?.length
-                ? page.list.map((childItem, childIndex) => {
+                ? page.list.map((childItem) => {
                     if (
                       childItem &&
                       childItem.type === "category" &&
                       !childItem.isHidden
                     ) {
+                      const catIds = [...categoryIds, childItem.id];
                       return (
                         <SidebarCollapse
-                          // eslint-disable-next-line react/no-array-index-key
-                          key={`category-${childItem.id}-tree-item-${childIndex}`}
+                          key={`category-${childItem.id}-tree-item-${childItem.id}`}
                           title={childItem?.name || "بدون نام"}
-                          onClick={() => {
-                            addEndpoint(
-                              childItem.name.replace(/\s+/g, "-"),
-                              childItem.id
-                            );
-                          }}
+                          defaultOpen={!!defaultState}
                         >
                           <SidebarCategoryItem
                             repoId={repoId}
                             repoName={repoName}
                             category={childItem}
-                            parentUrl={baseUrl}
+                            parentUrl={parentUrl}
+                            categoryIds={catIds}
                           />
                         </SidebarCollapse>
                       );
@@ -101,7 +89,8 @@ const SidebarCategoryItem = ({
                         <SidebarDocumentItem
                           key={`category-${childItem.categoryId}-document-${childItem.id}-tree-item`}
                           document={childItem}
-                          parentUrl={baseUrl}
+                          parentUrl={parentUrl}
+                          categoryIds={categoryIds}
                         />
                       );
                     }

@@ -10,7 +10,6 @@ import PublishVersion from "../../organisms/publish/publishVersion";
 import React from "react";
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
 import { RenderServerSideContent } from "clasor-content-preview";
-import { generateCachePageTag } from "@utils/redis";
 
 interface IProps {
   version: IVersion;
@@ -18,7 +17,6 @@ interface IProps {
 }
 
 const PublishVersionContent = async ({ version, document }: IProps) => {
-  await generateCachePageTag(`vr-${version.id}`);
   return (
     <>
       <section className="scroller grid gap-2 relative w-full overflow-y-auto min-h-full">
