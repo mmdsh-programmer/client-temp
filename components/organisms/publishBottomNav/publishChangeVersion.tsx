@@ -52,7 +52,7 @@ const PublishChangeVersion = ({
         pathArray.pop();
       }
       pathArray.push(toPersianDigit(versionItem.versionNumber), toPersianDigit(`v-${versionItem.id}`));
-      router.push(`${pathArray.join("/").replace(/\s+/g, "-")}?ids=${ids}`);
+      router.push(`${pathArray.join("/").replace(/\s+/g, "-")}${ids?.length ? `?ids=${ids}` : ""}`);
     }
   };
 

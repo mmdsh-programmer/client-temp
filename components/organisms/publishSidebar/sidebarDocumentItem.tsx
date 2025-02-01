@@ -18,7 +18,7 @@ const SidebarDocumentItem = ({ document, parentUrl, categoryIds }: IProps) => {
   const pathname = usePathname();
   const isSelected = pathname.includes(`/${encodeURIComponent(toPersianDigit(document.id))}`);
 
-  const url = toPersianDigit(`/${isPrivate(document) ? "private" : "publish"}${parentUrl}/${document.name}/${document.id}?ids=${categoryIds}`
+  const url = toPersianDigit(`/${isPrivate(document) ? "private" : "publish"}${parentUrl}/${document.name}/${document.id}${categoryIds.length ? `?ids=${categoryIds.join("-")}` : ""}`
     .replace(/\s+/g, "-"));
 
   return (

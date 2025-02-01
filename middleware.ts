@@ -60,7 +60,7 @@ function convertDocsUrlToPublishUrl(url: NextURL) {
   }
 
   if(ids.length){
-    newUrl.searchParams.set("ids", ids.join(","));
+    newUrl.searchParams.set("ids", ids.join("-"));
   }
 
 
@@ -71,6 +71,70 @@ function convertDocsUrlToPublishUrl(url: NextURL) {
     newUrl.pathname = `/${isPrivate ? "private" : "publish"}/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`;
     return newUrl;
   }
+  return null;
+}
+
+function convertOldPublishUrl(url: NextURL) {
+  const { pathname } = url;
+
+  if(!pathname.startsWith("/publish")){
+    return;
+ }
+
+  const slugs = pathname.split("/").map(slug => {
+    return (decodeURIComponent(slug)).replace(/\s/g, "-");
+  });
+ 
+  const repoId = slugs[2];
+  const repoName = slugs[3];
+
+  if(Number.isNaN(Number(toEnglishDigit(repoId)))){
+    return;
+  }
+
+
+  const newUrl = new NextURL(url);
+  if(repoId && slugs.length === 4){
+    newUrl.pathname = toPersianDigit(`/publish/${repoName}/${repoId}`);
+    return newUrl;
+  }
+
+  const lastSlug = toEnglishDigit(slugs[slugs.length - 1]);
+  const hasVersion = !Number.isNaN(lastSlug) && lastSlug.startsWith("v-");
+
+  
+  
+  const documentId = slugs[slugs.length - (hasVersion ? 3 : 1)];
+  const documentName = slugs[slugs.length - (hasVersion ? 4 : 2)];
+
+  const ids: string[] = [];
+  for(let i = 5; i < slugs.length - (hasVersion ? 4 : 2); i += 2){
+    const catId = Number(toEnglishDigit(slugs[i]));
+    if(!Number.isNaN(catId)){
+      ids.push(toPersianDigit(catId));
+    }
+  }
+
+  if(ids.length){
+    newUrl.searchParams.set("ids", ids.join("-"));
+  }
+
+
+
+
+  if(documentId && documentName && !hasVersion){
+    newUrl.pathname = toPersianDigit(`/publish/${repoName}/${repoId}/${documentName}/${documentId}`);
+    return newUrl;
+  }
+
+  const versionId = slugs[slugs.length - 1].replace("v-", "");
+  const versionName = slugs[slugs.length - 2];
+
+  if(documentId && documentName && versionId && versionName){
+    newUrl.pathname = toPersianDigit(`/publish/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`);
+    return newUrl;
+  }
+
   return null;
 }
 
@@ -111,6 +175,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(newUrl);
   }
 
+  const newPublishUrl = convertOldPublishUrl(url);
+  if (newPublishUrl) {
+    return NextResponse.redirect(newPublishUrl);
+  }
 
   if (domain) {
     const isInPages = pages.find((page) => {
