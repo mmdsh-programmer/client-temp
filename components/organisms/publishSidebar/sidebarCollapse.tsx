@@ -7,10 +7,17 @@ interface IProps {
   children: JSX.Element;
   className?: string;
   onClick?: () => void;
+  defaultOpen?: boolean;
 }
 
-const SidebarCollapse = ({ title, children, className, onClick }: IProps) => {
-  const [open, setOpen] = useState(false);
+const SidebarCollapse = ({
+  title,
+  children,
+  className,
+  onClick,
+  defaultOpen = false,
+}: IProps) => {
+  const [open, setOpen] = useState(defaultOpen);
 
   const toggleOpen = () => {
     onClick?.();

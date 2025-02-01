@@ -9,11 +9,12 @@ import {
   Spinner,
 } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import { publishVersionAtom } from "@atom/publish";
+import { toPersianDigit } from "@utils/index";
 import useGetPublishDocumentVersions from "@hooks/publish/useGetPublishDocumentVersions";
 import { useRecoilValue } from "recoil";
 
@@ -30,6 +31,7 @@ const PublishChangeVersion = ({
 }: IProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const search = useSearchParams();
   const [openMenu, setOpenMenu] = useState(false);
   const getPublishVersion = useRecoilValue(publishVersionAtom);
 
@@ -42,14 +44,15 @@ const PublishChangeVersion = ({
 
   const handleSelectVersion = (versionItem: IVersion) => {
     if (pathname && versionItem.id !== selectedVersionId) {
+      const ids = search.get("ids");
       const pathArray = pathname.split("/");
 
       if (pathArray[pathArray.length - 1].startsWith("v-")) {
         pathArray.pop();
         pathArray.pop();
       }
-      pathArray.push(versionItem.versionNumber, `v-${versionItem.id}`);
-      router.push(pathArray.join("/").replace(/\s+/g, "-").toLowerCase());
+      pathArray.push(toPersianDigit(versionItem.versionNumber), toPersianDigit(`v-${versionItem.id}`));
+      router.push(`${pathArray.join("/").replace(/\s+/g, "-").toLowerCase()}?ids=${ids}`);
     }
   };
 

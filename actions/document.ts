@@ -27,6 +27,7 @@ import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
+import { revalidateTag } from "next/cache";
 
 export const getClasorFieldAction = async () => {
   const userInfo = await getMe();
@@ -162,6 +163,10 @@ export const editDocumentAction = async (
       isDirectAccess
     );
 
+    // revalidate page of document if exists
+    revalidateTag(`dc-${documentId}`);
+
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -183,6 +188,9 @@ export const deleteDocumentAction = async (
       repoId,
       documentId
     );
+
+    // revalidate page of document if exists
+    revalidateTag(`dc-${documentId}`);
 
     return response;
   } catch (error) {
@@ -319,6 +327,9 @@ export const addToDocumentBlackListAction = async (
       usernameList
     );
 
+    // revalidate page of document if exists
+    revalidateTag(`dc-${documentId}`);
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -339,6 +350,10 @@ export const addToDocumentWhiteListAction = async (
       usernameList
     );
 
+    
+    // revalidate page of document if exists
+    revalidateTag(`dc-${documentId}`);
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -358,6 +373,9 @@ export const createDocumentPasswordAction = async (
       documentId,
       password
     );
+
+    // revalidate page of document if exists
+    revalidateTag(`dc-${documentId}`);
 
     return response;
   } catch (error) {

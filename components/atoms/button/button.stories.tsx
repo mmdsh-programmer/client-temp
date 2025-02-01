@@ -1,5 +1,6 @@
 import type {
- Meta, StoryObj 
+ Meta,
+ StoryObj
 } from "@storybook/react";
 
 import BackButton from "./backButton";
@@ -23,8 +24,7 @@ export const CancelButtonStory: StoryObj<typeof CancelButton> = {render: (args) 
 {return (
     <CancelButton
       {...args}
-      onClick={() => 
-{return console.log("Cancel button clicked");}}
+      onClick={() => {return console.log("Cancel button clicked");}}
     >
       انصراف
     </CancelButton>

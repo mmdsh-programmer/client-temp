@@ -19,10 +19,10 @@ import useCreateDocumentTemplate from "@hooks/document/useCreateDocumentTemplate
 import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
 import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
+import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   isTemplate: boolean;

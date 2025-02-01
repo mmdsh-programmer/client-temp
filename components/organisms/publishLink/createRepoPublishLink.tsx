@@ -1,19 +1,20 @@
-import React, { useState } from "react";
 import {
   Checkbox,
   DialogBody,
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { repoAtom, repositoryIdAtom } from "@atom/repository";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import { onDatePickerChangePayload } from "zaman/dist/types";
-import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreatePublishLink from "@hooks/publish/useCreatePublishLink";
 import { useForm } from "react-hook-form";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 
 interface IData {
   expireTime: number;
@@ -61,7 +62,7 @@ const CreateRepoPublishLink = () => {
       callBack: () => {
         setRepositoryAtomId(getRepo.id);
         handleReset();
-        toast.success(" انتشار مخزن با موفقيت انجام شد.");
+        toast.success("انتشار مخزن با موفقيت انجام شد.");
       },
     });
   };
@@ -69,7 +70,7 @@ const CreateRepoPublishLink = () => {
   return (
     <>
       <DialogBody
-        placeholder="dialog body"
+        placeholder="dialog body publish-repo"
         className="flex-grow px-5 py-3 xs:p-0 xs:pb-6"
       >
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>

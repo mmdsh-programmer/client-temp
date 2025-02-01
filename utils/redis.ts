@@ -1,5 +1,4 @@
 import { getClient as clusterClient } from "../cacheHandler.mjs";
-
 import { getClient as createClientDevelop } from "../cacheHandler.develop.mjs";
 
 export const getRedisClient = async () => {
@@ -11,10 +10,10 @@ export const getRedisClient = async () => {
    return redisClient;
 };
 
-export const generateCachePageTag = async (tag: string) => {
+export const generateCachePageTag = async (tag: string[]) => {
    await fetch(`${process.env.NEXT_PUBLIC_PODSPACE_API}/api`, {
       next: {
-        tags: [tag],
+        tags: tag,
       },
     });
 };

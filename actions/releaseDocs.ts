@@ -12,6 +12,7 @@ import {
 import { IActionError } from "@interface/app.interface";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
+import { revalidateTag } from "next/cache";
 
 export const getPendingDraftsAction = async (
   repoId: number,
@@ -67,6 +68,12 @@ export const acceptDraftAction = async (
       draftId
     );
 
+    // revalidate page of version if exists
+    revalidateTag(`vr-${response.id}`);
+
+    // revalidate empty page of document if exists
+    revalidateTag(`dc-${docId}`);
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -95,6 +102,7 @@ export const rejectDraftAction = async (
 
 export const acceptVersionAction = async (
   repoId: number,
+  docId: number,
   versionId: number
 ) => {
   const userInfo = await getMe();
@@ -104,6 +112,12 @@ export const acceptVersionAction = async (
       repoId,
       versionId
     );
+
+    // revalidate page of version if exists
+    revalidateTag(`vr-${versionId}`);
+
+    // revalidate empty page of document if exists
+    revalidateTag(`dc-${docId}`);
 
     return response;
   } catch (error) {

@@ -1,8 +1,10 @@
 import type {
- Meta, StoryObj 
+ Meta,
+ StoryObj
 } from "@storybook/react";
 import {
- QueryClient, QueryClientProvider 
+ QueryClient,
+ QueryClientProvider
 } from "@tanstack/react-query";
 
 import React from "react";
@@ -46,7 +48,4 @@ export const Default: Story = {args: {
  label: "Option 3", value: 3 
 },
     ],
-    handleChange: (value) => 
-{return console.log("Selected value:", value);},
-    background: "white",
-  },};
+    handleChange: (value) => {return console.log("Selected value:", value);} , background: "white"}};

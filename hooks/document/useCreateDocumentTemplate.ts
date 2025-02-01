@@ -1,10 +1,11 @@
-import { createDocumentTemplateAction } from "@actions/document";
-import { IDocument } from "@interface/document.interface";
-import { EDocumentTypes } from "@interface/enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
+import { EDocumentTypes } from "@interface/enums";
 import { IActionError } from "@interface/app.interface";
+import { IDocument } from "@interface/document.interface";
+import { createDocumentTemplateAction } from "@actions/document";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useCreateDocumentTemplate = () => {
   const queryClient = useQueryClient();

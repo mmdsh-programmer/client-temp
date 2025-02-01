@@ -17,7 +17,7 @@ import { ERoles } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import { repoAtom } from "@atom/repository";
-import { toPersinaDigit } from "@utils/index";
+import { toPersianDigit } from "@utils/index";
 import { useSetRecoilState } from "recoil";
 
 type ModalType =
@@ -126,9 +126,9 @@ const useMenuList = (
           <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {
             window.open(
-              `/publish/${repo.id}/${toPersinaDigit(
+              toPersianDigit(`/publish/${repo.id}/${toPersianDigit(
                 `${repo.name.replaceAll(/\s+/g, "-")}`
-              )}`,
+              )}`),
               "_blank"
             );
           }

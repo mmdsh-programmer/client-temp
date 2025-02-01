@@ -20,6 +20,7 @@ import { IComment } from "@interface/version.interface";
 import crypto from "crypto";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
+import Logger from "@utils/logger";
 
 const axiosSocialInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CORE_API,
@@ -30,30 +31,64 @@ const axiosSocialInstance = axios.create({
   },
 });
 
-axiosSocialInstance.interceptors.request.use((request) => {
-  const { headers, baseURL, method, url, data } = request;
-  const log = JSON.stringify({
-    headers,
-    baseURL,
-    method,
-    url,
-    data,
+axiosSocialInstance.interceptors.request.use(
+  (request) => {
+    const { headers, baseURL, method, url, data } = request;
+    const log = {
+      headers,
+      baseURL,
+      method,
+      url,
+      data,
+    };
+    Logger.info(log);
+    return request;
+  }, (error) => {
+    const log = {
+      type: "ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.error(log);
+    return Promise.reject(error);
   });
-  console.log(log);
-  return request;
-});
 
-axiosSocialInstance.interceptors.response.use((response) => {
-  const { data, status } = response;
+axiosSocialInstance.interceptors.response.use(
+  (response) => {
+    const { data, status } = response;
 
-  const log = JSON.stringify({
-    data,
-    status,
-  });
-
-  console.log(log);
-  return response;
-});
+    const log = {
+      data,
+      status,
+    };
+    Logger.info(log);
+    return response;
+  }, (error) => {
+    const log = {
+      type: "ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.info(log);
+    return Promise.reject(error);
+  }
+);
 
 export const handleSocialStatusError = (
   error: AxiosError<ISocialError> | ISocialResponse<unknown>
@@ -129,7 +164,7 @@ export const getCustomPostByDomain = async (
   if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(cacheKey);
     if (cachedData) {
-      console.log({
+      Logger.warn({
         type: "Redis cache data",
         data: cachedData
       });
@@ -177,7 +212,7 @@ export const getCustomPostById = async (
   if (redisClient && redisClient.isReady) {
     const cachedData = await redisClient?.get(cacheKey);
     if (cachedData) {
-      console.log({
+      Logger.warn({
         type: "Redis cache data",
         data: cachedData
       });
@@ -250,7 +285,7 @@ export const updateCustomPost = async (
   // update redis cache
   const redisClient = await getRedisClient();
   if (redisClient && redisClient.isReady) {
-    console.log({
+    Logger.warn({
       type: "Redis remove data"
     });
     await redisClient?.del(`domain-${metadata.domain}`);
