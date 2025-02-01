@@ -32,7 +32,7 @@ const SidebarDocumentItem = ({ document, parentUrl, categoryIds }: IProps) => {
       tabIndex={0}
     >
       <DocumentIcon className="w-5 h-5 stroke-icon-hover flex-none self-start" />
-      {document.hasPassword ? (
+      {isPrivate(document) ? (
         <LockIcon className="flex-none w-5 h-5 fill-icon-hover" />
       ) : null}
       <span className="text-xs text-gray-700 font-bold overflow-hidden text-right">

@@ -204,7 +204,7 @@ export default async function PublishContentPage({
   } catch (error) {
     const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if((error as unknown as IActionError).errorCode === 401){
-      return <LoginRequiredButton message="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید." />;
+      return <LoginRequiredButton message="ورود" description="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید." />;
     }
     if(message === "NEXT_NOT_FOUND"){
         return notFound();
