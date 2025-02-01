@@ -4,7 +4,7 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
@@ -34,13 +34,24 @@ export default async function PublishContentPage({
   const time = Date.now();
   try {
     const { id, name, slug } = params;
-    const decodeId = decodeURIComponent(id);
-    const repoId = parseInt(toEnglishDigit(decodeId), 10);
-    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
+    const decodeId = decodeURIComponent(id);
+    if(hasEnglishDigits(decodeId)){
+      throw new ServerError(["آدرس وارد شده نامعتبر است"]);
+    }
+    
+    const repoId = parseInt(toEnglishDigit(decodeId), 10);
+    
     if (Number.isNaN(repoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
+    
+    // Check for English digits in slug before converting 
+    if (slug?.some(s => {return hasEnglishDigits(decodeURIComponent(s));})) {
+      throw new ServerError(["آدرس وارد شده نامعتبر است"]);
+    }
+
+    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
     const repository = await getPublishRepositoryInfo(repoId);
 

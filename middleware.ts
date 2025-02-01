@@ -28,7 +28,8 @@ const pages = [
 
 function convertDocsUrlToPublishUrl(url: NextURL) {
   const { pathname } = url;
-  if(!pathname.startsWith("/page")){
+  const isPrivate = pathname.startsWith("/private/page");
+  if(!pathname.startsWith("/page") && !isPrivate){
      return;
   }
 
@@ -38,8 +39,11 @@ function convertDocsUrlToPublishUrl(url: NextURL) {
     return (decodeURIComponent(slug)).replace(/\s/g, "-");
   });
 
-  const repoId = slugs[3];
-  const repoName = slugs[2];
+  const repoIdIndex = pathname.startsWith("/private/page") ? 4 : 3;
+
+  const repoId = slugs[repoIdIndex];
+  const repoName = slugs[repoIdIndex - 1];
+  
   if(repoId && slugs.length === 4){
     newUrl.pathname = `/publish/${repoName}/${repoId}`;
     return newUrl;
@@ -48,7 +52,7 @@ function convertDocsUrlToPublishUrl(url: NextURL) {
   const documentName = slugs[slugs.length - 4];
 
   const ids: string[] = [];
-  for(let i = 5; i < slugs.length - 4; i += 2){
+  for(let i = isPrivate ? 6 : 5; i < slugs.length - 4; i += 2){
     const catId = Number(toEnglishDigit(slugs[i]));
     if(!Number.isNaN(catId)){
       ids.push(toPersianDigit(catId));
@@ -64,7 +68,7 @@ function convertDocsUrlToPublishUrl(url: NextURL) {
   const versionName = slugs[slugs.length - 2];
 
   if(documentId && documentName && versionId){
-    newUrl.pathname = `/publish/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`;
+    newUrl.pathname = `/${isPrivate ? "private" : "publish"}/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`;
     return newUrl;
   }
   return null;
@@ -142,7 +146,6 @@ export const config = {
     "/admin/:path*",
     "/panel-admin-clasor/:path*",
     "/publish/:path*",
-    "/private/:path*",
     "/sampleError/:path*",
     "/signin/:path*",
     "/subscribe/:path*",

@@ -5,10 +5,11 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError } from "@interface/app.interface";
+import LoginRequiredButton from "@components/molecules/loginRequiredButton";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
@@ -17,7 +18,6 @@ import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
-import LoginRequiredButton from "@components/molecules/loginRequiredButton";
 
 type PageParams = {
   name: string;
@@ -70,16 +70,27 @@ export default async function PublishContentPage({
   const time = Date.now();
   try {
     const { id, name, slug } = params;
+    
     const decodeId = decodeURIComponent(id);
+     // Check for English digits in slug before converting 
+    if(hasEnglishDigits(decodeId)){
+      throw new ServerError(["آدرس وارد شده نامعتبر است"]);
+    }
+
     const repoId = parseInt(toEnglishDigit(decodeId), 10);
-    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
     if (Number.isNaN(repoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    const repository = await getPublishRepositoryInfo(repoId);
+    // Check for English digits in slug before converting 
+    if (slug?.some(s => {return hasEnglishDigits(decodeURIComponent(s));})) {
+      throw new ServerError(["آدرس وارد شده نامعتبر است"]);
+    }
+    
+    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
+    const repository = await getPublishRepositoryInfo(repoId);
 
     const decodeName = decodeURIComponent(name);
     const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");

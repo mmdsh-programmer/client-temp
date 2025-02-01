@@ -292,4 +292,8 @@ export const isParsable = (message: string) => {
 
 export const isPrivate = (item: IDocumentMetadata) => {
   return item.hasPassword || item.hasBlackList || item.hasWhiteList;
- };
+};
+
+export const hasEnglishDigits = (str: string) => {
+  return /[0-9]/.test(str);
+};
