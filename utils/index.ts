@@ -267,12 +267,19 @@ export const generateKey = (domain: string) => {
 
 export const decodeKey = (domainKey: string) => {
   try {
-    return domainKey
-    .split("_") // Split the encoded string by "_"
-    .map((charCode) => {
+    const domainSplitArray = domainKey
+      .split("_"); // Split the encoded string by "_"
+
+    if (!domainSplitArray.some((item) => {return /[0-9]/.test(item);})) {
+      return "";
+    }
+
+    const decodedDomain = domainSplitArray.map((charCode) => {
       return String.fromCharCode(Number(charCode));
     }) // Convert each code back to a character
-    .join(""); // Join characters to form the original domain
+      .join(""); // Join characters to form the original domain
+
+    return decodedDomain;
   } catch (error) {
     console.log({
       type: "decodeKey",
