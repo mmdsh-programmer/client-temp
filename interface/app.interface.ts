@@ -307,6 +307,7 @@ export interface ICustomPostData {
   projectDescription?: string;
   heroImage?: string;
   theme?: IThemeInfo;
+  enablePublishPage: boolean;
 }
 export interface IThemeInfo {
   primaryColor?: string;

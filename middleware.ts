@@ -191,12 +191,7 @@ export async function middleware(request: NextRequest) {
     }
     if (pathname === "/") {
       const domainKey = generateKey(domain);
-      // const data = await getCustomPostByDomain(domain);
-      // if (data.enablePublishPage) {
-      //   url.pathname = `/${domainKey}/publish`;
-      //   return NextResponse.rewrite(url);
-      // }
-      url.pathname = `/${domainKey}/signin`;
+      url.pathname = `/${domainKey}`;
       return NextResponse.rewrite(url);
     }
   }

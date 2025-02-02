@@ -1,4 +1,4 @@
-import { IActionError } from "@interface/app.interface";
+import { IActionError, ICustomPostData } from "@interface/app.interface";
 import { getCustomPostById, updateCustomPost } from "@service/social";
 import { handleRouteError, InputError, NotFoundError } from "@utils/error";
 import { headers } from "next/headers";
@@ -29,13 +29,15 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             cryptoSecretKey, 
             cryptoInitVectorKey, 
             content,
-            enablePublishPage
         } = await request.json();
 
         const response = await getCustomPostById(+id);
         if(response.id !== +id){
           throw new NotFoundError(["دامنه مورد نظر پیدا نشد."]);
         }
+
+        const domainContent = JSON.parse(response.data ?? "{}") as ICustomPostData;
+        const updateContent = {...domainContent, ...(content ?? {})};
         
         await updateCustomPost({  
             domain: domain ?? response.domain, 
@@ -44,8 +46,7 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             clientSecret: clientSecret ?? response.clientSecret,
             cryptoSecretKey: cryptoSecretKey ?? response.cryptoSecretKey,
             cryptoInitVectorKey: cryptoInitVectorKey ?? response.cryptoInitVectorKey,
-            enablePublishPage: enablePublishPage ?? response.enablePublishPage,
-        }, +response.entityId, content ? JSON.stringify(content) : response.data);
+        }, +response.entityId, JSON.stringify(updateContent));
        
         return NextResponse.json({});
     } catch (error) {
