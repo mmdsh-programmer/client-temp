@@ -14,7 +14,6 @@ import PublishDocumentPassword from "@components/pages/publish/publishDocumentPa
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
-import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
@@ -99,7 +98,9 @@ export default async function PublishContentPage({
     }
 
     if (!enSlug?.length) {
-      return <RepositoryInfo repository={repository} />;
+      return <RedirectPage
+        redirectUrl={`/publish/${toPersianDigit(repoName)}/${toPersianDigit(id)}`}
+      />;
     }
 
     const lastSlug = enSlug[enSlug.length - 1];
@@ -115,7 +116,6 @@ export default async function PublishContentPage({
       : undefined;
 
     if (!documentId || Number.isNaN(documentId)) {
-      
       return notFound();
     }
 
@@ -149,9 +149,6 @@ export default async function PublishContentPage({
     // check password cookie 
     // caution: reading cookies will cause server side rendering
     const documentPassword = cookies().get(`document-${documentId}-password`)?.value;
-
-
-
 
     const encodedToken = cookies().get("token")?.value;
     let accessToken: string | undefined;

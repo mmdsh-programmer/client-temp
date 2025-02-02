@@ -21,6 +21,7 @@ export const generateStaticParams = async () => {
 };
 
 type PageParams = {
+  domain: string;
   name: string;
   id: string;
   slug?: string[];
@@ -33,7 +34,7 @@ export default async function PublishContentPage({
 }) {
   const time = Date.now();
   try {
-    const { id, name, slug } = params;
+    const { id, name, slug, domain } = params;
 
     const decodeId = decodeURIComponent(id);
     if(hasEnglishDigits(decodeId)){
@@ -62,7 +63,7 @@ export default async function PublishContentPage({
     }
 
     if (!enSlug?.length) {
-      await generateCachePageTag([`rp-${repository.id}`,`rp-ph-${repository.id}`]);
+      await generateCachePageTag([`rp-${repository.id}`,`rp-ph-${repository.id}`,`i-${domain}`]);
       return <RepositoryInfo repository={repository} />;
     }
 
@@ -80,7 +81,7 @@ export default async function PublishContentPage({
 
     let versionData: IVersion;
     if (!documentId || Number.isNaN(documentId)) {
-      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
       return notFound();
     }
 
@@ -92,7 +93,7 @@ export default async function PublishContentPage({
 
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
     if(toEnglishDigit(documentInfoName) !== documentName){
-      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
       return notFound();
     }
 
@@ -119,7 +120,7 @@ export default async function PublishContentPage({
       );
 
       if (!lastVersionInfo){
-        await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
+        await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
       }
 
@@ -132,7 +133,7 @@ export default async function PublishContentPage({
 
     const versionNumber = enSlug[enSlug.length - 2];
 
-    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`]);
+    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
     
     if(hasVersion && versionData && toEnglishDigit(versionData.versionNumber).replaceAll(/\s+/g, "-") !== versionNumber){
       return notFound();
