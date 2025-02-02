@@ -5,11 +5,17 @@ import { Spinner, Typography } from "@material-tailwind/react";
 import { getUserToken, login } from "@actions/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { ClasorLogo } from "@components/atoms/icons";
+import ImageComponent from "@components/atoms/image";
+import { InfoIcon } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
 import { useDebouncedCallback } from "use-debounce";
 
-const SignInComponent = () => {
+interface IProps{
+  projectName: string;
+  logo: string;
+  projectDescription: string;
+}
+const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -89,7 +95,17 @@ const SignInComponent = () => {
       <div className="flex flex-col lg:flex-row rounded-2xl shadow-xl bg-gradient-to-l to-deep-purple-50 from-deep-purple-300">
         <div className="flex justify-center items-center">
           <figure className="flex sm:w-[400px] sm:h-[400px] w-full h-auto items-center justify-center">
-            <ClasorLogo className="h-48 w-48" fill="#7446B2" />
+            {logo ? (
+              <ImageComponent
+                alt="repo-image"
+                src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${logo}`}
+                className="h-48 w-48"
+              />
+            ) : (
+              <div className="w-8 h-8 flex items-center justify-center">
+                <InfoIcon className="h-8 w-8" stroke="#000" />
+              </div>
+            )}
           </figure>
         </div>
         <div className="card-body flex flex-col flex-1 my-10 px-10">
@@ -100,10 +116,10 @@ const SignInComponent = () => {
           ) : (
             <>
               <h2 className="card-title text-xl font-bold text-primary">
-                به کلاسور خوش آمدید!
+                به {projectName} خوش آمدید!
               </h2>
-              <p className="text-base mt-4 flex-grow text-primary">
-                برای ورود به کلاسور باید از درگاه POD استفاده کنید
+              <p className="text-base mt-4 flex-grow text-sm">
+                {projectDescription}
               </p>
             </>
           )}

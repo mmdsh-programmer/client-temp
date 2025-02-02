@@ -159,6 +159,9 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
 
+  if(domain === ""){
+    throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
+  }
   const redisClient = await getRedisClient();
   const cacheKey = `domain-${domain}`;
 
