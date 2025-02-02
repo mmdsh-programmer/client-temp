@@ -5,7 +5,7 @@ import Error from "../error";
 import { Spinner, Typography } from "@material-tailwind/react";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
-import BranchCollapse from "./branchCollapse";
+import BranchCollapse from "../../molecules/branchCollapse";
 import { useRecoilValue } from "recoil";
 import { branchIdAtom } from "@atom/branch";
 
@@ -44,7 +44,7 @@ const BranchList = ({ branchId }: IProps) => {
   return (
     <>
       {isLoading ? (
-        <div className="loader w-full flex justify-center h-3 my-3">
+        <div className="w-full flex justify-center h-3 my-3">
           <Spinner className="w-4 h-4" color="deep-purple" />
         </div>
       ) : (
@@ -62,7 +62,7 @@ const BranchList = ({ branchId }: IProps) => {
               );
             })
           ) : (
-            <div className="flex items-center">
+            <div className="flex items-center w-full">
               <Typography className="text-right text-xs pr-4 py-1 text-dashboard-text-color-light">
                 موردی وجود ندارد
               </Typography>

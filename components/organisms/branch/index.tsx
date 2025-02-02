@@ -30,7 +30,7 @@ const Branch = () => {
         </div>
       ) : null}
       {open ? <BranchCreateDialog setOpen={setOpen} /> : null}
-      <div className="branch-wrapper pt-2 px-2 overflow-auto flex-grow">
+      <div className="branch-wrapper p-3 overflow-y-auto overflow-x-hidden flex-grow">
         <BranchList branchId={null} />
       </div>
     </div>

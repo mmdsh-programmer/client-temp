@@ -22,7 +22,8 @@ const useCreateRootBranch = () => {
     },
     onSuccess: (_, values) => {
       const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+      queryClient.invalidateQueries({ queryKey: ["branch-root"] });
+      queryClient.refetchQueries({ queryKey: ["branch-root"] });
       callBack?.();
     },
     onError: (error) => {

@@ -59,7 +59,7 @@ const BranchCollapse = ({
                 />
                 <Typography
                   title={childItem.title}
-                  className="max-w-[100px] truncate"
+                  className="max-w-[100px] w-[100px] truncate"
                   variant="small"
                 >
                   {childItem.title}

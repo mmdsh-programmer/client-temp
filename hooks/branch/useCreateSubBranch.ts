@@ -28,7 +28,8 @@ const useCreateSubBranch = () => {
     },
     onSuccess: (_, values) => {
       const { callBack, branchId } = values;
-      queryClient.invalidateQueries({ queryKey: [`branches-${branchId}`] });
+      queryClient.refetchQueries({ queryKey: [`branch-${branchId}`] });
+      queryClient.invalidateQueries({ queryKey: [`branch-${branchId}`] });
       callBack?.();
     },
     onError: (error) => {

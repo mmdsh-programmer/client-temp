@@ -60,16 +60,17 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
           handleClose();
         },
       });
+    } else {
+      createRootBranch.mutate({
+        name: dataForm.name,
+        repoType: dataForm.repoType,
+        username: dataForm.username,
+        callBack: () => {
+          toast.success(`شعبه ${dataForm.name} با موفقیت ساخته شد.`);
+          handleClose();
+        },
+      });
     }
-    createRootBranch.mutate({
-      name: dataForm.name,
-      repoType: dataForm.repoType,
-      username: dataForm.username,
-      callBack: () => {
-        toast.success(`شعبه ${dataForm.name} با موفقیت ساخته شد.`);
-        handleClose();
-      },
-    });
   };
 
   return (

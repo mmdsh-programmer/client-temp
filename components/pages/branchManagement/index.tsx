@@ -1,41 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Branch from "@components/organisms/branch";
 import BranchInfo from "@components/organisms/branch/branchInfo";
-import { Button, Typography } from "@material-tailwind/react";
-import { AddIcon } from "@components/atoms/icons";
-import PositionCreateDialog from "@components/organisms/dialogs/position/createPositionDialog";
+import { Typography } from "@material-tailwind/react";
 
 const BranchManagementPage = () => {
-  const [open, setOpen] = useState(false);
-
   return (
-    <div className="flex flex-col h-full gap-6">
+    <div className="flex flex-col h-full gap-6 overflow-hidden">
       <div className="category-header flex justify-between items-center px-4 xs:px-0">
-        <Typography className="title_t1 text-primary">لیست شعبات</Typography>
-        <Button
-          placeholder="create button"
-          className="bg-purple-normal flex gap-2 "
-          onClick={() => {
-            return setOpen(true);
-          }}
-        >
-          <Typography className="title_t3 text-white">
-            ایجاد گروه جدید
-          </Typography>
-          <AddIcon className="w-4 h-4 stroke-white" />
-        </Button>
+        <Typography className="title_t1 text-primary">مدیریت شعبات</Typography>
       </div>
-      <div className="flex justify-evenly gap-2 h-full">
-        <div className="basis-1/5 h-full">
+      <div className="flex justify-evenly gap-2 h-[calc(100%-50px)]">
+        <div className="basis-1/5 w-[30%] max-w-[260px] h-full">
           <Branch />
         </div>
-        <div className="basis-4/5 ">
+        <div className="basis-4/5 overflow-x-auto">
           <BranchInfo />
         </div>
       </div>
-      {open ? <PositionCreateDialog setOpen={setOpen} /> : null}
     </div>
   );
 };
