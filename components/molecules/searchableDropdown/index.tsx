@@ -108,7 +108,6 @@ const SearchableDropdown = ({
       className="w-full relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
-        e.preventDefault();
       }}
     >
       <div

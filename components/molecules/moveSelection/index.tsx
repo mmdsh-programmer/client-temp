@@ -37,7 +37,6 @@ const MoveSelection = ({ target }: IProps) => {
       className="w-full relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
-        e.preventDefault();
       }}
     >
       <Button

@@ -1,6 +1,6 @@
 "use client";
 
-import { LoginIcon, LogoutIcon, UserIcon } from "@components/atoms/icons";
+import { LogoutIcon, UserIcon } from "@components/atoms/icons";
 
 import { Button } from "@material-tailwind/react";
 import ImageComponent from "@components/atoms/image";
@@ -57,7 +57,6 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
           }}
         >
           <span className="hidden sm:block">ورود</span>
-          <LoginIcon className="block sm:hidden fill-blue-gray-700 w-5 h-5 xs:w-7 xs:h-7" />
         </LoadingButton>
       </>
     );

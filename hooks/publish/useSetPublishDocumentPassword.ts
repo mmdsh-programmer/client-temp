@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
 import { saveDocumentPasswordInCookieAction } from "@actions/cookies";
+import { useMutation } from "@tanstack/react-query";
 
 const useSetPublishDocumentPassword = () => {
   return useMutation({
@@ -7,14 +7,19 @@ const useSetPublishDocumentPassword = () => {
     mutationFn: async (values: {
       documentId: number;
       password: string;
-      callBack?: () => void;
+      handleSuccess?: () => void;
+      handleError?: () => void;
     }) => {
       const { documentId, password } = values;
       await saveDocumentPasswordInCookieAction(documentId, password);
     },
     onSuccess: (response, values) => {
-      const { callBack } = values;
-      callBack?.();
+      const { handleSuccess } = values;
+      handleSuccess?.();
+    },
+    onError: (error, values) => {
+      const { handleError } = values;
+      handleError?.();
     },
   });
 };

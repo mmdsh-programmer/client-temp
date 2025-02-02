@@ -4,18 +4,19 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import HamburgerButton from "../hamburgerButton";
 import SidebarTreeViewWrapper from "./sidebarTreeViewWrapper";
+import { toEnglishDigit } from "@utils/index";
+import { usePathname } from "next/navigation";
 
-interface IProps {
-  repoId: number;
-  repoName: string;
-}
-
-const PublishSidebar = ({ repoId, repoName }: IProps) => {
+const PublishSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(256);
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
 
+  const pathname = usePathname();
+  const repoId = toEnglishDigit(decodeURIComponent(pathname.split("/")[3]));
+  const repoName = decodeURIComponent(pathname.split("/")[2]);
+  
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -80,7 +81,7 @@ const PublishSidebar = ({ repoId, repoName }: IProps) => {
         }}
       >
         <div className="app-sidebar-content">
-          <SidebarTreeViewWrapper repoId={repoId} repoName={repoName} />
+          <SidebarTreeViewWrapper repoId={+repoId} repoName={repoName} />
         </div>
         <div
           className="app-sidebar-resizer absolute left-0 top-0 h-full w-1 cursor-ew-resize hover:bg-gray-200 transition-colors md:block hidden"

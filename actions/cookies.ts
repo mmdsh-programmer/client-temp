@@ -2,12 +2,6 @@
 
 import { cookies } from "next/headers";
 
-export const getDocumentPasswordAction = async (documentId: number) => {
-  const documentPassword = cookies().get(`document-${documentId}-password`);
-
-  return documentPassword?.value || null;
-};
-
 export const saveDocumentPasswordInCookieAction = async (
   documentId: number,
   password: string
