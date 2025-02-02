@@ -77,7 +77,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
                 return null;
               }
               return (
-                <div className="tree-item-wrapper" key={item.id}>
+                <div className="tree-item-wrapper w-full" key={item.id}>
                   <TreeCatItem
                     catItem={item}
                     move={move}

@@ -23,8 +23,8 @@ const TreeDocItem = ({ docItem, enableAction }: IProps) => {
   };
 
   return (
-    <div className="pr-4">
-      <div className="flex">
+    <div className={`${docItem.creatorSSOID ? "" : "bg-gray-300"} `}>
+      <div className="pr-4 flex">
         <Button
           placeholder="button"
           className="flex p-2 bg-transparent "

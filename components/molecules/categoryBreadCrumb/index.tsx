@@ -33,7 +33,7 @@ const CategoryBreadCrumb = () => {
   }, [getCategoryShow]);
 
   return (
-    <div className="category-breadcrumb flex text-sm cursor-pointer pl-5 sticky top-0 bg-secondary xs:bg-white z-50">
+    <div className="category-breadcrumb flex text-sm cursor-pointer pl-5 sticky top-0 bg-secondary xs:bg-white z-20">
       <div className="flex items-center">
         {breadCrumb.length > 0 ? (
           <Button

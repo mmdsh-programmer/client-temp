@@ -113,8 +113,16 @@ const Files = ({
   }, [refetch]);
 
   const handleUploadFile = async (item: any, showCropper: boolean) => {
+    console.log("handleUploadFile called:", { item, showCropper });
+
     setProcessCount(0);
     const token = userInfo?.access_token;
+    
+    if (!token) {
+      toast.error("توکن نامعتبر است");
+      return;
+    }
+
 
     if (token) {
       setIsLoading(true);

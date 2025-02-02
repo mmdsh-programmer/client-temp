@@ -105,7 +105,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
           />
         </div>
       )}
-      <RepoDialogs repo={repo} modals={modals} setModalState={setModalState} />
+      <RepoDialogs modals={modals} setModalState={setModalState} />
     </>
   );
 };

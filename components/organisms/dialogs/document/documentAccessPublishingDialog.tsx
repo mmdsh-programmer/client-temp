@@ -33,6 +33,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
     getRepo!.id,
     document!.id
   );
+
   const whiteListHook = useAddWhiteList();
   const blackListHook = useAddBlackList();
 

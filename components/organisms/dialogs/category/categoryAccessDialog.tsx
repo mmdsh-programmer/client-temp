@@ -55,7 +55,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
 
   return (
     <InfoDialog
-      dialogHeader="محدودیت دسترسی روی دسته‌بندی"
+      dialogHeader="محدودیت دسترسی روی پنل"
       setOpen={handleClose}
       className="min-h-[350px]"
     >

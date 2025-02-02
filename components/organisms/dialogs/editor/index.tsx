@@ -72,7 +72,8 @@ const Editor = ({ setOpen }: IProps) => {
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
     repoId(),
     getSelectedDocument!.id,
-    !getSelectedVersion && repoId() !== 0
+    !getSelectedVersion && repoId() !== 0,
+    true
   );
 
   const { data, isLoading, error, isSuccess } = useGetVersion(
@@ -82,7 +83,7 @@ const Editor = ({ setOpen }: IProps) => {
     getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    currentPath === "/admin/sharedDocuments",
     true
   );
 

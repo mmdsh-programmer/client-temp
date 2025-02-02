@@ -75,105 +75,98 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
     }
   };
 
-  return (
-    <div>
-      {catItem.type === "category" ? (
-        <div
-          className={`flex flex-col items-start ${catItem.active ? "" : "bg-red-500"}`}
-        >
-          <div className="flex">
-            {move && (
-              <Radio
-                containerProps={{ className: "!p-0" }}
-                className="transition-all hover:scale-105 hover:before:opacity-0"
-                ripple={false}
-                color="deep-purple"
-                crossOrigin=""
-                onChange={handleSelectDestinationCat}
-                checked={getCategoryMoveDest?.id === catItem.id}
-              />
-            )}
-            <div className="flex items-center p-2 bg-transparent ">
-              <div className="flex items-center">
-                <div
-                  className={`flex items-center justify-center cursor-pointer h-6 w-6 ${
-                    isOpen ? "-rotate-90" : ""
-                  }`}
-                  onClick={handleClick}
-                >
-                  <ChevronLeftIcon className="h-3 w-3 stroke-icon-hover" />
-                </div>
-                <FolderIcon className="fill-gray-400 w-5 h-5" />
-              </div>
-              <Typography
-                className="text-primary lowercase mr-2"
-                key={catItem.id}
-              >
-                {catItem.name}
-              </Typography>
-              {enableAction ? (
-                <div className="mr-4">
-                  <CategoryMenu category={catItem} />
-                </div>
-              ) : null}
+  return catItem.type === "category" ? (
+    <div
+      className={`flex flex-col items-start ${catItem.active ? "" : "bg-gray-300"}`}
+    >
+      <div className="flex">
+        {move && (
+          <Radio
+            containerProps={{ className: "!p-0" }}
+            className="transition-all hover:scale-105 hover:before:opacity-0"
+            ripple={false}
+            color="deep-purple"
+            crossOrigin=""
+            onChange={handleSelectDestinationCat}
+            checked={getCategoryMoveDest?.id === catItem.id}
+          />
+        )}
+        <div className="flex items-center p-2 bg-transparent ">
+          <div className="flex items-center">
+            <div
+              className={`flex items-center justify-center cursor-pointer h-6 w-6 ${
+                isOpen ? "-rotate-90" : ""
+              }`}
+              onClick={handleClick}
+            >
+              <ChevronLeftIcon className="h-3 w-3 stroke-icon-hover" />
             </div>
+            <FolderIcon className="fill-gray-400 w-5 h-5" />
           </div>
-          <div className="flex flex-col pr-6">
-            {isLoading && <div className="spinner" />}
-            {!isLoading && openCategory === catItem.id && (
-              <Collapse open={openCategory === catItem.id}>
-                {categoryChildren?.pages.map((page) => {
-                  if (page.list.length) {
-                    return page.list.map(
-                      (item: ICategoryMetadata | IDocumentMetadata) => {
-                        if (item.type === "document") {
-                          return !move ? (
-                            <TreeDocItem
-                              key={item.id}
-                              docItem={item}
-                              enableAction={enableAction}
-                            />
-                          ) : null;
-                        }
-                        return (
-                          <TreeCatItem
-                            catItem={item}
-                            key={item.id}
-                            move={move}
-                            enableAction={enableAction}
-                          />
-                        );
-                      }
+          <Typography className="text-primary lowercase mr-2" key={catItem.id}>
+            {catItem.name}
+          </Typography>
+          {enableAction ? (
+            <div className="mr-4">
+              <CategoryMenu category={catItem} />
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div className="flex flex-col pr-6">
+        {isLoading && <div className="spinner" />}
+        {!isLoading && openCategory === catItem.id && (
+          <Collapse open={openCategory === catItem.id}>
+            {categoryChildren?.pages.map((page) => {
+              if (page.list.length) {
+                return page.list.map(
+                  (item: ICategoryMetadata | IDocumentMetadata) => {
+                    if (item.type === "document") {
+                      return !move ? (
+                        <TreeDocItem
+                          key={item.id}
+                          docItem={item}
+                          enableAction={enableAction}
+                        />
+                      ) : null;
+                    }
+                    return (
+                      <TreeCatItem
+                        catItem={item}
+                        key={item.id}
+                        move={move}
+                        enableAction={enableAction}
+                      />
                     );
                   }
-                  return (
-                    <Typography
-                      className="text-xs text-center"
-                      key={`doc-create-no-item-${page}`}
-                    >
-                      موردی برای نمایش وجود ندارد
-                    </Typography>
-                  );
-                })}
-                <RenderIf isTrue={!!hasNextPage}>
-                  <LoadMore
-                    className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
-                    isFetchingNextPage={isFetchingNextPage}
-                    fetchNextPage={fetchNextPage}
-                  />
-                </RenderIf>
-              </Collapse>
-            )}
-          </div>
-        </div>
-      ) : (
-        <TreeDocItem
-          key={catItem.id}
-          docItem={catItem}
-          enableAction={enableAction}
-        />
-      )}
+                );
+              }
+              return (
+                <Typography
+                  className="text-xs text-center"
+                  key={`doc-create-no-item-${page}`}
+                >
+                  موردی برای نمایش وجود ندارد
+                </Typography>
+              );
+            })}
+            <RenderIf isTrue={!!hasNextPage}>
+              <LoadMore
+                className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                isFetchingNextPage={isFetchingNextPage}
+                fetchNextPage={fetchNextPage}
+              />
+            </RenderIf>
+          </Collapse>
+        )}
+      </div>
     </div>
+  ) : (
+    <TreeDocItem
+      key={catItem.id}
+      docItem={catItem}
+      enableAction={enableAction}
+    />
   );
 };
 
