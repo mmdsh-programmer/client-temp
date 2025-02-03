@@ -41,10 +41,12 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="مقایسه نسخه"
       setOpen={setOpen}
-      className="!min-w-[80%] !min-h-[80%]"
+      className="!min-w-[80%] !h-full overflow-auto"
     >
       {getVersionHook.isFetching || getCompareHook.isFetching ? (
-        <Spinner className="h-10 w-10" color="deep-purple" />
+        <div className="flex w-full h-full justify-center items-center">
+          <Spinner className="h-10 w-10" color="deep-purple" />
+        </div>
       ) : (
         <DiffViewerTable
           newValue={getCompareHook.data?.content || "_"}

@@ -26,7 +26,7 @@ declare interface IProps {
 }
 
 const DiffViewerTable = ({
- oldValue, newValue 
+ oldValue, newValue
 }: IProps) => {
   const compareVersionValue = useRecoilValue(compareVersionAtom);
 
@@ -37,7 +37,7 @@ const DiffViewerTable = ({
           <ReactDiffViewer
             oldValue={oldValue}
             newValue={newValue}
-            compareMethod={DiffMethod.WORDS}
+            compareMethod={DiffMethod.WORDS_WITH_SPACE}
             splitView
             styles={newStyles}
             leftTitle={
