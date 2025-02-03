@@ -1,8 +1,9 @@
-import { deleteDocumentAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
+import { deleteDocumentAction } from "@actions/document";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useDeleteDocument = () => {
   const queryClient = useQueryClient();
@@ -22,7 +23,7 @@ const useDeleteDocument = () => {
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`],
+        queryKey: [`category-${parentId || "root"}-children`],
       });
       callBack?.();
     },

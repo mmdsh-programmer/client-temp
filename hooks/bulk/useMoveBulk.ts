@@ -1,8 +1,9 @@
-import { moveBulkAction } from "@actions/bulk";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { moveBulkAction } from "@actions/bulk";
+import { toast } from "react-toastify";
 
 const useMoveBulk = () => {
   const queryClient = useQueryClient();
@@ -23,16 +24,16 @@ const useMoveBulk = () => {
     onSuccess: (response, values) => {
       const { callBack, currentParentId, destCategory } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
+        queryKey: [`category-${currentParentId || "root"}-children-for-move`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${destCategory || "parent"}-children-for-move`],
+        queryKey: [`category-${destCategory || "root"}-children-for-move`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "parent"}-children`],
+        queryKey: [`category-${currentParentId || "root"}-children`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${destCategory || "parent"}-children`],
+        queryKey: [`category-${destCategory || "root"}-children`],
       });
       callBack?.();
     },

@@ -19,7 +19,7 @@ const useGetCategoryChildren = (
   forMove?: boolean,
   enabled = true
 ) => {
-  const queryKey = [`category-${categoryId || "parent"}-children`];
+  const queryKey = [`category-${categoryId || "root"}-children`];
   if (forMove) {
     queryKey.push("for-move");
   }

@@ -1,8 +1,9 @@
-import { deleteBulkAction } from "@actions/bulk";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
+import { deleteBulkAction } from "@actions/bulk";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useDeleteBulk = () => {
   const queryClient = useQueryClient();
@@ -23,7 +24,7 @@ const useDeleteBulk = () => {
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`],
+        queryKey: [`category-${parentId || "root"}-children`],
       });
       callBack?.();
     },

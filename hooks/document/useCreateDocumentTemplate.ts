@@ -51,7 +51,7 @@ const useCreateDocumentTemplate = () => {
     onSuccess: (response, values) => {
       const { callBack, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`],
+        queryKey: [`category-${categoryId || "root"}-children`],
       });
       callBack?.();
     },

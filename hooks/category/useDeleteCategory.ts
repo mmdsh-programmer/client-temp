@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { deleteCategoryAction } from "@actions/category";
-import { toast } from "react-toastify";
-import { handleClientSideHookError } from "@utils/error";
 import { IActionError } from "@interface/app.interface";
+import { deleteCategoryAction } from "@actions/category";
+import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 // Define a custom error type
 interface CustomError {
@@ -36,7 +36,7 @@ const useDeleteCategory = () => {
     onSuccess: (response, values) => {
       const { callBack, parentId } = values;
       queryClient.refetchQueries({
-        queryKey: [`category-${parentId || "parent"}-children`],
+        queryKey: [`category-${parentId || "root"}-children`],
       });
       callBack?.();
     },

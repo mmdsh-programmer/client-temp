@@ -1,8 +1,9 @@
-import { bookmarkDocumentAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
+import { bookmarkDocumentAction } from "@actions/document";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useBookmarkDocument = () => {
   const queryClient = useQueryClient();
@@ -23,11 +24,11 @@ const useBookmarkDocument = () => {
     onSuccess: (response, values) => {
       const { callBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`],
+        queryKey: [`category-${categoryId || "root"}-children`],
       });
       queryClient.invalidateQueries({
         queryKey: [
-          `repo-${repoId}-category-${categoryId || "parent"}-children`,
+          `repo-${repoId}-category-${categoryId || "root"}-children`,
           undefined,
         ],
       });

@@ -1,9 +1,10 @@
-import { updateDocumentPasswordAction } from "@actions/document";
-import { IDocument } from "@interface/document.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
+import { IDocument } from "@interface/document.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
+import { updateDocumentPasswordAction } from "@actions/document";
 
 const useUpdateDocumentPassword = () => {
   const queryClient = useQueryClient();
@@ -31,7 +32,7 @@ const useUpdateDocumentPassword = () => {
     onSuccess: (response, values) => {
       const { successCallBack, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "parent"}-children`],
+        queryKey: [`category-${categoryId || "root"}-children`],
       });
       successCallBack?.(response);
     },

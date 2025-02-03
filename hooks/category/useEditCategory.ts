@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { IActionError } from "@interface/app.interface";
 import { ICategory } from "@interface/category.interface";
 import { editCategoryAction } from "@actions/category";
-import { toast } from "react-toastify";
-import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useEditCategory = () => {
   const queryClient = useQueryClient();
@@ -45,15 +46,15 @@ const useEditCategory = () => {
     onSuccess: (response, values) => {
       const { callBack, parentId, currentParentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "parent"}-children`],
+        queryKey: [`category-${currentParentId || "root"}-children`],
       });
 
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "parent"}-children`],
+        queryKey: [`category-${parentId || "root"}-children`],
       });
 
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "parent"}-children-for-move`],
+        queryKey: [`category-${currentParentId || "root"}-children-for-move`],
       });
 
       callBack?.();
