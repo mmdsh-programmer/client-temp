@@ -1,12 +1,13 @@
+import { Checkbox, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import { ICategoryMetadata } from "@interface/category.interface";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
-import { useRecoilValue } from "recoil";
-import { Checkbox, Typography } from "@material-tailwind/react";
-import { ICategoryMetadata } from "@interface/category.interface";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +18,7 @@ interface IProps {
 
 const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
+  const [getCategory, setCategory] = useRecoilState(categoryAtom);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [forceDelete, setForceDelete] = useState(false);
@@ -49,6 +50,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
       callBack: () => {
         toast.success("دسته بندی حذف شد.");
         handleClose();
+        setCategory(null);
       },
       errorCallBack: (error) => {
         setErrorMessage(error.message);

@@ -1,18 +1,19 @@
-import React from "react";
 import {
   categoryAtom,
   categoryMoveDestAtom,
   categoryShowAtom,
 } from "@atom/category";
 import { useRecoilState, useRecoilValue } from "recoil";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import MoveSelection from "@components/molecules/moveSelection";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -20,7 +21,7 @@ interface IProps {
 
 const CategoryMoveDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
+  const [getCategory, setCategory] = useRecoilState(categoryAtom);
   const getCategoryShow = useRecoilValue(categoryShowAtom);
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
@@ -66,6 +67,7 @@ const CategoryMoveDialog = ({ setOpen }: IProps) => {
       callBack: () => {
         toast.success("دسته بندی مورد نظر با موفقیت انتقال یافت.");
         handleClose();
+        setCategory(null);
       },
     });
   };

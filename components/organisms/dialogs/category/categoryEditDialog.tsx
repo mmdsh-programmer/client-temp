@@ -1,6 +1,8 @@
-import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categoryAtom } from "@atom/category";
@@ -9,10 +11,9 @@ import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IDataForm {
   id?: number;
@@ -28,7 +29,7 @@ interface IProps {
 
 const CategoryEditDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
+  const [getCategory, setCategory] = useRecoilState(categoryAtom);
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -83,6 +84,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
       isHidden: false,
       currentParentId: null,
       callBack: () => {
+        setCategory(null);
         toast.success("دسته بندی با موفقیت به روز رسانی شد.");
         handleClose();
       },

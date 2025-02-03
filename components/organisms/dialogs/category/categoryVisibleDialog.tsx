@@ -1,3 +1,5 @@
+import { useRecoilState, useRecoilValue } from "recoil";
+
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
 import { categoryAtom } from "@atom/category";
@@ -5,7 +7,6 @@ import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -13,7 +14,7 @@ interface IProps {
 
 const CategoryVisibleDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
+  const [getCategory, setCategory] = useRecoilState(categoryAtom);
 
   const editCategory = useEditCategory();
 
@@ -37,6 +38,7 @@ const CategoryVisibleDialog = ({ setOpen }: IProps) => {
       isHidden: false,
       currentParentId: null,
       callBack: () => {
+        setCategory(null);
         toast.success("دسته بندی قابل رویت است.");
         handleClose();
       },
