@@ -31,7 +31,7 @@ const EditDialog = ({
   onSubmit,
   className,
   backToMain,
-  customSize
+  customSize,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -44,6 +44,9 @@ const EditDialog = ({
       open
       handler={handleClose}
       className={`${className} flex flex-col shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
+      dismiss={{
+        enabled: false,
+      }}
     >
       <DialogHeader
         placeholder="dialog header"

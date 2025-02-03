@@ -1,5 +1,11 @@
 import React from "react";
-import { Dialog, DialogFooter, DialogBody, DialogHeader, Typography } from "@material-tailwind/react";
+import {
+  Dialog,
+  DialogFooter,
+  DialogBody,
+  DialogHeader,
+  Typography,
+} from "@material-tailwind/react";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -33,6 +39,9 @@ const FreeDraftDialog = ({
       open
       handler={onResume}
       className="rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0"
+      dismiss={{
+        enabled: false,
+      }}
     >
       <DialogHeader
         placeholder="dialog header"

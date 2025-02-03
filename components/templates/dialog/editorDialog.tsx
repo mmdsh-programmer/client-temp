@@ -1,5 +1,8 @@
 import {
- Dialog, DialogBody, DialogFooter, DialogHeader 
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
 } from "@material-tailwind/react";
 
 import EditorFooter from "@components/organisms/editor/editorFooter";
@@ -22,7 +25,6 @@ const EditorDialog = ({
   className,
   editorRef,
 }: IProps) => {
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -34,6 +36,9 @@ const EditorDialog = ({
       open
       handler={handleClose}
       className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] bg-primary rounded-none xs:rounded-lg `}
+      dismiss={{
+        enabled: false,
+      }}
     >
       <DialogHeader
         placeholder="dialog header"

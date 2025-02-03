@@ -7,9 +7,8 @@ import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
 import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRestoreDialog";
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
 import RepoLeaveDialog from "@components/organisms/dialogs/repository/repoLeaveDialog";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
-import { IRepo } from "@interface/repo.interface";
 import Files from "@components/organisms/fileManagement";
 import RepoVersionRequestsDialog from "@components/organisms/dialogs/repository/repoVersionRequestsDialog";
 
@@ -30,11 +29,10 @@ interface IRepoDialogsProps {
     key: keyof IRepoDialogsProps["modals"],
     state: boolean
   ) => void;
-  repo?: IRepo;
 }
 
-const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
-  const setRepo = useSetRecoilState(repoAtom);
+const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
 
   const handleClose = () => {
     if (window.location.pathname === "/admin/dashboard") {
@@ -76,9 +74,9 @@ const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
           }}
         />
       ) : null}
-      {modals.bookmark ? (
+      {modals.bookmark && getRepo ? (
         <RepoBookmarkDialog
-          repo={repo}
+          repo={getRepo}
           setOpen={() => {
             setModalState("bookmark", false);
             handleClose();
@@ -109,11 +107,11 @@ const RepoDialogs = ({ modals, setModalState, repo }: IRepoDialogsProps) => {
           }}
         />
       ) : null}
-      {modals.fileManagement && repo ? (
+      {modals.fileManagement && getRepo ? (
         <Files
           type="public"
-          userGroupHash={repo.userGroupHash}
-          resourceId={repo?.id}
+          userGroupHash={getRepo.userGroupHash}
+          resourceId={getRepo?.id}
           handleClose={() => {
             setModalState("fileManagement", false);
             handleClose();

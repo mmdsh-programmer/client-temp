@@ -63,7 +63,7 @@ const RepoKeyList = ({
         },
       ];
 
-  const itemCount = publicKeyList?.pages[0]?.list.length;
+  const itemCount = publicKeyList?.pages[0]?.list?.length;
 
   const handleKeySelect = (keyItem: IPublicKey) => {
     if (!isSelectable) return;

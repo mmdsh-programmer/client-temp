@@ -29,8 +29,8 @@ const FilterMobileView = () => {
           }}
           className="flex xs:!hidden"
         >
-          <AdvancedFilter setOpen={setOpenFilter}  />
-          </InfoDialog>
+          <AdvancedFilter setOpen={setOpenFilter} />
+        </InfoDialog>
       ) : null}
     </div>
   );

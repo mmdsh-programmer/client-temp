@@ -95,9 +95,9 @@ const InviteToRepo = () => {
             <LoadingButton
               loading={isPending}
               onClick={handleSubmit(onSubmit)}
-              className="!h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+              className="!h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
             >
-              <Typography className="text__label__button !text-primary px-3 font-medium">
+              <Typography className="text__label__button !text-primary font-medium">
                 دعوت
               </Typography>
             </LoadingButton>

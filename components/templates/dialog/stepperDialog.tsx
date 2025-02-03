@@ -1,10 +1,7 @@
-import {
- Dialog, DialogHeader, Typography 
-} from "@material-tailwind/react";
-
+import React from "react";
+import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
-import React from "react";
 import StepperComponent from "@components/molecules/stepper";
 
 interface IProps {
@@ -28,7 +25,10 @@ const StepperDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className="flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[600px] xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg"
+      className="flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[630px] xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg"
+      dismiss={{
+        enabled: false,
+      }}
     >
       <DialogHeader
         placeholder="dialog header"
@@ -37,7 +37,7 @@ const StepperDialog = ({
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
         </div>
-        <Typography className="form__title">{dialogHeader}</Typography>{" "}
+        <Typography className="form__title">{dialogHeader}</Typography>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />
         </div>

@@ -76,10 +76,10 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
           " اطمینان دارید؟
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="warning_text">
-            برای تایید "<strong>{getRepo?.name}</strong>" را در کادر پایین تایپ
+          <div className="warning_text flex items-center">
+            برای تایید "<strong className="max-w-[150px] truncate inline-block" title={getRepo?.name}>{getRepo?.name}</strong>" را در کادر پایین تایپ
             نمایید!
-          </Typography>
+          </div>
           <FormInput placeholder="عنوان" register={{ ...register("name") }} />
           {errors.name && (
             <Typography className="warning_text">
