@@ -8,6 +8,8 @@ import {
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import BranchMenu from "@components/molecules/branchMenu";
 import { IBranch } from "@interface/branch.interface";
+import { branchIdAtom } from "@atom/branch";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   children: React.JSX.Element;
@@ -23,15 +25,18 @@ const BranchCollapse = ({
   childItem,
 }: IProps) => {
   const [open, setOpen] = React.useState(false);
+  const setBranchId = useSetRecoilState(branchIdAtom);
 
   const handleOpen = () => {
     setOpen(!open);
+    setBranchId(childItem.id);
   };
 
   return (
     <Accordion open={open}>
       <AccordionHeader
         onClick={handleOpen}
+        placeholder="accordionHeader"
         className={`flex border-b-0 p-0 ${className}`}
       >
         <div className="flex gap-2 min-w-full w-full justify-between items-center">

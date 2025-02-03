@@ -7,25 +7,26 @@ const useAddMembers = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      branchId,
-      positionName,
-      members,
-    }: {
+    mutationFn: async (values: {
       branchId: number;
       positionName: string;
       members: string[];
     }) => {
-      const response = await addMembersToPositionAction(branchId, positionName, members);
+      const { branchId, positionName, members } = values;
+      const response = await addMembersToPositionAction(
+        branchId,
+        positionName,
+        members
+      );
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ 
-        queryKey: ["position", variables.branchId, variables.positionName] 
+      queryClient.invalidateQueries({
+        queryKey: ["position", variables.branchId, variables.positionName],
       });
     },
   });
 };
 
-export default useAddMembers; 
+export default useAddMembers;

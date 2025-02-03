@@ -3,7 +3,7 @@ import { getPositionListAction } from "@actions/position";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 
-const useGetPositions = (branchId?: number, size: number = 10) => {
+const useGetPositions = (branchId: number, size: number) => {
   return useInfiniteQuery({
     queryKey: [`positions-${branchId}`],
     queryFn: async ({ pageParam }) => {

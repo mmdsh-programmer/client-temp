@@ -10,6 +10,7 @@ import { IUserList } from "../document/documentAccessPublishingDialog";
 import { UserIcon, XIcon } from "@components/atoms/icons";
 import ImageComponent from "next/image";
 import ChipMolecule from "@components/molecules/chip";
+import { toast } from "react-toastify";
 
 interface IForm {
   title: string;
@@ -76,17 +77,26 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getBranchId) return;
+    const usernameArray = selectedUserList?.length
+      ? selectedUserList.map((userItem) => {
+          return userItem.username;
+        })
+      : [];
+
     setPositionForBranch.mutate({
       branchId: getBranchId,
       title: dataForm.title,
-      members: [],
+      members: usernameArray,
+      callBack: () => {
+        toast.success(`گروه ${dataForm.title} با موفقیت ساخته شد.`);
+      },
     });
   };
 
   return (
     <CreateDialog
       isPending={setPositionForBranch.isPending}
-      dialogHeader="ایجاد گروه برای شعبه"
+      dialogHeader="ایجاد گروه جدید"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
@@ -112,39 +122,41 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
             value={inputValue}
             onChange={handleInputChange}
           />
-          {selectedUserList.map((item) => {
-            return (
-              <ChipMolecule
-                key={item.username}
-                value={item.name || item.username}
-                className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+          <div className="flex gap-2">
+            {selectedUserList.map((item) => {
+              return (
+                <ChipMolecule
+                  key={item.username}
+                  value={item.name || item.username}
+                  className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
                          w-auto pl-2 border-[1px] border-normal`}
-                icon={
-                  item.picture ? (
-                    <ImageComponent
-                      className="w-full h-full rounded-full overflow-hidden"
-                      src={item.picture}
-                      alt={item.picture}
-                    />
-                  ) : (
-                    <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
-                  )
-                }
-                actionIcon={
-                  <Button
-                    className="bg-transparent p-0"
-                    onClick={() => {
-                      removeUser(item.username);
-                    }}
-                  >
-                    <XIcon
-                      className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
-                    />
-                  </Button>
-                }
-              />
-            );
-          })}
+                  icon={
+                    item.picture ? (
+                      <ImageComponent
+                        className="w-full h-full rounded-full overflow-hidden"
+                        src={item.picture}
+                        alt={item.picture}
+                      />
+                    ) : (
+                      <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                    )
+                  }
+                  actionIcon={
+                    <Button
+                      className="bg-white p-1 rounded-full"
+                      onClick={() => {
+                        removeUser(item.username);
+                      }}
+                    >
+                      <XIcon
+                        className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
+                      />
+                    </Button>
+                  }
+                />
+              );
+            })}
+          </div>
         </div>
       </form>
     </CreateDialog>

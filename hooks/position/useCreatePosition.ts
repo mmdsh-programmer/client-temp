@@ -6,15 +6,13 @@ import { handleClientSideHookError } from "@utils/error";
 const useCreatePosition = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({
-      branchId,
-      title,
-      members,
-    }: {
+    mutationFn: async (values: {
       branchId: number;
       title: string;
-      members: string[];
+      members?: string[];
+      callBack?: () => void;
     }) => {
+      const { branchId, title, members } = values;
       const response = await createPositionAction(branchId, title, members);
       handleClientSideHookError(response as IActionError);
       return response;

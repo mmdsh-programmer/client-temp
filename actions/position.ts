@@ -53,7 +53,7 @@ export const getPositionInfoAction = async (
 export const createPositionAction = async (
   branchId: number,
   title: string,
-  members: string[]
+  members?: string[]
 ) => {
   const userInfo = await getMe();
   try {

@@ -3591,7 +3591,7 @@ export const setPositionForBranch = async (
   accessToken: string,
   branchId: number,
   title: string,
-  members: string[]
+  members?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
