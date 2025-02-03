@@ -51,7 +51,7 @@ const useCreateDocument = () => {
     },
     onSuccess: async(response, values) => {
       const { successCallBack, categoryId } = values;
-      const queryKey = [`category-${categoryId || "parent"}-children`];
+      const queryKey = [`category-${categoryId || "root"}-children`];
 
       const cachedData = await queryClient.getQueriesData({ queryKey });
       const cachePages = cachedData?.[0]?.[1] as { pages: { list: IDocument[]; offset: number; size: number; total: number }[] };
@@ -74,7 +74,7 @@ const useCreateDocument = () => {
           ...cachePages,
           pages: cachePages.pages.map((page, index) => 
             {return index === 0 
-              ? { ...page, list: [newCategory, ...page.list] } 
+              ? { ...{ ...page, total: page.total + 1}, list: [newCategory, ...page.list] } 
               : page;}
           )
         };

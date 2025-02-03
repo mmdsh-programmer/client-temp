@@ -63,7 +63,7 @@ const useCreateVersion = () => {
           ...cachePages,
           pages: cachePages.pages.map((page, index) => {
             return index === 0
-              ? { ...page, list: [newVersion, ...page.list] }
+              ? { ...{ ...page, total: page.total + 1}, list: [newVersion, ...page.list] }
               : page;
           }),
         };
