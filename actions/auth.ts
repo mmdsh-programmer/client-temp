@@ -16,7 +16,6 @@ import { userInfo, userMetadata } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
 import { getRedisClient } from "@utils/redis";
-import { handleActionError } from "@utils/error";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
@@ -110,14 +109,10 @@ export const getMe = async () => {
           clientSecret
         );
       } catch (refreshTokenError) {
-        console.log({
-          type: "Refresh Cookie Header",
-          error: JSON.stringify(refreshTokenError),
-        });
-        return handleActionError(refreshTokenError as IActionError);
+        return normalizeError(refreshTokenError as IActionError);
       }
     }
-    return handleActionError(error as IActionError);
+    return normalizeError(error as IActionError);
   }
 };
 
@@ -129,6 +124,7 @@ export const userInfoAction = async () => {
     }
     return getMe();
   } catch (error) {
+    console.log("--------------------------- userInfoAction error ----------------------------", error);
     return normalizeError(error as IActionError);
   }
 };

@@ -94,6 +94,10 @@ axiosSocialInstance.interceptors.response.use(
 export const handleSocialStatusError = (
   error: AxiosError<ISocialError> | ISocialResponse<unknown>
 ) => {
+  console.log(
+    "--------------------- social service error ---------------------",
+    error
+  );
   if ("hasError" in error) {
     const message = error.message ?? "خطای نامشخصی رخ داد";
     switch (error.errorCode) {
