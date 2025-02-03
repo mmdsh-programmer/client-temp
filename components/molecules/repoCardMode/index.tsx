@@ -26,7 +26,6 @@ const RepoCardMode = ({ repo }: IProps) => {
         ${getRepoInfo?.id === repo.id ? "mb-14" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
-        e.preventDefault();
         if (!repo.isArchived) {
           router.push(`/admin/repositories?repoId=${repo.id}`);
         }
@@ -59,7 +58,6 @@ const RepoCardMode = ({ repo }: IProps) => {
         <div
           onClick={(e) => {
             e.stopPropagation();
-            e.preventDefault();
           }}
         >
           <RepoMenu repo={repo} />
