@@ -17,10 +17,11 @@ import { IQAList, IQAResponse } from "@interface/qa.interface";
 import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
+import Logger from "@utils/logger";
 import crypto from "crypto";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import Logger from "@utils/logger";
+import { revalidateTag } from "next/cache";
 
 const axiosSocialInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CORE_API,
@@ -158,6 +159,9 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
 
+  if(domain === ""){
+    throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
+  }
   const redisClient = await getRedisClient();
   const cacheKey = `domain-${domain}`;
 
@@ -187,6 +191,9 @@ export const getCustomPostByDomain = async (
 
  
   const response = await getCustomPost(metaQuery, size, offset);
+  if(response.result.length === 0){
+    throw new NotFoundError(["دامنه مورد نظر پیدا نشد."]);
+  }
   const { item } = response.result[0];
 
   const domainInfo = {
@@ -267,7 +274,6 @@ export const updateCustomPost = async (
     clientSecret: string;
     cryptoInitVectorKey: string;
     cryptoSecretKey: string;
-    enablePublishPage: boolean;
   },
   entityId: number,
   content: string
@@ -290,6 +296,7 @@ export const updateCustomPost = async (
     });
     await redisClient?.del(`domain-${metadata.domain}`);
     await redisClient?.del(`domain-id-${entityId}`);
+    revalidateTag(`i-${metadata.domain}`);
   }
 
   if (response.data.hasError) {

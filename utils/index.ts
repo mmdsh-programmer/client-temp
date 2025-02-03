@@ -1,4 +1,5 @@
 import { ERoles } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import moment from "moment-jalaali";
 
@@ -266,12 +267,19 @@ export const generateKey = (domain: string) => {
 
 export const decodeKey = (domainKey: string) => {
   try {
-    return domainKey
-    .split("_") // Split the encoded string by "_"
-    .map((charCode) => {
+    const domainSplitArray = domainKey
+      .split("_"); // Split the encoded string by "_"
+
+    if (!domainSplitArray.some((item) => {return /[0-9]/.test(item);})) {
+      return "";
+    }
+
+    const decodedDomain = domainSplitArray.map((charCode) => {
       return String.fromCharCode(Number(charCode));
     }) // Convert each code back to a character
-    .join(""); // Join characters to form the original domain
+      .join(""); // Join characters to form the original domain
+
+    return decodedDomain;
   } catch (error) {
     console.log({
       type: "decodeKey",
@@ -287,4 +295,12 @@ export const isParsable = (message: string) => {
   } catch {
     return false;
   }
+};
+
+export const isPrivate = (item: IDocumentMetadata) => {
+  return item.hasPassword || item.hasBlackList || item.hasWhiteList;
+};
+
+export const hasEnglishDigits = (str: string) => {
+  return /[0-9]/.test(str);
 };

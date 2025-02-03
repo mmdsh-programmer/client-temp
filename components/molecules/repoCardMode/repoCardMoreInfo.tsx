@@ -47,7 +47,6 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
       className="relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
-        e.preventDefault();
       }}
     >
       <div className="absolute z-[99999] -mt-2 min-w-max w-full bg-gray-50 rounded-b-lg shadow-lg">

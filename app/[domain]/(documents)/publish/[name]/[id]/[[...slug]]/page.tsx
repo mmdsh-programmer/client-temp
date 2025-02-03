@@ -4,7 +4,7 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
@@ -21,6 +21,7 @@ export const generateStaticParams = async () => {
 };
 
 type PageParams = {
+  domain: string;
   name: string;
   id: string;
   slug?: string[];
@@ -33,14 +34,25 @@ export default async function PublishContentPage({
 }) {
   const time = Date.now();
   try {
-    const { id, name, slug } = params;
-    const decodeId = decodeURIComponent(id);
-    const repoId = parseInt(toEnglishDigit(decodeId), 10);
-    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
+    const { id, name, slug, domain } = params;
 
+    const decodeId = decodeURIComponent(id);
+    if(hasEnglishDigits(decodeId)){
+      throw new ServerError(["آدرس وارد شده نامعتبر است"]);
+    }
+    
+    const repoId = parseInt(toEnglishDigit(decodeId), 10);
+    
     if (Number.isNaN(repoId)) {
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
+    
+    // Check for English digits in slug before converting 
+    if (slug?.some(s => {return hasEnglishDigits(decodeURIComponent(s));})) {
+      throw new ServerError(["آدرس وارد شده نامعتبر است"]);
+    }
+
+    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
 
     const repository = await getPublishRepositoryInfo(repoId);
 
@@ -51,7 +63,7 @@ export default async function PublishContentPage({
     }
 
     if (!enSlug?.length) {
-      await generateCachePageTag([`rp-${repository.id}`,`rp-ph-${repository.id}`]);
+      await generateCachePageTag([`rp-${repository.id}`,`rp-ph-${repository.id}`,`i-${domain}`]);
       return <RepositoryInfo repository={repository} />;
     }
 
@@ -69,7 +81,7 @@ export default async function PublishContentPage({
 
     let versionData: IVersion;
     if (!documentId || Number.isNaN(documentId)) {
-      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
       return notFound();
     }
 
@@ -79,7 +91,9 @@ export default async function PublishContentPage({
       true
     );
 
-    if(documentInfo.name.replaceAll(/\s+/g, "-") !== documentName){
+    const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
+    if(toEnglishDigit(documentInfoName) !== documentName){
+      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
       return notFound();
     }
 
@@ -88,8 +102,8 @@ export default async function PublishContentPage({
       documentInfo?.hasWhiteList ||
       documentInfo?.hasBlackList
     ) {
-      await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
-      const privatePath = `/publish/${repoId}/${params.name}/private/${enSlug.join("/")}`;
+      // CHECK THE CACHE
+      const privatePath = `/private/${name}/${id}/${slug?.join("/")}`;
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
@@ -106,7 +120,7 @@ export default async function PublishContentPage({
       );
 
       if (!lastVersionInfo){
-        await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`]);
+        await generateCachePageTag([`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
         throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
       }
 
@@ -119,11 +133,12 @@ export default async function PublishContentPage({
 
     const versionNumber = enSlug[enSlug.length - 2];
 
-    if(hasVersion && versionData && versionData.versionNumber.replaceAll(/\s+/g, "-") !== versionNumber){
+    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`,`i-${domain}`]);
+    
+    if(hasVersion && versionData && toEnglishDigit(versionData.versionNumber).replaceAll(/\s+/g, "-") !== versionNumber){
       return notFound();
     }
 
-    await generateCachePageTag([`vr-${versionData.id}`,`dc-${documentId}`,`rp-ph-${repository.id}`]);
     return (
       <>
         <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
@@ -140,6 +155,7 @@ export default async function PublishContentPage({
         <div className="flex flex-col justify-center items-center">
           <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
           <FolderEmptyIcon />
+          <p>{message}</p>
         </div>
       </section>
     );
