@@ -454,44 +454,6 @@ export const CircleIcon = (props: IProps) => {
   );
 };
 
-export const ClasorLogo = (props: IProps) => {
-  const { className, fill = "#673AB7" } = props;
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      fill={fill}
-      viewBox="0 0 153.12 153.14"
-    >
-      <g id="Layer_2" data-name="Layer 2">
-        <g id="Layer_1-2" data-name="Layer 1">
-          <path
-            d="M102.7,98.9V97.6H96.55a20.89,20.89,0,0,1-14.47-5.82H6.91L18,102.9H98.7A4,4,0,0,0,102.7,98.9Z"
-            fill={fill}
-          />
-          <path
-            d="M78,62.31l3.16.07A21,21,0,0,1,96.55,55.6h6.15V54.44a4,4,0,0,0-4-4h-26A6,6,0,0,1,68.44,40.2l28.3-28.3-6-6a20,20,0,0,0-28.28,0L21.19,47.07C51.72,61.48,77.64,62.3,78,62.31Z"
-            fill={fill}
-          />
-          <path
-            d="M70.84,71.79A172.39,172.39,0,0,1,13.67,54.6L5.84,62.43l-.11.12A348.88,348.88,0,0,0,70.84,71.79Z"
-            fill={fill}
-          />
-          <path
-            d="M147.26,62.43,124.05,39.22a20,20,0,0,1-4.44-21.54l5.93-14.9a1,1,0,0,0-1.63-1.07L87.17,38.44H98.7a16,16,0,0,1,16,16V98.9a16,16,0,0,1-16,16H30l32.38,32.38a20,20,0,0,0,28.28,0l56.57-56.57A20,20,0,0,0,147.26,62.43Z"
-            fill={fill}
-          />
-          <path d="M102.7,63.6H96.55a13,13,0,0,0,0,26h6.15Z" fill={fill} />
-          <path
-            d="M.69,81.78H70A351.89,351.89,0,0,1,.63,71.6,20,20,0,0,0,.69,81.78Z"
-            fill={fill}
-          />
-        </g>
-      </g>
-    </svg>
-  );
-};
-
 export const ComparisionIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
@@ -4349,22 +4311,6 @@ export const DotsIcon = (props: IProps) => {
       className={className}
     >
       <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-    </svg>
-  );
-};
-
-export const LoginIcon = (props: IProps) => {
-  const { className } = props;
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill="currentColor;"
-        d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8z"
-      />
     </svg>
   );
 };

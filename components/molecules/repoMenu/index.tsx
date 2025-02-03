@@ -76,7 +76,6 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
             className="repoInformationTab repoActions flex items-center gap-1 justify-end"
             onClick={(e) => {
               e.stopPropagation();
-              e.preventDefault();
             }}
           >
             {repo?.bookmark ? (

@@ -125,10 +125,11 @@ const useMenuList = (
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {
+            const url = toPersianDigit(`/publish/${toPersianDigit(
+              `${repo.name.replaceAll(/\s+/g, "-")}`
+            )}/${repo.id}`);
             window.open(
-              toPersianDigit(`/publish/${repo.id}/${toPersianDigit(
-                `${repo.name.replaceAll(/\s+/g, "-")}`
-              )}`),
+              url,
               "_blank"
             );
           }

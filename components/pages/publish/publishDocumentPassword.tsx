@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import FormInput from "@components/atoms/input/formInput";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { documentPasswordSchema } from "./validation.yup";
 import LoadingButton from "@components/molecules/loadingButton";
-import useSetPublishDocumentPassword from "@hooks/publish/useSetPublishDocumentPassword";
+import { Typography } from "@material-tailwind/react";
+import { documentPasswordSchema } from "./validation.yup";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import useSetPublishDocumentPassword from "@hooks/publish/useSetPublishDocumentPassword";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IProps {
   documentId: number;
@@ -26,6 +27,7 @@ const PublishDocumentPassword = ({
   errorMessage,
 }: IProps) => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentPasswordSchema),
   });
@@ -36,11 +38,15 @@ const PublishDocumentPassword = ({
   const saveDocumentPasswordHook = useSetPublishDocumentPassword();
 
   const onSubmit = (dataForm: IDataForm) => {
+    setLoading(true);
     saveDocumentPasswordHook.mutate({
       documentId,
       password: dataForm.password,
-      callBack: () => {
+      handleSuccess: () => {
         router.refresh();
+      },
+      handleError: () => {
+        setLoading(false);
       },
     });
   };
@@ -50,6 +56,9 @@ const PublishDocumentPassword = ({
       reset({ password: documentPassword });
       setError("password", { message: errorMessage });
     }
+    return () => {
+      setLoading(false);
+    };
   }, [errorMessage]);
 
   return (
@@ -81,7 +90,7 @@ const PublishDocumentPassword = ({
         <LoadingButton
           className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
-          loading={saveDocumentPasswordHook.isPending}
+          loading={loading}
         >
           <Typography className="text__label__button text-white">
             تایید
