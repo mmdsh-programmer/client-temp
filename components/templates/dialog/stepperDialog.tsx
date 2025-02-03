@@ -26,6 +26,9 @@ const StepperDialog = ({
       open
       handler={handleClose}
       className="flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[630px] xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg"
+      dismiss={{
+        enabled: false,
+      }}
     >
       <DialogHeader
         placeholder="dialog header"

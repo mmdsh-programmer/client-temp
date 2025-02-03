@@ -29,6 +29,9 @@ const InfoDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
+      dismiss={{
+        enabled: false,
+      }}
       className={`${className} flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
     >
       <DialogHeader
