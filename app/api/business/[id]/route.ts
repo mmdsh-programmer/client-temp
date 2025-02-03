@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest, { params } : { params: { id: str
             clientSecret: clientSecret ?? response.clientSecret,
             cryptoSecretKey: cryptoSecretKey ?? response.cryptoSecretKey,
             cryptoInitVectorKey: cryptoInitVectorKey ?? response.cryptoInitVectorKey,
-        }, +response.entityId, JSON.stringify(updateContent));
+        }, +response.entityId, JSON.stringify(updateContent), +response.id);
        
         return NextResponse.json({});
     } catch (error) {

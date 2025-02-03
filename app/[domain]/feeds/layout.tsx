@@ -9,13 +9,14 @@ interface IProps {
   params: { domain: string };
 }
 
-const PublicFeedsLayout = async ({ children, params: { domain } }: IProps) => {
+const PublicFeedsLayout = async ({ children, params }: IProps) => {
   try {
-    const { data } = await getCustomPostByDomain(decodeKey(domain));
+    const domain = decodeKey(params.domain);
+    const { data } = await getCustomPostByDomain(domain);
     const { projectName, logo } = JSON.parse(data);
     return (
       <>
-        <PublishHeader projectName={projectName} logo={logo} />
+        <PublishHeader projectName={projectName} logo={logo} domain={domain} />
         <main className="flex w-full h-[calc(100vh-81px)] bg-white">
           <section className="h-full w-full px-4 xs:px-8">{children}</section>
         </main>

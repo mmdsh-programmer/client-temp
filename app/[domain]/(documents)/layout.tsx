@@ -10,9 +10,10 @@ interface IProps {
   params: { id: string; name: string; domain: string };
 }
 
-const PublishSlugLayout = async ({ children, params: { domain } }: IProps) => {
+const PublishSlugLayout = async ({ children, params }: IProps) => {
   try {
-    const data = await getCustomPostByDomain(decodeKey(domain));
+    const domain = decodeKey(params.domain);
+    const data = await getCustomPostByDomain(domain);
 
     const { projectName, logo } = JSON.parse(data.data) as ICustomPostData;
 
@@ -20,6 +21,7 @@ const PublishSlugLayout = async ({ children, params: { domain } }: IProps) => {
       <PublishSlugTemplate
         projectName={projectName}
         logo={logo}
+        domain={domain}
       >
         {children}
       </PublishSlugTemplate>

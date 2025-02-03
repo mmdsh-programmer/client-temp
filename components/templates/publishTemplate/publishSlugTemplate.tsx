@@ -8,16 +8,18 @@ declare interface IProps {
   children: ReactNode;
   projectName?: string;
   logo?: string;
+  domain: string;
 }
 
 const PublishSlugTemplate = ({
   children,
   projectName,
   logo,
+  domain,
 }: IProps) => {
   return (
     <>
-      <PublishHeader projectName={projectName} logo={logo} />
+      <PublishHeader projectName={projectName} logo={logo} domain={domain} />
       <main className="flex w-full h-[calc(100vh-81px)]">
           <ClientSideProvider>
             <PublishSidebar />

@@ -276,7 +276,8 @@ export const updateCustomPost = async (
     cryptoSecretKey: string;
   },
   entityId: number,
-  content: string
+  content: string,
+  id: number
 ) => {
 
   const response = await axiosSocialInstance.post("/biz/updateCustomPost", {
@@ -295,7 +296,7 @@ export const updateCustomPost = async (
       type: "Redis remove data"
     });
     await redisClient?.del(`domain-${metadata.domain}`);
-    await redisClient?.del(`domain-id-${entityId}`);
+    await redisClient?.del(`domain-id-${id}`);
     revalidateTag(`i-${metadata.domain}`);
   }
 
