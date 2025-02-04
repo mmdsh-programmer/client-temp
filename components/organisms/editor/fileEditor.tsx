@@ -1,10 +1,9 @@
+import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
-import React, { useEffect, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import Files from "../fileManagement";
 import { IFile } from "@interface/file.interface";
 import PreviewFile from "./previewFile";
@@ -14,6 +13,7 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedFileAtom } from "@atom/file";
 import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 export interface IFileHash {
   hash: string;
@@ -27,7 +27,6 @@ const FileEditor = () => {
   const [showFilePicker, setShowFilePicker] = useState(false);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepoId = searchParams?.get("repoId");
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
@@ -36,6 +35,7 @@ const FileEditor = () => {
   const [getSelectedFile, setSelectedFile] = useRecoilState(selectedFileAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
 
+  const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
   const token: string | undefined = userInfo?.access_token;
 
@@ -55,19 +55,6 @@ const FileEditor = () => {
       setShowFilePicker(true);
     }
   }, []);
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
-    }
-    return getRepo!.id;
-  };
 
   const userGroupHash = () => {
     if (currentPath === "/admin/myDocuments") {
@@ -146,7 +133,7 @@ const FileEditor = () => {
             <div className="py-4 overflow-auto">
               <Files
                 userGroupHash={userGroupHash()}
-                resourceId={repoId()}
+                resourceId={repoId}
                 type="public"
                 setSelectedFile={(file) => {
                   setSelectedFile(file);

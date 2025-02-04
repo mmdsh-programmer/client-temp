@@ -9,7 +9,6 @@ import {
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { EDocumentTypes } from "@interface/enums";
@@ -24,6 +23,7 @@ import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
+import useRepoId from "@hooks/custom/useRepoId";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -44,26 +44,13 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepoId = searchParams?.get("repoId");
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const timeout = 5 * 60; // seconds
-
+  
+  const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
   const saveEditorHook = useSaveEditor();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
-    }
-    return getRepo!.id;
-  };
 
   const writerRole = () => {
     if (currentPath === "/admin/myDocuments") {
@@ -140,7 +127,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
       encryptedContent = encryptData(content) as string;
     }
 
-    if (getVersionData && selectedDocument && repoId()) {
+    if (getVersionData && selectedDocument && repoId) {
       saveEditorHook.mutate({
         content: selectedDocument?.publicKeyId
           ? (encryptedContent as string)
@@ -149,7 +136,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           selectedDocument?.contentType === EDocumentTypes.classic
             ? data?.outline
             : "[]",
-        repoId: repoId(),
+        repoId,
         documentId: selectedDocument.id,
         versionId: getVersionData.id,
         versionNumber: getVersionData.versionNumber,

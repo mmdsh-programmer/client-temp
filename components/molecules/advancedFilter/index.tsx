@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilState } from "recoil";
+import { usePathname, useSearchParams } from "next/navigation";
 import { EDocumentTypes } from "@interface/enums";
 import SelectBox from "../selectBox";
 import InputAtom from "@components/atoms/input";
@@ -11,6 +9,7 @@ import LoadingButton from "../loadingButton";
 import { Typography } from "@material-tailwind/react";
 import useGetTags from "@hooks/tag/useGetTags";
 import SelectAtom, { IOption } from "../select";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,7 +17,6 @@ interface IProps {
 
 const AdvancedFilter = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
-  const getRepo = useRecoilValue(repoAtom);
   const [getFilterChildren, setFilterChildren] =
     useRecoilState(filterChildrenAtom);
   const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
@@ -33,18 +31,16 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
 
-  const { data: userInfo } = useGetUser();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
+  const repoId = useRepoId();
 
   const { data: getTags } = useGetTags(
-    repoId,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    repoId!,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     30,
-    true
+    !!repoId
   );
 
   const tagOptions =
@@ -52,10 +48,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
       return { label: tag.name, value: tag.id };
     }) || [];
 
-  const searchTypeOptions = [
-    { label: "همین دسته‌بندی", value: "currentCategory" },
-    { label: "کل مخزن", value: "currentRepo" },
-  ];
+  const searchTypeOptions =
+    currentPath === "/admin/sharedDocuments"
+      ? [{ label: "کل مخزن", value: "currentRepo" }]
+      : [
+          { label: "همین دسته‌بندی", value: "currentCategory" },
+          { label: "کل مخزن", value: "currentRepo" },
+        ];
 
   useEffect(() => {
     if (getFilterChildren) {

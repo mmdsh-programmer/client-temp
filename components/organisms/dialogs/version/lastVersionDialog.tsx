@@ -1,5 +1,4 @@
 import React from "react";
-import { repoAtom } from "@atom/repository";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { toast } from "react-toastify";
@@ -7,20 +6,21 @@ import { selectedDocumentAtom } from "@atom/document";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import useSetLastVersion from "@hooks/version/useSetLastVersion";
 import { selectedVersionAtom } from "@atom/version";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname, useSearchParams } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const LastVersionDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const setLastVersion = useSetLastVersion();
 
   const form = useForm();
@@ -36,30 +36,21 @@ const LastVersionDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   const onSubmit = async () => {
-    if (!repoId() || !getVersion) return;
+    if (!repoId || !getVersion) return;
     setLastVersion.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: getDocument!.id,
       versionId: getVersion.id,
       isDirectAccess:
-      currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
         toast.success("به عنوان آخرین نسخه انتخاب شد.");
         handleClose();
       },
     });
   };
+
   return (
     <ConfirmDialog
       isPending={setLastVersion.isPending}

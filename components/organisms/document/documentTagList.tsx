@@ -1,14 +1,13 @@
+import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import ChipMolecule from "@components/molecules/chip";
-import React from "react";
 import { XIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
-import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   tagList?: {
@@ -22,10 +21,8 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const document = useRecoilValue(selectedDocumentAtom);
   const setTempDocTag = useSetRecoilState(tempDocTagAtom);
   const currentPath = usePathname();
-  const searchParams = useSearchParams();
-  const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
+  const repoId = useRepoId();
 
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
@@ -42,18 +39,8 @@ const DocumentTagList = ({ tagList }: IProps) => {
     }
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
-      return document!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   const handleDelete = (tag: { name: string; id: number }) => {
-    if (!repoId() || !document) return;
+    if (!repoId || !document) return;
     if (!tag) return;
     setTempDocTag((oldValue) => {
       return [

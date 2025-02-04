@@ -16,7 +16,6 @@ import {
 } from "@atom/version";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import { IVersion } from "@interface/version.interface";
 import React from "react";
 import copy from "copy-to-clipboard";
@@ -25,6 +24,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface MenuItem {
   text: string;
@@ -61,6 +61,7 @@ const useVersionMenuList = (
   const setVersionData = useSetRecoilState(editorDataAtom);
   const currentPath = usePathname();
 
+  const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
 
   const adminOrOwnerRole = () => {
@@ -91,16 +92,6 @@ const useVersionMenuList = (
     if (getRepo) {
       return getRepo?.roleName === "viewer" || getRepo?.roleName === "writer";
     }
-  };
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
   };
 
   const defaultOptions = (otherOption: MenuItem[]) => {
@@ -136,12 +127,12 @@ const useVersionMenuList = (
           if (version) {
             setVersion(version);
           }
-          if (repoId() && getDocument && version && compareVersion?.version) {
+          if (repoId && getDocument && version && compareVersion?.version) {
             setCompareVersion({
               ...compareVersion,
               compare: {
                 data: version,
-                repoId: repoId(),
+                repoId,
                 document: getDocument,
               },
             });
@@ -150,7 +141,7 @@ const useVersionMenuList = (
             setCompareVersion({
               version: {
                 data: version,
-                repoId: repoId(),
+                repoId,
                 document: getDocument,
               },
               compare: null,

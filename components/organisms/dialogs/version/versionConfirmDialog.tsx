@@ -1,26 +1,26 @@
 import React from "react";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useConfirmVersion from "@hooks/version/useConfirmVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { selectedVersionAtom } from "@atom/version";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname, useSearchParams } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const VersionConfirmDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const confirmVersion = useConfirmVersion();
 
   const form = useForm();
@@ -36,24 +36,14 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   const onSubmit = async () => {
-    if (!repoId() || !getVersion) return;
+    if (!repoId || !getVersion) return;
     confirmVersion.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: getDocument!.id,
       versionId: getVersion.id,
       isDirectAccess:
-      currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
         toast.success(" نسخه با موفقیت تایید شد.");
         handleClose();

@@ -6,7 +6,6 @@ import {
   editorModeAtom,
 } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
@@ -22,6 +21,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   getEditorConfig: () => {
@@ -38,7 +38,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const timestampRef = useRef(Date.now());
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepoId = searchParams?.get("repoId");
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
@@ -48,6 +47,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
   const listDrawer = useRecoilValue(editorListDrawerAtom);
 
+  const repoId = useRepoId();
   const { data: userInfo, isLoading } = useGetUser();
   const setUserMetadataHook = useSetUserMetadata();
 
@@ -68,19 +68,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     setUserMetadataHook.mutate({
       data: newMetadata,
     });
-  };
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
-    }
-    return getRepo!.id;
   };
 
   const repoGroupHash = () => {
@@ -109,7 +96,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           },
           publicUserGroupHash: repoGroupHash() || undefined,
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
-          repositoryId: repoId() || undefined,
+          repositoryId: repoId || undefined,
           resourceId: selectedCategory?.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
@@ -155,7 +142,8 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="flex h-full relative bg-primary">
-      {currentPath === "/admin/sharedDocuments" || sharedDocuments === "true" ? (
+      {currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true" ? (
         <DocumentEnableUserGroup />
       ) : null}
       {listDrawer && getEditorConfig().ref ? (

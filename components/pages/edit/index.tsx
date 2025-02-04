@@ -3,47 +3,29 @@
 import React, { useEffect } from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue } from "recoil";
-
+import { useRecoilState } from "recoil";
 import EditorTab from "@components/organisms/editorTab";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetDocument from "@hooks/document/useGetDocument";
-import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const EditPage = () => {
   const currentPath = usePathname();
-
-  const getRepo = useRecoilValue(repoAtom);
   const [getSelectedDocument, setDocument] =
     useRecoilState(selectedDocumentAtom);
 
+  const repoId = useRepoId();
+
   const searchParams = useSearchParams();
   const documentId = searchParams?.get("documentId");
-  const getRepoId = searchParams?.get("repoId");
   const sharedDocuments = searchParams?.get("sharedDocuments");
-
-  const { data: userInfo, isFetching } = useGetUser();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
-    }
-    return getRepo!.id;
-  };
 
   const {
     data: getDocument,
     isFetching: isFetchingDocument,
     error,
   } = useGetDocument(
-    repoId(),
+    repoId,
     +documentId!,
     sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true,
@@ -64,7 +46,7 @@ const EditPage = () => {
     );
   }
 
-  if (isFetching || isFetchingDocument) {
+  if (isFetchingDocument) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <Typography className="font-bold ml-2">لطفا صبر کنید</Typography>
