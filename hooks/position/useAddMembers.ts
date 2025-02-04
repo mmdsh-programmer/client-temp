@@ -11,6 +11,7 @@ const useAddMembers = () => {
       branchId: number;
       positionName: string;
       members: string[];
+      callBack?: () => void;
     }) => {
       const { branchId, positionName, members } = values;
       const response = await addMembersToPositionAction(
@@ -21,10 +22,12 @@ const useAddMembers = () => {
       handleClientSideHookError(response as IActionError);
       return response;
     },
-    onSuccess: (_, variables) => {
+    onSuccess: (response, values) => {
+      const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: ["position", variables.branchId, variables.positionName],
+        queryKey: ["position", values.branchId, values.positionName],
       });
+      callBack?.();
     },
   });
 };

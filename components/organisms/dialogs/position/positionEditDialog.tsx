@@ -18,10 +18,11 @@ interface IForm {
 }
 
 interface IProps {
+  group: any;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PositionCreateDialog = ({ setOpen }: IProps) => {
+const PositionEditDialog = ({ group, setOpen }: IProps) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedUserList, setSelectedUserList] = useState<IUserList[]>([]);
 
@@ -89,6 +90,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
       members: usernameArray,
       callBack: () => {
         toast.success(`گروه ${dataForm.title} با موفقیت ساخته شد.`);
+        handleClose();
       },
     });
   };
@@ -163,4 +165,4 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
   );
 };
 
-export default PositionCreateDialog;
+export default PositionEditDialog;

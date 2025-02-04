@@ -17,8 +17,10 @@ const useCreatePosition = () => {
       handleClientSideHookError(response as IActionError);
       return response;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["positions"] });
+    onSuccess: (response, values) => {
+      const { callBack, branchId } = values;
+      queryClient.invalidateQueries({ queryKey: [`positions-${branchId}`] });
+      callBack?.();
     },
   });
 };

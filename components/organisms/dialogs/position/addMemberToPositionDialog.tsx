@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { Typography } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { branchIdAtom } from "@atom/branch";
 import useGetPositions from "@hooks/position/useGetPositions";
 import useAddMembers from "@hooks/position/useAddMembers";
 import SelectAtom, { IOption } from "@components/molecules/select";
+import { toast } from "react-toastify";
 
 interface IForm {
   username: string;
@@ -18,7 +19,7 @@ interface IProps {
 }
 
 const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
-const [group, setGroup] = useState<IOption>();
+  const [group, setGroup] = useState<IOption>();
   const getBranchId = useRecoilValue(branchIdAtom);
 
   const { data: getGroupOfBranch, isLoading } = useGetPositions(
@@ -26,11 +27,6 @@ const [group, setGroup] = useState<IOption>();
     20
   );
   const addMember = useAddMembers();
-
-  const groupOptions =
-    getGroupOfBranch?.pages[0].list.map((group) => {
-      return { label: group.title, value: group.groupId };
-    }) || [];
 
   const form = useForm<IForm>();
   const {
@@ -40,6 +36,11 @@ const [group, setGroup] = useState<IOption>();
     clearErrors,
     reset,
   } = form;
+
+  const groupOptions =
+    getGroupOfBranch?.pages[0].list.map((groupItem) => {
+      return { label: groupItem.title, value: groupItem.groupId };
+    }) || [];
 
   const handleReset = () => {
     clearErrors();
@@ -51,17 +52,17 @@ const [group, setGroup] = useState<IOption>();
     setOpen(false);
   };
 
-
   const onSubmit = async (dataForm: IForm) => {
     if (!getBranchId || !group) return;
 
     addMember.mutate({
       branchId: getBranchId,
-      positionName: (group?.value).toString(),
+      positionName: group.value.toString(),
       members: [dataForm.username],
-      //   callBack: () => {
-      //     toast.success(`گروه ${dataForm.title} با موفقیت ساخته شد.`);
-      //   },
+      callBack: () => {
+        toast.success("کاربر با موفقیت به گروه اضافه شد.");
+        handleClose();
+      },
     });
   };
 
@@ -73,7 +74,7 @@ const [group, setGroup] = useState<IOption>();
       setOpen={handleClose}
       className=""
     >
-      <form className="flex flex-col gap-6">
+      <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نام کاربری</Typography>
           <FormInput
@@ -88,13 +89,17 @@ const [group, setGroup] = useState<IOption>();
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">انتخاب گروه </Typography>
-          <SelectAtom
-            options={groupOptions}
-            className="h-12 xs:!h-10 pl-1 pr-2 !w-full bg-white border-[2px] border-normal justify-between"
-            setSelectedOption={setGroup}
-            defaultOption={{ value: "انتخاب کنید", label: "انتخاب کنید" }}
-            selectedOption={group}
-          />
+          {isLoading ? (
+            <Spinner className="h-5 w-5" color="deep-purple" />
+          ) : (
+            <SelectAtom
+              options={groupOptions}
+              className="h-12 xs:!h-10 pl-1 pr-2 !w-full bg-white border-[2px] border-normal justify-between"
+              defaultOption={{ value: "انتخاب کنید", label: "انتخاب کنید" }}
+              setSelectedOption={setGroup}
+              selectedOption={group}
+            />
+          )}
         </div>
       </form>
     </CreateDialog>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AddIcon } from "@components/atoms/icons";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import SearchInput from "@components/molecules/searchInput";
-import PositionCreateDialog from "../dialogs/position/createPositionDialog";
+import PositionCreateDialog from "../dialogs/position/positionCreateDialog";
 import BranchGroupList from "./branchGroupList";
 
 const BranchGroups = () => {
