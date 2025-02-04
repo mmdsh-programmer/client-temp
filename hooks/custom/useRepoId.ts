@@ -21,9 +21,6 @@ const useRepoId = () => {
     if (currentPath === "/admin/sharedDocuments" && getSelectedDocument) {
       return getSelectedDocument!.repoId;
     }
-    if (currentPath === "/admin/sharedDocuments") {
-      return undefined;
-    }
     if (sharedDocuments === "true") {
       return +getRepoId!;
     }

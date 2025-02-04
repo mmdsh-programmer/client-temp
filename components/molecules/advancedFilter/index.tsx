@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { useRecoilState } from "recoil";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { usePathname } from "next/navigation";
 import { EDocumentTypes } from "@interface/enums";
 import SelectBox from "../selectBox";
 import InputAtom from "@components/atoms/input";
@@ -9,13 +9,15 @@ import LoadingButton from "../loadingButton";
 import { Typography } from "@material-tailwind/react";
 import useGetTags from "@hooks/tag/useGetTags";
 import SelectAtom, { IOption } from "../select";
-import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
+import { repoAtom } from "@atom/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AdvancedFilter = ({ setOpen }: IProps) => {
+  const getRepo = useRecoilValue(repoAtom);
   const currentPath = usePathname();
   const [getFilterChildren, setFilterChildren] =
     useRecoilState(filterChildrenAtom);
@@ -31,16 +33,23 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
   const [moreFilter, setMoreFilter] = useState<string[]>([]);
   const [searchTitle, setSearchTitle] = useState("");
 
-  const searchParams = useSearchParams();
-  const sharedDocuments = searchParams?.get("sharedDocuments");
+  const { data: userInfo } = useGetUser();
 
-  const repoId = useRepoId();
+  const repoId = () => {
+    if (currentPath === "/admin/myDocuments") {
+      return userInfo!.repository.id;
+    }
+    if (currentPath === "/admin/sharedDocuments") {
+      return undefined;
+    }
+    return getRepo!.id;
+  };
 
   const { data: getTags } = useGetTags(
-    repoId!,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    repoId()!,
+    currentPath === "/admin/sharedDocuments",
     30,
-    !!repoId
+    !!repoId()
   );
 
   const tagOptions =
