@@ -29,10 +29,7 @@ interface IVersionDialogsProps {
   ) => void;
 }
 
-const VersionDialogs = ({
-  modals,
-  setModalState,
-}: IVersionDialogsProps) => {
+const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
   const [compareVersion, setCompareVersion] =
     useRecoilState(compareVersionAtom);
 

@@ -1,16 +1,12 @@
+import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import { useForm } from "react-hook-form";
-import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IForm {
   name: string;
@@ -22,14 +18,12 @@ interface IProps {
 }
 
 const TagCreateDialog = ({ name, setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const repoId = useRepoId();
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const createTag = useCreateTag();
   const {
     register,
@@ -49,24 +43,10 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
     setOpen(false);
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (
-      (currentPath === "/admin/sharedDocuments" ||
-        sharedDocuments === "true") &&
-      getDocument
-    ) {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   const onSubmit = async (dataForm: IForm) => {
-    if (!repoId()) return;
+    if (!repoId) return;
     createTag.mutate({
-      repoId: repoId(),
+      repoId,
       name: dataForm.name,
       isDirectAccess:
         currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",

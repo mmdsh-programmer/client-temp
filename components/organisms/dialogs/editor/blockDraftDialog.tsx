@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import FreeDraftDialog from "@components/templates/dialog/freeDraftDialog";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import RenderIf from "@components/atoms/renderIf";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
-import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const timeout = 5 * 60; // seconds
 
@@ -20,35 +18,20 @@ interface IProps {
 }
 
 const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
-  const repository = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
 
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);
   const workerRef = useRef<Worker>();
+
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-
-  const getRepoId = searchParams?.get("repoId");
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();
   const freeDraftHook = useFreeDraft();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
-    }
-    return repository!.id;
-  };
 
   const stopWorker = () => {
     workerRef.current?.terminate();
@@ -65,7 +48,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   };
 
   const handleFreeDraft = async () => {
-    if (editorData && repoId() && selectedDocument) {
+    if (editorData && repoId && selectedDocument) {
       const value = (await editorRef.current?.getData()) as unknown as
         | { content: string; outline: string }
         | string;
@@ -76,7 +59,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
       freeDraftHook.mutate({
         content,
         outline,
-        repoId: repoId(),
+        repoId,
         documentId: selectedDocument.id,
         versionId: editorData.id,
         versionNumber: editorData?.versionNumber,
@@ -93,9 +76,9 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   };
 
   const handleBlockDraft = () => {
-    if (repoId() && selectedDocument && editorData && editorMode === "edit") {
+    if (repoId && selectedDocument && editorData && editorMode === "edit") {
       const data = {
-        repoId: repoId(),
+        repoId,
         documentId: selectedDocument.id,
         versionId: editorData.id,
       };

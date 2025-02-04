@@ -2,7 +2,6 @@ import React from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
@@ -12,8 +11,8 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname, useSearchParams } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IForm {
   name: string;
@@ -24,31 +23,21 @@ interface IProps {
 }
 
 const VersionCloneDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
   const currentPath = usePathname();
-
-  const { data: userInfo } = useGetUser();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: getVersionInfo, isLoading } = useGetVersion(
-    repoId(),
+    repoId,
     getDocument!.id,
     getVersion?.id,
     getVersion?.state,
     true,
     true,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true
   );
   const createVersion = useCreateVersion();
@@ -69,9 +58,9 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!repoId()) return;
+    if (!repoId) return;
     createVersion.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
       content: getVersionInfo?.content || "",

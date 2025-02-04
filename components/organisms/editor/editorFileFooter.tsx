@@ -6,7 +6,6 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import LoadingButton from "@components/molecules/loadingButton";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
@@ -14,10 +13,10 @@ import { selectedFileAtom } from "@atom/file";
 import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
 import { IVersion } from "@interface/version.interface";
 import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const EditorFileFooter = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
   const [getEditorData, setEditorData] = useRecoilState(editorDataAtom);
@@ -33,18 +32,7 @@ const EditorFileFooter = () => {
 
   const timeout = 5 * 60; // seconds
 
-  const { data: userInfo } = useGetUser();
   const saveFileEditorHook = useSaveFileEditor();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return selectedDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
 
   const renderTitle = () => {
     if (!getEditorData) {
@@ -76,7 +64,7 @@ const EditorFileFooter = () => {
   };
 
   const handleSave = () => {
-    if (getEditorData && selectedDocument && repoId()) {
+    if (getEditorData && selectedDocument && repoId) {
       if (getSelectedFile) {
         const { name, hash, extension } = getSelectedFile;
         const fileHash = {
@@ -86,7 +74,7 @@ const EditorFileFooter = () => {
         };
         saveFileEditorHook.mutate({
           fileHash,
-          repoId: repoId(),
+          repoId,
           documentId: selectedDocument.id,
           versionId: getEditorData.id,
           versionNumber: getEditorData.versionNumber,

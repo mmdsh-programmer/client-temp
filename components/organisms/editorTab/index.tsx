@@ -8,7 +8,6 @@ import {
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
@@ -18,18 +17,17 @@ import EditorHeader from "../editor/editorHeader";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import useGetUser from "@hooks/auth/useGetUser";
 import useGetVersion from "@hooks/version/useGetVersion";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const EditorTab = () => {
   const currentPath = usePathname();
 
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
@@ -44,12 +42,9 @@ const EditorTab = () => {
   );
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
-  const { data: userInfo } = useGetUser();
-
   const searchParams = useSearchParams();
   const versionId = searchParams?.get("versionId");
   const versionState = searchParams?.get("versionState");
-  const getRepoId = searchParams?.get("repoId");
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const editorRefs = {
@@ -60,21 +55,8 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
-    }
-    return getRepo!.id;
-  };
-
   const { data: getLastVersion } = useGetLastVersion(
-    repoId(),
+    repoId,
     getSelectedDocument!.id,
     sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     !getVersionData
@@ -88,7 +70,7 @@ const EditorTab = () => {
     : versionState || getLastVersion?.state;
 
   const { data, isFetching, error, isSuccess } = useGetVersion(
-    repoId(),
+    repoId,
     getSelectedDocument!.id,
     +vId!,
     vState as "draft" | "version" | "public" | undefined,
@@ -104,7 +86,7 @@ const EditorTab = () => {
     error: keyError,
     isSuccess: isSuccessKey,
   } = useGetKey(
-    repoId(),
+    repoId,
     getSelectedDocument?.publicKeyId
       ? +getSelectedDocument.publicKeyId
       : undefined

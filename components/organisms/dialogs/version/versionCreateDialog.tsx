@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IForm {
@@ -25,6 +25,8 @@ const VersionCreateDialog = ({ close }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
   const createVersion = useCreateVersion();
@@ -62,7 +64,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
       content: "",
       outline: "",
       isDirectAccess:
-        currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();

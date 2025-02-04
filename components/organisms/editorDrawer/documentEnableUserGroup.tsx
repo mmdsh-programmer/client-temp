@@ -1,41 +1,25 @@
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue } from "recoil";
-
-import { repoAtom } from "@atom/repository";
+import { useRecoilState } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import { useEffect } from "react";
 import useEnableGroupHash from "@hooks/document/useEnableGroupHash";
-import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const DocumentEnableUserGroup = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const [getDocument, setDocument] = useRecoilState(selectedDocumentAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const enableUserGroup = useEnableGroupHash();
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (
-      currentPath === "/admin/sharedDocuments" ||
-      sharedDocuments === "true"
-    ) {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   useEffect(() => {
-    if (!repoId() || !getDocument) return;
+    if (!repoId || !getDocument) return;
     if (getDocument?.attachmentUserGroup) return;
 
     enableUserGroup.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: getDocument.id,
       isDirectAccess:
         sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",

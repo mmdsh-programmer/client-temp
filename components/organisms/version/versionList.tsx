@@ -5,31 +5,20 @@ import { IVersionView } from "@interface/version.interface";
 import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
 import VersionMobileView from "../versionView/versionMobileView";
 import VersionTableView from "@components/organisms/versionView/versionTableView";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersionList from "@hooks/version/useGetVersionList";
 import { useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname, useSearchParams } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const VersionList = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-
   const currentPath = usePathname();
 
-  const { data: userInfo } = useGetUser();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const {
     data: versionList,
@@ -38,16 +27,16 @@ const VersionList = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useGetVersionList(
-    repoId(),
+    repoId,
     getSelectedDocument!.id,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     30
   );
 
   const { data: getLastVersion } = useGetLastVersion(
-    repoId(),
+    repoId,
     getSelectedDocument!.id,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true
   );
 

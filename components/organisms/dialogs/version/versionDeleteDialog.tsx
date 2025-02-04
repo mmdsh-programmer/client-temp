@@ -1,26 +1,26 @@
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useDeleteVersion from "@hooks/version/useDeleteVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { selectedVersionAtom } from "@atom/version";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname, useSearchParams } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const VersionDeleteDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const deleteVerion = useDeleteVersion();
 
   const form = useForm();
@@ -36,25 +36,15 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
     setOpen(false);
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   const onSubmit = async () => {
-    if (!repoId() || !getVersion) return;
+    if (!repoId || !getVersion) return;
     deleteVerion.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: getDocument!.id,
       versionId: getVersion.id,
       state: getVersion.state,
       isDirectAccess:
-        currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
         toast.error(" نسخه حذف شد.");
         handleClose();

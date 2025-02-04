@@ -5,7 +5,7 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import DiffViewerTable from "@components/organisms/version/diffViewerTable";
 import { Spinner } from "@material-tailwind/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,6 +14,8 @@ interface IProps {
 const DiffVersionDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
   const compareVersion = useRecoilValue(compareVersionAtom);
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getVersionHook = useGetVersion(
     compareVersion?.version?.repoId ?? 0,
@@ -22,7 +24,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.version?.data?.state,
     true,
     true,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true
   );
 
@@ -33,7 +35,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.compare?.data.state,
     true,
     true,
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true
   );
 
