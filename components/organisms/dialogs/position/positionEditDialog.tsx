@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import CreateDialog from "@components/templates/dialog/createDialog";
+import React, { useEffect, useState } from "react";
 import FormInput from "@components/atoms/input/formInput";
 import { Button, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { branchIdAtom } from "@atom/branch";
-import useCreatePosition from "@hooks/position/useCreatePosition";
 import { IUserList } from "../document/documentAccessPublishingDialog";
 import { UserIcon, XIcon } from "@components/atoms/icons";
-import ImageComponent from "next/image";
 import ChipMolecule from "@components/molecules/chip";
 import { toast } from "react-toastify";
+import { IPosition } from "@interface/position.interface";
+import useGetPositionInfo from "@hooks/position/useGetPositionInfo";
+import EditDialog from "@components/templates/dialog/editDialog";
+import ImageComponent from "@components/atoms/image";
+import useUpdatePosition from "@hooks/position/useUpdatePosition";
 
 interface IForm {
   title: string;
@@ -18,7 +20,7 @@ interface IForm {
 }
 
 interface IProps {
-  group: any;
+  group: IPosition;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -28,7 +30,12 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
 
   const getBranchId = useRecoilValue(branchIdAtom);
 
-  const setPositionForBranch = useCreatePosition();
+  const { data: groupInfo } = useGetPositionInfo(
+    getBranchId!,
+    group.groupPath
+  );
+
+  const updatePosition = useUpdatePosition();
 
   const form = useForm<IForm>();
   const {
@@ -84,21 +91,38 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
         })
       : [];
 
-    setPositionForBranch.mutate({
+    updatePosition.mutate({
       branchId: getBranchId,
+      positionName: group.groupPath,
       title: dataForm.title,
       members: usernameArray,
       callBack: () => {
-        toast.success(`گروه ${dataForm.title} با موفقیت ساخته شد.`);
+        toast.success(`گروه ${dataForm.title} با موفقیت بروزرسانی شد.`);
         handleClose();
       },
     });
   };
 
+  useEffect(() => {
+    setSelectedUserList([]);
+    groupInfo?.members.map((item) => {
+      return setSelectedUserList((preValue) => {
+        return [
+          ...preValue,
+          {
+            username: item.preferred_username,
+            name: item.family_name,
+            picture: item.picture,
+          },
+        ];
+      });
+    });
+  }, [groupInfo]);
+
   return (
-    <CreateDialog
-      isPending={setPositionForBranch.isPending}
-      dialogHeader="ایجاد گروه جدید"
+    <EditDialog
+      isPending={updatePosition.isPending}
+      dialogHeader="ویرایش گروه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
@@ -108,7 +132,11 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
           <Typography className="form_label">نام گروه</Typography>
           <FormInput
             placeholder="نام گروه"
-            register={{ ...register("title") }}
+            register={{
+              ...register("title", {
+                value: group.title,
+              }),
+            }}
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -161,7 +189,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
           </div>
         </div>
       </form>
-    </CreateDialog>
+    </EditDialog>
   );
 };
 

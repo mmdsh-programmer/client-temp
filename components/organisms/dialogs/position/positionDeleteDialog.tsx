@@ -1,14 +1,13 @@
 import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import useDeleteBranch from "@hooks/branch/useDeleteBranch";
+import { IPosition } from "@interface/position.interface";
 
 interface IProps {
-  group: any;
+  group: IPosition;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PositionhDeleteDialog = ({ setOpen, group }: IProps) => {
-  const deleteBranch = useDeleteBranch();
 
   const handleClose = () => {
     setOpen(false);
@@ -20,7 +19,7 @@ const PositionhDeleteDialog = ({ setOpen, group }: IProps) => {
 
   return (
     <DeleteDialog
-      isPending={deleteBranch.isPending}
+      isPending={false}
       dialogHeader="حذف شعبه"
       onSubmit={handleDelete}
       setOpen={handleClose}

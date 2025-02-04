@@ -12,9 +12,7 @@ interface IProps {
   className?: string;
 }
 
-const TableHead = ({
- tableHead, className 
-}: IProps) => {
+const TableHead = ({ tableHead, className }: IProps) => {
   return (
     <thead className={`${className || ""} top-0 z-[9999] bg-tertiary h-10 `}>
       <tr>
@@ -25,14 +23,14 @@ const TableHead = ({
               className={` ${head.className || ""} text-right px-5 py-[6px]`}
             >
               {head.isSorted ? (
-                <div className="flex items-center">
+                <div className={`${head.className || ""} flex items-center`}>
                   <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>
                   <Sort />
                 </div>
               ) : (
-                <div className="flex items-center">
+                <div className={`${head.className || ""} flex items-center`}>
                   <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>

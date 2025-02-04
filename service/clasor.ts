@@ -68,6 +68,7 @@ import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
 import { IBranchList } from "@interface/branch.interface";
+import { IPositionInfo, IPositionList } from "@interface/position.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -3547,7 +3548,7 @@ export const getPositionOfBranch = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<any>(
+    const response = await axiosClasorInstance.get<IServerResult<IPositionList>>(
       `branch/${branchId}/position`,
       {
         headers: {
@@ -3581,7 +3582,7 @@ export const getPositionInfo = async (
       }
     );
 
-    return response.data.data;
+    return response.data.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -3686,7 +3687,7 @@ export const updatePosition = async (
   members: string[]
 ) => {
   try {
-    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
       `branch/${branchId}/position/${positionName}`,
       { title, members },
       {

@@ -7,17 +7,14 @@ const useUpdatePosition = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      branchId,
-      positionName,
-      title,
-      members,
-    }: {
+    mutationFn: async (values: {
       branchId: number;
       positionName: string;
       title: string;
       members: string[];
+      callBack?: () => void;
     }) => {
+      const { branchId, positionName, title, members } = values;
       const response = await updatePositionAction(
         branchId,
         positionName,
@@ -32,6 +29,7 @@ const useUpdatePosition = () => {
         queryKey: ["position", variables.branchId, variables.positionName],
       });
       queryClient.invalidateQueries({ queryKey: ["positions"] });
+      variables.callBack?.();
     },
   });
 };

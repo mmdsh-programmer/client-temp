@@ -26,7 +26,6 @@ const BranchGroupList = () => {
             key={`group-table-item-${group.groupId}`}
             tableCell={[
               { data: group.title },
-              { data: "--" },
               {
                 data: <BranchGroupMenu group={group} />,
                 stopPropagation: true,
@@ -52,7 +51,6 @@ const BranchGroupList = () => {
         <TableHead
           tableHead={[
             { key: "name", value: "نام گروه", isSorted: true },
-            { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
             {
               key: "action",
               value: "عملیات",

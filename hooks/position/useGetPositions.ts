@@ -2,6 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { getPositionListAction } from "@actions/position";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { IPositionList } from "@interface/position.interface";
 
 const useGetPositions = (branchId: number, size: number) => {
   return useInfiniteQuery({
@@ -13,7 +14,7 @@ const useGetPositions = (branchId: number, size: number) => {
         size
       );
       handleClientSideHookError(response as IActionError);
-      return response;
+      return response as IPositionList;
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
