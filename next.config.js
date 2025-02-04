@@ -1,6 +1,3 @@
-
-
-
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
@@ -15,8 +12,12 @@ const nextConfig = {
         protocol: "http",
         hostname: "**",
       },
-      
     ],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "5mb",
+    },
   },
   webpack: (config, { isServer }) => {
     const newConfig = { ...config };
@@ -28,9 +29,9 @@ const nextConfig = {
     return newConfig;
   },
   cacheHandler:
-  process.env.NODE_ENV === "production"
-    ? require.resolve("./cacheHandler.mjs")
-    : undefined,
+    process.env.NODE_ENV === "production"
+      ? require.resolve("./cacheHandler.mjs")
+      : undefined,
   cacheMaxMemorySize: 0, // disable default in-memory caching
 };
 

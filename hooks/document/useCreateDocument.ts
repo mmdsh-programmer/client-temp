@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { EDocumentTypes } from "@interface/enums";
 import { IActionError } from "@interface/app.interface";
 import { IDocument } from "@interface/document.interface";
@@ -44,20 +43,27 @@ const useCreateDocument = () => {
         description,
         order,
         imageUrl,
-        publicKeyId,
+        publicKeyId
       );
       handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
-    onSuccess: async(response, values) => {
+    onSuccess: async (response, values) => {
       const { successCallBack, categoryId } = values;
       const queryKey = [`category-${categoryId || "root"}-children`];
 
       const cachedData = await queryClient.getQueriesData({ queryKey });
-      const cachePages = cachedData?.[0]?.[1] as { pages: { list: IDocument[]; offset: number; size: number; total: number }[] };
+      const cachePages = cachedData?.[0]?.[1] as {
+        pages: {
+          list: IDocument[];
+          offset: number;
+          size: number;
+          total: number;
+        }[];
+      };
 
       if (cachePages) {
-        const newCategory = {
+        const newDocument = {
           ...response,
           createdAt: `${+new Date()}`,
           updatedAt: null,
@@ -68,15 +74,19 @@ const useCreateDocument = () => {
           isTemplate: values.isTemplate,
           contentType: values.contentType,
           repoId: values.repoId,
+          publicKeyId: values.publicKeyId,
         };
 
         const newData = {
           ...cachePages,
-          pages: cachePages.pages.map((page, index) => 
-            {return index === 0 
-              ? { ...{ ...page, total: page.total + 1}, list: [newCategory, ...page.list] } 
-              : page;}
-          )
+          pages: cachePages.pages.map((page, index) => {
+            return index === 0
+              ? {
+                  ...{ ...page, total: page.total + 1 },
+                  list: [newDocument, ...page.list],
+                }
+              : page;
+          }),
         };
 
         queryClient.setQueriesData({ queryKey }, newData);

@@ -60,7 +60,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
 
   const handleSubmit = async () => {
     if (!getRepo || !document) return;
-    if (!selectedUserList.length) {
+    if (!selectedUserList.length && !users?.length) {
       toast.warn("لیست کاربران خالی است");
       return;
     }
@@ -89,6 +89,25 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
       setType("white-list");
     }
   }, [userList]);
+
+  const renderList = () => {
+    if (type === "white-list") {
+      return (
+        <DocumentWhiteList
+          whiteList={users}
+          selectedUserList={selectedUserList}
+          setSelectedUserList={setSelectedUserList}
+        />
+      );
+    }
+    return (
+      <DocumentBlackList
+        blackList={users}
+        selectedUserList={selectedUserList}
+        setSelectedUserList={setSelectedUserList}
+      />
+    );
+  };
 
   return alert ? (
     <WhiteBlackAlertDialog
@@ -119,9 +138,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
             name="type"
             label="لیست سفید"
             crossOrigin=""
-            onChange={() => {
-              setType("white-list");
-            }}
+            onChange={handleTypeChange}
             checked={type === "white-list"}
             value="white-list"
           />
@@ -142,21 +159,10 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
             value="black-list"
           />
         </div>
-        {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <Spinner className="w-6 h-6" color="deep-purple" />
-        ) : type === "white-list" ? (
-          <DocumentWhiteList
-            whiteList={users}
-            selectedUserList={selectedUserList}
-            setSelectedUserList={setSelectedUserList}
-          />
         ) : (
-          <DocumentBlackList
-            blackList={users}
-            selectedUserList={selectedUserList}
-            setSelectedUserList={setSelectedUserList}
-          />
+          renderList()
         )}
       </div>
     </ConfirmFullHeightDialog>

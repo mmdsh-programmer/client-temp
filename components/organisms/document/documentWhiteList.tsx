@@ -38,8 +38,7 @@ const DocumentWhiteList = ({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
@@ -80,7 +79,9 @@ const DocumentWhiteList = ({
         لیست سفید سند
       </Typography>
       {isLoading ? (
-        <Spinner className="h-4 w-4" color="deep-purple" />
+        <div className="flex justify-center mt-4">
+          <Spinner className="h-4 w-4" color="deep-purple" />
+        </div>
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex flex-wrap gap-2">

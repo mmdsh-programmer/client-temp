@@ -2817,10 +2817,13 @@ export const saveVersion = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
         },
         params: {
           isDirectAccess,
         },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
       }
     );
 

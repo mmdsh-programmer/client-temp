@@ -33,17 +33,22 @@ const AccessRepoList = () => {
 
   const listLength = getAccessRepoList?.pages[0].total;
 
+  const renderList = () => {
+    if (listLength) return <CardView {...commonProps} />;
+    return (
+      <EmptyList type={search ? EEmptyList.FILTER : EEmptyList.ACCESS_REPO} />
+    );
+  };
+
   return (
     <div className="flex flex-col gap-6">
-      {!isLoading || search ? <RepoSearch /> : null}
+      {(!isLoading || search) && listLength ? <RepoSearch /> : null}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
-      ) : listLength ? (
-        <CardView {...commonProps} />
       ) : (
-        <EmptyList type={search ? EEmptyList.FILTER : EEmptyList.ACCESS_REPO} />
+        renderList()
       )}
     </div>
   );

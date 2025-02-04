@@ -2,39 +2,29 @@ import React, { useState } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
 import TagCreateDialog from "../tag/tagCreateDialog";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname, useSearchParams } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentTagsDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const document = useRecoilValue(selectedDocumentAtom);
   const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
 
   const [openCreateTagDialog, setOpenCreateTagDialog] = useState(false);
   const [tagName, setTagName] = useState<string | number>("");
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const { data: userInfo } = useGetUser();
   const editDocument = useEditDocument();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments" && document) {
-      return document!.repoId;
-    }
-    return getRepo!.id;
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -42,14 +32,14 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!repoId() || !document) return;
+    if (!repoId || !document) return;
     if (!getTempDocTag) return;
     if (getTempDocTag.length > 10) {
       toast.error("بیش از ده آیتم نمی‌توانید به سند منصوب کنید.");
       return;
     }
     editDocument.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: document.id,
       categoryId: document.categoryId,
       title: document.name,
@@ -58,7 +48,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
         return tag.id;
       }),
       isDirectAccess:
-      currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
         toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },

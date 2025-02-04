@@ -309,16 +309,13 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 .toast-warning {
-  background: "#FF9500" !important;
   box-shadow: 0px 2px 7px 0px rgba(255, 149, 0, 0.15), 0px 5px 17px 0px rgba(255, 149, 0, 0.20) !important;
-  font-family: "iranYekan" !important;
+  @apply !bg-[#FF9500] !font-iranYekan
 }
 
 .toast-dark {
-  background: "#222222" !important;
   box-shadow: 0px 2px 7px 0px rgba(0, 0, 0, 0.15), 0px 5px 17px 0px rgba(0, 0, 0, 0.20) !important;
-  font-family: "iranYekan" !important;
-}
+  @apply !bg-[#222222] !font-iranYekan}
 
 .Toastify__toast-icon > svg {
   @apply fill-white

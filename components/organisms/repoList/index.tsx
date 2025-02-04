@@ -15,6 +15,8 @@ import RenderIf from "@components/atoms/renderIf";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 import PublishedRepoList from "./publishedRepoList";
 import RepoMenu from "@components/molecules/repoMenu";
+import RepoTypesCards from "../repoTypesCards";
+import RepoSearch from "@components/molecules/repoSearch";
 
 const RepoList = () => {
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
@@ -34,9 +36,13 @@ const RepoList = () => {
         renderDialog={(close: () => void) => {
           return <RepoCreateDialogStepper close={close} />;
         }}
+        renderSearch={<RepoSearch />}
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
-        <AllRepoList />
+        <>
+          <RepoTypesCards />
+          <AllRepoList />
+        </>
       </RenderIf>
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.MY_REPO}>
         <MyRepoList archived={false} />

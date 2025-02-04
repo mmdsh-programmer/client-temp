@@ -163,7 +163,7 @@ const EditorTab = () => {
     return null;
   }
 
-  if (showKey && !decryptedContent && getVersionData?.content) {
+  if (showKey && !decryptedContent && getVersionData) {
     return (
       <EditorKey
         isPending={isFetching || isLoadingKey}

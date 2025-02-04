@@ -62,6 +62,7 @@ const SelectAtom = ({
       className=" relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
+        e.preventDefault();
       }}
     >
       <button

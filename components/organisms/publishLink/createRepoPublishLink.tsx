@@ -1,15 +1,8 @@
-import {
-  Checkbox,
-  DialogBody,
-  DialogFooter,
-  Typography,
-} from "@material-tailwind/react";
-import React, { useState } from "react";
+import React from "react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import { DatePicker } from "zaman";
-import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import { onDatePickerChangePayload } from "zaman/dist/types";
 import { toast } from "react-toastify";
@@ -18,13 +11,11 @@ import { useForm } from "react-hook-form";
 
 interface IData {
   expireTime: number;
-  password?: string;
 }
 
 const CreateRepoPublishLink = () => {
   const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
   const getRepo = useRecoilValue(repoAtom);
-  const [hasPassword, setHasPassword] = useState(false);
   const createPublishLink = useCreatePublishLink();
 
   const form = useForm<{
@@ -33,7 +24,6 @@ const CreateRepoPublishLink = () => {
   }>();
 
   const {
-    register,
     handleSubmit,
     reset,
     clearErrors,
@@ -58,7 +48,7 @@ const CreateRepoPublishLink = () => {
     createPublishLink.mutate({
       repoId: getRepo.id,
       expireTime: data.expireTime,
-      password: hasPassword ? data.password : undefined,
+      password: undefined,
       callBack: () => {
         setRepositoryAtomId(getRepo.id);
         handleReset();
@@ -74,36 +64,6 @@ const CreateRepoPublishLink = () => {
         className="flex-grow px-5 py-3 xs:p-0 xs:pb-6"
       >
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col gap-2">
-            <Checkbox
-              crossOrigin="anonymous"
-              label={
-                <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
-                  افزودن رمز عبور
-                </Typography>
-              }
-              color="deep-purple"
-              checked={hasPassword}
-              onChange={() => {
-                setHasPassword(!hasPassword);
-              }}
-              containerProps={{className: "-mr-3",}}
-            />
-            {hasPassword && (
-              <>
-                <Typography className="label">رمز عبور</Typography>
-                <FormInput
-                  type="password"
-                  register={{ ...register("password") }}
-                />
-                {errors.password && (
-                  <Typography className="warning_text">
-                    {errors.password?.message}
-                  </Typography>
-                )}
-              </>
-            )}
-          </div>
           <div className="flex flex-col gap-2">
             <Typography className="label">انتخاب تاریخ</Typography>
             <DatePicker

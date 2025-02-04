@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { UserIcon, XIcon } from "@components/atoms/icons";
 import ChipMolecule from "@components/molecules/chip";
@@ -20,6 +20,7 @@ const DocumentBlackList = ({
   setSelectedUserList,
 }: IProps) => {
   const [inputValue, setInputValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSpaceClick = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (
@@ -49,6 +50,8 @@ const DocumentBlackList = ({
   };
 
   useEffect(() => {
+    setIsLoading(true);
+    setSelectedUserList([]);
     blackList?.map((item) => {
       return setSelectedUserList((preValue) => {
         return [
@@ -61,6 +64,7 @@ const DocumentBlackList = ({
         ];
       });
     });
+    setIsLoading(false);
   }, [blackList]);
 
   return (
@@ -74,47 +78,53 @@ const DocumentBlackList = ({
       <Typography className="title_t4 text-secondary ">
         لیست سیاه سند
       </Typography>
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-wrap gap-2">
-          {selectedUserList?.length ? (
-            selectedUserList.map((item) => {
-              return (
-                <ChipMolecule
-                  key={item.username}
-                  value={item.name || item.username}
-                  className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
-                       w-auto pl-2 border-[1px] border-normal`}
-                  icon={
-                    item.picture ? (
-                      <ImageComponent
-                        className="w-full h-full rounded-full overflow-hidden"
-                        src={item.picture}
-                        alt={item.picture}
-                      />
-                    ) : (
-                      <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
-                    )
-                  }
-                  actionIcon={
-                    <Button
-                      className="bg-transparent p-0"
-                      onClick={() => {
-                        removeUser(item.username);
-                      }}
-                    >
-                      <XIcon
-                        className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
-                      />
-                    </Button>
-                  }
-                />
-              );
-            })
-          ) : (
-            <EmptyList type={EEmptyList.WHITE_LIST} />
-          )}
+      {isLoading ? (
+        <div className="flex justify-center mt-4">
+          <Spinner className="h-4 w-4" color="deep-purple" />
         </div>
-      </div>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-wrap gap-2">
+            {selectedUserList?.length ? (
+              selectedUserList.map((item) => {
+                return (
+                  <ChipMolecule
+                    key={item.username}
+                    value={item.name || item.username}
+                    className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+                       w-auto pl-2 border-[1px] border-normal`}
+                    icon={
+                      item.picture ? (
+                        <ImageComponent
+                          className="w-full h-full rounded-full overflow-hidden"
+                          src={item.picture}
+                          alt={item.picture}
+                        />
+                      ) : (
+                        <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                      )
+                    }
+                    actionIcon={
+                      <Button
+                        className="bg-transparent p-0"
+                        onClick={() => {
+                          removeUser(item.username);
+                        }}
+                      >
+                        <XIcon
+                          className={`${item.name ? "fill-icon-active" : "fill-icon-hover"} h-4 w-4`}
+                        />
+                      </Button>
+                    }
+                  />
+                );
+              })
+            ) : (
+              <EmptyList type={EEmptyList.BLACK_LIST} />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

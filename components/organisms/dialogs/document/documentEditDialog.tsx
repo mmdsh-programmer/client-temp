@@ -86,6 +86,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       description: dataForm?.description,
       order: dataForm.order,
       isHidden: false,
+      isDirectAccess: currentPath === "/admin/sharedDocuments",
       callBack: () => {
         toast.success("سند با موفقیت به روز رسانی شد.");
         handleClose();
