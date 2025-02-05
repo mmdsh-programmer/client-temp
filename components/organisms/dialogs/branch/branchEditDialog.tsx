@@ -47,6 +47,8 @@ const BranchEditDialog = ({ branch, setOpen }: IProps) => {
     editBranch.mutate({
       branchId: branch.id,
       name: dataForm.name,
+      username: dataForm.username,
+      parentId: branch.parentId,
       callBack: () => {
         toast.success(`شعبه ${dataForm.name} با موفقیت ویرایش شد.`);
         handleClose();
@@ -81,13 +83,13 @@ const BranchEditDialog = ({ branch, setOpen }: IProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نوع شعبه</Typography>
-          <FormInput placeholder={branch.type} readOnly />
+          <FormInput placeholder={branch.repoTypeName} readOnly />
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> مالک </Typography>
           <FormInput
             placeholder="مالک شعبه"
-            register={{ ...register("username") }}
+            register={{ ...register("username", { value: branch.userName }) }}
           />
           {errors.username && (
             <Typography className="warning_text">

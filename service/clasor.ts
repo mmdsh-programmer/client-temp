@@ -3398,19 +3398,20 @@ export const getBranchList = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IBranchList>
-    >("branch", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: {
-        parentId,
-        ownerSSOID,
-        offset,
-        size,
-      },
-    });
+    const response = await axiosClasorInstance.get<IServerResult<IBranchList>>(
+      "branch",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          parentId,
+          ownerSSOID,
+          offset,
+          size,
+        },
+      }
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3444,7 +3445,7 @@ export const createRootBranch = async (
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       "branch",
-      { name, repoType, username },
+      { title: name, repoTypeName: repoType, ownerUsername: username },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -3468,7 +3469,7 @@ export const createSubBranch = async (
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `branch/${branchId}`,
-      { name, repoType, username },
+      { title: name, repoTypeName: repoType, ownerUsername: username },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -3482,11 +3483,11 @@ export const createSubBranch = async (
   }
 };
 
-export const updateRootBranch = async (accessToken: string, name: string) => {
+export const updateRootBranch = async (accessToken: string, name: string, username: string) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       "branch",
-      { name },
+      { title: name, ownerUsername: username  },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -3503,12 +3504,13 @@ export const updateRootBranch = async (accessToken: string, name: string) => {
 export const updateSubBranch = async (
   accessToken: string,
   branchId: number,
-  name: string
+  name: string,
+  username: string
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `branch/${branchId}`,
-      { name },
+      { title: name, ownerUsername: username  },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -3548,18 +3550,17 @@ export const getPositionOfBranch = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IPositionList>>(
-      `branch/${branchId}/position`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IPositionList>
+    >(`branch/${branchId}/position`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -3766,13 +3767,112 @@ export const createRepoTypes = async (
   }
 };
 
-export const deleteRepoType = async (
-  accessToken: string,
-  id: number,
-) => {
+export const deleteRepoType = async (accessToken: string, id: number) => {
   try {
     const response = await axiosClasorInstance.delete<any>(
       `admin/repoTypes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// DOMAIN PUBLIC FEEDS //////////////////////
+
+export const getDomainFeeds = async (
+  accessToken: string,
+  domainId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IFeedItem>>
+    >(`domain/${domainId}/feeds`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createDomainFeed = async (
+  accessToken: string,
+  domainId: number,
+  name: string,
+  content: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IFeedItem>>(
+      `domain/${domainId}/feeds`,
+      {
+        name,
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateDomainFeed = async (
+  accessToken: string,
+  domainId: number,
+  feedId: number,
+  name: string,
+  content: string
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<IFeedItem>>(
+      `domain/${domainId}/feeds/${feedId}`,
+      {
+        name,
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteDomainFeed = async (
+  accessToken: string,
+  domainId: number,
+  feedId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<void>>(
+      `domain/${domainId}/feeds/${feedId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

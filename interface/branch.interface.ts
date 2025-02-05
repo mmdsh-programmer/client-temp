@@ -3,12 +3,13 @@ export interface IBranch {
   businessId: number;
   createdAt: string;
   id: number;
-  name: string;
   parentId: number;
   title: string;
   type: string;
   updateAt: string;
   userSSOID: number;
+  repoTypeName: string;
+  userName: string;
 }
 
 export interface IBranchList {

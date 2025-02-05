@@ -33,7 +33,7 @@ const BranchInfo = () => {
           tabList={tabList}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          headerClassName="!bg-white !py-0 border-b-normal !border-b-2 rounded-none max-w-[200px]"
+          headerClassName="!bg-white !py-0 border-b-normal !border-b-2 rounded-none"
           activeTabClassName="!rounded-none !border-t-0 border-x-0 border-b-purple-normal !border-b-2 !shadow-none !text-purple-normal !py-3"
           tabClassName="!border-none !h-auto !py-3 !px-4 max-w-[100px]"
         />

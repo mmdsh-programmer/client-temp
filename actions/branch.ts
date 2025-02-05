@@ -84,23 +84,24 @@ export const createSubBranchAction = async (
   }
 };
 
-export const updateRootBranchAction = async (name: string) => {
+export const updateRootBranchAction = async (name: string, username: string) => {
   const userInfo = await getMe();
   try {
-    const response = await updateRootBranch(userInfo.access_token, name);
+    const response = await updateRootBranch(userInfo.access_token, name, username);
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
   }
 };
 
-export const updateSubBranchAction = async (branchId: number, name: string) => {
+export const updateSubBranchAction = async (branchId: number, name: string, username: string) => {
   const userInfo = await getMe();
   try {
     const response = await updateSubBranch(
       userInfo.access_token,
       branchId,
-      name
+      name,
+      username
     );
     return response;
   } catch (error) {

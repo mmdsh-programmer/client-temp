@@ -32,6 +32,7 @@ export enum EEmptyList {
   FEED_LIST = "feed-list",
   BRANCH_INFO = "branch_info",
   BRANCH_GROUP = "branch_group",
+  DOMAIN_PUBLICFEEDS = "domain-public-feeds",
 }
 
 interface IProps {
@@ -346,6 +347,17 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary"
             >
               گروهی برای نمایش وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.DOMAIN_PUBLICFEEDS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              خبرنامه‌ای برای نمایش وجود ندارد
             </Typography>
           </div>
         );

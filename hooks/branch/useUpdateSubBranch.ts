@@ -12,16 +12,18 @@ const useUpdateSubBranch = () => {
     mutationFn: async (values: {
       branchId: number;
       name: string;
+      username: string;
+      parentId: number;
       callBack?: () => void;
     }) => {
-      const { branchId, name } = values;
-      const response = await updateSubBranchAction(branchId, name);
+      const { branchId, name, username } = values;
+      const response = await updateSubBranchAction(branchId, name, username);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (_, values) => {
-      const { callBack, branchId } = values;
-      queryClient.invalidateQueries({ queryKey: [`branches-${branchId}`] });
+      const { callBack, parentId } = values;
+      queryClient.invalidateQueries({ queryKey: [`branch-${parentId || "root"}`] });
       callBack?.();
     },
     onError: (error) => {

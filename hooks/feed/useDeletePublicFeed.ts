@@ -1,27 +1,28 @@
-import { updateRootBranchAction } from "@actions/branch";
+import { deletePublicFeedAction } from "@actions/publicFeed";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 
-const useUpdateRootBranch = () => {
+const useDeletePublicFeed = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationKey: ["update-root-branch"],
+    mutationKey: ["delete-public-feed"],
     mutationFn: async (values: {
-      name: string;
-      username: string;
+      domainId: number;
+      feedId: number;
       callBack?: () => void;
     }) => {
-      const { name, username } = values;
-      const response = await updateRootBranchAction(name, username);
+      const { domainId, feedId } = values;
+      const response = await deletePublicFeedAction(domainId, feedId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
-    onSuccess: (_, values) => {
-      const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+    onSuccess: (response, values) => {
+      const { callBack, domainId } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`getPublicFeeds-${domainId}`],
+      });
       callBack?.();
     },
     onError: (error) => {
@@ -30,4 +31,4 @@ const useUpdateRootBranch = () => {
   });
 };
 
-export default useUpdateRootBranch;
+export default useDeletePublicFeed; 

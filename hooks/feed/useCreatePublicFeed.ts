@@ -1,27 +1,29 @@
-import { updateRootBranchAction } from "@actions/branch";
+import { createPublicFeedAction } from "@actions/publicFeed";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 
-const useUpdateRootBranch = () => {
+const useCreatePublicFeed = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationKey: ["update-root-branch"],
+    mutationKey: ["create-public-feed"],
     mutationFn: async (values: {
+      domainId: number;
       name: string;
-      username: string;
+      content: string;
       callBack?: () => void;
     }) => {
-      const { name, username } = values;
-      const response = await updateRootBranchAction(name, username);
+      const { domainId, name, content } = values;
+      const response = await createPublicFeedAction(domainId, name, content);
       handleClientSideHookError(response as IActionError);
       return response;
     },
-    onSuccess: (_, values) => {
-      const { callBack } = values;
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
+    onSuccess: (response, values) => {
+      const { callBack, domainId } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`getPublicFeeds-${domainId}`],
+      });
       callBack?.();
     },
     onError: (error) => {
@@ -30,4 +32,4 @@ const useUpdateRootBranch = () => {
   });
 };
 
-export default useUpdateRootBranch;
+export default useCreatePublicFeed; 
