@@ -11,10 +11,8 @@ interface IProps {
 
 const PublishRepoSubscribe = ({ repository }: IProps) => {
   const { data: userInfo, isLoading, isFetching } = useGetUser();
-  const isOwner = repository.owner?.ssoId === Number(userInfo?.ssoId);
 
-  // Only render the button when we have both repository and user data
-  if (isLoading || isFetching || !userInfo || isOwner) {
+  if (isLoading || isFetching || !userInfo) {
     return null;
   }
 

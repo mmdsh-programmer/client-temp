@@ -23,6 +23,7 @@ import {
   restoreRepository,
   subscribeToRepository,
   transferOwnershipRepository,
+  unsubscribeFromRepository,
 } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
@@ -397,6 +398,24 @@ export const subscribeToRepoAction = async (
   const userInfo = await getMe();
   try {
     const response = await subscribeToRepository(
+      userInfo.access_token,
+      repoId,
+      isDirectAccess
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const unsubscribeFromRepoAction = async (
+  repoId: number,
+  isDirectAccess?: boolean
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await unsubscribeFromRepository(
       userInfo.access_token,
       repoId,
       isDirectAccess

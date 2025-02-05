@@ -316,9 +316,7 @@ export const getAllRepositories = async (
   }
 };
 
-export const getPublishRepositoryInfo = async (
-  repoId: number
-) => {
+export const getPublishRepositoryInfo = async (repoId: number) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
       `repositories/${repoId}/publish`
@@ -746,6 +744,30 @@ export const subscribeToRepository = async (
     const response = await axiosClasorInstance.post(
       `repositories/${repoId}/subscription`,
       {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const unsubscribeFromRepository = async (
+  accessToken: string,
+  repoId: number,
+  isDirectAccess?: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.delete(
+      `repositories/${repoId}/subscription`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
