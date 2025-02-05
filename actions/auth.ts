@@ -60,7 +60,7 @@ const refreshCookieHeader = async (
   await redisClient?.set(
     `user:${access_token}`,
     JSON.stringify(userData),
-    { EX: userData.expires_in }
+    { EX: expires_in }
   );
   const mySocialProfile = await getMySocialProfile(access_token);
   return {
