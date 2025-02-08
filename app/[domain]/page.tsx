@@ -22,7 +22,7 @@ const MainPage = async ({ params }: MainPageProps) => {
     const { data } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`]);
-    if (domainInfo.enablePublishPage) {
+    if (domainInfo.enablePublishPage && false) {
       const time = Date.now();
       const { projectName, projectDescription, heroImage, theme } = domainInfo;
       return (
@@ -64,11 +64,7 @@ const MainPage = async ({ params }: MainPageProps) => {
         </>
       );
     }
-    return (
-      <main className="flex h-screen flex-col items-center justify-between">
-        <LandingPage />
-      </main>
-    );
+    return <LandingPage />;
   } catch (error) {
     return (
       <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

@@ -4,6 +4,7 @@
 @import "../node_modules/cls-file-management/dist/style.css";
 @import "./outline.style.css";
 @import "./clasor-preview.style.css";
+@import "./landing.css";
 
 @layer base {
   html {
