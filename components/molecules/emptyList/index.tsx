@@ -30,6 +30,9 @@ export enum EEmptyList {
   ANSWER_LIST = "answer_list",
   ACCESS_LIST = "access_list",
   FEED_LIST = "feed-list",
+  BRANCH_INFO = "branch_info",
+  BRANCH_GROUP = "branch_group",
+  DOMAIN_PUBLICFEEDS = "domain-public-feeds",
 }
 
 interface IProps {
@@ -309,6 +312,52 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary"
             >
               خبرنامه ای برای نمایش وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.BRANCH_INFO:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              <div className="flex flex-col items-center justify-center">
+                <Typography
+                  placeholder="empty-message"
+                  className="title_t3 text-primary"
+                >
+                  شما در حال حاضر شعبه‌ای را انتخاب نکرده‌اید.
+                </Typography>
+                <Typography
+                  placeholder="empty-message"
+                  className="text-secondary caption_c1"
+                >
+                  برای نمایش اطلاعات شعبه، شعبه موردنظرتان را انتخاب کنید.
+                </Typography>
+              </div>
+            </Typography>
+          </div>
+        );
+      case EEmptyList.BRANCH_GROUP:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              گروهی برای نمایش وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.DOMAIN_PUBLICFEEDS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              خبرنامه‌ای برای نمایش وجود ندارد
             </Typography>
           </div>
         );

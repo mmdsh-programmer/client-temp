@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import { Collapse, Radio, Typography } from "@material-tailwind/react";
 import {
@@ -6,7 +7,6 @@ import {
   categoryMoveDestAtom,
   categoryQueryParamsAtom,
 } from "atom/category";
-import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
