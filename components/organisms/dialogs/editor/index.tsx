@@ -16,7 +16,6 @@ import EditorComponent from "@components/organisms/editor";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { Spinner } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
@@ -24,14 +23,14 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import { toast } from "react-toastify";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Editor = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
@@ -57,27 +56,16 @@ const Editor = ({ setOpen }: IProps) => {
     flowchart: useRef<IRemoteEditorRef>(null),
     latex: useRef<IRemoteEditorRef>(null),
   };
-  const { data: userInfo } = useGetUser();
-
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getSelectedDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
 
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
-    repoId(),
+    repoId,
     getSelectedDocument!.id,
-    !getSelectedVersion && repoId() !== 0,
+    !getSelectedVersion && repoId !== 0,
     true
   );
 
   const { data, isLoading, error, isSuccess } = useGetVersion(
-    repoId(),
+    repoId,
     getSelectedDocument!.id,
     getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
     getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
@@ -93,7 +81,7 @@ const Editor = ({ setOpen }: IProps) => {
     error: keyError,
     isSuccess: isSuccessKey,
   } = useGetKey(
-    repoId(),
+    repoId,
     getSelectedDocument?.publicKeyId
       ? +getSelectedDocument.publicKeyId
       : undefined
@@ -163,7 +151,7 @@ const Editor = ({ setOpen }: IProps) => {
       setVersionModalList(false);
       setDocumentShow(null);
       setSelectedDocument(null);
-    } else if (!getRepo) {
+    } else if (!repoId) {
       setVersionModalList(false);
     } else {
       setVersionModalList(true);
@@ -176,7 +164,7 @@ const Editor = ({ setOpen }: IProps) => {
     return null;
   }
 
-  if (showKey && !decryptedContent && getVersionData?.content) {
+  if (showKey && !decryptedContent && getVersionData) {
     return (
       <EditorKey
         isPending={isLoading || isLoadingKey}

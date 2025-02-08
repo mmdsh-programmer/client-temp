@@ -51,7 +51,6 @@ const MyRepoList = ({ archived }: IProps) => {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* {(!isLoading || search) && listLength ? <RepoSearch /> : null} */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

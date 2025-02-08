@@ -1,10 +1,7 @@
-/* eslint-disable no-nested-ternary */
-
 import React, { useMemo } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { useRecoilValue } from "recoil";
 import { repoSearchParamAtom } from "@atom/repository";
-import RepoSearch from "../../molecules/repoSearch";
 import { ERepoGrouping } from "@interface/enums";
 import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
@@ -74,14 +71,9 @@ const AllRepoList = () => {
   const isLoadingAllRepos = allRepos?.isLoading;
   const listLength = repoList?.pages[0].total;
 
-  return (
-    <div className="flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4">
-      {!isLoading || search ? <RepoSearch /> : null}
-      {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
-        </div>
-      ) : listLength ? (
+  const renderList = () => {
+    if (listLength)
+      return (
         <CardView
           isLoading={isLoadingAllRepos || isLoading}
           getRepoList={repoList}
@@ -90,8 +82,20 @@ const AllRepoList = () => {
           isFetchingNextPage={isFetchingNextPage}
           type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD}
         />
+      );
+    return (
+      <EmptyList type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD} />
+    );
+  };
+
+  return (
+    <div className="flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4">
+      {isLoading ? (
+        <div className="w-full h-full flex justify-center items-center">
+          <Spinner className="h-8 w-8" color="deep-purple" />
+        </div>
       ) : (
-        <EmptyList type={search ? EEmptyList.FILTER : EEmptyList.DASHBOARD} />
+        renderList()
       )}
     </div>
   );
