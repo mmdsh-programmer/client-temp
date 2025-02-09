@@ -3,15 +3,14 @@ import TableHead from "@components/molecules/tableHead";
 import TableCell from "@components/molecules/tableCell";
 import { Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import useGetPublicFeeds from "@hooks/feeds/useGetPublicFeeds";
 import PublicFeedMenu from "@components/molecules/publicFeedMenu";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
+import useGetPublicFeeds from "@hooks/feed/useGetPublicFeeds";
 
 const DomainPublicFeedList = () => {
-  const domainId = process.env.NEXT_PUBLIC_DOMAIN_ID as string;
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useGetPublicFeeds(+domainId, 10, true);
+  useGetPublicFeeds(10);
 
   const listLength = data?.pages.flatMap((page) => {
     return page.list;

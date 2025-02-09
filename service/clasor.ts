@@ -3791,18 +3791,18 @@ export const deleteRepoType = async (accessToken: string, id: number) => {
 
 export const getDomainFeeds = async (
   accessToken: string,
-  domainId: number,
+  domainUrl: string,
   offset: number,
   size: number
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IFeedItem>>
-    >(`domain/${domainId}/feeds`, {
+    >("domain/feeds", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        domainUrl
       },
-
       params: {
         offset,
         size,
@@ -3817,13 +3817,13 @@ export const getDomainFeeds = async (
 
 export const createDomainFeed = async (
   accessToken: string,
-  domainId: number,
+  domainUrl: string,
   name: string,
   content: string
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IFeedItem>>(
-      `domain/${domainId}/feeds`,
+      "domain/feeds",
       {
         name,
         content,
@@ -3831,6 +3831,7 @@ export const createDomainFeed = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "domainUrl": domainUrl
         },
       }
     );
@@ -3843,14 +3844,14 @@ export const createDomainFeed = async (
 
 export const updateDomainFeed = async (
   accessToken: string,
-  domainId: number,
+  domainUrl: string,
   feedId: number,
   name: string,
   content: string
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<IFeedItem>>(
-      `domain/${domainId}/feeds/${feedId}`,
+      `domain/feeds/${feedId}`,
       {
         name,
         content,
@@ -3858,6 +3859,7 @@ export const updateDomainFeed = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "domainUrl": domainUrl
         },
       }
     );
@@ -3870,15 +3872,16 @@ export const updateDomainFeed = async (
 
 export const deleteDomainFeed = async (
   accessToken: string,
-  domainId: number,
+  domainUrl: string,
   feedId: number
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<void>>(
-      `domain/${domainId}/feeds/${feedId}`,
+      `domain/feeds/${feedId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          domainUrl
         },
       }
     );

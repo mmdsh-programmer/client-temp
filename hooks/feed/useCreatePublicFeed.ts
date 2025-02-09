@@ -9,20 +9,19 @@ const useCreatePublicFeed = () => {
   return useMutation({
     mutationKey: ["create-public-feed"],
     mutationFn: async (values: {
-      domainId: number;
       name: string;
       content: string;
       callBack?: () => void;
     }) => {
-      const { domainId, name, content } = values;
-      const response = await createPublicFeedAction(domainId, name, content);
+      const {  name, content } = values;
+      const response = await createPublicFeedAction( name, content);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, domainId } = values;
+      const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getPublicFeeds-${domainId}`],
+        queryKey: ["getPublicFeeds"],
       });
       callBack?.();
     },

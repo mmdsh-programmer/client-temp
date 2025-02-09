@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const PublicFeedDeleteDialog = ({ setOpen, feed }: IProps) => {
-  const domainId = process.env.NEXT_PUBLIC_DOMAIN_ID as string;
 
   const deletePublicFeed = useDeletePublicFeed();
 
@@ -20,7 +19,6 @@ const PublicFeedDeleteDialog = ({ setOpen, feed }: IProps) => {
 
   const handleDelete = async () => {
     deletePublicFeed.mutate({
-      domainId: +domainId,
       feedId: feed.id,
       callBack: () => {
         toast.error(`خبرنامه ${feed.name} حذف شد`);

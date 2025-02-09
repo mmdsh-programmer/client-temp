@@ -90,6 +90,7 @@ export const getMe = async () => {
     access_token: string;
     refresh_token: string;
   };
+
   try {
     const userData = await userInfo(`${tokenInfo.access_token}`);
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);

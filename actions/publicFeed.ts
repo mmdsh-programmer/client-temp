@@ -11,15 +11,19 @@ import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
 
 export const getPublicFeedsAction = async (
-  domainId: number,
   offset: number,
   size: number
 ) => {
   const userInfo = await getMe();
+  // const domain = headers().get("host");
+  // if (!domain) {
+  //   throw new Error("Domain is not found");
+  // }
+  const domain = "http://zahraesp/ir";
   try {
     const response = await getDomainFeeds(
       userInfo.access_token,
-      domainId,
+      domain,
       offset,
       size
     );
@@ -31,15 +35,19 @@ export const getPublicFeedsAction = async (
 };
 
 export const createPublicFeedAction = async (
-  domainId: number,
   name: string,
   content: string
 ) => {
   const userInfo = await getMe();
+  // const domain = headers().get("host");
+  // if (!domain) {
+  //   throw new Error("Domain is not found");
+  // }
+  const domain = "http://zahraesp/ir";
   try {
     const response = await createDomainFeed(
       userInfo.access_token,
-      domainId,
+      domain,
       name,
       content
     );
@@ -51,16 +59,20 @@ export const createPublicFeedAction = async (
 };
 
 export const updatePublicFeedAction = async (
-  domainId: number,
   feedId: number,
   name: string,
   content: string
 ) => {
   const userInfo = await getMe();
+  // const domain = headers().get("host");
+  // if (!domain) {
+  //   throw new Error("Domain is not found");
+  // }
+  const domain = "http://zahraesp/ir";
   try {
     const response = await updateDomainFeed(
       userInfo.access_token,
-      domainId,
+      domain,
       feedId,
       name,
       content
@@ -73,14 +85,18 @@ export const updatePublicFeedAction = async (
 };
 
 export const deletePublicFeedAction = async (
-  domainId: number,
   feedId: number
 ) => {
   const userInfo = await getMe();
+  // const domain = headers().get("host");
+  // if (!domain) {
+  //   throw new Error("Domain is not found");
+  // }
+  const domain = "http://zahraesp/ir";
   try {
     const response = await deleteDomainFeed(
       userInfo.access_token,
-      domainId,
+      domain,
       feedId
     );
 

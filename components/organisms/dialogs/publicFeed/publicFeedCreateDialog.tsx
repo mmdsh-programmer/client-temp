@@ -17,7 +17,6 @@ interface IProps {
 }
 
 const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
-  const domainId = process.env.NEXT_PUBLIC_DOMAIN_ID as string;
   const createPublicFeed = useCreatePublicFeed();
 
   const form = useForm<IForm>();
@@ -41,7 +40,6 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     createPublicFeed.mutate({
-      domainId: +domainId,
       name: dataForm.name,
       content: dataForm.content,
       callBack: () => {

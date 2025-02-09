@@ -9,19 +9,18 @@ const useDeletePublicFeed = () => {
   return useMutation({
     mutationKey: ["delete-public-feed"],
     mutationFn: async (values: {
-      domainId: number;
       feedId: number;
       callBack?: () => void;
     }) => {
-      const { domainId, feedId } = values;
-      const response = await deletePublicFeedAction(domainId, feedId);
+      const { feedId } = values;
+      const response = await deletePublicFeedAction(feedId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, domainId } = values;
+      const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getPublicFeeds-${domainId}`],
+        queryKey: ["getPublicFeeds"],
       });
       callBack?.();
     },

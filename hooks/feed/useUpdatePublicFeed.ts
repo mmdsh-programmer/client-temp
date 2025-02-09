@@ -9,21 +9,20 @@ const useUpdatePublicFeed = () => {
   return useMutation({
     mutationKey: ["update-public-feed"],
     mutationFn: async (values: {
-      domainId: number;
       feedId: number;
       name: string;
       content: string;
       callBack?: () => void;
     }) => {
-      const { domainId, feedId, name, content } = values;
-      const response = await updatePublicFeedAction(domainId, feedId, name, content);
+      const { feedId, name, content } = values;
+      const response = await updatePublicFeedAction(feedId, name, content);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, domainId } = values;
+      const { callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getPublicFeeds-${domainId}`],
+        queryKey: ["getPublicFeeds"],
       });
       callBack?.();
     },
@@ -33,4 +32,4 @@ const useUpdatePublicFeed = () => {
   });
 };
 
-export default useUpdatePublicFeed; 
+export default useUpdatePublicFeed;
