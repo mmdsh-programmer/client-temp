@@ -27,12 +27,13 @@ const Feeds = () => {
   ];
 
   return (
-    <section className="w-full flex items-center gap-4 bg-white">
+    <section className="w-full min-h- flex items-center gap-4 bg-white">
       <PublishTab
         tabList={tabList}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         tabHeaderClassName="w-full"
+        tabPanelClassName="!h-[calc(100vh-250px)] min-h-[unset]"
       />
     </section>
   );

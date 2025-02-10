@@ -10,6 +10,7 @@ interface IProps {
   defaultOption: string;
   className?: string;
   disabled?: boolean;
+  singleSelect?: boolean;
 }
 
 const SelectBox = ({
@@ -18,7 +19,8 @@ const SelectBox = ({
   setSelectedOptions,
   defaultOption,
   className,
-  disabled
+  disabled,
+  singleSelect = false,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -43,13 +45,18 @@ const SelectBox = ({
   }, []);
 
   const handleOptionChange = (option: string) => {
-    setSelectedOptions(
-      selectedOptions.includes(option)
-        ? selectedOptions.filter((selected) => {
-            return selected !== option;
-          })
-        : [...selectedOptions, option]
-    );
+    if (singleSelect) {
+      setSelectedOptions([option]);
+      setIsOpen(false);
+    } else {
+      setSelectedOptions(
+        selectedOptions.includes(option)
+          ? selectedOptions.filter((selected) => {
+              return selected !== option;
+            })
+          : [...selectedOptions, option]
+      );
+    }
   };
 
   return (
@@ -108,7 +115,7 @@ const SelectBox = ({
                         className: "p-1",
                       }}
                       placeholder="checkbox"
-                      className=" p-0"
+                      className="p-0"
                       checked={selectedOptions.includes(option.value)}
                       onChange={() => {
                         return handleOptionChange(option.value);
@@ -116,7 +123,7 @@ const SelectBox = ({
                       color="deep-purple"
                       crossOrigin=""
                     />
-                    <Typography className="select_option__text truncate text-right text-primary ">
+                    <Typography className="select_option__text truncate text-right text-primary">
                       {option.label}
                     </Typography>
                   </div>

@@ -5,18 +5,13 @@ import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { handleClientSideHookError } from "@utils/error";
 
-const useGetPublicFeeds = (
-  domainId: number,
-  size: number,
-  enabled?: boolean
-) => {
+const useGetPublicFeeds = (size: number, enabled?: boolean) => {
   return useInfiniteQuery({
     queryKey: ["public-feeds"],
     queryFn: async ({ pageParam }) => {
       const response = await getDomainPublicFeedsAction(
-        domainId,
         (pageParam - 1) * size,
-        size,
+        size
       );
       handleClientSideHookError(response as IActionError);
       return response as IListResponse<IFeedItem>;

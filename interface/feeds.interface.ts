@@ -1,5 +1,7 @@
 export interface IFeedItem {
   id: number;
+  imageUrl?: string;
+  link: string;
   version: number;
   timelineId: number;
   entityId: number;
