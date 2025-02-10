@@ -53,9 +53,6 @@ export const deletePublishLinkAction = async (repoId: number) => {
     // revalidate all links related to repository publish cache if exists
     revalidateTag(`rp-ph-${repoId}`);
 
-    // revalidate repository publish cache if exists
-    revalidateTag(`rp-${repoId}`);
-
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
