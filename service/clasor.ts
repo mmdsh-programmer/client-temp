@@ -730,6 +730,7 @@ export const transferOwnershipRepository = async (
 };
 
 export const subscribeToRepository = async (
+  domain: string,
   accessToken: string,
   repoId: number,
   isDirectAccess?: boolean
@@ -741,6 +742,7 @@ export const subscribeToRepository = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          domainUrl: domain,
         },
         params: {
           isDirectAccess,
@@ -755,6 +757,7 @@ export const subscribeToRepository = async (
 };
 
 export const unsubscribeFromRepository = async (
+  domain: string,
   accessToken: string,
   repoId: number,
   isDirectAccess?: boolean
@@ -765,6 +768,7 @@ export const unsubscribeFromRepository = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          domainUrl: domain,
         },
         params: {
           isDirectAccess,

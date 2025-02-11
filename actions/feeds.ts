@@ -15,7 +15,7 @@ export const getDomainPublicFeedsAction = async (
     throw new Error("Domain is not found");
   }
   try {
-    const result = await getDomainPublicFeeds(`https://${domain}`, offset, size);
+    const result = await getDomainPublicFeeds(domain, offset, size);
     return result;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -34,7 +34,7 @@ export const getDomainPrivateFeedsAction = async (
   }
   try {
     const result = await getDomainPrivateFeeds(
-      `https://${domain}`,
+      domain,
       userInfo.access_token,
       offset,
       size,

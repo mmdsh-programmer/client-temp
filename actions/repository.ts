@@ -234,7 +234,7 @@ export const deleteRepoAction = async (repoId: number) => {
 
     // revalidate all links related to repository publish cache if exists
     revalidateTag(`rp-ph-${repoId}`);
-    
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -396,8 +396,13 @@ export const subscribeToRepoAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await subscribeToRepository(
+      domain,
       userInfo.access_token,
       repoId,
       isDirectAccess
@@ -414,8 +419,13 @@ export const unsubscribeFromRepoAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await unsubscribeFromRepository(
+      domain,
       userInfo.access_token,
       repoId,
       isDirectAccess
