@@ -178,11 +178,9 @@ export const publicVersionAction = async (
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const domainInfo = await getCustomPostByDomain(domain);
 
   try {
     const response = await publicVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,
