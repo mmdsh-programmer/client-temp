@@ -1,3 +1,4 @@
+import ClientSideProvider from "provider/clientSideProvider";
 import ConnectRemoteEditor from "@components/organisms/publish/connectRemoteEditor";
 import { EDocumentTypes } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
@@ -30,7 +31,9 @@ const PublishVersionContent = async ({ version, document }: IProps) => {
             />
           </>
         ) : (
-          <ConnectRemoteEditor versionData={version} />
+          <ClientSideProvider>
+            <ConnectRemoteEditor versionData={version} />
+          </ClientSideProvider>
         )}
         <PublishFeeback postId={version.postId} />
         <PublishBottomNav />
