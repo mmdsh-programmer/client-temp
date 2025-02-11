@@ -96,7 +96,11 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           },
           publicUserGroupHash: repoGroupHash() || undefined,
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
-          repositoryId: repoId || undefined,
+          repositoryId:
+            currentPath === "/admin/sharedDocuments" ||
+            sharedDocuments === "true"
+              ? selectedDocument.id
+              : repoId || undefined,
           resourceId: selectedCategory?.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,

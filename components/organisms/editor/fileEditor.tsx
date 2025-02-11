@@ -54,7 +54,7 @@ const FileEditor = () => {
     } else {
       setShowFilePicker(true);
     }
-  }, []);
+  }, [editorData]);
 
   const userGroupHash = () => {
     if (currentPath === "/admin/myDocuments") {

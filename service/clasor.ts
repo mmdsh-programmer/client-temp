@@ -2922,7 +2922,7 @@ export const createBlockVersion = async (
 export const sendFeedback = async (
   accessToken: string,
   content: string,
-  fileHashList: string[]
+  fileHashList: { hash: string; fileName: string; fileExtension: string }[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
