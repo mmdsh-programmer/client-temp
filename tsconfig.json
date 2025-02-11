@@ -60,6 +60,9 @@
       ],
       "@mock/*": [
         "./mock/*"
+      ],
+      "@dataJson/*": [
+        "./dataJson/*"
       ]
     },
     "forceConsistentCasingInFileNames": true
