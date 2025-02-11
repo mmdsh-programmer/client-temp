@@ -22,7 +22,7 @@ const MainPage = async ({ params }: MainPageProps) => {
     const { data } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`]);
-    if (domainInfo.enablePublishPage && false) {
+    if (domainInfo.enablePublishPage) {
       const time = Date.now();
       const { projectName, projectDescription, heroImage, theme } = domainInfo;
       return (
