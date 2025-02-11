@@ -17,7 +17,7 @@ const LoginButton = () => {
   return (
     <button
       onClick={handleRedirect}
-      className="btn btn-white"
+      className="btn btn-white px-4 py-2"
       disabled={loading}
     >
       ورود

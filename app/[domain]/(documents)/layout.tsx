@@ -7,7 +7,7 @@ import { getCustomPostByDomain } from "@service/social";
 
 interface IProps {
   children: React.ReactNode;
-  params: { id: string; name: string; domain: string };
+  params: { id: string; name: string; domain: string,  };
 }
 
 const PublishSlugLayout = async ({ children, params }: IProps) => {
@@ -16,6 +16,7 @@ const PublishSlugLayout = async ({ children, params }: IProps) => {
     const data = await getCustomPostByDomain(domain);
 
     const { projectName, logo } = JSON.parse(data.data) as ICustomPostData;
+
 
     return (
       <PublishSlugTemplate

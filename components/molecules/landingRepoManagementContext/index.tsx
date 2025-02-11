@@ -1,6 +1,6 @@
 import React from "react";
 
-const RepoManagementContext = () => {
+const LandingRepoManagementContext = () => {
   return (
     <div className="clasor-attributes__item-content w-full">
       <h3 className="clasor-attributes__item-title">مدیریت مخزن</h3>
@@ -16,4 +16,4 @@ const RepoManagementContext = () => {
   );
 };
 
-export default RepoManagementContext;
+export default LandingRepoManagementContext;

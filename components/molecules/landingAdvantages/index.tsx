@@ -3,13 +3,17 @@
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { StacksIcon, UrgencyIcon, UsersIcon } from "@components/atoms/landingSvg/landingSvg";
+import {
+  StacksIcon,
+  UrgencyIcon,
+  UsersIcon,
+} from "@components/atoms/landingSvg/landingSvg";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Pagination } from "swiper/modules";
 import React from "react";
 
-const Advantages = () => {
+const LandingAdvantages = () => {
   return (
     <section className="landing-advantages bg-white">
       <div className="container max-w-[1108px] py-[70px]">
@@ -71,11 +75,10 @@ const Advantages = () => {
             </div>
           </SwiperSlide>
         </Swiper>
-
         <div className="advantages-slider__pagination" />
       </div>
     </section>
   );
 };
 
-export default Advantages;
+export default LandingAdvantages;

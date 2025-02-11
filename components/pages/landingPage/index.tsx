@@ -1,11 +1,10 @@
-import Advantages from "./advantages";
-import AttributeWrapper from "./attributeWrapper";
 import ClientSideProvider from "provider/clientSideProvider";
-import Customers from "./customers";
-import Footer from "./footer";
-import Hero from "./hero";
+import LandingAdvantages from "@components/molecules/landingAdvantages";
+import LandingAttributeWrapper from "@components/organisms/landingAttributeWrapper";
+import LandingFooter from "@components/molecules/landingFooter";
+import LandingHero from "../../molecules/landingHero";
+import LandingSupporters from "@components/molecules/landingSupporters";
 import React from "react";
-import Supporters from "./supporters";
 
 const Landing = () => {
 
@@ -13,12 +12,11 @@ const Landing = () => {
   return (
     <main className="clasor-landing h-[200vh]">
       <ClientSideProvider>
-        <Hero />
-        <AttributeWrapper />
-        <Advantages />
-        <Customers />
-        <Supporters />
-        <Footer />
+        <LandingHero />
+        <LandingAttributeWrapper />
+        <LandingAdvantages />
+        <LandingSupporters />
+        <LandingFooter />
       </ClientSideProvider>
     </main>
   );

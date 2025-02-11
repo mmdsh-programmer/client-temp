@@ -1,6 +1,6 @@
 import React from "react";
 
-const AdvancedFeaturesContext = () => {
+const LandingAdvancedFeaturesContext = () => {
   return (
     <div className="clasor-attributes__item-content w-full">
       <h3 className="clasor-attributes__item-title">امکانات پیشرفته روی سند</h3>
@@ -17,4 +17,4 @@ const AdvancedFeaturesContext = () => {
   );
 };
 
-export default AdvancedFeaturesContext;
+export default LandingAdvancedFeaturesContext;

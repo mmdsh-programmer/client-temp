@@ -1,6 +1,6 @@
 import React from "react";
 
-const DocManagementContext = () => {
+const LandingDocManagementContext = () => {
   return (
     <div className="clasor-attributes__item-content w-full">
       <h3 className="clasor-attributes__item-title">مدیریت اسناد</h3>
@@ -13,4 +13,4 @@ const DocManagementContext = () => {
   );
 };
 
-export default DocManagementContext;
+export default LandingDocManagementContext;

@@ -1,18 +1,18 @@
-import AccessManagementContext from "./features-context/accessManagementContext";
-import AdvancedFeaturesContext from "./features-context/advancedFeaturesContext";
-import DocManagementContext from "./features-context/docManagementContext";
+import LandingAccessManagementContext from "../landingAccessManagementContext";
+import LandingAdvancedFeaturesContext from "../landingAdvancedFeaturesContext";
+import LandingDocManagementContext from "../landingDocManagementContext";
+import LandingRepoManagementContext from "../landingRepoManagementContext";
+import LandingVariousEditorsContext from "../landingVariousEditorsContext";
 import Lottie from "react-lottie";
 import React from "react";
-import RepoManagementContext from "./features-context/repoManagementContext";
-import VariousEditorsContext from "./features-context/variousEditorsContext";
-import accessManagement from "./data/access-management.json";
-import advanceFeatures from "./data/advance-features.json";
-import documentManagement from "./data/document-management.json";
-import { featuresDefaultOptions } from "./desktopAttributes";
-import repoManagement from "./data/repo-management.json";
-import variousEditors from "./data/various-editors.json";
+import accessManagement from "@dataJson/access-management.json";
+import advanceFeatures from "@dataJson/advance-features.json";
+import documentManagement from "@dataJson/document-management.json";
+import { featuresDefaultOptions } from "@components/molecules/landingDesktopAttribute";
+import repoManagement from "@dataJson/repo-management.json";
+import variousEditors from "@dataJson/various-editors.json";
 
-const Attributes = () => {
+const LandingMobileAttributes = () => {
   return (
     <section id="clasor-attributes" className="landing-attributes">
       <div className="container max-w-[1108px] py-[70px]">
@@ -32,7 +32,7 @@ const Attributes = () => {
             </div>
 
             <div className="md:w-[50vw] w-full">
-              <RepoManagementContext />
+              <LandingRepoManagementContext />
             </div>
           </article>
 
@@ -49,7 +49,7 @@ const Attributes = () => {
             </div>
 
             <div className="md:w-[50vw] w-full">
-              <DocManagementContext />
+              <LandingDocManagementContext />
             </div>
           </article>
 
@@ -66,7 +66,7 @@ const Attributes = () => {
             </div>
 
             <div className="md:w-[50vw] w-full">
-              <VariousEditorsContext />
+              <LandingVariousEditorsContext />
             </div>
           </article>
 
@@ -83,7 +83,7 @@ const Attributes = () => {
             </div>
 
             <div className="md:w-[50vw] w-full">
-              <AccessManagementContext />
+              <LandingAccessManagementContext />
             </div>
           </article>
 
@@ -100,7 +100,7 @@ const Attributes = () => {
             </div>
 
             <div className="md:w-[50vw] w-full">
-              <AdvancedFeaturesContext />
+              <LandingAdvancedFeaturesContext />
             </div>
           </article>
         </div>
@@ -109,4 +109,4 @@ const Attributes = () => {
   );
 };
 
-export default Attributes;
+export default LandingMobileAttributes;

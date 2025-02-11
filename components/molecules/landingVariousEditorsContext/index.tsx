@@ -1,6 +1,6 @@
 import React from "react";
 
-const VariousEditorsContext = () => {
+const LandingVariousEditorsContext = () => {
   return (
     <div className="clasor-attributes__item-content w-full">
       <h3 className="clasor-attributes__item-title">ویرایشگر متنوع</h3>
@@ -22,4 +22,4 @@ const VariousEditorsContext = () => {
   );
 };
 
-export default VariousEditorsContext;
+export default LandingVariousEditorsContext;

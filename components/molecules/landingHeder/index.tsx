@@ -1,16 +1,13 @@
-import LoginButton from "./loginButton";
+import LoginButton from "@components/molecules/loginButton";
 import { Logo } from "@components/atoms/landingSvg/landingSvg";
 import React from "react";
 
-const Header = () => {
-
-
+const LandingHeder = () => {
   return (
     <header className="landing-header">
       <div className="container max-w-[1220px]">
         <div className="flex flex-wrap pt-[30px] justify-between">
           <Logo />
-
           <div className="landing-header__actions flex gap-x-[15px] items-center xs:items-start">
               <LoginButton />
           </div>
@@ -20,4 +17,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default LandingHeder;

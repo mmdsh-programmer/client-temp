@@ -1,6 +1,6 @@
 import React from "react";
 
-const AccessManagementContext = () => {
+const LandingAccessManagementContext = () => {
   return (
     <div className="clasor-attributes__item-content w-full">
       <h3 className="clasor-attributes__item-title">
@@ -26,4 +26,4 @@ const AccessManagementContext = () => {
   );
 };
 
-export default AccessManagementContext;
+export default LandingAccessManagementContext;

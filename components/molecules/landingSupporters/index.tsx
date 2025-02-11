@@ -9,7 +9,7 @@ import { Autoplay } from "swiper/modules";
 import Image from "next/image";
 import React from "react";
 
-const Supporters = () => {
+const LandingSupporters = () => {
   return (
     <section className="landing-supporters pt-12 pb-[82px] bg-white">
       <div className="container max-w-[1108px]">
@@ -86,7 +86,7 @@ const Supporters = () => {
             <div className="customers-slider__image-container">
               <Image
                 layout="fill"
-                src="/pasargad_logo"
+                src="/pasargad_logo.png"
                 alt="pasargad"
                 className="customers-slider__image"
               />
@@ -127,7 +127,7 @@ const Supporters = () => {
             <div className="customers-slider__image-container">
               <Image
                 layout="fill"
-                src="/pasargad_logo"
+                src="/pasargad_logo.png"
                 alt="pasargad"
                 className="customers-slider__image"
               />
@@ -170,4 +170,4 @@ const Supporters = () => {
   );
 };
 
-export default Supporters;
+export default LandingSupporters;
