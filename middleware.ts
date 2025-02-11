@@ -88,7 +88,7 @@ function convertOldPublishUrl(url: NextURL) {
   const repoId = slugs[2];
   const repoName = slugs[3];
 
-  if(Number.isNaN(Number(toEnglishDigit(repoId)))){
+  if(Number.isNaN(Number(toEnglishDigit(repoId))) || !Number.isNaN(Number(toEnglishDigit(repoName)))){
     return;
   }
 
