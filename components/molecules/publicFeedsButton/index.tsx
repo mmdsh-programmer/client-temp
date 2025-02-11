@@ -4,7 +4,7 @@ import React from "react";
 
 const PublicFeedsButton = () => {
   return (
-    <Link href="/feeds">
+    <Link className="feeds-button" href="/feeds">
       <FeedIcon className="stroke-blue-gray-700 w-5 h-5 xs:w-6 xs:h-6" />
     </Link>
   );
