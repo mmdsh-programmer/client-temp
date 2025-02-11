@@ -26,7 +26,7 @@ const refreshCookieHeader = async (
   clientSecret: string
 ) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
-  const { access_token, refresh_token } = response;
+  const { access_token, refresh_token, expires_in } = response;
   // get domain and find proper custom post base on domain
   const domain = headers().get("host");
   if (!domain) {
@@ -40,6 +40,7 @@ const refreshCookieHeader = async (
     JSON.stringify({
       access_token,
       refresh_token,
+      expiresAt: +new Date() + (expires_in * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
@@ -55,6 +56,12 @@ const refreshCookieHeader = async (
   });
 
   const userData = await userInfo(access_token);
+  const redisClient = await getRedisClient();
+  await redisClient?.set(
+    `user:${access_token}`,
+    JSON.stringify(userData),
+    { EX: expires_in }
+  );
   const mySocialProfile = await getMySocialProfile(access_token);
   return {
     ...userData,
@@ -89,9 +96,18 @@ export const getMe = async () => {
   ) as {
     access_token: string;
     refresh_token: string;
+    expiresAt: number;
   };
   try {
-    const userData = await userInfo(`${tokenInfo.access_token}`);
+    console.log(tokenInfo.expiresAt, +new Date());
+    if(tokenInfo.expiresAt < +new Date()){
+      return refreshCookieHeader(
+        tokenInfo.refresh_token,
+        clientId,
+        clientSecret
+      );
+    }
+    const userData = await userInfo(tokenInfo.access_token);
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
     const userDataWithPrivate = {
       ...userData,
@@ -152,17 +168,20 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 
   const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
     await getCustomPostByDomain(domain);
-  const { access_token, refresh_token } = await getPodAccessToken(
+  const { access_token, refresh_token, expires_in } = await getPodAccessToken(
     code,
     redirectUrl,
     clientId,
     clientSecret
   );
 
+  
+
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
+      expiresAt: +new Date() + (expires_in * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey

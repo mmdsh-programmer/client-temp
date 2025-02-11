@@ -164,14 +164,14 @@ export const userInfo = async (accessToken: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    Logger.info({
+    Logger.warn({
       type: "Redis cache data",
       data: cachedUser,
     });
     return JSON.parse(cachedUser);
   }
 
-  try {
+  try {  
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
       {
@@ -179,12 +179,6 @@ export const userInfo = async (accessToken: string) => {
           Authorization: `Bearer ${accessToken}`,
         },
       }
-    );
-
-    await redisClient?.set(
-      `user:${accessToken}`,
-      JSON.stringify(response.data.data),
-      { EX: 840 }
     );
 
     return response.data.data;

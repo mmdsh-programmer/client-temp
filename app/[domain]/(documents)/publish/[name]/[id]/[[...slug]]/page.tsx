@@ -63,7 +63,7 @@ export default async function PublishContentPage({
     }
 
     if (!enSlug?.length) {
-      await generateCachePageTag([`rp-${repository.id}`,`rp-ph-${repository.id}`,`i-${domain}`]);
+      await generateCachePageTag([`rp-ph-${repository.id}`,`i-${domain}`]);
       return <RepositoryInfo repository={repository} />;
     }
 

@@ -195,9 +195,6 @@ export const editRepoAction = async (
     // revalidate all links related to repository publish cache if exists
     revalidateTag(`rp-ph-${repoId}`);
 
-    // revalidate repository publish cache if exists
-    revalidateTag(`rp-${repoId}`);
-
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -234,6 +231,9 @@ export const deleteRepoAction = async (repoId: number) => {
   try {
     const response = await deleteRepository(userInfo.access_token, repoId);
 
+    // revalidate all links related to repository publish cache if exists
+    revalidateTag(`rp-ph-${repoId}`);
+    
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
