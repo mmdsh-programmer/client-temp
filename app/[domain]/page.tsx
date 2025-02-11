@@ -23,13 +23,9 @@ const MainPage = async ({ params }: MainPageProps) => {
     const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`]);
     if (domainInfo.enablePublishPage) {
-      const time = Date.now();
       const { projectName, projectDescription, heroImage, theme } = domainInfo;
       return (
         <>
-          <h1 className="fixed top-0 left-0 font-bold text-red-500 z-50">
-            {time}
-          </h1>
           <PublishHeader projectName={projectName} logo={heroImage} domain={domain} />
           <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
             <div className="w-full mt-8 bg-primary px-4 py-8 rounded-md">

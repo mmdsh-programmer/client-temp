@@ -12,7 +12,7 @@ interface IProps{
     className?: string;
 }
 const BubbleItems = ({ children, className }: IProps) => {
-  const [_, setRerender] = useState(0);
+  const [, setRerender] = useState(0);
 
   return (
     <div
