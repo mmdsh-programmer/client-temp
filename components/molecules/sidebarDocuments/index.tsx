@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
 import { categoryAtom } from "@atom/category";
-import { DocumentIcon } from "@components/atoms/icons";
+import { MyDocumentsIcon, SharedDocumentsIcon } from "@components/atoms/icons";
 import { selectedDocumentAtom } from "@atom/document";
 
 const SidebarDocuments = () => {
@@ -57,7 +57,7 @@ const SidebarDocuments = () => {
             return handleNavigation("/admin/myDocuments");
           }}
         >
-          <DocumentIcon className="h-6 w-6 stroke-icon-hover" />
+          <MyDocumentsIcon className="h-6 w-6 stroke-icon-hover" />
           <Typography placeholder="sidebar-text" className="title_t3">
             سندهای من
           </Typography>
@@ -81,7 +81,7 @@ const SidebarDocuments = () => {
             return handleNavigation("/admin/sharedDocuments");
           }}
         >
-          <DocumentIcon className="h-6 w-6 stroke-icon-hover" />
+          <SharedDocumentsIcon className="h-6 w-6 stroke-icon-hover" />
           <Typography placeholder="sidebar-text" className="title_t3">
             سندهای اشتراکی
           </Typography>

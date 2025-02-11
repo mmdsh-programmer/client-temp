@@ -4262,6 +4262,62 @@ export const HeroIcon = (props: IProps) => {
   );
 };
 
+export const MyDocumentsIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M18.414 6.414L15.586 3.586C15.211 3.211 14.702 3 14.172 3H7C5.895 3 5 3.895 5 5V19C5 20.105 5.895 21 7 21H17C18.105 21 19 20.105 19 19V7.828C19 7.298 18.789 6.789 18.414 6.414V6.414Z"
+        stroke="#B4B4B9"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M19 8H15C14.448 8 14 7.552 14 7V3"
+        stroke="#B4B4B9"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const SharedDocumentsIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M8.3741 19.6005H5.58594C4.48094 19.6005 3.58594 18.7055 3.58594 17.6005V3.60046C3.58594 2.49546 4.48094 1.60046 5.58594 1.60046H12.7579C13.2879 1.60046 13.7969 1.81146 14.1719 2.18646L16.9999 5.01446C17.3749 5.38946 17.5859 5.89846 17.5859 6.42846V9.97113M18.9634 18.8973L19.5177 18.343C20.6328 17.2719 20.7281 15.5202 19.7358 14.3344C19.2162 13.7557 18.4815 13.4161 17.7041 13.3952C16.9266 13.3744 16.1748 13.6742 15.625 14.2243L14.9578 14.8916M12.9549 16.8964L12.4007 17.4507C11.2856 18.5218 11.1903 20.2735 12.1826 21.4593C12.7022 22.0381 13.4368 22.3777 14.2143 22.3985C14.9917 22.4193 15.7435 22.1195 16.2933 21.5694L16.9606 20.9021M14.2905 19.5656L17.6279 16.2282"
+        stroke="#B4B4B9"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M17.5859 6.60046H13.5859C13.0339 6.60046 12.5859 6.15246 12.5859 5.60046V1.60046"
+        stroke="#B4B4B9"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
 export const DocumentIcon = (props: IProps) => {
   const { className } = props;
   return (
