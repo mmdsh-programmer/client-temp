@@ -17,7 +17,11 @@ const SubscribePage = ({ hash, hasPassword }: IProps) => {
   const { data: userInfo, isLoading } = useGetUser();
 
   if (isLoading) {
-    return <SpinnerText text="در حال بررسی اطلاعات" />;
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <SpinnerText text="در حال بررسی اطلاعات" />;
+      </div>
+    );
   }
 
   if (!userInfo) {

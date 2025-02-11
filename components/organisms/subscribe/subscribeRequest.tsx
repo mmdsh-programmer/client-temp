@@ -22,7 +22,7 @@ const SubscribeRequest = ({ hash }: IProps) => {
   const fetchSubscribe = () => {
     if (hasFetched.current) return;
     hasFetched.current = true;
-    
+
     subscribeHook.mutate({
       hash,
       callBack: (result) => {
@@ -43,7 +43,11 @@ const SubscribeRequest = ({ hash }: IProps) => {
   }, []);
 
   if (subscribeHook.isPending) {
-    return <SpinnerText text="در حال بررسی اطلاعات" />;
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <SpinnerText text="در حال بررسی اطلاعات" />;
+      </div>
+    );
   }
 
   if (subscribeHook.isError) {
