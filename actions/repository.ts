@@ -211,7 +211,7 @@ export const createRepoAction = async (name: string, description?: string) => {
     const response = await createRepo(
       userInfo.access_token,
       name,
-      type[0], // TO_DOO: it should not be array
+      type, // TO_DOO: it should not be array
       description,
     );
     return response;

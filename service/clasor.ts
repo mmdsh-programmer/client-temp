@@ -618,7 +618,7 @@ export const restoreRepository = async (
 export const createRepo = async (
   accessToken: string,
   name: string,
-  repoTypes: string,
+  repoTypes: string[],
   description?: string,
 ) => {
   try {
