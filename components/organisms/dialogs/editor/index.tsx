@@ -164,7 +164,7 @@ const Editor = ({ setOpen }: IProps) => {
     return null;
   }
 
-  if (showKey && !decryptedContent && getVersionData) {
+  if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
     return (
       <EditorKey
         isPending={isLoading || isLoadingKey}
