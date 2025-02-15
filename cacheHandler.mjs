@@ -1,5 +1,4 @@
 import { CacheHandler } from "@neshca/cache-handler";
-import { PHASE_PRODUCTION_BUILD } from "next/constants.js";
 import { createCluster } from "redis";
 import createClusterHandler from "@neshca/cache-handler/experimental-redis-cluster";
 
@@ -10,8 +9,8 @@ export const getClient = async () => {
       return cluster;
     }
 
-    const rootNodes = process.env.REDIS_PORT.split(",").map((item) => {
-      return { url: `redis://${process.env.REDIS_NODE}:${item}` };
+    const rootNodes = process.env.REDIS_NODES.split(",").map((item) => {
+      return { url: `redis://${item}` };
     });
     cluster = createCluster({
       rootNodes,
@@ -71,17 +70,13 @@ export const getClient = async () => {
     return null;
   }
 };
-/* from https://caching-tools.github.io/next-shared-cache/redis */
 CacheHandler.onCreation(async () => {
-  // use redis cluster during build could cause issue https://github.com/caching-tools/next-shared-cache/issues/284#issuecomment-1919145094
-  if (PHASE_PRODUCTION_BUILD !== process.env.NEXT_PHASE) {
     try {
       // Create a Redis cluster.
       cluster = await getClient();
     } catch (error) {
       console.warn("Failed to create Redis cluster:", error);
     }
-  }
 
   /** @type {import("@neshca/cache-handler").Handler | null} */
   let redisHandler = null;
