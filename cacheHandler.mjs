@@ -9,7 +9,7 @@ export const getClient = async () => {
       return cluster;
     }
 
-    const rootNodes = process.env.REDIS_NODES.split(",").map((item) => {
+    const rootNodes = process.env.REDIS_NODE.split(",").map((item) => {
       return { url: `redis://${item}` };
     });
     cluster = createCluster({
