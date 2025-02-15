@@ -5,6 +5,7 @@ import LoginPanelButton from "@components/molecules/loginPanelButton";
 import ProfileMenu from "@components/molecules/profileMenu";
 import PublishSearchButton from "@components/molecules/publishSearchButton";
 import React from "react";
+import PublicFeedsButton from "@components/molecules/publicFeedsButton";
 
 // import PublicFeedsButton from "@components/molecules/publicFeedsButton";
 
@@ -44,7 +45,7 @@ const PublishHeader = ({ projectName, logo, domain }: IProps) => {
             <ProfileMenu
               renderSideButton={
                 <>
-                  {/* <PublicFeedsButton /> */}
+                  <PublicFeedsButton />
                   <PublishSearchButton />
                   <LoginPanelButton />
                 </>

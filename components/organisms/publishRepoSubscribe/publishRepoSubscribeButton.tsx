@@ -53,8 +53,8 @@ const PublishRepoSubscribeButton = ({
   };
 
   const renderButton = () => {
-    switch (subscriptionStatus?.status.userFollowRequestStatus) {
-      case ERepoSubscriptionStatus.FOLLOW_REQUEST_ACCEPTED:
+    switch (subscriptionStatus?.status) {
+      case ERepoSubscriptionStatus.ACCEPTED:
         return (
           <LoadingButton
             className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
@@ -65,7 +65,7 @@ const PublishRepoSubscribeButton = ({
             درخواست دریافت اعلانات تایید شده - لغو درخواست
           </LoadingButton>
         );
-      case ERepoSubscriptionStatus.FOLLOW_REQUEST_SENT:
+      case ERepoSubscriptionStatus.PENDING:
         return (
           <LoadingButton
             className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
@@ -76,7 +76,7 @@ const PublishRepoSubscribeButton = ({
             درخواست دریافت اعلانات ارسال شده - لغو درخواست
           </LoadingButton>
         );
-      case ERepoSubscriptionStatus.FOLLOW_REQUEST_REJECTED:
+      case ERepoSubscriptionStatus.REJECTED:
         return (
           <LoadingButton
             className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
