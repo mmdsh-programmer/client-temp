@@ -1,6 +1,6 @@
 "use server";
 
-import { cookies, headers } from "next/dist/client/components/headers";
+import { cookies, headers } from "next/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   editSocialProfile,
