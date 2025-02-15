@@ -3,9 +3,12 @@ import { InfoIcon } from "@components/atoms/icons";
 import Link from "next/link";
 import LoginPanelButton from "@components/molecules/loginPanelButton";
 import ProfileMenu from "@components/molecules/profileMenu";
-import PublicFeedsButton from "@components/molecules/publicFeedsButton";
 import PublishSearchButton from "@components/molecules/publishSearchButton";
 import React from "react";
+
+// import PublicFeedsButton from "@components/molecules/publicFeedsButton";
+
+
 
 interface IProps {
   projectName?: string;
@@ -41,7 +44,7 @@ const PublishHeader = ({ projectName, logo, domain }: IProps) => {
             <ProfileMenu
               renderSideButton={
                 <>
-                  <PublicFeedsButton />
+                  {/* <PublicFeedsButton /> */}
                   <PublishSearchButton />
                   <LoginPanelButton />
                 </>

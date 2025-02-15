@@ -23,11 +23,14 @@ export interface IProps {
 }
 
 const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
-  const [open, setOpen] = useState(false);
+  const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
 
-  const toggleOpen = () => {
-    return setOpen((cur) => {
-      return !cur;
+  const toggleOpen = (menuText: string) => {
+    setOpenStates((prev) => {
+      return {
+        ...prev,
+        [menuText]: !prev[menuText],
+      };
     });
   };
 
@@ -38,7 +41,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
       onClose={() => {
         setOpenDrawer(null);
       }}
-      className="p-4 !h-auto"
+      className="p-4 !h-auto overflow-x-hidden overflow-y-auto"
       placeholder="action-drawer"
     >
       <ul
@@ -50,18 +53,20 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
             <div key={`drawer-sub-menu-${menuItem.text}`}>
               <Button
                 className="w-full flex items-center justify-between bg-transparent px-0"
-                onClick={toggleOpen}
+                onClick={() => {
+                  return toggleOpen(menuItem.text);
+                }}
               >
                 <Typography className="select_option__text text-primary font-normal ">
                   {menuItem.text}
                 </Typography>
                 <ChevronLeftIcon
                   className={`h-2 w-2 transition-transform stroke-icon-active ${
-                    open ? "" : "rotate-90"
+                    openStates[menuItem.text] ? "" : "rotate-90"
                   }`}
                 />
               </Button>
-              <Collapse open={open}>
+              <Collapse open={openStates[menuItem.text]}>
                 <ul className="w-full ml-4 font-iranYekan text-primary overflow-hidden p-[2px]">
                   {menuItem.subMenu.map((subItem) => {
                     return (

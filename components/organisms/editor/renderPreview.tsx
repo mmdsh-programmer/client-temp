@@ -31,7 +31,7 @@ const RenderPreview = ({ file, isPublic, displayLabel = true }: IProps) => {
     case "image":
       return (
         <>
-          <ImageComponent src={fileLink} alt={file.name} className="object-none" />
+          <ImageComponent src={fileLink} alt={file.name} className="object-none !h-full !w-full" />
           {displayLabel && (
             <FileLabel name={file.name} extension={file.extension} />
           )}

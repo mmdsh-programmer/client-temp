@@ -529,7 +529,6 @@ export const getBookmarkRepositories = async (
 };
 
 export const editRepo = async (
-  repoType: string,
   accessToken: string,
   repoId: number,
   name: string,
@@ -617,8 +616,8 @@ export const restoreRepository = async (
 export const createRepo = async (
   accessToken: string,
   name: string,
+  repoTypes: string[],
   description?: string,
-  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -1459,7 +1458,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string
+  repoType: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2294,7 +2293,6 @@ export const setLastVersion = async (
 };
 
 export const publicVersion = async (
-  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -2950,7 +2948,7 @@ export const createBlockVersion = async (
 export const sendFeedback = async (
   accessToken: string,
   content: string,
-  fileHashList: string[]
+  fileHashList: { hash: string; fileName: string; fileExtension: string }[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3156,7 +3154,7 @@ export const getDislike = async (
 export const getPublishRepoList = async (
   offset: number,
   size: number,
-  repoTypes?: string
+  repoTypes: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<

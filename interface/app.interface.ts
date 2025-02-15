@@ -292,7 +292,7 @@ export interface IDomainMetadata {
   id: number;
   domain: string;
   clientId: string;
-  type: string;
+  type: string[];
   clientSecret: string;
   CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
   entityId: number;

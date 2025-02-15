@@ -1,39 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Accordion,
-  AccordionBody,
-  AccordionHeader,
   Button,
   ListItem,
   Typography,
 } from "@material-tailwind/react";
-import { ChevronLeftIcon, DashboardIcon } from "@components/atoms/icons";
-import SidebarDocuments from "@components/molecules/sidebarDocuments";
-import SidebarRepoList from "@components/molecules/sidebarRepoList";
-import { useRouter } from "next/navigation";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { ERepoGrouping } from "@interface/enums";
 
-const CUSTOM_ANIMATION = {
-  mount: { scale: 1 },
-  unmount: { scale: 0.9 },
-};
+import { DashboardIcon } from "@components/atoms/icons";
+import { ERepoGrouping } from "@interface/enums";
+import React from "react";
+import SidebarRepoList from "@components/molecules/sidebarRepoList";
+import { useRouter } from "next/navigation";
+
 interface IProps {
   children: React.ReactNode;
 }
 
 const Sidebar = ({ children }: IProps) => {
   const router = useRouter();
-  const [open, setOpen] = useState(0);
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-
-  const handleOpen = (value) => {
-    return setOpen(open === value ? 0 : value);
-  };
 
   return (
     <aside className="hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
@@ -65,7 +53,7 @@ const Sidebar = ({ children }: IProps) => {
         </Button>
       </ListItem>
       <hr className="" />
-      <Accordion
+      {/* <Accordion
         className="max-w-full w-full "
         open={open === 1}
         icon={
@@ -88,8 +76,8 @@ const Sidebar = ({ children }: IProps) => {
             <SidebarDocuments />
           </div>
         </AccordionBody>
-      </Accordion>
-      <Accordion
+      </Accordion> */}
+      {/* <Accordion
         className="max-w-full w-full "
         open={open === 2}
         icon={
@@ -112,8 +100,11 @@ const Sidebar = ({ children }: IProps) => {
             <SidebarRepoList />
           </div>
         </AccordionBody>
-      </Accordion>
-      <Accordion
+      </Accordion> */}
+      <div className="px-3 pb-3 border-b-2 border-normal mt-3">
+            <SidebarRepoList />
+      </div>
+      {/* <Accordion
         className="max-w-full w-full "
         open={open === 3}
         icon={
@@ -131,7 +122,7 @@ const Sidebar = ({ children }: IProps) => {
         >
           <Typography className="title_t4">مدیریت شعبات</Typography>
         </AccordionHeader>
-      </Accordion>
+      </Accordion> */}
     </aside>
   );
 };
