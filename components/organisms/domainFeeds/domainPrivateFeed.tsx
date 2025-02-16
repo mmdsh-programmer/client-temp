@@ -8,8 +8,8 @@ import {
   Tabs,
   TabsBody,
   TabsHeader,
-  Typography,
 } from "@material-tailwind/react";
+import DomainSubscription from "./domainSubscription";
 
 export enum ETabs {
   REQUESTS = "درخواست‌ها",
@@ -23,11 +23,7 @@ const DomainPrivateFeed = () => {
   const tabList = [
     {
       tabTitle: ETabs.REQUESTS,
-      tabContent: (
-        <div className="flex justify-center items-center h-full w-full">
-          <Typography>اطلاعاتی در دست نیست</Typography>
-        </div>
-      ),
+      tabContent: <DomainSubscription />,
     },
     {
       tabTitle: ETabs.FEEDS,

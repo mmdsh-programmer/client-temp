@@ -3984,3 +3984,76 @@ export const getFeedImages = async (offset: number, size: number) => {
   }
 };
 
+/// /////////////////////////////// DOMAIN SUBSCRIPTION //////////////////////
+
+export const getDomainSubscription = async (
+  accessToken: string,
+  domainUrl: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IDomainSubscriptionList>
+    >("domain/subscription/requests", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectSubscription = async (
+  accessToken: string,
+  domainUrl: string,
+  requestId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `domain/subscription/request/${requestId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const acceptSubscription = async (
+  accessToken: string,
+  domainUrl: string,
+  requestId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `domain/subscription/request/${requestId}/accept`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
