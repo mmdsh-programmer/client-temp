@@ -88,7 +88,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
       title: dataForm.title,
       members: usernameArray,
       callBack: () => {
-        toast.success(`گروه ${dataForm.title} با موفقیت ساخته شد.`);
+        toast.success(`سمت ${dataForm.title} با موفقیت ساخته شد.`);
         handleClose();
       },
     });
@@ -97,16 +97,16 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
   return (
     <CreateDialog
       isPending={setPositionForBranch.isPending}
-      dialogHeader="ایجاد گروه جدید"
+      dialogHeader="ایجاد سمت جدید"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام گروه</Typography>
+          <Typography className="form_label">نام سمت</Typography>
           <FormInput
-            placeholder="نام گروه"
+            placeholder="نام سمت"
             register={{ ...register("title") }}
           />
           {errors.title && (
@@ -116,7 +116,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">اعضای گروه </Typography>
+          <Typography className="form_label">اعضای سمت </Typography>
           <FormInput
             placeholder="نام کاربری را وارد کنید..."
             onKeyDown={handleSpaceClick}

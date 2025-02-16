@@ -50,7 +50,7 @@ const BranchGroupList = () => {
       <table className="w-full overflow-hidden min-w-max">
         <TableHead
           tableHead={[
-            { key: "name", value: "نام گروه", isSorted: true },
+            { key: "name", value: "نام سمت" },
             {
               key: "action",
               value: "عملیات",

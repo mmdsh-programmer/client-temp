@@ -8,6 +8,7 @@ import {
   updateRootBranch,
   updateSubBranch,
   deleteBranch,
+  getBranchUsers,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -113,6 +114,25 @@ export const deleteBranchAction = async (branchId: number) => {
   const userInfo = await getMe();
   try {
     const response = await deleteBranch(userInfo.access_token, branchId);
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getBranchUsersAction = async (
+  branchId: number,
+  offset: number,
+  size: number
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getBranchUsers(
+      userInfo.access_token,
+      branchId,
+      offset,
+      size
+    );
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

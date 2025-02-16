@@ -65,6 +65,8 @@ export type TUserData = Pick<
   | "business"
   | "isClasorAdmin"
   | "repository"
+  | "domainConfig"
+  | "isDomainOwner"
 > & {
   private: boolean;
   access_token: string;

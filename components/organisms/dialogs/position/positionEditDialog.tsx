@@ -97,7 +97,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
       title: dataForm.title,
       members: usernameArray,
       callBack: () => {
-        toast.success(`گروه ${dataForm.title} با موفقیت بروزرسانی شد.`);
+        toast.success(`سمت ${dataForm.title} با موفقیت بروزرسانی شد.`);
         handleClose();
       },
     });
@@ -122,16 +122,16 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
   return (
     <EditDialog
       isPending={updatePosition.isPending}
-      dialogHeader="ویرایش گروه"
+      dialogHeader="ویرایش سمت"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام گروه</Typography>
+          <Typography className="form_label">نام سمت</Typography>
           <FormInput
-            placeholder="نام گروه"
+            placeholder="نام سمت"
             register={{
               ...register("title", {
                 value: group.title,
@@ -145,14 +145,14 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">اعضای گروه </Typography>
+          <Typography className="form_label">اعضای سمت </Typography>
           <FormInput
             placeholder="نام کاربری را وارد کنید..."
             onKeyDown={handleSpaceClick}
             value={inputValue}
             onChange={handleInputChange}
           />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {selectedUserList.map((item) => {
               return (
                 <ChipMolecule

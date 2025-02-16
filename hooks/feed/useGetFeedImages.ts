@@ -1,20 +1,15 @@
-import { getPublicFeedsAction } from "@actions/publicFeed";
+import { getFeedImagesAction } from "@actions/publicFeed";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { IListResponse } from "@interface/repo.interface";
-import { IFeedItem } from "@interface/feeds.interface";
 
-const useGetPublicFeeds = (size: number) => {
+const useGetFeedImages = (size: number) => {
   return useInfiniteQuery({
-    queryKey: ["getPublicFeeds"],
+    queryKey: ["getFeedImages"],
     queryFn: async ({ pageParam }) => {
-      const response = await getPublicFeedsAction(
-        (pageParam - 1) * size,
-        size,
-      );
+      const response = await getFeedImagesAction((pageParam - 1) * size, size);
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<IFeedItem>;
+      return response;
     },
     initialPageParam: 1,
     retry: false,
@@ -27,4 +22,4 @@ const useGetPublicFeeds = (size: number) => {
   });
 };
 
-export default useGetPublicFeeds;
+export default useGetFeedImages;

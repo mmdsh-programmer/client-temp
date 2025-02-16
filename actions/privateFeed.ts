@@ -4,7 +4,6 @@ import {
   createDomainFeed,
   deleteDomainFeed,
   getDomainFeeds,
-  getFeedImages,
   updateDomainFeed,
 } from "@service/clasor";
 import { getMe } from "./auth";
@@ -27,17 +26,13 @@ export const getPublicFeedsAction = async (offset: number, size: number) => {
     );
 
     return response;
+
   } catch (error) {
     return normalizeError(error as IActionError);
   }
 };
 
-export const createPublicFeedAction = async (
-  name: string,
-  content: string,
-  link?: string,
-  image?: string
-) => {
+export const createPublicFeedAction = async (name: string, content: string) => {
   const userInfo = await getMe();
   // const domain = headers().get("host");
   // if (!domain) {
@@ -49,9 +44,7 @@ export const createPublicFeedAction = async (
       userInfo.access_token,
       domain,
       name,
-      content,
-      link,
-      image
+      content
     );
 
     return response;
@@ -63,9 +56,7 @@ export const createPublicFeedAction = async (
 export const updatePublicFeedAction = async (
   feedId: number,
   name: string,
-  content: string,
-  link?: string, 
-  image?: string
+  content: string
 ) => {
   const userInfo = await getMe();
   // const domain = headers().get("host");
@@ -79,9 +70,7 @@ export const updatePublicFeedAction = async (
       domain,
       feedId,
       name,
-      content,
-      link,
-      image
+      content
     );
 
     return response;
@@ -103,16 +92,6 @@ export const deletePublicFeedAction = async (feedId: number) => {
       domain,
       feedId
     );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const getFeedImagesAction = async (offset: number, size: number) => {
-  try {
-    const response = await getFeedImages(offset, size);
 
     return response;
   } catch (error) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   AuthorizationError,
   DuplicateError,
@@ -67,8 +68,9 @@ import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import { IBranchList } from "@interface/branch.interface";
-import { IPositionInfo, IPositionList } from "@interface/position.interface";
+import { IBranchList, IBranchUserList } from "@interface/branch.interface";
+import { IPositionList } from "@interface/position.interface";
+import { IDomainSubscriptionList } from "@interface/domain.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -161,7 +163,7 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (accessToken: string) => {
+export const userInfo = async (accessToken: string, domain: string) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
@@ -179,6 +181,7 @@ export const userInfo = async (accessToken: string) => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          domainUrl: domain,
         },
       }
     );
@@ -3486,11 +3489,15 @@ export const createSubBranch = async (
   }
 };
 
-export const updateRootBranch = async (accessToken: string, name: string, username: string) => {
+export const updateRootBranch = async (
+  accessToken: string,
+  name: string,
+  username: string
+) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       "branch",
-      { title: name, ownerUsername: username  },
+      { title: name, ownerUsername: username },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -3513,7 +3520,7 @@ export const updateSubBranch = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `branch/${branchId}`,
-      { title: name, ownerUsername: username  },
+      { title: name, ownerUsername: username },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -3732,6 +3739,52 @@ export const deleteMembersFromPosition = async (
   }
 };
 
+export const deletePosition = async (
+  accessToken: string,
+  branchId: number,
+  positionName: string
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getBranchUsers = async (
+  accessToken: string,
+  branchId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IBranchUserList>
+    >(`branch/${branchId}/users`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ///////////////////////////////REPO TYPE////////////////////////////////////////
 
 export const getRepoTypes = async (accessToken: string) => {
@@ -3801,7 +3854,7 @@ export const getDomainFeeds = async (
     >("domain/feeds", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        domainUrl
+        domainUrl,
       },
       params: {
         offset,
@@ -3819,19 +3872,29 @@ export const createDomainFeed = async (
   accessToken: string,
   domainUrl: string,
   name: string,
-  content: string
+  content: string,
+  link?: string,
+  image?: string
 ) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
   try {
     const response = await axiosClasorInstance.post<IServerResult<IFeedItem>>(
       "domain/feeds",
-      {
-        name,
-        content,
-      },
+      data,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "domainUrl": domainUrl
+          domainUrl,
         },
       }
     );
@@ -3847,19 +3910,29 @@ export const updateDomainFeed = async (
   domainUrl: string,
   feedId: number,
   name: string,
-  content: string
+  content: string,
+  link?: string,
+  image?: string
 ) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
   try {
     const response = await axiosClasorInstance.put<IServerResult<IFeedItem>>(
       `domain/feeds/${feedId}`,
-      {
-        name,
-        content,
-      },
+      data,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          "domainUrl": domainUrl
+          domainUrl,
         },
       }
     );
@@ -3876,12 +3949,12 @@ export const deleteDomainFeed = async (
   feedId: number
 ) => {
   try {
-    const response = await axiosClasorInstance.delete<IServerResult<void>>(
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `domain/feeds/${feedId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl
+          domainUrl,
         },
       }
     );
@@ -3891,3 +3964,23 @@ export const deleteDomainFeed = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const getFeedImages = async (offset: number, size: number) => {
+  try {
+    const response = await axiosClasorInstance.get<any>(
+      "podSpace/publicFolder/images",
+      {
+        headers: {},
+        params: {
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+

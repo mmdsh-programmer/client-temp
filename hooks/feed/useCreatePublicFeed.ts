@@ -11,10 +11,12 @@ const useCreatePublicFeed = () => {
     mutationFn: async (values: {
       name: string;
       content: string;
+      link?: string, 
+      image?: string
       callBack?: () => void;
     }) => {
-      const {  name, content } = values;
-      const response = await createPublicFeedAction( name, content);
+      const {  name, content, link, image } = values;
+      const response = await createPublicFeedAction( name, content, link, image);
       handleClientSideHookError(response as IActionError);
       return response;
     },

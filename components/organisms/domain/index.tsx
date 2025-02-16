@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
-import DomainFeeds from "../domainFeeds";
+import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
+import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
 
 export enum ETabs {
   SETTING = "تنطیمات",
-  FEEDS = "خبرنامه‌ها",
+  PUBLIC_FEEDS = "خبرنامه‌ عمومی",
+  PRIVATE_FEEDS = "خبرنامه‌ خصوصی",
   COMMENTS = "نظرات",
   QUESTIONS = "سوالات",
   VIOLATION_REPORT = "گزارش تخلف",
@@ -25,8 +27,12 @@ const DomainConfig = () => {
       ),
     },
     {
-      tabTitle: ETabs.FEEDS,
-      tabContent: <DomainFeeds />,
+      tabTitle: ETabs.PUBLIC_FEEDS,
+      tabContent: <DomainPublicFeed />,
+    },
+    {
+      tabTitle: ETabs.PRIVATE_FEEDS,
+      tabContent: <DomainPrivateFeed />,
     },
     {
       tabTitle: ETabs.COMMENTS,

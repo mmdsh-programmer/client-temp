@@ -7,10 +7,11 @@ import PublicFeedMenu from "@components/molecules/publicFeedMenu";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
 import useGetPublicFeeds from "@hooks/feed/useGetPublicFeeds";
+import ImageComponent from "@components/atoms/image";
 
 const DomainPublicFeedList = () => {
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
-  useGetPublicFeeds(10);
+    useGetPublicFeeds(10);
 
   const listLength = data?.pages.flatMap((page) => {
     return page.list;
@@ -21,18 +22,46 @@ const DomainPublicFeedList = () => {
       <>
         {data?.pages.map((page) => {
           return page.list.map((publicFeed) => {
+            const { link, image } = JSON.parse(publicFeed.metadata);
             return (
               <TableCell
                 key={`publicFeed-table-item-${publicFeed.id}`}
                 tableCell={[
-                  { data: publicFeed.name },
+                  {
+                    data: (
+                      <div className="flex gap-2 items-center">
+                        {image ? (
+                          <div className="h-5 w-5">
+                            <ImageComponent
+                              className="object-cover max-h-full"
+                              alt="repo-image"
+                              src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${image}?&checkUserGroupAccess=true&time=${Date.now()})`}
+                            />
+                          </div>
+                        ) : null}
+                        <Typography className="title_t3">
+                          {publicFeed.name}
+                        </Typography>
+                      </div>
+                    ),
+                  },
                   {
                     data: (
                       <Typography
-                        className="max-w-[150px] truncate flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+                        className="title_t3 text- max-w-[150px] truncate flex gap-2 mr-2 w-12 sm:w-20 md:w-auto"
                         title={publicFeed.content}
                       >
                         {publicFeed.content}
+                      </Typography>
+                    ),
+                  },
+                  {
+                    data: (
+                      <Typography
+                        className="title_t3 text-blue-600 max-w-[100px] truncate flex gap-2 mr-2 w-12 sm:w-20 md:w-auto"
+                        title={link}
+                      >
+                        {link || "_"}
                       </Typography>
                     ),
                   },
@@ -70,12 +99,13 @@ const DomainPublicFeedList = () => {
       <table className="w-full overflow-hidden min-w-max">
         <TableHead
           tableHead={[
-            { key: "name", value: "عنوان ", isSorted: true },
-            { key: "content", value: "متن ", isSorted: true },
+            { key: "name", value: "عنوان " },
+            { key: "content", value: "متن " },
+            { key: "link", value: "لینک " },
             {
               key: "action",
               value: "عملیات",
-              className: "justify-end",
+              className: "flex justify-end",
             },
           ]}
         />

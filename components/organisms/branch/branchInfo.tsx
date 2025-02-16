@@ -8,7 +8,7 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 export enum ETabs {
   USERS = "دسترسی افراد",
-  GROUPS = "گروه‌ها",
+  GROUPS = "سمت‌ها",
 }
 
 const BranchInfo = () => {

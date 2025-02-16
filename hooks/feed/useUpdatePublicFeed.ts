@@ -12,10 +12,12 @@ const useUpdatePublicFeed = () => {
       feedId: number;
       name: string;
       content: string;
+      link?: string, 
+      image?: string
       callBack?: () => void;
     }) => {
-      const { feedId, name, content } = values;
-      const response = await updatePublicFeedAction(feedId, name, content);
+      const { feedId, name, content, link, image } = values;
+      const response = await updatePublicFeedAction(feedId, name, content, link, image);
       handleClientSideHookError(response as IActionError);
       return response;
     },

@@ -1,20 +1,20 @@
-import { getPublicFeedsAction } from "@actions/publicFeed";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { IActionError } from "@interface/app.interface";
+import { getBranchUsersAction } from "@actions/branch";
 import { handleClientSideHookError } from "@utils/error";
-import { IListResponse } from "@interface/repo.interface";
-import { IFeedItem } from "@interface/feeds.interface";
+import { IActionError } from "@interface/app.interface";
+import { IBranchUserList } from "@interface/branch.interface";
 
-const useGetPublicFeeds = (size: number) => {
+const useGetBranchUsers = (branchId: number, size: number) => {
   return useInfiniteQuery({
-    queryKey: ["getPublicFeeds"],
+    queryKey: [`branch-users-${branchId}`],
     queryFn: async ({ pageParam }) => {
-      const response = await getPublicFeedsAction(
+      const response = await getBranchUsersAction(
+        branchId,
         (pageParam - 1) * size,
         size,
       );
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<IFeedItem>;
+      return response as IBranchUserList;
     },
     initialPageParam: 1,
     retry: false,
@@ -27,4 +27,4 @@ const useGetPublicFeeds = (size: number) => {
   });
 };
 
-export default useGetPublicFeeds;
+export default useGetBranchUsers; 

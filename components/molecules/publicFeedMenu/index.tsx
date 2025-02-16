@@ -4,7 +4,6 @@ import { IFeedItem } from "@interface/feeds.interface";
 import PublicFeedEditDialog from "@components/organisms/dialogs/publicFeed/publicFeedEditDialog";
 import PublicFeedDeleteDialog from "@components/organisms/dialogs/publicFeed/publicFeedDeleteDialog";
 
-
 interface IProps {
   feed: IFeedItem;
 }
@@ -15,13 +14,13 @@ const PublicFeedMenu = ({ feed }: IProps) => {
 
   const menuList = [
     {
-      text: "ویرایش گروه",
+      text: "ویرایش خبرنامه",
       onClick: () => {
         setEditFeedDialog(true);
       },
     },
     {
-      text: "حذف گروه",
+      text: "حذف خبرنامه",
       onClick: () => {
         setDeleteFeedDialog(true);
       },

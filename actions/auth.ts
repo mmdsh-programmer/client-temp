@@ -54,7 +54,7 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token);
+  const userData = await userInfo(access_token, "http://zahraesp.ir");
   const mySocialProfile = await getMySocialProfile(access_token);
   return {
     ...userData,
@@ -92,7 +92,7 @@ export const getMe = async () => {
   };
 
   try {
-    const userData = await userInfo(`${tokenInfo.access_token}`);
+    const userData = await userInfo(`${tokenInfo.access_token}`, "http://zahraesp.ir");
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
     const userDataWithPrivate = {
       ...userData,
@@ -125,7 +125,6 @@ export const userInfoAction = async () => {
     }
     return getMe();
   } catch (error) {
-    console.log("--------------------------- userInfoAction error ----------------------------", error);
     return normalizeError(error as IActionError);
   }
 };

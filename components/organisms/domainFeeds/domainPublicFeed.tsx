@@ -9,8 +9,8 @@ const DomainPublicFeed = () => {
     useState(false);
 
   return (
-    <div className="flex flex-col px-5">
-      <div className="h-[76px] flex justify-end items-center">
+    <div className="flex flex-col h-full pb-5 px-5">
+      <div className="h-[76px] min-h-[76px] flex justify-end items-center">
         <IconTextButton
           text="ایجاد خبرنامه جدید"
           icon={<AddIcon className="h-5 w-5 stroke-white pr-1" />}

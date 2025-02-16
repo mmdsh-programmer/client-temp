@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -34,6 +35,8 @@ const Sidebar = ({ children }: IProps) => {
   const [open, setOpen] = useState(0);
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
+
+  const { data: userInfo } = useGetUser();
 
   const handleOpen = (value) => {
     return setOpen(open === value ? 0 : value);
@@ -117,6 +120,7 @@ const Sidebar = ({ children }: IProps) => {
           </div>
         </AccordionBody>
       </Accordion>
+
       <ListItem
         placeholder="sidebar-item"
         className="p-2 dashboard hover:!bg-transparent"
@@ -138,6 +142,7 @@ const Sidebar = ({ children }: IProps) => {
         </Button>
       </ListItem>
       <div className="border-b-2 border-normal" />
+
       <ListItem
         placeholder="sidebar-item"
         className="p-2 dashboard hover:!bg-transparent"

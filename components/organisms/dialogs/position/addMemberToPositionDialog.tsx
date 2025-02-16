@@ -39,7 +39,7 @@ const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
 
   const groupOptions =
     getGroupOfBranch?.pages[0].list.map((groupItem) => {
-      return { label: groupItem.title, value: groupItem.groupId };
+      return { label: groupItem.groupPath, value: groupItem.groupId };
     }) || [];
 
   const handleReset = () => {

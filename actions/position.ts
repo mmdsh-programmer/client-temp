@@ -9,6 +9,7 @@ import {
   assignPositionForSubBranch,
   updatePosition,
   deleteMembersFromPosition,
+  deletePosition,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -159,6 +160,23 @@ export const deleteMembersFromPositionAction = async (
       branchId,
       positionName,
       members
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const deletePositionAction = async (
+  branchId: number,
+  positionName: string
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await deletePosition(
+      userInfo.access_token,
+      branchId,
+      positionName
     );
     return response;
   } catch (error) {

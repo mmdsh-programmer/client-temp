@@ -18,3 +18,24 @@ export interface IBranchList {
   size: number;
   total: number;
 }
+
+export interface IBranchUser {
+  user: {
+    preferred_username: string;
+    given_name: string;
+    family_name: string;
+    id: number;
+    phone_number_verified: boolean;
+    email_verified: boolean;
+    nationalcode_verified: boolean;
+  };
+  grants: string[];
+}
+
+export interface IBranchUserList {
+  list: IBranchUser[];
+  offset: number;
+  size: number;
+  total: number;
+}
+

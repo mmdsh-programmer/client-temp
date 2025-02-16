@@ -1,27 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updatePositionAction } from "@actions/position";
-import { IActionError } from "@interface/app.interface";
+import { deletePositionAction } from "@actions/position";
+import { toast } from "react-toastify";
 import { handleClientSideHookError } from "@utils/error";
+import { IActionError } from "@interface/app.interface";
 
-const useUpdatePosition = () => {
+export const useDeletePosition = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (values: {
       branchId: number;
       positionName: string;
-      title: string;
-      members: string[];
       callBack?: () => void;
     }) => {
-      const { branchId, positionName, title, members } = values;
-      const response = await updatePositionAction(
-        branchId,
-        positionName,
-        title,
-        members
-      );
-      handleClientSideHookError(response as IActionError);
+      const { branchId, positionName } = values;
+      const response = await deletePositionAction(branchId, positionName);
+      if (response) {
+        handleClientSideHookError(response as IActionError);
+      }
       return response;
     },
     onSuccess: (response, values) => {
@@ -32,7 +28,8 @@ const useUpdatePosition = () => {
 
       callBack?.();
     },
+    onError: (error) => {
+      toast.error(error.message || "خطای نامشخصی رخ داد");
+    },
   });
 };
-
-export default useUpdatePosition;
