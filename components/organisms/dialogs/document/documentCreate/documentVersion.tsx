@@ -110,7 +110,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
                 toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
               },
             });
-          } else if (getDocumentType === EDocumentTypes.file) {
+          } else {
             createFileVersionHook.mutate({
               repoId,
               documentId: result.id,
