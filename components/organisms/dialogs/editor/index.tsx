@@ -57,7 +57,7 @@ const Editor = ({ setOpen }: IProps) => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
+  const { data: getLastVersion, error: lastVersionError, isSuccess: lastVersionIsSuccess } = useGetLastVersion(
     repoId,
     getSelectedDocument!.id,
     !getSelectedVersion && repoId !== 0,
@@ -162,6 +162,10 @@ const Editor = ({ setOpen }: IProps) => {
     toast.warn("باز کردن سند با خطا مواجه شد.");
     handleClose();
     return null;
+  }
+
+  if (lastVersionIsSuccess && !getLastVersion) {
+    toast.warn("آخرین نسخه یافت نشد.");
   }
 
   if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
