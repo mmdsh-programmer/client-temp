@@ -1,8 +1,8 @@
-import { getAdminPanelReportAction } from "@actions/admin";
-import { IClasorReport } from "@interface/clasorReport";
-import { useQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
+import { IClasorReport } from "@interface/clasor";
+import { getAdminPanelReportAction } from "@actions/admin";
 import { handleClientSideHookError } from "@utils/error";
+import { useQuery } from "@tanstack/react-query";
 
 const useGetAdminReport = () => {
   return useQuery({

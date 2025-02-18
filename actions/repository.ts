@@ -11,6 +11,7 @@ import {
   getAccessRepositories,
   getAllRepositories,
   getBookmarkRepositories,
+  getCustomPostByDomain,
   getKey,
   getMyInfo,
   getMyRepositories,
@@ -27,7 +28,6 @@ import {
 
 import { IActionError } from "@interface/app.interface";
 import { NotFoundError } from "@utils/error";
-import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";

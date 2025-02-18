@@ -296,7 +296,7 @@ export interface IDomainMetadata {
   clientSecret: string;
   CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
   entityId: number;
-  data: string;
+  content: string;
   cryptoInitVectorKey: string;
   cryptoSecretKey: string;
   enablePublishPage: false;

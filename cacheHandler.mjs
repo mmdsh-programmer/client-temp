@@ -4,71 +4,72 @@ import createClusterHandler from "@neshca/cache-handler/experimental-redis-clust
 
 let cluster;
 export const getClient = async () => {
-  try {
-    if (cluster && cluster.isReady) {
-      return cluster;
-    }
+  return null;
+  // try {
+  //   if (cluster && cluster.isReady) {
+  //     return cluster;
+  //   }
 
-    const rootNodes = process.env.REDIS_NODE.split(",").map((item) => {
-      return { url: `redis://${item}` };
-    });
-    cluster = createCluster({
-      rootNodes,
-      defaults: {
-        username: process.env.REDIS_USER,
-        password: process.env.REDIS_PASS,
-        socket: {
-          reconnectStrategy: () => {
-            cluster.isReady = false;
-            return false;
-          },
-        },
-      },
-    });
+  //   const rootNodes = process.env.REDIS_NODE.split(",").map((item) => {
+  //     return { url: `redis://${item}` };
+  //   });
+  //   cluster = createCluster({
+  //     rootNodes,
+  //     defaults: {
+  //       username: process.env.REDIS_USER,
+  //       password: process.env.REDIS_PASS,
+  //       socket: {
+  //         reconnectStrategy: () => {
+  //           cluster.isReady = false;
+  //           return false;
+  //         },
+  //       },
+  //     },
+  //   });
 
-    // Redis won't work without error handling.
-    cluster.on("error", (e) => {
-      console.log("Redis Error");
-      throw e;
-    });
+  //   // Redis won't work without error handling.
+  //   cluster.on("error", (e) => {
+  //     console.log("Redis Error");
+  //     throw e;
+  //   });
 
-    if (cluster) {
-      try {
-        console.info("Connecting Redis cluster...");
+  //   if (cluster) {
+  //     try {
+  //       console.info("Connecting Redis cluster...");
 
-        // Wait for the cluster to connect.
-        // Caveat: This will block the server from starting until the cluster is connected.
-        // And there is no timeout. Make your own timeout if needed.
-        await cluster.connect();
-        cluster.isReady = true;
-        console.info("Redis cluster connected.");
-      } catch (error) {
-        console.warn("Failed to connect Redis cluster:", error);
-        cluster.isReady = false;
+  //       // Wait for the cluster to connect.
+  //       // Caveat: This will block the server from starting until the cluster is connected.
+  //       // And there is no timeout. Make your own timeout if needed.
+  //       await cluster.connect();
+  //       cluster.isReady = true;
+  //       console.info("Redis cluster connected.");
+  //     } catch (error) {
+  //       console.warn("Failed to connect Redis cluster:", error);
+  //       cluster.isReady = false;
 
-        console.warn("Disconnecting the Redis cluster...");
-        // Try to disconnect the cluster to stop it from reconnecting.
-        cluster
-          .disconnect()
-          .then(() => {
-            console.info("Redis cluster disconnected.");
-          })
-          .catch(() => {
-            console.warn(
-              "Failed to quit the Redis cluster after failing to connect."
-            );
-          });
-      }
-    }
+  //       console.warn("Disconnecting the Redis cluster...");
+  //       // Try to disconnect the cluster to stop it from reconnecting.
+  //       cluster
+  //         .disconnect()
+  //         .then(() => {
+  //           console.info("Redis cluster disconnected.");
+  //         })
+  //         .catch(() => {
+  //           console.warn(
+  //             "Failed to quit the Redis cluster after failing to connect."
+  //           );
+  //         });
+  //     }
+  //   }
 
-    return cluster;
-  } catch (error) {
-    console.log({
-      type: "getClient",
-      error: JSON.stringify(error),
-    });
-    return null;
-  }
+  //   return cluster;
+  // } catch (error) {
+  //   console.log({
+  //     type: "getClient",
+  //     error: JSON.stringify(error),
+  //   });
+  //   return null;
+  // }
 };
 CacheHandler.onCreation(async () => {
     try {
