@@ -54,7 +54,7 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token);
+  const userData = await userInfo(access_token, domain);
   const redisClient = await getRedisClient();
   await redisClient?.set(
     `user:${access_token}`,
@@ -106,7 +106,7 @@ export const getMe = async () => {
         clientSecret
       );
     }
-    const userData = await userInfo(tokenInfo.access_token);
+    const userData = await userInfo(tokenInfo.access_token, domain);
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
     const userDataWithPrivate = {
       ...userData,
@@ -171,7 +171,8 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
     code,
     redirectUrl,
     clientId,
-    clientSecret
+    clientSecret,
+    domain
   );
 
   

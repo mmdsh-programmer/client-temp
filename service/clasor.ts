@@ -161,7 +161,7 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (accessToken: string) => {
+export const userInfo = async (accessToken: string, domainUrl: string) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
@@ -179,6 +179,7 @@ export const userInfo = async (accessToken: string) => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          domainUrl,
         },
       }
     );
