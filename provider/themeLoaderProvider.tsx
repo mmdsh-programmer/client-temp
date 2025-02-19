@@ -2,7 +2,7 @@ import { ICustomPostData, IThemeInfo } from "@interface/app.interface";
 
 import React from "react";
 import { decodeKey } from "@utils/index";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 import localFont from "next/font/local";
 
 interface IProps {
@@ -35,8 +35,8 @@ const iranYekanFont = localFont({
 
 const ThemeLoaderProvider = async ({ children, domain }: IProps) => {
   const domainHash = decodeKey(domain);
-  const { data } = await getCustomPostByDomain(domainHash);
-  const { theme } = JSON.parse(data ?? "{}") as ICustomPostData;
+  const { content } = await getCustomPostByDomain(domainHash);
+  const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
 
   return (
     <body

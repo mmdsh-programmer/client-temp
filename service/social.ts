@@ -1,13 +1,9 @@
 import {
   AuthorizationError,
   InputError,
-  NotFoundError,
   ServerError,
 } from "@utils/error";
 import {
-  ICustomPostResult,
-  IDomainMetadata,
-  IMetaQuery,
   IPostInfo,
   ISocialError,
   ISocialProfile,
@@ -18,10 +14,7 @@ import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
 import Logger from "@utils/logger";
-import crypto from "crypto";
-import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import { revalidateTag } from "next/cache";
 
 const axiosSocialInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CORE_API,
@@ -44,7 +37,8 @@ axiosSocialInstance.interceptors.request.use(
     };
     Logger.info(log);
     return request;
-  }, (error) => {
+  },
+  (error) => {
     const log = {
       type: "ERROR",
       message: error.message,
@@ -60,7 +54,8 @@ axiosSocialInstance.interceptors.request.use(
     };
     Logger.error(log);
     return Promise.reject(error);
-  });
+  }
+);
 
 axiosSocialInstance.interceptors.response.use(
   (response) => {
@@ -72,7 +67,8 @@ axiosSocialInstance.interceptors.response.use(
     };
     Logger.info(log);
     return response;
-  }, (error) => {
+  },
+  (error) => {
     const log = {
       type: "ERROR",
       message: error.message,
@@ -106,206 +102,12 @@ export const handleSocialStatusError = (
       case 40: // Unauthorized
         throw new AuthorizationError([message]);
       case 21:
-          throw new AuthorizationError([message]);
+        throw new AuthorizationError([message]);
       default:
         throw new ServerError([message]);
     }
   } else {
     throw new ServerError(["خطای نامشخصی رخ داد"]);
-  }
-};
-
-export const createCustomPost = async (metadata: string, domain: string) => {
-  const uniqueId = crypto.createHash("sha256").update(domain).digest("base64");
-  const response = await axiosSocialInstance.post(
-    "/biz/addCustomPost",
-    {},
-    {
-      params: {
-        name: "DOMAIN_BUSINESS",
-        content: JSON.stringify({}),
-        enable: "true",
-        metadata,
-        uniqueId,
-      },
-    }
-  );
-  if (response.data.hasError) {
-    return handleSocialStatusError(response.data);
-  }
-  return response.data;
-};
-
-export const getCustomPost = async (
-  metaQuery: IMetaQuery,
-  size: string,
-  offset: string
-) : Promise<ISocialResponse<ICustomPostResult[]>> => {
-  const response = await axiosSocialInstance.get(
-    "/biz/searchTimelineByMetadata",
-    {
-      params: {
-        metaQuery: JSON.stringify(metaQuery),
-        activityInfo: false,
-        size,
-        offset,
-      },
-    }
-  );
-  if (response.data.hasError) {
-    return handleSocialStatusError(response.data);
-  }
-
-  return response.data;
-};
-
-export const getCustomPostByDomain = async (
-  domain: string
-): Promise<IDomainMetadata> => {
-
-  if(domain === ""){
-    throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
-  }
-  const redisClient = await getRedisClient();
-  const cacheKey = `domain-${domain}`;
-
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.get(cacheKey);
-    if (cachedData) {
-      Logger.warn({
-        type: "Redis cache data",
-        data: cachedData
-      });
-      return JSON.parse(cachedData);
-    }
-  }
-
-  const metaQuery: IMetaQuery = {
-    field: "CUSTOM_POST_TYPE",
-    is: "DOMAIN_BUSINESS",
-    and: [
-      {
-        field: "domain",
-        is: domain,
-      },
-    ],
-  };
-  const size = "1";
-  const offset = "0";
-
- 
-  const response = await getCustomPost(metaQuery, size, offset);
-  if(response.result.length === 0){
-    throw new NotFoundError(["دامنه مورد نظر پیدا نشد."]);
-  }
-  const { item } = response.result[0];
-
-  const domainInfo = {
-    ...JSON.parse(item.metadata),
-    id: item.entityId,
-    data: item.data ?? "0",
-  };
-
-  
-  if (redisClient && redisClient.isReady) {
-    await redisClient?.set(cacheKey, JSON.stringify(domainInfo));
-  }
-
-  return domainInfo;
-};
-
-export const getCustomPostById = async (
-  id: number
-): Promise<IDomainMetadata> => {
-  const redisClient = await getRedisClient();
-  const cacheKey = `domain-id-${id}`;
-
-  if (redisClient && redisClient.isReady) {
-    const cachedData = await redisClient?.get(cacheKey);
-    if (cachedData) {
-      Logger.warn({
-        type: "Redis cache data",
-        data: cachedData
-      });
-      return JSON.parse(cachedData);
-    }
-  }
-
-  const metaQuery: IMetaQuery = {
-    field: "CUSTOM_POST_TYPE",
-    is: "DOMAIN_BUSINESS",
-  };
-
-  const response = await axiosSocialInstance.get(
-    "/biz/searchTimelineByMetadata",
-    {
-      params: {
-        metaQuery: JSON.stringify(metaQuery),
-        postIds: id,
-      },
-    }
-  );
-
-  if (response.data.hasError) {
-    return handleSocialStatusError(response.data);
-  }
-
-  if (!response.data.result.length) {
-    throw new NotFoundError(["Post not found"]);
-  }
-  const customPost = response.data.result[0]?.item;
-  const { metadata } = customPost;
-
-  const customPostData = {
-    ...JSON.parse(metadata),
-    id: customPost.id,
-    entityId: customPost.entityId,
-    data: customPost.data ?? "0",
-  };
-
-  if (redisClient && redisClient.isReady) {
-    await redisClient?.set(cacheKey, JSON.stringify(customPostData));
-  }
-
-  return customPostData;
-};
-
-export const updateCustomPost = async (
-  metadata: {
-    domain: string;
-    clientId: string;
-    type: string;
-    clientSecret: string;
-    cryptoInitVectorKey: string;
-    cryptoSecretKey: string;
-  },
-  entityId: number,
-  content: string,
-  id: number
-) => {
-
-  const response = await axiosSocialInstance.post("/biz/updateCustomPost", {
-    metadata: JSON.stringify({
-      ...metadata,
-      CUSTOM_POST_TYPE: "DOMAIN_BUSINESS",
-    }),
-    entityId,
-    content,
-  });
-
-  // update redis cache
-  const redisClient = await getRedisClient();
-  if (redisClient && redisClient.isReady) {
-    Logger.warn({
-      type: "Redis remove data"
-    });
-    await redisClient?.del(`domain-${metadata.domain}`);
-    await redisClient?.del(`domain-id-${id}`);
-    revalidateTag(`i-${metadata.domain}`);
-  }
-
-  if (response.data.hasError) {
-    return handleSocialStatusError(response.data);
   }
 };
 

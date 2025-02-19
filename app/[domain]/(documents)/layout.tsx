@@ -3,7 +3,7 @@ import { ICustomPostData } from "@interface/app.interface";
 import PublishSlugTemplate from "@components/templates/publishTemplate/publishSlugTemplate";
 import React from "react";
 import { decodeKey } from "@utils/index";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
@@ -13,9 +13,9 @@ interface IProps {
 const PublishSlugLayout = async ({ children, params }: IProps) => {
   try {
     const domain = decodeKey(params.domain);
-    const data = await getCustomPostByDomain(domain);
+    const { content } = await getCustomPostByDomain(domain);
 
-    const { projectName, logo } = JSON.parse(data.data) as ICustomPostData;
+    const { projectName, logo } = JSON.parse(content) as ICustomPostData;
 
 
     return (

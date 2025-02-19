@@ -2,7 +2,7 @@ import Error from "@components/organisms/error";
 import PublishHeader from "@components/organisms/header/publishHeader";
 import React from "react";
 import { decodeKey } from "@utils/index";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
@@ -12,8 +12,8 @@ interface IProps {
 const PublicFeedsLayout = async ({ children, params }: IProps) => {
   try {
     const domain = decodeKey(params.domain);
-    const { data } = await getCustomPostByDomain(domain);
-    const { projectName, logo } = JSON.parse(data);
+    const { content } = await getCustomPostByDomain(domain);
+    const { projectName, logo } = JSON.parse(content);
     return (
       <>
         <PublishHeader projectName={projectName} logo={logo} domain={domain} />
