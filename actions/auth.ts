@@ -54,7 +54,7 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token);
+  const userData = await userInfo(access_token, domain);
   const redisClient = await getRedisClient();
   await redisClient?.set(
     `user:${access_token}`,
