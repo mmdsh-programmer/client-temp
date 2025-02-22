@@ -10,6 +10,7 @@ import {
   TabsHeader,
 } from "@material-tailwind/react";
 import DomainSubscription from "./domainSubscription";
+import PrivateFeedCreateDialog from "../dialogs/privateFeed/privateFeedCreateDialog";
 
 export enum ETabs {
   REQUESTS = "درخواست‌ها",
@@ -84,9 +85,9 @@ const DomainPrivateFeed = () => {
           })}
         </TabsBody>
       </Tabs>
-      {/* {openCreateFeedDialog ? (
+      {openCreateFeedDialog ? (
         <PrivateFeedCreateDialog setOpen={setOpenCreateFeedDialog} />
-      ) : null} */}
+      ) : null}
     </div>
   );
 };

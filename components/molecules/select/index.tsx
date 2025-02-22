@@ -1,11 +1,7 @@
-import React, {
- useEffect,
- useRef,
- useState
-} from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import { Typography } from "@material-tailwind/react";
+import { Spinner, Typography } from "@material-tailwind/react";
 
 export interface IOption {
   label: string;
@@ -19,6 +15,8 @@ interface IProps {
   setSelectedOption: (option: IOption) => void; // Updated type here
   defaultOption?: IOption;
   className?: string;
+  onMenuScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+  isLoading?: boolean;
 }
 
 const SelectAtom = ({
@@ -27,6 +25,8 @@ const SelectAtom = ({
   setSelectedOption,
   defaultOption,
   className,
+  onMenuScroll,
+  isLoading,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -59,7 +59,7 @@ const SelectAtom = ({
   return (
     <div
       ref={dropdownRef}
-      className=" relative inline-block"
+      className="relative inline-block"
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
@@ -70,7 +70,7 @@ const SelectAtom = ({
         className={`${className || ""}
         flex items-center leading-[18.2px] -tracking-[0.13px]
          truncate text-[13px] text-primary font-iranYekan font-normal gap-x-2
-        bg-transparent  rounded-md focus:outline-none`}
+        bg-transparent rounded-md focus:outline-none`}
       >
         {selectedOption?.label ?? defaultOption?.label}
         <ChevronLeftIcon
@@ -80,7 +80,10 @@ const SelectAtom = ({
         />
       </button>
       {isOpen && (
-        <div className="absolute max-h-[150px] overflow-auto z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
+        <div
+          className="absolute max-h-[150px] overflow-auto z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5"
+          onScroll={onMenuScroll}
+        >
           <ul
             className="rounded-md p-1 text-right shadow-menu overflow-auto focus:outline-none"
             role="listbox"
@@ -93,7 +96,7 @@ const SelectAtom = ({
                   key={option.value}
                   className="cursor-pointer select-none relative p-[6px]"
                   onClick={() => {
-                    handleOptionChange(option);
+                    return handleOptionChange(option);
                   }}
                 >
                   <Typography
@@ -105,6 +108,11 @@ const SelectAtom = ({
               );
             })}
           </ul>
+          {isLoading && (
+            <div className="flex justify-center p-2">
+              <Spinner className="h-4 w-4" color="deep-purple" />
+            </div>
+          )}
         </div>
       )}
     </div>

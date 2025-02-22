@@ -30,7 +30,7 @@ const PublicFeedDeleteDialog = ({ setOpen, feed }: IProps) => {
   return (
     <DeleteDialog
       isPending={deletePublicFeed.isPending}
-      dialogHeader="حذف خبرنامه عمومی"
+      dialogHeader="حذف خبرنامه خصوصی"
       onSubmit={handleDelete}
       setOpen={handleClose}
       className=""

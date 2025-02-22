@@ -3266,6 +3266,32 @@ export const getAllPublishChildren = async (
   }
 };
 
+export const getDomainPublishRepoList = async (
+  accessToken: string,
+  domainUrl: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories/publishRepoList", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ////////////////////// ACCESS_MANAGEMENT /////////////////////////////
 export const getUsersOfResource = async (
   accessToken: string,
@@ -3974,6 +4000,102 @@ export const getFeedImages = async (offset: number, size: number) => {
         params: {
           offset,
           size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// PRIVATE FFED //////////////////////
+
+export const createPrivateFeed = async (
+  accessToken: string,
+  repoId: number,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IFeedItem>>(
+      `repositories/${repoId}/feeds`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updatePrivateFeed = async (
+  accessToken: string,
+  repoId: number,
+  feedId: number,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<IFeedItem>>(
+      `repositories/${repoId}/feeds/${feedId}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deletePrivateFeed = async (
+  accessToken: string,
+  repoId: number,
+  feedId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/feeds/${feedId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );

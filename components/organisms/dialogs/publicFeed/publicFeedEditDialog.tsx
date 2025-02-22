@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { IFeedItem } from "@interface/feeds.interface";
-import useUpdatePublicFeed from "@hooks/feed/useUpdatePublicFeed";
-import useGetFeedImages from "@hooks/feed/useGetFeedImages";
+import useUpdatePublicFeed from "@hooks/publicFeed/useUpdatePublicFeed";
+import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
 
 interface IForm {

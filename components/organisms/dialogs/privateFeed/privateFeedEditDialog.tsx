@@ -5,25 +5,28 @@ import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
+import { IFeedItem } from "@interface/feeds.interface";
+import useUpdatePublicFeed from "@hooks/publicFeed/useUpdatePublicFeed";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
 
 interface IForm {
   name: string;
   content: string;
-  link?: string
+  link?: string;
 }
 
 interface IProps {
+  feed: IFeedItem;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
+const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
+  const { link, image } = JSON.parse(feed.metadata);
   const [imageHash, setImageHash] = useState<string | undefined>();
-  
+
   const { data: feedImages, isLoading } = useGetFeedImages(30);
-  const createPublicFeed = useCreatePublicFeed();
+  const updatePublicFeed = useUpdatePublicFeed();
 
   const form = useForm<IForm>();
   const {
@@ -45,13 +48,14 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    createPublicFeed.mutate({
+    updatePublicFeed.mutate({
+      feedId: feed.id,
       name: dataForm.name,
       content: dataForm.content,
       image: imageHash,
       link: dataForm.link,
       callBack: () => {
-        toast.success(`خبرنامه ${dataForm.name} با موفقیت ساخته شد.`);
+        toast.success(`خبرنامه ${dataForm.name} با موفقیت بروزرسانی شد.`);
         handleClose();
       },
     });
@@ -59,8 +63,8 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
 
   return (
     <CreateDialog
-      isPending={createPublicFeed.isPending}
-      dialogHeader="ایجاد خبرنامه عمومی"
+      isPending={updatePublicFeed.isPending}
+      dialogHeader="ویرایش خبرنامه خصوصی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
@@ -68,7 +72,10 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> عنوان</Typography>
-          <FormInput placeholder="عنوان " register={{ ...register("name") }} />
+          <FormInput
+            placeholder="عنوان "
+            register={{ ...register("name", { value: feed.name }) }}
+          />
           {errors.name && (
             <Typography className="warning_text">
               {errors.name?.message}
@@ -76,15 +83,18 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">متن </Typography>
+          <Typography className="form_label"> </Typography>
           <TextareaAtom
             placeholder="متن"
-            register={{ ...register("content") }}
+            register={{ ...register("content", { value: feed.content }) }}
           />
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> لینک</Typography>
-          <FormInput placeholder="لینک " register={{ ...register("link") }} />
+          <FormInput
+            placeholder="لینک "
+            register={{ ...register("link", { value: link }) }}
+          />
           {errors.link && (
             <Typography className="warning_text">
               {errors.link?.message}
@@ -105,7 +115,9 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
                     <Button
                       placeholder="button"
                       key={hash}
-                      className="flex flex-grow focus:bg-secondary focus:outline-2 focus:outline-gray-200 justify-center items-center rounded-lg border-[1px] border-normal bg-primary w-[70px] h-[70px]"
+                      className={`flex flex-grow ${image === hash ? "!bg-secondary !outline-2 !outline-gray-200" : ""} focus:bg-secondary focus:outline-2 focus:outline-gray-200 
+                        justify-center items-center rounded-lg border-[1px] 
+                        border-normal bg-primary w-[70px] h-[70px]`}
                       onClick={() => {
                         return setImageHash(hash);
                       }}
@@ -127,4 +139,4 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
   );
 };
 
-export default PublicFeedCreateDialog;
+export default PublicFeedEditDialog;

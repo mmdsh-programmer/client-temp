@@ -5,25 +5,36 @@ import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
+import useCreatePrivateFeed from "@hooks/privateFeed/useCreatePrivateFeed";
+import SelectAtom, { IOption } from "@components/molecules/select";
+import useGetDomainPublishRepoList from "@hooks/domain/useGetDomainPublishRepoList";
 
 interface IForm {
   name: string;
   content: string;
-  link?: string
+  repoId: number;
+  link?: string;
 }
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
+const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
   const [imageHash, setImageHash] = useState<string | undefined>();
-  
-  const { data: feedImages, isLoading } = useGetFeedImages(30);
-  const createPublicFeed = useCreatePublicFeed();
+  const [repoInfo, setRepoInfo] = useState<IOption>();
+
+  const {
+    data: publishRepoList,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useGetDomainPublishRepoList(30);
+  const { data: feedImages, isLoading: ImagesIsLoading } = useGetFeedImages(30);
+  const createPrivateFeed = useCreatePrivateFeed();
 
   const form = useForm<IForm>();
   const {
@@ -33,6 +44,15 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
     clearErrors,
     reset,
   } = form;
+
+  const repoOptions = publishRepoList?.pages.map((page) => {
+    return page.list.map((repo) => {
+      return {
+        label: repo.name,
+        value: repo.id,
+      };
+    });
+  });
 
   const handleReset = () => {
     clearErrors();
@@ -45,7 +65,11 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    createPublicFeed.mutate({
+    if (!repoInfo) {
+      return;
+    }
+    createPrivateFeed.mutate({
+      repoId: +repoInfo.value,
       name: dataForm.name,
       content: dataForm.content,
       image: imageHash,
@@ -57,13 +81,24 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
     });
   };
 
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+    if (
+      scrollHeight - scrollTop === clientHeight &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  };
+
   return (
     <CreateDialog
-      isPending={createPublicFeed.isPending}
-      dialogHeader="ایجاد خبرنامه عمومی"
+      isPending={createPrivateFeed.isPending}
+      dialogHeader="ایجاد خبرنامه خصوصی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="!h-screen xs:!h-[600px] overflow-y-auto"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -83,6 +118,24 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
           />
         </div>
         <div className="flex flex-col gap-2">
+          <Typography className="form_label">مخزن</Typography>
+          {isLoading ? (
+            <div className="w-full justify-center items-center flex h-[50px]">
+              <Spinner className="h-5 w-5" color="deep-purple" />
+            </div>
+          ) : (
+            <SelectAtom
+              className="w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
+              defaultOption={repoOptions?.[0]?.[0]}
+              options={repoOptions?.flat()}
+              selectedOption={repoInfo}
+              setSelectedOption={setRepoInfo}
+              onMenuScroll={handleScroll}
+              isLoading={isFetchingNextPage}
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
           <Typography className="form_label"> لینک</Typography>
           <FormInput placeholder="لینک " register={{ ...register("link") }} />
           {errors.link && (
@@ -93,7 +146,7 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">عکس خبرنامه </Typography>
-          {isLoading ? (
+          {ImagesIsLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
               <Spinner className="h-5 w-5" color="deep-purple" />
             </div>
@@ -127,4 +180,4 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
   );
 };
 
-export default PublicFeedCreateDialog;
+export default PrivateFeedCreateDialog;

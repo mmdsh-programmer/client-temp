@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { AddIcon } from "@components/atoms/icons";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
-import PublicFeedCreateDialog from "../dialogs/publicFeed/publicFeedCreateDialog";
 import DomainPublicFeedList from "./domainPublicFeedList";
+import PublicFeedCreateDialog from "../dialogs/publicFeed/publicFeedCreateDialog";
 
 const DomainPublicFeed = () => {
   const [openCreateFeedDialog, setOpenCreateFeedDialog] =

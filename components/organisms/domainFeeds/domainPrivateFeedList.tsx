@@ -35,10 +35,10 @@ const DomainPrivateFeedList = () => {
                       </Typography>
                     ),
                   },
-                //   {
-                //     data: <PrivateFeedMenu feed={privateFeed} />,
-                //     stopPropagation: true,
-                //   },
+                  // {
+                  //   data: <PrivateFeedMenu feed={privateFeed} />,
+                  //   stopPropagation: true,
+                  // },
                 ]}
               />
             );

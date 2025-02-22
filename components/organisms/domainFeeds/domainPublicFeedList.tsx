@@ -6,7 +6,7 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import PublicFeedMenu from "@components/molecules/publicFeedMenu";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
-import useGetPublicFeeds from "@hooks/feed/useGetPublicFeeds";
+import useGetPublicFeeds from "@hooks/publicFeed/useGetPublicFeeds";
 import ImageComponent from "@components/atoms/image";
 
 const DomainPublicFeedList = () => {

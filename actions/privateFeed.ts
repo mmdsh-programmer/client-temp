@@ -1,16 +1,16 @@
 "use server";
 
 import {
-  createDomainFeed,
-  deleteDomainFeed,
+  createPrivateFeed,
+  deletePrivateFeed,
   getDomainFeeds,
-  updateDomainFeed,
+  updatePrivateFeed,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
 
-export const getPublicFeedsAction = async (offset: number, size: number) => {
+export const getPrivateFeedsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
   // const domain = headers().get("host");
   // if (!domain) {
@@ -26,51 +26,28 @@ export const getPublicFeedsAction = async (offset: number, size: number) => {
     );
 
     return response;
-
   } catch (error) {
     return normalizeError(error as IActionError);
   }
 };
 
-export const createPublicFeedAction = async (name: string, content: string) => {
-  const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
-  try {
-    const response = await createDomainFeed(
-      userInfo.access_token,
-      domain,
-      name,
-      content
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const updatePublicFeedAction = async (
-  feedId: number,
+export const createPrivateFeedAction = async (
+  repoId: number,
   name: string,
-  content: string
+  content: string,
+  link?: string,
+  image?: string
 ) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+
   try {
-    const response = await updateDomainFeed(
+    const response = await createPrivateFeed(
       userInfo.access_token,
-      domain,
-      feedId,
+      repoId,
       name,
-      content
+      content,
+      link,
+      image
     );
 
     return response;
@@ -79,17 +56,42 @@ export const updatePublicFeedAction = async (
   }
 };
 
-export const deletePublicFeedAction = async (feedId: number) => {
+export const updatePrivateFeedAction = async (
+  repoId: number,
+  feedId: number,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
   try {
-    const response = await deleteDomainFeed(
+    const response = await updatePrivateFeed(
       userInfo.access_token,
-      domain,
+      repoId,
+      feedId,
+      name,
+      content,
+      link,
+      image
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const deletePrivateFeedAction = async (
+  repoId: number,
+  feedId: number
+) => {
+  const userInfo = await getMe();
+
+  try {
+    const response = await deletePrivateFeed(
+      userInfo.access_token,
+      repoId,
       feedId
     );
 
