@@ -103,9 +103,9 @@ axiosClasorInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    const { headers  } = error.config;
     const log = {
       type: "ERROR",
-      message: error.message,
       config: {
         url: error.config?.url,
         method: error.config?.method,
@@ -114,6 +114,11 @@ axiosClasorInstance.interceptors.response.use(
       response: {
         status: error.response?.status,
         data: error.response?.data,
+      },
+      headers: {
+        "Accept": headers?.Accept,
+        "Accept-Encoding": headers?.["Accept-Encoding"],
+        "Authorization": headers?.Authorization,
       },
     };
     Logger.error(log);
@@ -290,7 +295,7 @@ export const getAllRepositories = async (
   offset: number,
   size: number,
   name?: string,
-  repoTypes?: string
+  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -304,6 +309,11 @@ export const getAllRepositories = async (
         size,
         title: name,
         repoTypes,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, {
+          arrayFormat: "repeat",
+        });
       },
     });
 
@@ -449,6 +459,11 @@ export const getMyRepositories = async (
         isPublish,
         repoTypes,
       },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, {
+          indexes: false,
+        });
+      },
     });
 
     return response.data.data;
@@ -497,6 +512,11 @@ export const getAccessRepositories = async (
         title: name,
         repoTypes,
       },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, {
+          indexes: false,
+        });
+      },
     });
 
     return response.data.data;
@@ -524,6 +544,11 @@ export const getBookmarkRepositories = async (
         size,
         title: name,
         repoTypes,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, {
+          indexes: false,
+        });
       },
     });
 
@@ -1231,7 +1256,7 @@ export const getChildren = async (
         },
         paramsSerializer: (params) => {
           return qs.stringify(params, {
-            arrayFormat: "repeat",
+            indexes: false,
           });
         },
       }
@@ -1435,7 +1460,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string[],
+  repoTypes: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1471,7 +1496,7 @@ export const getUserDocument = async (
           offset,
           size,
           repoId,
-          repoType,
+          repoTypes,
           reportType,
           title: filters?.title,
           contentTypes: filters?.contentTypes,
@@ -1483,7 +1508,7 @@ export const getUserDocument = async (
         },
         paramsSerializer: (params) => {
           return qs.stringify(params, {
-            arrayFormat: "repeat",
+            indexes: false,
           });
         },
       }
@@ -3144,6 +3169,11 @@ export const getPublishRepoList = async (
         offset,
         size,
         repoTypes,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, {
+          indexes: false,
+        });
       },
     });
 
