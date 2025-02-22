@@ -1,5 +1,6 @@
 "use client";
 
+import ClientSideProvider from "provider/clientSideProvider";
 import Image from "next/image";
 import React from "react";
 
@@ -16,14 +17,16 @@ const imageLoader = (src: string) => {
 const ImageComponent = (props: IProps) => {
   const { width, height, src, ...rest } = props;
   return (
-    <Image
-      {...rest}
-      src={src}
-      loader={() => { return imageLoader(src); }}
-      width={width ?? 100}
-      height={height ?? 100}
-      priority
-    />
+    <ClientSideProvider>
+      <Image
+        {...rest}
+        src={src}
+        loader={() => { return imageLoader(src); }}
+        width={width ?? 100}
+        height={height ?? 100}
+        priority
+      />
+    </ClientSideProvider>
   );
 };
 
