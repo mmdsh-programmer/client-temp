@@ -1460,7 +1460,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string[],
+  repoTypes: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1496,7 +1496,7 @@ export const getUserDocument = async (
           offset,
           size,
           repoId,
-          repoType,
+          repoTypes,
           reportType,
           title: filters?.title,
           contentTypes: filters?.contentTypes,
