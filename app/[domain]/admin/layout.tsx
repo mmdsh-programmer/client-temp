@@ -3,7 +3,7 @@ import ErrorBoundary from "@components/errorBoundry";
 import { ICustomPostData } from "@interface/app.interface";
 import React from "react";
 import { decodeKey } from "@utils/index";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
@@ -14,8 +14,8 @@ interface IProps {
 
 const AdminLayout = async ({ children, params }: IProps) => {
   const { domain } = params;
-  const { data } = await getCustomPostByDomain(decodeKey(domain));
-  const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
+  const { content } = await getCustomPostByDomain(decodeKey(domain));
+  const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
   
   return (
     <ErrorBoundary>

@@ -9,7 +9,7 @@ import PublishRepositories from "@components/organisms/publishRepositoreis";
 import React from "react";
 import { decodeKey } from "@utils/index";
 import { generateCachePageTag } from "@utils/redis";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface MainPageProps {
   params: {
@@ -19,8 +19,8 @@ interface MainPageProps {
 const MainPage = async ({ params }: MainPageProps) => {
   try {
     const domain = decodeKey(params.domain);
-    const { data } = await getCustomPostByDomain(domain);
-    const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
+    const { content } = await getCustomPostByDomain(domain);
+    const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`]);
     if (domainInfo.enablePublishPage) {
       const { projectName, projectDescription, heroImage, theme } = domainInfo;

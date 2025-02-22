@@ -27,7 +27,7 @@
 
   .landing-hero {
     @apply h-screen;
-    background: url("/landing/pattern.svg") no-repeat 50% 0,
+    background: url("/pattern.svg") no-repeat 50% 0,
       radial-gradient(100% 100% at 50% 0%, #ffffff 0%, #f8f3fc 100%), #f6f3fc;
     background-size: cover;
   }

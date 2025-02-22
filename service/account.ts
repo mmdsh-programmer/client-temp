@@ -91,7 +91,8 @@ export const getPodAccessToken = async (
   code: string,
   redirectUrl: string,
   clientId: string,
-  clientSecret: string
+  clientSecret: string,
+  domain: string,
 ): Promise<IGetTokenResponse> => {
   try {
     const url = "/oauth2/token";
@@ -113,7 +114,7 @@ export const getPodAccessToken = async (
       }
     );
 
-    const userData = await userInfo(result.data.access_token);
+    const userData = await userInfo(result.data.access_token, domain);
     if(userData){
       const redisClient = await getRedisClient();
       await redisClient?.set(

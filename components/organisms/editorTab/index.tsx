@@ -55,12 +55,13 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const { data: getLastVersion } = useGetLastVersion(
-    repoId,
-    getSelectedDocument!.id,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    !getVersionData
-  );
+  const { data: getLastVersion, isSuccess: lastVersionIsSuccess } =
+    useGetLastVersion(
+      repoId,
+      getSelectedDocument!.id,
+      sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+      !getVersionData
+    );
 
   const vId = getSelectedVersion
     ? getSelectedVersion.id
@@ -163,7 +164,18 @@ const EditorTab = () => {
     return null;
   }
 
-  if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
+  if (lastVersionIsSuccess && !getLastVersion) {
+    toast.warn("آخرین نسخه یافت نشد.");
+    handleClose();
+    return null;
+  }
+
+  if (
+    showKey &&
+    !decryptedContent &&
+    getVersionData &&
+    getVersionData.content?.length
+  ) {
     return (
       <EditorKey
         isPending={isFetching || isLoadingKey}
