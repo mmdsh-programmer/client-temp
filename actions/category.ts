@@ -1,5 +1,6 @@
 "use server";
 
+import { IActionError, IChildrenFilter } from "@interface/app.interface";
 import {
   addUserToCategoryBlocklist,
   createCategory,
@@ -9,10 +10,11 @@ import {
   getCategoryBlocklist,
   getChildren,
 } from "@service/clasor";
-import { IActionError, IChildrenFilter } from "@interface/app.interface";
+
 import { ISortProps } from "@atom/sortParam";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
+import { revalidateTag } from "next/cache";
 
 export const getChildrenAction = async (
   repoId: number,
@@ -80,6 +82,11 @@ export const editCategoryAction = async (
       order,
       isHidden
     );
+
+    if (isHidden) {
+      // revalidate repository publish cache if exists
+      revalidateTag(`rp-ph-${repoId}`);
+    }
 
     return response;
   } catch (error) {

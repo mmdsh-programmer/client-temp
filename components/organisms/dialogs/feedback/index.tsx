@@ -35,7 +35,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<{
     content: string;
-    fileHashList?: string[];
+    fileHashList?: { hash: string; fileName: string; fileExtension: string }[];
   }>({
     defaultValues: { fileHashList: [] },
     resolver: yupResolver(feedBackSchema),
@@ -109,10 +109,14 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
 
   const onUploadSuccess = (response: string) => {
     const res = JSON.parse(response);
-    const { hash } = res.result as IPodspaceResult;
+    const { hash, name, extension } = res.result as IPodspaceResult;
+
     if (hash) {
       const fileHashList = getValues("fileHashList") || [];
-      setValue("fileHashList", [...fileHashList, hash]);
+      setValue("fileHashList", [
+        ...fileHashList,
+        { hash, fileName: name, fileExtension: extension },
+      ]);
       checkAllIsReady();
     }
   };

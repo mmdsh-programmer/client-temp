@@ -91,7 +91,9 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   }, [documentInfo]);
 
   return isLoading || isLoadingTags ? (
-    <Spinner className="h-5 w-5" color="deep-purple" />
+    <div className="w-full flex justify-center mt-2">
+      <Spinner className="h-5 w-5" color="deep-purple" />
+    </div>
   ) : (
     <div className="flex flex-col gap-2">
       {adminOrOwnerRole() ? (
@@ -100,7 +102,10 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
           handleSelect={handleTagSelect}
           handleChange={setTagName}
           setOpen={setOpen}
-          createIcon
+          createIcon={
+            currentPath !== "/admin/sharedDocuments" &&
+            sharedDocuments !== "true"
+          }
         />
       ) : null}
       <DocumentTagList tagList={getTempDocTag} />

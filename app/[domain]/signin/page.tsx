@@ -3,7 +3,7 @@ import React, { Suspense } from "react";
 import { ICustomPostData } from "@interface/app.interface";
 import SignInComponent from "@components/pages/signin";
 import { decodeKey } from "@utils/index";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   params: {
@@ -12,8 +12,8 @@ interface IProps {
 }
 const Signin = async ({ params }: IProps) => {
   const domainHash = decodeKey(params.domain);
-  const { data } = await getCustomPostByDomain(domainHash);
-  const { projectName, logo, projectDescription } = JSON.parse(data ?? "{}") as ICustomPostData;
+  const { content } = await getCustomPostByDomain(domainHash);
+  const { projectName, logo, projectDescription } = JSON.parse(content ?? "{}") as ICustomPostData;
   return (
     <Suspense>
       <SignInComponent projectName={projectName ?? "_"} logo={logo ?? "_"} projectDescription={projectDescription ?? "_"} />

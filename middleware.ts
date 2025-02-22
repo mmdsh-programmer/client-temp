@@ -88,7 +88,7 @@ function convertOldPublishUrl(url: NextURL) {
   const repoId = slugs[2];
   const repoName = slugs[3];
 
-  if(Number.isNaN(Number(toEnglishDigit(repoId)))){
+  if(Number.isNaN(Number(toEnglishDigit(repoId))) || !Number.isNaN(Number(toEnglishDigit(repoName)))){
     return;
   }
 
@@ -175,10 +175,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(newUrl);
   }
 
-  const newPublishUrl = convertOldPublishUrl(url);
-  if (newPublishUrl) {
-    return NextResponse.redirect(newPublishUrl);
-  }
+  if(pathname !== "/publish"){
+    const newPublishUrl = convertOldPublishUrl(url);
+    if (newPublishUrl) {
+      return NextResponse.redirect(newPublishUrl);
+    }
+   }
+
 
   if (domain) {
     const isInPages = pages.find((page) => {

@@ -120,28 +120,31 @@ const Sidebar = ({ children }: IProps) => {
           </div>
         </AccordionBody>
       </Accordion>
-
-      <ListItem
-        placeholder="sidebar-item"
-        className="p-2 dashboard hover:!bg-transparent"
-      >
-        <Button
-          placeholder="sidebar-button"
-          className={` bg-transparent justify-start w-full 
+      {userInfo?.isDomainOwner ? (
+        <>
+          <ListItem
+            placeholder="sidebar-item"
+            className="p-2 dashboard hover:!bg-transparent"
+          >
+            <Button
+              placeholder="sidebar-button"
+              className={` bg-transparent justify-start w-full 
                      text-secondary gap-1 px-3 h-[44px]
                   hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
-          onClick={() => {
-            router.push("/admin/domainManagement");
-            setSearchParam(null);
-          }}
-        >
-          <UserGroupIcon className="h-6 w-6" />
-          <Typography placeholder="sidebar-text" className="title_t3">
-            مدیریت دامنه
-          </Typography>
-        </Button>
-      </ListItem>
-      <div className="border-b-2 border-normal" />
+              onClick={() => {
+                router.push("/admin/domainManagement");
+                setSearchParam(null);
+              }}
+            >
+              <UserGroupIcon className="h-6 w-6" />
+              <Typography placeholder="sidebar-text" className="title_t3">
+                مدیریت دامنه
+              </Typography>
+            </Button>
+          </ListItem>
+          <div className="border-b-2 border-normal" />
+        </>
+      ) : null}
 
       <ListItem
         placeholder="sidebar-item"

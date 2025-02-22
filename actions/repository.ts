@@ -11,6 +11,7 @@ import {
   getAccessRepositories,
   getAllRepositories,
   getBookmarkRepositories,
+  getCustomPostByDomain,
   getKey,
   getMyInfo,
   getMyRepositories,
@@ -27,7 +28,6 @@ import {
 
 import { IActionError } from "@interface/app.interface";
 import { NotFoundError } from "@utils/error";
-import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -42,7 +42,7 @@ export const getMyInfoAction = async () => {
     }
     const { type } = await getCustomPostByDomain(domain);
 
-    const response = await getMyInfo(userInfo.access_token, [type]);
+    const response = await getMyInfo(userInfo.access_token, type); // TODO: it should not be array
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -66,7 +66,7 @@ export const getAllRepositoryList = async (
       offset,
       size,
       name,
-      type
+      type[0] // TODO: it should not be array
     );
 
     return response;
@@ -97,7 +97,7 @@ export const getMyRepositoryList = async (
       archived,
       name,
       isPublished,
-      [type]
+      type
     );
 
     return response;
@@ -135,7 +135,7 @@ export const getAccessRepositoryList = async (
       offset,
       size,
       name,
-      [type]
+      type
     );
 
     return response;
@@ -162,7 +162,7 @@ export const getBookmarkRepositoryList = async (
       offset,
       size,
       name,
-      [type]
+      type
     );
 
     return response;
@@ -181,11 +181,9 @@ export const editRepoAction = async (
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const domainInfo = await getCustomPostByDomain(domain);
 
   try {
     const response = await editRepo(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       name,
@@ -194,9 +192,6 @@ export const editRepoAction = async (
 
     // revalidate all links related to repository publish cache if exists
     revalidateTag(`rp-ph-${repoId}`);
-
-    // revalidate repository publish cache if exists
-    revalidateTag(`rp-${repoId}`);
 
     return response;
   } catch (error) {
@@ -216,8 +211,8 @@ export const createRepoAction = async (name: string, description?: string) => {
     const response = await createRepo(
       userInfo.access_token,
       name,
+      type, // TO_DOO: it should not be array
       description,
-      Array.isArray(type) ? [type[0]] : [type]
     );
     return response;
   } catch (error) {
@@ -234,6 +229,9 @@ export const deleteRepoAction = async (repoId: number) => {
   try {
     const response = await deleteRepository(userInfo.access_token, repoId);
 
+    // revalidate all links related to repository publish cache if exists
+    revalidateTag(`rp-ph-${repoId}`);
+    
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -430,7 +428,7 @@ export const getPublishRepositoriesAction = async (
     throw new Error("Domain is not found");
   }
   const { type } = await getCustomPostByDomain(domain);
-  const response = await getPublishRepoList(offset, size, type);
+  const response = await getPublishRepoList(offset, size, type); // TODO: it should not be array
   return response;
 };
 

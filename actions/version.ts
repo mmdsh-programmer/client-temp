@@ -15,7 +15,6 @@ import {
 
 import { IActionError } from "@interface/app.interface";
 import { IFileVersion } from "@interface/version.interface";
-import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -178,11 +177,9 @@ export const publicVersionAction = async (
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const domainInfo = await getCustomPostByDomain(domain);
 
   try {
     const response = await publicVersion(
-      domainInfo.type,
       userInfo.access_token,
       repoId,
       documentId,

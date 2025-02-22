@@ -4,12 +4,14 @@ import SubscribePage from "@components/pages/subscribe";
 interface IProps {
   params: {
     hash: string;
+  };
+  searchParams: {
     hasPassword?: string;
   };
 }
 
-const Subcribe = ({ params: { hash, hasPassword } }: IProps) => {
+const Subscribe = ({ params: { hash }, searchParams: { hasPassword } }: IProps) => {
   return <SubscribePage hash={hash} hasPassword={hasPassword} />;
 };
 
-export default Subcribe;
+export default Subscribe;

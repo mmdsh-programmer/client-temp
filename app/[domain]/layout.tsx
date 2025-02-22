@@ -18,22 +18,23 @@ export const metadata: Metadata = {
   description: "کلاسور",
 };
 
-const RootLayout = ({ children, params }: IProps) => {
+const DomainLayout = ({ children, params }: IProps) => {
   return (
-    <html lang="fa">
       <ThemeLoaderProvider domain={params.domain}>
-        <MainProvider>
-          <LayoutTransitionProvider
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {children}
-          </LayoutTransitionProvider>
-        </MainProvider>
+        <>
+          <MainProvider>
+            <LayoutTransitionProvider
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {children}
+            </LayoutTransitionProvider>
+          </MainProvider>
+          <p className="hidden absolute -z-50">3.18.1.6</p>
+        </>
       </ThemeLoaderProvider>
-    </html>
   );
 };
 
-export default RootLayout;
+export default DomainLayout;

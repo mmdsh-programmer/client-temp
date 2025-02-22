@@ -6,6 +6,7 @@ import {
   editorModeAtom,
 } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
+
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
@@ -20,8 +21,8 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
-import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import useRepoId from "@hooks/custom/useRepoId";
+import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 
 interface IProps {
   getEditorConfig: () => {
@@ -96,7 +97,11 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           },
           publicUserGroupHash: repoGroupHash() || undefined,
           privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
-          repositoryId: repoId || undefined,
+          repositoryId:
+            currentPath === "/admin/sharedDocuments" ||
+            sharedDocuments === "true"
+              ? selectedDocument.id
+              : repoId || undefined,
           resourceId: selectedCategory?.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
@@ -121,8 +126,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
         editorMode={editorMode}
         ref={getEditorConfig().ref}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        loadData={getLoadData() as any}
+        loadData={getLoadData() as IClassicData }
         onGetConfig={handleSaveConfig}
         onChange={handleChange}
         loadHtml={() => {

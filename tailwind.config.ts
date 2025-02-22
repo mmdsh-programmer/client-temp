@@ -10,8 +10,10 @@ module.exports = withMT({
     "./node_modules/clasor-content-preview/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: ["class", "[data-mode=\"dark\"]"],
-  theme: {extend: {
+  theme: {
+    extend: {
       colors: {
+        "landing-text-color": "#3D3456",
         gray: {
           50: "var(--gray-50)", // cancel background
           100: "var(--gray-100)",
@@ -93,8 +95,13 @@ module.exports = withMT({
       },
       animation: {
         marquee: "marquee 20s linear infinite",
+        floatBubble: "floatBubble 4s ease-in-out infinite",
       },
       keyframes: {
+        floatBubble: {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "50%": { transform: "translate(var(--randomX), var(--randomY))" },
+        },
         marquee: {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(100%)" },

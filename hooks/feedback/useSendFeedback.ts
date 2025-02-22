@@ -9,7 +9,7 @@ const useSendFeedback = () => {
     mutationKey: ["send-feedback"],
     mutationFn: async (values: {
       content: string;
-      fileHashList: string[];
+      fileHashList: { hash: string; fileName: string; fileExtension: string }[];
       callBack?: () => void;
     }) => {
       const { content, fileHashList } = values;

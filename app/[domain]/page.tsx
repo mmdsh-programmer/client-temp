@@ -9,7 +9,7 @@ import PublishRepositories from "@components/organisms/publishRepositoreis";
 import React from "react";
 import { decodeKey } from "@utils/index";
 import { generateCachePageTag } from "@utils/redis";
-import { getCustomPostByDomain } from "@service/social";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface MainPageProps {
   params: {
@@ -19,17 +19,13 @@ interface MainPageProps {
 const MainPage = async ({ params }: MainPageProps) => {
   try {
     const domain = decodeKey(params.domain);
-    const { data } = await getCustomPostByDomain(domain);
-    const domainInfo = JSON.parse(data ?? "{}") as ICustomPostData;
+    const { content } = await getCustomPostByDomain(domain);
+    const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`]);
     if (domainInfo.enablePublishPage) {
-      const time = Date.now();
       const { projectName, projectDescription, heroImage, theme } = domainInfo;
       return (
         <>
-          <h1 className="fixed top-0 left-0 font-bold text-red-500 z-50">
-            {time}
-          </h1>
           <PublishHeader projectName={projectName} logo={heroImage} domain={domain} />
           <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
             <div className="w-full mt-8 bg-primary px-4 py-8 rounded-md">
@@ -64,11 +60,7 @@ const MainPage = async ({ params }: MainPageProps) => {
         </>
       );
     }
-    return (
-      <main className="flex h-screen flex-col items-center justify-between">
-        <LandingPage />
-      </main>
-    );
+    return <LandingPage />;
   } catch (error) {
     return (
       <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

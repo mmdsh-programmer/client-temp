@@ -1,18 +1,17 @@
 "use server";
 
-import { cookies, headers } from "next/dist/client/components/headers";
+import { cookies, headers } from "next/headers";
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   editSocialProfile,
-  getCustomPostByDomain,
   getMySocialProfile,
 } from "@service/social";
+import { getCustomPostByDomain, userInfo, userMetadata } from "@service/clasor";
 import {
   getPodAccessToken,
   refreshPodAccessToken,
   revokePodToken,
 } from "@service/account";
-import { userInfo, userMetadata } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
 import { getRedisClient } from "@utils/redis";
@@ -26,7 +25,7 @@ const refreshCookieHeader = async (
   clientSecret: string
 ) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
-  const { access_token, refresh_token } = response;
+  const { access_token, refresh_token, expires_in } = response;
   // get domain and find proper custom post base on domain
   const domain = headers().get("host");
   if (!domain) {
@@ -40,6 +39,7 @@ const refreshCookieHeader = async (
     JSON.stringify({
       access_token,
       refresh_token,
+      expiresAt: +new Date() + (expires_in * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
@@ -54,7 +54,13 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token, "http://zahraesp.ir");
+  const userData = await userInfo(access_token, domain);
+  const redisClient = await getRedisClient();
+  await redisClient?.set(
+    `user:${access_token}`,
+    JSON.stringify(userData),
+    { EX: expires_in }
+  );
   const mySocialProfile = await getMySocialProfile(access_token);
   return {
     ...userData,
@@ -89,10 +95,19 @@ export const getMe = async () => {
   ) as {
     access_token: string;
     refresh_token: string;
+    expiresAt: number;
   };
 
   try {
-    const userData = await userInfo(`${tokenInfo.access_token}`, "http://zahraesp.ir");
+    console.log(tokenInfo.expiresAt, +new Date());
+    if(tokenInfo.expiresAt < +new Date()){
+      return refreshCookieHeader(
+        tokenInfo.refresh_token,
+        clientId,
+        clientSecret
+      );
+    }
+    const userData = await userInfo(tokenInfo.access_token, domain);
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
     const userDataWithPrivate = {
       ...userData,
@@ -152,17 +167,21 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 
   const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
     await getCustomPostByDomain(domain);
-  const { access_token, refresh_token } = await getPodAccessToken(
+  const { access_token, refresh_token, expires_in } = await getPodAccessToken(
     code,
     redirectUrl,
     clientId,
-    clientSecret
+    clientSecret,
+    domain
   );
+
+  
 
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
+      expiresAt: +new Date() + (expires_in * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey

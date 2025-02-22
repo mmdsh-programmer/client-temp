@@ -14,6 +14,7 @@ import {
   documentEnableUserGroupHash,
   editDocument,
   getClasorField,
+  getCustomPostByDomain,
   getDocument,
   getDocumentBlocklist,
   getDocumentWhiteBlackList,
@@ -23,7 +24,6 @@ import {
 
 import { EDocumentTypes } from "@interface/enums";
 import { ISortProps } from "@atom/sortParam";
-import { getCustomPostByDomain } from "@service/social";
 import { getMe } from "./auth";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";

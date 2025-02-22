@@ -66,7 +66,6 @@ export default async function PublishContentPage({
 }: {
   params: PageParams;
 }) {
-  const time = Date.now();
   try {
     const { id, name, slug } = params;
     
@@ -209,7 +208,6 @@ export default async function PublishContentPage({
     return (
       <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="fixed top-0 left-0 font-bold text-red-500">{time}</h1>
           <FolderEmptyIcon />
           <p>{message}</p>
         </div>

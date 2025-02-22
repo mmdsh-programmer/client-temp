@@ -24,12 +24,14 @@ import { ICategory, ICategoryMetadata } from "@interface/category.interface";
 import {
   IChildrenFilter,
   IClasorError,
+  IDomainMetadata,
   IGetToken,
   IMyInfo,
   IReportFilter,
   IServerResult,
   IUserInfo,
 } from "@interface/app.interface";
+import { IClasorDomainResult, IClasorReport, IClasorResult } from "@interface/clasor";
 import {
   IClasorField,
   IDocument,
@@ -59,13 +61,13 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
-import { IClasorReport } from "@interface/clasorReport";
 import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
+import { decryptKey } from "@utils/crypto";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
 import { IBranchList, IBranchUserList } from "@interface/branch.interface";
@@ -163,33 +165,27 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (accessToken: string, domain: string) => {
+export const userInfo = async (accessToken: string, domainUrl: string) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    Logger.info({
+    Logger.warn({
       type: "Redis cache data",
       data: cachedUser,
     });
     return JSON.parse(cachedUser);
   }
 
-  try {
+  try {  
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl: domain,
+          domainUrl,
         },
       }
-    );
-
-    await redisClient?.set(
-      `user:${accessToken}`,
-      JSON.stringify(response.data.data),
-      { EX: 840 }
     );
 
     return response.data.data;
@@ -540,7 +536,6 @@ export const getBookmarkRepositories = async (
 };
 
 export const editRepo = async (
-  repoType: string,
   accessToken: string,
   repoId: number,
   name: string,
@@ -628,8 +623,8 @@ export const restoreRepository = async (
 export const createRepo = async (
   accessToken: string,
   name: string,
+  repoTypes: string[],
   description?: string,
-  repoTypes?: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -1442,7 +1437,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoType: string
+  repoType: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2277,7 +2272,6 @@ export const setLastVersion = async (
 };
 
 export const publicVersion = async (
-  repoType: string,
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -2933,7 +2927,7 @@ export const createBlockVersion = async (
 export const sendFeedback = async (
   accessToken: string,
   content: string,
-  fileHashList: string[]
+  fileHashList: { hash: string; fileName: string; fileExtension: string }[]
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3139,7 +3133,7 @@ export const getDislike = async (
 export const getPublishRepoList = async (
   offset: number,
   size: number,
-  repoTypes?: string
+  repoTypes: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -4175,6 +4169,40 @@ export const acceptSubscription = async (
     );
 
     return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+export const getCustomPostByDomain = async (
+  domain: string
+): Promise<IDomainMetadata> => {
+  try {
+    
+  if(domain === ""){
+    throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
+  }
+
+ 
+  const { data } = await axiosClasorInstance.get<IClasorResult<IClasorDomainResult>>("domain/info", {
+    headers:{
+      domainUrl: domain
+    }
+  });
+
+
+  const sensitiveStringData = await decryptKey(
+    data.data.sensitiveData,
+    process.env.CRYPTO_SECRET_KEY!, 
+    process.env.CRYPTO_INIT_VECTOR_KEY!
+  );
+  const sensitiveData = JSON.parse(sensitiveStringData);
+  
+  const domainInfo = {
+    ...data.data,
+    ...sensitiveData,
+  };
+
+  return domainInfo as IDomainMetadata;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

@@ -194,17 +194,31 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
               </div>
               <div className="flex flex-grow flex-col gap-2">
                 <Typography className="form_label">تگ‌ها</Typography>
-                <SelectBox
-                  options={tagOptions}
-                  className="h-12 xs:!h-10 flex-grow"
-                  selectedOptions={tags}
-                  setSelectedOptions={setTags}
-                  defaultOption="تگ‌ها"
-                  disabled={
-                    !type.includes("document") &&
-                    !(searchType.value as string).includes("currentRepo")
-                  }
-                />
+
+                {!tagOptions.length && currentPath !== "/admin/sharedDocuments" ? (
+                  <SelectAtom
+                    options={[{ label: "تگی وجود ندارد", value: "none" }]}
+                    className="h-12 xs:!h-10 pl-1 pr-2 !w-full bg-white border-[2px] border-normal justify-between"
+                    setSelectedOption={setSearchType}
+                    defaultOption={{ label: "تگ‌ها", value: "none" }}
+                    selectedOption={{ label: "تگی وجود ندارد", value: "none" }}
+                  />
+                ) : (
+                  <SelectBox
+                    options={tagOptions}
+                    className="h-12 xs:!h-10 flex-grow"
+                    selectedOptions={tags}
+                    setSelectedOptions={setTags}
+                    defaultOption="تگ‌ها"
+                    disabled={
+                      (!type.includes("document") &&
+                        !(searchType.value as string).includes(
+                          "currentRepo"
+                        )) ||
+                      currentPath === "/admin/sharedDocuments"
+                    }
+                  />
+                )}
               </div>
               <div className="flex flex-grow flex-col gap-2">
                 <Typography className="form_label">سایر فیلترها</Typography>
@@ -218,8 +232,9 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                   setSelectedOptions={setMoreFilter}
                   defaultOption="سایر فیلترها"
                   disabled={
-                    !type.includes("document") &&
-                    !(searchType.value as string).includes("currentRepo")
+                    (!type.includes("document") &&
+                      !(searchType.value as string).includes("currentRepo")) ||
+                    currentPath === "/admin/sharedDocuments"
                   }
                 />
               </div>

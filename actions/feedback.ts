@@ -17,7 +17,7 @@ export const addUserToFeedbackGroupHashAction = async () => {
 
 export const sendFeedbackAction = async (
   content: string,
-  fileHashList: string[]
+  fileHashList: { hash: string; fileName: string; fileExtension: string }[]
 ) => {
   const userInfo = await getMe();
   try {

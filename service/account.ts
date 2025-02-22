@@ -12,6 +12,8 @@ import axios, { AxiosError, isAxiosError } from "axios";
 import { IGetTokenResponse } from "@interface/app.interface";
 import Logger from "@utils/logger";
 import { bracketStringify } from "@utils/index";
+import { getRedisClient } from "@utils/redis";
+import { userInfo } from "./clasor";
 
 const axiosAccountsInstance = axios.create({
   baseURL: process.env.ACCOUNTS,
@@ -89,7 +91,8 @@ export const getPodAccessToken = async (
   code: string,
   redirectUrl: string,
   clientId: string,
-  clientSecret: string
+  clientSecret: string,
+  domain: string,
 ): Promise<IGetTokenResponse> => {
   try {
     const url = "/oauth2/token";
@@ -110,10 +113,20 @@ export const getPodAccessToken = async (
         headers,
       }
     );
+
+    const userData = await userInfo(result.data.access_token, domain);
+    if(userData){
+      const redisClient = await getRedisClient();
+      await redisClient?.set(
+        `user:${result.data.access_token}`,
+        JSON.stringify(userData),
+        { EX: result.data.expires_in }
+      );
+    }
+    
     return result.data;
   } catch (error) {
-    console.log(error);
-    throw error;
+    return handleAccountStatusError(error as AxiosError<any>);
   }
 };
 
@@ -172,7 +185,7 @@ export const refreshPodAccessToken = async (
       }
     );
 
-    return result.data as { access_token: string; refresh_token: string };
+    return result.data as { access_token: string; refresh_token: string, expires_in: number };
   } catch (error) {
     return handleAccountStatusError(error as AxiosError<any>);
   }

@@ -293,6 +293,7 @@ export interface IMetaQuery {
 export interface IGetTokenResponse {
   access_token: string;
   refresh_token: string;
+  expires_in: number;
 }
 
 export interface ICustomPostItem {
@@ -311,11 +312,11 @@ export interface IDomainMetadata {
   id: number;
   domain: string;
   clientId: string;
-  type: string;
+  type: string[];
   clientSecret: string;
   CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
   entityId: number;
-  data: string;
+  content: string;
   cryptoInitVectorKey: string;
   cryptoSecretKey: string;
   enablePublishPage: false;

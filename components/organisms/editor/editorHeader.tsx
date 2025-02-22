@@ -9,6 +9,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import useRepoId from "@hooks/custom/useRepoId";
+import DownloadPDF from "@components/molecules/downloadPDF";
 
 export interface IProps {
   dialogHeader?: string;
@@ -30,6 +31,9 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const freeDraftHook = useFreeDraft();
 
   const handleClose = () => {
+    if (currentPath === "/admin/edit") {
+      window.close();
+    }
     setOpen?.(false);
     if (
       repoId &&
@@ -60,7 +64,10 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
         <BackButton onClick={handleClose} />
       </div>
       <Typography className="title_t1">{dialogHeader}</Typography>
-      <div className="hidden xs:block">
+      <div className="hidden xs:flex items-center gap-2">
+        {editorMode === "preview" || editorMode === "temporaryPreview" ? (
+          <DownloadPDF />
+        ) : null}
         <CloseButton onClose={handleClose} disabled={disabled} />
       </div>
     </>
