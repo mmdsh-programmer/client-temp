@@ -41,9 +41,9 @@ export const getMyInfoAction = async () => {
     if (!domain) {
       throw new NotFoundError(["دامنه مورد نظر پیدا نشد"]);
     }
-    const { type } = await getCustomPostByDomain(domain);
+    const { types } = await getCustomPostByDomain(domain);
 
-    const response = await getMyInfo(userInfo.access_token, type); // TODO: it should not be array
+    const response = await getMyInfo(userInfo.access_token, types); // TODO: it should not be array
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -61,13 +61,13 @@ export const getAllRepositoryList = async (
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const { type } = await getCustomPostByDomain(domain);
+    const { types } = await getCustomPostByDomain(domain);
     const response = await getAllRepositories(
       userInfo.access_token,
       offset,
       size,
       name,
-      type[0] // TODO: it should not be array
+      types
     );
 
     return response;
@@ -89,7 +89,7 @@ export const getMyRepositoryList = async (
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const { type } = await getCustomPostByDomain(domain);
+    const { types } = await getCustomPostByDomain(domain);
 
     const response = await getMyRepositories(
       userInfo.access_token,
@@ -98,7 +98,7 @@ export const getMyRepositoryList = async (
       archived,
       name,
       isPublished,
-      type
+      types
     );
 
     return response;
@@ -129,14 +129,14 @@ export const getAccessRepositoryList = async (
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const { type } = await getCustomPostByDomain(domain);
+    const { types } = await getCustomPostByDomain(domain);
 
     const response = await getAccessRepositories(
       userInfo.access_token,
       offset,
       size,
       name,
-      type
+      types
     );
 
     return response;
@@ -156,14 +156,14 @@ export const getBookmarkRepositoryList = async (
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const { type } = await getCustomPostByDomain(domain);
+    const { types } = await getCustomPostByDomain(domain);
 
     const response = await getBookmarkRepositories(
       userInfo.access_token,
       offset,
       size,
       name,
-      type
+      types
     );
 
     return response;
@@ -207,12 +207,12 @@ export const createRepoAction = async (name: string, description?: string) => {
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const { type } = await getCustomPostByDomain(domain);
+    const { types } = await getCustomPostByDomain(domain);
 
     const response = await createRepo(
       userInfo.access_token,
       name,
-      type, // TO_DOO: it should not be array
+      types, // TO_DOO: it should not be array
       description,
     );
     return response;
@@ -456,7 +456,7 @@ export const getPublishRepositoriesAction = async (
   if (!domain) {
     throw new Error("Domain is not found");
   }
-  const { type } = await getCustomPostByDomain(domain);
-  const response = await getPublishRepoList(offset, size, type); // TODO: it should not be array
+  const { types } = await getCustomPostByDomain(domain);
+  const response = await getPublishRepoList(offset, size, types); // TODO: it should not be array
   return response;
 };

@@ -222,7 +222,7 @@ export const getUserDocumentAction = async (
       size,
       filters,
       reportType,
-      domainInfo.type
+      domainInfo.types
     );
 
     return response;
