@@ -23,8 +23,8 @@ const PublishLink = () => {
 
   return (
     <div className="share-link-content mt-4 w-full overflow-auto bg-white">
-      <div className="border-b-[1px] bg-gray-200 w-full" />
-      <div className="pt-16">
+      <div className=" bg-gray-200 w-full" />
+      <div className="pt-6 px-2">
         {getRepo?.isPublish ? (
           <div className="flex flex-col gap-6">
             <Typography className="title_t3">

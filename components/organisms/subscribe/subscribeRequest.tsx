@@ -28,7 +28,7 @@ const SubscribeRequest = ({ hash }: IProps) => {
       callBack: (result) => {
         toast.success("با موفقیت به ریپو منصوب شدید");
         localStorage.removeItem("CLASOR:LAST_PAGE");
-        router.push(`/admin/repositories?repoId=${result.repository.id}`);
+        router.push(`/admin/repositories?repoId=${result.data.repository.id}`);
         setRepoGroup(ERepoGrouping.ACCESS_REPO);
       },
       errorCallBack: () => {

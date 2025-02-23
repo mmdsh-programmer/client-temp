@@ -1,27 +1,46 @@
 "use client";
 
+import React, { useState } from "react";
 import {
+  Accordion,
+  AccordionBody,
+  AccordionHeader,
   Button,
   ListItem,
   Typography,
 } from "@material-tailwind/react";
-import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
-
-import { DashboardIcon } from "@components/atoms/icons";
-import { ERepoGrouping } from "@interface/enums";
-import React from "react";
+import {
+  ChevronLeftIcon,
+  DashboardIcon,
+  UserGroupIcon,
+} from "@components/atoms/icons";
+import SidebarDocuments from "@components/molecules/sidebarDocuments";
 import SidebarRepoList from "@components/molecules/sidebarRepoList";
 import { useRouter } from "next/navigation";
+import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { ERepoGrouping } from "@interface/enums";
+import useGetUser from "@hooks/auth/useGetUser";
 
+const CUSTOM_ANIMATION = {
+  mount: { scale: 1 },
+  unmount: { scale: 0.9 },
+};
 interface IProps {
   children: React.ReactNode;
 }
 
 const Sidebar = ({ children }: IProps) => {
   const router = useRouter();
+  const [open, setOpen] = useState(0);
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
+
+  const { data: userInfo } = useGetUser();
+
+  const handleOpen = (value) => {
+    return setOpen(open === value ? 0 : value);
+  };
 
   return (
     <aside className="hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
@@ -53,7 +72,7 @@ const Sidebar = ({ children }: IProps) => {
         </Button>
       </ListItem>
       <hr className="" />
-      {/* <Accordion
+      <Accordion
         className="max-w-full w-full "
         open={open === 1}
         icon={
@@ -76,8 +95,8 @@ const Sidebar = ({ children }: IProps) => {
             <SidebarDocuments />
           </div>
         </AccordionBody>
-      </Accordion> */}
-      {/* <Accordion
+      </Accordion>
+      <Accordion
         className="max-w-full w-full "
         open={open === 2}
         icon={
@@ -100,29 +119,53 @@ const Sidebar = ({ children }: IProps) => {
             <SidebarRepoList />
           </div>
         </AccordionBody>
-      </Accordion> */}
-      <div className="px-3 pb-3 border-b-2 border-normal mt-3">
-            <SidebarRepoList />
-      </div>
-      {/* <Accordion
-        className="max-w-full w-full "
-        open={open === 3}
-        icon={
-          <ChevronLeftIcon
-            className={`h-2 w-2 stroke-icon-active ${open === 3 ? "rotate-90" : "-rotate-90"}`}
-          />
-        }
-        animate={CUSTOM_ANIMATION}
+      </Accordion>
+      {userInfo?.isDomainOwner ? (
+        <>
+          <ListItem
+            placeholder="sidebar-item"
+            className="p-2 dashboard hover:!bg-transparent"
+          >
+            <Button
+              placeholder="sidebar-button"
+              className={` bg-transparent justify-start w-full 
+                     text-secondary gap-1 px-3 h-[44px]
+                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+              onClick={() => {
+                router.push("/admin/domainManagement");
+                setSearchParam(null);
+              }}
+            >
+              <UserGroupIcon className="h-6 w-6" />
+              <Typography placeholder="sidebar-text" className="title_t3">
+                مدیریت دامنه
+              </Typography>
+            </Button>
+          </ListItem>
+          <div className="border-b-2 border-normal" />
+        </>
+      ) : null}
+
+      <ListItem
+        placeholder="sidebar-item"
+        className="p-2 dashboard hover:!bg-transparent"
       >
-        <AccordionHeader
-          className={`px-3 flex-row-reverse justify-end ${open === 3 ? "border-none" : "border-b-2 border-normal"}`}
+        <Button
+          placeholder="sidebar-button"
+          className={` bg-transparent justify-start w-full 
+                     text-secondary gap-1 px-3 h-[44px]
+                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
-            return handleOpen(3);
+            router.push("/admin/branchManagement");
+            setSearchParam(null);
           }}
         >
-          <Typography className="title_t4">مدیریت شعبات</Typography>
-        </AccordionHeader>
-      </Accordion> */}
+          <UserGroupIcon className="h-6 w-6" />
+          <Typography placeholder="sidebar-text" className="title_t3">
+            مدیریت سازمانی
+          </Typography>
+        </Button>
+      </ListItem>
     </aside>
   );
 };

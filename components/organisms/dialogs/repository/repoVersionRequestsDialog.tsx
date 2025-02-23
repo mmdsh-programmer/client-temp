@@ -115,7 +115,6 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-4 p-4 xs:p-6 h-[calc(100%-160px)] xs:h-[535px] overflow-auto">
           {getRepo?.roleName === "owner" ? (
             <TabComponent
-              className=""
               tabList={tabList}
               activeTab={activeTab}
               setActiveTab={setActiveTab}

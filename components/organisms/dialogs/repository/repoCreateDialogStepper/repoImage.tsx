@@ -1,6 +1,5 @@
+import React, { useEffect, useState } from "react";
 import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
-
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
@@ -43,9 +42,13 @@ const RepoImage = ({
 
   const onSubmit = async () => {
     if (!getRepo) return;
-    if (!imageType) return handleClose();
-    if (imageType === "default" && !defualtImage) return;
-    if (imageType === "custom" && !selectedFile) return;
+    if (imageType === "default" && !defualtImage) {
+      toast.error("عکسی انتخاب نشده");
+    }
+    if (imageType === "custom" && !selectedFile) {
+      toast.error("عکسی انتخاب نشده");
+    }
+
     mutate({
       repoId: getRepo.id,
       fileHash: selectedFile || defualtImage,
@@ -56,6 +59,12 @@ const RepoImage = ({
       },
     });
   };
+
+  useEffect(() => {
+    if (selectedFile) {
+      setImageType("custom");
+    }
+  }, [selectedFile]);
 
   return (
     <>
@@ -68,6 +77,7 @@ const RepoImage = ({
           setImageType={setImageType}
           setOpenFileManagement={setOpenFileManagement}
           onSelect={handleSelect}
+          imageHash={selectedFile}
         />
       </DialogBody>
       <DialogFooter
