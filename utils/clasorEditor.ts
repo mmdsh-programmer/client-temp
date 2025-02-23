@@ -1,5 +1,6 @@
 export const config = {
   showOutline: false,
+  padding: 0,
   includeItems: [
     "bold",
     "italic",
