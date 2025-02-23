@@ -84,7 +84,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       contentType: document.contentType,
       title: dataForm.title,
       description: dataForm?.description,
-      order: dataForm.order,
+      order: dataForm.order || undefined,
       isHidden: false,
       isDirectAccess: currentPath === "/admin/sharedDocuments",
       callBack: () => {

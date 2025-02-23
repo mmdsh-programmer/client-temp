@@ -1,31 +1,29 @@
-import { createRepoKeyAction } from "@actions/repository";
+import { createUploadLinkAction } from "@actions/files";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { IPublicKey } from "@interface/repo.interface";
 
-const useCreateRepoPublicKey = () => {
+const useCreateUploadLink = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["createRepoKey"],
+    mutationKey: ["createUploadLink"],
     mutationFn: async (values: {
-      repoId: number;
-      name: string;
-      key: string;
-      callBack?: () => void;
+      resourceId: number;
+      userGroupHash: string;
+      successCallBack?: (result: string) => void;
     }) => {
-      const { repoId, name, key } = values;
-      const response = await createRepoKeyAction(repoId, name, key);
+      const { resourceId, userGroupHash } = values;
+      const response = await createUploadLinkAction(resourceId, userGroupHash);
       handleClientSideHookError(response as IActionError);
-      return response as IPublicKey;
+      return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { successCallBack, userGroupHash } = values;
       queryClient.invalidateQueries({
-        queryKey: [`repo-${repoId}-public-keys`],
+        queryKey: [`getFiles-${userGroupHash}`],
       });
-      callBack?.();
+      successCallBack?.(response.uploadHash);
     },
     onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
@@ -33,4 +31,4 @@ const useCreateRepoPublicKey = () => {
   });
 };
 
-export default useCreateRepoPublicKey;
+export default useCreateUploadLink;

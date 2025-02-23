@@ -350,20 +350,19 @@ export const getRepositoryKeys = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IListResponse<IPublicKey>>(
-      `repositories/${repoId}/publicKey`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IPublicKey>>
+    >(`repositories/${repoId}/publicKey`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -599,8 +598,8 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          forceDelete: true
-        }
+          forceDelete: true,
+        },
       }
     );
 
@@ -2486,6 +2485,32 @@ export const deleteFile = async (
         },
         params: {
           type,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createUploadLink = async (
+  accessToken: string,
+  resourceId: number,
+  userGroupHash: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post(
+      `fileManagement/resource/${resourceId}/uploadLink`,
+      {
+        expireTime: (Date.now() + 3600 * 1000).toString(),
+        userGroupHash,
+        isPublic: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
