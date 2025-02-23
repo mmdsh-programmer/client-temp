@@ -37,7 +37,6 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
     reset,
     clearErrors,
     setValue,
-    getValues,
     formState: { errors },
   } = form;
 
