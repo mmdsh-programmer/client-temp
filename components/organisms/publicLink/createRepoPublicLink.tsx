@@ -6,16 +6,14 @@ import FormInput from "@components/atoms/input/formInput";
 import { onDatePickerChangePayload } from "zaman/dist/types";
 import { publicRoleAtom } from "@atom/public";
 import { repoAtom } from "@atom/repository";
-import { repoShareSchema } from "@components/organisms/dialogs/repository/validation.yup";
 import { toast } from "react-toastify";
 import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { IRepo } from "@interface/repo.interface";
 
 interface IData {
-  expireTime: number;
+  expireTime?: number;
   roleId: number;
   password?: string;
 }
@@ -25,16 +23,13 @@ interface IProps {
 }
 
 const CreateRepoPublicLink = ({ setOpen }: IProps) => {
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const [hasPassword, setHasPassword] = useState(false);
+  const [hasExpireTime, setHasExpireTime] = useState(false);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const getSelectedRoleId = useRecoilValue(publicRoleAtom);
   const createPublicLink = useCreatePublicLink();
 
-  const form = useForm<{
-    expireTime: number;
-    roleId: number;
-    password?: string;
-  }>({ resolver: yupResolver(repoShareSchema) });
+  const form = useForm<IData>();
 
   const {
     register,
@@ -42,6 +37,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
     reset,
     clearErrors,
     setValue,
+    getValues,
     formState: { errors },
   } = form;
 
@@ -71,7 +67,10 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
     createPublicLink.mutate({
       repoId: getRepo.id,
       roleId: getSelectedRoleId,
-      expireTime: data.expireTime,
+      expireTime:
+        hasExpireTime && data.expireTime
+          ? data.expireTime
+          : undefined,
       password: hasPassword ? data.password : undefined,
       callBack: (result) => {
         const objKey = Object.keys(result)[0];
@@ -126,17 +125,35 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">انتخاب تاریخ</Typography>
-          <DatePicker
-            onChange={submitCalendar}
-            className="z-[999999] delay-200"
-            inputClass="rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
+          <Checkbox
+            crossOrigin="anonymous"
+            label={
+              <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                افزودن تاریخ انقضای لینک
+              </Typography>
+            }
+            color="deep-purple"
+            checked={hasExpireTime}
+            onChange={() => {
+              setHasExpireTime(!hasExpireTime);
+            }}
+            containerProps={{ className: "-mr-3" }}
           />
-          {errors.expireTime && (
-            <Typography className="warning_text">
-              {errors.expireTime?.message}
-            </Typography>
-          )}
+          {hasExpireTime ? (
+            <>
+              <Typography className="label"> انتخاب تاریخ</Typography>
+              <DatePicker
+                onChange={submitCalendar}
+                className="z-[999999] delay-200"
+                inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
+              />
+              {errors.expireTime && (
+                <Typography className="warning_text">
+                  {errors.expireTime?.message}
+                </Typography>
+              )}
+            </>
+          ) : null}
         </div>
       </form>
     </CreateDialog>

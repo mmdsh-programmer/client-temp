@@ -58,7 +58,8 @@ const DomainPublicFeedList = () => {
                   {
                     data: (
                       <Typography
-                        className="title_t3 text-blue-600 max-w-[100px] truncate flex gap-2 mr-2 w-12 sm:w-20 md:w-auto"
+                        dir="ltr"
+                        className="title_t3 text-blue-600 max-w-[150px] truncate flex gap-2 mr-2 w-12 sm:w-20 md:w-auto"
                         title={link}
                       >
                         {link || "_"}

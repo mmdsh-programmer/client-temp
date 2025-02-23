@@ -10,14 +10,14 @@ import {
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+import { headers } from "next/headers";
 
 export const getPublicFeedsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await getDomainFeeds(
       userInfo.access_token,
@@ -39,11 +39,10 @@ export const createPublicFeedAction = async (
   image?: string
 ) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await createDomainFeed(
       userInfo.access_token,
@@ -64,15 +63,15 @@ export const updatePublicFeedAction = async (
   feedId: number,
   name: string,
   content: string,
-  link?: string, 
+  link?: string,
   image?: string
 ) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+
   try {
     const response = await updateDomainFeed(
       userInfo.access_token,
@@ -92,11 +91,10 @@ export const updatePublicFeedAction = async (
 
 export const deletePublicFeedAction = async (feedId: number) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await deleteDomainFeed(
       userInfo.access_token,

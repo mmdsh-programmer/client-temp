@@ -9,14 +9,16 @@ import {
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+import { headers } from "next/headers";
 
 export const getPrivateFeedsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+
   try {
     const response = await getDomainFeeds(
       userInfo.access_token,

@@ -13,7 +13,7 @@ import { normalizeError } from "@utils/normalizeActionError";
 export const createRepoPublicLinkAction = async (
   repoId: number,
   roleId: number,
-  expireTime: number,
+  expireTime?: number,
   password?: string
 ) => {
   const userInfo = await getMe();

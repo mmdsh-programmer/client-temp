@@ -31,7 +31,11 @@ import {
   IServerResult,
   IUserInfo,
 } from "@interface/app.interface";
-import { IClasorDomainResult, IClasorReport, IClasorResult } from "@interface/clasor";
+import {
+  IClasorDomainResult,
+  IClasorReport,
+  IClasorResult,
+} from "@interface/clasor";
 import {
   IClasorField,
   IDocument,
@@ -107,7 +111,7 @@ axiosClasorInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    const { headers  } = error.config;
+    const { headers } = error.config;
     const log = {
       type: "ERROR",
       config: {
@@ -120,9 +124,9 @@ axiosClasorInstance.interceptors.response.use(
         data: error.response?.data,
       },
       headers: {
-        "Accept": headers?.Accept,
+        Accept: headers?.Accept,
         "Accept-Encoding": headers?.["Accept-Encoding"],
-        "Authorization": headers?.Authorization,
+        Authorization: headers?.Authorization,
       },
     };
     Logger.error(log);
@@ -182,7 +186,7 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
     return JSON.parse(cachedUser);
   }
 
-  try {  
+  try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
       {
@@ -594,6 +598,9 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          forceDelete: true
+        }
       }
     );
 
@@ -649,7 +656,7 @@ export const createRepo = async (
   accessToken: string,
   name: string,
   repoTypes: string[],
-  description?: string,
+  description?: string
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -1305,7 +1312,7 @@ export const createCategory = async (
         parentId,
         name,
         description,
-        order,
+        order: order && order > 0 ? Number(order) : undefined,
       },
       {
         headers: {
@@ -1462,7 +1469,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoTypes: string[],
+  repoTypes: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1768,7 +1775,7 @@ export const createDocument = async (
         categoryId,
         description,
         imageUrl,
-        order: order && order > 0 ? order : undefined,
+        order: order && order > 0 ? Number(order) : undefined,
         isTemplate,
         publicKeyId,
       },
@@ -2631,7 +2638,7 @@ export const createRepoPublicLink = async (
   accessToken: string,
   repoId: number,
   roleId: number,
-  expireTime: number,
+  expireTime?: number,
   password?: string
 ) => {
   try {
@@ -4207,32 +4214,31 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
   try {
-    
-  if(domain === ""){
-    throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
-  }
-
- 
-  const { data } = await axiosClasorInstance.get<IClasorResult<IClasorDomainResult>>("domain/info", {
-    headers:{
-      domainUrl: domain
+    if (domain === "") {
+      throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
-  });
 
+    const { data } = await axiosClasorInstance.get<
+      IClasorResult<IClasorDomainResult>
+    >("domain/info", {
+      headers: {
+        domainUrl: domain,
+      },
+    });
 
-  const sensitiveStringData = await decryptKey(
-    data.data.sensitiveData,
-    process.env.CRYPTO_SECRET_KEY!, 
-    process.env.CRYPTO_INIT_VECTOR_KEY!
-  );
-  const sensitiveData = JSON.parse(sensitiveStringData);
-  
-  const domainInfo = {
-    ...data.data,
-    ...sensitiveData,
-  };
+    const sensitiveStringData = await decryptKey(
+      data.data.sensitiveData,
+      process.env.CRYPTO_SECRET_KEY!,
+      process.env.CRYPTO_INIT_VECTOR_KEY!
+    );
+    const sensitiveData = JSON.parse(sensitiveStringData);
 
-  return domainInfo as IDomainMetadata;
+    const domainInfo = {
+      ...data.data,
+      ...sensitiveData,
+    };
+
+    return domainInfo as IDomainMetadata;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

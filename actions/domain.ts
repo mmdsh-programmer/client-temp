@@ -1,8 +1,8 @@
 "use server";
 
 import { getDomainPublishRepoList } from "@service/clasor";
-import { headers } from "next/dist/client/components/headers";
 import { getMe } from "./auth";
+import { headers } from "next/headers";
 
 export const getDomainPublishRepositoriesAction = async (
   offset: number,
@@ -16,7 +16,7 @@ export const getDomainPublishRepositoriesAction = async (
   }
   const response = await getDomainPublishRepoList(
     userInfo.access_token,
-    "http://zahraesp.ir",
+    domain,
     offset,
     size
   );
