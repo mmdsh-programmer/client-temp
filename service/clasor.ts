@@ -262,6 +262,11 @@ export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
         params: {
           repoTypes,
         },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       }
     );
 
@@ -312,7 +317,7 @@ export const getAllRepositories = async (
       },
       paramsSerializer: (params) => {
         return qs.stringify(params, {
-          arrayFormat: "repeat",
+          indexes: false,
         });
       },
     });
