@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { ChangeEvent, useState } from "react";
@@ -6,18 +7,24 @@ import FileList from "../fileList";
 import FileUpload from "@components/molecules/fileUpload";
 import { IFile } from "cls-file-management";
 import axios from "axios";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
+import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
+import { selectedDocumentAtom } from "@atom/document";
+import { useRecoilValue } from "recoil";
+import { Spinner } from "@material-tailwind/react";
 
 const fileTablePageSize = 20;
 
-const AttachFile = () => {
+const AttachFile = ({
+  attachmentUserGroup,
+}: {
+  attachmentUserGroup: string;
+}) => {
   const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [processCount, setProcessCount] = useState(0);
@@ -31,13 +38,13 @@ const AttachFile = () => {
     isFetching: isFetchingUserInfo,
   } = useGetUser();
 
-  const { data: files, refetch } = useGetFiles(
-    getDocument!.id,
-    getDocument!.attachmentUserGroup || "",
-    fileTablePageSize,
-    0 * fileTablePageSize
-  );
+  const {
+    data: files,
+    refetch,
+    isLoading: isLoadingFiles,
+  } = useGetFiles(getDocument!.id, attachmentUserGroup, fileTablePageSize);
 
+  const createUploadLink = useCreateUploadLink();
   const deleteFile = useDeleteFile();
 
   const handleDeleteFile = (file: IFile) => {
@@ -69,8 +76,6 @@ const AttachFile = () => {
       return;
     }
 
-    // setProcessCount(0);
-
     const token = userInfo?.access_token;
     if (!isFetchingUserInfo && token) {
       setIsLoading(true);
@@ -78,75 +83,63 @@ const AttachFile = () => {
       const fileItem = file;
       const fileData = new FormData();
       fileData.append("file", fileItem, encodeURIComponent(fileItem.name));
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${getDocument?.id}/uploadLink`,
-          {
-            expireTime: (Date.now() + 3600 * 1000).toString(),
-            userGroupHash: getDocument?.attachmentUserGroup,
-            isPublic: false,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              _token_: token || "",
-              _token_issuer_: "1",
-            },
-          }
-        )
-        .then(async (res) => {
-          if (res.data.data.uploadHash) {
-            const uploadLink = res.data.data.uploadHash;
-            try {
-              const result = await axios.post(
-                `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadLink}`,
-                fileData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data;",
-                    Authorization: `Bearer ${token}`,
-                    _token_: token || "",
-                    _token_issuer_: "1",
-                  },
-                  onUploadProgress(progressEvent: any) {
-                    const progress = Math.round(
-                      (progressEvent.loaded * 100) / progressEvent.total
-                    );
-                    setProcessCount(progress);
-                  },
-                }
-              );
-              if (result.data.result) {
-                await onSuccess();
+      if (!getDocument?.attachmentUserGroup) {
+        toast.error("یوزرگروپ سند یافت نشد.");
+        return;
+      }
+
+      createUploadLink.mutate({
+        resourceId: getDocument!.id,
+        userGroupHash: getDocument.attachmentUserGroup,
+        successCallBack: async (uploadHash) => {
+          try {
+            const result = await axios.post(
+              `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadHash}`,
+              fileData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data;",
+                  Authorization: `Bearer ${token}`,
+                  _token_: token || "",
+                  _token_issuer_: "1",
+                },
+                onUploadProgress(progressEvent: any) {
+                  const progress = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );
+                  setProcessCount(progress);
+                },
               }
-            } catch (error: any) {
-              if (error?.result?.status === 401) {
-                refetchUser();
-              }
-              toast.error("خطا در بارگذاری فایل");
-            } finally {
-              setIsLoading(false);
+            );
+            if (result.data.result) {
+              await onSuccess();
             }
+          } catch (error: any) {
+            if (error?.result?.status === 401) {
+              refetchUser();
+            }
+            toast.error("خطا در بارگذاری فایل");
+          } finally {
+            setIsLoading(false);
           }
-          queryClient.invalidateQueries({
-            queryKey: [`getReport-${getDocument?.attachmentUserGroup}`],
-          });
-        })
-        .catch((error: any) => {
-          if (error?.response?.status === 401) {
-            refetchUser();
-          }
-          toast.error("خطا در بارگذاری فایل");
-          setIsLoading(false);
-        });
+        },
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: [`getReport-${getDocument?.attachmentUserGroup}`],
+      });
     }
   };
 
   return (
     <>
       <DocumentEnableUserGroup />
-      <div className="flex flex-col gap-6 justify-between px-6 py-4">
-        {userInfo ? (
+      <div className="h-full flex flex-col gap-6 justify-between px-6 py-4">
+        {isLoadingFiles ? (
+          <div className="h-full flex justify-center">
+            <Spinner className="h-5 w-5" />
+          </div>
+        ) : userInfo ? (
           <FileList
             files={
               files?.pages?.flatMap((page) => {
