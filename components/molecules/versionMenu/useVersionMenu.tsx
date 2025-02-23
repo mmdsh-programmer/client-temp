@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import { EDocumentTypes } from "@interface/enums";
 
 interface MenuItem {
   text: string;
@@ -120,9 +121,11 @@ const useVersionMenuList = (
           setVersionData(null);
         },
       },
+
       {
         text: compareVersion?.version ? "مقایسه با نسخه مورد نظر" : "مقایسه",
         icon: <ComparisionIcon className="h-4 w-4 stroke-icon-active" />,
+        disabled: getDocument?.contentType !== EDocumentTypes.classic,
         onClick: () => {
           if (version) {
             setVersion(version);

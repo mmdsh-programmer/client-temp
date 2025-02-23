@@ -154,7 +154,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         <div className="w-full xs:w-[300px]">
           <EditorDrawer
             version={versionData}
-            editorRef={getEditorConfig().ref}
           />
         </div>
       ) : null}

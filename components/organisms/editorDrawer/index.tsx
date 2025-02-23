@@ -1,14 +1,12 @@
 import "clasor-content-preview/src/styles/contentPreview.css";
 
-import { IOutline, IVersion } from "@interface/version.interface";
-import React, { RefObject, useState } from "react";
+import { IVersion } from "@interface/version.interface";
+import React, { useState } from "react";
 
 import AttachFile from "./attachFile";
 import Comments from "./comments";
 import { EDocumentTypes } from "@interface/enums";
 import EditorTags from "./editorTags";
-import { IRemoteEditorRef } from "clasor-remote-editor";
-import { Outline } from "clasor-content-preview";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import { editorModeAtom } from "@atom/editor";
@@ -16,7 +14,6 @@ import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
 
 export enum ETabs {
-  OUTLINE = "فهرست",
   CHAT = "گفتگو",
   TAGS = "تگ‌ها",
   ATTACH_FILE = "پیوست",
@@ -25,31 +22,14 @@ export enum ETabs {
 
 interface IProps {
   version?: IVersion;
-  editorRef: RefObject<IRemoteEditorRef>;
 }
 
-const EditorDrawer = ({ version, editorRef }: IProps) => {
+const EditorDrawer = ({ version }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const [activeTab, setActiveTab] = useState<string>(ETabs.OUTLINE);
-
-  const outlineList = version?.outline?.startsWith("{\"root\": {\"root\"")
-    ? "[]"
-    : version?.outline;
+  const [activeTab, setActiveTab] = useState<string>(ETabs.CHAT);
 
   const tabList = [
-    {
-      tabTitle: ETabs.OUTLINE,
-      tabContent: (
-        <Outline
-          outline={outlineList || "[]"}
-          classicEditor
-          handleClick={(value: IOutline) => {
-            return editorRef.current?.setHeader(value);
-          }}
-        />
-      ),
-    },
     {
       tabTitle: ETabs.CHAT,
       tabContent: <Typography>تب گفتگو</Typography>,
@@ -60,10 +40,10 @@ const EditorDrawer = ({ version, editorRef }: IProps) => {
           tabContent: <EditorTags />,
         }
       : null,
-    getDocument?.contentType === EDocumentTypes.classic
+    getDocument?.contentType === EDocumentTypes.classic && getDocument.attachmentUserGroup
       ? {
           tabTitle: ETabs.ATTACH_FILE,
-          tabContent: <AttachFile />,
+          tabContent: <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />,
         }
       : null,
     version?.state !== "draft" &&

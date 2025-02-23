@@ -1,7 +1,6 @@
 import React from "react";
 import {
   RepoBlueIcon,
-  RepoIcon,
   RepoPurpleIcon,
   RepoRedIcon,
   RepoYellowIcon,
@@ -22,7 +21,7 @@ const RepoDefaultImage = ({ imageHash }: IProps) => {
   }
 
   if (!imageHash) {
-    return <RepoIcon className="w-full h-full" />;
+    return <RepoYellowIcon className="w-full h-full" />;
   }
 
   const generateImage = () => {
