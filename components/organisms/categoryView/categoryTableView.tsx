@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 import React, { useState } from "react";
 import {
   ICategoryMetadata,
@@ -88,7 +86,7 @@ const TableView = ({
                       key: "order",
                       value: "اولویت",
                       isSorted: true,
-                      className: "categoryOrder hidden xl:table-cell",
+                      className: "categoryOrder hidden xl:flex",
                     },
                     { key: "name", value: "نام دسته", isSorted: true },
                     { key: "createDate", value: "تاریخ ایجاد", isSorted: true },

@@ -27,6 +27,7 @@ export interface IFeedItem {
   name: string;
   content: string;
   pin: boolean;
+  metadata: string
 }
 
 export interface IRate {

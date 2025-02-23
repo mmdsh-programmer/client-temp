@@ -45,7 +45,7 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
         password: dataForm.password,
         callBack: (result) => {
           toast.success("با موفقیت به ریپو منصوب شدید");
-          router.push(`/admin/repositories?repoId=${result.repository.id}`);
+          router.push(`/admin/repositories?repoId=${result.data.repository.id}`);
           localStorage.removeItem("CLASOR:LAST_PAGE");
           setRepoGroup(ERepoGrouping.ACCESS_REPO);
         },
