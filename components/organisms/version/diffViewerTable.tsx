@@ -37,7 +37,7 @@ const DiffViewerTable = ({
           <ReactDiffViewer
             oldValue={oldValue}
             newValue={newValue}
-            compareMethod={DiffMethod.WORDS_WITH_SPACE}
+            compareMethod={DiffMethod.WORDS}
             splitView
             styles={newStyles}
             leftTitle={
