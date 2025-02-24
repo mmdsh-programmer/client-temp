@@ -4242,10 +4242,20 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
   try {
+    
     if (domain === "") {
       throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
 
+    const redisClient = await getRedisClient();
+    const cachedDomain = await redisClient?.get(`domain:${domain}`);
+    if (cachedDomain) {
+      Logger.warn(JSON.stringify({
+        type: "Redis cache data",
+        data: cachedDomain,
+      }));
+      return JSON.parse(cachedDomain);
+    }
     const { data } = await axiosClasorInstance.get<
       IClasorResult<IClasorDomainResult>
     >("domain/info", {
@@ -4265,6 +4275,14 @@ export const getCustomPostByDomain = async (
       ...data.data,
       ...sensitiveData,
     };
+
+    if(domainInfo){
+      await redisClient?.set(
+        `domain:${domain}`,
+        JSON.stringify(domainInfo),
+        { EX: 60 * 60 }
+      );
+    }
 
     return domainInfo as IDomainMetadata;
   } catch (error) {
