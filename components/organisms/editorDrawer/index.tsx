@@ -1,17 +1,17 @@
 import "clasor-content-preview/src/styles/contentPreview.css";
 
-import { IVersion } from "@interface/version.interface";
 import React, { useState } from "react";
-
+import { IVersion } from "@interface/version.interface";
 import AttachFile from "./attachFile";
 import Comments from "./comments";
 import { EDocumentTypes } from "@interface/enums";
 import EditorTags from "./editorTags";
 import TabComponent from "@components/molecules/tab";
-import { Typography } from "@material-tailwind/react";
 import { editorModeAtom } from "@atom/editor";
 import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
+import DocumentEnableUserGroup from "./documentEnableUserGroup";
+import { Spinner } from "@material-tailwind/react";
 
 export enum ETabs {
   CHAT = "گفتگو",
@@ -27,23 +27,22 @@ interface IProps {
 const EditorDrawer = ({ version }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const [activeTab, setActiveTab] = useState<string>(ETabs.CHAT);
+  const [activeTab, setActiveTab] = useState<string>(ETabs.TAGS);
 
   const tabList = [
-    {
-      tabTitle: ETabs.CHAT,
-      tabContent: <Typography>تب گفتگو</Typography>,
-    },
     getDocument?.contentType === EDocumentTypes.classic
       ? {
           tabTitle: ETabs.TAGS,
           tabContent: <EditorTags />,
         }
       : null,
-    getDocument?.contentType === EDocumentTypes.classic && getDocument.attachmentUserGroup
+    getDocument?.contentType === EDocumentTypes.classic &&
+    getDocument.attachmentUserGroup
       ? {
           tabTitle: ETabs.ATTACH_FILE,
-          tabContent: <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />,
+          tabContent: (
+            <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />
+          ),
         }
       : null,
     version?.state !== "draft" &&
@@ -60,11 +59,20 @@ const EditorDrawer = ({ version }: IProps) => {
   }[];
 
   return (
-    <TabComponent
-      tabList={tabList}
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-    />
+    <>
+      <DocumentEnableUserGroup />
+      {!getDocument?.attachmentUserGroup ? (
+        <div className="h-full mt-4 flex justify-center">
+          <Spinner className="h-5 w-5" />
+        </div>
+      ) : (
+        <TabComponent
+          tabList={tabList}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      )}
+    </>
   );
 };
 

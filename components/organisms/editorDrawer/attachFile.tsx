@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { ChangeEvent, useState } from "react";
-import DocumentEnableUserGroup from "./documentEnableUserGroup";
 import FileList from "../fileList";
 import FileUpload from "@components/molecules/fileUpload";
 import { IFile } from "cls-file-management";
@@ -132,9 +131,7 @@ const AttachFile = ({
   };
 
   return (
-    <>
-      <DocumentEnableUserGroup />
-      <div className="h-full flex flex-col gap-6 justify-between px-6 py-4">
+    <div className="h-full flex flex-col gap-6 justify-between px-6 py-4">
         {isLoadingFiles ? (
           <div className="h-full flex justify-center">
             <Spinner className="h-5 w-5" />
@@ -155,7 +152,6 @@ const AttachFile = ({
           <FileUpload onUpload={handleUploadClick} progress={processCount} />
         ) : null}
       </div>
-    </>
   );
 };
 
