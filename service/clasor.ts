@@ -180,10 +180,12 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    Logger.warn(JSON.stringify({
-      type: "Redis cache data",
-      data: cachedUser,
-    }));
+    Logger.warn(
+      JSON.stringify({
+        type: "Redis cache data",
+        data: cachedUser,
+      })
+    );
     return JSON.parse(cachedUser);
   }
 
@@ -428,7 +430,7 @@ export const getKey = async (
   isDirectAccess?: boolean
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IPublicKey>(
+    const response = await axiosClasorInstance.get<IServerResult<IPublicKey>>(
       `repositories/${repoId}/publicKey/${keyId}`,
       {
         headers: {
@@ -440,7 +442,7 @@ export const getKey = async (
       }
     );
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -4242,7 +4244,6 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
   try {
-    
     if (domain === "") {
       throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
@@ -4250,10 +4251,12 @@ export const getCustomPostByDomain = async (
     const redisClient = await getRedisClient();
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
-      Logger.warn(JSON.stringify({
-        type: "Redis cache data",
-        data: cachedDomain,
-      }));
+      Logger.warn(
+        JSON.stringify({
+          type: "Redis cache data",
+          data: cachedDomain,
+        })
+      );
       return JSON.parse(cachedDomain);
     }
     const { data } = await axiosClasorInstance.get<
@@ -4276,12 +4279,10 @@ export const getCustomPostByDomain = async (
       ...sensitiveData,
     };
 
-    if(domainInfo){
-      await redisClient?.set(
-        `domain:${domain}`,
-        JSON.stringify(domainInfo),
-        { EX: 60 * 60 }
-      );
+    if (domainInfo) {
+      await redisClient?.set(`domain:${domain}`, JSON.stringify(domainInfo), {
+        EX: 60 * 60,
+      });
     }
 
     return domainInfo as IDomainMetadata;
