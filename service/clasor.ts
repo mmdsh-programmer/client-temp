@@ -2059,7 +2059,7 @@ export const updateDocumentPassword = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  oldPassword: string,
+  oldPassword: string | undefined,
   newPassword: string
 ) => {
   try {

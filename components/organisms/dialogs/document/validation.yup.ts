@@ -50,7 +50,7 @@ export const documentSetPasswordSchema = yup
 export const documentResetPasswordSchema = yup
   .object()
   .shape({
-    oldPassword: yup.string().required("لطفا رمز عبور قدیمی خود را وارد کنید"),
+    // oldPassword: yup.string().required("لطفا رمز عبور قدیمی خود را وارد کنید"),
     password: yup
       .string()
       .matches(/^(?=.{8,})/, "رمز عبور باید حداقل 8 کاراکتر باشد")

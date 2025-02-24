@@ -11,13 +11,14 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useUpdateDocumentPassword from "@hooks/document/useUpdateDocumentPassword";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ERoles } from "@interface/enums";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 interface IDataForm {
-  oldPassword: string;
+  oldPassword?: string;
   password: string;
   confirmPassword: string;
 }
@@ -30,10 +31,10 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
 
   const updatePassword = useUpdateDocumentPassword();
 
-  const form = useForm<IDataForm>({resolver: yupResolver(documentResetPasswordSchema),});
-  const {
- register, handleSubmit, formState, reset, clearErrors, setError 
-} =
+  const form = useForm<IDataForm>({
+    resolver: yupResolver(documentResetPasswordSchema),
+  });
+  const { register, handleSubmit, formState, reset, clearErrors, setError } =
     form;
   const { errors } = formState;
 
@@ -45,7 +46,9 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = (dataForm: IDataForm) => {
     if (dataForm.password !== dataForm.confirmPassword) {
-      setError("confirmPassword", {message: "تکرار رمز عبور با رمز عبور یکسان نیست",});
+      setError("confirmPassword", {
+        message: "تکرار رمز عبور با رمز عبور یکسان نیست",
+      });
 
       return;
     }
@@ -54,7 +57,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
       repoId: getRepo!.id,
       documentId: document!.id,
       categoryId: getCategory?.id || null,
-      oldPassword: dataForm.oldPassword,
+      oldPassword: getRepo?.roleName !== ERoles.owner? dataForm.oldPassword : undefined,
       newPassword: dataForm.password,
       successCallBack: () => {
         toast.success("رمز عبور سند مورد نظر با موفقیت تعییر کرد.");
@@ -63,19 +66,20 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
     });
   };
   return (
-      <ConfirmFullHeightDialog
-        isPending={updatePassword.isPending}
-        onSubmit={handleSubmit(onSubmit)}
-        setOpen={handleClose}
-        dialogHeader="تغییر رمز عبور سند"
-      >
-        <form className="flex flex-col gap-5">
+    <ConfirmFullHeightDialog
+      isPending={updatePassword.isPending}
+      onSubmit={handleSubmit(onSubmit)}
+      setOpen={handleClose}
+      dialogHeader="تغییر رمز عبور سند"
+    >
+      <form className="flex flex-col gap-5">
+        {getRepo?.roleName !== ERoles.owner ? (
           <div className="flex flex-col gap-2">
             <Typography className="form_label">رمز عبور سابق</Typography>
             <FormInput
               type="password"
               placeholder="رمز عبور سابق"
-              register={{...register("oldPassword"),}}
+              register={{ ...register("oldPassword") }}
             />
             {errors.oldPassword && (
               <Typography className="warning_text">
@@ -83,34 +87,35 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
               </Typography>
             )}
           </div>
-          <div className="flex flex-col gap-2">
-            <Typography className="form_label">رمز عبور</Typography>
-            <FormInput
-              type="password"
-              placeholder="رمز عبور"
-              register={{...register("password"),}}
-            />
-            {errors.password && (
-              <Typography className="warning_text">
-                {errors.password?.message}
-              </Typography>
-            )}
-          </div>
-          <div className="flex flex-col gap-2">
-            <Typography className="form_label">تکرار رمز عبور</Typography>
-            <FormInput
-              type="password"
-              placeholder="تکرار رمز عبور"
-              register={{...register("confirmPassword"),}}
-            />
-            {errors.confirmPassword && (
-              <Typography className="warning_text">
-                {errors.confirmPassword?.message}
-              </Typography>
-            )}
-          </div>
-        </form>
-      </ConfirmFullHeightDialog>
+        ) : null}
+        <div className="flex flex-col gap-2">
+          <Typography className="form_label">رمز عبور</Typography>
+          <FormInput
+            type="password"
+            placeholder="رمز عبور"
+            register={{ ...register("password") }}
+          />
+          {errors.password && (
+            <Typography className="warning_text">
+              {errors.password?.message}
+            </Typography>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Typography className="form_label">تکرار رمز عبور</Typography>
+          <FormInput
+            type="password"
+            placeholder="تکرار رمز عبور"
+            register={{ ...register("confirmPassword") }}
+          />
+          {errors.confirmPassword && (
+            <Typography className="warning_text">
+              {errors.confirmPassword?.message}
+            </Typography>
+          )}
+        </div>
+      </form>
+    </ConfirmFullHeightDialog>
   );
 };
 
