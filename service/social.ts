@@ -35,7 +35,7 @@ axiosSocialInstance.interceptors.request.use(
       url,
       data,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return request;
   },
   (error) => {
@@ -52,7 +52,7 @@ axiosSocialInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   }
 );
@@ -65,7 +65,7 @@ axiosSocialInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return response;
   },
   (error) => {
@@ -82,7 +82,7 @@ axiosSocialInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.info(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   }
 );

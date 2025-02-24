@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   AuthorizationError,
   DuplicateError,
@@ -20,6 +21,7 @@ import {
   ILikeList,
   IVersion,
 } from "@interface/version.interface";
+import { IBranchList, IBranchUserList } from "@interface/branch.interface";
 import { ICategory, ICategoryMetadata } from "@interface/category.interface";
 import {
   IChildrenFilter,
@@ -65,18 +67,17 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
+import { IDomainSubscriptionList } from "@interface/domain.interface";
 import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
+import { IPositionList } from "@interface/position.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
 import { decryptKey } from "@utils/crypto";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
-import { IBranchList, IBranchUserList } from "@interface/branch.interface";
-import { IPositionList } from "@interface/position.interface";
-import { IDomainSubscriptionList } from "@interface/domain.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -95,7 +96,7 @@ axiosClasorInstance.interceptors.request.use((request) => {
     data,
   };
 
-  Logger.info(log);
+  Logger.info(JSON.stringify(log));
   return request;
 });
 
@@ -107,7 +108,7 @@ axiosClasorInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return response;
   },
   (error) => {
@@ -129,7 +130,7 @@ axiosClasorInstance.interceptors.response.use(
         Authorization: headers?.Authorization,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   }
 );
@@ -179,10 +180,10 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    Logger.warn({
+    Logger.warn(JSON.stringify({
       type: "Redis cache data",
       data: cachedUser,
-    });
+    }));
     return JSON.parse(cachedUser);
   }
 
@@ -2412,8 +2413,6 @@ export const cancelConfirmVersion = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
-/// ////////////////// FILES ///////////////////////////
 export const getResourceFiles = async (
   accessToken: string,
   resourceId: number,
@@ -2448,7 +2447,6 @@ export const getResourceFiles = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
 export const editFile = async (
   accessToken: string,
   resourceId: number,
@@ -4244,10 +4242,20 @@ export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
   try {
+    
     if (domain === "") {
       throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
 
+    const redisClient = await getRedisClient();
+    const cachedDomain = await redisClient?.get(`domain:${domain}`);
+    if (cachedDomain) {
+      Logger.warn(JSON.stringify({
+        type: "Redis cache data",
+        data: cachedDomain,
+      }));
+      return JSON.parse(cachedDomain);
+    }
     const { data } = await axiosClasorInstance.get<
       IClasorResult<IClasorDomainResult>
     >("domain/info", {
@@ -4267,6 +4275,14 @@ export const getCustomPostByDomain = async (
       ...data.data,
       ...sensitiveData,
     };
+
+    if(domainInfo){
+      await redisClient?.set(
+        `domain:${domain}`,
+        JSON.stringify(domainInfo),
+        { EX: 60 * 60 }
+      );
+    }
 
     return domainInfo as IDomainMetadata;
   } catch (error) {

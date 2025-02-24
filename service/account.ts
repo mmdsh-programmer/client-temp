@@ -29,7 +29,7 @@ axiosAccountsInstance.interceptors.request.use((request) => {
     data,
   };
 
-  Logger.info(log);
+  Logger.info(JSON.stringify(log));
   return request;
 });
 
@@ -40,7 +40,7 @@ axiosAccountsInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return response;
   }, (error) => {
     const log = {
@@ -56,7 +56,7 @@ axiosAccountsInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   });
 

@@ -28,7 +28,7 @@ axiosTinyLinkInstance.interceptors.request.use((request) => {
     data,
   };
 
-  Logger.info(log);
+  Logger.info(JSON.stringify(log));
   return request;
 });
 
@@ -38,7 +38,7 @@ axiosTinyLinkInstance.interceptors.response.use((response) => {
     data,
     status,
   };
-  Logger.info(log);
+  Logger.info(JSON.stringify(log));
   return response;
 }, (error) => {
   const log = {

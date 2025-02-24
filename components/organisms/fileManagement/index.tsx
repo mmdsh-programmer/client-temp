@@ -33,7 +33,6 @@ const Files = ({
   type,
   handleClose,
 }: IProps) => {
-  const [page, setPage] = useState<number>(0);
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -227,7 +226,6 @@ const Files = ({
         onDeleteFile={handleDeleteFile}
         onUploadFile={handleUploadFile}
         onSearchFile={(search?: string) => {
-          setPage(0);
           setName(search);
         }}
       />
