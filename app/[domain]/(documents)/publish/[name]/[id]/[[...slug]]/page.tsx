@@ -8,6 +8,7 @@ import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
+import Logger from "@utils/logger";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
@@ -131,7 +132,7 @@ export default async function PublishContentPage({
           `rp-ph-${repository.id}`,
           `i-${domain}`,
         ]);
-        throw new ServerError(["سند مورد نظر فاقد آخرین نسخه میباشد."]);
+        throw new ServerError(["سند مورد نظر فاقد آخرین نسخه می باشد."]);
       }
 
       versionData = await getPublishDocumentVersion(
@@ -163,6 +164,18 @@ export default async function PublishContentPage({
       <PublishVersionContent document={documentInfo} version={versionData} />
     );
   } catch (error) {
+
+    const { errorList, errorCode } = error as unknown as   {
+      errorList: string[];
+      errorCode: number;
+    };
+    Logger.error(JSON.stringify({
+      errorList,
+      errorCode,
+      error: true,
+      referenceNumber: "NOT_DEFINED",
+    }));
+    
     const message =
       error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if (message === "NEXT_NOT_FOUND") {

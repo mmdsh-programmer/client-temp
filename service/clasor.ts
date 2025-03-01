@@ -89,6 +89,7 @@ const axiosClasorInstance = axios.create({
 axiosClasorInstance.interceptors.request.use((request) => {
   const { headers, baseURL, method, url, data } = request;
   const log = {
+    type: "REQUEST",
     headers,
     baseURL,
     method,
@@ -98,6 +99,22 @@ axiosClasorInstance.interceptors.request.use((request) => {
 
   Logger.info(JSON.stringify(log));
   return request;
+}, (error) => {
+  const log = {
+    type: "REQUEST_ERROR",
+    message: error.message,
+    config: {
+      url: error.config?.url,
+      method: error.config?.method,
+      data: error.config?.data,
+    },
+    response: {
+      status: error.response?.status,
+      data: error.response?.data,
+    },
+  };
+  Logger.error(JSON.stringify(log));
+  return Promise.reject(error);
 });
 
 axiosClasorInstance.interceptors.response.use(
@@ -114,7 +131,7 @@ axiosClasorInstance.interceptors.response.use(
   (error) => {
     const { headers } = error.config;
     const log = {
-      type: "ERROR",
+      type: "RESPONSE_ERROR",
       config: {
         url: error.config?.url,
         method: error.config?.method,

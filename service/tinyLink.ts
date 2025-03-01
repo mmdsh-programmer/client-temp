@@ -18,45 +18,67 @@ const axiosTinyLinkInstance = axios.create({
   },
 });
 
-axiosTinyLinkInstance.interceptors.request.use((request) => {
-  const { headers, baseURL, method, url, data } = request;
-  const log = {
-    headers,
-    baseURL,
-    method,
-    url,
-    data,
-  };
+axiosTinyLinkInstance.interceptors.request.use(
+  (request) => {
+    const { headers, baseURL, method, url, data } = request;
+    const log = {
+      headers,
+      baseURL,
+      method,
+      url,
+      data,
+    };
 
-  Logger.info(JSON.stringify(log));
-  return request;
-});
+    Logger.info(JSON.stringify(log));
+    return request;
+  },
+  (error) => {
+    const log = {
+      type: "REQUEST_ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.error(JSON.stringify(log));
+    return Promise.reject(error);
+  }
+);
 
-axiosTinyLinkInstance.interceptors.response.use((response) => {
-  const { data, status } = response;
-  const log = {
-    data,
-    status,
-  };
-  Logger.info(JSON.stringify(log));
-  return response;
-}, (error) => {
-  const log = {
-    type: "ERROR",
-    message: error.message,
-    config: {
-      url: error.config?.url,
-      method: error.config?.method,
-      data: error.config?.data,
-    },
-    response: {
-      status: error.response?.status,
-      data: error.response?.data,
-    },
-  };
-  Logger.error(log);
-  return Promise.reject(error);
-});
+axiosTinyLinkInstance.interceptors.response.use(
+  (response) => {
+    const { data, status } = response;
+    const log = {
+      data,
+      status,
+    };
+    Logger.info(JSON.stringify(log));
+    return response;
+  },
+  (error) => {
+    const log = {
+      type: "RESPONSE_ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.error(log);
+    return Promise.reject(error);
+  }
+);
 
 export const handleTinyLinkStatusError = (
   error: AxiosError<ITinyActionError> | ITinyActionError
