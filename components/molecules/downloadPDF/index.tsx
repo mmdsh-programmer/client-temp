@@ -1,66 +1,75 @@
-import React, { useRef, useEffect } from "react";
-import { DownloadIcon, PrintIcon } from "@components/atoms/icons";
-import { useReactToPrint } from "react-to-print";
-import {
-  Button,
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Typography,
-} from "@material-tailwind/react";
+import React, { useRef, useState } from "react";
+import { PDFIcon } from "@components/atoms/icons";
+import { Button } from "@material-tailwind/react";
+import { selectedVersionAtom } from "@atom/version";
+import { selectedDocumentAtom } from "@atom/document";
+import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
-import { editorDataAtom } from "@atom/editor";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const DownloadPDF = () => {
-  const getVersionData = useRecoilValue(editorDataAtom);
-  const contentRef = useRef<HTMLDivElement>();
+  const [loading, setLoading] = useState(false);
+  const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const handlePrint = useReactToPrint({
-    bodyClass: "print-window",
-    contentRef,
-    onAfterPrint: () => {
-      localStorage.setItem("CLASOR_PDF_FLAG", JSON.stringify(false));
-      window.dispatchEvent(new Event("storage"));
-    },
-    pageStyle: "width:100%;height:auto;padding:25px;overflow-x:hidden;",
-  });
+  const getRepo = useRecoilValue(repoAtom);
+  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
 
-  const setLocalStorage = () => {
-    localStorage.setItem("CLASOR_PDF_FLAG", JSON.stringify(true));
-    window.dispatchEvent(new Event("storage"));
-    setTimeout(() => {
-      handlePrint();
+ const {data: userInfo } = useGetUser();
+
+  const handleDownloadFile = async (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    
+    let versionPath = "";
+    if (getSelectedVersion?.state === "draft") {
+      versionPath = "/draft";
+    } else if (getSelectedVersion?.state === "public") {
+      versionPath = "/publicVersion";
+    }
+    
+    const link = `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${getRepo!.id}/documents/${getSelectedDocument!.id}/versions/${getSelectedVersion!.id}${versionPath}?innerDocument=true&format=pdf`;
+    setLoading(true);
+    const result = await fetch(link, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/pdf",
+        Authorization: `Bearer ${userInfo?.access_token}`,
+      },
     });
+
+    const blob = await result.blob();
+    const url = window.URL.createObjectURL(new Blob([blob]));
+
+    if (!linkRef.current) {
+      return;
+    }
+    linkRef.current.href = url;
+    linkRef.current.setAttribute(
+      "download",
+      `${getSelectedDocument?.name}(${getSelectedVersion?.versionNumber}).pdf`
+    );
+    setLoading(false);
+    linkRef.current.click();
   };
 
-  useEffect(() => {
-    const divEl = document.createElement("div");
-    if (getVersionData) {
-      divEl.innerHTML = getVersionData.content || "";
-      contentRef.current = divEl;
-    }
-  }, [getVersionData]);
-
   return (
-    <Menu>
-      <MenuHandler>
-        <Button className="bg-transparent p-0 mt-1">
-          <DownloadIcon className="w-6 h-6 cursor-pointer" />
-        </Button>
-      </MenuHandler>
-      <MenuList className="z-[999999] p-0">
-        <MenuItem
-        className="flex gap-2"
-          onClick={() => {
-            return setLocalStorage();
-          }}
-        >
-          <PrintIcon className="w-5 h-5 stroke-blue-gray-400" />
-          <Typography>دانلود به فرمت pdf</Typography>
-        </MenuItem>
-      </MenuList>
-    </Menu>
+    <>
+      <Button
+        className="bg-transparent p-0 mt-1"
+        title="دانلود pdf"
+        onClick={handleDownloadFile}
+        disabled={loading}
+      >
+        {loading ? (
+          <div className="spinner" />
+        ) : (
+          <PDFIcon className="w-4 h-4" />
+        )}
+      </Button>
+      <a hidden ref={linkRef} download>
+        downloadLInk
+      </a>
+    </>
   );
 };
 
