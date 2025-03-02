@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { SearchIcon } from "@components/atoms/icons";
-import InputAtom from "@components/atoms/input";
-import { ERepoGrouping } from "@interface/enums";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
+import { ERepoGrouping } from "@interface/enums";
+import InputAtom from "@components/atoms/input";
+import { SearchIcon } from "@components/atoms/icons";
 
 const RepoSearch = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
@@ -13,13 +14,13 @@ const RepoSearch = () => {
     getRepoGroup === ERepoGrouping.DASHBOARD
       ? ERepoGrouping.ALL_REPO
       : (getRepoGroup ?? ERepoGrouping.ALL_REPO);
-
+  
   return (
     <div className="searchRepo hidden w-full xs:flex justify-between">
       <div
         className="flex flex-grow gap-2 w-full items-center h-9 px-3 border-[1px] border-normal bg-primary rounded-lg "
         onKeyDown={(event) => {
-          if (event.code === "Enter") {
+          if (event.code === "Enter" || event.code === "NumpadEnter") {
             event.preventDefault();
             if (search) {
               setSearchParam({ repoType, search });

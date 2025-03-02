@@ -99,7 +99,6 @@ export const getMe = async () => {
   };
 
   try {
-    console.log(tokenInfo.expiresAt, +new Date());
     if(tokenInfo.expiresAt < +new Date()){
       return refreshCookieHeader(
         tokenInfo.refresh_token,

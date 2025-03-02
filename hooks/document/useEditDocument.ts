@@ -71,6 +71,9 @@ const useEditDocument = () => {
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-children-user-document`],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["personal-documents"],
+      });
       callBack?.();
     },
     onError: (error) => {
