@@ -45,7 +45,7 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   }, [repoId, selectedDocument, version, editorMode]);
 
   return (
-    <div className="version-list__container h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0">
+    <div className=" h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0">
       {children}
     </div>
   );

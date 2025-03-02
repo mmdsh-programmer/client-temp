@@ -48,13 +48,13 @@
   @apply !hidden;
 }
 .tour-overlay {
-  @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-60 !z-[20];
+  @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-40 !z-[20000];
 }
 .version-overlay {
   @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-60 !z-[1000];
 }
 .custom-shepherd-theme {
-  @apply absolute max-w-[350px] z-[1000] overflow-hidden shadow-lg border-normal border-2;
+  @apply absolute max-w-[350px] z-[10000] overflow-hidden shadow-lg border-normal border-2;
 }
 .shepherd-content {
   @apply px-3 py-2 !bg-white rounded-lg  shadow-md;
