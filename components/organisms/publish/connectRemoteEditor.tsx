@@ -5,12 +5,14 @@ import React, { useMemo } from "react";
 import { EDocumentTypes } from "@interface/enums";
 import { IVersion } from "@interface/version.interface";
 import RemoteEditor from "clasor-remote-editor";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   versionData: IVersion;
 }
 
 const ConnectRemoteEditor = ({ versionData }: IProps) => {
+  const { data: userInfo } = useGetUser();
   const editorUrl = useMemo(() => {
     switch (versionData.contentType) {
       case EDocumentTypes.word:
@@ -24,17 +26,25 @@ const ConnectRemoteEditor = ({ versionData }: IProps) => {
     }
   }, [versionData]);
 
+  const getLoadData = () => {
+    switch (versionData?.contentType) {
+      case EDocumentTypes.word:
+        return {
+          username: userInfo?.username,
+          content: versionData.content,
+        };
+      default:
+        return versionData.content;
+    }
+  };
 
   return editorUrl ? (
     <div className="remote-editor-container px-1 h-[calc(100vh-156px)]">
       <RemoteEditor
         url={`${editorUrl}?timestamp=${Date.now()}`}
         editorMode="preview"
-        loadData={{
-          content: versionData.content
-        }}
+        loadData={getLoadData()}
       />
-
     </div>
   ) : (
     <p className="block text-center">سند مورد نظر پشتیبانی نمیشود</p>

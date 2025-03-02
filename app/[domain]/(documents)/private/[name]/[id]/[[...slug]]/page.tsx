@@ -9,6 +9,7 @@ import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError } from "@interface/app.interface";
+import Logger from "@utils/logger";
 import LoginRequiredButton from "@components/molecules/loginRequiredButton";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
 import PublishVersionContent from "@components/pages/publish";
@@ -49,7 +50,7 @@ async function fetchDocumentVersion(
   );
 
   if (!lastVersion?.id) {
-    throw new ServerError(["سند مورد نظر فاقد نسخه میباشد."]);
+    throw new ServerError(["سند مورد نظر فاقد نسخه می باشد."]);
   }
 
   return getPublishDocumentVersion(
@@ -198,6 +199,18 @@ export default async function PublishContentPage({
       throw error;
     }
   } catch (error) {
+
+    const { errorList, errorCode } = error as unknown as   {
+      errorList: string[];
+      errorCode: number;
+    };
+    Logger.error(JSON.stringify({
+      errorList,
+      errorCode,
+      error: true,
+      referenceNumber: "NOT_DEFINED",
+    }));
+
     const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if((error as unknown as IActionError).errorCode === 401){
       return <LoginRequiredButton message="ورود" description="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید." />;
