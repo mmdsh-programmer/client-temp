@@ -2422,8 +2422,6 @@ export const getResourceFiles = async (
   offset: number,
   size: number,
   name?: string,
-  order?: string,
-  dataType?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -4286,6 +4284,34 @@ export const getCustomPostByDomain = async (
     }
 
     return domainInfo as IDomainMetadata;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// CHAT //////////////////////
+
+export const enableDocChat = async (
+  accessToken: string,
+  repoId: number,
+  docId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<
+      IServerResult<{
+        chatThreadId: number;
+      }>
+    >(
+      `repositories/${repoId}/documents/${docId}/enableChat`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
