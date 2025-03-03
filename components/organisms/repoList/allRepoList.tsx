@@ -1,16 +1,18 @@
-import React, { useMemo } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { useRecoilValue } from "recoil";
-import { repoSearchParamAtom } from "@atom/repository";
-import { ERepoGrouping } from "@interface/enums";
-import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
-import useGetAccessList from "@hooks/repository/useGetAccessList";
-import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
-import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
+import React, { useMemo } from "react";
+
 import CardView from "../repoView/cardView";
+import { ERepoGrouping } from "@interface/enums";
 import { Spinner } from "@material-tailwind/react";
+import { repoSearchParamAtom } from "@atom/repository";
+import useGetAccessList from "@hooks/repository/useGetAccessList";
+import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
+import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
+import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
+import { useRecoilValue } from "recoil";
 
 const AllRepoList = () => {
+  // TODO REFACTOR REQUIRED - REMOVE repoSearchParamAtom - REMOVE DOUBLE USAGE OF useGetAllRepositories
   const getSearchParam = useRecoilValue(repoSearchParamAtom);
   const repoType = getSearchParam?.repoType;
   const search = getSearchParam?.search;

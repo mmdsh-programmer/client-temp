@@ -31,6 +31,7 @@ const ConfirmFullHeightDialog = ({
   className,
   disabled,
 }: IProps) => {
+    
   const handleClose = () => {
     setOpen(false);
   };

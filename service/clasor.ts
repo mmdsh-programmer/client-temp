@@ -192,10 +192,9 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (accessToken: string, domainUrl: string) => {
+export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
-
   if (cachedUser) {
     Logger.warn(
       JSON.stringify({
@@ -205,7 +204,6 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
     );
     return JSON.parse(cachedUser);
   }
-
   try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
@@ -216,22 +214,9 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
         },
       }
     );
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
-export const renewToken = async (refreshToken: string) => {
-  try {
-    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
-      "auth/renewToken",
-      {
-        refreshToken,
-      }
-    );
-
+    await redisClient?.set(`user:${accessToken}`, JSON.stringify(response.data.data), {
+      EX: expiresAt,
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -4257,6 +4242,7 @@ export const acceptSubscription = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
 export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {

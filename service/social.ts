@@ -14,6 +14,7 @@ import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
 import Logger from "@utils/logger";
+import { getRedisClient } from "@utils/redis";
 import qs from "qs";
 
 const axiosSocialInstance = axios.create({
@@ -484,7 +485,7 @@ export const dislikeComment = async (
   return response.data;
 };
 
-export const getMySocialProfile = async (accessToken: string) => {
+export const getMySocialProfile = async (accessToken: string, expiresAt: number) => {
   const response = await axiosSocialInstance.get<
     ISocialResponse<ISocialProfile>
   >("/mySocialProfile", {
@@ -493,10 +494,29 @@ export const getMySocialProfile = async (accessToken: string) => {
       _token_: accessToken,
     },
   });
+
+  const redisClient = await getRedisClient();
+  const cacheData = await redisClient.get(`user-social:${accessToken}`);
+  if (cacheData) {
+    Logger.warn(
+      JSON.stringify({
+        type: "Redis cache data",
+        data: cacheData,
+      })
+    );
+    return JSON.parse(cacheData);
+  }
+
+  
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);
   }
 
+  await redisClient?.set(
+    `user-social:${accessToken}`,
+    JSON.stringify(response.data),
+    { EX: expiresAt }
+  );
   return response.data;
 };
 
@@ -504,8 +524,7 @@ export const editSocialProfile = async (
   accessToken: string,
   isPrivate: boolean
 ) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const response = await axiosSocialInstance.get<ISocialResponse<any>>(
+  const response = await axiosSocialInstance.get<ISocialResponse<unknown>>(
     "/editSocialProfile",
     {
       headers: {
@@ -518,6 +537,9 @@ export const editSocialProfile = async (
       },
     }
   );
+
+  const redisClient = await getRedisClient();
+  await redisClient?.remove(`user-social:${accessToken}`);
 
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);

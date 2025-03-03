@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+
 import ChildrenTree from "@components/organisms/childrenTree";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { documentTemplateAtom } from "@atom/document";
-import { useRecoilState } from "recoil";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import LoadHtml from "./loadHtml";
+import { documentTemplateAtom } from "@atom/document";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -12,6 +13,8 @@ interface IProps {
 }
 
 const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
+  // TODO CODE REVIEW REQUIRED
+  
   const [loading, setLoading] = useState(false);
   const [getDocumentTemplate, setDocumentTemplate] = useRecoilState(documentTemplateAtom);
 
