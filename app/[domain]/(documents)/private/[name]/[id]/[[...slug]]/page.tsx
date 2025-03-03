@@ -126,7 +126,7 @@ export default async function PublishContentPage({
     );
 
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
-    if(toEnglishDigit(documentInfoName) !== documentName){
+    if(documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName){
       return notFound();
     }
 
