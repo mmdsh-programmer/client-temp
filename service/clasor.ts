@@ -1349,7 +1349,7 @@ export const editCategory = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
-      { name, description, order, isHidden, parentId },
+      { name, description, order: Number(order), isHidden, parentId },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -1853,7 +1853,7 @@ export const editDocument = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
-      { categoryId, title, contentType, order, description, isHidden, tagIds },
+      { categoryId, title, contentType, order: Number(order), description, isHidden, tagIds },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
