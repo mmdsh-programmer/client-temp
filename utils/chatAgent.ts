@@ -9,6 +9,11 @@ import {
   IInvitees,
 } from "@interface/chat.interface";
 import { EChatType } from "@interface/enums";
+import { getMe } from "@actions/auth";
+
+interface ChatInitParams {
+  token: string;
+}
 
 export default class Chat {
   private static instance: Chat;
@@ -30,14 +35,14 @@ export default class Chat {
     return this.chatInstance;
   }
 
-  public check = async () => {
+  public check = async (params: ChatInitParams) => {
     if (this.pending) {
       this.waitForInit();
     }
-    if (!this.chatInstance) await this.init();
+    if (!this.chatInstance) await this.init(params);
   };
 
-  private init = async () => {
+  private init = async (params: ChatInitParams) => {
     console.log("server render>>>>>>>>>>>>>>>>>>>>");
     if (!window) {
       return;
@@ -46,18 +51,18 @@ export default class Chat {
 
     const chatParams = {
       appId: "POD-Chat",
-      socketAddress: "wss://chat-sandbox.pod.ir/ws",
-      ssoHost: "http://sso-sandbox.pod.ir",
-      platformHost: "https://sandbox.pod.ir:8043/srv/basic-platform",
-      fileServer: "https://core.pod.ir",
-      podSpaceFileServer: "http://sandbox.podspace.ir:8080",
+      socketAddress: "wss://chat-sandbox.sandpod.ir/ws",
+      ssoHost: "http://sso-sandbox.sandpod.ir",
+      platformHost: "https://sandbox.sandpod.ir/srv/basic-platform",
+      fileServer: "https://core.sandpod.ir",
+      podSpaceFileServer: "https://podspace.sandpod.ir",
       serverName: "chat-server",
       grantDeviceIdFromSSO: false,
       enableCache: false,
       fullResponseObject: false,
       mapApiKey: "https://api.neshan.org/v1",
       typeCode: "Clasor",
-      token: localStorage.getItem("CLASOR:ACCESS_TOKEN"),
+      token: params.token,
       wsConnectionWaitTime: 500,
       connectionRetryInterval: 5000,
       connectionCheckTimeout: 10_000,
@@ -75,7 +80,6 @@ export default class Chat {
         callNoAnswerTimeout: 5000,
         streamCloseTimeout: 5000,
       },
-      ownerId: window.localStorage.getItem("OWNER_ID"),
     };
 
     const deferred = q.defer();
@@ -95,13 +99,8 @@ export default class Chat {
         console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         switch (error.code) {
           case 21: {
-            // await RefreshToken();
-            // if (this.chatAgent) {
-            //   await this.chatAgent?.setToken(
-            //     window.localStorage.getItem("CLASOR:ACCESS_TOKEN"),
-            //   );
-            //   deferred.resolve();
-            // }
+            const userInfo = await getMe();
+            this.chatAgent?.setToken(userInfo.access_token);
             break;
           }
           case 109: {

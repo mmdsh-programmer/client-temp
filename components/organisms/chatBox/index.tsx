@@ -1,15 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from "react";
-import {
-  Author,
-  ChatBubbleStyles,
-  LastSeenAvatarStyles,
-  AvatarStyles,
-  ChatFeed,
-  Message,
-} from "react-bell-chat";
+import React, { useState, useEffect, useRef } from "react";
+import { Author, ChatFeed } from "react-bell-chat";
 import Chat from "@utils/chatAgent";
-import { IChatError } from "@interface/chat.interface";
+
 import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import useEnableDocChat from "@hooks/chat/useEnableDocChat";
@@ -17,106 +10,15 @@ import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import LoadingButton from "@components/molecules/loadingButton";
 import { Typography } from "@material-tailwind/react";
-import InputAtom from "@components/atoms/input";
-import Image from "next/image";
-import { FaDateFromTimestamp } from "@utils/index";
-
-const chatBubbleStyles: ChatBubbleStyles = {
-  chatBubble: {
-    boxShadow: "none",
-    borderRadius: "12px",
-    padding: "12px",
-    margin: "8px 0",
-  },
-  recipientChatBubble: {
-    backgroundColor: "#f5f5f5",
-  },
-  userChatBubble: {
-    backgroundColor: "#f5f5f5",
-    color: "black",
-  },
-  text: {
-    fontSize: "14px",
-    fontWeight: "normal",
-  },
-};
-
-const lastSeenAvatarStyles: LastSeenAvatarStyles = {
-  container: {
-    boxShadow: "#cacaca 0px 0px 10px 0px, rgb(187 187 187) 0px 0px 2px 0",
-    backgroundColor: "white",
-    overflow: "hidden",
-  },
-};
-
-const avatarStyles: AvatarStyles = {
-  container: {
-    backgroundColor: "white",
-    overflow: "hidden",
-  },
-};
-
-const style: React.CSSProperties = {
-  backgroundColor: "#fff",
-  height: "calc(100% - 100px)",
-};
-
-interface IChatState {
-  authors: Author<string>[];
-  messages: Message<string>[];
-  useCustomBubble: boolean;
-  currentUser: number;
-  messageText: string;
-  showAvatar: boolean;
-  showLastSeen: boolean;
-  showDateRow: boolean;
-  showIsTyping: boolean;
-  showLoadingMessages: boolean;
-  hasOldMessages: boolean;
-  useCustomStyles: boolean;
-  useAvatarBg: boolean;
-  useCustomIsTyping: boolean;
-  showMsgProgress: boolean;
-  chatDisabled: boolean;
-  replyedMessage: string | null;
-}
-
-// Define the CustomChatBubble component outside of ChatBox
-const CustomChatBubble = (props: any) => {
-  const { message, author, currentUser } = props;
-  const isUser = author.id === currentUser;
-
-  return (
-    <div
-      className={`flex flex-col mb-4 ${isUser ? "items-end" : "items-start"}`}
-    >
-      <div className="bg-[#f5f5f5] rounded-xl p-3 w-full relative">
-        <div className="w-full flex gap-4 mb-1">
-          <div className="flex flex-none items-start gap-2">
-            {author.bgImageUrl && (
-              <Image
-                src={author.bgImageUrl}
-                alt={author.name}
-                className="rounded-full object-cover"
-                width={24}
-                height={24}
-              />
-            )}
-          </div>
-          <div className="flex flex-1 flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-medium">{author.name}</span>
-              <span className="text-xs text-gray-500 mr-auto">
-                {FaDateFromTimestamp(message.createdOn)}
-              </span>
-            </div>
-            <p className="text-sm">{message.message}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import {
+  avatarStyles,
+  chatBubbleStyles,
+  chatFeedStyle,
+  lastSeenAvatarStyles,
+} from "./styles";
+import ChatBubble from "./chatBubble";
+import ChatInput from "./chatInput";
+import { IChatError, IChatState } from "@interface/chat.interface";
 
 const ChatBox = () => {
   const chat = React.useRef<any>();
@@ -131,32 +33,8 @@ const ChatBox = () => {
   let currentAuthorId = -1;
 
   const [chatState, setState] = useState<IChatState>({
-    authors: [
-      {
-        id: 1,
-        name: "محمد شاکری",
-        isTyping: false,
-        lastSeenMessageId: 1,
-        bgImageUrl:
-          "https://podspace.pod.ir/api/links/RTM324KYGFCP89D1GZOGRNX12US9GIEAH229SD7ISKDGFNCKJF#FAZHI25MNNB6B624",
-      },
-    ],
-    messages: [
-      {
-        id: 1,
-        authorId: 1,
-        message: "سلام",
-        createdOn: new Date(),
-        isSend: true,
-      },
-      {
-        id: 2,
-        authorId: 1,
-        message: "سلام",
-        createdOn: new Date(),
-        isSend: false,
-      },
-    ],
+    authors: [],
+    messages: [],
     chatDisabled: false,
     useCustomBubble: true,
     currentUser: currentAuthorId,
@@ -174,11 +52,32 @@ const ChatBox = () => {
     replyedMessage: null,
   });
 
+  const [chatFeedHeight, setChatFeedHeight] = useState("100%");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const calculateHeight = () => {
+      if (containerRef.current && inputAreaRef.current) {
+        const containerHeight = containerRef.current.clientHeight;
+        const inputHeight = inputAreaRef.current.clientHeight;
+        const availableHeight = containerHeight - inputHeight;
+        setChatFeedHeight(`${availableHeight}px`);
+      }
+    };
+
+    const timeoutId = setTimeout(calculateHeight, 100);
+    window.addEventListener("resize", calculateHeight);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", calculateHeight);
+    };
+  }, []);
+
   const renderCustomBubble = React.useCallback(
     (props: any) => {
-      return (
-        <CustomChatBubble {...props} currentUser={chatState.currentUser} />
-      );
+      return <ChatBubble {...props} currentUser={chatState.currentUser} />;
     },
     [chatState.currentUser]
   );
@@ -280,7 +179,7 @@ const ChatBox = () => {
     }
   };
 
-  const onMessageSubmit = (e: any) => {
+  const onMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (chatState.messageText !== "") {
       chatAgentRef.current.sendTextMessage(
@@ -291,11 +190,11 @@ const ChatBox = () => {
         },
         {
           onSent: () => {
-            setState((previousState: any) => {
+            setState((previousState) => {
               return {
                 ...previousState,
                 messageText: "",
-                authors: [...previousState.authors].map((a) => {
+                authors: previousState.authors.map((a) => {
                   return a.id === chatState.currentUser
                     ? a
                     : {
@@ -309,9 +208,7 @@ const ChatBox = () => {
               chat.current.onMessageSend();
             }
           },
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onDeliver: () => {},
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
           onSeen: () => {},
         }
       );
@@ -323,11 +220,10 @@ const ChatBox = () => {
       switch (res.type) {
         case "MESSAGE_NEW":
           if (enabledThreadId === res.result.message.threadId) {
-            setState((previousState: any) => {
+            setState((previousState) => {
               return {
                 ...previousState,
-                // eslint-disable-next-line unicorn/prefer-array-some
-                messages: previousState.messages.find((message: any) => {
+                messages: previousState.messages.find((message) => {
                   return message?.id === res.result.message.id;
                 })
                   ? previousState.messages
@@ -375,7 +271,9 @@ const ChatBox = () => {
 
   const getChat = async () => {
     try {
-      await Chat.getInstance().check();
+      await Chat.getInstance().check({
+        token: userInfo?.access_token || "",
+      });
       chatAgentRef.current = Chat.getInstance().chatAgent;
       await getThreadParticipants();
       getHistory(0);
@@ -440,13 +338,17 @@ const ChatBox = () => {
   }
 
   return (
-    <div className="chat-body h-full flex flex-col">
+    <div className="chat-body h-full flex flex-col" ref={containerRef}>
       <ChatFeed
         ref={chat}
         yourAuthorId={chatState.currentUser}
-        messages={chatState.messages}
         authors={chatState.authors}
-        style={style}
+        messages={chatState.messages}
+        style={{
+          ...chatFeedStyle,
+          overflow: "auto",
+          height: chatFeedHeight,
+        }}
         avatarStyles={avatarStyles}
         showRecipientAvatar={false}
         showRecipientLastSeenMessage={false}
@@ -454,44 +356,17 @@ const ChatBox = () => {
         showLoadingMessages={chatState.showLoadingMessages}
         lastSeenAvatarStyles={lastSeenAvatarStyles}
         chatBubbleStyles={chatBubbleStyles}
-        maxHeight="100%"
         CustomChatBubble={renderCustomBubble}
         showDateRow={chatState.showDateRow}
         hasOldMessages={chatState.hasOldMessages}
       />
-      <form
-        onSubmit={(e) => {
-          return onMessageSubmit(e);
-        }}
-        className="comment-create gap-2 justify-center items-center rounded-lg !w-[300px] left-0 bg-white shadow-lg md:shadow-none z-[9999]"
-      >
-        <div className="flex flex-col h-full">
-          <div className="px-4 py-3 flex flex-grow flex-col gap-4 justify-end">
-            <div className="border-b-[1px] border-normal" />
-            <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
-              <InputAtom
-                value={chatState.messageText}
-                onChange={onMessageChange}
-                placeholder="نظر خود را بنویسید."
-                className="!w-auto h-auto overflow-hidden !p-0 border-none"
-              />
-              <LoadingButton
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                onClick={(e) => {
-                  return onMessageSubmit(e);
-                }}
-                className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
-                isPrimary
-              >
-                <Typography className="text__label__button !text-primary px-3 font-medium">
-                  ارسال
-                </Typography>
-              </LoadingButton>
-            </div>
-          </div>
-        </div>
-      </form>
+      <div ref={inputAreaRef}>
+        <ChatInput
+          messageText={chatState.messageText}
+          onMessageChange={onMessageChange}
+          onMessageSubmit={onMessageSubmit}
+        />
+      </div>
     </div>
   );
 };
