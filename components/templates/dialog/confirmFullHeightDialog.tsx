@@ -11,6 +11,8 @@ import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
+import { documentTemplateAtom } from "@atom/document";
+import { useRecoilValue } from "recoil";
 
 export interface IProps {
   isPending: boolean;
@@ -29,6 +31,8 @@ const ConfirmFullHeightDialog = ({
   onSubmit,
   className,
 }: IProps) => {
+    const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
+    
   const handleClose = () => {
     setOpen(false);
   };
@@ -76,6 +80,7 @@ const ConfirmFullHeightDialog = ({
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={onSubmit}
           loading={isPending}
+          disabled={!getDocumentTemplate}
         >
           <Typography className="text__label__button text-white">
             تایید
