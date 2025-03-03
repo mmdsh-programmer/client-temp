@@ -35,12 +35,11 @@ const refreshCookieHeader = async (
   const { cryptoInitVectorKey, cryptoSecretKey } =
     await getCustomPostByDomain(domain);
 
-  const expiresAt = +new Date() + ((expires_in - 60) * 1000);
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt,
+      expiresAt: +new Date() + ((expires_in - 60) * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
@@ -56,8 +55,8 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token, domain, expiresAt);
-  const mySocialProfile = await getMySocialProfile(access_token, expiresAt);
+  const userData = await userInfo(access_token, domain, expires_in - 60);
+  const mySocialProfile = await getMySocialProfile(access_token, expires_in - 60 );
   return {
     ...userData,
     private: mySocialProfile.result.private,
@@ -102,8 +101,10 @@ export const getMe = async () => {
         clientSecret
       );
     }
+
+    const expiresAt = Math.floor((tokenInfo.expiresAt - +new Date()) / 1000);
     const userData = await userInfo(tokenInfo.access_token, domain, +tokenInfo.expiresAt);
-    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, +tokenInfo.expiresAt);
+    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, expiresAt);
     const userDataWithPrivate = {
       ...userData,
       private: mySocialProfile.result.private,
@@ -172,11 +173,12 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 
   
 
+  const expiresAt = +new Date() + ((expires_in - 60) * 1000);
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + ((expires_in - 60) * 1000),
+      expiresAt,
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
