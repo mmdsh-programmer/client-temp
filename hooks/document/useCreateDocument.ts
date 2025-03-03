@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { EDocumentTypes } from "@interface/enums";
 import { IActionError } from "@interface/app.interface";
 import { IDocument } from "@interface/document.interface";
@@ -17,7 +18,7 @@ const useCreateDocument = () => {
       contentType: EDocumentTypes;
       isTemplate: boolean;
       description?: string;
-      order?: number;
+      order?: number | null;
       imageUrl?: string;
       publicKeyId?: string;
       successCallBack?: (result: IDocument) => void;

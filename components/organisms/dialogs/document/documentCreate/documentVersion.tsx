@@ -85,6 +85,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         },
       });
     } else {
+      const order = getDocumentInfo.order ? getDocumentInfo.order : null;
       createDocumentHook.mutate({
         repoId,
         categoryId: getCategory?.id || getCategoryShow?.id || null,
@@ -92,7 +93,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         description: getDocumentInfo.description,
         contentType: getDocumentType,
         isTemplate,
-        order: getDocumentInfo.order,
+        order,
         publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         successCallBack: (result: IDocument) => {
           close();

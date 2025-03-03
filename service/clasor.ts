@@ -1312,7 +1312,7 @@ export const createCategory = async (
   parentId: number | null,
   name: string,
   description: string,
-  order: number | null
+  order?: number | null
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<ICategory>>(
@@ -1321,7 +1321,7 @@ export const createCategory = async (
         parentId,
         name,
         description,
-        order: order && order > 0 ? Number(order) : undefined,
+        order: order === null ? order : order,
       },
       {
         headers: {
@@ -1349,7 +1349,12 @@ export const editCategory = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
-      { name, description, order: Number(order), isHidden, parentId },
+      { 
+        name, 
+        description, 
+        order: order === null ? order : order, 
+        isHidden, parentId 
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -1637,7 +1642,7 @@ export const getPublishDocumentVersion = async (
 
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
-      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}`,
+      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}?innerDocument=true&innerOutline=true`,
       {
         headers,
         params: {
@@ -1771,7 +1776,7 @@ export const createDocument = async (
   contentType: EDocumentTypes,
   isTemplate: boolean,
   description?: string,
-  order?: number,
+  order?: number | null,
   imageUrl?: string,
   publicKeyId?: string
 ) => {
@@ -1784,7 +1789,7 @@ export const createDocument = async (
         categoryId,
         description,
         imageUrl,
-        order: order && order > 0 ? Number(order) : undefined,
+        order: order === null ? order : order,
         isTemplate,
         publicKeyId,
       },
@@ -1853,7 +1858,15 @@ export const editDocument = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
-      { categoryId, title, contentType, order: Number(order), description, isHidden, tagIds },
+      { 
+        categoryId, 
+        title, 
+        contentType, 
+        order: order === null ? order : order, 
+        description, 
+        isHidden, 
+        tagIds 
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -2424,8 +2437,6 @@ export const getResourceFiles = async (
   offset: number,
   size: number,
   name?: string,
-  order?: string,
-  dataType?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<

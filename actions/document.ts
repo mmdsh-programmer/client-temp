@@ -73,7 +73,7 @@ export const createDocumentAction = async (
   contentType: EDocumentTypes,
   isTemplate: boolean,
   description?: string,
-  order?: number,
+  order?: number | null,
   imageUrl?: string,
   publicKeyId?: string
 ) => {

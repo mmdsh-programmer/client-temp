@@ -20,7 +20,6 @@ const DownloadPDF = () => {
   const handleDownloadFile = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
 
-    debugger;
     if(!getSelectedDocument || !getEditorVersion){
       toast.error("اطلاعات لازم برای ایجاد pdf وجود ندارد.");
       return;

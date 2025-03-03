@@ -47,7 +47,6 @@ const LoadHtml = ({ editorRef, handleClose }: IProps) => {
       toast.error("خطا در دریافت اطلاعات آخرین نسخه.");
       return;
     }
-    debugger;
     if (data) {
       editorRef.current?.setHtml(data.content);
       handleClose();
