@@ -8,6 +8,10 @@ import { IRepo } from "@interface/repo.interface";
 interface ISubscribeResult {
   repository: IRepo;
 }
+interface CustomError {
+  message: string;
+  repoId?: number;
+}
 
 const useSubscribeRepo = () => {
   const queryClient = useQueryClient();
@@ -17,7 +21,7 @@ const useSubscribeRepo = () => {
       hash: string;
       password?: string;
       callBack?: (result) => void;
-      errorCallBack?: () => void;
+      errorCallBack?: (error?: number) => void;
     }) => {
       const { hash, password } = values;
       const response = await subscribeRepoAction(hash, password);
@@ -34,8 +38,9 @@ const useSubscribeRepo = () => {
     },
     onError: (error, values) => {
       const { errorCallBack } = values;
-      errorCallBack?.();
-      toast.error(error.message || "خطای نامشخصی رخ داد");
+      const { message, repoId } = (error.message as unknown) as CustomError;
+      errorCallBack?.(repoId);
+      toast.error(message || "خطای نامشخصی رخ داد");
     },
   });
 };
