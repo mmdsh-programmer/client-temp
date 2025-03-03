@@ -31,9 +31,16 @@ const SubscribeRequest = ({ hash }: IProps) => {
         router.push(`/admin/repositories?repoId=${result.data.repository.id}`);
         setRepoGroup(ERepoGrouping.ACCESS_REPO);
       },
-      errorCallBack: () => {
+      errorCallBack: (repoId?: number) => {
         localStorage.removeItem("CLASOR:LAST_PAGE");
-        router.push("/admin/dashboard");
+        if (repoId) {
+          router.push(
+            `/admin/repositories?repoId=${repoId}`
+          );
+          setRepoGroup(ERepoGrouping.ACCESS_REPO);
+        } else {
+          router.push("/admin/dashboard");
+        }
       },
     });
   };

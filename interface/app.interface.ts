@@ -49,9 +49,9 @@ export interface IUserInfo {
     entityId: number;
     content: string | null;
   };
-  isDomainOwner: boolean;
+  domainRole: string | null;
   metadata: string | null;
-}
+};
 
 export type TUserData = Pick<
   IUserInfo,
@@ -66,7 +66,7 @@ export type TUserData = Pick<
   | "isClasorAdmin"
   | "repository"
   | "domainConfig"
-  | "isDomainOwner"
+  | "domainRole"
 > & {
   private: boolean;
   access_token: string;
