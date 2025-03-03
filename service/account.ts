@@ -44,7 +44,8 @@ axiosAccountsInstance.interceptors.response.use(
     };
     Logger.info(JSON.stringify(log));
     return response;
-  }, (error) => {
+  },
+  (error) => {
     const log = {
       type: "ERROR",
       message: error.message,
@@ -60,13 +61,17 @@ axiosAccountsInstance.interceptors.response.use(
     };
     Logger.error(JSON.stringify(log));
     return Promise.reject(error);
-  });
+  }
+);
 
 // TODO: proper handler for error
 
-export const handleAccountStatusError = (error: AxiosError<any>) => {
+export const handleAccountStatusError = (error: AxiosError<unknown>) => {
   if (isAxiosError(error)) {
-    const message = [error.response?.data?.messages?.[0] || error.message];
+    const message = [
+      (error as { response?: { data?: { messages?: string[] } } }).response?.data
+        ?.messages?.[0] || error.message,
+    ];
     switch (error.response?.status) {
       case 400:
         throw new InputError(message, error as IOriginalError);
@@ -94,7 +99,7 @@ export const getPodAccessToken = async (
   redirectUrl: string,
   clientId: string,
   clientSecret: string,
-  domain: string,
+  domain: string
 ): Promise<IGetTokenResponse> => {
   try {
     const url = "/oauth2/token";
@@ -116,19 +121,24 @@ export const getPodAccessToken = async (
       }
     );
 
-    const userData = await userInfo(result.data.access_token, domain);
-    if(userData){
+    const expiresAt = result.data.expires_in;
+    const userData = await userInfo(
+      result.data.access_token,
+      domain,
+      expiresAt
+    );
+    if (userData) {
       const redisClient = await getRedisClient();
       await redisClient?.set(
         `user:${result.data.access_token}`,
         JSON.stringify(userData),
-        { EX: result.data.expires_in }
+        { EX: expiresAt }
       );
     }
-    
+
     return result.data;
   } catch (error) {
-    return handleAccountStatusError(error as AxiosError<any>);
+    return handleAccountStatusError(error as AxiosError<unknown>);
   }
 };
 
@@ -158,7 +168,7 @@ export const revokePodToken = async (
       }
     );
   } catch (error) {
-    return handleAccountStatusError(error as AxiosError<any>);
+    return handleAccountStatusError(error as AxiosError<unknown>);
   }
 };
 
@@ -187,8 +197,12 @@ export const refreshPodAccessToken = async (
       }
     );
 
-    return result.data as { access_token: string; refresh_token: string, expires_in: number };
+    return result.data as {
+      access_token: string;
+      refresh_token: string;
+      expires_in: number;
+    };
   } catch (error) {
-    return handleAccountStatusError(error as AxiosError<any>);
+    return handleAccountStatusError(error as AxiosError<unknown>);
   }
 };
