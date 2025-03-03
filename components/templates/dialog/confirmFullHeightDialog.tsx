@@ -19,6 +19,7 @@ export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit: () => Promise<void>;
   className?: string;
+  disabled?: boolean;
 }
 
 const ConfirmFullHeightDialog = ({
@@ -28,6 +29,7 @@ const ConfirmFullHeightDialog = ({
   setOpen,
   onSubmit,
   className,
+  disabled,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -76,6 +78,7 @@ const ConfirmFullHeightDialog = ({
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={onSubmit}
           loading={isPending}
+          disabled={disabled}
         >
           <Typography className="text__label__button text-white">
             تایید

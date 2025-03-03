@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ChildrenTree from "@components/organisms/childrenTree";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { documentTemplateAtom } from "@atom/document";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import LoadHtml from "./loadHtml";
 
@@ -13,9 +13,7 @@ interface IProps {
 
 const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
   const [loading, setLoading] = useState(false);
-
-  const setDocumentTemplate =
-    useSetRecoilState(documentTemplateAtom);
+  const [getDocumentTemplate, setDocumentTemplate] = useRecoilState(documentTemplateAtom);
 
   const handleClose = () => {
     setOpen(false);
@@ -33,10 +31,14 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
       isPending={loading}
       setOpen={handleClose}
       onSubmit={handleSubmit}
+      disabled={!getDocumentTemplate}
     >
       <ChildrenTree move={false} enableAction={false} />
       {loading ? (
-        <LoadHtml handleClose={handleClose} editorRef={editorRef} />
+        <LoadHtml
+          handleClose={handleClose}
+          editorRef={editorRef}
+        />
       ) : null}
     </ConfirmFullHeightDialog>
   );
