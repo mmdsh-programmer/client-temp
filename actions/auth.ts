@@ -35,17 +35,19 @@ const refreshCookieHeader = async (
   const { cryptoInitVectorKey, cryptoSecretKey } =
     await getCustomPostByDomain(domain);
 
+  const expiresAt = +new Date() + ((expires_in - 60) * 1000);
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + ((expires_in - 60) * 1000),
+      expiresAt,
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
+ 
   cookies().set("token", token, {
     httpOnly: true,
     secure: process.env.SECURE === "TRUE",
@@ -54,14 +56,8 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token, domain);
-  const redisClient = await getRedisClient();
-  await redisClient?.set(
-    `user:${access_token}`,
-    JSON.stringify(userData),
-    { EX: expires_in }
-  );
-  const mySocialProfile = await getMySocialProfile(access_token);
+  const userData = await userInfo(access_token, domain, expiresAt);
+  const mySocialProfile = await getMySocialProfile(access_token, expiresAt);
   return {
     ...userData,
     private: mySocialProfile.result.private,
@@ -106,8 +102,8 @@ export const getMe = async () => {
         clientSecret
       );
     }
-    const userData = await userInfo(tokenInfo.access_token, domain);
-    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
+    const userData = await userInfo(tokenInfo.access_token, domain, +tokenInfo.expiresAt);
+    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, +tokenInfo.expiresAt);
     const userDataWithPrivate = {
       ...userData,
       private: mySocialProfile.result.private,
@@ -180,7 +176,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + (expires_in * 1000),
+      expiresAt: +new Date() + ((expires_in - 60) * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
@@ -264,7 +260,6 @@ export const editSocialProfileAction = async (isPrivate: boolean) => {
   const userData = await getMe();
   try {
     const response = await editSocialProfile(userData.access_token, isPrivate);
-
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
