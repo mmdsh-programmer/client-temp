@@ -39,7 +39,7 @@ const refreshCookieHeader = async (
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + (expires_in * 1000),
+      expiresAt: +new Date() + ((expires_in - 60) * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
