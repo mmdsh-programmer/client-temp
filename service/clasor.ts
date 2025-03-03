@@ -2437,6 +2437,8 @@ export const getResourceFiles = async (
   offset: number,
   size: number,
   name?: string,
+  _order?: string,
+  _type?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
