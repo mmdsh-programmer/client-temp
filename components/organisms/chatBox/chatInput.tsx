@@ -2,13 +2,13 @@ import React from "react";
 import { Typography } from "@material-tailwind/react";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
-import { IChatInputProps } from "./types";
+import { IChatInputProps } from "@interface/chat.interface";
 
-const ChatInput: React.FC<IChatInputProps> = ({
+const ChatInput = ({
   messageText,
   onMessageChange,
   onMessageSubmit,
-}) => {
+}: IChatInputProps) => {
   return (
     <form
       onSubmit={onMessageSubmit}

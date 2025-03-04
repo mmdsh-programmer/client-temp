@@ -1,14 +1,19 @@
 import React from "react";
 import Image from "next/image";
 import { FaDateFromTimestamp } from "@utils/index";
-import { IChatBubbleProps } from "./types";
+import { IChatBubbleProps } from "@interface/chat.interface";
 
-const ChatBubble: React.FC<IChatBubbleProps> = ({ message, author, currentUser }) => {
+const ChatBubble = ({ message, author, currentUser }: IChatBubbleProps) => {
   const isUser = author.id === currentUser;
-  const timestamp = message.createdOn instanceof Date ? message.createdOn.getTime() : Date.now();
+  const timestamp =
+    message.createdOn instanceof Date
+      ? message.createdOn.getTime()
+      : Date.now();
 
   return (
-    <div className={`flex flex-col mb-4 ${isUser ? "items-end" : "items-start"}`}>
+    <div
+      className={`flex flex-col mb-4 ${isUser ? "items-end" : "items-start"}`}
+    >
       <div className="bg-[#f5f5f5] rounded-xl p-3 w-full relative">
         <div className="w-full flex gap-4 mb-1">
           <div className="flex flex-none items-start gap-2">
@@ -45,4 +50,4 @@ const ChatBubble: React.FC<IChatBubbleProps> = ({ message, author, currentUser }
   );
 };
 
-export default ChatBubble; 
+export default ChatBubble;

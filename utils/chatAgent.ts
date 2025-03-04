@@ -172,7 +172,7 @@ export default class Chat {
   addChatContact = (
     givenName: string,
     familyName: string,
-    userName: string,
+    userName: string
   ) => {
     const deferred = q.defer<IAddContact>();
     const params = {
@@ -296,8 +296,29 @@ export default class Chat {
     return deferred.promise;
   }
 
-  waitForInit = (): Promise<void> => 
-    {return new Promise((resolve) => {
+  isUserInThread(threadId: number, userId: number) {
+    const deferred = q.defer<boolean>();
+    const params = {
+      threadId,
+    };
+
+    this.chatAgent?.getThreadParticipants(params, (result: any) => {
+      if (result.hasError) {
+        deferred.reject(result);
+        return;
+      }
+
+      const isParticipant = result.result.participants.some((participant: any) => {
+        return participant.coreUserId === userId;
+      });
+      deferred.resolve(isParticipant);
+    });
+
+    return deferred.promise;
+  }
+
+  waitForInit = (): Promise<void> => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         if (!this.pending) {
           resolve();
@@ -305,5 +326,6 @@ export default class Chat {
         }
         this.waitForInit();
       }, 1000);
-    });};
+    });
+  };
 }

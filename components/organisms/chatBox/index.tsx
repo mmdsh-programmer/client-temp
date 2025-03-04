@@ -52,28 +52,10 @@ const ChatBox = () => {
     replyedMessage: null,
   });
 
-  const [chatFeedHeight, setChatFeedHeight] = useState("100%");
   const containerRef = useRef<HTMLDivElement>(null);
   const inputAreaRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const calculateHeight = () => {
-      if (containerRef.current && inputAreaRef.current) {
-        const containerHeight = containerRef.current.clientHeight;
-        const inputHeight = inputAreaRef.current.clientHeight;
-        const availableHeight = containerHeight - inputHeight;
-        setChatFeedHeight(`${availableHeight}px`);
-      }
-    };
-
-    const timeoutId = setTimeout(calculateHeight, 100);
-    window.addEventListener("resize", calculateHeight);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("resize", calculateHeight);
-    };
-  }, []);
+  const [userCanAccessChat, setUserCanAccessChat] = useState<boolean>(false);
 
   const renderCustomBubble = React.useCallback(
     (props: any) => {
@@ -294,18 +276,41 @@ const ChatBox = () => {
       docId,
       callBack: (threadId) => {
         setEnabledThreadId(threadId);
+        setUserCanAccessChat(true);
+        getChat();
         toast.success("چت با موفقیت برای این سند فعال شد");
       },
     });
   };
 
+  const checkUserAccess = async () => {
+    try {
+      await Chat.getInstance().check({
+        token: userInfo?.access_token || "",
+      });
+      chatAgentRef.current = Chat.getInstance().chatAgent;
+      
+      const isParticipant = await Chat.getInstance().isUserInThread(
+        enabledThreadId as number,
+        userInfo?.userId as number
+      );
+      
+      if (isParticipant) {
+        setUserCanAccessChat(true);
+        getChat();
+      }
+    } catch {
+      console.log(">>>>>>>>>>>>>>>>>>>> error in checking user access");
+    }
+  };
+
   useEffect(() => {
     if (enabledThreadId) {
-      getChat();
+      checkUserAccess();
     }
   }, [enabledThreadId]);
 
-  if (!enabledThreadId) {
+  if (!enabledThreadId || !userCanAccessChat) {
     return (
       <div className="h-full flex items-end px-6 py-4">
         <LoadingButton
@@ -347,7 +352,7 @@ const ChatBox = () => {
         style={{
           ...chatFeedStyle,
           overflow: "auto",
-          height: chatFeedHeight,
+          height: "calc(100vh - 300px)",
         }}
         avatarStyles={avatarStyles}
         showRecipientAvatar={false}
