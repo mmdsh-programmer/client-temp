@@ -29,6 +29,7 @@ axiosSocialInstance.interceptors.request.use(
   (request) => {
     const { headers, baseURL, method, url, data } = request;
     const log = {
+      type: "REQUEST",
       headers,
       baseURL,
       method,
@@ -40,7 +41,7 @@ axiosSocialInstance.interceptors.request.use(
   },
   (error) => {
     const log = {
-      type: "ERROR",
+      type: "REQUEST_ERROR",
       message: error.message,
       config: {
         url: error.config?.url,
@@ -62,6 +63,7 @@ axiosSocialInstance.interceptors.response.use(
     const { data, status } = response;
 
     const log = {
+      type: "RESPONSE",
       data,
       status,
     };
@@ -70,7 +72,7 @@ axiosSocialInstance.interceptors.response.use(
   },
   (error) => {
     const log = {
-      type: "ERROR",
+      type: "RESPONSE_ERROR",
       message: error.message,
       config: {
         url: error.config?.url,

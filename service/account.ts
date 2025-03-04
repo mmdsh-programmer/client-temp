@@ -22,6 +22,7 @@ const axiosAccountsInstance = axios.create({
 axiosAccountsInstance.interceptors.request.use((request) => {
   const { headers, baseURL, method, url, data } = request;
   const log = {
+    type: "REQUEST_ERROR",
     headers,
     baseURL,
     method,
@@ -37,6 +38,7 @@ axiosAccountsInstance.interceptors.response.use(
   (response) => {
     const { data, status } = response;
     const log = {
+      type: "RESPONSE_ERROR",
       data,
       status,
     };
