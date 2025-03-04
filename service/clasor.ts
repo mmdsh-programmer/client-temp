@@ -86,36 +86,39 @@ const axiosClasorInstance = axios.create({
   },
 });
 
-axiosClasorInstance.interceptors.request.use((request) => {
-  const { headers, baseURL, method, url, data } = request;
-  const log = {
-    type: "REQUEST",
-    headers,
-    baseURL,
-    method,
-    url,
-    data,
-  };
+axiosClasorInstance.interceptors.request.use(
+  (request) => {
+    const { headers, baseURL, method, url, data } = request;
+    const log = {
+      type: "REQUEST",
+      headers,
+      baseURL,
+      method,
+      url,
+      data,
+    };
 
-  Logger.info(JSON.stringify(log));
-  return request;
-}, (error) => {
-  const log = {
-    type: "REQUEST_ERROR",
-    message: error.message,
-    config: {
-      url: error.config?.url,
-      method: error.config?.method,
-      data: error.config?.data,
-    },
-    response: {
-      status: error.response?.status,
-      data: error.response?.data,
-    },
-  };
-  Logger.error(JSON.stringify(log));
-  return Promise.reject(error);
-});
+    Logger.info(JSON.stringify(log));
+    return request;
+  },
+  (error) => {
+    const log = {
+      type: "REQUEST_ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.error(JSON.stringify(log));
+    return Promise.reject(error);
+  }
+);
 
 axiosClasorInstance.interceptors.response.use(
   (response) => {
@@ -192,7 +195,11 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
+export const userInfo = async (
+  accessToken: string,
+  domainUrl: string,
+  expiresAt: number
+) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
   if (cachedUser) {
@@ -214,9 +221,13 @@ export const userInfo = async (accessToken: string, domainUrl: string, expiresAt
         },
       }
     );
-    await redisClient?.set(`user:${accessToken}`, JSON.stringify(response.data.data), {
-      EX: expiresAt,
-    });
+    await redisClient?.set(
+      `user:${accessToken}`,
+      JSON.stringify(response.data.data),
+      {
+        EX: expiresAt,
+      }
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1321,7 +1332,7 @@ export const createCategory = async (
         parentId,
         name,
         description,
-        order: order === null ? order : order,
+        order: order === null ? null : Number(order),
       },
       {
         headers: {
@@ -1349,11 +1360,12 @@ export const editCategory = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
-      { 
-        name, 
-        description, 
-        order: order === null ? order : order, 
-        isHidden, parentId 
+      {
+        name,
+        description,
+        order: order === null ? null : Number(order),
+        isHidden,
+        parentId,
       },
       {
         headers: {
@@ -1789,7 +1801,7 @@ export const createDocument = async (
         categoryId,
         description,
         imageUrl,
-        order: order === null ? order : order,
+        order: order === null ? null : Number(order),
         isTemplate,
         publicKeyId,
       },
@@ -1827,7 +1839,7 @@ export const createDocumentTemplate = async (
         categoryId,
         description,
         imageUrl,
-        order,
+        order: order === null ? null : Number(order),
       },
       {
         headers: {
@@ -1858,14 +1870,14 @@ export const editDocument = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
-      { 
-        categoryId, 
-        title, 
-        contentType, 
-        order: order === null ? order : order, 
-        description, 
-        isHidden, 
-        tagIds 
+      {
+        categoryId,
+        title,
+        contentType,
+        order: order === null ? null : Number(order),
+        description,
+        isHidden,
+        tagIds,
       },
       {
         headers: {
@@ -2438,7 +2450,7 @@ export const getResourceFiles = async (
   size: number,
   name?: string,
   _order?: string,
-  _type?: string,
+  _type?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
