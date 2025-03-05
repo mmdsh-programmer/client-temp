@@ -59,7 +59,7 @@ const PrivateFeedList = ({ ssoId }: IProps) => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-2 h-[calc(100vh-250px)] overflow-y-auto px-5 mt-5">
+      <div className="flex flex-col gap-2 h-[calc(100vh-360px)] overflow-y-auto px-5 mt-5">
         {feedList.map((feed) => {
           return <FeedItem key={feed.id} feed={feed} />;
         })}

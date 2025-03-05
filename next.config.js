@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  output: "standalone",
+  // output: "standalone",
   images: {
     remotePatterns: [
       {
@@ -30,7 +30,7 @@ const nextConfig = {
   },
   cacheHandler:
     process.env.NODE_ENV === "production"
-      ? require.resolve("./cacheHandler.mjs")
+      ? require.resolve("./cacheHandler.develop.mjs")
       : undefined,
   cacheMaxMemorySize: 0, // disable default in-memory caching
 };
