@@ -106,19 +106,5 @@ export interface IRepoView {
 }
 
 export interface IRepoSubscriptionStatus {
-  status: {
-    userSrv: {
-      id: number;
-      firstName: string;
-      lastName: string;
-      username: string;
-      profileImage: string;
-      numOfStories: number;
-      private: boolean;
-    };
-    myFollowing: boolean;
-    myFollowRequestStatus?: ERepoSubscriptionStatus;
-    myFollower: boolean;
-    userFollowRequestStatus?: ERepoSubscriptionStatus;
-  };
+  status: ERepoSubscriptionStatus;
 }
