@@ -135,11 +135,11 @@ const LinkWrapper = ({ role }: IProps) => {
               )}
             </Button>
           ) : null}
-          {readLink()?.expireTime && (
+          {readLink()?.expireTime ? (
             <span className="block text-[10px] text-hint">
               انقضا :{FaDateFromTimestamp(readLink()!.expireTime)}
             </span>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

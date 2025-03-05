@@ -7,18 +7,15 @@ import { useSetRecoilState } from "recoil";
 const VersionTour = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
 
-  // const versonListContainer = document.querySelector(
-  //   ".version-list__container"
-  // );
-
-  // const versionOverlay = document.createElement("div");
-  // versonListContainer?.append(versionOverlay);
-  // versionOverlay.classList.add("version-overlay");
-
   useEffect(() => {
-    const tourOverlay = document.querySelectorAll(
-      ".tour-overlay"
-    )[0] as HTMLElement;
+
+    const versonListContainer = document.querySelector(
+      ".version-list__container"
+    );
+  
+    const versionOverlay = document.createElement("div");
+    versonListContainer?.append(versionOverlay);
+    versionOverlay.classList.add("version-overlay");
 
     const versionTour = new Shepherd.Tour({
       useModalOverlay: false,
@@ -34,18 +31,18 @@ const VersionTour = () => {
         },
         when: {
           show: () => {
-            tourOverlay.style.display = "block";
+            versionOverlay.style.display = "block";
           },
           hide: () => {
-            tourOverlay.style.display = "none !important";
+            versionOverlay.style.display = "none";
             // setActiveTour(null);
           },
           complete: () => {
-            tourOverlay.style.display = "none";
+            versionOverlay.style.display = "none";
             setActiveTour(null);
           },
           cancel: () => {
-            tourOverlay.style.display = "none";
+            versionOverlay.style.display = "none";
             setActiveTour(null);
           },
         },
@@ -169,7 +166,7 @@ const VersionTour = () => {
         </div>
         `,
         ".version-action",
-        "bottom",
+        "bottom"
       ),
     ];
 
@@ -181,14 +178,13 @@ const VersionTour = () => {
 
     return () => {
       if (versionTour) {
-        tourOverlay.style.display = "none";
-        
+        versionOverlay.remove();
+
         versionTour.hide();
         versionTour.complete();
         versionTour.cancel();
       }
     };
-
   }, []);
 
   return null;

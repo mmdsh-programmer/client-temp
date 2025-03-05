@@ -52,7 +52,7 @@ const CreateDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
-      className={`${className} flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary xs:!rounded-lg `}
+      className={`${className} flex flex-col !rounded-none shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary xs:!rounded-lg `}
       onClick={handleBackdropClick}
       dismiss={{
         enabled: false,
@@ -84,7 +84,7 @@ const CreateDialog = ({
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="flex-grow px-5 py-3 xs:p-6 overflow-auto"
       >
         {children}
       </DialogBody>

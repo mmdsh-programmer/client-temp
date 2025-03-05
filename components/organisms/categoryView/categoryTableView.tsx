@@ -43,34 +43,10 @@ const TableView = ({
   const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
 
   const listLength = getCategoryList?.pages[0].total;
-  return (
-    <div
-      className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
-    >
-      <div className="flex items-center py-4 px-5 justify-between">
-        <CategoryBreadCrumb />
-        <SearchFilter open={openFilter} setOpen={setOpenFilter} />
-      </div>
-      {openFilter ? <AdvancedFilter setOpen={setOpenFilter} /> : null}
-      {!openFilter && (getFilterChildren || getFilterReport) ? (
-        <div className="px-5">
-          <Button
-            className="bg-error h-7 w-max rounded-full gap-1 px-3"
-            onClick={() => {
-              setFilterChildren(null);
-              setFilterReport(null);
-            }}
-          >
-            <DeleteIcon className="h-4 w-4 fill-white" />
-            <Typography className="label text-white">حذف فیلتر</Typography>
-          </Button>
-        </div>
-      ) : null}
-      {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
-        </div>
-      ) : listLength ? (
+
+  const renderContent = () => {
+    if (listLength) {
+      return (
         <div className="px-5 py-4 overflow-auto">
           <div className="w-full border-[0.5px] overflow-auto border-normal rounded-lg">
             <table className="w-full overflow-hidden min-w-max ">
@@ -88,7 +64,7 @@ const TableView = ({
                       key: "order",
                       value: "اولویت",
                       isSorted: true,
-                      className: "categoryOrder hidden xl:table-cell",
+                      className: "categoryOrder hidden xl:flex",
                     },
                     { key: "name", value: "نام دسته", isSorted: true },
                     { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
@@ -145,10 +121,44 @@ const TableView = ({
             </table>
           </div>
         </div>
-      ) : (
-        <div className="py-4">
-          <EmptyList type={type} />
+      );
+    }
+    return (
+      <div className="py-4">
+        <EmptyList type={type} />
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+    >
+      <div className="flex items-center py-4 px-5 justify-between">
+        <CategoryBreadCrumb />
+        <SearchFilter open={openFilter} setOpen={setOpenFilter} />
+      </div>
+      {openFilter ? <AdvancedFilter setOpen={setOpenFilter} /> : null}
+      {!openFilter && (getFilterChildren || getFilterReport) ? (
+        <div className="px-5">
+          <Button
+            className="bg-error h-7 w-max rounded-full gap-1 px-3"
+            onClick={() => {
+              setFilterChildren(null);
+              setFilterReport(null);
+            }}
+          >
+            <DeleteIcon className="h-4 w-4 fill-white" />
+            <Typography className="label text-white">حذف فیلتر</Typography>
+          </Button>
         </div>
+      ) : null}
+      {isLoading ? (
+        <div className="w-full h-full flex justify-center items-center">
+          <Spinner className="h-8 w-8" color="deep-purple" />
+        </div>
+      ) : (
+        renderContent()
       )}
     </div>
   );

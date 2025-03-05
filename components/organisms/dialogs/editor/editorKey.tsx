@@ -40,13 +40,26 @@ const EditorKey = ({
 
     try {
       const privateKey = forge.pki.privateKeyFromPem(key);
+      const encrypted = JSON.parse(encryptedContent);
 
-      return forge.util.decodeUtf8(
-        privateKey.decrypt(forge.util.decode64(encryptedContent), "RSA-OAEP", {
-          md: forge.md.sha256.create(),
-        })
-      );
-    } catch {
+      // Decrypt the AES key using RSA private key
+      const aesKey = privateKey.decrypt(forge.util.decode64(encrypted.key), "RSA-OAEP", {
+        md: forge.md.sha256.create()
+      });
+
+      // Create decipher for AES decryption
+      const decipher = forge.cipher.createDecipher("AES-CBC", aesKey);
+      const iv = forge.util.decode64(encrypted.iv);
+      decipher.start({iv});
+
+      // Decrypt the content
+      const encryptedBytes = forge.util.decode64(encrypted.content);
+      decipher.update(forge.util.createBuffer(encryptedBytes));
+      decipher.finish();
+
+      return forge.util.decodeUtf8(decipher.output.getBytes());
+    } catch (error) {
+      console.error("Decryption error:", error);
       setError("privateKey", {
         message: "کلید خصوصی وارد شده اشتباه است",
       });

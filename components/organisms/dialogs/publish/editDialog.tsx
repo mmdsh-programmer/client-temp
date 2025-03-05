@@ -87,7 +87,7 @@ const PublishQuestionAnswerEditDialog = ({
           متن خود را بنویسید
         </Typography>
 
-        <div className="h-44">
+        <div className="h-52">
           <QuestionAnswerEditor defaultValue={item.content} ref={editorRef} />
         </div>
       </form>

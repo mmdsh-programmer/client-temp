@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   AuthorizationError,
   DuplicateError,
@@ -19,6 +21,7 @@ import {
   ILikeList,
   IVersion,
 } from "@interface/version.interface";
+import { IBranchList, IBranchUserList } from "@interface/branch.interface";
 import { ICategory, ICategoryMetadata } from "@interface/category.interface";
 import {
   IChildrenFilter,
@@ -30,7 +33,11 @@ import {
   IServerResult,
   IUserInfo,
 } from "@interface/app.interface";
-import { IClasorDomainResult, IClasorReport, IClasorResult } from "@interface/clasor";
+import {
+  IClasorDomainResult,
+  IClasorReport,
+  IClasorResult,
+} from "@interface/clasor";
 import {
   IClasorField,
   IDocument,
@@ -60,9 +67,11 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
+import { IDomainSubscriptionList } from "@interface/domain.interface";
 import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
+import { IPositionList } from "@interface/position.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import Logger from "@utils/logger";
@@ -80,6 +89,7 @@ const axiosClasorInstance = axios.create({
 axiosClasorInstance.interceptors.request.use((request) => {
   const { headers, baseURL, method, url, data } = request;
   const log = {
+    type: "REQUEST",
     headers,
     baseURL,
     method,
@@ -87,8 +97,24 @@ axiosClasorInstance.interceptors.request.use((request) => {
     data,
   };
 
-  Logger.info(log);
+  Logger.info(JSON.stringify(log));
   return request;
+}, (error) => {
+  const log = {
+    type: "REQUEST_ERROR",
+    message: error.message,
+    config: {
+      url: error.config?.url,
+      method: error.config?.method,
+      data: error.config?.data,
+    },
+    response: {
+      status: error.response?.status,
+      data: error.response?.data,
+    },
+  };
+  Logger.error(JSON.stringify(log));
+  return Promise.reject(error);
 });
 
 axiosClasorInstance.interceptors.response.use(
@@ -99,13 +125,13 @@ axiosClasorInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return response;
   },
   (error) => {
-    const { headers  } = error.config;
+    const { headers } = error.config;
     const log = {
-      type: "ERROR",
+      type: "RESPONSE_ERROR",
       config: {
         url: error.config?.url,
         method: error.config?.method,
@@ -116,12 +142,12 @@ axiosClasorInstance.interceptors.response.use(
         data: error.response?.data,
       },
       headers: {
-        "Accept": headers?.Accept,
+        Accept: headers?.Accept,
         "Accept-Encoding": headers?.["Accept-Encoding"],
-        "Authorization": headers?.Authorization,
+        Authorization: headers?.Authorization,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   }
 );
@@ -171,14 +197,16 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
   if (cachedUser) {
-    Logger.warn({
-      type: "Redis cache data",
-      data: cachedUser,
-    });
+    Logger.warn(
+      JSON.stringify({
+        type: "Redis cache data",
+        data: cachedUser,
+      })
+    );
     return JSON.parse(cachedUser);
   }
 
-  try {  
+  try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
       {
@@ -262,6 +290,11 @@ export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
         params: {
           repoTypes,
         },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       }
     );
 
@@ -312,7 +345,7 @@ export const getAllRepositories = async (
       },
       paramsSerializer: (params) => {
         return qs.stringify(params, {
-          arrayFormat: "repeat",
+          indexes: false,
         });
       },
     });
@@ -342,20 +375,19 @@ export const getRepositoryKeys = async (
   size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IListResponse<IPublicKey>>(
-      `repositories/${repoId}/publicKey`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IPublicKey>>
+    >(`repositories/${repoId}/publicKey`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -415,7 +447,7 @@ export const getKey = async (
   isDirectAccess?: boolean
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IPublicKey>(
+    const response = await axiosClasorInstance.get<IServerResult<IPublicKey>>(
       `repositories/${repoId}/publicKey/${keyId}`,
       {
         headers: {
@@ -427,7 +459,7 @@ export const getKey = async (
       }
     );
 
-    return response.data;
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -590,6 +622,9 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          forceDelete: true,
+        },
       }
     );
 
@@ -645,7 +680,7 @@ export const createRepo = async (
   accessToken: string,
   name: string,
   repoTypes: string[],
-  description?: string,
+  description?: string
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -1329,7 +1364,7 @@ export const createCategory = async (
         parentId,
         name,
         description,
-        order,
+        order: order && order > 0 ? Number(order) : undefined,
       },
       {
         headers: {
@@ -1357,7 +1392,7 @@ export const editCategory = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
-      { name, description, order, isHidden, parentId },
+      { name, description, order: Number(order), isHidden, parentId },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -1486,7 +1521,7 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoTypes: string[],
+  repoTypes: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -1792,7 +1827,7 @@ export const createDocument = async (
         categoryId,
         description,
         imageUrl,
-        order: order && order > 0 ? order : undefined,
+        order: order && order > 0 ? Number(order) : undefined,
         isTemplate,
         publicKeyId,
       },
@@ -1861,7 +1896,7 @@ export const editDocument = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
-      { categoryId, title, contentType, order, description, isHidden, tagIds },
+      { categoryId, title, contentType, order: Number(order), description, isHidden, tagIds },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -2071,7 +2106,7 @@ export const updateDocumentPassword = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  oldPassword: string,
+  oldPassword: string | undefined,
   newPassword: string
 ) => {
   try {
@@ -2425,8 +2460,6 @@ export const cancelConfirmVersion = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
-/// ////////////////// FILES ///////////////////////////
 export const getResourceFiles = async (
   accessToken: string,
   resourceId: number,
@@ -2461,7 +2494,6 @@ export const getResourceFiles = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
 export const editFile = async (
   accessToken: string,
   resourceId: number,
@@ -2503,6 +2535,32 @@ export const deleteFile = async (
         },
         params: {
           type,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createUploadLink = async (
+  accessToken: string,
+  resourceId: number,
+  userGroupHash: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post(
+      `fileManagement/resource/${resourceId}/uploadLink`,
+      {
+        expireTime: (Date.now() + 3600 * 1000).toString(),
+        userGroupHash,
+        isPublic: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       }
     );
@@ -2655,7 +2713,7 @@ export const createRepoPublicLink = async (
   accessToken: string,
   repoId: number,
   roleId: number,
-  expireTime: number,
+  expireTime?: number,
   password?: string
 ) => {
   try {
@@ -3314,6 +3372,32 @@ export const getAllPublishChildren = async (
   }
 };
 
+export const getDomainPublishRepoList = async (
+  accessToken: string,
+  domainUrl: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IRepo>>
+    >("repositories/publishRepoList", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ////////////////////// ACCESS_MANAGEMENT /////////////////////////////
 export const getUsersOfResource = async (
   accessToken: string,
@@ -3451,36 +3535,811 @@ export const getDomainPrivateFeeds = async (
   }
 };
 
+/// /////////////////////////////// BRANCH SERVICES //////////////////////
+
+export const getBranchList = async (
+  accessToken: string,
+  parentId: number | undefined,
+  ownerSSOID: number | undefined,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IBranchList>>(
+      "branch",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          parentId,
+          ownerSSOID,
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getBranchInfo = async (
+  accessToken: string,
+  branchId: number | undefined
+) => {
+  try {
+    const response = await axiosClasorInstance.get<any>(`branch/${branchId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createRootBranch = async (
+  accessToken: string,
+  name: string,
+  repoType: string,
+  username: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      "branch",
+      { title: name, repoTypeName: repoType, ownerUsername: username },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createSubBranch = async (
+  accessToken: string,
+  branchId: number,
+  name: string,
+  repoType: string,
+  username: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `branch/${branchId}`,
+      { title: name, repoTypeName: repoType, ownerUsername: username },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateRootBranch = async (
+  accessToken: string,
+  name: string,
+  username: string
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      "branch",
+      { title: name, ownerUsername: username },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateSubBranch = async (
+  accessToken: string,
+  branchId: number,
+  name: string,
+  username: string
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `branch/${branchId}`,
+      { title: name, ownerUsername: username },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteBranch = async (accessToken: string, branchId: number) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `branch/${branchId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// POSITION SERVICES //////////////////////
+
+export const getPositionOfBranch = async (
+  accessToken: string,
+  branchId: number | undefined,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IPositionList>
+    >(`branch/${branchId}/position`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPositionInfo = async (
+  accessToken: string,
+  branchId: number | undefined,
+  positionName: string
+) => {
+  try {
+    const response = await axiosClasorInstance.get<any>(
+      `branch/${branchId}/position/${positionName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const setPositionForBranch = async (
+  accessToken: string,
+  branchId: number,
+  title: string,
+  members?: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `branch/${branchId}/position`,
+      { title, members },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const addMembersToPosition = async (
+  accessToken: string,
+  branchId: number,
+  positionName: string,
+  members: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}/members`,
+      { members },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const setGrantsForPosition = async (
+  accessToken: string,
+  branchId: number,
+  positionName: string,
+  serviceNames: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}/blockGrants`,
+      { serviceNames },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const assignPositionForSubBranch = async (
+  accessToken: string,
+  branchId: number,
+  subBranchId: number,
+  positionName: string
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}/subBranch/${subBranchId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updatePosition = async (
+  accessToken: string,
+  branchId: number,
+  positionName: string,
+  title: string,
+  members: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}`,
+      { title, members },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteMembersFromPosition = async (
+  accessToken: string,
+  branchId: number,
+  positionName: string,
+  members: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}/members`,
+      {
+        data: {
+          members,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deletePosition = async (
+  accessToken: string,
+  branchId: number,
+  positionName: string
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `branch/${branchId}/position/${positionName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getBranchUsers = async (
+  accessToken: string,
+  branchId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IBranchUserList>
+    >(`branch/${branchId}/users`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// ///////////////////////////////REPO TYPE////////////////////////////////////////
+
+export const getRepoTypes = async (accessToken: string) => {
+  try {
+    const response = await axiosClasorInstance.get<any>("admin/repoTypes", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createRepoTypes = async (
+  accessToken: string,
+  name: string,
+  username: string
+) => {
+  try {
+    const response = await axiosClasorInstance.post<any>(
+      "admin/repoTypes/user/BlogBox",
+      { name, username },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteRepoType = async (accessToken: string, id: number) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(
+      `admin/repoTypes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// DOMAIN PUBLIC FEEDS //////////////////////
+
+export const getDomainFeeds = async (
+  accessToken: string,
+  domainUrl: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IFeedItem>>
+    >("domain/feeds", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createDomainFeed = async (
+  accessToken: string,
+  domainUrl: string,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IFeedItem>>(
+      "domain/feeds",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateDomainFeed = async (
+  accessToken: string,
+  domainUrl: string,
+  feedId: number,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<IFeedItem>>(
+      `domain/feeds/${feedId}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteDomainFeed = async (
+  accessToken: string,
+  domainUrl: string,
+  feedId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `domain/feeds/${feedId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getFeedImages = async (offset: number, size: number) => {
+  try {
+    const response = await axiosClasorInstance.get<any>(
+      "podSpace/publicFolder/images",
+      {
+        headers: {},
+        params: {
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// PRIVATE FFED //////////////////////
+
+export const createPrivateFeed = async (
+  accessToken: string,
+  repoId: number,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<IFeedItem>>(
+      `repositories/${repoId}/feeds`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updatePrivateFeed = async (
+  accessToken: string,
+  repoId: number,
+  feedId: number,
+  name: string,
+  content: string,
+  link?: string,
+  image?: string
+) => {
+  const data: any = {
+    name,
+    content,
+  };
+
+  if (link) {
+    data.link = link;
+  }
+  if (image) {
+    data.image = image;
+  }
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<IFeedItem>>(
+      `repositories/${repoId}/feeds/${feedId}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deletePrivateFeed = async (
+  accessToken: string,
+  repoId: number,
+  feedId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/feeds/${feedId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////////// DOMAIN SUBSCRIPTION //////////////////////
+
+export const getDomainSubscription = async (
+  accessToken: string,
+  domainUrl: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IDomainSubscriptionList>
+    >("domain/subscription/requests", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectSubscription = async (
+  accessToken: string,
+  domainUrl: string,
+  requestId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `domain/subscription/request/${requestId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const acceptSubscription = async (
+  accessToken: string,
+  domainUrl: string,
+  requestId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `domain/subscription/request/${requestId}/accept`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
 export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
   try {
-    
-  if(domain === ""){
-    throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
-  }
-
- 
-  const { data } = await axiosClasorInstance.get<IClasorResult<IClasorDomainResult>>("domain/info", {
-    headers:{
-      domainUrl: domain
+    if (domain === "") {
+      throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
-  });
 
+    const redisClient = await getRedisClient();
+    const cachedDomain = await redisClient?.get(`domain:${domain}`);
+    if (cachedDomain) {
+      Logger.warn(
+        JSON.stringify({
+          type: "Redis cache data",
+          data: cachedDomain,
+        })
+      );
+      return JSON.parse(cachedDomain);
+    }
+    const { data } = await axiosClasorInstance.get<
+      IClasorResult<IClasorDomainResult>
+    >("domain/info", {
+      headers: {
+        domainUrl: domain,
+      },
+    });
 
-  const sensitiveStringData = await decryptKey(
-    data.data.sensitiveData,
-    process.env.CRYPTO_SECRET_KEY!, 
-    process.env.CRYPTO_INIT_VECTOR_KEY!
-  );
-  const sensitiveData = JSON.parse(sensitiveStringData);
-  
-  const domainInfo = {
-    ...data.data,
-    ...sensitiveData,
-  };
+    const sensitiveStringData = await decryptKey(
+      data.data.sensitiveData,
+      process.env.CRYPTO_SECRET_KEY!,
+      process.env.CRYPTO_INIT_VECTOR_KEY!
+    );
+    const sensitiveData = JSON.parse(sensitiveStringData);
 
-  return domainInfo as IDomainMetadata;
+    const domainInfo = {
+      ...data.data,
+      ...sensitiveData,
+    };
+
+    if (domainInfo) {
+      await redisClient?.set(`domain:${domain}`, JSON.stringify(domainInfo), {
+        EX: 60 * 60,
+      });
+    }
+
+    return domainInfo as IDomainMetadata;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

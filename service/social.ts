@@ -29,18 +29,19 @@ axiosSocialInstance.interceptors.request.use(
   (request) => {
     const { headers, baseURL, method, url, data } = request;
     const log = {
+      type: "REQUEST",
       headers,
       baseURL,
       method,
       url,
       data,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return request;
   },
   (error) => {
     const log = {
-      type: "ERROR",
+      type: "REQUEST_ERROR",
       message: error.message,
       config: {
         url: error.config?.url,
@@ -52,7 +53,7 @@ axiosSocialInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   }
 );
@@ -62,15 +63,16 @@ axiosSocialInstance.interceptors.response.use(
     const { data, status } = response;
 
     const log = {
+      type: "RESPONSE",
       data,
       status,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return response;
   },
   (error) => {
     const log = {
-      type: "ERROR",
+      type: "RESPONSE_ERROR",
       message: error.message,
       config: {
         url: error.config?.url,
@@ -82,7 +84,7 @@ axiosSocialInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.info(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   }
 );

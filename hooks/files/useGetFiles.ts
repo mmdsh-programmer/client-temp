@@ -8,7 +8,6 @@ const useGetFiles = (
   resourceId: number,
   userGroupHash: string,
   size: number,
-  offset?: number,
   name?: string,
   order?: string,
   dataType?: string
@@ -41,6 +40,7 @@ const useGetFiles = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: !!resourceId && !!userGroupHash && userGroupHash !== "",
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.count / size)) {
         return pages.length + 1;

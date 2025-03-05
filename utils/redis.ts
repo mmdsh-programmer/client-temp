@@ -11,7 +11,7 @@ export const getRedisClient = async () => {
 };
 
 export const generateCachePageTag = async (tag: string[]) => {
-   await fetch(`${process.env.NEXT_PUBLIC_PODSPACE_API}/api`, {
+   await fetch(`${process.env.BACKEND_URL}/v1`, {
       next: {
         tags: tag,
       },

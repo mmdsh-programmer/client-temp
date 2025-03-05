@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ClasorFileManagement, IFile } from "cls-file-management";
 import React, { useCallback, useState } from "react";
-
+import { ClasorFileManagement, IFile } from "cls-file-management";
 import FileManagementDialog from "@components/templates/dialog/fileManagementDialog";
 import axios from "axios";
 import { repoAtom } from "@atom/repository";
@@ -13,6 +12,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 import useRenameFile from "@hooks/files/useRenameFile";
+import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 
 const fileTablePageSize = 20;
 
@@ -33,7 +33,6 @@ const Files = ({
   type,
   handleClose,
 }: IProps) => {
-  const [page, setPage] = useState<number>(0);
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -54,11 +53,11 @@ const Files = ({
     resourceId,
     userGroupHash,
     fileTablePageSize,
-    page * fileTablePageSize,
     name,
     dataType
   );
 
+  const createUploadLink = useCreateUploadLink();
   const renameHook = useRenameFile();
   const deleteFile = useDeleteFile();
 
@@ -113,102 +112,73 @@ const Files = ({
   }, [refetch]);
 
   const handleUploadFile = async (item: any, showCropper: boolean) => {
-    console.log("handleUploadFile called:", { item, showCropper });
-
     setProcessCount(0);
     const token = userInfo?.access_token;
-    
+
     if (!token) {
       toast.error("توکن نامعتبر است");
       return;
     }
 
+    setIsLoading(true);
 
-    if (token) {
-      setIsLoading(true);
-
-      const uploadFile = async (fileData: FormData | any) => {
-        try {
-          const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/fileManagement/resource/${resourceId}/uploadLink`,
-            {
-              expireTime: (Date.now() + 3600 * 1000).toString(),
-              userGroupHash,
-              isPublic: false,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                _token_: token || "",
-                _token_issuer_: "1",
-              },
-            }
-          );
-
-          if (response.data.data.uploadHash) {
-            const uploadLink = response.data.data.uploadHash;
-            try {
-              const result = await axios.post(
-                `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadLink}`,
-                fileData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data;",
-                    Authorization: `Bearer ${token}`,
-                    _token_: token || "",
-                    _token_issuer_: "1",
-                  },
-                  onUploadProgress(progressEvent: any) {
-                    const progress = Math.round(
-                      (progressEvent.loaded * 100) / progressEvent.total
-                    );
-                    setProcessCount(progress);
-                  },
-                }
-              );
-              if (result.data.result) {
-                await onSuccess();
+    const uploadFile = async (fileData: FormData | any) => {
+      createUploadLink.mutate({
+        resourceId,
+        userGroupHash,
+        successCallBack: async (uploadHash) => {
+          try {
+            const result = await axios.post(
+              `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${uploadHash}`,
+              fileData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data;",
+                  Authorization: `Bearer ${token}`,
+                  _token_: token || "",
+                  _token_issuer_: "1",
+                },
+                onUploadProgress(progressEvent: any) {
+                  const progress = Math.round(
+                    (progressEvent.loaded * 100) / progressEvent.total
+                  );
+                  setProcessCount(progress);
+                },
               }
-            } catch (error: any) {
-              if (error?.result?.status === 401) {
-                refetchUser();
-              }
-              setIsError(true);
-              toast.error("خطا در بارگذاری فایل");
-            } finally {
-              setIsLoading(false);
+            );
+            if (result.data.result) {
+              onSuccess();
+              queryClient.invalidateQueries({
+                queryKey: [`getReport-${resourceId}`],
+              });
             }
+          } catch (error: any) {
+            if (error?.result?.status === 401) {
+              refetchUser();
+            }
+            setIsError(true);
+            toast.error("خطا در بارگذاری فایل");
+          } finally {
+            setIsLoading(false);
           }
+        },
+      });
+    };
 
-          queryClient.invalidateQueries({
-            queryKey: [`getReport-${resourceId}`],
-          });
-        } catch (error: any) {
-          if (error?.response?.status === 401) {
-            refetchUser();
-          }
-          setIsError(true);
-          toast.error("خطا در بارگذاری فایل");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      try {
-        if (showCropper) {
-          await uploadFile(item);
-        } else {
-          const formData = new FormData();
-          formData.append("file", item, encodeURIComponent(item.name));
-          await uploadFile(formData);
-        }
-      } catch (error: any) {
-        if (error?.response?.status === 401) {
-          refetchUser();
-        }
-        setIsError(true);
-        toast.error("آپلود ناموفق");
+    try {
+      if (showCropper) {
+        await uploadFile(item);
+      } else {
+        const formData = new FormData();
+        formData.append("file", item, encodeURIComponent(item.name));
+        await uploadFile(formData);
       }
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        refetchUser();
+      }
+      setIsError(true);
+      toast.error("آپلود ناموفق");
     }
   };
 
@@ -256,7 +226,6 @@ const Files = ({
         onDeleteFile={handleDeleteFile}
         onUploadFile={handleUploadFile}
         onSearchFile={(search?: string) => {
-          setPage(0);
           setName(search);
         }}
       />

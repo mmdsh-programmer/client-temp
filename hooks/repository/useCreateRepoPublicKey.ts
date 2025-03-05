@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { IPublicKey } from "@interface/repo.interface";
 
 const useCreateRepoPublicKey = () => {
   const queryClient = useQueryClient();
@@ -17,7 +18,7 @@ const useCreateRepoPublicKey = () => {
       const { repoId, name, key } = values;
       const response = await createRepoKeyAction(repoId, name, key);
       handleClientSideHookError(response as IActionError);
-      return response;
+      return response as IPublicKey;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;

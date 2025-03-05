@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import {
   editorDataAtom,
   editorDecryptedContentAtom,
@@ -9,27 +10,29 @@ import {
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "./blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
 import EditorComponent from "@components/organisms/editor";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
+import { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@material-tailwind/react";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import useGetKey from "@hooks/repository/useGetKey";
+import { toast } from "react-toastify";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { toast } from "react-toastify";
-import { IRemoteEditorRef } from "clasor-remote-editor";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import PublicKeyInfo from "./publicKeyInfo";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Editor = ({ setOpen }: IProps) => {
+  // TODO: REFACTOR NEEDED (HIGH PRIORITY)
+
   const repoId = useRepoId();
   const [getSelectedDocument, setSelectedDocument] =
     useRecoilState(selectedDocumentAtom);
@@ -57,7 +60,11 @@ const Editor = ({ setOpen }: IProps) => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const { data: getLastVersion, error: lastVersionError, isSuccess: lastVersionIsSuccess } = useGetLastVersion(
+  const {
+    data: getLastVersion,
+    error: lastVersionError,
+    isSuccess: lastVersionIsSuccess,
+  } = useGetLastVersion(
     repoId,
     getSelectedDocument!.id,
     !getSelectedVersion && repoId !== 0,
@@ -73,18 +80,6 @@ const Editor = ({ setOpen }: IProps) => {
     editorMode === "preview", // innerDocument,
     currentPath === "/admin/sharedDocuments",
     true
-  );
-
-  const {
-    data: keyInfo,
-    isLoading: isLoadingKey,
-    error: keyError,
-    isSuccess: isSuccessKey,
-  } = useGetKey(
-    repoId,
-    getSelectedDocument?.publicKeyId
-      ? +getSelectedDocument.publicKeyId
-      : undefined
   );
 
   const getEditorConfig = (): {
@@ -103,6 +98,25 @@ const Editor = ({ setOpen }: IProps) => {
     const contentType =
       getSelectedDocument?.contentType || EDocumentTypes.classic;
     return { url: editors[contentType], ref: editorRefs[contentType] };
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setDecryptedContent(null);
+    setShowKey(false);
+    setPublicKey(null);
+    setSelectedVersion(null);
+    setEditorModal(false);
+    setListDrawer(false);
+    if (!getDocumentShow) {
+      setVersionModalList(false);
+      setDocumentShow(null);
+      setSelectedDocument(null);
+    } else if (!repoId) {
+      setVersionModalList(false);
+    } else {
+      setVersionModalList(true);
+    }
   };
 
   useEffect(() => {
@@ -129,38 +143,18 @@ const Editor = ({ setOpen }: IProps) => {
   }, [isSuccess]);
 
   useEffect(() => {
-    if (keyInfo && isSuccessKey) {
-      setPublicKey(keyInfo.key);
+    if (error || lastVersionError) {
+      toast.error("باز کردن سند با خطا مواجه شد.");
+      handleClose();
     }
-  }, [keyInfo]);
+  }, [error, lastVersionError]);
 
   const handleDecryption = useCallback((content: string) => {
     setDecryptedContent(content);
     setShowKey(false);
   }, []);
 
-  const handleClose = () => {
-    setOpen(false);
-    setDecryptedContent(null);
-    setShowKey(false);
-    setPublicKey(null);
-    setSelectedVersion(null);
-    setEditorModal(false);
-    setListDrawer(false);
-    if (!getDocumentShow) {
-      setVersionModalList(false);
-      setDocumentShow(null);
-      setSelectedDocument(null);
-    } else if (!repoId) {
-      setVersionModalList(false);
-    } else {
-      setVersionModalList(true);
-    }
-  };
-
-  if (error || keyError || lastVersionError) {
-    toast.warn("باز کردن سند با خطا مواجه شد.");
-    handleClose();
+  if (error || lastVersionError) {
     return null;
   }
 
@@ -168,10 +162,15 @@ const Editor = ({ setOpen }: IProps) => {
     toast.warn("آخرین نسخه یافت نشد.");
   }
 
-  if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
+  if (
+    showKey &&
+    !decryptedContent &&
+    getVersionData &&
+    getVersionData.content?.length
+  ) {
     return (
       <EditorKey
-        isPending={isLoading || isLoadingKey}
+        isPending={isLoading}
         onDecryption={handleDecryption}
         setOpen={handleClose}
         encryptedContent={getVersionData?.content}
@@ -190,13 +189,25 @@ const Editor = ({ setOpen }: IProps) => {
     if (data && isSuccess) {
       return (
         <BlockDraft version={data}>
-          <>
-            <BlockDraftDialog
-              editorRef={getEditorConfig().ref}
-              onClose={handleClose}
-            />
-            <EditorComponent version={data} getEditorConfig={getEditorConfig} />
-          </>
+          <PublicKeyInfo
+            repoId={repoId}
+            publicKeyId={
+              getSelectedDocument?.publicKeyId
+                ? +getSelectedDocument.publicKeyId
+                : undefined
+            }
+          >
+            <>
+              <BlockDraftDialog
+                editorRef={getEditorConfig().ref}
+                onClose={handleClose}
+              />
+              <EditorComponent
+                version={data}
+                getEditorConfig={getEditorConfig}
+              />
+            </>
+          </PublicKeyInfo>
         </BlockDraft>
       );
     }

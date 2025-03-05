@@ -11,7 +11,7 @@ const useCreatePublicLink = () => {
     mutationFn: async (values: {
       repoId: number;
       roleId: number;
-      expireTime: number;
+      expireTime?: number;
       password?: string;
       callBack?: (result) => void;
     }) => {

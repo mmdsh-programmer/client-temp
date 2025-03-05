@@ -19,10 +19,10 @@ import { IRemoteEditorRef } from "clasor-remote-editor";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
-import useGetKey from "@hooks/repository/useGetKey";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import useRepoId from "@hooks/custom/useRepoId";
+import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
 
 const EditorTab = () => {
   const currentPath = usePathname();
@@ -81,18 +81,6 @@ const EditorTab = () => {
     true
   );
 
-  const {
-    data: keyInfo,
-    isLoading: isLoadingKey,
-    error: keyError,
-    isSuccess: isSuccessKey,
-  } = useGetKey(
-    repoId,
-    getSelectedDocument?.publicKeyId
-      ? +getSelectedDocument.publicKeyId
-      : undefined
-  );
-
   const getEditorConfig = (): {
     url: string;
     ref: React.RefObject<IRemoteEditorRef>;
@@ -139,12 +127,6 @@ const EditorTab = () => {
     }
   }, [data]);
 
-  useEffect(() => {
-    if (keyInfo && isSuccessKey) {
-      setPublicKey(keyInfo.key);
-    }
-  }, [keyInfo]);
-
   const handleDecryption = useCallback((content: string) => {
     setDecryptedContent(content);
     setShowKey(false);
@@ -158,7 +140,7 @@ const EditorTab = () => {
     window.close();
   };
 
-  if (error || keyError) {
+  if (error) {
     toast.warn("باز کردن سند با خطا مواجه شد.");
     handleClose();
     return null;
@@ -178,7 +160,7 @@ const EditorTab = () => {
   ) {
     return (
       <EditorKey
-        isPending={isFetching || isLoadingKey}
+        isPending={isFetching}
         onDecryption={handleDecryption}
         setOpen={handleClose}
         encryptedContent={getVersionData?.content}
@@ -193,19 +175,28 @@ const EditorTab = () => {
   return data ? (
     <div className="h-screen flex-grow p-0 overflow-auto">
       <BlockDraft version={data}>
-        <>
-          <BlockDraftDialog
-            editorRef={getEditorConfig().ref}
-            onClose={handleClose}
-          />
-          <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
-            <EditorHeader dialogHeader={getSelectedDocument?.name} />
-          </div>
-          <EditorComponent version={data} getEditorConfig={getEditorConfig} />
-          <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
-            <EditorFooter editorRef={getEditorConfig().ref} />
-          </div>
-        </>
+        <PublicKeyInfo
+          repoId={repoId}
+          publicKeyId={
+            getSelectedDocument?.publicKeyId
+              ? +getSelectedDocument.publicKeyId
+              : undefined
+          }
+        >
+          <>
+            <BlockDraftDialog
+              editorRef={getEditorConfig().ref}
+              onClose={handleClose}
+            />
+            <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
+              <EditorHeader dialogHeader={getSelectedDocument?.name} />
+            </div>
+            <EditorComponent version={data} getEditorConfig={getEditorConfig} />
+            <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
+              <EditorFooter editorRef={getEditorConfig().ref} />
+            </div>
+          </>
+        </PublicKeyInfo>
       </BlockDraft>
     </div>
   ) : null;

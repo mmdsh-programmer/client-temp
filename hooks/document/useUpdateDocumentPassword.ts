@@ -14,7 +14,7 @@ const useUpdateDocumentPassword = () => {
       repoId: number;
       categoryId: number | null;
       documentId: number;
-      oldPassword: string;
+      oldPassword: string | undefined; 
       newPassword: string;
       successCallBack?: (result: IDocument) => void;
       errorCallBack?: () => void;

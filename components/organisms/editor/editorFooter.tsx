@@ -106,13 +106,38 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const encryptData = (content: string) => {
     if (!key) return;
 
-    const publicKey = forge.pki.publicKeyFromPem(key);
+    try {
+      // Generate a random AES key
+      const aesKey = forge.random.getBytesSync(32); // 256 bits
+      
+      // Create cipher for AES encryption
+      const cipher = forge.cipher.createCipher("AES-CBC", aesKey);
+      const iv = forge.random.getBytesSync(16);
+      cipher.start({iv});
+      
+      // Encrypt content with AES
+      cipher.update(forge.util.createBuffer(content, "utf8"));
+      cipher.finish();
+      const encryptedContent = cipher.output.getBytes();
+      
+      // Encrypt the AES key with RSA public key
+      const publicKey = forge.pki.publicKeyFromPem(key);
+      const encryptedKey = publicKey.encrypt(aesKey, "RSA-OAEP", {
+        md: forge.md.sha256.create()
+      });
 
-    return forge.util.encode64(
-      publicKey.encrypt(forge.util.encodeUtf8(content), "RSA-OAEP", {
-        md: forge.md.sha256.create(),
-      })
-    );
+      // Combine IV, encrypted key and encrypted content
+      const result = {
+        iv: forge.util.encode64(iv),
+        key: forge.util.encode64(encryptedKey),
+        content: forge.util.encode64(encryptedContent)
+      };
+
+      return JSON.stringify(result);
+    } catch (error) {
+      console.error("Encryption error:", error);
+      throw error;
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

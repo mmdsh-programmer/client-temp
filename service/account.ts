@@ -22,6 +22,7 @@ const axiosAccountsInstance = axios.create({
 axiosAccountsInstance.interceptors.request.use((request) => {
   const { headers, baseURL, method, url, data } = request;
   const log = {
+    type: "REQUEST_ERROR",
     headers,
     baseURL,
     method,
@@ -29,7 +30,7 @@ axiosAccountsInstance.interceptors.request.use((request) => {
     data,
   };
 
-  Logger.info(log);
+  Logger.info(JSON.stringify(log));
   return request;
 });
 
@@ -37,10 +38,11 @@ axiosAccountsInstance.interceptors.response.use(
   (response) => {
     const { data, status } = response;
     const log = {
+      type: "RESPONSE_ERROR",
       data,
       status,
     };
-    Logger.info(log);
+    Logger.info(JSON.stringify(log));
     return response;
   }, (error) => {
     const log = {
@@ -56,7 +58,7 @@ axiosAccountsInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log));
     return Promise.reject(error);
   });
 

@@ -63,7 +63,7 @@ const CreateQuestion = ({ postId }: IProps) => {
         پرسش خود را بنویسید
       </Typography>
 
-      <div className="h-44">
+      <div className="h-52">
         <QuestionAnswerEditor ref={editorRef} />
       </div>
 

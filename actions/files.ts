@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteFile, editFile, getResourceFiles } from "@service/clasor";
+import { createUploadLink, deleteFile, editFile, getResourceFiles } from "@service/clasor";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
@@ -53,6 +53,24 @@ export const renameFileAction = async (
   }
 };
 
+export const createUploadLinkAction = async (
+  resourceId: number,
+  userGroupHash: string,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createUploadLink(
+      userInfo.access_token,
+      resourceId,
+      userGroupHash
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
 export const deleteFileAction = async (
   repoId: number,
   resourceId: number,
@@ -74,3 +92,4 @@ export const deleteFileAction = async (
     return normalizeError(error as IActionError);
   }
 };
+

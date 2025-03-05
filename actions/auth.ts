@@ -97,6 +97,7 @@ export const getMe = async () => {
     refresh_token: string;
     expiresAt: number;
   };
+
   try {
     console.log(tokenInfo.expiresAt, +new Date());
     if(tokenInfo.expiresAt < +new Date()){
@@ -139,7 +140,6 @@ export const userInfoAction = async () => {
     }
     return getMe();
   } catch (error) {
-    console.log("--------------------------- userInfoAction error ----------------------------", error);
     return normalizeError(error as IActionError);
   }
 };

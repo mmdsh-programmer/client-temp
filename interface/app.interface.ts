@@ -29,8 +29,28 @@ export interface IUserInfo {
     };
     repoType: string;
     chatThreadId: number | null;
-    imageFile: string;
+    imageFileHash: string;
+    createDate: number;
   };
+  domainConfig: {
+    userName: string;
+    userSSOID: number;
+    domain: string;
+    CUSTOM_POST_TYPE: string;
+    types: string[];
+    newsFeed: {
+      thingId: number;
+      thingApiToken: string;
+      thingUserId: number;
+      participants: [];
+    };
+    enablePublishPage: boolean;
+    id: number;
+    entityId: number;
+    content: string | null;
+  };
+  isDomainOwner: boolean;
+  metadata: string | null;
 }
 
 export type TUserData = Pick<
@@ -45,6 +65,8 @@ export type TUserData = Pick<
   | "business"
   | "isClasorAdmin"
   | "repository"
+  | "domainConfig"
+  | "isDomainOwner"
 > & {
   private: boolean;
   access_token: string;
@@ -233,8 +255,6 @@ export interface ISocialResponse<T> {
   result: T;
 }
 
-
-
 export interface ISocialProfile {
   id: number;
   firstName: string;
@@ -277,15 +297,15 @@ export interface IGetTokenResponse {
 }
 
 export interface ICustomPostItem {
- data: string;
- metadata: string;
- uniqueId: string;
- entityId: number;
+  data: string;
+  metadata: string;
+  uniqueId: string;
+  entityId: number;
 }
 
 export interface ICustomPostResult {
-   item: ICustomPostItem;
-   type: number;
+  item: ICustomPostItem;
+  type: number;
 }
 
 export interface IDomainMetadata {

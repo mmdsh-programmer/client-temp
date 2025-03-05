@@ -12,15 +12,26 @@ interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-  className?: string;
+  headerClassName?: string;
+  tabClassName?: string;
+  activeTabClassName?: string;
 }
 
-const TabComponent = ({ tabList, activeTab, setActiveTab, className }: IProps) => {
+const TabComponent = ({
+  tabList,
+  activeTab,
+  setActiveTab,
+  headerClassName,
+  tabClassName,
+  activeTabClassName,
+}: IProps) => {
   return (
     <Tabs value={activeTab} className="h-full">
       <TabsHeader
-        className="flex items-center p-[2px] rounded-lg bg-secondary"
-        indicatorProps={{ className: "" }}
+        className={`flex items-center p-[2px] rounded-lg bg-secondary text-secondary  ${headerClassName || ""}`}
+        indicatorProps={{
+          className: `p-2 rounded-lg shadow-small !text-purple-normal ${activeTabClassName || ""}`,
+        }}
         placeholder="tabs-header"
       >
         {tabList.map((tab) => {
@@ -31,9 +42,11 @@ const TabComponent = ({ tabList, activeTab, setActiveTab, className }: IProps) =
               onClick={() => {
                 return setActiveTab(tab.tabTitle);
               }}
-              className="flex font-iranYekan h-9 p-2 text-secondary text-[12px] leading-[18px] -tracking-[0.12px] font-medium "
+              className={`flex font-iranYekan h-9 p-2 text-secondary text-[12px]
+                ${tabClassName || ""}
+                leading-[18px] -tracking-[0.12px] font-medium text-nowrap`}
               placeholder="tab"
-              activeClassName="!text-primary p-2 rounded-lg shadow-small"
+              activeClassName={`text-primary ${activeTabClassName || ""} `}
             >
               {tab.tabTitle}
             </Tab>
@@ -46,7 +59,7 @@ const TabComponent = ({ tabList, activeTab, setActiveTab, className }: IProps) =
             <TabPanel
               key={tab.tabTitle}
               value={tab.tabTitle}
-              className={`p-0 h-full ${className || ""}`}
+              className="p-0 h-full"
             >
               {tab.tabContent}
             </TabPanel>

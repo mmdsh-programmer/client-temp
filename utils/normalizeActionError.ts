@@ -17,7 +17,7 @@ export const normalizeError = async (error: IActionError) => {
   if (originalError?.response?.data?.referenceNumber) {
     actionError.referenceNumber = originalError.response.data.referenceNumber;
   } else if(!originalError?.response){
-    Logger.error(actionError);
+    Logger.error(JSON.stringify(actionError));
   }
 
   return actionError;

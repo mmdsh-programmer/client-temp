@@ -1,22 +1,19 @@
 import "clasor-content-preview/src/styles/contentPreview.css";
 
-import { IOutline, IVersion } from "@interface/version.interface";
-import React, { RefObject, useState } from "react";
-
+import React, { useState } from "react";
+import { IVersion } from "@interface/version.interface";
 import AttachFile from "./attachFile";
 import Comments from "./comments";
 import { EDocumentTypes } from "@interface/enums";
 import EditorTags from "./editorTags";
-import { IRemoteEditorRef } from "clasor-remote-editor";
-import { Outline } from "clasor-content-preview";
 import TabComponent from "@components/molecules/tab";
-import { Typography } from "@material-tailwind/react";
 import { editorModeAtom } from "@atom/editor";
 import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
+import DocumentEnableUserGroup from "./documentEnableUserGroup";
+import { Spinner } from "@material-tailwind/react";
 
 export enum ETabs {
-  OUTLINE = "فهرست",
   CHAT = "گفتگو",
   TAGS = "تگ‌ها",
   ATTACH_FILE = "پیوست",
@@ -25,45 +22,27 @@ export enum ETabs {
 
 interface IProps {
   version?: IVersion;
-  editorRef: RefObject<IRemoteEditorRef>;
 }
 
-const EditorDrawer = ({ version, editorRef }: IProps) => {
+const EditorDrawer = ({ version }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const [activeTab, setActiveTab] = useState<string>(ETabs.OUTLINE);
-
-  const outlineList = version?.outline?.startsWith("{\"root\": {\"root\"")
-    ? "[]"
-    : version?.outline;
+  const [activeTab, setActiveTab] = useState<string>(ETabs.TAGS);
 
   const tabList = [
-    {
-      tabTitle: ETabs.OUTLINE,
-      tabContent: (
-        <Outline
-          outline={outlineList || "[]"}
-          classicEditor
-          handleClick={(value: IOutline) => {
-            return editorRef.current?.setHeader(value);
-          }}
-        />
-      ),
-    },
-    {
-      tabTitle: ETabs.CHAT,
-      tabContent: <Typography>تب گفتگو</Typography>,
-    },
     getDocument?.contentType === EDocumentTypes.classic
       ? {
           tabTitle: ETabs.TAGS,
           tabContent: <EditorTags />,
         }
       : null,
-    getDocument?.contentType === EDocumentTypes.classic
+    getDocument?.contentType === EDocumentTypes.classic &&
+    getDocument.attachmentUserGroup
       ? {
           tabTitle: ETabs.ATTACH_FILE,
-          tabContent: <AttachFile />,
+          tabContent: (
+            <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />
+          ),
         }
       : null,
     version?.state !== "draft" &&
@@ -80,11 +59,20 @@ const EditorDrawer = ({ version, editorRef }: IProps) => {
   }[];
 
   return (
-    <TabComponent
-      tabList={tabList}
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-    />
+    <>
+      <DocumentEnableUserGroup />
+      {!getDocument?.attachmentUserGroup ? (
+        <div className="h-full mt-4 flex justify-center">
+          <Spinner className="h-5 w-5" />
+        </div>
+      ) : (
+        <TabComponent
+          tabList={tabList}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      )}
+    </>
   );
 };
 

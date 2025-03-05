@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { IActionError } from "@interface/app.interface";
 import { ICategory } from "@interface/category.interface";
 import { createCategoryAction } from "@actions/category";
@@ -32,7 +31,7 @@ const useCreateCategory = () => {
       return response as ICategory;
     },
     onSuccess: async(response, values) => {
-      const { onSuccessHandler, parentId } = values;
+      const { onSuccessHandler, parentId, order } = values;
       const queryKey = [`category-${parentId || "root"}-children`];
       const cachedData = await queryClient.getQueriesData({ queryKey });
       const cachePages = cachedData?.[0]?.[1] as { pages: { list: ICategory[]; offset: number; size: number; total: number }[] };
@@ -45,6 +44,7 @@ const useCreateCategory = () => {
           type: "category",
           newOne: true,
           repoId: values.repoId,
+          order
         };
 
         const newData = {

@@ -1,5 +1,10 @@
-import React from "react";
-import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+import {
+  Checkbox,
+  DialogBody,
+  DialogFooter,
+  Typography,
+} from "@material-tailwind/react";
 import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { DatePicker } from "zaman";
@@ -14,6 +19,8 @@ interface IData {
 }
 
 const CreateRepoPublishLink = () => {
+  const [hasExpireTime, setHasExpireTime] = useState(false);
+
   const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
   const getRepo = useRecoilValue(repoAtom);
   const createPublishLink = useCreatePublishLink();
@@ -47,7 +54,8 @@ const CreateRepoPublishLink = () => {
 
     createPublishLink.mutate({
       repoId: getRepo.id,
-      expireTime: data.expireTime,
+      expireTime:
+        hasExpireTime && data.expireTime ? data.expireTime : undefined,
       password: undefined,
       callBack: () => {
         setRepositoryAtomId(getRepo.id);
@@ -65,17 +73,35 @@ const CreateRepoPublishLink = () => {
       >
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
-            <Typography className="label">انتخاب تاریخ</Typography>
-            <DatePicker
-              onChange={submitCalendar}
-              className="z-[999999] delay-200"
-              inputClass="rounded-lg px-2 border-[1px] text-[13px] placeholdre:text-[13px] outline-none bg-gray-50 h-12 border-normal w-full font-iranYekan placeholdre:font-iranYekan"
+            <Checkbox
+              crossOrigin="anonymous"
+              label={
+                <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                  افزودن تاریخ انقضای لینک
+                </Typography>
+              }
+              color="deep-purple"
+              checked={hasExpireTime}
+              onChange={() => {
+                setHasExpireTime(!hasExpireTime);
+              }}
+              containerProps={{ className: "-mr-3" }}
             />
-            {errors.expireTime && (
-              <Typography className="warning_text">
-                {errors.expireTime?.message}
-              </Typography>
-            )}
+            {hasExpireTime ? (
+              <>
+                <Typography className="label"> انتخاب تاریخ</Typography>
+                <DatePicker
+                  onChange={submitCalendar}
+                  className="z-[999999] delay-200"
+                  inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
+                />
+                {errors.expireTime && (
+                  <Typography className="warning_text">
+                    {errors.expireTime?.message}
+                  </Typography>
+                )}
+              </>
+            ) : null}
           </div>
         </form>
       </DialogBody>

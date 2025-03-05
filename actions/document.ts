@@ -386,7 +386,7 @@ export const createDocumentPasswordAction = async (
 export const updateDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  oldPassword: string,
+  oldPassword: string | undefined,
   newPassword: string
 ) => {
   const userInfo = await getMe();

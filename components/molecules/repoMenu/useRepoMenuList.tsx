@@ -125,13 +125,12 @@ const useMenuList = (
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
           () => {
-            const url = toPersianDigit(`/publish/${toPersianDigit(
-              `${repo.name.replaceAll(/\s+/g, "-")}`
-            )}/${repo.id}`);
-            window.open(
-              url,
-              "_blank"
+            const url = toPersianDigit(
+              `/publish/${toPersianDigit(
+                `${repo.name.replaceAll(/\s+/g, "-")}`
+              )}/${repo.id}`
             );
+            window.open(url, "_blank");
           }
         ),
     ].filter(Boolean) as MenuItem[];
@@ -239,7 +238,14 @@ const useMenuList = (
         createMenuItem(
           "مخزن منتشرشده",
           <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
-          () => {}
+          () => {
+            const url = toPersianDigit(
+              `/publish/${toPersianDigit(
+                `${repo.name.replaceAll(/\s+/g, "-")}`
+              )}/${repo.id}`
+            );
+            window.open(url, "_blank");
+          }
         ),
       createMenuItem(
         "ترک مخزن",
