@@ -29,7 +29,13 @@ export interface IFeedItem {
   name: string;
   content: string;
   pin: boolean;
-  metadata: string
+  metadata: string;
+}
+
+export interface IFeedItemMetadata {
+  type: string;
+  link: string | null;
+  image: string | null;
 }
 
 export interface IRate {
