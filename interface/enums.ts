@@ -137,7 +137,8 @@ export enum ERepoGrouping {
 }
 
 export enum ERepoSubscriptionStatus {
-  FOLLOW_REQUEST_ACCEPTED = "FOLLOW_REQUEST_ACCEPTED",
-  FOLLOW_REQUEST_SENT = "FOLLOW_REQUEST_SENT",
-  FOLLOW_REQUEST_REJECTED = "FOLLOW_REQUEST_REJECTED",
+  PENDING = "pending",
+  ACCEPTED = "accepted",
+  REJECTED = "rejected",
+  NOT_FOLLOWED = "notFollowed",
 }

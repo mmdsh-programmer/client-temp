@@ -792,6 +792,7 @@ export const transferOwnershipRepository = async (
 };
 
 export const subscribeToRepository = async (
+  domain: string,
   accessToken: string,
   repoId: number,
   isDirectAccess?: boolean
@@ -803,6 +804,33 @@ export const subscribeToRepository = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          domainUrl: domain,
+        },
+        params: {
+          isDirectAccess,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const unsubscribeFromRepository = async (
+  domain: string,
+  accessToken: string,
+  repoId: number,
+  isDirectAccess?: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.delete(
+      `repositories/${repoId}/subscription`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl: domain,
         },
         params: {
           isDirectAccess,
@@ -3452,19 +3480,23 @@ export const deleteAccessOfResource = async (
 /// /////////////////////////////// FEEDS SERVICES //////////////////////
 
 export const getDomainPublicFeeds = async (
-  domainId: number,
+  domain: string,
   offset: number,
   size: number
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IFeedItem>>
-    >(`domain/${domainId}/feeds`, {
+    >("domain/feeds", {
+      headers: {
+        domainUrl: domain,
+      },
       params: {
         offset,
         size,
       },
     });
+
 
     return response.data.data;
   } catch (error) {
@@ -3473,9 +3505,12 @@ export const getDomainPublicFeeds = async (
 };
 
 export const getDomainPrivateFeeds = async (
+  domain: string,
   accessToken: string,
   offset: number,
-  size: number
+  size: number,
+  repoId?: number,
+  
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -3483,10 +3518,12 @@ export const getDomainPrivateFeeds = async (
     >("report/social/userPosts", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        domainUrl: domain,
       },
       params: {
         offset,
         size,
+        repoId
       },
     });
 

@@ -24,6 +24,7 @@ import {
   restoreRepository,
   subscribeToRepository,
   transferOwnershipRepository,
+  unsubscribeFromRepository,
 } from "@service/clasor";
 
 import { IActionError } from "@interface/app.interface";
@@ -231,7 +232,7 @@ export const deleteRepoAction = async (repoId: number) => {
 
     // revalidate all links related to repository publish cache if exists
     revalidateTag(`rp-ph-${repoId}`);
-    
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -393,8 +394,36 @@ export const subscribeToRepoAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await subscribeToRepository(
+      domain,
+      userInfo.access_token,
+      repoId,
+      isDirectAccess
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const unsubscribeFromRepoAction = async (
+  repoId: number,
+  isDirectAccess?: boolean
+) => {
+  const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  try {
+    const response = await unsubscribeFromRepository(
+      domain,
       userInfo.access_token,
       repoId,
       isDirectAccess
