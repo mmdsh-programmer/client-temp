@@ -133,6 +133,16 @@ const useMenuList = (
             window.open(url, "_blank");
           }
         ),
+      createMenuItem(
+        "کلید های مخزن",
+        <KeyIcon className="w-4 h-4 stroke-1" />,
+        () => {
+          setModalState("key", true);
+          if (repo) {
+            setRepo(repo);
+          }
+        }
+      ),
     ].filter(Boolean) as MenuItem[];
   };
 
@@ -158,16 +168,6 @@ const useMenuList = (
 
     return [
       ...(ownerAdminActions() as MenuItem[]),
-      createMenuItem(
-        "کلید های مخزن",
-        <KeyIcon className="w-4 h-4 stroke-1" />,
-        () => {
-          setModalState("key", true);
-          if (repo) {
-            setRepo(repo);
-          }
-        }
-      ),
       createMenuItem(
         "بایگانی",
         <ArchiveActionIcon className="w-4 h-4 fill-icon-active" />,
@@ -247,6 +247,16 @@ const useMenuList = (
             window.open(url, "_blank");
           }
         ),
+      createMenuItem(
+        "کلید های مخزن",
+        <KeyIcon className="w-4 h-4 stroke-1" />,
+        () => {
+          setModalState("key", true);
+          if (repo) {
+            setRepo(repo);
+          }
+        }
+      ),
       createMenuItem(
         "ترک مخزن",
         <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
