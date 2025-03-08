@@ -7,6 +7,8 @@ import PublishSearchButton from "@components/molecules/publishSearchButton";
 import React from "react";
 import PublicFeedsButton from "@components/molecules/publicFeedsButton";
 
+// import PublicFeedsButton from "@components/molecules/publicFeedsButton";
+
 interface IProps {
   projectName?: string;
   logo?: string;
@@ -38,10 +40,10 @@ const PublishHeader = ({ projectName, logo, domain }: IProps) => {
             ) : null}
           </Link>
           <div className="flex items-center gap-1 xs:gap-4 xs:mr-auto">
+            <PublicFeedsButton />
             <ProfileMenu
               renderSideButton={
                 <>
-                  <PublicFeedsButton />
                   <PublishSearchButton />
                   <LoginPanelButton />
                 </>

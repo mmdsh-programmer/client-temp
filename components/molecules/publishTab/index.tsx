@@ -12,6 +12,7 @@ interface IProps {
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
   tabHeaderClassName?: string;
+  tabPanelClassName?: string;
 }
 
 const PublishTab = ({
@@ -19,6 +20,7 @@ const PublishTab = ({
   activeTab,
   setActiveTab,
   tabHeaderClassName,
+  tabPanelClassName,
 }: IProps) => {
   return (
     <Tabs value={activeTab} className="w-full">
@@ -48,7 +50,7 @@ const PublishTab = ({
         {tabList.map((tab) => {
           return (
             <TabPanel
-              className="px-0 py-0 min-h-[500px]"
+              className={`px-0 py-0 min-h-[500px] ${tabPanelClassName || ""}`}
               key={tab.tabTitle}
               value={tab.tabTitle}
             >

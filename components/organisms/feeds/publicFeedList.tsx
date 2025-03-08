@@ -1,27 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import useGetPublicFeeds from "@hooks/feeds/useGetPublicFeeds";
-import {
-  Accordion,
-  AccordionBody,
-  AccordionHeader,
-  Spinner,
-} from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import RenderIf from "@components/atoms/renderIf";
 import LoadMore from "@components/molecules/loadMore";
+import FeedItem from "./feedItem";
 
 const PublicFeedList = () => {
-  const domainId = process.env.NEXT_PUBLIC_DOMAIN_ID as string;
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useGetPublicFeeds(+domainId, 10, true);
-
-  const [open, setOpen] = useState<number | null>(null);
-
-  const handleOpen = (value: number) => {
-    setOpen(open === value ? null : value);
-  };
+    useGetPublicFeeds(10, true);
 
   const feedList = data?.pages.flatMap((page) => {
     return page.list;
@@ -29,7 +18,7 @@ const PublicFeedList = () => {
 
   if (isLoading) {
     return (
-      <div className="mt-6 grid h-full place-content-center py-4">
+      <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <div className="w-full flex justify-center">
           <Spinner className="h-6 w-6" color="deep-purple" />
         </div>
@@ -39,39 +28,17 @@ const PublicFeedList = () => {
 
   if (!feedList?.length) {
     return (
-      <div className="mt-6 grid h-full place-content-center py-4">
+      <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <EmptyList type={EEmptyList.FEED_LIST} />
       </div>
     );
   }
 
   return (
-    <div className="py-4 h-full">
-      <div className="flex flex-col gap-2 h-[calc(100vh-180px)] overflow-y-auto">
+    <div className="py-4">
+      <div className="flex flex-col gap-2 h-[calc(100vh-250px)] overflow-y-auto p-5">
         {feedList.map((feed) => {
-          return (
-            <Accordion
-              open={open === feed.id}
-              className={`mb-2 rounded-lg border ${open === feed.id ? "border-purple-normal" : "border-blue-gray-100"} px-4`}
-              key={feed.id}
-            >
-              <AccordionHeader
-                onClick={() => {
-                  return handleOpen(feed.id);
-                }}
-                className={`border-b-0 transition-colors text-sm text-gray-800 font-bold ${
-                  open === feed.id
-                    ? "text-purple-normal hover:!text-purple-normal"
-                    : ""
-                }`}
-              >
-                {feed.name}
-              </AccordionHeader>
-              <AccordionBody className="pt-0 font-iranYekan text-sm font-thin">
-                {feed.content}
-              </AccordionBody>
-            </Accordion>
-          );
+          return <FeedItem key={feed.id} feed={feed} />;
         })}
         <RenderIf isTrue={!!hasNextPage}>
           <div className="mx-auto">
