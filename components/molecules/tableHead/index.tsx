@@ -30,7 +30,7 @@ const TableHead = ({ tableHead, className }: IProps) => {
                   <Sort />
                 </div>
               ) : (
-                <div className={`${head.className || ""} flex items-center`}>
+                <div className="flex items-center">
                   <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>

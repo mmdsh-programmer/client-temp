@@ -26,7 +26,7 @@ const BaseTemplate = ({ children, domainInfo }: IProps) => {
     <>
       <Tour />
       <Start>
-        <div className="flex max-w-screen-2xl m-auto">
+        <div className="flex m-auto">
           <Sidebar>
             <SidebarHeader domainInfo={domainInfo} />
           </Sidebar>

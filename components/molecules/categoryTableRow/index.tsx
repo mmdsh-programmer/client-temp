@@ -57,6 +57,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
               })}
             />
           ),
+          className: "!px-0",
           stopPropagation: true,
         },
         {
@@ -64,21 +65,25 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
             categoryProp.order || categoryProp.order === 0
               ? categoryProp.order
               : "--",
+
           title: String(categoryProp.order) || "--",
-          className: "hidden xl:table-cell",
+          className:
+            "hidden xl:flex justify-center items-center !pt-7 !px-0 !max-w-[70px] !w-[70px]",
         },
         {
           data: (
             <div className="flex">
               <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
               <span
-                className="max-w-[150px] truncate flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+                className="truncate flex gap-2 mr-2 text-ellipsis overflow-hidden"
                 title={categoryProp.name}
               >
                 {categoryProp.name}
               </span>
             </div>
           ),
+          className:
+            "!px-3 max-w-[300px] !w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%]",
         },
         {
           data: categoryProp.createdAt
@@ -87,6 +92,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
           title: categoryProp.createdAt
             ? FaDateFromTimestamp(+categoryProp.createdAt)
             : "--",
+          className: "!px-3",
         },
         {
           data: categoryProp.updatedAt
@@ -95,16 +101,17 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
           title: categoryProp.updatedAt
             ? FaDateFromTimestamp(+categoryProp.updatedAt)
             : "--",
-          className: "hidden xl:table-cell",
+          className: "hidden xl:table-cell !px-3",
         },
         {
           data: categoryProp.creator?.name || "--",
           title: categoryProp.creator?.name || "--",
-          className: "hidden lg:table-cell",
+          className: "hidden lg:table-cell !px-3",
         },
         {
           data: <CategoryMenu category={categoryProp} />,
           stopPropagation: true,
+          className: "!px-2",
         },
       ]}
     />
