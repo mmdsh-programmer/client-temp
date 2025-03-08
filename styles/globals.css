@@ -48,7 +48,7 @@
   @apply !hidden;
 }
 .tour-overlay {
-  @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-40 !z-[20000];
+  @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-60 !z-[20];
 }
 .version-overlay {
   @apply hidden top-0 left-0 bg-black absolute w-full h-full opacity-60 !z-[1000];

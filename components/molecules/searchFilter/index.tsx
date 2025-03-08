@@ -19,38 +19,35 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
   const [openSearchModal, setOpenSearchModal] = useState(false);
 
   return (
-    <>
-      <div className="flex gap-x-2">
-        {currentPath === "/admin/sharedDocuments" ||
-        currentPath === "/admin/myDocuments" ? null : (
-          <Button
-            onClick={() => {
-              setOpenSearchModal(true);
-            }}
-            placeholder="categorySearchContent"
-            className="categorySearchContent bg-white shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
-          >
-            <SearchIcon className="h-5 w-5 stroke-gray-500" />
-          </Button>
-        )}
+    <div className="flex gap-x-2">
+      {currentPath === "/admin/sharedDocuments" ||
+      currentPath === "/admin/myDocuments" ? null : (
         <Button
           onClick={() => {
-            if ((getFilterReport || getFilterChildren) && open) {
-              setFilterChildren(null);
-              setFilterReport(null);
-              setOpen(false);
-            } else {
-              setOpen(!open);
-            }
+            setOpenSearchModal(true);
           }}
-          placeholder=""
-          className="categorySearch bg-whiteShadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+          className="searchContent bg-white shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
         >
-          <FilterIcon className="h-5 w-5 stroke-gray-500" />
+          <SearchIcon className="h-5 w-5 stroke-gray-500" />
         </Button>
-      </div>
+      )}
+      <Button
+        onClick={() => {
+          if ((getFilterReport || getFilterChildren) && open) {
+            setFilterChildren(null);
+            setFilterReport(null);
+            setOpen(false);
+          } else {
+            setOpen(!open);
+          }
+        }}
+        placeholder=""
+        className="advancedFilter bg-whiteShadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+      >
+        <FilterIcon className="h-5 w-5 stroke-gray-500" />
+      </Button>
       {openSearchModal && <SearchContent setOpen={setOpenSearchModal} />}
-    </>
+    </div>
   );
 };
 
