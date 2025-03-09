@@ -18,7 +18,7 @@ interface IProps {
   document: IDocumentMetadata;
 }
 
-const PublishVersionContent = async ({ version, document }: IProps) => {
+const PublishVersionContent = ({ version, document }: IProps) => {
   return (
     <>
       <section className="scroller grid gap-2 relative w-full overflow-y-auto min-h-full">
