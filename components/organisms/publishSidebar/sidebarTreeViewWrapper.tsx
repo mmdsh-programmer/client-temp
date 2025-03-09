@@ -51,7 +51,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
     isFetchingNextPage: isFetchingChildrenNextPage,
     hasNextPage: childrenHasNextPage,
     fetchNextPage,
-  } = useGetPublishChildren(repoId, 10, undefined, true);
+  } = useGetPublishChildren(repoId, 20, undefined, true);
 
   const {
     data: searchList,
@@ -61,7 +61,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
     fetchNextPage: fetchNextSearchPage,
   } = useGetAllPublishChildren(
     repoId,
-    10,
+    20,
     undefined,
     manualSearch,
     !!manualSearch
