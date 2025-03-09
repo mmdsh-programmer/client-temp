@@ -8,11 +8,13 @@ import TextareaAtom from "@components/atoms/textarea/textarea";
 import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { publicFeedSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
   content: string;
-  link?: string
+  link?: string;
 }
 
 interface IProps {
@@ -21,11 +23,11 @@ interface IProps {
 
 const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
   const [imageHash, setImageHash] = useState<string | undefined>();
-  
+
   const { data: feedImages, isLoading } = useGetFeedImages(30);
   const createPublicFeed = useCreatePublicFeed();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(publicFeedSchema) });
   const {
     register,
     handleSubmit,

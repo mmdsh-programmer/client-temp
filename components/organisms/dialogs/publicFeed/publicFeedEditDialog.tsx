@@ -9,6 +9,8 @@ import { IFeedItem } from "@interface/feeds.interface";
 import useUpdatePublicFeed from "@hooks/publicFeed/useUpdatePublicFeed";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { publicFeedSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
@@ -28,7 +30,8 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
   const { data: feedImages, isLoading } = useGetFeedImages(30);
   const updatePublicFeed = useUpdatePublicFeed();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(publicFeedSchema) });
+
   const {
     register,
     handleSubmit,

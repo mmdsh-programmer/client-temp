@@ -11,6 +11,8 @@ import { UserIcon, XIcon } from "@components/atoms/icons";
 import ImageComponent from "next/image";
 import ChipMolecule from "@components/molecules/chip";
 import { toast } from "react-toastify";
+import { positionSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
@@ -29,7 +31,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
 
   const setPositionForBranch = useCreatePosition();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(positionSchema) });
   const {
     register,
     handleSubmit,
