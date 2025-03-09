@@ -23,7 +23,7 @@ const TableHead = ({ tableHead, className }: IProps) => {
               className={` ${head.className || ""} text-right px-5 py-[6px]`}
             >
               {head.isSorted ? (
-                <div className={`${head.className || ""} flex items-center`}>
+                <div className={` flex items-center`}>
                   <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>

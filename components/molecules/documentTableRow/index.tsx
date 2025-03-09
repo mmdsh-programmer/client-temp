@@ -104,7 +104,7 @@ const DocumentTableRow = ({ document }: IProps) => {
               document.order || document.order === 0 ? document.order : "--",
             title: String(document.order) || "--",
             className:
-              "hidden xl:flex justify-center items-center !pt-7 !px-0 !max-w-[70px] !w-[70px]",
+              "hidden xl:table-cell text-center !px-0",
           },
           {
             data: (
@@ -119,7 +119,7 @@ const DocumentTableRow = ({ document }: IProps) => {
               </div>
             ),
             className:
-              "!px-3 max-w-[300px] !w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%]",
+              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%]",
           },
           {
             data: document.createdAt

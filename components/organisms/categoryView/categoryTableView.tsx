@@ -58,7 +58,7 @@ const TableView = ({
                           key: "select",
                           value: "انتخاب",
                           className:
-                            "categoryBulk !pr-2 !pl-0 !max-w-[65px] !w-[65px]",
+                            "categoryBulk !pr-2 !pl-0 !max-w-[50px] !w-[50px]",
                         }
                       : null,
                     {
@@ -66,13 +66,13 @@ const TableView = ({
                       value: "اولویت",
                       isSorted: true,
                       className:
-                        "categoryOrder whitespace-nowrap hidden !px-1 xl:flex !max-w-[70px] !w-[70px]",
+                        "categoryOrder whitespace-nowrap hidden !px-1 xl:table-cell !max-w-[70px] !w-[70px]",
                     },
                     {
                       key: "name",
                       value: "نام دسته",
                       isSorted: true,
-                      className: "!max-w-[300px] !w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%] !px-2",
+                      className: "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%] !px-2",
                     },
                     { key: "createDate", value: "تاریخ ایجاد", isSorted: true, className: "!px-2 whitespace-nowrap" },
                     {
