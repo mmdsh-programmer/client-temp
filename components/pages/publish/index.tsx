@@ -11,6 +11,7 @@ import PublishVersion from "../../organisms/publish/publishVersion";
 import React from "react";
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
 import { RenderServerSideContent } from "clasor-content-preview";
+import PublishFilePreview from "@components/organisms/publish/publishFilePreview";
 
 interface IProps {
   version: IVersion;
@@ -22,19 +23,28 @@ const PublishVersionContent = async ({ version, document }: IProps) => {
     <>
       <section className="scroller grid gap-2 relative w-full overflow-y-auto min-h-full">
         <PublishVersion document={document} version={version} />
-        {version.contentType === EDocumentTypes.classic ? (
-          <>
-            <RenderClientContent versionData={version} />
-            <RenderServerSideContent
-              className="min-h-full"
-              versionData={version as IGetSpecificVersion}
-            />
-          </>
-        ) : (
-          <ClientSideProvider>
-            <ConnectRemoteEditor versionData={version} />
-          </ClientSideProvider>
-        )}
+        {(() => {
+          switch (version.contentType) {
+            case EDocumentTypes.classic:
+              return (
+                <>
+                  <RenderClientContent versionData={version} />
+                  <RenderServerSideContent
+                    className="min-h-full"
+                    versionData={version as IGetSpecificVersion}
+                  />
+                </>
+              );
+            case EDocumentTypes.file:
+              return <PublishFilePreview fileInfo={version.fileHash!} />;
+            default:
+              return (
+                <ClientSideProvider>
+                  <ConnectRemoteEditor versionData={version} />
+                </ClientSideProvider>
+              );
+          }
+        })()}
         <PublishFeeback postId={version.postId} />
         <PublishBottomNav />
       </section>

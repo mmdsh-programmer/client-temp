@@ -325,3 +325,11 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 .Toastify__toast-icon + div {
   @apply text-white
 }
+
+.file-editor__preview .react-pdf__Document {
+  @apply !w-full;
+}
+
+.file-editor__preview .preview-wrapper {
+  @apply !h-[calc(100vh-280px)]
+}

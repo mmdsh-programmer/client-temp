@@ -9,3 +9,9 @@
 .clasor-preview-content__render-server-content * {
   direction: ltr;
 }
+
+.publish-file-preview .preview-wrapper {
+  @apply !h-[calc(100vh-200px)];
+}
+
+
