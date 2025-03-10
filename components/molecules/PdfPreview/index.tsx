@@ -1,4 +1,7 @@
+"use client";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React, { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 
@@ -6,7 +9,8 @@ interface IProps {
   fileLink: string;
 }
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
 
 const PdfPreview = ({ fileLink }: IProps) => {
   const [numPages, setNumPages] = useState<number | null>(null);
