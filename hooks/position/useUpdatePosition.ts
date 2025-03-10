@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePositionAction } from "@actions/position";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useUpdatePosition = () => {
   const queryClient = useQueryClient();
@@ -31,6 +32,9 @@ const useUpdatePosition = () => {
       });
 
       callBack?.();
+    },
+    onError: (error) => {
+      toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });
 };

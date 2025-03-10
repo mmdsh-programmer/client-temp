@@ -189,6 +189,11 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
               );
             })}
           </div>
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
       </form>
     </EditDialog>

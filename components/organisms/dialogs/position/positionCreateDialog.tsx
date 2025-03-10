@@ -125,7 +125,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
             value={inputValue}
             onChange={handleInputChange}
           />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {selectedUserList.map((item) => {
               return (
                 <ChipMolecule
@@ -160,6 +160,11 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
               );
             })}
           </div>
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
       </form>
     </CreateDialog>
