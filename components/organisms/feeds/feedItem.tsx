@@ -15,13 +15,18 @@ const FeedItem = ({ feed }: IProps) => {
     ? `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${image}?&checkUserGroupAccess=true&time=${Date.now()})`
     : "/no-image.jpg";
 
+  const Wrapper = link ? "a" : "div";
+  const wrapperProps = link
+    ? {
+        href: link,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        className: "block",
+      }
+    : {};
+
   return (
-    <a
-      href={link || "#"}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block"
-    >
+    <Wrapper {...wrapperProps}>
       <article className="flex gap-6 p-2 rounded-xl border border-[#eeeeef] hover:bg-gray-50 transition-colors">
         <div className="col w-fit flex-none">
           <ImageComponent
@@ -50,6 +55,7 @@ const FeedItem = ({ feed }: IProps) => {
             className={`text-[#5d5f69] text-[13px] font-normal mt-2 font-iranYekan leading-snug transition-all duration-300 break-all ${
               isExpanded ? "line-clamp-none" : "line-clamp-1"
             }`}
+            style={{ whiteSpace: "pre-line" }}
           >
             {feed.content}
           </p>
@@ -65,7 +71,7 @@ const FeedItem = ({ feed }: IProps) => {
           </button>
         </div>
       </article>
-    </a>
+    </Wrapper>
   );
 };
 
