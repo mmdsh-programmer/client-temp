@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
@@ -11,6 +10,7 @@ import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { publicFeedSchema } from "./validation.yup";
+import EditDialog from "@components/templates/dialog/editDialog";
 
 interface IForm {
   name: string;
@@ -65,12 +65,12 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
   };
 
   return (
-    <CreateDialog
+    <EditDialog
       isPending={updatePublicFeed.isPending}
       dialogHeader="ویرایش خبرنامه عمومی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="!h-screen xs:!h-[600px] max-w-full w-full m-0"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -86,10 +86,11 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> </Typography>
+          <Typography className="form_label">توضیحات </Typography>
           <TextareaAtom
-            placeholder="متن"
+            placeholder="توضیحات"
             register={{ ...register("content", { value: feed.content }) }}
+            rows={15}
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -138,7 +139,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           )}
         </div>
       </form>
-    </CreateDialog>
+    </EditDialog>
   );
 };
 

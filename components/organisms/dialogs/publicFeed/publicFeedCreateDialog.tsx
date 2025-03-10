@@ -65,7 +65,7 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
       dialogHeader="ایجاد خبرنامه عمومی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="!h-screen xs:!h-[600px] max-w-full w-full m-0"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -78,11 +78,17 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">متن </Typography>
+          <Typography className="form_label">توضیحات </Typography>
           <TextareaAtom
-            placeholder="متن"
+            placeholder="توضیحات"
             register={{ ...register("content") }}
+            rows={15}
           />
+          {errors.content && (
+            <Typography className="warning_text">
+              {errors.content?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> لینک</Typography>
