@@ -334,30 +334,27 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   @apply !h-[calc(100vh-280px)]
 }
 
+.custom-dialog {
+  @apply !min-h-[60%] !max-h-[60%] !h-[60%]
+}
+
 @media (max-width: 480px) {
   .custom-dialog {
-    min-height: 100% !important;
-    max-height: 100% !important;
-    height: 100% !important;
-    width: 100% !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
+    @apply !min-h-[100%] !max-h-[100%] !h-[100%] !w-full !m-0 !rounded-none
   }
 }
 
 @media (min-height: 600px) and (min-width: 481px) {
   .custom-dialog {
-    min-height: 80% !important;
-    max-height: 80% !important;
-    height: 80% !important;
+    @apply !min-h-[80%] !max-h-[80%] !h-[80%]
+
   }
 }
 
 @media (min-height: 1000px) and (min-width: 481px) {
   .custom-dialog {
-    min-height: 800px !important;
-    max-height: 800px !important;
-    height: 800px !important;
+    @apply !min-h-[800px] !max-h-[800px] !h-[800px]
+
   }
 }
 
