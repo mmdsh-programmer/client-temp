@@ -70,7 +70,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
       dialogHeader="ویرایش خبرنامه عمومی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="!h-screen xs:!h-[600px] max-w-full w-full m-0"
+      className="custom-dialog sm:!min-w-[500px] sm:!max-w-[500px] m-0"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
