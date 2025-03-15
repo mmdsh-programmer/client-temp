@@ -8,6 +8,8 @@ import DocumentTagManagement from "@components/organisms/document/documentTagMan
 import TagCreateDialog from "../tag/tagCreateDialog";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useSetDocumentDomainTags } from "@hooks/domainTags";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -24,6 +26,8 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
+  const setDocumentTags = useSetDocumentDomainTags();
   const editDocument = useEditDocument();
 
   const handleClose = () => {
@@ -37,6 +41,15 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
     if (getTempDocTag.length > 10) {
       toast.error("بیش از ده آیتم نمی‌توانید به سند منصوب کنید.");
       return;
+    }
+    if (userInfo?.domainConfig.useDomainTag) {
+      return setDocumentTags.mutate({
+        repoId,
+        documentId: document.id,
+        tagIds: getTempDocTag.map((tag) => {
+          return tag.id;
+        }),
+      });
     }
     editDocument.mutate({
       repoId,
@@ -71,7 +84,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
       dialogHeader="تگ‌های سند"
       setOpen={handleClose}
       className="min-h-[350px]"
-      isPending={editDocument.isPending}
+      isPending={editDocument.isPending || setDocumentTags.isPending}
       onSubmit={handleSubmit}
     >
       <form className="flex flex-col gap-5">

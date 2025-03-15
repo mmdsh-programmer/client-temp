@@ -7,6 +7,7 @@ import {
   getDomainTagById,
   updateDomainTag,
   deleteDomainTag,
+  setDocumentDomainTags,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
@@ -145,6 +146,33 @@ export const deleteDomainTagAction = async (tagId: number) => {
       domain,
       userInfo.access_token,
       tagId
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const setDocumentDomainTagsAction = async (
+  repoId: number,
+  documentId: number,
+  tagIds: number[]
+) => {
+  try {
+    const userInfo = await getMe();
+    const domain = headers().get("host");
+
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const response = await setDocumentDomainTags(
+      domain,
+      userInfo.access_token,
+      repoId,
+      documentId,
+      tagIds
     );
 
     return response;

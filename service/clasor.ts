@@ -4476,3 +4476,29 @@ export const deleteDomainTag = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const setDocumentDomainTags = async (
+  domainUrl: string,
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  tagIds: number[]
+) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      `repositories/${repoId}/documents/${documentId}/setDomainTags`,
+      {
+        tagIds,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
