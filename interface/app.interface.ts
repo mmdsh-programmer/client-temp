@@ -33,21 +33,7 @@ export interface IUserInfo {
     createDate: number;
   };
   domainConfig: {
-    userName: string;
-    userSSOID: number;
-    domain: string;
-    CUSTOM_POST_TYPE: string;
-    types: string[];
-    newsFeed: {
-      thingId: number;
-      thingApiToken: string;
-      thingUserId: number;
-      participants: [];
-    };
-    enablePublishPage: boolean;
-    id: number;
-    entityId: number;
-    content: string | null;
+    useDomainTag: boolean
   };
   domainRole: string | null;
   metadata: string | null;
