@@ -6,7 +6,6 @@ import {
   editorModeAtom,
 } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
@@ -16,7 +15,6 @@ import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
 import { Spinner } from "@material-tailwind/react";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
-import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -42,7 +40,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
-  const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
@@ -94,15 +91,15 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             accessToken: userInfo?.access_token,
             refreshToken: userInfo?.refresh_token,
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
+            userHasDirectAccess:
+              currentPath === "/admin/sharedDocuments" ||
+              sharedDocuments === "true",
+            documentHasDirectAccess: selectedDocument.hasDirectAccess,
           },
           publicUserGroupHash: repoGroupHash() || undefined,
-          privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
-          repositoryId:
-            currentPath === "/admin/sharedDocuments" ||
-            sharedDocuments === "true"
-              ? selectedDocument.id
-              : repoId || undefined,
-          resourceId: selectedCategory?.id || undefined,
+          privateUserGroupHash: undefined,
+          repositoryId: repoId,
+          resourceId: selectedDocument.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
         } as IClassicData;
@@ -126,7 +123,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
         editorMode={editorMode}
         ref={getEditorConfig().ref}
-        loadData={getLoadData() as IClassicData }
+        loadData={getLoadData() as IClassicData}
         onGetConfig={handleSaveConfig}
         onChange={handleChange}
         loadHtml={() => {
@@ -152,9 +149,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       ) : null}
       {listDrawer && getEditorConfig().ref ? (
         <div className="w-full xs:w-[300px]">
-          <EditorDrawer
-            version={versionData}
-          />
+          <EditorDrawer version={versionData} />
         </div>
       ) : null}
       <div
