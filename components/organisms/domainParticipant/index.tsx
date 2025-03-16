@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TableHead from "@components/molecules/tableHead";
 import TableCell from "@components/molecules/tableCell";
-import { Spinner } from "@material-tailwind/react";
+import { Button, Spinner } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import SearchInput from "@components/molecules/searchInput";
@@ -21,6 +21,11 @@ const DomainParticipant = () => {
 
   const listLength = getDomainInfo?.participants.length;
 
+  const handleDeleteClick = (userName: string) => {
+    setSelectedUser(userName);
+    setOpenDeleteParticipantDialog(true);
+  };
+
   const renderTableRows = () => {
     return getDomainInfo?.participants?.map((user) => {
       return (
@@ -30,15 +35,20 @@ const DomainParticipant = () => {
             { data: user.name },
             {
               data: user.userName,
-              className: "flex justify-center",
             },
-
             {
-              data: <DeleteIcon className="h-5 w-5 stroke-red-normal" />,
-              onClick: () => {
-                setSelectedUser(user.userName);
-                setOpenDeleteParticipantDialog(true);
-              },
+              data: (
+                <Button
+                  onClick={() => {
+                    handleDeleteClick(user.userName);
+                    setOpenDeleteParticipantDialog(true);
+                  }}
+                  className="bg-transparent p-0 flex items-center justify-center"
+                >
+                  <DeleteIcon className="h-5 w-5 stroke-red-normal" />
+                </Button>
+              ),
+              className: "flex justify-end ml-5",
             },
           ]}
         />
@@ -77,10 +87,13 @@ const DomainParticipant = () => {
                 {
                   key: "username",
                   value: "حساب پادی",
-                  className: "flex justify-center",
                 },
 
-                { key: "action", value: "عملیات" },
+                {
+                  key: "action",
+                  value: "عملیات",
+                  className: "flex justify-end ml-5",
+                },
               ]}
             />
             <tbody>{renderTableRows()}</tbody>
