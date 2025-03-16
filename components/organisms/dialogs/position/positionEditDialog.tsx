@@ -18,7 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
-  members: string[];
+  members?: string[];
 }
 
 interface IProps {

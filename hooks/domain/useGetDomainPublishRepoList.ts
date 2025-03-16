@@ -1,4 +1,5 @@
 import { getDomainPublishRepositoriesAction } from "@actions/domain";
+import { IListResponse, IRepo } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetDomainPublishRepoList = (
@@ -13,7 +14,7 @@ const useGetDomainPublishRepoList = (
         (pageParam - 1) * size,
         size,
       );
-      return response;
+      return response as IListResponse<IRepo>;
     },
     initialPageParam: 1,
     retry: false,
