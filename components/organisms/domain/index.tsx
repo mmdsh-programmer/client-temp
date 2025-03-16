@@ -3,9 +3,11 @@ import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
+import DomainParticipant from "../domainParticipant";
 
 export enum ETabs {
   SETTING = "تنطیمات",
+  PARTICIPANT = "دسترسی افراد",
   PUBLIC_FEEDS = "خبرنامه‌ عمومی",
   PRIVATE_FEEDS = "خبرنامه‌ خصوصی",
   COMMENTS = "نظرات",
@@ -25,6 +27,10 @@ const DomainConfig = () => {
           <Typography>اطلاعاتی در دست نیست</Typography>
         </div>
       ),
+    },
+    {
+      tabTitle: ETabs.PARTICIPANT,
+      tabContent: <DomainParticipant />,
     },
     {
       tabTitle: ETabs.PUBLIC_FEEDS,

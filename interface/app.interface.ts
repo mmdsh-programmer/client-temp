@@ -306,6 +306,12 @@ export interface IDomainMetadata {
   cryptoInitVectorKey: string;
   cryptoSecretKey: string;
   enablePublishPage: false;
+  participants: {
+    ssoId: number;
+    userName: string;
+    name: string;
+  }[];
+  useDomainTag: boolean;
 }
 
 export interface ICustomPostData {

@@ -4502,3 +4502,27 @@ export const setDocumentDomainTags = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const addPartyToDomainParticipants = async (
+  domainUrl: string,
+  accessToken: string,
+  userNameList: string[],
+) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      "domain/participants/addParty",
+      {
+        userNameList,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};

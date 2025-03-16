@@ -34,6 +34,7 @@ export enum EEmptyList {
   BRANCH_GROUP = "branch_group",
   DOMAIN_PUBLICFEEDS = "domain-public-feeds",
   BRANCH_USERS = "branch_users",
+  DOMAIN_USERS = "domain_users",
 }
 
 interface IProps {
@@ -370,6 +371,17 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary"
             >
               در شعبه موردنظر فردی دارای سمت وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.DOMAIN_USERS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary"
+            >
+              در حال حاضر هیچ کاربری به دامنه دسترسی ندارد
             </Typography>
           </div>
         );

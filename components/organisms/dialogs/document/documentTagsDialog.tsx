@@ -9,7 +9,7 @@ import TagCreateDialog from "../tag/tagCreateDialog";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useSetDocumentDomainTags } from "@hooks/domainTags";
+import useSetDocumentDomainTags from "@hooks/domainTags/useSetDocumentDomainTags";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;

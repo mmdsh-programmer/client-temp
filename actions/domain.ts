@@ -8,11 +8,27 @@ import {
   updateDomainTag,
   deleteDomainTag,
   setDocumentDomainTags,
+  getCustomPostByDomain,
+  addPartyToDomainParticipants,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+
+export const getCustomPostByDomainAction = async () => {
+  try {
+    const domain = headers().get("host");
+
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const response = await getCustomPostByDomain(domain);
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
 
 export const getDomainPublishRepositoriesAction = async (
   offset: number,
@@ -173,6 +189,29 @@ export const setDocumentDomainTagsAction = async (
       repoId,
       documentId,
       tagIds
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const addPartyToDomainParticipantsAction = async (
+  userNameList: string[],
+) => {
+  try {
+    const userInfo = await getMe();
+    const domain = headers().get("host");
+
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const response = await addPartyToDomainParticipants(
+      domain,
+      userInfo.access_token,
+      userNameList,
     );
 
     return response;

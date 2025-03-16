@@ -2,7 +2,7 @@ export interface IClasorResult<T> {
   data: T;
   referenceNumber: string;
   timestamp: number;
-  cacheResponse: boolean
+  cacheResponse: boolean;
 }
 export interface IClasorDomainResult {
   userName: string;
@@ -12,12 +12,17 @@ export interface IClasorDomainResult {
   newsFeed: {
     participants: number[];
   };
-  participants: number[];
+  participants: {
+    ssoId: number;
+    userName: string;
+    name: string;
+  }[];
   enablePublishPage: boolean;
   id: number;
   entityId: number;
   content?: string; // optional field
   sensitiveData: string;
+  useDomainTag: boolean;
 }
 export interface IClasorReport {
   podSpaceStatus: IPodSpaceStatus | null;
