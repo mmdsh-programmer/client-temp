@@ -4,6 +4,7 @@ import { Typography } from "@material-tailwind/react";
 import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
 import DomainParticipant from "../domainParticipant";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export enum ETabs {
   SETTING = "تنطیمات",
@@ -19,6 +20,8 @@ export enum ETabs {
 const DomainConfig = () => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.SETTING);
 
+  const { data: userInfo } = useGetUser();
+
   const tabList = [
     {
       tabTitle: ETabs.SETTING,
@@ -28,10 +31,12 @@ const DomainConfig = () => {
         </div>
       ),
     },
-    {
-      tabTitle: ETabs.PARTICIPANT,
-      tabContent: <DomainParticipant />,
-    },
+    userInfo?.domainRole === "owner"
+      ? {
+          tabTitle: ETabs.PARTICIPANT,
+          tabContent: <DomainParticipant />,
+        }
+      : null,
     {
       tabTitle: ETabs.PUBLIC_FEEDS,
       tabContent: <DomainPublicFeed />,
@@ -72,7 +77,10 @@ const DomainConfig = () => {
         </div>
       ),
     },
-  ];
+  ].filter(Boolean) as {
+    tabTitle: ETabs;
+    tabContent: React.JSX.Element;
+  }[];
 
   return (
     <TabComponent

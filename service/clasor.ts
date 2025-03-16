@@ -67,7 +67,11 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
-import { IDomainSubscriptionList, IDomainTag, IDomainTagList } from "@interface/domain.interface";
+import {
+  IDomainSubscriptionList,
+  IDomainTag,
+  IDomainTagList,
+} from "@interface/domain.interface";
 import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
@@ -4388,22 +4392,21 @@ export const getAllDomainTags = async (
   domainUrl: string,
   accessToken: string,
   offset: number,
-  size: number,
+  size: number
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IDomainTagList>>(
-      "/domain/tags",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          domainUrl,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<
+      IServerResult<IDomainTagList>
+    >("/domain/tags", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -4493,7 +4496,7 @@ export const setDocumentDomainTags = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl
+          domainUrl,
         },
       }
     );
@@ -4506,7 +4509,7 @@ export const setDocumentDomainTags = async (
 export const addPartyToDomainParticipants = async (
   domainUrl: string,
   accessToken: string,
-  userNameList: string[],
+  userNameList: string[]
 ) => {
   try {
     const response = await axiosClasorInstance.patch(
@@ -4517,7 +4520,31 @@ export const addPartyToDomainParticipants = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl
+          domainUrl,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const removePartyFromDomainParticipants = async (
+  domainUrl: string,
+  accessToken: string,
+  userNameList: string[]
+) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      "domain/participants/removeParty",
+      {
+        userNameList,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
         },
       }
     );

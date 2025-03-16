@@ -10,6 +10,7 @@ import {
   setDocumentDomainTags,
   getCustomPostByDomain,
   addPartyToDomainParticipants,
+  removePartyFromDomainParticipants
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
@@ -212,6 +213,29 @@ export const addPartyToDomainParticipantsAction = async (
       domain,
       userInfo.access_token,
       userNameList,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const removePartyFromDomainParticipantsAction = async (
+  userNameList: string[],
+) => {
+  try {
+    const userInfo = await getMe();
+    const domain = headers().get("host");
+
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const response = await removePartyFromDomainParticipants(
+      domain,
+      userInfo.access_token,
+      userNameList
     );
 
     return response;

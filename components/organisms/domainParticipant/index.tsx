@@ -5,13 +5,18 @@ import { Spinner } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import SearchInput from "@components/molecules/searchInput";
-import { AddIcon } from "@components/atoms/icons";
+import { AddIcon, DeleteIcon } from "@components/atoms/icons";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import AddDomainParticipantDialog from "../dialogs/domainParticipant/addDomainParticipantDialog";
+import RemoveDomainParticipantDialog from "../dialogs/domainParticipant/removeDomainParticipantDialog";
 
 const DomainParticipant = () => {
   const [openAddParticipantDialog, setOpenAddParticipantDialog] =
     useState(false);
+  const [openDeleteParticipantDialog, setOpenDeleteParticipantDialog] =
+    useState(false);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+
   const { data: getDomainInfo, isLoading } = useGetDomainInfo();
 
   const listLength = getDomainInfo?.participants.length;
@@ -26,6 +31,14 @@ const DomainParticipant = () => {
             {
               data: user.userName,
               className: "flex justify-center",
+            },
+
+            {
+              data: <DeleteIcon className="h-5 w-5 stroke-red-normal" />,
+              onClick: () => {
+                setSelectedUser(user.userName);
+                setOpenDeleteParticipantDialog(true);
+              },
             },
           ]}
         />
@@ -66,6 +79,8 @@ const DomainParticipant = () => {
                   value: "حساب پادی",
                   className: "flex justify-center",
                 },
+
+                { key: "action", value: "عملیات" },
               ]}
             />
             <tbody>{renderTableRows()}</tbody>
@@ -76,6 +91,12 @@ const DomainParticipant = () => {
       )}
       {openAddParticipantDialog ? (
         <AddDomainParticipantDialog setOpen={setOpenAddParticipantDialog} />
+      ) : null}
+      {openDeleteParticipantDialog && selectedUser ? (
+        <RemoveDomainParticipantDialog
+          user={selectedUser}
+          setOpen={setOpenDeleteParticipantDialog}
+        />
       ) : null}
     </div>
   );
