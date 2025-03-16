@@ -27,7 +27,7 @@ const useSetDocumentDomainTags = () => {
     onSuccess: (response, values) => {
       const { callBack, documentId } = values;
       queryClient.invalidateQueries({
-        queryKey: ["documentDomainTags", documentId],
+        queryKey: [`document-${documentId}-info`],
       });
       callBack?.();
       toast.success("تگ‌های دامنه برای سند با موفقیت تنظیم شدند");

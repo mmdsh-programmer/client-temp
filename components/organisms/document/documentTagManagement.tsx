@@ -91,8 +91,13 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   useEffect(() => {
     if (!documentInfo) return;
+    
+    const resourceTags = userInfo?.domainConfig.useDomainTag
+      ? documentInfo.domainTags
+      : documentInfo.tags;
+
     setTempDocTag(
-      documentInfo?.tags.map((tag) => {
+      resourceTags.map((tag) => {
         return tag;
       })
     );
