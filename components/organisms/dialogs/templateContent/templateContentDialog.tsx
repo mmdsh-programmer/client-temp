@@ -6,6 +6,8 @@ import { IRemoteEditorRef } from "clasor-remote-editor";
 import LoadHtml from "./loadHtml";
 import { documentTemplateAtom } from "@atom/document";
 import { useRecoilState } from "recoil";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -14,9 +16,14 @@ interface IProps {
 
 const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
   // TODO CODE REVIEW REQUIRED
-  
+
   const [loading, setLoading] = useState(false);
-  const [getDocumentTemplate, setDocumentTemplate] = useRecoilState(documentTemplateAtom);
+  const [getDocumentTemplate, setDocumentTemplate] =
+    useRecoilState(documentTemplateAtom);
+
+  const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const handleClose = () => {
     setOpen(false);
@@ -36,13 +43,17 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
       onSubmit={handleSubmit}
       disabled={!getDocumentTemplate}
     >
-      <ChildrenTree move={false} enableAction={false} />
-      {loading ? (
-        <LoadHtml
-          handleClose={handleClose}
-          editorRef={editorRef}
-        />
-      ) : null}
+      {currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true" ? (
+        <Typography className="title_t3 text-primary">شما به نمونه‌ سندهای این منبع دسترسی ندارید.</Typography>
+      ) : (
+        <>
+          <ChildrenTree move={false} enableAction={false} />
+          {loading ? (
+            <LoadHtml handleClose={handleClose} editorRef={editorRef} />
+          ) : null}
+        </>
+      )}
     </ConfirmFullHeightDialog>
   );
 };
