@@ -9,14 +9,15 @@ interface IProps {
 
 const RemoveDomainParticipantDialog = ({ user, setOpen }: IProps) => {
   const { isPending, mutate } = useRemovePartyFromDomain();
-
   const handleClose = () => {
     setOpen(false);
   };
-
   const handleDelete = async () => {
     mutate({
       userNameList: [user],
+      callBack:()=> {
+      handleClose();
+      },
     });
   };
 

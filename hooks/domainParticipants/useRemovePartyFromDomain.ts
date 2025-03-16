@@ -9,8 +9,10 @@ const useRemovePartyFromDomain = () => {
 
   return useMutation({
     mutationKey: ["removePartyFromDomain"],
-    mutationFn: async (values: { userNameList: string[],
-        callBack?: () => void;}) => {
+    mutationFn: async (values: {
+      userNameList: string[],
+      callBack?: () => void;
+    }) => {
       const { userNameList } = values;
       const response = await removePartyFromDomainParticipantsAction(userNameList);
       handleClientSideHookError(response as IActionError);
@@ -18,11 +20,11 @@ const useRemovePartyFromDomain = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
-      
+
       queryClient.invalidateQueries({
-        queryKey: ["domainParticipants"],
+        queryKey: ["getDomainInfo"],
       });
-      
+
       callBack?.();
       toast.success("کاربر با موفقیت از دامنه حذف شد");
     },

@@ -77,6 +77,9 @@ const AddDomainParticipantDialog = ({ setOpen }: IProps) => {
 
     addPartyToDomain.mutate({
       userNameList: usernameArray,
+      callBack: () => {
+        handleClose();
+      },
     });
   };
 

@@ -4511,6 +4511,9 @@ export const addPartyToDomainParticipants = async (
   accessToken: string,
   userNameList: string[]
 ) => {
+  const redisClient = await getRedisClient();
+  const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
+  
   try {
     const response = await axiosClasorInstance.patch(
       "domain/participants/addParty",
@@ -4524,6 +4527,9 @@ export const addPartyToDomainParticipants = async (
         },
       }
     );
+    if (cachedDomain) {
+      redisClient?.del(`domain:${domainUrl}`);
+    }
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -4535,6 +4541,9 @@ export const removePartyFromDomainParticipants = async (
   accessToken: string,
   userNameList: string[]
 ) => {
+  const redisClient = await getRedisClient();
+  const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
+   
   try {
     const response = await axiosClasorInstance.patch(
       "domain/participants/removeParty",
@@ -4548,6 +4557,9 @@ export const removePartyFromDomainParticipants = async (
         },
       }
     );
+    if (cachedDomain) {
+      redisClient?.del(`domain:${domainUrl}`);
+    }
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

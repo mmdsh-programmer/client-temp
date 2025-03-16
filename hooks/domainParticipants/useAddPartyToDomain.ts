@@ -1,18 +1,19 @@
 import { addPartyToDomainParticipantsAction } from "@actions/domain";
 import { IActionError } from "@interface/app.interface";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { handleClientSideHookError } from "@utils/error";
 import { toast } from "react-toastify";
 
-interface IUseAddPartyToDomainProps {
-  userNameList: string[];
-  callBack?: () => void;
-}
 
 const useAddPartyToDomain = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ["addPartyToDomain"],
-    mutationFn: async (values: IUseAddPartyToDomainProps) => {
+    mutationFn: async (values: {
+      userNameList: string[];
+      callBack?: () => void;
+    }) => {
       const { userNameList } = values;
       const response = await addPartyToDomainParticipantsAction(userNameList);
       handleClientSideHookError(response as IActionError);
@@ -20,6 +21,9 @@ const useAddPartyToDomain = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
+      queryClient.invalidateQueries({
+        queryKey: ["getDomainInfo"],
+      });
 
       callBack?.();
       toast.success("کاربر با موفقیت به دامنه اضافه شد");
