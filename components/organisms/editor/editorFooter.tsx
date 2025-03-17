@@ -52,6 +52,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const { data: userInfo } = useGetUser();
   const saveEditorHook = useSaveEditor();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const writerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return false;
@@ -142,6 +144,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = (data: any) => {
+    setIsLoading(true);
+
     let encryptedContent: string | null = null;
     const content: string =
       selectedDocument?.contentType === EDocumentTypes.classic
@@ -167,11 +171,17 @@ const EditorFooter = ({ editorRef }: IProps) => {
         versionNumber: getVersionData.versionNumber,
         versionState: getVersionData.state,
         isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+          sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
         callBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
+          setIsLoading(false);
+        },
+        errorCallback: () => {
+          setIsLoading(false);
         },
       });
+    } else {
+      setIsLoading(false);
     }
   };
 
@@ -210,6 +220,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   useEffect(() => {
+    editorRef.current?.on("getData", handleSave);
+  
     return () => {
       stopWorker();
     };
@@ -299,13 +311,11 @@ const EditorFooter = ({ editorRef }: IProps) => {
         </CancelButton>
         <LoadingButton
           className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-          onClick={async () => {
-            const value = await editorRef.current?.getData();
-            if (value) {
-              handleSave(value);
-            }
+          onClick={() => {
+            editorRef.current?.getData();
           }}
-          disabled={saveEditorHook.isPending}
+          disabled={saveEditorHook.isPending || isLoading}
+          loading={isLoading || saveEditorHook.isPending}
         >
           <Typography className="text__label__button text-white">
             ذخیره

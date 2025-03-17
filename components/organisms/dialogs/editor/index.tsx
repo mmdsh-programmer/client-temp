@@ -219,6 +219,7 @@ const Editor = ({ setOpen }: IProps) => {
       dialogHeader={getSelectedDocument?.name}
       setOpen={handleClose}
       editorRef={getEditorConfig().ref}
+      isEditorReady={!!getVersionData}
     >
       {renderContent()}
     </EditorDialog>
