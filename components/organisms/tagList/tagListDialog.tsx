@@ -15,6 +15,8 @@ import TagEditDialog from "../dialogs/tag/tagEditDialog";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
 import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
+import useGetUser from "@hooks/auth/useGetUser";
+import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,7 +31,16 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
 
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
 
-  const { data: getTags, isLoading } = useGetTags(repoId, undefined, 20, true);
+  const { data: userInfo } = useGetUser();
+  const { data: getDomainTags, isLoading: isLoadingDomainTags } =
+    useGetDomainTags(20, !!userInfo?.domainConfig.useDomainTag);
+
+  const { data: getTags, isLoading: isLoadingRepoTags } = useGetTags(
+    repoId,
+    undefined,
+    20,
+    !userInfo?.domainConfig.useDomainTag
+  );
 
   const handleClose = () => {
     setOpen(false);
@@ -37,6 +48,9 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
 
   const adminRole =
     getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
+
+  const isLoading = isLoadingRepoTags || isLoadingDomainTags;
+  const tags = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
 
   if (openTagCreateModal) {
     return <TagCreateDialog setOpen={setOpenTagCreateModal} />;
@@ -47,6 +61,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
   if (getDeleteTagModal) {
     return <TagDeleteDialog setOpen={setDeleteTagModal} />;
   }
+
   return (
     <InfoDialog dialogHeader="لیست تگ‌ها" setOpen={handleClose}>
       <DialogBody placeholder="dialog body" className="p-0 h-full">
@@ -68,7 +83,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                     className="border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
                   />
                 </div>
-                {getTags?.pages.map((page) => {
+                {tags?.pages.map((page) => {
                   return page.list.map((tag) => {
                     return (
                       <div key={tag.id}>
@@ -85,7 +100,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
               </div>
               <div className="xs:hidden flex flex-col h-full justify-between">
                 <ul className="h-full flex flex-col gap-y-2">
-                  {getTags?.pages.map((page) => {
+                  {tags?.pages.map((page) => {
                     return page.list.map((tag) => {
                       return (
                         <li

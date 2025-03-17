@@ -120,7 +120,7 @@ const Sidebar = ({ children }: IProps) => {
           </div>
         </AccordionBody>
       </Accordion>
-      {userInfo?.domainRole === "owner" ? (
+      {userInfo?.domainRole === "owner" || userInfo?.domainRole === "participant" ? (
         <>
           <ListItem
             placeholder="sidebar-item"

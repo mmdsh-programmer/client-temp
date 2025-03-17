@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { EDocumentTypes } from "./enums";
 import { IVersion, IVersionMetadata } from "./version.interface";
 
@@ -8,7 +9,6 @@ export interface IDocumentList {
   deletedAt: string | null;
   description: string;
   id: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata: any;
   tags: number[];
   title: string;
@@ -111,6 +111,10 @@ export interface IClasorField {
   data: string;
 }
 
+interface ParticipantRole {
+  [key: string]: any;
+}
+
 export interface IDocumentMetadata {
   id: number;
   name: string;
@@ -155,8 +159,27 @@ export interface IDocumentMetadata {
   attachmentUserGroup: string | null;
   hasWhiteList: boolean;
   hasBlackList: boolean;
+  hasDirectAccess: boolean;
   newOne?: boolean;
   accesses?: string[];
+  createDate: number;
+  customPostEntityId: number;
+  customPostId: number;
+  deleteDate: number | null;
+  domainTags: any[];
+  imageAlt: string | null;
+  imageUrl: string | null;
+  isCommitted: boolean;
+  isPublished: boolean;
+  parentId: number | null;
+  participants: string[];
+  participantsRoles: {
+    [participantId: string]: ParticipantRole;
+  };
+  readTime: number | null;
+  repoTypeId: number;
+  sharedArray: any[];
+  updateDate: number;
 }
 
 export interface IWhiteListItem {

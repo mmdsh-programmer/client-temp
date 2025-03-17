@@ -4,6 +4,5 @@ export const positionSchema = yup
   .object()
   .shape({
     title: yup.string().required("لطفا نام سمت را وارد کنید."),
-    members: yup.array().required("لطفا اعضا را وارد کنید."),
   })
   .required();

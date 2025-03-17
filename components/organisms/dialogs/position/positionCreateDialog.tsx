@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
-  members: string[];
+  members?: string[];
 }
 
 interface IProps {
@@ -79,6 +79,9 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getBranchId) return;
+    if (!selectedUserList.length) {
+      return toast.error("اعضای سمت نمی تواند خالی باشد.");
+    }
     const usernameArray = selectedUserList?.length
       ? selectedUserList.map((userItem) => {
           return userItem.username;

@@ -20,3 +20,23 @@ export interface IDomainSubscriptionList {
   size: number;
   total: number;
 }
+
+export interface IDomainTag{
+  id: number;
+  name: string;
+  description: string;
+  parentId: number | null;
+  domainId: number;
+  domainUrl: string;
+  domainEntityId: number;
+  createdAt: string;
+  updatedAt?: string;
+  order: number;
+}
+
+export interface IDomainTagList {
+  list: IDomainTag[];
+  offset: number;
+  size: number;
+  total: number;
+}
