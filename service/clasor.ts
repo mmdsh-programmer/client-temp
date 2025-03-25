@@ -2194,6 +2194,75 @@ export const documentEnableUserGroupHash = async (
   }
 };
 
+export const createDocumentPublishLink = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  expireTime?: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/publish`,
+      {
+        expireTime,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDocumentPublishLink = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  password?: string
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/publish`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: password ? { password } : undefined,
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteDocumentPublishLink = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/publish`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ////////////////// VERSION //////////////////
 export const getVersion = async (
   accessToken: string,
@@ -4509,16 +4578,17 @@ export const setDocumentDomainTags = async (
 export const addPartyToDomainParticipants = async (
   domainUrl: string,
   accessToken: string,
-  userNameList: string[]
+  userNameList: string
 ) => {
   const redisClient = await getRedisClient();
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
+  const cachedUser = await redisClient?.get(`user:${accessToken}`);
   
   try {
     const response = await axiosClasorInstance.patch(
       "domain/participants/addParty",
       {
-        userNameList,
+        userNameList: [userNameList],
       },
       {
         headers: {
@@ -4529,6 +4599,10 @@ export const addPartyToDomainParticipants = async (
     );
     if (cachedDomain) {
       redisClient?.del(`domain:${domainUrl}`);
+    }
+
+    if (cachedUser) {
+      redisClient?.del(`user:${accessToken}`);
     }
     return response.data;
   } catch (error) {

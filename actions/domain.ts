@@ -199,7 +199,7 @@ export const setDocumentDomainTagsAction = async (
 };
 
 export const addPartyToDomainParticipantsAction = async (
-  userNameList: string[],
+  userNameList: string,
 ) => {
   try {
     const userInfo = await getMe();

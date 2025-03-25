@@ -75,7 +75,8 @@ const TagList = ({ repoId }: { repoId: number }) => {
               );
             });
           })}
-          {adminRole ? (
+          {(!!userInfo?.domainConfig.useDomainTag && userInfo?.domainRole === "owner")
+          || (!userInfo?.domainConfig.useDomainTag && adminRole) ? (
             <div
               onClick={() => {
                 setOpenTagCreateModal(true);

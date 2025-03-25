@@ -12,6 +12,8 @@ import DocumentCreatePasswordDialog from "@components/organisms/dialogs/document
 import DocumentUpdatePasswordDialog from "@components/organisms/dialogs/document/documentUpdatePasswordDialog";
 import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document/documentDeletePasswordDialog";
 import DocumentDirectAccessDialog from "@components/organisms/dialogs/document/documentDirectAccessDialog";
+import DocumentCreatePublishLinkDialog from "@components/organisms/dialogs/document/documentCreatePublishLinkDialog";
+import DocumentDeletePublishLinkDialog from "@components/organisms/dialogs/document/documentDeletePublishLinkDialog";
 
 interface DocumentDialogsProps {
   modalsState: {
@@ -30,6 +32,8 @@ interface DocumentDialogsProps {
     editContent: boolean;
     documentVersionList: boolean;
     documentDirectAccess: boolean;
+    createPublishLink: boolean;
+    deletePublishLink: boolean;
   };
   toggleModal: (
     modalName: keyof DocumentDialogsProps["modalsState"],
@@ -131,6 +135,20 @@ const DocumentDialogs: React.FC<DocumentDialogsProps> = ({
         <DocumentDirectAccessDialog
           setOpen={() => {
             return toggleModal("documentDirectAccess", false);
+          }}
+        />
+      ) : null}
+      {modalsState.createPublishLink ? (
+        <DocumentCreatePublishLinkDialog
+          setOpen={() => {
+            return toggleModal("createPublishLink", false);
+          }}
+          />
+      ) : null}
+      {modalsState.deletePublishLink ? (
+        <DocumentDeletePublishLinkDialog
+          setOpen={() => {
+            return toggleModal("deletePublishLink", false);
           }}
         />
       ) : null}
