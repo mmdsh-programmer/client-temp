@@ -61,10 +61,10 @@ async function fetchDocumentVersion(
 }
 
 
-const PrivateSharePage = async ({ params,
+export default async function  PrivateSharePage ({ params,
 }: {
     params: PageParams;
-}) => {
+}) {
     try {
         const { id, name, slug } = params;
 
@@ -134,7 +134,7 @@ const PrivateSharePage = async ({ params,
             !documentInfo?.hasWhiteList &&
             !documentInfo?.hasBlackList
         ) {
-            const publicSlug = slug?.join("/").replace("/private", "");
+            const publicSlug = slug?.join("/").replace("/privateDoc", "");
             return (
                 <RedirectPage
                     redirectUrl={`/share/${name}/${id}/${publicSlug}`}
@@ -223,7 +223,4 @@ const PrivateSharePage = async ({ params,
             </section>
         );
     }
-
 };
-
-export default PrivateSharePage;

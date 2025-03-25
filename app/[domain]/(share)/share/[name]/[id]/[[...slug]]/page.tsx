@@ -81,7 +81,7 @@ const SharePage = async ({ params,
             documentInfo?.hasWhiteList ||
             documentInfo?.hasBlackList
           ) {
-            const privatePath = `/private/${name}/${id}/${slug?.join("/")}`;
+            const privatePath = `/privateDoc/${name}/${id}/${slug?.join("/")}`;
             return <RedirectPage redirectUrl={privatePath} />;
           }
 
