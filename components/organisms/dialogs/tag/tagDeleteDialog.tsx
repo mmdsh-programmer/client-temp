@@ -49,6 +49,9 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
     if (userInfo?.domainConfig.useDomainTag && getTag) {
       return deleteDomainTag.mutate({
         tagId: getTag.id,
+        callBack: () => {
+          handleClose();
+        },
       });
     }
     if (!repoId() || !getTag) return;

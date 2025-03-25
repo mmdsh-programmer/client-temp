@@ -5,6 +5,7 @@ import LoadingButton from "@components/molecules/loadingButton";
 import RepoShare from "@components/organisms/users";
 import { repoActiveStepAtom } from "@atom/stepper";
 import { useSetRecoilState } from "recoil";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   handleClose: () => void;
@@ -12,6 +13,7 @@ interface IProps {
 
 const RepoAddUser = ({ handleClose }: IProps) => {
   const setActiveStep = useSetRecoilState(repoActiveStepAtom);
+  const { data: userInfo } = useGetUser();
 
   return (
     <>
@@ -29,7 +31,13 @@ const RepoAddUser = ({ handleClose }: IProps) => {
         <LoadingButton
           className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={() => {
-            return setActiveStep(2);
+            if (userInfo?.domainConfig.useDomainTag &&
+              (userInfo?.domainRole === "owner" ||
+                userInfo.domainRole === "participant")) {
+              setActiveStep(3);
+            } else {
+              setActiveStep(2);
+            }
           }}
         >
           <Typography className="text__label__button text-white">

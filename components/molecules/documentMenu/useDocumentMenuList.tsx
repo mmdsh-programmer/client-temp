@@ -197,16 +197,11 @@ const useDocumentMenuList = ({
           getRepo?.roleName === ERoles.viewer ||
           getRepo?.roleName === ERoles.editor,
         onClick: () => {
-          const path = `/share?repoId=${getRepo?.id}&documentId=${document?.id}`;
           const url = toPersianDigit(
             `/share/${toPersianDigit(
               `${getRepo?.name.replaceAll(/\s+/g, "-")}`
             )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`
           );
-          
-
-    //       toPersianDigit(`/${isPrivate(document) ? "private" : "publish"}${parentUrl}/${document.name}/${document.id}${categoryIds.length ? `?ids=${categoryIds.join("-")}` : ""}`
-    // .replace(/\s+/g, "-"))
           window.open(url, "_blank");
         },
       },

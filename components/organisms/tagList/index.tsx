@@ -75,7 +75,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
               );
             });
           })}
-          {(!!userInfo?.domainConfig.useDomainTag && userInfo?.domainRole === "owner")
+          {(!!userInfo?.domainConfig.useDomainTag)
           || (!userInfo?.domainConfig.useDomainTag && adminRole) ? (
             <div
               onClick={() => {

@@ -109,16 +109,18 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     </div>
   ) : (
     <div className="flex flex-col gap-2">
-        {(!!userInfo?.domainConfig.useDomainTag && userInfo?.domainRole === "owner")
-          || (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole()) ? (
+        {adminOrOwnerRole() ? (
         <SearchableDropdown
           options={updatedAvailableTags}
           handleSelect={handleTagSelect}
           handleChange={setTagName}
           setOpen={setOpen}
           createIcon={
-            currentPath !== "/admin/sharedDocuments" &&
-            sharedDocuments !== "true"
+            userInfo?.domainConfig.useDomainTag && 
+            (userInfo?.domainRole === "owner" || 
+            userInfo.domainRole === "participant") ||
+            (!userInfo?.domainConfig.useDomainTag && currentPath !== "/admin/sharedDocuments" &&
+            sharedDocuments !== "true")
           }
         />
       ) : null}

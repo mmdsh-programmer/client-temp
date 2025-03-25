@@ -73,7 +73,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
           ) : (
             <>
                 <div className="hidden xs:flex flex-wrap gap-2">
-                  {(!!userInfo?.domainConfig.useDomainTag && userInfo?.domainRole === "owner")
+                  {(!!userInfo?.domainConfig.useDomainTag)
                     || (!userInfo?.domainConfig.useDomainTag && adminRole) ? <div
                       onClick={() => {
                         setOpenTagCreateModal(true);
