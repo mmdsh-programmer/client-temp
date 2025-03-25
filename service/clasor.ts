@@ -4617,6 +4617,7 @@ export const removePartyFromDomainParticipants = async (
 ) => {
   const redisClient = await getRedisClient();
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
+  const cachedUser = await redisClient?.get(`user:${accessToken}`);
    
   try {
     const response = await axiosClasorInstance.patch(
@@ -4633,6 +4634,9 @@ export const removePartyFromDomainParticipants = async (
     );
     if (cachedDomain) {
       redisClient?.del(`domain:${domainUrl}`);
+    }
+    if (cachedUser) {
+      redisClient?.del(`user:${accessToken}`);
     }
     return response.data;
   } catch (error) {
