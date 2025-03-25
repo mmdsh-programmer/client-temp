@@ -72,17 +72,18 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
             </div>
           ) : (
             <>
-              <div className="hidden xs:flex flex-wrap gap-2">
-                <div
-                  onClick={() => {
-                    setOpenTagCreateModal(true);
-                  }}
-                >
-                  <ChipMolecule
-                    value="افزودن تگ"
-                    className="border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
-                  />
-                </div>
+                <div className="hidden xs:flex flex-wrap gap-2">
+                  {(!!userInfo?.domainConfig.useDomainTag && userInfo?.domainRole === "owner")
+                    || (!userInfo?.domainConfig.useDomainTag && adminRole) ? <div
+                      onClick={() => {
+                        setOpenTagCreateModal(true);
+                      }}
+                    >
+                    <ChipMolecule
+                      value="افزودن تگ"
+                      className="border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
+                    />
+                  </div> : null}
                 {tags?.pages.map((page) => {
                   return page.list.map((tag) => {
                     return (

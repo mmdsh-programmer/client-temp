@@ -8,15 +8,18 @@ import {
   bookmarkDocument,
   createDocument,
   createDocumentPassword,
+  createDocumentPublishLink,
   createDocumentTemplate,
   deleteDocument,
   deleteDocumentPassword,
+  deleteDocumentPublishLink,
   documentEnableUserGroupHash,
   editDocument,
   getClasorField,
   getCustomPostByDomain,
   getDocument,
   getDocumentBlocklist,
+  getDocumentPublishLink,
   getDocumentWhiteBlackList,
   getUserDocument,
   updateDocumentPassword,
@@ -350,7 +353,7 @@ export const addToDocumentWhiteListAction = async (
       usernameList
     );
 
-    
+
     // revalidate page of document if exists
     revalidateTag(`dc-${documentId}`);
 
@@ -439,6 +442,61 @@ export const documentEnableUserGroupHashAction = async (
       isDirectAccess
     );
 
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const createDocumentPublishLinkAction = async (
+  repoId: number,
+  documentId: number,
+  expireTime?: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await createDocumentPublishLink(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      expireTime,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getDocumentPublishLinkAction = async (
+  repoId: number,
+  documentId: number,
+  password?: string
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await getDocumentPublishLink(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      password
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const deleteDocumentPublishLinkAction = async (
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await deleteDocumentPublishLink(
+      userInfo.access_token,
+      repoId,
+      documentId
+    );
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

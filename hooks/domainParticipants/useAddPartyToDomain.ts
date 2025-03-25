@@ -11,7 +11,7 @@ const useAddPartyToDomain = () => {
   return useMutation({
     mutationKey: ["addPartyToDomain"],
     mutationFn: async (values: {
-      userNameList: string[];
+      userNameList: string;
       callBack?: () => void;
     }) => {
       const { userNameList } = values;
