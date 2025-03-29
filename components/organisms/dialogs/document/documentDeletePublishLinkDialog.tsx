@@ -1,12 +1,10 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import { IDocumentMetadata } from "@interface/document.interface";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
 import useDeleteDocumentPublishLink from "@hooks/document/useDeleteDocumentPublishLink";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -14,11 +12,9 @@ interface IProps {
 }
 
 const DocumentDeletePublishLinkDialog = ({ document, setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
-  const currentPath = usePathname();
 
-  const { data: userInfo } = useGetUser();
   const deletePublishLink = useDeleteDocumentPublishLink();
 
   const handleClose = () => {
@@ -26,11 +22,6 @@ const DocumentDeletePublishLinkDialog = ({ document, setOpen }: IProps) => {
   };
 
   const handleDelete = async () => {
-    const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
-
     const selectedDocument = document || getDocument;
     if (!repoId || !selectedDocument) return;
     deletePublishLink.mutate({

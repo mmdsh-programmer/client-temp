@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { Checkbox, Typography } from "@material-tailwind/react";
 import { categoryAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import { DatePicker } from "zaman";
 import { onDatePickerChangePayload } from "zaman/dist/types";
 import useCreateDocumentPublishLink from "@hooks/document/useCreateDocumentPublishLink";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
     setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -21,7 +21,7 @@ interface IDataForm {
 const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
     const [hasExpireTime, setHasExpireTime] = useState(false);
 
-    const getRepo = useRecoilValue(repoAtom);
+    const repoId = useRepoId();
     const getCategory = useRecoilValue(categoryAtom);
     const document = useRecoilValue(selectedDocumentAtom);
 
@@ -43,11 +43,11 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
     };
 
     const onSubmit = (dataForm: IDataForm) => {
-        if (!getRepo || !document) {
+        if (!repoId || !document) {
             return null;
         }
         createPublishLink.mutate({
-            repoId: getRepo.id,
+            repoId,
             categoryId: getCategory?.id,
             documentId: document.id,
             expireTime: hasExpireTime ? dataForm.expireTime : undefined,

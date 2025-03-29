@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { createDocumentPublishLinkAction } from "@actions/document";
+import { handleClientSideHookError } from "@utils/error";
+import { IActionError } from "@interface/app.interface";
 
 const useCreateDocumentPublishLink = () => {
     const queryClient = useQueryClient();
@@ -12,20 +14,13 @@ const useCreateDocumentPublishLink = () => {
             expireTime?: number;
             callBack?: () => void;
         }) => {
-            const { repoId, documentId, expireTime, callBack } = values;
+            const { repoId, documentId, expireTime } = values;
             const response = await createDocumentPublishLinkAction(
                 repoId,
                 documentId,
                 expireTime,
             );
-
-            if (response?.statusCode) {
-                throw new Error(response.message || "خطا در ایجاد لینک انتشار سند");
-            }
-
-            if (callBack) {
-                callBack();
-            }
+            handleClientSideHookError(response as IActionError);
 
             return response;
         },

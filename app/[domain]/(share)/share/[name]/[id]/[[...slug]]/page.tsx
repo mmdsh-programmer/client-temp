@@ -9,6 +9,7 @@ import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
 import { ServerError } from "@utils/error";
 import RedirectPage from "@components/pages/redirectPage";
 import { getMe } from "@actions/auth";
+import { generateCachePageTag } from "@utils/redis";
 
 export const generateStaticParams = async () => {
     return [];
@@ -26,7 +27,7 @@ const SharePage = async ({ params,
     params: PageParams;
 }) => {
     try {
-        const { id, name, slug } = params;
+        const { id, name, slug, domain } = params;
 
         const decodeId = decodeURIComponent(id);
         if (hasEnglishDigits(decodeId)) {
@@ -64,10 +65,22 @@ const SharePage = async ({ params,
             const userInfo = await getMe();
             const accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
 
+            if (!documentId || Number.isNaN(documentId)) {
+                await generateCachePageTag([
+                  `dc-ph-${documentId}`,
+                  `i-${domain}`,
+                ]);
+                return notFound();
+              }
+
         const documentInfo = await getDocumentPublishLink(accessToken!, +documentId!, false);
         const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
         if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
+            await generateCachePageTag([
+                `dc-ph-${documentId}`,
+                `i-${domain}`,
+              ]);
             return notFound();
         }
 
@@ -94,6 +107,10 @@ const SharePage = async ({ params,
                  +documentId!
             );
             if (!lastVersionInfo) {
+                await generateCachePageTag([
+                    `dc-ph-${documentId}`,
+                    `i-${domain}`,
+                  ]);
                 throw new ServerError(["سند مورد نظر فاقد آخرین نسخه می باشد."]);
 
             }
@@ -106,8 +123,11 @@ const SharePage = async ({ params,
         }
 
         const versionNumber = enSlug[enSlug.length - 2];
-
-
+        await generateCachePageTag([
+            `vr-${versionData.id}`,
+            `dc-ph-${documentId}`,
+            `i-${domain}`,
+          ]);
         if (
             hasVersion &&
             versionData &&

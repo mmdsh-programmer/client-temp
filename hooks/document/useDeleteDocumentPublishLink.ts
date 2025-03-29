@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { deleteDocumentPublishLinkAction } from "@actions/document";
+import { handleClientSideHookError } from "@utils/error";
+import { IActionError } from "@interface/app.interface";
 
 const useDeleteDocumentPublishLink = () => {
     const queryClient = useQueryClient();
@@ -11,19 +13,13 @@ const useDeleteDocumentPublishLink = () => {
             categoryId: number;
             callBack?: () => void;
         }) => {
-            const { repoId, documentId, callBack } = values;
+            const { repoId, documentId } = values;
             const response = await deleteDocumentPublishLinkAction(
                 repoId,
                 documentId
             );
 
-            if (response?.statusCode) {
-                throw new Error(response.message || "خطا در حذف لینک انتشار سند");
-            }
-
-            if (callBack) {
-                callBack();
-            }
+            handleClientSideHookError(response as IActionError);
 
             return response;
         },

@@ -190,12 +190,6 @@ const useDocumentMenuList = ({
       {
         text: " لینک انتشار",
         icon: <CopyIcon className="w-4 h-4 fill-icon-active" />,
-        disabled:
-          currentPath === "/admin/myDocuments" ||
-          currentPath === "/admin/sharedDocuments" ||
-          getRepo?.roleName === ERoles.writer ||
-          getRepo?.roleName === ERoles.viewer ||
-          getRepo?.roleName === ERoles.editor,
         onClick: () => {
           const url = toPersianDigit(
             `/share/${toPersianDigit(
@@ -209,7 +203,6 @@ const useDocumentMenuList = ({
         text: "حذف لینک انتشار",
         icon: <DeleteIcon className="w-4 h-4" />,
         disabled:
-          currentPath === "/admin/myDocuments" ||
           currentPath === "/admin/sharedDocuments" ||
           getRepo?.roleName === ERoles.writer ||
           getRepo?.roleName === ERoles.viewer ||
@@ -297,6 +290,7 @@ const useDocumentMenuList = ({
       text: "ایجاد لینک انتشار",
       icon: <GlobeIcon className="w-4 h-4 fill-icon-active" />,
       disabled:
+      currentPath === "/admin/myDocuments" ||
         currentPath === "/admin/sharedDocuments" ||
         (getRepo?.roleName === ERoles.writer &&
           document?.creator?.userName !== userInfo?.username) ||

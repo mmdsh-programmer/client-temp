@@ -1,5 +1,5 @@
 import React from "react";
-import { getDocumentPublishLink, getPublishDocumentLastVersion, getPublishDocumentVersion, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
+import { getDocumentPublishLink, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { notFound } from "next/navigation";
 import Logger from "@utils/logger";
@@ -24,7 +24,6 @@ interface PageParams {
 }
 
 async function fetchDocumentVersion(
-    repositoryId: number,
     documentId: number,
     versionId: number | undefined,
     documentPassword?: string,
@@ -143,7 +142,6 @@ export default async function  PrivateSharePage ({ params,
         }
         try {
             const version = await fetchDocumentVersion(
-                repoId,
                 documentId,
                 hasVersion ? versionId : undefined,
                 documentPassword || undefined,
