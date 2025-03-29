@@ -2221,18 +2221,23 @@ export const createDocumentPublishLink = async (
 
 export const getDocumentPublishLink = async (
   accessToken: string,
-  repoId: number,
   documentId: number,
-  password?: string
+  getVersions: boolean,
+  offset?: number,
+  size?: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/publish`,
+      `publish/document/${documentId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        data: password ? { password } : undefined,
+        params: {
+          getVersions,
+          offset,
+          size,
+        },
       }
     );
 
@@ -2257,6 +2262,56 @@ export const deleteDocumentPublishLink = async (
       }
     );
 
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishedDocumentLastVersion = async (
+  accessToken: string,
+  documentId: number,
+  password?: string,
+) => {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
+
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IVersion | null>
+    >(`publish/document/${documentId}/lastVersion`, {
+      headers,
+      params: {
+        password,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishedDocumentVersion = async (
+  accessToken: string,
+  documentId: number,
+  versionId: number,
+  password?: string,
+) => {
+  const headers = accessToken
+  ? { Authorization: `Bearer ${accessToken}` }
+  : undefined;
+
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IVersion>
+    >(`publish/document/${documentId}/versions/${versionId}`, {
+      headers,
+      params: {
+       password
+      },
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

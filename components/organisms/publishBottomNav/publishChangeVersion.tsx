@@ -17,6 +17,7 @@ import { publishVersionAtom } from "@atom/publish";
 import { toPersianDigit } from "@utils/index";
 import useGetPublishDocumentVersions from "@hooks/publish/useGetPublishDocumentVersions";
 import { useRecoilValue } from "recoil";
+import useGetDocumentPublishLink from "@hooks/document/useGetDocumentPublishLink";
 
 interface IProps {
   repoId: number;
@@ -35,12 +36,20 @@ const PublishChangeVersion = ({
   const [openMenu, setOpenMenu] = useState(false);
   const getPublishVersion = useRecoilValue(publishVersionAtom);
 
+  const isSharePath = pathname?.startsWith("/share");
+
   const { data: publicVersions, isLoading } = useGetPublishDocumentVersions(
     repoId,
     documentId,
     30,
-    true
+    !isSharePath
   );
+
+  const { data: publishedDocumentVersions,
+    isLoading: isLoadingPublishedDocumentVersions } =
+    useGetDocumentPublishLink(documentId, true, 30, !!isSharePath);
+
+  const publishVersions = isSharePath ? publishedDocumentVersions : publicVersions;
 
   const handleSelectVersion = (versionItem: IVersion) => {
     if (pathname && versionItem.id !== selectedVersionId) {
@@ -56,7 +65,7 @@ const PublishChangeVersion = ({
     }
   };
 
-  if (isLoading) {
+  if (isLoading || isLoadingPublishedDocumentVersions) {
     return (
       <div className="flex items-center w-fit">
         <Spinner className="h-5 w-5" color="deep-purple" />
@@ -77,8 +86,8 @@ const PublishChangeVersion = ({
         </Button>
       </MenuHandler>
       <MenuList className="bg-[#222] border-none p-1.5 w-32">
-        {publicVersions?.pages.map((publicVersionPage, index) => {
-          return publicVersionPage.list.map((publishVersion) => {
+        {publishVersions?.pages.map((publicVersionPage, index) => {
+          return publicVersionPage?.list.map((publishVersion) => {
             return (
               <MenuItem
                 className={`text-ellipsis text-white hover:!bg-white hover:!bg-opacity-15 hover:!text-white overflow-hidden whitespace-nowrap ${publishVersion.id === selectedVersionId ? "bg-white bg-opacity-15" : ""}`}

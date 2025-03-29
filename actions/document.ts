@@ -468,17 +468,19 @@ export const createDocumentPublishLinkAction = async (
 };
 
 export const getDocumentPublishLinkAction = async (
-  repoId: number,
   documentId: number,
-  password?: string
+  getVersions: boolean,
+  offset?: number,
+  size?: number,
 ) => {
   try {
     const userInfo = await getMe();
     const response = await getDocumentPublishLink(
       userInfo.access_token,
-      repoId,
       documentId,
-      password
+      getVersions,
+      offset,
+      size,
     );
     return response;
   } catch (error) {

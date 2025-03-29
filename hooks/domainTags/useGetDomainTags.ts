@@ -6,7 +6,7 @@ import { IDomainTagList } from "@interface/domain.interface";
 
 const useGetDomainTags = (size: number, enabled: boolean) => {
   return useInfiniteQuery({
-    queryKey: ["domainTags"],
+    queryKey: ["domainTags", size],
     queryFn: async ({ pageParam }) => {
       const response = await getAllDomainTagsAction(
         (pageParam - 1) * size,
@@ -15,7 +15,7 @@ const useGetDomainTags = (size: number, enabled: boolean) => {
       handleClientSideHookError(response as IActionError);
       return response as IDomainTagList;
     },
-    enabled,
+    enabled: !!enabled,
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     retry: false,

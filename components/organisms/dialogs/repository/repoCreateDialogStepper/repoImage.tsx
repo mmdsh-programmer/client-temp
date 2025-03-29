@@ -42,11 +42,14 @@ const RepoImage = ({
 
   const onSubmit = async () => {
     if (!getRepo) return;
+    if (!imageType) {
+      return handleClose();
+    };
     if (imageType === "default" && !defualtImage) {
-      toast.error("عکسی انتخاب نشده");
+      return toast.error("عکسی انتخاب نشده");
     }
     if (imageType === "custom" && !selectedFile) {
-      toast.error("عکسی انتخاب نشده");
+      return toast.error("عکسی انتخاب نشده");
     }
 
     mutate({

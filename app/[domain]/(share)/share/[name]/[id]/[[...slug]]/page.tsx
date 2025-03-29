@@ -1,13 +1,14 @@
 import React from "react";
-import { getPublishDocumentInfo, getPublishDocumentLastVersion, getPublishDocumentVersion, getPublishRepositoryInfo } from "@service/clasor";
+import { getDocumentPublishLink, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
 import { IVersion } from "@interface/version.interface";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { notFound } from "next/navigation";
 import Logger from "@utils/logger";
 import PublishVersionContent from "@components/pages/publish";
-import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
 import { ServerError } from "@utils/error";
 import RedirectPage from "@components/pages/redirectPage";
+import { getMe } from "@actions/auth";
 
 export const generateStaticParams = async () => {
     return [];
@@ -47,18 +48,9 @@ const SharePage = async ({ params,
             throw new ServerError(["آدرس وارد شده نامعتبر است"]);
         }
 
-
         const enSlug = slug.map((s) => {
             return toEnglishDigit(decodeURIComponent(s));
         });
-
-        const repository = await getPublishRepositoryInfo(repoId);
-
-        const decodeName = decodeURIComponent(name);
-        const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
-        if (decodeName !== repoName) {
-            return notFound();
-        }
 
         const lastSlug = enSlug[enSlug.length - 1];
         const hasVersion = lastSlug.startsWith("v-");
@@ -69,7 +61,10 @@ const SharePage = async ({ params,
             ? parseInt(lastSlug.replace("v-", ""), 10)
             : undefined;
 
-        const documentInfo = await getPublishDocumentInfo(+repoId!, +documentId!, true);
+            const userInfo = await getMe();
+            const accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+
+        const documentInfo = await getDocumentPublishLink(accessToken!, +documentId!, false);
         const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
         if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
@@ -88,20 +83,23 @@ const SharePage = async ({ params,
         let versionData: IVersion;
 
         if (hasVersion && versionId && !Number.isNaN(versionId)) {
-            versionData = await getPublishDocumentVersion(
-                +repoId!, +documentId!,
+            versionData = await getPublishedDocumentVersion(
+                accessToken!,
+                +documentId!,
                 versionId
             );
         } else {
-            const lastVersionInfo = await getPublishDocumentLastVersion(
-                +repoId!, +documentId!
+            const lastVersionInfo = await getPublishedDocumentLastVersion(
+                accessToken!,
+                 +documentId!
             );
             if (!lastVersionInfo) {
                 throw new ServerError(["سند مورد نظر فاقد آخرین نسخه می باشد."]);
 
             }
-            versionData = await getPublishDocumentVersion(
-                +repoId!, +documentId!,
+            versionData = await getPublishedDocumentVersion(
+                accessToken!,
+                +documentId!,
                 lastVersionInfo!.id
             );
 

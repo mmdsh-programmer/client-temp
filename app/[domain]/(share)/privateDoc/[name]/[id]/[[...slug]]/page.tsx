@@ -1,10 +1,10 @@
 import React from "react";
-import { getPublishDocumentInfo, getPublishDocumentLastVersion, getPublishDocumentVersion, getPublishRepositoryInfo } from "@service/clasor";
+import { getDocumentPublishLink, getPublishDocumentLastVersion, getPublishDocumentVersion, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { notFound } from "next/navigation";
 import Logger from "@utils/logger";
 import PublishVersionContent from "@components/pages/publish";
-import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
 import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import RedirectPage from "@components/pages/redirectPage";
 import { getMe } from "@actions/auth";
@@ -31,32 +31,29 @@ async function fetchDocumentVersion(
     accessToken?: string
 ) {
     if (versionId) {
-        return getPublishDocumentVersion(
-            repositoryId,
+        return getPublishedDocumentVersion(
+            accessToken!,
             documentId,
             versionId,
             documentPassword,
-            accessToken
         );
     }
 
-    const lastVersion = await getPublishDocumentLastVersion(
-        repositoryId,
+    const lastVersion = await getPublishedDocumentLastVersion(
+        accessToken!,
         documentId,
         documentPassword,
-        accessToken
     );
 
     if (!lastVersion?.id) {
         throw new ServerError(["سند مورد نظر فاقد نسخه می باشد."]);
     }
 
-    return getPublishDocumentVersion(
-        repositoryId,
+    return getPublishedDocumentVersion(
+        accessToken!,
         documentId,
         lastVersion.id,
         documentPassword,
-        accessToken
     );
 }
 
@@ -88,25 +85,9 @@ export default async function  PrivateSharePage ({ params,
             throw new ServerError(["آدرس وارد شده نامعتبر است"]);
         }
 
-
         const enSlug = slug.map((s) => {
             return toEnglishDigit(decodeURIComponent(s));
         });
-
-        const repository = await getPublishRepositoryInfo(repoId);
-
-        const decodeName = decodeURIComponent(name);
-        const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
-        if (decodeName !== repoName) {
-            return notFound();
-        }
-
-
-        if (!enSlug?.length) {
-            return <RedirectPage
-                redirectUrl={`/share/${toPersianDigit(repoName)}/${toPersianDigit(id)}`}
-            />;
-        }
 
         const lastSlug = enSlug[enSlug.length - 1];
         const hasVersion = lastSlug.startsWith("v-");
@@ -122,7 +103,11 @@ export default async function  PrivateSharePage ({ params,
             return notFound();
         }
 
-        const documentInfo = await getPublishDocumentInfo(+repoId!, +documentId!, true);
+        const userInfo = await getMe();
+        const    accessToken =
+                userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+
+        const documentInfo = await getDocumentPublishLink(accessToken!, +documentId!, false);
         const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
         if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
@@ -148,14 +133,9 @@ export default async function  PrivateSharePage ({ params,
         const documentPassword = cookies().get(`document-${documentId}-password`)?.value;
 
         const encodedToken = cookies().get("token")?.value;
-        let accessToken: string | undefined;
 
         if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && !encodedToken) {
             throw new AuthorizationError();
-        } else if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken) {
-            const userInfo = await getMe();
-            accessToken =
-                userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
         }
 
         if (documentInfo?.hasPassword && !documentPassword) {
@@ -163,7 +143,7 @@ export default async function  PrivateSharePage ({ params,
         }
         try {
             const version = await fetchDocumentVersion(
-                repository.id,
+                repoId,
                 documentId,
                 hasVersion ? versionId : undefined,
                 documentPassword || undefined,
