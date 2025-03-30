@@ -5,7 +5,6 @@ import {
   getPublishRepositoryInfo,
 } from "@service/clasor";
 import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
-
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import Logger from "@utils/logger";

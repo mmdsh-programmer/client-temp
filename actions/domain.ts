@@ -174,7 +174,8 @@ export const deleteDomainTagAction = async (tagId: number) => {
 export const setDocumentDomainTagsAction = async (
   repoId: number,
   documentId: number,
-  tagIds: number[]
+  tagIds: number[],
+  isDirectAccess?: boolean
 ) => {
   try {
     const userInfo = await getMe();
@@ -189,7 +190,8 @@ export const setDocumentDomainTagsAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      tagIds
+      tagIds,
+      isDirectAccess
     );
 
     return response;

@@ -102,11 +102,7 @@ export default async function  PrivateSharePage ({ params,
             return notFound();
         }
 
-        const userInfo = await getMe();
-        const    accessToken =
-                userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
-
-        const documentInfo = await getDocumentPublishLink(accessToken!, +documentId!, false);
+        const documentInfo = await getDocumentPublishLink(undefined,+documentId!, false);
         const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
         if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
@@ -132,9 +128,14 @@ export default async function  PrivateSharePage ({ params,
         const documentPassword = cookies().get(`document-${documentId}-password`)?.value;
 
         const encodedToken = cookies().get("token")?.value;
+        let accessToken: string | undefined;
 
         if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && !encodedToken) {
             throw new AuthorizationError();
+        } else if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken) {
+            const userInfo = await getMe();
+            accessToken =
+                userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
         }
 
         if (documentInfo?.hasPassword && !documentPassword) {

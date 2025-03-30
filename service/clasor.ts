@@ -2220,19 +2220,21 @@ export const createDocumentPublishLink = async (
 };
 
 export const getDocumentPublishLink = async (
-  accessToken: string,
+  accessToken: string | undefined,
   documentId: number,
   getVersions: boolean,
   offset?: number,
   size?: number,
 ) => {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<any>>(
       `publish/document/${documentId}`,
       {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers,
         params: {
           getVersions,
           offset,
@@ -2269,7 +2271,7 @@ export const deleteDocumentPublishLink = async (
 };
 
 export const getPublishedDocumentLastVersion = async (
-  accessToken: string,
+  accessToken: string | undefined,
   documentId: number,
   password?: string,
 ) => {
@@ -2294,7 +2296,7 @@ export const getPublishedDocumentLastVersion = async (
 };
 
 export const getPublishedDocumentVersion = async (
-  accessToken: string,
+  accessToken: string | undefined,
   documentId: number,
   versionId: number,
   password?: string,
@@ -4609,7 +4611,8 @@ export const setDocumentDomainTags = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  tagIds: number[]
+  tagIds: number[],
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.patch(
@@ -4621,6 +4624,9 @@ export const setDocumentDomainTags = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
+        },
+        params: {
+          isDirectAccess,
         },
       }
     );

@@ -8,7 +8,6 @@ import PublishVersionContent from "@components/pages/publish";
 import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
 import { ServerError } from "@utils/error";
 import RedirectPage from "@components/pages/redirectPage";
-import { getMe } from "@actions/auth";
 import { generateCachePageTag } from "@utils/redis";
 
 export const generateStaticParams = async () => {
@@ -62,9 +61,6 @@ const SharePage = async ({ params,
             ? parseInt(lastSlug.replace("v-", ""), 10)
             : undefined;
 
-            const userInfo = await getMe();
-            const accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
-
             if (!documentId || Number.isNaN(documentId)) {
                 await generateCachePageTag([
                   `dc-ph-${documentId}`,
@@ -73,7 +69,7 @@ const SharePage = async ({ params,
                 return notFound();
               }
 
-        const documentInfo = await getDocumentPublishLink(accessToken!, +documentId!, false);
+        const documentInfo = await getDocumentPublishLink(undefined,+documentId!, false);
         const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
         if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
@@ -97,13 +93,13 @@ const SharePage = async ({ params,
 
         if (hasVersion && versionId && !Number.isNaN(versionId)) {
             versionData = await getPublishedDocumentVersion(
-                accessToken!,
+                undefined,
                 +documentId!,
                 versionId
             );
         } else {
             const lastVersionInfo = await getPublishedDocumentLastVersion(
-                accessToken!,
+                undefined,
                  +documentId!
             );
             if (!lastVersionInfo) {
@@ -115,7 +111,7 @@ const SharePage = async ({ params,
 
             }
             versionData = await getPublishedDocumentVersion(
-                accessToken!,
+                undefined,
                 +documentId!,
                 lastVersionInfo!.id
             );

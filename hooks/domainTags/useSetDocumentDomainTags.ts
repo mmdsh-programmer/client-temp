@@ -13,13 +13,15 @@ const useSetDocumentDomainTags = () => {
       repoId: number;
       documentId: number;
       tagIds: number[];
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, tagIds } = values;
+      const { repoId, documentId, tagIds, isDirectAccess } = values;
       const response = await setDocumentDomainTagsAction(
         repoId,
         documentId,
-        tagIds
+        tagIds,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;

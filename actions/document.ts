@@ -27,7 +27,7 @@ import {
 
 import { EDocumentTypes } from "@interface/enums";
 import { ISortProps } from "@atom/sortParam";
-import { getMe } from "./auth";
+import { getMe, userInfoAction } from "./auth";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
@@ -473,10 +473,12 @@ export const getDocumentPublishLinkAction = async (
   offset?: number,
   size?: number,
 ) => {
+  const userInfo = await userInfoAction();
   try {
-    const userInfo = await getMe();
+    const accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+
     const response = await getDocumentPublishLink(
-      userInfo.access_token,
+      accessToken,
       documentId,
       getVersions,
       offset,

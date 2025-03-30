@@ -49,6 +49,8 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
         tagIds: getTempDocTag.map((tag) => {
           return tag.id;
         }),
+      isDirectAccess:
+      sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       });
     }
     editDocument.mutate({

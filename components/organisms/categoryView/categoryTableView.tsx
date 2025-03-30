@@ -49,7 +49,7 @@ const TableView = ({
       return (
         <div className="px-5 py-4 overflow-auto">
           <div className="w-full border-[0.5px] overflow-auto border-normal rounded-lg">
-            <table className="w-full overflow-hidden min-w-max table-auto xl:table-fixed">
+            <table className="w-full overflow-hidden min-w-max table-auto">
               <TableHead
                 tableHead={
                   [
