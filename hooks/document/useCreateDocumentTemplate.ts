@@ -19,7 +19,7 @@ const useCreateDocumentTemplate = () => {
       versionNumber: string;
       templateId: number;
       description?: string;
-      order?: number;
+      order?: number | null;
       imageUrl?: string;
       callBack?: () => void;
     }) => {

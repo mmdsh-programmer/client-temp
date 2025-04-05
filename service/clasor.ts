@@ -1859,7 +1859,7 @@ export const createDocumentTemplate = async (
   versionNumber: string,
   templateId: number,
   description?: string,
-  order?: number,
+  order?: number | null,
   imageUrl?: string
 ) => {
   try {

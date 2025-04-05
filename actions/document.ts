@@ -109,7 +109,7 @@ export const createDocumentTemplateAction = async (
   versionNumber: string,
   templateId: number,
   description?: string,
-  order?: number,
+  order?: number | null,
   imageUrl?: string
 ) => {
   const userInfo = await getMe();

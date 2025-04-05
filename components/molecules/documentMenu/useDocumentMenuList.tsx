@@ -294,7 +294,6 @@ const useDocumentMenuList = ({
         currentPath === "/admin/myDocuments" ||
         (getRepo?.roleName === ERoles.admin) ||
         (getRepo?.roleName === ERoles.editor) ||
-        (getRepo?.roleName === ERoles.owner) ||
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("createPublishLink", true);

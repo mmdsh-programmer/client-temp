@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { createCatDocDrawerAtom } from "@atom/category";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { categoryAtom, categoryShowAtom, createCatDocDrawerAtom } from "@atom/category";
 import {
   AddIcon,
   ArrowDownIcon,
@@ -26,6 +26,8 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
   const [createCategoryModal, setCreateCategoryModal] = useState(false);
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
+  const setCategory = useSetRecoilState(categoryAtom);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
   const [openCreateDrawer, setOpenCreateDrawer] = useRecoilState(
     createCatDocDrawerAtom
   );
@@ -42,6 +44,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
       disabled: getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         setCreateDocumentModal(true);
+        setCategory(getCategoryShow);
       },
     },
     {
@@ -53,6 +56,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         getRepo?.roleName === ERoles.editor,
       onClick: () => {
         setCreateTemplateModal(true);
+        setCategory(getCategoryShow);
       },
     },
     {
@@ -63,6 +67,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         setCreateCategoryModal(true);
+        setCategory(getCategoryShow);
       },
     },
   ];
