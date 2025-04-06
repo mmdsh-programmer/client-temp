@@ -204,6 +204,8 @@ const useDocumentMenuList = ({
         icon: <DeleteIcon className="w-4 h-4" />,
         disabled:
           currentPath === "/admin/sharedDocuments" ||
+          currentPath === "/admin/myDocuments" ||
+          (getRepo?.roleName === ERoles.admin) ||
           getRepo?.roleName === ERoles.writer ||
           getRepo?.roleName === ERoles.viewer ||
           getRepo?.roleName === ERoles.editor,
