@@ -61,7 +61,7 @@ const DocumentInfo = () => {
               className="w-full"
               placeholder="اولویت سند"
               type="number"
-              min={0}
+              min={1}
               register={{
                 ...register("order", { value: getDocumentInfo?.order }),
               }}

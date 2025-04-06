@@ -123,7 +123,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">اولویت سند </Typography>
           <FormInput
             type="number"
-            min={0}
+            min={1}
             placeholder="اولویت سند"
             register={{
               ...register("order", {
