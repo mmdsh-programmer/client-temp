@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
+
 import FreeDraftDialog from "@components/templates/dialog/freeDraftDialog";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import RenderIf from "@components/atoms/renderIf";
@@ -22,7 +23,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
-  const editorContent = useRef<any>(null);
+  const editorContent = useRef<unknown>(null);
 
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);
   const workerRef = useRef<Worker>();
@@ -55,7 +56,10 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         editorContent.current = value;
       });
 
-      const value = editorContent.current;
+      const value = editorContent.current as unknown as {
+        content: string;
+        outline: string;
+      };
 
       editorRef.current?.getData();
 
