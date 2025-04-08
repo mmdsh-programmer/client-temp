@@ -1860,7 +1860,8 @@ export const createDocumentTemplate = async (
   templateId: number,
   description?: string,
   order?: number | null,
-  imageUrl?: string
+  imageUrl?: string,
+  publicKeyId?: string
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IDocument>>(
@@ -1872,6 +1873,7 @@ export const createDocumentTemplate = async (
         description,
         imageUrl,
         order: order === null ? null : Number(order),
+        publicKeyId
       },
       {
         headers: {

@@ -110,7 +110,8 @@ export const createDocumentTemplateAction = async (
   templateId: number,
   description?: string,
   order?: number | null,
-  imageUrl?: string
+  imageUrl?: string,
+  publicKeyId?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -124,7 +125,8 @@ export const createDocumentTemplateAction = async (
       templateId,
       description,
       order,
-      imageUrl
+      imageUrl,
+      publicKeyId
     );
 
     return response;

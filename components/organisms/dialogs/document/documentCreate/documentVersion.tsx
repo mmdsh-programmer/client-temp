@@ -83,6 +83,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         order: getDocumentInfo.order || null,
         versionNumber: dataForm.versionNumber,
         templateId: getDocumentTemplate.id,
+        publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         callBack: () => {
           toast.success("سند مورد نظر با موفقیت ایجاد گردید.");
           setOpen(false);
