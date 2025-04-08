@@ -55,21 +55,21 @@ const Tags = ({ handleClose }: IProps) => {
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="repo-tags__dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <form className="flex flex-col gap-5">
+        <form className="repo-tags__form flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <Typography className="label"> تگ</Typography>
             <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
               <InputAtom
-                className="!w-auto h-auto overflow-hidden !p-0 border-none"
+                className="repo-tags__input !w-auto h-auto overflow-hidden !p-0 border-none"
                 placeholder="عنوان تگ"
                 register={{ ...register("name") }}
               />
               <LoadingButton
                 loading={isPending}
                 onClick={handleSubmit(onSubmit)}
-                className="!h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+                className="repo-tags__add-button !h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
                 <Typography className="!text-primary text__label__button px-3">
                   افزودن
@@ -83,14 +83,14 @@ const Tags = ({ handleClose }: IProps) => {
             <Spinner color="deep-purple" className="w-5 h-5" />
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2 py-4">
+          <div className="repo-tags__list flex flex-wrap gap-2 py-4">
             {tagList?.pages.map((page) => {
               return page.list.map((tag) => {
                 return (
                   <ChipMolecule
                     value={tag.name}
                     key={tag.id}
-                    className="bg-gray-50 h-6 px-3 text-primary max-w-[150px] "
+                    className="repo-tag-item bg-gray-50 h-6 px-3 text-primary max-w-[150px] "
                   />
                 );
               });
@@ -100,13 +100,13 @@ const Tags = ({ handleClose }: IProps) => {
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="repo-tags__dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
         </CancelButton>
         <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-tags__dialog-next-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={() => {
             return setActiveStep(3);
           }}

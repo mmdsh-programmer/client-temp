@@ -12,7 +12,7 @@ const BackButton = ({ onClick, disabled, className }: IProps) => {
   return (
     <Button
       placeholder="back button"
-      className={`${className || ""} bg-transparent shadow-none hover:shadow-none outline-none p-3`}
+      className={`${className || ""} back-button bg-transparent shadow-none hover:shadow-none outline-none p-3`}
       onClick={onClick}
       disabled={disabled}
     >

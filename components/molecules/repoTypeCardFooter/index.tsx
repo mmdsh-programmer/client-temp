@@ -16,7 +16,7 @@ const RepoTypeCardFooter = ({ icon, repoNumber, tooltipContent }: IProps) => {
         <div className="max-w-[100px] overflow-hidden">
           <Typography
             placeholder=""
-            className="font-iranYekan text-secondary text-[12px] mr-1 truncate"
+            className="repo-number font-iranYekan text-secondary text-[12px] mr-1 truncate"
             title={repoNumber !== 0 ? `${repoNumber} مخزن` : "مخزنی وجود ندارد"}
           >
             {repoNumber !== 0 ? `${repoNumber} مخزن` : "مخزنی وجود ندارد"}

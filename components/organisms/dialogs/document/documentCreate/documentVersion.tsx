@@ -70,6 +70,10 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     }
 
     if (getDocumentTemplate) {
+      if (getDocumentType !== EDocumentTypes.classic) {
+        toast.error("ساخت سند از روی نمونه سند فقط برای محتوای کلاسور امکان‌پذیر است.");
+        return;
+      }
       createDocFromTemplateHook.mutate({
         repoId,
         categoryId: getCategory?.id || getCategoryShow?.id || null,

@@ -41,11 +41,12 @@ const UserItem = ({ user }: IProps) => {
     {
       label: "انتقال مالکیت",
       value: "transferOwnership",
+      className: "repo-user__transfer-ownership",
     },
     {
       label: "حذف کاربر",
       value: "delete",
-      className: "!text-error",
+      className: "!text-error repo-user__delete-user",
     },
   ]);
 
@@ -88,7 +89,7 @@ const UserItem = ({ user }: IProps) => {
   const renderUserRole = () => {
     if (user.userRole === ERoles.owner) {
       return (
-        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
+        <div className="repo-user__role w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
           <Typography className="select_option__text text-primary">
             {translateRoles(user.userRole)}
           </Typography>
@@ -108,7 +109,7 @@ const UserItem = ({ user }: IProps) => {
     }
     return (
       <SelectAtom
-        className="!w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+        className="repo-user__change-role !w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
         defaultOption={{
           label: translateRoles(user.userRole),
           value: user.userRole,
@@ -125,7 +126,7 @@ const UserItem = ({ user }: IProps) => {
 
   return (
     <div
-      className="flex items-center gap-x-[10px] min-h-[50px] h-[50px] cursor-pointer"
+      className="repo-user-item flex items-center gap-x-[10px] min-h-[50px] h-[50px] cursor-pointer"
       title={user.userInfo.userName}
     >
       <div className="h-8 w-8">

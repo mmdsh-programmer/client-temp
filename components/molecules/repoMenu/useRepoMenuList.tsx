@@ -36,6 +36,7 @@ export interface MenuItem {
   text: string;
   icon?: JSX.Element;
   onClick: () => void;
+  className?: string;
 }
 
 const useMenuList = (
@@ -49,9 +50,10 @@ const useMenuList = (
   const createMenuItem = (
     menuText: string,
     menuIcon: React.JSX.Element,
-    menuOnClick: () => void
+    menuOnClick: () => void,
+    className?: string
   ) => {
-    return { text: menuText, icon: menuIcon, onClick: menuOnClick };
+    return { text: menuText, icon: menuIcon, onClick: menuOnClick, className };
   };
 
   const ownerAdminActions = () => {
@@ -60,15 +62,21 @@ const useMenuList = (
         ? createMenuItem(
             "اطلاعات پوشه",
             <FolderInfoIcon className="w-4 h-4" />,
-            handleRepoInfo
+            handleRepoInfo,
+            "repo-menu__item--folder-info"
           )
         : null,
-      createMenuItem("ویرایش", <EditIcon className="w-4 h-4" />, () => {
-        setModalState("edit", true);
-        if (repo) {
-          setRepo(repo);
-        }
-      }),
+      createMenuItem(
+        "ویرایش", 
+        <EditIcon className="w-4 h-4" />, 
+        () => {
+          setModalState("edit", true);
+          if (repo) {
+            setRepo(repo);
+          }
+        },
+        "repo-menu__item--edit"
+      ),
       !repo?.bookmark
         ? createMenuItem(
             "بوکمارک کردن",
@@ -78,7 +86,8 @@ const useMenuList = (
               if (repo) {
                 setRepo(repo);
               }
-            }
+            },
+            "repo-menu__item--bookmark"
           )
         : createMenuItem(
             "حذف بوکمارک",
@@ -88,7 +97,8 @@ const useMenuList = (
               if (repo) {
                 setRepo(repo);
               }
-            }
+            },
+            "repo-menu__item--bookmark-remove"
           ),
       createMenuItem(
         "اشتراک گذاری",
@@ -98,7 +108,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--share"
       ),
       createMenuItem(
         "مدیریت فایل",
@@ -108,7 +119,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--file-management"
       ),
       createMenuItem(
         "درخواست‌ها",
@@ -118,7 +130,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--version-requests"
       ),
       repo?.isPublish &&
         createMenuItem(
@@ -131,7 +144,8 @@ const useMenuList = (
               )}/${repo.id}`
             );
             window.open(url, "_blank");
-          }
+          },
+          "repo-menu__item--publish"
         ),
       createMenuItem(
         "کلید های مخزن",
@@ -141,7 +155,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--keys"
       ),
     ].filter(Boolean) as MenuItem[];
   };
@@ -149,20 +164,30 @@ const useMenuList = (
   const ownerActions = () => {
     if (repo?.isArchived) {
       return [
-        createMenuItem("حذف", <DeleteIcon className="w-4 h-4" />, () => {
-          setModalState("delete", true);
-          setOpenRepoActionDrawer(false);
-          if (repo) {
-            setRepo(repo);
-          }
-        }),
-        createMenuItem("بازگردانی", <RestoreIcon className="w-4 h-4" />, () => {
-          setModalState("restore", true);
-          setOpenRepoActionDrawer(false);
-          if (repo) {
-            setRepo(repo);
-          }
-        }),
+        createMenuItem(
+          "حذف", 
+          <DeleteIcon className="w-4 h-4" />, 
+          () => {
+            setModalState("delete", true);
+            setOpenRepoActionDrawer(false);
+            if (repo) {
+              setRepo(repo);
+            }
+          },
+          "repo-menu__item--delete"
+        ),
+        createMenuItem(
+          "بازگردانی", 
+          <RestoreIcon className="w-4 h-4" />, 
+          () => {
+            setModalState("restore", true);
+            setOpenRepoActionDrawer(false);
+            if (repo) {
+              setRepo(repo);
+            }
+          },
+          "repo-menu__item--restore"
+        ),
       ];
     }
 
@@ -177,15 +202,21 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--archive"
       ),
-      createMenuItem("حذف", <DeleteIcon className="w-4 h-4" />, () => {
-        setModalState("delete", true);
-        setOpenRepoActionDrawer(false);
-        if (repo) {
-          setRepo(repo);
-        }
-      }),
+      createMenuItem(
+        "حذف", 
+        <DeleteIcon className="w-4 h-4" />, 
+        () => {
+          setModalState("delete", true);
+          setOpenRepoActionDrawer(false);
+          if (repo) {
+            setRepo(repo);
+          }
+        },
+        "repo-menu__item--delete"
+      ),
     ];
   };
 
@@ -200,7 +231,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--leave"
       ),
     ];
   };
@@ -211,7 +243,8 @@ const useMenuList = (
         createMenuItem(
           "اطلاعات پوشه",
           <FolderInfoIcon className="w-4 h-4" />,
-          handleRepoInfo
+          handleRepoInfo,
+          "repo-menu__item--folder-info"
         ),
       !repo?.bookmark
         ? createMenuItem(
@@ -222,7 +255,8 @@ const useMenuList = (
               if (repo) {
                 setRepo(repo);
               }
-            }
+            },
+            "repo-menu__item--bookmark"
           )
         : createMenuItem(
             "حذف بوکمارک",
@@ -232,7 +266,8 @@ const useMenuList = (
               if (repo) {
                 setRepo(repo);
               }
-            }
+            },
+            "repo-menu__item--bookmark-remove"
           ),
       repo?.isPublish &&
         createMenuItem(
@@ -245,7 +280,8 @@ const useMenuList = (
               )}/${repo.id}`
             );
             window.open(url, "_blank");
-          }
+          },
+          "repo-menu__item--publish"
         ),
       createMenuItem(
         "کلید های مخزن",
@@ -255,7 +291,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--keys"
       ),
       createMenuItem(
         "ترک مخزن",
@@ -265,7 +302,8 @@ const useMenuList = (
           if (repo) {
             setRepo(repo);
           }
-        }
+        },
+        "repo-menu__item--leave"
       ),
     ];
   };

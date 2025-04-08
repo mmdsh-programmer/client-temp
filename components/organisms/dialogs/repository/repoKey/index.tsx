@@ -39,8 +39,8 @@ const RepoKeyDialog = ({ setOpen }: IProps) => {
       <div className="p-4">
         {getRepo?.roleName === ERoles.owner ? (
           <Button
-            placeholder="create group"
-            className="flex justify-between items-center shadow-none hover:shadow-none px-1 h-8 bg-white hover:bg-transparent border-[1px] border-normal mr-auto"
+            placeholder="create repo key"
+            className="repo-key-dialog__create-button flex justify-between items-center shadow-none hover:shadow-none px-1 h-8 bg-white hover:bg-transparent border-[1px] border-normal mr-auto"
             onClick={() => {
               setCreateRepoKey(true);
             }}

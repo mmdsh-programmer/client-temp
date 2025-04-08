@@ -43,7 +43,7 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
       dialogHeader="رد عمومی سازی نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="repo-reject-public-version-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از رد عمومی سازی نسخه "

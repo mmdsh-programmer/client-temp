@@ -22,7 +22,7 @@ const RepoCardMode = ({ repo }: IProps) => {
     <Card
       placeholder="card"
       key={`repo-card-item-${repo.id}`}
-      className={`flex flex-col h-auto max-h-[85px] rounded-lg bg-white border-[1px] border-normal shadow-small cursor-pointer
+      className={`repo-card flex flex-col h-auto max-h-[85px] rounded-lg bg-white border-[1px] border-normal shadow-small cursor-pointer
         ${getRepoInfo?.id === repo.id ? "mb-14" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
@@ -33,23 +33,23 @@ const RepoCardMode = ({ repo }: IProps) => {
     >
       <div className="flex p-4 justify-between items-center">
         <div className="flex items-center gap-3 max-w-[70%]">
-          <div className="h-12 w-12">
+          <div className="repo__image h-12 w-12">
             <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
-          <div className="flex flex-col max-w-[80%] flex-grow">
-            <Typography className="title_t1 !text-primary max-w-full truncate font-[450]">
+          <div className="repo__info flex flex-col max-w-[80%] flex-grow">
+            <Typography className="repo__name title_t1 !text-primary max-w-full truncate font-[450]">
               {repo.name}
             </Typography>
-            <div className="flex items-center gap-2 ">
-              <Typography className="caption_c2 text-hint">
+            <div className="repo__info-details flex items-center gap-2 ">
+              <Typography className="repo__info-details-date caption_c2 text-hint">
                 {repo ? FaDateFromTimestamp(+new Date(repo.createDate)) : null}
               </Typography>
               <CircleIcon className="h-2 w-2" />
-              <Typography className="caption_c2 text-hint">
+              <Typography className="repo__info-details-role caption_c2 text-hint">
                 {translateRoles(repo?.roleName)}
               </Typography>
               <CircleIcon className="h-2 w-2" />
-              <Typography className="caption_c2 text-hint">
+              <Typography className="repo__info-details-status caption_c2 text-hint">
                 {repo.isArchived ? "غیرفعال" : "فعال"}
               </Typography>
             </div>

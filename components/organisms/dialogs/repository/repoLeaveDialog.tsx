@@ -50,7 +50,7 @@ const RepoLeaveDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       dialogHeader="ترک مخزن"
       setOpen={handleClose}
-      className=""
+      className="repo-leave-dialog"
     >
       <form className="flex flex-col gap-5">
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">

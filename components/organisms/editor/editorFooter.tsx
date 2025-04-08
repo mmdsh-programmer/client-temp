@@ -232,9 +232,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
   }
 
   return editorMode === "preview" ? (
-    <div className="w-full flex justify-between items-center gap-2">
+    <div className="editor-footer__preview-mode w-full flex justify-between items-center gap-2">
       <Button
-        className="w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+        className="editor-footer__version-number w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
@@ -255,15 +255,16 @@ const EditorFooter = ({ editorRef }: IProps) => {
           writerRole() &&
           getVersionData?.creator?.userName !== userInfo?.username
         }
+        className="editor-footer__edit-button"
       >
         ویرایش
       </CancelButton>
     </div>
   ) : (
-    <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
+    <div className="editor-footer__edit-mode w-full flex flex-col md:flex-row gap-4 justify-between items-center">
       <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
         <Button
-          className="w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+          className="editor-footer__version-number w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
@@ -285,7 +286,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
               ذخیره‌سازی خودکار
             </Typography>
           }
-          className=""
+          className="editor-footer__auto-save-checkbox"
           color="deep-purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
@@ -300,7 +301,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             );
             setEditorMode(editorMode === "edit" ? "temporaryPreview" : "edit");
           }}
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
+          className="editor-footer__change-mode-button !h-12 md:!h-8 !w-[50%] md:!w-[100px]"
           disabled={
             saveEditorHook.isPending ||
             (writerRole() &&
@@ -310,7 +311,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={() => {
             editorRef.current?.getData();
           }}

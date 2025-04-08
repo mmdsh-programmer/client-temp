@@ -41,18 +41,18 @@ const RepoUsers = () => {
   const {register,} = useForm<IForm>();
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="repo-users flex flex-col w-full">
       <div className="h-2 border-b-2 border-gray-300" />
       {isFetchingInviteRequests || isFetchingUsers ? (
         <div className="h-full w-full flex justify-center items-center">
           <Spinner color="deep-purple" className="" />
         </div>
       ) : (
-        <div>
+        <div className="repo-users__list">
           {getRepoUsers?.pages.map((page) => {
             return page.list.map((user) => {
               return (
-                <div className="flex" key={user.userInfo.ssoId}>
+                <div className="repo-user-item flex" key={user.userInfo.ssoId}>
                   <div
                     key={user.userInfo.ssoId}
                     title={user.userInfo.userName || ""}
@@ -74,7 +74,7 @@ const RepoUsers = () => {
                   <Typography> {user.userInfo.userName}</Typography>
                   <select
                     id="user-create-role"
-                    className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
+                    className="repo-users__select-role text-[14px] font-iranYekan outline-none bg-transparent text-primary"
                     {...register("roleName")}
                   >
                     {getRoles?.map((item: IRoles) => {
@@ -96,7 +96,7 @@ const RepoUsers = () => {
           {getInviteRequests?.pages.map((page) => {
             return page.list.map((user) => {
               return (
-                <div className="flex" key={user.userSSOID}>
+                <div className="repo-user-item flex" key={user.userSSOID}>
                   <div
                     key={user.userSSOID}
                     title={user.user.preferred_username || ""}

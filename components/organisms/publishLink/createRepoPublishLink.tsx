@@ -69,7 +69,7 @@ const CreateRepoPublishLink = () => {
     <>
       <DialogBody
         placeholder="dialog body publish-repo"
-        className="flex-grow px-5 py-3 xs:p-0 xs:pb-6"
+        className="repo-create-publish-link__dialog-body flex-grow px-5 py-3 xs:p-0 xs:pb-6"
       >
         <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
@@ -86,6 +86,7 @@ const CreateRepoPublishLink = () => {
                 setHasExpireTime(!hasExpireTime);
               }}
               containerProps={{ className: "-mr-3" }}
+              className="repo-create-publish-link__checkbox"
             />
             {hasExpireTime ? (
               <>
@@ -107,10 +108,10 @@ const CreateRepoPublishLink = () => {
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:p-0 xs:pt-6 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer p-5 xs:p-0 xs:pt-6 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-create-publish-link__create-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
           loading={createPublishLink.isPending}
         >

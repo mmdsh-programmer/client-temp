@@ -1,6 +1,6 @@
+import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { IPublicKey } from "@interface/repo.interface";
-import React from "react";
 import { deleteRepoKeyAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useDeleteRepoPublicKey from "@hooks/repository/useDeleteRepoPublicKey";
@@ -42,6 +42,7 @@ const RepoKeyDeleteDialog = ({
       setOpen={handleClose}
       onSubmit={handleDelete}
       dialogHeader="حذف کلید"
+      className="repo-key-delete-dialog"
     >
       {getDeleteRepoKey?.name}
     </DeleteDialog>

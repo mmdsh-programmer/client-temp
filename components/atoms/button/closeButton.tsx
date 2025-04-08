@@ -11,7 +11,7 @@ const CloseButton = ({ onClose, disabled }: IProps) => {
   return (
     <Button
       placeholder="close button"
-      className="bg-transparent shadow-none hover:shadow-none outline-none p-0"
+      className="close-button bg-transparent shadow-none hover:shadow-none outline-none p-0"
       onClick={onClose}
       disabled={disabled}
     >

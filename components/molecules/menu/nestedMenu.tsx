@@ -20,6 +20,7 @@ interface IProps {
     disabled?: boolean;
     onClick?: React.MouseEventHandler<HTMLLIElement> &
       React.MouseEventHandler<HTMLButtonElement>;
+    className?: string;
   }[];
 }
 
@@ -56,7 +57,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon }: IProps) => {
               // eslint-disable-next-line react/no-array-index-key
               key={`sub-menu-${index}`}
               placeholder="menu-item"
-              className="p-2"
+              className={`p-2 ${menuItem.className}`}
               onClick={menuItem.onClick}
               disabled={menuItem.disabled}
             >
