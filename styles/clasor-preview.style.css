@@ -15,15 +15,23 @@
 }
 
 .clasor-preview-content__render-server-content *:not(.clasor-editor-content *):not([style*="text-align"]) {
-  direction: rtl;
+  text-align: right;
 }
 
 /* All elements inside clasor-editor-content and without inline text-align get LTR */
 .clasor-preview-content__render-server-content .clasor-editor-content *:not([style*="text-align"]) {
-  direction: ltr;
+  text-align: left;
 }
 
 /* Elements with inline text-align maintain their own alignment */
 .clasor-preview-content__render-server-content [style*="text-align"] {
-  direction: inherit;
+  text-align: inherit;
+}
+
+.clasor-preview-content__render-server-content figure img {
+  width: unset;
+}
+
+.clasor-preview-content__render-server-content table {
+  width: 100%;
 }
