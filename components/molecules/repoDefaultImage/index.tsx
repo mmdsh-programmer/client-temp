@@ -27,17 +27,17 @@ const RepoDefaultImage = ({ imageHash }: IProps) => {
   const generateImage = () => {
     switch (imageHash) {
       case "red":
-        return <RepoRedIcon className="w-full h-full" />;
+        return <RepoRedIcon className="repo-red-icon w-full h-full" />;
       case "blue":
-        return <RepoBlueIcon className="w-full h-full" />;
+        return <RepoBlueIcon className="repo-blue-icon w-full h-full" />;
       case "purple":
-        return <RepoPurpleIcon className="w-full h-full" />;
+        return <RepoPurpleIcon className="repo-purple-icon w-full h-full" />;
       case "yellow":
-        return <RepoYellowIcon className="w-full h-full" />;
+        return <RepoYellowIcon className="repo-yellow-icon w-full h-full" />;
       default:
         return (
           <ImageComponent
-            className="object-cover max-h-full"
+            className="repo-image object-cover max-h-full"
             alt="repo-image"
             src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${imageHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
           />

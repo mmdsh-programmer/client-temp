@@ -34,6 +34,7 @@ const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
           setRequest(request);
         }
       },
+      className: "repo-draft-request__accept-request",
     },
     {
       text: "رد درخواست",
@@ -44,11 +45,12 @@ const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
           setRequest(request);
         }
       },
+      className: "repo-draft-request__reject-request",
     },
   ];
 
   return showDrawer ? (
-    <div className="xs:hidden flex">
+    <div className="repo-draft-request-menu xs:hidden flex">
       <DrawerTemplate
         openDrawer={openRequestActionDrawer}
         setOpenDrawer={setOpenRequestActionDrawer}
@@ -67,6 +69,7 @@ const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
           <MoreDotIcon className="w-4 h-4" />
         </div>
       }
+      className="repo-draft-request-menu"
     />
   );
 };

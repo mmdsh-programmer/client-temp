@@ -65,9 +65,9 @@ const DocumentType = ({
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <form className="flex flex-col gap-5" onSubmit={handleSelectType}>
+        <form className="document-type flex flex-col gap-5" onSubmit={handleSelectType}>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
               <Spinner className="h-5 w-5" color="deep-purple" />
@@ -76,7 +76,7 @@ const DocumentType = ({
             <div className="flex flex-col gap-2">
               <Typography className="form_label">نوع سند</Typography>
               <SelectAtom
-                className="w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
+                className="document-type__select w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
                 defaultOption={defaultOption}
                 options={typeOptions}
                 selectedOption={type}

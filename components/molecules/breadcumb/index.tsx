@@ -45,7 +45,7 @@ const Breadcrumb = () => {
 
     if (list.length > 3) {
       return (
-        <div className="flex items-center">
+        <div className="breadcumb-list flex items-center">
           <div className="flex items-center">
             <Typography className="text-xs xs:text-sm font-iranYekan mx-2 text-secondary">
               ...

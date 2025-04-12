@@ -39,6 +39,7 @@ const WhiteBlackAlertDialog = ({ type, onClose }: IProps) => {
       isPending={listHook.isPending}
       onSubmit={handleSubmit}
       backToMain
+      className="access-publishing-alert-dialog"
     >
       سند مورد نظر از قبل دارای کاربرانی از لیست{" "}
       {type === "black-list" ? "سیاه" : "سفید"} است. ابتدا باید این لیست خالی

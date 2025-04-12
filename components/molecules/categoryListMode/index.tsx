@@ -7,9 +7,9 @@ import { useRecoilState } from "recoil";
 const CategoryListMode: React.FC = () => {
   const [getListMode, setListMode] = useRecoilState(categoryListModeAtom);
   return (
-    <div className="flex gap-2">
+    <div className="category-list-mode flex gap-2">
       <Button
-        className={`rounded-lg p-1 flex justify-center items-center h-9 w-9
+        className={`table-mode rounded-lg p-1 flex justify-center items-center h-9 w-9
     ${getListMode === "table" ? "bg-white !shadow-lg" : "bg-transparent"}`}
         onClick={() => {
           setListMode("table");
@@ -18,7 +18,7 @@ const CategoryListMode: React.FC = () => {
         <MoreLineIcon className="h-4 w-4 stroke-icon-active" />
       </Button>
       <Button
-        className={`rounded-lg p-1  flex justify-center items-center h-9 w-9
+        className={`tree-mode rounded-lg p-1  flex justify-center items-center h-9 w-9
     ${getListMode === "tree" ? "bg-white !shadow-lg" : "bg-transparent"}`}
         onClick={() => {
           setListMode("tree");

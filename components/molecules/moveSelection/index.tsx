@@ -41,7 +41,7 @@ const MoveSelection = ({ target }: IProps) => {
     >
       <Button
         onClick={toggleDropdown}
-        className={`w-full justify-between pr-3 pl-2 h-12 border-[1px] border-normal
+        className={`move-${target}__select w-full justify-between pr-3 pl-2 h-12 border-[1px] border-normal
     flex items-center leading-[18.2px] -tracking-[0.13px]
      truncate text-[13px] text-primary font-iranYekan font-normal gap-x-2
     bg-transparent rounded-md focus:outline-none lowercase`}

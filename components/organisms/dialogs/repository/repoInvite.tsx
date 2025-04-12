@@ -56,7 +56,7 @@ const RepoInvite = () => {
   return isFetchingRoles ? (
     <Spinner color="deep-purple" />
   ) : (
-    <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+    <form className="repo-invite-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">
         <label htmlFor="title" className="text-sm text-primary font-normal">
           اشتراک گذاری با
@@ -67,13 +67,13 @@ const RepoInvite = () => {
             type="text"
             placeholder="شناسه پادی"
             {...register("username")}
-            className="flex-grow bg-transparent px-[15px] py-[9px] rounded-[4px] focus:px-[15px] focus:outline-none text-[13px] 
+            className="repo-invite-form__input flex-grow bg-transparent px-[15px] py-[9px] rounded-[4px] focus:px-[15px] focus:outline-none text-[13px] 
                font-iranYekan font-normal text-primary placeholder:text-placeholder w-full
                 outline-none"
           />
           <select
             id="user-create-role"
-            className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
+            className="repo-invite-form__select text-[14px] font-iranYekan outline-none bg-transparent text-primary"
             {...register("accessName")}
           >
             {getRoles?.map((item: IRoles) => {
@@ -93,7 +93,7 @@ const RepoInvite = () => {
           ) : (
             <button
               disabled={isPending}
-              className="font-iranYekan mr-2 bg-white py-0 px-3 rounded-lg"
+              className="repo-invite-form__button font-iranYekan mr-2 bg-white py-0 px-3 rounded-lg"
             >
               دعوت
             </button>

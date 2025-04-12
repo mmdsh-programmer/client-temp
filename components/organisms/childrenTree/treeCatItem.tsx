@@ -77,7 +77,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
 
   return catItem.type === "category" ? (
     <div
-      className={`flex flex-col items-start ${catItem.active ? "" : "bg-gray-300"}`}
+      className={`flex flex-col items-start ${catItem.active ? "" : "bg-gray-300"} category-tree-item`}
     >
       <div className="flex">
         {move && (

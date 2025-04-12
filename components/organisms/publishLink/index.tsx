@@ -22,7 +22,7 @@ const PublishLink = () => {
   };
 
   return (
-    <div className="share-link-content mt-4 w-full overflow-auto bg-white">
+    <div className="repo-publish-link mt-4 w-full overflow-auto bg-white">
       <div className=" bg-gray-200 w-full" />
       <div className="pt-6 px-2">
         {getRepo?.isPublish ? (
@@ -31,7 +31,7 @@ const PublishLink = () => {
               مخزن شما قبلا انتشار یافته. آیا می‌خواهید آن را لغو کنید؟
             </Typography>
             <LoadingButton
-              className="self-end bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="repo-publish-link__delete-publish-button self-end bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
               onClick={handleDelete}
               loading={deletePublishLink.isPending}
             >

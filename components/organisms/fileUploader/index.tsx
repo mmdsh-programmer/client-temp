@@ -164,16 +164,16 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
         />
         {/*  eslint-disable-next-line no-nested-ternary */}
         {failed ? (
-          <Button className="bg-transparent p-0" onClick={retryUpload}>
+          <Button className="uploaded-file__retry-button bg-transparent p-0" onClick={retryUpload}>
             <ReloadIcon className="h-6 w-6" />
           </Button>
         ) : progress && progress === 100 ? (
-          <Button className="bg-transparent p-0">
+          <Button className="uploaded-file__success-button bg-transparent p-0">
             <TickIcon className="h-5 w-5 fill-[#249e00]" />
           </Button>
         ) : (
           <Button
-            className="bg-transparent p-0"
+            className="uploaded-file__delete-button bg-transparent p-0"
             onClick={() => {
               return onDeleteFile?.(file);
             }}
@@ -182,14 +182,14 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
             <DeleteIcon className="h-5 w-5 fill-icon-hover" />
           </Button>
         )}
-        <div className="flex flex-col flex-grow items-end max-w-[90%]">
+        <div className="uploaded-file__file-info flex flex-col flex-grow items-end max-w-[90%]">
           <Typography
-            className="title_t2 text-primary truncate max-w-full"
+            className="uploaded-file__file-name title_t2 text-primary truncate max-w-full"
             dir="ltr"
           >
             {file.name}
           </Typography>
-          <Typography className="title_t4 flex justify-end text-hint">
+          <Typography className="uploaded-file__file-size title_t4 flex justify-end text-hint">
             {fileSizeInKB < 1000
               ? `${fileSizeInKB.toFixed(2)} کیلوبایت`
               : `${fileSizeInMB?.toFixed(2)} مگابایت`}
@@ -216,14 +216,14 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
     };
   }, []);
   return (
-    <div className="upload-input flex w-full flex-col">
-      <div className="upload-input__file flex flex-col w-full">
+    <div className="uploaded-file flex w-full flex-col">
+      <div className="uploaded-file__item flex flex-col w-full">
         {label ? (
-          <label className="upload-input__label w-full text-base font-bold">
+          <label className="uploaded-file__label w-full text-base font-bold">
             {label}
           </label>
         ) : null}
-        <div className="upload-input__info flex items-center relative w-full btn-group">
+        <div className="uploaded-file__info flex items-center relative w-full btn-group">
           {getButtonJsx()}
         </div>
       </div>

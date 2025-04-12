@@ -37,6 +37,7 @@ const GroupDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       onSubmit={handleDelete}
       dialogHeader="حذف گروه"
+      className="repo-group-delete-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"

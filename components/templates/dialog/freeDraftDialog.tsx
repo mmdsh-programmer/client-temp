@@ -38,14 +38,14 @@ const FreeDraftDialog = ({
       size="sm"
       open
       handler={onResume}
-      className="rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0"
+      className="free-draft-dialog rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0"
       dismiss={{
         enabled: false,
       }}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <Typography className="form__title"> آزادسازی ویرایشگر </Typography>
@@ -59,14 +59,14 @@ const FreeDraftDialog = ({
       </DialogHeader>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
         <div className="body_b3 flex text-primary">
           مهلت استفاده شما از ویرایشگر به پایان رسیده.
           <br />
           آیا ادامه میدهید؟
         </div>
-        <div className="flex justify-center mt-4">
+        <div className="dialog-body__timer flex justify-center mt-4">
           <CountdownCircleTimer
             isPlaying
             size={50}
@@ -81,10 +81,10 @@ const FreeDraftDialog = ({
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !text-white flex-grow"
+          className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !text-white flex-grow"
           onClick={onResume}
           disabled={onCloseLoading || onResumeLoading}
         >
@@ -93,7 +93,7 @@ const FreeDraftDialog = ({
         <CancelButton
           onClick={onClose}
           disabled={onResumeLoading || onCloseLoading}
-          className="!flex-grow"
+          className="dialog-footer__cancel-button !flex-grow"
         >
           <Typography className="text__label__button">
             نه ، ذخیره و بستن ویرایشگر

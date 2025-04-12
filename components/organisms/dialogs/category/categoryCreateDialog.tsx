@@ -80,7 +80,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       dialogHeader="ساخت دسته بندی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="category-create-dialog"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -88,6 +88,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <FormInput
             placeholder="نام دسته بندی"
             register={{ ...register("name") }}
+            className="category-create-dialog__form-name"
           />
           {errors.name && (
             <Typography className="warning_text">
@@ -102,6 +103,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             min={0}
             placeholder="اولویت دسته بندی"
             register={{ ...register("order") }}
+            className="category-create-dialog__form-order"
           />
           {errors.order && (
             <Typography className="warning_text">
@@ -114,6 +116,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
             register={{ ...register("description") }}
+            className="category-create-dialog__form-description"
           />
           {errors.description && (
             <Typography className="warning_text">

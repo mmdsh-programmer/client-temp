@@ -44,7 +44,7 @@ const RejectDraft = ({ setOpen }: IProps) => {
       dialogHeader=" عمومی سازی نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="repo-accept-public-version-dialog"
     >
       آیا از عمومی سازی نسخه "
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">

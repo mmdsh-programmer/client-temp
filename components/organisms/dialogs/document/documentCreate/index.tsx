@@ -73,6 +73,7 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
       stepList={stepList}
       handleClose={handleClose}
       activeStep={getActiveStep}
+      className={isTemplate ? "template-create-dialog" :"document-create-dialog"}
     >
       {renderStepperContent()}
     </StepperDialog>

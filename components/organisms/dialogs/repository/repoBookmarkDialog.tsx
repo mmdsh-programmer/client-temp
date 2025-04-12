@@ -54,7 +54,7 @@ const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
       dialogHeader={repo?.bookmark ? "حذف نشان مخزن" : "نشان‌دار کردن مخزن"}
       onSubmit={handleSubmit}
       setOpen={handleClose}
-      className=""
+      className="repo-bookmark-dialog"
     >
       آیا از {repo?.bookmark ? " حذف نشان   " : "  نشان‌دار کردن  "}"
       <Typography

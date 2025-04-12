@@ -43,6 +43,7 @@ const TagMenu = ({
           setTag(tag);
         }
       },
+      className: "edit-tag__button",
     },
     {
       text: "حذف تگ",
@@ -54,11 +55,12 @@ const TagMenu = ({
           setTag(tag);
         }
       },
+      className: "delete-tag__button",
     },
   ];
 
   return showDrawer ? (
-    <div className="xs:hidden flex">
+    <div className="tag-menu xs:hidden flex">
       <DrawerTemplate
         openDrawer={openTagActionDrawer}
         setOpenDrawer={setOpenTagActionDrawer}
@@ -72,6 +74,7 @@ const TagMenu = ({
         setOpenTagActionDrawer(true);
       }}
       menuList={menuList}
+      className="tag-menu"
     />
   );
 };

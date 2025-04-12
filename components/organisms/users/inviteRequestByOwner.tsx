@@ -1,12 +1,11 @@
+import React from "react";
 import {
  Spinner,
  Typography
 } from "@material-tailwind/react";
-
 import { ERoles } from "@interface/enums";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import ImageComponent from "@components/atoms/image";
-import React from "react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
@@ -39,7 +38,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
   const renderUserRoleSection = () => {
     if (user.role === ERoles.owner) {
       return (
-        <div className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
+        <div className="repo-invite-request-by-owner__role w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
           <Typography className="select_option__text text-primary">
             {translateRoles(user.role)}
           </Typography>
@@ -54,7 +53,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
     } 
       return (
         <div
-          className="w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+          className="repo-invite-request-by-owner__delete-user w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
           onClick={handleChange}
         >
           <Typography className="select_option__text text-primary">
@@ -67,7 +66,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
 
   return (
     <div
-      className="flex items-center gap-x-[10px] h-[50px] min-h-[50px] cursor-pointer"
+      className="repo-invite-request-by-owner flex items-center gap-x-[10px] h-[50px] min-h-[50px] cursor-pointer"
       title={user.user.preferred_username}
     >
       <div className="h-8 w-8">

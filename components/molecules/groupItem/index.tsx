@@ -10,7 +10,7 @@ interface IProps {
 
 const GroupItem = ({ group }: IProps) => {
   return (
-    <div className="flex justify-between items-center gap-3">
+    <div className="repo-group-item flex justify-between items-center gap-3">
       <div className="w-10 h-10 flex justify-center items-center border-[1px] border-normal rounded-full ">
         <UserGroupIcon className="w-7 h-7 overflow-hidden" />
       </div>

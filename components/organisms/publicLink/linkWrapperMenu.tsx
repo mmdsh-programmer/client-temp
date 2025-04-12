@@ -30,7 +30,7 @@ const LinkWrapperMenu = ({ role }: IProps) => {
 
   return (
     <Button
-      className="p-0 !min-h-10 !min-w-10 border-[1px] border-normal bg-white"
+      className="public-link-delete-button p-0 !min-h-10 !min-w-10 border-[1px] border-normal bg-white"
       onClick={handleRemovePublicLink}
     >
       {deletePublicLinkHook.isPending ? (

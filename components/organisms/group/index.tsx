@@ -1,10 +1,9 @@
+import React from "react";
 import {
  Button, Typography 
 } from "@material-tailwind/react";
-
 import { AddIcon } from "@components/atoms/icons";
 import GroupList from "./groupList";
-import React from "react";
 import { createGroupAtom } from "@atom/group";
 import { useSetRecoilState } from "recoil";
 
@@ -12,7 +11,7 @@ const Groups = () => {
   const setCreateGroupModal = useSetRecoilState(createGroupAtom);
 
   return (
-    <div className="mt-4">
+    <div className="repo-groups mt-4">
       <div className="border-b-[1px] bg-gray-200 w-full" />
       <div className="pt-5 flex flex-col gap-5">
         <div className="flex items-center justify-between">
@@ -21,7 +20,7 @@ const Groups = () => {
           </Typography>
           <Button
             placeholder="create group"
-            className="flex justify-between items-center shadow-none hover:shadow-none px-1 h-8 bg-white hover:bg-transparent border-[1px] border-normal"
+            className="create-group-button flex justify-between items-center shadow-none hover:shadow-none px-1 h-8 bg-white hover:bg-transparent border-[1px] border-normal"
             onClick={() => {
               setCreateGroupModal(true);
             }}

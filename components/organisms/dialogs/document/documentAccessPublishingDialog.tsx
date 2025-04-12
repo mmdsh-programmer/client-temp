@@ -122,7 +122,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit}
       setOpen={handleClose}
       dialogHeader="محدودیت کاربران در پابلیش سند"
-      className="!min-h-[500px]"
+      className="document-limitation-dialog !min-h-[500px]"
     >
       <div className="flex flex-col gap-5">
         <div className="flex gap-5">
@@ -133,7 +133,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
             containerProps={{
               className: "p-0 ml-2",
             }}
-            className="radio !hover:shadow-none"
+            className="document-white-list__radio-button radio !hover:shadow-none"
             color="deep-purple"
             name="type"
             label="لیست سفید"
@@ -149,7 +149,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
             containerProps={{
               className: "p-0 ml-2",
             }}
-            className="!hover:shadow-none"
+            className="document-black-list__radio-button !hover:shadow-none"
             color="deep-purple"
             name="type"
             label="لیست سیاه"
