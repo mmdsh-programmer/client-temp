@@ -54,6 +54,11 @@ import {
   IGetGroups,
   IUpdateGroup,
 } from "@interface/group.interface";
+import {
+  IDomainSubscriptionList,
+  IDomainTag,
+  IDomainTagList,
+} from "@interface/domain.interface";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   IListResponse,
@@ -67,11 +72,6 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
-import {
-  IDomainSubscriptionList,
-  IDomainTag,
-  IDomainTagList,
-} from "@interface/domain.interface";
 import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
@@ -4446,13 +4446,14 @@ export const getCustomPostByDomain = async (
     const redisClient = await getRedisClient();
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
+      const cacheResult = JSON.parse(cachedDomain);
       Logger.warn(
         JSON.stringify({
           type: "Redis cache data",
-          data: cachedDomain,
+          data: cacheResult,
         })
       );
-      return JSON.parse(cachedDomain);
+      return cacheResult;
     }
     const { data } = await axiosClasorInstance.get<
       IClasorResult<IClasorDomainResult>
