@@ -40,8 +40,11 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
     reset();
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (dataForm: IForm) => {
     if (!getRepo) return;
+    if (dataForm.name !== getRepo.name) {
+      return toast.error("نام وارد شده با نام مخزن مغایرت دارد.");
+    }
     mutate({
       repoId: getRepo.id,
       callBack: () => {

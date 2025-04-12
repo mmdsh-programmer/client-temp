@@ -77,13 +77,14 @@ const VersionList = () => {
   };
 
   return (
-    <div className="p-4 xs:p-0 flex flex-col gap-4 xs:gap-6">
+    <div className="version-list p-4 xs:p-0 flex flex-col gap-4 xs:gap-6">
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
         renderDialog={(close: () => void) => {
           return <VersionCreateDialog close={close} />;
         }}
+        className="version-list-header"
       />
       <div className="hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto">
         <VersionTableView {...commonProps} />

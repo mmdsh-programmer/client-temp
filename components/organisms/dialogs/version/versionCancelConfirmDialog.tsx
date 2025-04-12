@@ -56,7 +56,7 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
       dialogHeader="لغو تایید نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="version-cancel-confirm-dialog"
     >
       آیا از لغو تایید نسخه "
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">

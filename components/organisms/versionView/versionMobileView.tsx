@@ -58,7 +58,7 @@ const VersionMobileView = ({
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div className="flex flex-col gap-3 rounded-lg overflow-auto h-[calc(100vh-140px)]">
+        <div className="version-list-mobile flex flex-col gap-3 rounded-lg overflow-auto h-[calc(100vh-140px)]">
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
@@ -114,7 +114,7 @@ const VersionMobileView = ({
                   cardAction={
                     <VersionMenu version={version} lastVersion={lastVersion} />
                   }
-                  className={`version-action ${versionModalList ? "border-[1px] border-normal" : ""}`}
+                  className={`version-mbile-item ${versionModalList ? "border-[1px] border-normal" : ""}`}
                 />
               );
             });

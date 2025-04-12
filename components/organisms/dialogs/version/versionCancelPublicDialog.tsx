@@ -45,7 +45,7 @@ const VersionCancelPublicDialog = ({ setOpen }: IProps) => {
       isDirectAccess:
         sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
-        toast.error(" .تایید نسخه لغو شد");
+        toast.error(" .عمومی سازی نسخه لغو شد");
         handleClose();
       },
     });
@@ -53,12 +53,12 @@ const VersionCancelPublicDialog = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={cancelPublicVersion.isPending}
-      dialogHeader="لغو تایید نسخه"
+      dialogHeader="لغو عمومی سازی نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="version-cancel-public-dialog"
     >
-      آیا از لغو تایید نسخه "
+      آیا از لغو عمومی سازی نسخه "
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
         {getVersion?.versionNumber}
       </span>

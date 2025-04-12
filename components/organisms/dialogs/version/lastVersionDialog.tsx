@@ -57,7 +57,7 @@ const LastVersionDialog = ({ setOpen }: IProps) => {
       dialogHeader="انتخاب به عنوان آخرین نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="set-last-version-dialog"
     >
       <p>آیا از انتخاب این نسخه به عنوان آخرین نسخه سند اطمینان دارید؟</p>
     </ConfirmDialog>

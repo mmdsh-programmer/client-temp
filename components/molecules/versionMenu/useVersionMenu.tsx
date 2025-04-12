@@ -107,6 +107,7 @@ const useVersionMenuList = (
             setVersion(version);
           }
         },
+        className: "clone-version"
       },
       {
         text: "ویرایش",
@@ -120,6 +121,7 @@ const useVersionMenuList = (
           setVersionModalList(false);
           setVersionData(null);
         },
+        className: "edit-version"
       },
 
       {
@@ -151,6 +153,7 @@ const useVersionMenuList = (
             });
           }
         },
+        className: "compare-version"
       },
       ...otherOption,
       {
@@ -166,6 +169,7 @@ const useVersionMenuList = (
             toast.success("هش مربوط به پیش نویس کپی شد.");
           }
         },
+        className: "copy-version-hash"
       },
       {
         text: "کپی آدرس اشتراک‌ گذاری",
@@ -181,6 +185,7 @@ const useVersionMenuList = (
             toast.success("آدرس کپی شد.");
           }
         },
+        className: "copy-version-url"
       },
       {
         text: version?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه",
@@ -192,6 +197,7 @@ const useVersionMenuList = (
             setVersion(version);
           }
         },
+        className: "delete-version"
       },
     ];
   };
@@ -218,7 +224,8 @@ const useVersionMenuList = (
           toggleModal("cancelConfirm", true);
         }
       },
-    },
+      className: (version?.status === "editing" && "confirm-version") || 
+      (version?.status === "pending" && "cancel-confirm-version")    },
   ];
 
   const privateVersionOption = [
@@ -245,6 +252,8 @@ const useVersionMenuList = (
               }
             }
           },
+          className: (version?.status === "private" && "public-version") || 
+            (version?.status === "private" && "cancel-public-version")
         }
       : null,
     version?.id !== lastVersion?.id
@@ -257,6 +266,7 @@ const useVersionMenuList = (
               setVersion(version);
             }
           },
+          className: "set-last-version"
         }
       : null,
   ].filter(Boolean) as MenuItem[];

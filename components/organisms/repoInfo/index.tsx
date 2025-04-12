@@ -9,11 +9,9 @@ import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
-import useGetUser from "@hooks/auth/useGetUser";
 
 const RepoInfo = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const { data: userInfo } = useGetUser();
 
   return (
     <div className="repo-info rounded-none xs:rounded-lg bg-primary flex p-4 shadow-small">
@@ -47,10 +45,7 @@ const RepoInfo = () => {
               {getRepo?.description}
             </Typography>
             <div className="mt-2 sm:mt-4 md:mt-2 lg:mt-4">
-              {getRepo && userInfo?.domainConfig.useDomainTag && 
-              (userInfo?.domainRole === "owner" || 
-              userInfo.domainRole === "participant") ? <TagList repoId={getRepo.id} /> : null}
-              {getRepo && !userInfo?.domainConfig.useDomainTag ? <TagList repoId={getRepo.id} /> : null}
+              {getRepo ? <TagList repoId={getRepo.id} /> : null}
             </div>
           </div>
         </div>
