@@ -63,6 +63,7 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
             onSubmit={handleSubmit(onSubmit)}
             setOpen={handleClose}
             dialogHeader="ایجاد لینک انتشار"
+            className="create-publish-link-dialog"
         >
             <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-2">
@@ -79,6 +80,7 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
                             setHasExpireTime(!hasExpireTime);
                         }}
                         containerProps={{ className: "-mr-3" }}
+                        className="expire-time__checkbox"
                     />
                     {hasExpireTime ? (
                         <>

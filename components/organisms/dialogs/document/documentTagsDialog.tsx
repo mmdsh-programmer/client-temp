@@ -85,7 +85,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
     <ConfirmFullHeightDialog
       dialogHeader="تگ‌های سند"
       setOpen={handleClose}
-      className="min-h-[350px]"
+      className="document-tags-dialog min-h-[350px]"
       isPending={editDocument.isPending || setDocumentTags.isPending}
       onSubmit={handleSubmit}
     >

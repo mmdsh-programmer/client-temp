@@ -50,6 +50,7 @@ const RepoInfo = () => {
               {getRepo && userInfo?.domainConfig.useDomainTag && 
               (userInfo?.domainRole === "owner" || 
               userInfo.domainRole === "participant") ? <TagList repoId={getRepo.id} /> : null}
+              {getRepo && !userInfo?.domainConfig.useDomainTag ? <TagList repoId={getRepo.id} /> : null}
             </div>
           </div>
         </div>

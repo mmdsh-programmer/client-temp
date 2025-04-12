@@ -52,7 +52,7 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
   return (
     <>
       {showDrawer ? (
-        <div className="xs:hidden flex">
+        <div className="category-menu xs:hidden flex">
           <DrawerTemplate
             openDrawer={openCategoryActionDrawer}
             setOpenDrawer={setOpenCategoryActionDrawer}
@@ -75,6 +75,7 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
                 <MoreDotIcon className="w-4 h-4" />
               </div>
             }
+            className="category-menu"
           />
         </div>
       )}

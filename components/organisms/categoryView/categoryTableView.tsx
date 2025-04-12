@@ -47,7 +47,7 @@ const TableView = ({
   const renderContent = () => {
     if (listLength) {
       return (
-        <div className="px-5 py-4 overflow-auto">
+        <div className="category-table-view px-5 py-4 overflow-auto">
           <div className="w-full border-[0.5px] overflow-auto border-normal rounded-lg">
             <table className="w-full overflow-hidden min-w-max table-auto">
               <TableHead

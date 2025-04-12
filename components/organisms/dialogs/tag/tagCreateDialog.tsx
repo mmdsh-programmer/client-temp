@@ -81,7 +81,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
       dialogHeader="ساخت تگ"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "
+      className="tag-create-dialog h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "
     >
       <form className="flex flex-col gap-6 ">
         <div className="flex flex-col gap-2">
@@ -89,6 +89,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
           <FormInput
             placeholder="نام تگ"
             register={{ ...register("name", { value: name?.toString() }) }}
+            className="tag-create-dialog__name"
           />
           {errors.name && (
             <Typography className="warning_text">
@@ -107,6 +108,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
                 register={{
                   ...register("order"),
                 }}
+                className="tag-create-dialog__priority"
               />
               {errors.order && (
                 <Typography className="warning_text">
@@ -121,6 +123,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
                 register={{
                   ...register("description"),
                 }}
+                className="tag-create-dialog__description"
               />
               {errors.description && (
                 <Typography className="warning_text">

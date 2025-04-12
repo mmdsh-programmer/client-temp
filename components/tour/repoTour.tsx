@@ -228,7 +228,7 @@ const RepoTour = () => {
         ساخت تگ نام تگ مورد نظر را وارد کنید.
         </p>
       </div>`,
-        ".repoTags",
+        ".createTag",
         "bottom",
       ),
     ];

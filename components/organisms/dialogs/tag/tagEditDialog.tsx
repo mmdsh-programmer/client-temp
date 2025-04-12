@@ -101,7 +101,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       dialogHeader="ویرایش تگ"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="tag-edit-dialog"
       backToMain
     >
       <form className="flex flex-col gap-6">
@@ -114,6 +114,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                 value: getTag?.name,
               }),
             }}
+            className="tag-edit-dialog__name"
           />
           {errors.name && (
             <Typography className="warning_text">
@@ -134,6 +135,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                     value: (getTag as IDomainTag)?.order,
                   }),
                 }}
+                className="tag-edit-dialog__priority"
               />
               {errors.order && (
                 <Typography className="warning_text">
@@ -150,6 +152,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                     value: (getTag as IDomainTag)?.description,
                   }),
                 }}
+                className="tag-edit-dialog__description"
               />
               {errors.description && (
                 <Typography className="warning_text">

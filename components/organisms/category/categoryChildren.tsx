@@ -93,13 +93,13 @@ const CategoryChildren = () => {
           <div className="category-children hidden xs:block">
             <TableView {...commonProps} />
           </div>
-          <div className="block xs:hidden">
+          <div className="category-children block xs:hidden">
             <MobileView {...commonProps} />
           </div>
         </>
       </RenderIf>
       <RenderIf isTrue={getListMode === "tree"}>
-        <div className="bg-white min-h-[calc(100vh-340px)] h-full">
+        <div className="category-children__tree bg-white min-h-[calc(100vh-340px)] h-full">
         <ChildrenTree move={false} enableAction />
         </div>
       </RenderIf>

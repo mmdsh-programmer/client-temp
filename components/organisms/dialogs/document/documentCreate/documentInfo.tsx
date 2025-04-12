@@ -37,13 +37,13 @@ const DocumentInfo = () => {
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="document-info-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
             <Typography className="form_label">نام سند</Typography>
             <FormInput
-              className="w-full"
+              className="document-info-form__name w-full"
               placeholder="نام سند"
               register={{
                 ...register("title", { value: getDocumentInfo?.title }),
@@ -58,7 +58,7 @@ const DocumentInfo = () => {
           <div className="flex flex-col gap-2">
             <Typography className="form_label">اولویت سند </Typography>
             <FormInput
-              className="w-full"
+              className="document-info-form__order w-full"
               placeholder="اولویت سند"
               type="number"
               min={1}
@@ -75,7 +75,7 @@ const DocumentInfo = () => {
           <div className="flex flex-col gap-2">
             <Typography className="form_label">توضیحات سند</Typography>
             <TextareaAtom
-              className="w-full"
+              className="document-info-form__description w-full"
               placeholder="توضیحات سند"
               register={{
                 ...register("description", {

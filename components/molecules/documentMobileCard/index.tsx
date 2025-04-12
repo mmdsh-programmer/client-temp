@@ -70,6 +70,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
 
   return (
     <MobileCard
+      className="document-mobile-card"
       name={
         <div className="flex items-center gap-2 w-full">
           <Checkbox

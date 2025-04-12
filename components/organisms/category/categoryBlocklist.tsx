@@ -45,7 +45,7 @@ const CategoryBlockList = () => {
         {isLoading || isFetching ? (
           <Spinner className="h-6 w-6" color="deep-purple" />
         ) : (
-          <div className="flex flex-wrap gap-2">
+          <div className="category-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
               return page.list.length ? (
                 page.list.map((blockItem) => {
@@ -53,7 +53,7 @@ const CategoryBlockList = () => {
                     <ChipMolecule
                       key={blockItem.userInfo.userName}
                       value={blockItem.userInfo.name}
-                      className="w-auto border-[1px] border-normal pl-2 text-primary"
+                      className="block-item w-auto border-[1px] border-normal pl-2 text-primary"
                       icon={
                         blockItem.userInfo.img ? (
                           <ImageComponent
@@ -70,7 +70,7 @@ const CategoryBlockList = () => {
                           <Spinner className="h-4 w-4" color="deep-purple" />
                         ) : (
                           <Button
-                            className="bg-transparent p-0"
+                            className="delete-button bg-transparent p-0"
                             onClick={() => {
                               handleDelete(blockItem.userInfo.userName);
                             }}

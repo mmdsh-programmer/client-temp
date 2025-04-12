@@ -21,7 +21,7 @@ const MobileView = ({
   const listLength = getCategoryList?.pages[0].total;
 
   return (
-    <div className=" px-4 flex-grow flex-shrink-0">
+    <div className="category-mobile-view px-4 flex-grow flex-shrink-0">
       <div className="flex flex-col">
         <CategoryBreadCrumb />
       </div>
@@ -30,7 +30,7 @@ const MobileView = ({
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div className="flex flex-col gap-3">
+        <div className="category-list flex flex-col gap-3">
           {getCategoryList?.pages.map((page) => {
             return page.list.map((item) => {
               return item ? (
