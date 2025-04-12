@@ -67,7 +67,7 @@ const BulkMoveDialog = ({ setOpen }: IProps) => {
       dialogHeader="انتقال موارد انتخاب شده"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="min-h-[350px]"
+      className="bulk-move-dialog min-h-[350px]"
     >
       <MoveSelection target="category" />
     </ConfirmFullHeightDialog>

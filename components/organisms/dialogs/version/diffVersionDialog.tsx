@@ -43,7 +43,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="مقایسه نسخه"
       setOpen={setOpen}
-      className="!min-w-[80%] !h-full overflow-auto"
+      className="version-compare-dialog !min-w-[80%] !h-full overflow-auto"
     >
       {getVersionHook.isFetching || getCompareHook.isFetching ? (
         <div className="flex w-full h-full justify-center items-center">

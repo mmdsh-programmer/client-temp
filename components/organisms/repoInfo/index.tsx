@@ -9,11 +9,9 @@ import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
 import ChipMolecule from "@components/molecules/chip";
-import useGetUser from "@hooks/auth/useGetUser";
 
 const RepoInfo = () => {
   const getRepo = useRecoilValue(repoAtom);
-  const { data: userInfo } = useGetUser();
 
   return (
     <div className="repo-info rounded-none xs:rounded-lg bg-primary flex p-4 shadow-small">

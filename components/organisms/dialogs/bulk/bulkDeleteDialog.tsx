@@ -69,6 +69,7 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
       dialogHeader="حذف موارد انتخاب‌ شده"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
+      className="bulk-delete-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف موارد انتخاب شده مطمئن هستید؟

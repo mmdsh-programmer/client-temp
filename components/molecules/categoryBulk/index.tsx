@@ -17,7 +17,7 @@ const CategoryBulk = () => {
   const [openMoveDialog, setOpenMoveDialog] = useState<boolean | null>(null);
   return (
     <>
-      <div className="hidden xs:flex font-iranYekan z-[9999] h-9 absolute bottom-[5%] right-[calc(50vw-180px)] rounded-lg bg-gray-900 ">
+      <div className="category-bulk hidden xs:flex font-iranYekan z-[9999] h-9 absolute bottom-[5%] right-[calc(50vw-180px)] rounded-lg bg-gray-900 ">
         <div className="flex h-full items-center justify-evenly">
           <div className="flex items-center justify-center gap-2 pr-3 pl-4">
             <InfoIcon className="h-6 w-6 stroke-white " />
@@ -30,7 +30,7 @@ const CategoryBulk = () => {
           </div>
           <div className="border-r-2 border-gray-500 h-full" />
           <Button
-            className="label_l2 px-4 h-full"
+            className="move label_l2 px-4 h-full"
             onClick={() => {
               setOpenMoveDialog(true);
             }}
@@ -39,7 +39,7 @@ const CategoryBulk = () => {
           </Button>
           <div className="border-r-2 border-gray-500 h-full" />
           <Button
-            className="label_l2 px-4 h-full"
+            className="delete label_l2 px-4 h-full"
             onClick={() => {
               setOpenDeleteDialog(true);
             }}
@@ -48,7 +48,7 @@ const CategoryBulk = () => {
           </Button>
           <div className="border-r-2 border-gray-500 h-full" />
           <Button
-            className="label_l2 px-2 h-full"
+            className="cancel label_l2 px-2 h-full"
             onClick={() => {
               setBulkItems([]);
             }}
@@ -57,9 +57,9 @@ const CategoryBulk = () => {
           </Button>
         </div>
       </div>
-      <div className="absolute w-full bottom-0 mt-4 p-4 flex gap-x-2 justify-between items-center xs:hidden bg-white">
+      <div className="category-bulk absolute w-full bottom-0 mt-4 p-4 flex gap-x-2 justify-between items-center xs:hidden bg-white">
         <div
-          className="flex flex-col items-center cursor-pointer"
+          className="move flex flex-col items-center cursor-pointer"
           onClick={() => {
             setOpenMoveDialog(true);
           }}
@@ -68,7 +68,7 @@ const CategoryBulk = () => {
           <p className="text-[10px]">انتقال</p>
         </div>
         <div
-          className="flex flex-col items-center cursor-pointer"
+          className="delete flex flex-col items-center cursor-pointer"
           onClick={() => {
             setOpenDeleteDialog(true);
           }}
@@ -77,7 +77,7 @@ const CategoryBulk = () => {
           <p className="text-[10px]">حذف</p>
         </div>
         <div
-          className="flex flex-col items-center cursor-pointer"
+          className="cancel flex flex-col items-center cursor-pointer"
           onClick={() => {
             setBulkItems([]);
           }}

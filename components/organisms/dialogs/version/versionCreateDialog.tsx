@@ -77,7 +77,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
       dialogHeader="ایجاد نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="version-create-dialog"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
