@@ -49,7 +49,7 @@ const DocumentVisibleDialog = ({ setOpen }: IProps) => {
       dialogHeader=" عدم مخفی سازی  سند"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="doccument-visible-dialog"
     >
       آیا از عدم مخفی سازی"
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">

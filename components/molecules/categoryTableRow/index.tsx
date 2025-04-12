@@ -45,6 +45,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
       onClick={() => {
         return handleRowClick(categoryProp);
       }}
+      className="category-table-row"
       tableCell={[
         {
           data: (

@@ -41,6 +41,7 @@ const CategoryMobileCard = ({ category }: IProps) => {
 
   return (
     <MobileCard
+      className="category-mobile-card"
       name={
         <div className="flex items-center gap-2 w-full">
           <Checkbox

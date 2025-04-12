@@ -81,6 +81,7 @@ const useDocumentMenuList = ({
           setDocument(document);
         }
       },
+      className: "document-edit-content"
     },
     {
       text: "ویرایش سند",
@@ -92,6 +93,7 @@ const useDocumentMenuList = ({
         toggleModal("editDocument", true);
         if (document) setDocument(document);
       },
+      className: "document-edit"
     },
     {
       text: "تگ های سند",
@@ -102,6 +104,7 @@ const useDocumentMenuList = ({
           setDocument(document);
         }
       },
+      className: "document-edit-tags"
     },
   ];
 
@@ -122,6 +125,7 @@ const useDocumentMenuList = ({
         toggleModal(document?.isHidden ? "visible" : "hide", true);
         if (document) setDocument(document);
       },
+      className: `${document?.isHidden ? "document-visible" : "document-hide"}`
     },
     {
       text: "محدودیت کاربران",
@@ -136,6 +140,7 @@ const useDocumentMenuList = ({
         toggleModal("documentAccessPublishing", true);
         if (document) setDocument(document);
       },
+      className: "document-limitation"
     },
     ...(document?.hasPassword
       ? [
@@ -152,6 +157,7 @@ const useDocumentMenuList = ({
               toggleModal("updatePassword", true);
               if (document) setDocument(document);
             },
+            className: "document-edit-password"
           },
           {
             text: "حذف رمز عبور",
@@ -166,6 +172,7 @@ const useDocumentMenuList = ({
               toggleModal("deletePassword", true);
               if (document) setDocument(document);
             },
+            className: "document-delete-password"
           },
         ]
       : [
@@ -182,6 +189,7 @@ const useDocumentMenuList = ({
               toggleModal("createPassword", true);
               if (document) setDocument(document);
             },
+            className: "document-create-password"
           },
         ]),
   ];
@@ -198,6 +206,7 @@ const useDocumentMenuList = ({
           );
           window.open(url, "_blank");
         },
+        className: "document-copy-publish-link"
       },
       {
         text: "حذف لینک انتشار",
@@ -213,6 +222,7 @@ const useDocumentMenuList = ({
           toggleModal("deletePublishLink", true);
           if (document) setDocument(document);
         },
+        className: "document-delete-publish-link"
       },
   ];
 
@@ -233,6 +243,7 @@ const useDocumentMenuList = ({
         toggleModal("bookmarkDocument", true);
         if (document) setDocument(document);
       },
+      className: `${document?.isBookmarked ? "document-delete-bookmark" : "document-bookmark"}`
     },
     {
       text: "انتقال",
@@ -245,6 +256,7 @@ const useDocumentMenuList = ({
         toggleModal("move", true);
         if (document) setDocument(document);
       },
+      className: "document-move"
     },
     {
       text: "نسخه های سند",
@@ -256,6 +268,7 @@ const useDocumentMenuList = ({
           setDocumentShow(document);
         }
       },
+      className: "document-version-list"
     },
     {
       text: "دسترسی مستقیم به سند",
@@ -268,6 +281,7 @@ const useDocumentMenuList = ({
         toggleModal("documentDirectAccess", true);
         if (document) setDocument(document);
       },
+      className: "document-direct-access"
     },
     {
       text: "محدودیت دسترسی در پنل",
@@ -282,6 +296,7 @@ const useDocumentMenuList = ({
         toggleModal("documentAccess", true);
         if (document) setDocument(document);
       },
+      className: "document-access"
     },
     ...(document?.isPublish ?  [{
       text: "سند منتشر شده",
@@ -302,6 +317,7 @@ const useDocumentMenuList = ({
         toggleModal("createPublishLink", true);
         if (document) setDocument(document);
       },
+      className: "document-create-publish-link"
     }]),
     {
       text: "محدودیت در انتشار",
@@ -321,6 +337,7 @@ const useDocumentMenuList = ({
         toggleModal("deleteDocument", true);
         if (document) setDocument(document);
       },
+      className: "document-delete"
     },
   ];
 

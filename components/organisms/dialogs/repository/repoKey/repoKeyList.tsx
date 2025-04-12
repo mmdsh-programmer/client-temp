@@ -93,6 +93,7 @@ const RepoKeyList = ({
             return (
               <TableCell
                 key={`publick-key-table-item-${key.id}`}
+                className="public-key-table-item"
                 tableCell={
                   hasAction && getRepo?.roleName === ERoles.owner
                     ? [

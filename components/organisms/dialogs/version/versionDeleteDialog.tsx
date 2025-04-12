@@ -46,7 +46,7 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       isDirectAccess:
         sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
-        toast.error(" نسخه حذف شد.");
+        toast.success(" نسخه حذف شد.");
         handleClose();
       },
     });

@@ -62,12 +62,12 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="محدودیت دسترسی در پنل"
       setOpen={handleClose}
-      className="min-h-[350px]"
+      className="document-access-dialog min-h-[350px]"
     >
       <DialogBody>
         <form className="flex flex-col gap-6">
           <div className="flex gap-2">
-            <div className="flex-grow">
+            <div className="document-access-dialog flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
                 handleSelect={(val) => {
@@ -77,7 +77,7 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
               />
             </div>
             <LoadingButton
-              className="!h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="add-button !h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
               onClick={handleBlock}
               loading={blockDocument.isPending}
               disabled={!value}
