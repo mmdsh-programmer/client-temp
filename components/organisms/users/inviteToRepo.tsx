@@ -69,19 +69,19 @@ const InviteToRepo = () => {
       <Spinner color="deep-purple" />
     </div>
   ) : (
-    <form className="pb-6" onSubmit={handleSubmit(onSubmit)}>
+    <form className="repo-invite-form pb-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2 my-4">
         <div className="flex flex-col gap-2">
           <Typography className="label"> اشتراک گذاری با </Typography>
           <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
             <InputAtom
               id="username"
-              className="!w-auto h-auto overflow-hidden !p-0 border-none"
+              className="repo-invite-form__input !w-auto h-auto overflow-hidden !p-0 border-none"
               placeholder="شناسه پادی"
               register={{ ...register("username") }}
             />
             <SelectAtom
-              className="w-auto"
+              className="repo-invite-form__select w-auto"
               defaultOption={rolesOption?.[0]}
               options={rolesOption}
               selectedOption={role}
@@ -95,7 +95,7 @@ const InviteToRepo = () => {
             <LoadingButton
               loading={isPending}
               onClick={handleSubmit(onSubmit)}
-              className="!h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+              className="repo-invite-form__button !h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
             >
               <Typography className="text__label__button !text-primary font-medium">
                 دعوت

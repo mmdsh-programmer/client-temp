@@ -70,6 +70,10 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     }
 
     if (getDocumentTemplate) {
+      if (getDocumentType !== EDocumentTypes.classic) {
+        toast.error("ساخت سند از روی نمونه سند فقط برای محتوای کلاسور امکان‌پذیر است.");
+        return;
+      }
       createDocFromTemplateHook.mutate({
         repoId,
         categoryId: getCategory?.id || getCategoryShow?.id || null,
@@ -79,6 +83,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         order: getDocumentInfo.order || null,
         versionNumber: dataForm.versionNumber,
         templateId: getDocumentTemplate.id,
+        publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         callBack: () => {
           toast.success("سند مورد نظر با موفقیت ایجاد گردید.");
           setOpen(false);
@@ -143,13 +148,13 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="document-version-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
             <Typography className="form_label">نام نسخه</Typography>
             <FormInput
-              className="w-full"
+              className="document-version-form__name w-full"
               placeholder="نام نسخه"
               register={{
                 ...register("versionNumber", { required: true }),

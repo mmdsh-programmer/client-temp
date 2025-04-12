@@ -63,7 +63,7 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
       <div className="block xs:hidden">
         <BackButton onClick={handleClose} />
       </div>
-      <Typography className="title_t1">{dialogHeader}</Typography>
+      <Typography className="editor-header__title title_t1">{dialogHeader}</Typography>
       <div className="hidden xs:flex items-center gap-2">
         {editorMode === "preview" || editorMode === "temporaryPreview" ? (
           <DownloadPDF />
@@ -72,7 +72,7 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
       </div>
     </>
   ) : (
-    <Typography className="title_t1">{dialogHeader}</Typography>
+    <Typography className="editor-header__title title_t1">{dialogHeader}</Typography>
   );
 };
 

@@ -20,12 +20,13 @@ const RepoAttachCustomImage = ({
   imageHash,
 }: IProps) => {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="repo-attach-image flex flex-col gap-6">
       <div className="flex flex-col gap-4">
         <Radio
           crossOrigin="anonymous"
           name="default_image"
           color="deep-purple"
+          className="repo-attach-default-image__radio"
           label={
             <div>
               <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
@@ -77,12 +78,13 @@ const RepoAttachCustomImage = ({
           onChange={() => {
             setImageType("custom");
           }}
+          className="repo-attach-custom-image__radio"
         />
         <Button
           onClick={() => {
             setOpenFileManagement(true);
           }}
-          className="p-0 flex justify-center items-center rounded-lg border-[1px] border-dashed border-normal bg-secondary w-[82px] h-[82px]"
+          className="repo-attach-custom-image-button p-0 flex justify-center items-center rounded-lg border-[1px] border-dashed border-normal bg-secondary w-[82px] h-[82px]"
           placeholder=""
           disabled={imageType !== "custom"}
         >

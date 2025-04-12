@@ -22,23 +22,25 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
     <InfoDialog
       setOpen={handleClose}
       dialogHeader="لیست درخواست‌ها"
-      className="xs:!min-w-[450px] xs:!max-w-[450px]"
+      className="join-to-repo-requests__dialog xs:!min-w-[450px] xs:!max-w-[450px]"
     >
       <DialogBody
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6 overflow-auto h-[450px]"
       >
         {isLoading ? (
+          <div className="flex justify-center items-center w-full">
           <Spinner className="w-6 h-6" color="deep-purple" />
+          </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="join-to-repo-request-list flex flex-col gap-3">
             {requests?.pages.map((page) => {
               return page.total ? (
                 page.list.map((request) => {
                   return (
                     <div
                       key={request.id}
-                      className="flex justify-between items-center border-[1px] border-normal p-4 rounded-lg"
+                      className="request-item flex justify-between items-center border-[1px] border-normal p-4 rounded-lg"
                     >
                       <div className="flex flex-grow gap-1">
                         <Typography

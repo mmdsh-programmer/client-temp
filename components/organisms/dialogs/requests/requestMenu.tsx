@@ -31,13 +31,13 @@ const RequestMenu = ({ request }: IProps) => {
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="request-menu flex gap-3">
       {acceptRequest.isPending || rejectRequest.isPending ? (
         <Spinner className="h-5 w-5" color="deep-purple" />
       ) : (
         <>
           <Button
-            className="w-16 xs:w-20 h-8 hover:bg-gray-50 bg-gray-50 "
+            className="request-menu__reject-button w-16 xs:w-20 h-8 hover:bg-gray-50 bg-gray-50 "
             onClick={handleRejectRequest}
           >
             <Typography className="text__label__button text-primary">
@@ -45,7 +45,7 @@ const RequestMenu = ({ request }: IProps) => {
             </Typography>
           </Button>
           <Button
-            className="w-16 xs:w-20 h-8 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="request-menu__accept-button w-16 xs:w-20 h-8 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
             onClick={handleAcceptRequest}
           >
             <Typography className="text__label__button text-white">

@@ -81,7 +81,7 @@ const LinkWrapper = ({ role }: IProps) => {
             <div className="flex items-center">
               {readLink() ? (
                 <Button
-                  className="bg-white p-0 h-7 w-8 rounded-none"
+                  className="repo-link-wrapper__copy-link-button bg-white p-0 h-7 w-8 rounded-none"
                   onClick={() => {
                     copy(
                       `${subscribeLink}/${readLink()?.link}${
@@ -101,7 +101,7 @@ const LinkWrapper = ({ role }: IProps) => {
           ) : (
             <Button
               onClick={handleOpenShareAccess}
-              className="p-0 h-10 w-10 border-[1px] border-normal bg-white"
+              className="repo-link-wrapper__create-link-button p-0 h-10 w-10 border-[1px] border-normal bg-white"
             >
               <SettingIcon className="w-5 h-5 stroke-icon-active" />
             </Button>
@@ -112,7 +112,7 @@ const LinkWrapper = ({ role }: IProps) => {
           {readLink() ? (
             <Button
               key={role.id}
-              className="p-0 bg-transparent"
+              className="repo-public-link__copy-link-button p-0 bg-transparent"
               onClick={() => {
                 if (tinyLink) {
                   copy(tinyLink);
@@ -136,7 +136,7 @@ const LinkWrapper = ({ role }: IProps) => {
             </Button>
           ) : null}
           {readLink()?.expireTime ? (
-            <span className="block text-[10px] text-hint">
+            <span className="repo-public-link__expire-time block text-[10px] text-hint">
               انقضا :{FaDateFromTimestamp(readLink()!.expireTime)}
             </span>
           ) : null}

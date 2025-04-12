@@ -10,9 +10,9 @@ const DocumentTemplate = () => {
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6 "
+        className="dialog-body flex-grow px-5 py-3 xs:p-6 "
       >
-        <div className="flex flex-col gap-2">
+        <div className="document-template flex flex-col gap-2">
           <Typography className="form_label">انتخاب نمونه سند</Typography>
           <ChildrenTree move={false} enableAction={false} />
         </div>

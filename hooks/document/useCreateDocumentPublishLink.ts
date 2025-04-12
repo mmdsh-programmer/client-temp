@@ -25,11 +25,12 @@ const useCreateDocumentPublishLink = () => {
             return response;
         },
         onSuccess: (response, values) => {
-            const { categoryId } = values;
+            const { categoryId, callBack } = values;
             queryClient.invalidateQueries({
                 queryKey: [`category-${categoryId || "root"}-children`],
             });
             toast.success("لینک انتشار سند با موفقیت ایجاد شد");
+            callBack?.();
         },
         onError: (error: Error) => {
             toast.error(error.message || "خطا در ایجاد لینک انتشار سند");

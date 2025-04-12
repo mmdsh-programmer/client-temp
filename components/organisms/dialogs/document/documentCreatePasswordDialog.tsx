@@ -68,8 +68,9 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       dialogHeader="انتخاب رمز عبور سند"
+      className="document-create-password-dialog"
     >
-      <form className="flex flex-col gap-5">
+      <form className="create-password-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <Typography className="form_label">رمز عبور</Typography>
           <FormInput
@@ -78,6 +79,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("password"),
             }}
+            className="create-password-form__password"
           />
           {errors.password && (
             <Typography className="warning_text">
@@ -93,6 +95,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("confirmPassword"),
             }}
+            className="create-password-form__confirm-password"
           />
           {errors.confirmPassword && (
             <Typography className="warning_text">

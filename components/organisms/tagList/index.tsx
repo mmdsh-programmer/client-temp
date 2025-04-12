@@ -62,14 +62,14 @@ const TagList = ({ repoId }: { repoId: number }) => {
       {isLoading ? (
         <Spinner color="deep-purple" className="" />
       ) : (
-        <div className="flex flex-wrap gap-2">
+        <div className="tag-list flex flex-wrap gap-2">
           {tags?.pages.map((page) => {
             return page.list.map((tag) => {
               return (
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
+                  className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
                   actionIcon={adminRole ? <TagMenu tag={tag} /> : null}
                 />
               );
@@ -84,7 +84,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
             >
               <ChipMolecule
                 value="افزودن تگ"
-                className="repoTags border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
+                className="createTag border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
               />
             </div>
           ) : null}
@@ -94,7 +94,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
                 setOpenTagsModal(true);
               }}
               placeholder=""
-              className="shadow-none hover:shadow-none p-0 font-iranYekan bg-transparent text-gray-400 text-[10px]"
+              className="all-tags__button shadow-none hover:shadow-none p-0 font-iranYekan bg-transparent text-gray-400 text-[10px]"
             >
               نمایش بیشتر
             </Button>

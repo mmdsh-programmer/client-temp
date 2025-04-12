@@ -51,7 +51,7 @@ const DocumentDeleteDialog = ({ document, setOpen }: IProps) => {
       dialogHeader="حذف سند"
       onSubmit={handleDelete}
       setOpen={handleClose}
-      className=""
+      className="document-delete-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"

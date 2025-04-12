@@ -1,6 +1,5 @@
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useMemo } from "react";
-
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import CardView from "../repoView/cardView";
 import { ERepoGrouping } from "@interface/enums";
 import { Spinner } from "@material-tailwind/react";
@@ -91,7 +90,7 @@ const AllRepoList = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4">
+    <div className={`${search ? "searchRepo__list" :"allRepo__list"} flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4`}>
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

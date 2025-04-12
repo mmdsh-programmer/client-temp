@@ -89,10 +89,10 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
         handleOpen();
       }}
       backToMain
-      className=""
+      className="repo-create-public-link-dialog"
       dialogHeader="مدیریت لینک"
     >
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <form className="repo-create-public-link-form flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
           <Checkbox
             crossOrigin="anonymous"
@@ -107,6 +107,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
               setHasPassword(!hasPassword);
             }}
             containerProps={{ className: "-mr-3" }}
+            className="repo-create-public-link-form__add-password-checkbox"
           />
           {hasPassword && (
             <>
@@ -114,6 +115,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
               <FormInput
                 type="password"
                 register={{ ...register("password") }}
+                className="repo-create-public-link-form__password-input"
               />
               {errors.password && (
                 <Typography className="warning_text">
@@ -137,13 +139,14 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
               setHasExpireTime(!hasExpireTime);
             }}
             containerProps={{ className: "-mr-3" }}
+            className="repo-create-public-link-form__add-expire-time-checkbox"
           />
           {hasExpireTime ? (
             <>
               <Typography className="label"> انتخاب تاریخ</Typography>
               <DatePicker
                 onChange={submitCalendar}
-                className="z-[999999] delay-200"
+                className="z-[999999] delay-200 repo-create-public-link-form__date-picker"
                 inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
               />
               {errors.expireTime && (

@@ -102,7 +102,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
           {
             text: " خروج از حساب",
             icon: <LogoutIcon className="h-[18px] w-[18px]" />,
-            className: "body_b3",
+            className: "logout-button body_b3",
             onClick: handleLogout,
           },
         ]}

@@ -69,7 +69,7 @@ const VersionRequests = () => {
     if (listLength) {
       return (
         <>
-          <div className="hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto ">
+          <div className="repo-version-request-table hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto ">
             <RequestTableView>
               {getVersionRequest?.pages.map((page) => {
                 return page.list.map((request) => {
@@ -108,7 +108,7 @@ const VersionRequests = () => {
               })}
             </RequestTableView>
           </div>
-          <div className="flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
+          <div className="repo-version-request-mobile flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
             {getVersionRequest?.pages.map((page) => {
               return page.list.map((request) => {
                 return (

@@ -54,6 +54,7 @@ const useCategoryMenuList = ({
         toggleModal("createCategoryModal", true);
         if (category) setCategory(category);
       },
+      className: "create-category",
     },
     {
       text: "ساخت سند",
@@ -63,6 +64,7 @@ const useCategoryMenuList = ({
         toggleModal("createDocumentModal", true);
         if (category) setCategory(category);
       },
+      className: "create-document",
     },
     {
       text: "ساخت نمونه سند",
@@ -75,6 +77,7 @@ const useCategoryMenuList = ({
         toggleModal("createTemplateModal", true);
         if (category) setCategory(category);
       },
+      className: "create-template",
     },
   ];
 
@@ -95,6 +98,7 @@ const useCategoryMenuList = ({
         toggleModal("editCategoryModal", true);
         if (category) setCategory(category);
       },
+      className: "edit-category",
     },
     {
       text: "انتقال",
@@ -106,6 +110,7 @@ const useCategoryMenuList = ({
         toggleModal("moveModal", true);
         if (category) setCategory(category);
       },
+      className: "move-category",
     },
     {
       text: category?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
@@ -122,6 +127,7 @@ const useCategoryMenuList = ({
         toggleModal(category?.isHidden ? "visibleModal" : "hideModal", true);
         if (category) setCategory(category);
       },
+      className: `${category?.isHidden ? "hide-category" : "visible-category"}`,
     },
     {
       text: "محدودیت دسترسی روی پنل",
@@ -135,6 +141,7 @@ const useCategoryMenuList = ({
         toggleModal("categoryAccessModal", true);
         if (category) setCategory(category);
       },
+      className: "category-access",
     },
     {
       text: "حذف دسته بندی",
@@ -146,6 +153,7 @@ const useCategoryMenuList = ({
         toggleModal("deleteCategoryModal", true);
         if (category) setCategory(category);
       },
+      className: "delete-category",
     },
   ];
 

@@ -66,6 +66,7 @@ const RepoCreateDialogStepper = ({ close }: IProps) => {
       stepList={steplist}
       handleClose={handleClose}
       activeStep={getActiveStep}
+      className="repo-create-dialog"
     >
       {handleStepperContent()}
     </StepperDialog>

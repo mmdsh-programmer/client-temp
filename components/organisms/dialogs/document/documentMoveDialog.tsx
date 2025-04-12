@@ -68,7 +68,7 @@ const DocumentMoveDialog = ({ setOpen }: IProps) => {
       dialogHeader="انتقال سند"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="min-h-[350px]"
+      className="document-move-dialog min-h-[350px]"
     >
       <MoveSelection target="document" />
     </ConfirmFullHeightDialog>

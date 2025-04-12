@@ -73,7 +73,7 @@ const RepoImage = ({
     <>
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
+        className="repo-image__dialog-body flex-grow px-5 py-3 xs:p-6"
       >
         <RepoAttachCustomImage
           imageType={imageType}
@@ -85,13 +85,13 @@ const RepoImage = ({
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="repo-image__dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
         </CancelButton>
         <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-image__dialog-next-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >

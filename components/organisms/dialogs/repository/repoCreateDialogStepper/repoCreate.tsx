@@ -66,13 +66,14 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
       >
-        <form className="flex flex-col gap-6">
+        <form className="repo-create-dialog__form flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Typography className="label">عنوان مخزن</Typography>
             <FormInput
               placeholder="عنوان مخزن"
               register={{ ...register("name") }}
               id="repo-name"
+              className="repo-create-dialog__input"
             />
             {errors.name && (
               <Typography className="warning_text">
@@ -85,6 +86,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
             <TextareaAtom
               placeholder="توضیحات مخزن"
               register={{ ...register("description") }}
+              className="repo-create-dialog__textarea"
             />
             {errors.description && (
               <Typography className="warning_text">
@@ -96,13 +98,13 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog__footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
         </CancelButton>
         <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-create-dialog__create-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >

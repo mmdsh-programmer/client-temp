@@ -49,12 +49,12 @@ const ConfirmFullHeightDialog = ({
     >
       <DialogHeader
         placeholder="dialog header"
-        className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
         </div>
-        <div className="flex items-center">
+        <div className="dialog-header__title flex items-center">
           <Typography className="form__title">{dialogHeader}</Typography>{" "}
         </div>
         <div className="hidden xs:block">
@@ -64,19 +64,19 @@ const ConfirmFullHeightDialog = ({
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <DialogBody
         placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6 overflow-auto"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6 overflow-auto"
       >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
         </CancelButton>
         <LoadingButton
-          className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={onSubmit}
           loading={isPending}
           disabled={disabled}

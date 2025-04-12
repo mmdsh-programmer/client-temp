@@ -13,7 +13,7 @@ const CancelButton = ({ onClick, disabled, children, className }: IProps) => {
     <Button
       placeholder="cancel button"
       variant="text"
-      className={`${className || ""} flex justify-center items-center flex-1 xs:flex-0 xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 hover:bg-gray-50 bg-gray-50`}
+      className={`${className || ""} cancel-button flex justify-center items-center flex-1 xs:flex-0 xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 hover:bg-gray-50 bg-gray-50`}
       onClick={onClick}
       disabled={disabled}
     >

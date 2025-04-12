@@ -68,12 +68,13 @@ const DocumentBlackList = ({
   }, [blackList]);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="document-black-list flex flex-col gap-5">
       <FormInput
         placeholder="نام کاربری را وارد کنید..."
         onKeyDown={handleSpaceClick}
         value={inputValue}
         onChange={handleInputChange}
+        className="document-black-list__name-input"
       />
       <Typography className="title_t4 text-secondary ">
         لیست سیاه سند
@@ -84,14 +85,14 @@ const DocumentBlackList = ({
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="black-list flex flex-wrap gap-2">
             {selectedUserList?.length ? (
               selectedUserList.map((item) => {
                 return (
                   <ChipMolecule
                     key={item.username}
                     value={item.name || item.username}
-                    className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+                    className={`black-item ${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
                        w-auto pl-2 border-[1px] border-normal`}
                     icon={
                       item.picture ? (
@@ -106,7 +107,7 @@ const DocumentBlackList = ({
                     }
                     actionIcon={
                       <Button
-                        className="bg-transparent p-0"
+                        className="delete-button bg-transparent p-0"
                         onClick={() => {
                           removeUser(item.username);
                         }}

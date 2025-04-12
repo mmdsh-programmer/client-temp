@@ -81,6 +81,7 @@ const DocumentTableRow = ({ document }: IProps) => {
     <TableCell
       key={`document-table-item-${document.id}`}
       onClick={handleRowClick}
+      className="document-table-row"
       tableCell={
         [
           currentPath === "/admin/sharedDocuments"

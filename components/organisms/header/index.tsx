@@ -47,7 +47,7 @@ const Header = () => {
           {currentPath?.includes("/panel-admin-clasor") ? (
             <div className="flex items-center gap-2">
               <Button
-                className="p-0 bg-transparent"
+                className="back-button p-0 bg-transparent"
                 onClick={() => {
                   return window.history.back();
                 }}
@@ -69,7 +69,7 @@ const Header = () => {
             currentPath !== "/panel-admin-clasor" ? (
               <Button
                 onClick={handleAdminPanelNavigation}
-                className="panel-admin rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+                className="panel-admin__button rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
                 title="پنل ادمین"
               >
                 <UserFillIcon className=" h-4 w-4 fill-[#9AA6B1]" />
@@ -79,7 +79,7 @@ const Header = () => {
               onClick={() => {
                 return setOpenRequestDialog(true);
               }}
-              className="notice rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+              className="join-to-repo-requests__button notice rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
             >
               <AlertIcon className=" h-4 w-4" />
             </Button>
@@ -87,7 +87,7 @@ const Header = () => {
               onClick={() => {
                 return setOpenFeedbackDialog(true);
               }}
-              className="rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+              className="feedback__button rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
             >
               <ThemeIcon className=" h-4 w-4" />
             </Button>

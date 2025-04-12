@@ -44,7 +44,7 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
       dialogHeader="رد تایید پیش‌نویس"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="repo-reject-draft-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از رد تایید پیش‌نویس "

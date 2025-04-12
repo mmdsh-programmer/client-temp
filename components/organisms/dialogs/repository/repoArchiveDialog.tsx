@@ -44,10 +44,10 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
       dialogHeader="آرشیو مخزن"
       onSubmit={handleSubmit}
       setOpen={handleClose}
-      className=""
+      className="archive-repo-dialog"
       isArchive
     >
-      <form className="flex flex-col gap-5">
+      <form className="archive-repo-dialog__form flex flex-col gap-5">
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از آرشیو"
           <span
