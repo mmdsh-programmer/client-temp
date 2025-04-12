@@ -59,8 +59,9 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       dialogHeader="حذف رمز عبور سند"
+      className="document-delete-password-dialog"
     >
-      <form className="flex flex-col gap-5">
+      <form className="delete-password-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <Typography className="form_label">رمز عبور سابق</Typography>
           <FormInput
@@ -69,6 +70,7 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("oldPassword"),
             }}
+            className="delete-password-form__old-password"
           />
           {errors.oldPassword && (
             <Typography className="warning_text">

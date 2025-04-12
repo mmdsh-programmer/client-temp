@@ -27,6 +27,7 @@ interface IProps {
       icon?: React.JSX.Element;
       onClick: () => void;
       disabled?: boolean;
+      className?: string;
     }[];
   }[];
 }
@@ -52,7 +53,7 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
             <MenuItem
               key={`menu-${index}`}
               placeholder="menu-item"
-              className="p-2"
+              className={`p-2 ${menuItem.className}`}
               onClick={menuItem.onClick}
               disabled={menuItem.disabled}
             >
@@ -60,7 +61,7 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
                 {menuItem.icon}
                 <Typography
                   placeholder="menu-item-text"
-                  className={`font-iranYekan ${menuItem.className || ""}
+                  className={`font-iranYekan 
                      ${variant === "small" ? " font-light text-[12px] " : "font-medium text-base mb-1"}`}
                 >
                   {menuItem.text}

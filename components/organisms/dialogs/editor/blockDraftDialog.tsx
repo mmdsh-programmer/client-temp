@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
+
 import FreeDraftDialog from "@components/templates/dialog/freeDraftDialog";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import RenderIf from "@components/atoms/renderIf";
@@ -22,6 +23,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const editorData = useRecoilValue(editorDataAtom);
   const editorMode = useRecoilValue(editorModeAtom);
+  const editorContent = useRef<unknown>(null);
 
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);
   const workerRef = useRef<Worker>();
@@ -47,11 +49,19 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
     }
   };
 
-  const handleFreeDraft = async () => {
+  const handleFreeDraft =  () => {
     if (editorData && repoId && selectedDocument) {
-      const value = (await editorRef.current?.getData()) as unknown as
-        | { content: string; outline: string }
-        | string;
+      editorRef.current?.on("getData", (value) => {
+        console.log("------------------ value -----------------", value);
+        editorContent.current = value;
+      });
+
+      const value = editorContent.current as unknown as {
+        content: string;
+        outline: string;
+      };
+
+      editorRef.current?.getData();
 
       const content = typeof value === "string" ? value : value.content;
       const outline = typeof value === "string" ? "[]" : value.outline;
@@ -66,6 +76,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         isDirectAccess:
           sharedDocuments === "true" ||
           currentPath === "/admin/sharedDocuments",
+
         callBack: () => {
           setShowFreeDraftModal(false);
           stopWorker();
@@ -89,6 +100,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         isDirectAccess:
           sharedDocuments === "true" ||
           currentPath === "/admin/sharedDocuments",
+
         callBack: () => {
           startWorker(timeout);
         },
@@ -101,7 +113,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
     return () => {
       stopWorker();
     };
-  }, [editorMode, editorData]);
+  }, [editorMode, editorData?.id]);
 
   useEffect(() => {
     if (editorMode === "edit") {

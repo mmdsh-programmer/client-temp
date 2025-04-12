@@ -33,12 +33,12 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
   } = useGetInviteRequestsByOwner(repoId, 10);
 
   return (
-    <div className="overflow-y-auto">
+    <div className="repo-users overflow-y-auto">
       {isLoadingInviteToRepoRequests || isLoadingRepoUsers ? (
         <Spinner className="h-0 w-0" />
       ) : (
         <div
-          className={`flex flex-col overflow-auto overflow-y-auto
+          className={`repo-users__list flex flex-col overflow-auto overflow-y-auto
         ${createRepoDialog ? "!h-[250px] xs:!h-[168px]" : "!h-[370px] xs:!h-[250px]"}`}
         >
           {getRepoUsers?.pages.map((page) => {

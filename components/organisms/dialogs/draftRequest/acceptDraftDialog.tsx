@@ -44,7 +44,7 @@ const AcceptDraftDialog = ({ setOpen }: IProps) => {
       dialogHeader="تایید نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="repo-accept-draft-dialog"
       backToMain
     >
       آیا از تایید نسخه "

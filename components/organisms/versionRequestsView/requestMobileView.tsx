@@ -15,7 +15,7 @@ const RequestMobileView = ({ request, onClick }: IProps) => {
   return (
     <MobileCard
       key={request.id}
-      className="!shadow-sm border-[1px] border-normal"
+      className="repo-request__mobile-view !shadow-sm border-[1px] border-normal"
       name={request.versionNumber}
       description={[
         {

@@ -40,7 +40,7 @@ const DocumentDeletePublishLinkDialog = ({ document, setOpen }: IProps) => {
       dialogHeader="حذف لینک انتشار"
       onSubmit={handleDelete}
       setOpen={handleClose}
-      className=""
+      className="document-delete-publish-link-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
       آیا از حذف لینک انتشار "

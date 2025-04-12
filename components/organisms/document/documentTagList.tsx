@@ -56,19 +56,19 @@ const DocumentTagList = ({ tagList }: IProps) => {
       <Typography className="title_t4 text-secondary ">
         تگ‌های انتخاب شده
       </Typography>
-      <div className="flex flex-col">
+      <div className="document-tag-list flex flex-col">
         {tagList?.length ? (
-          <div className="flex flex-wrap gap-2">
+          <div className="tag-list flex flex-wrap gap-2">
             {tagList.map((tag) => {
               return (
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
+                  className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
                   actionIcon={
                     adminOrOwnerRole() ? (
                       <Button
-                        className="p-0 bg-transparent"
+                        className="delete-button p-0 bg-transparent"
                         onClick={() => {
                           return handleDelete(tag);
                         }}

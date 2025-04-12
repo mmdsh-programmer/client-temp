@@ -62,7 +62,7 @@ const DownloadPDF = () => {
   return (
     <>
       <Button
-        className="bg-transparent p-0 mt-1"
+        className="download-pdf__button bg-transparent p-0 mt-1"
         title="دانلود pdf"
         onClick={handleDownloadFile}
         disabled={loading || !getSelectedDocument}

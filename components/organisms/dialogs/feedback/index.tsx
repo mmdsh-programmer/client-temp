@@ -163,14 +163,15 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
       dialogHeader="ارسال نظر و بازخورد"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={setOpen}
-      className="xs:max-h-[600px]"
+      className="feedback__dialog xs:max-h-[600px]"
     >
-      <form className="flex flex-col gap-4 ">
-        <div className="flex flex-col gap-2">
+      <form className="feedback__form flex flex-col gap-4 ">
+        <div className="feedback__form-content flex flex-col gap-2">
           <Typography className="form_label"> متن بازخورد</Typography>
           <TextareaAtom
             placeholder="لطفا متن خود را وارد کنید"
             register={{ ...register("content") }}
+            className="feedback__form-content-textarea"
           />
           {errors.content && (
             <Typography className="warning_text">
@@ -198,14 +199,14 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
               <input
                 type="file"
                 id="input-file"
-                className="hidden"
+                className="feedback__upload-file-input hidden"
                 onChange={handleFileChange}
                 accept="image/*"
               />
             </label>
           </div>
         ) : null}
-        <div className="flex flex-col gap-2">
+        <div className="feedback__form-file-list flex flex-col gap-2">
           <Typography className="title_t3 text-hint">
             مشاهده همه فایل‌ها
           </Typography>

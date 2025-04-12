@@ -57,12 +57,12 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="محدودیت دسترسی روی پنل"
       setOpen={handleClose}
-      className="min-h-[350px]"
+      className="category-access-dialog min-h-[350px] "
     >
       <DialogBody>
         <form className="flex flex-col gap-6">
           <div className="flex gap-2">
-            <div className="flex-grow">
+            <div className="searchable-dropdown flex-grow">
               <SearchableDropdown
                 options={filteredUsers}
                 handleSelect={(val) => {
@@ -72,7 +72,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
               />
             </div>
             <LoadingButton
-              className="!h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="add-button !h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
               onClick={handleBlock}
               loading={blockCatgory.isPending}
               disabled={!value}

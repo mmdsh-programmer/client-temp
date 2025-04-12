@@ -34,6 +34,7 @@ const VersionRequestMenu = ({ showDrawer, request }: IProps) => {
           setRequest(request);
         }
       },
+      className: "repo-version-request__accept-request",
     },
     {
       text: "رد درخواست",
@@ -44,11 +45,12 @@ const VersionRequestMenu = ({ showDrawer, request }: IProps) => {
           setRequest(request);
         }
       },
+      className: "repo-version-request__reject-request",
     },
   ];
 
   return showDrawer ? (
-    <div className="xs:hidden flex">
+    <div className="repo-version-request-menu xs:hidden flex">
       <DrawerTemplate
         openDrawer={openRequestActionDrawer}
         setOpenDrawer={setOpenRequestActionDrawer}

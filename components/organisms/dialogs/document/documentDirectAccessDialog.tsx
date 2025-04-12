@@ -78,15 +78,15 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="دسترسی مستقیم روی سند"
       setOpen={handleClose}
-      className="min-h-[350px]"
+      className="document-direct-access-dialog min-h-[350px]"
     >
       <DialogBody>
-        <form className="flex flex-col gap-6">
+        <form className="direct-access-form flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
               <InputAtom
                 id="username"
-                className="!w-auto h-auto overflow-hidden !p-0 border-none"
+                className="direct-access-form__username  !w-auto h-auto overflow-hidden !p-0 border-none"
                 placeholder="شناسه پادی"
                 register={{ ...register("username") }}
               />
@@ -94,7 +94,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 <Spinner className="h-3 w-3" color="deep-purple" />
               ) : (
                 <SelectAtom
-                  className="w-auto"
+                  className="direct-access-form__role w-auto"
                   defaultOption={rolesOption?.[0]}
                   options={rolesOption}
                   selectedOption={role}
@@ -109,7 +109,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
               <LoadingButton
                 loading={directAccessDocument.isPending}
                 onClick={handleSubmit(onSubmit)}
-                className="!h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+                className="direct-access-form__add !h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
                 <Typography className="text__label__button !text-primary font-medium">
                   افزودن

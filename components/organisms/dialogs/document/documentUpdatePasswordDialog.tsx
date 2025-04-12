@@ -71,6 +71,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       dialogHeader="تغییر رمز عبور سند"
+      className="document-update-password-dialog"
     >
       <form className="flex flex-col gap-5">
         {getRepo?.roleName !== ERoles.owner ? (
@@ -80,6 +81,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
               type="password"
               placeholder="رمز عبور سابق"
               register={{ ...register("oldPassword") }}
+              className="old-password"
             />
             {errors.oldPassword && (
               <Typography className="warning_text">
@@ -94,6 +96,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             type="password"
             placeholder="رمز عبور"
             register={{ ...register("password") }}
+            className="new-password"
           />
           {errors.password && (
             <Typography className="warning_text">
@@ -107,6 +110,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             type="password"
             placeholder="تکرار رمز عبور"
             register={{ ...register("confirmPassword") }}
+            className="confirm-password"
           />
           {errors.confirmPassword && (
             <Typography className="warning_text">

@@ -14,7 +14,7 @@ const GroupList = () => {
  data: getGroups, isFetching 
 } = useGetGroups(repoId, 20);
   return (
-    <div className="flex flex-col gap-2 !h-[470px] xs:!h-[350px] overflow-auto">
+    <div className="repo-group-list flex flex-col gap-2 !h-[470px] xs:!h-[350px] overflow-auto">
       {isFetching ? (
         <div className="">
           <Spinner className="" color="deep-purple" />

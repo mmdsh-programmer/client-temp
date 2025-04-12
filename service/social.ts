@@ -498,13 +498,14 @@ export const getMySocialProfile = async (accessToken: string, expiresAt: number)
   const redisClient = await getRedisClient();
   const cacheData = await redisClient?.get(`user-social:${accessToken}`);
   if (cacheData) {
+    const cacheResult = JSON.parse(cacheData);
     Logger.warn(
       JSON.stringify({
         type: "Redis cache data",
-        data: cacheData,
+        data: cacheResult,
       })
     );
-    return JSON.parse(cacheData);
+    return cacheResult;
   }
 
   

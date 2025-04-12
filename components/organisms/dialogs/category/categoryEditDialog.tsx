@@ -96,9 +96,9 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
       dialogHeader="ویرایش دسته بندی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="category-edit-dialog"
     >
-      <form className="flex flex-col gap-6">
+      <form className="category-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نام دسته‌بندی</Typography>
           <FormInput
@@ -108,6 +108,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
                 value: getCategory?.name,
               }),
             }}
+            className="category-edit-dialog__form-name"
           />
           {errors.name && (
             <Typography className="warning_text">
@@ -127,6 +128,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
                 valueAsNumber: true,
               }),
             }}
+            className="category-edit-dialog__form-order"
           />
           {errors.order && (
             <Typography className="warning_text">
@@ -141,6 +143,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("description", { value: getCategory?.description }),
             }}
+            className="category-edit-dialog__form-description"
           />
           {errors.description && (
             <Typography className="warning_text">

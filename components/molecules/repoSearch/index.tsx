@@ -33,14 +33,14 @@ const RepoSearch = () => {
         <SearchIcon className="h-5 w-5 stroke-icon-hover" />
         <InputAtom
           placeholder="جستجو ..."
-          className="bg-white flex-grow !h-8 pr-0 outline-none !overflow-hidden border-none focus:border-none !w-full"
+          className="search-repo__input bg-white flex-grow !h-8 pr-0 outline-none !overflow-hidden border-none focus:border-none !w-full"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setSearch(event.target.value);
           }}
           value={search}
         />
         <Button
-          className="rounded-none h-[34px] px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="search-repo__button rounded-none h-[34px] px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={() => {
             if (search.trim() !== "") {
               setSearchParam({ repoType, search });

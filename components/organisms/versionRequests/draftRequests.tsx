@@ -69,7 +69,7 @@ const DraftRequests = () => {
     if (listLength) {
       return (
         <>
-          <div className="hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto mt-4">
+          <div className="repo-draft-request-table hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto mt-4">
             <RequestTableView>
               {getDraftRequest?.pages.map((page) => {
                 return page.list.map((request) => {
@@ -106,7 +106,7 @@ const DraftRequests = () => {
               })}
             </RequestTableView>
           </div>
-          <div className="flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
+          <div className="repo-draft-request-mobile flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
             {getDraftRequest?.pages.map((page) => {
               return page.list.map((request) => {
                 return <RequestMobileView request={request}  onClick={() => {

@@ -51,7 +51,7 @@ const CategoryHideDialog = ({ setOpen }: IProps) => {
       dialogHeader="مخفی سازی دسته بندی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="category-hide-dialog"
     >
       آیا از مخفی سازی"
       <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">

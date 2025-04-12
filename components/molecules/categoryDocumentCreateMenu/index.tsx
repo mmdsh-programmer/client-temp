@@ -37,6 +37,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
     icon?: React.JSX.Element;
     disabled?: boolean;
     onClick: () => void;
+    className?: string;
   }[] = [
     {
       text: "سند جدید",
@@ -46,6 +47,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         setCreateDocumentModal(true);
         setCategory(getCategoryShow);
       },
+      className: "create-document",
     },
     {
       text: "نمونه سند",
@@ -58,6 +60,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         setCreateTemplateModal(true);
         setCategory(getCategoryShow);
       },
+      className: "create-template",
     },
     {
       text: "ایجاد دسته بندی",
@@ -69,6 +72,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         setCreateCategoryModal(true);
         setCategory(getCategoryShow);
       },
+      className: "create-category",
     },
   ];
 
