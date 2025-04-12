@@ -70,12 +70,17 @@ const TagList = ({ repoId }: { repoId: number }) => {
                   value={tag.name}
                   key={tag.id}
                   className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
-                  actionIcon={adminRole ? <TagMenu tag={tag} /> : null}
+                  actionIcon={userInfo?.domainConfig.useDomainTag && 
+                    (userInfo?.domainRole === "owner" || 
+                    userInfo.domainRole === "participant") || 
+                    !userInfo?.domainConfig.useDomainTag && adminRole ? <TagMenu tag={tag} /> : null}
                 />
               );
             });
           })}
-          {(!!userInfo?.domainConfig.useDomainTag)
+          {userInfo?.domainConfig.useDomainTag && 
+                    (userInfo?.domainRole === "owner" || 
+                    userInfo.domainRole === "participant")
           || (!userInfo?.domainConfig.useDomainTag && adminRole) ? (
             <div
               onClick={() => {

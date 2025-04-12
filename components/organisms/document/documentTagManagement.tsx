@@ -108,24 +108,26 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
       <Spinner className="h-5 w-5" color="deep-purple" />
     </div>
   ) : (
-    <div className="flex flex-col gap-2">
-        {adminOrOwnerRole() ? (
-        <SearchableDropdown
-          options={updatedAvailableTags}
-          handleSelect={handleTagSelect}
-          handleChange={setTagName}
-          setOpen={setOpen}
-          createIcon={
-            userInfo?.domainConfig.useDomainTag && 
-            (userInfo?.domainRole === "owner" || 
+      <div className="flex flex-col gap-2">
+        {userInfo?.domainConfig.useDomainTag &&
+          (userInfo?.domainRole === "owner" ||
             userInfo.domainRole === "participant") ||
-            (!userInfo?.domainConfig.useDomainTag && currentPath !== "/admin/sharedDocuments" &&
-            sharedDocuments !== "true")
-          }
-        />
-      ) : null}
-      <DocumentTagList tagList={getTempDocTag} />
-    </div>
+          (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole()) ?
+          <SearchableDropdown
+            options={updatedAvailableTags}
+            handleSelect={handleTagSelect}
+            handleChange={setTagName}
+            setOpen={setOpen}
+            createIcon={
+              userInfo?.domainConfig.useDomainTag &&
+              (userInfo?.domainRole === "owner" ||
+                userInfo.domainRole === "participant") ||
+              (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole())
+            }
+          />
+          : null}
+        <DocumentTagList tagList={getTempDocTag} />
+      </div>
   );
 };
 
