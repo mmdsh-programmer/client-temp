@@ -13,3 +13,9 @@ export const categoryListModeAtom = atom<"table" | "tree">({
   default: "table",
   effects: [logEffect("categoryListModeAtom")],
 });
+
+export const userIdAtom = atom<null | number>({
+  key: "userIdAtom",
+  default: null,
+  effects: [logEffect("userIdAtom")],
+});

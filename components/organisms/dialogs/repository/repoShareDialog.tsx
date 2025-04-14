@@ -15,6 +15,8 @@ import TabComponent from "@components/molecules/tab";
 import Users from "@components/organisms/users";
 import { openShareAccessAtom } from "@atom/public";
 import { repoAtom } from "@atom/repository";
+import { userIdAtom } from "@atom/app";
+import UserConfigPanelDialog from "../configPanel/userConfigPanelDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +40,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
     useRecoilState(deleteGroupAtom);
   const [getOpenShareAccess, setOpenShareAccess] =
     useRecoilState(openShareAccessAtom);
+    const  getUserId = useRecoilValue(userIdAtom);
 
   const handleClose = () => {
     setOpen(false);
@@ -46,19 +49,19 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   const tabList = [
     {
       tabTitle: ETabs.USERS,
-      tabContent: <Users />,
+      tabContent: activeTab === ETabs.USERS ? <Users /> : null,
     },
     {
       tabTitle: ETabs.GROUPS,
-      tabContent: <Groups />,
+      tabContent: activeTab === ETabs.GROUPS ? <Groups /> : null,
     },
     getRepo?.roleName === "owner" && {
       tabTitle: ETabs.LINK,
-      tabContent: <PublicLink />,
+      tabContent: activeTab === ETabs.LINK ? <PublicLink /> : null,
     },
     getRepo?.roleName === "owner" && {
       tabTitle: ETabs.PUBLISH,
-      tabContent: <PublishLink />,
+      tabContent: activeTab === ETabs.PUBLISH ? <PublishLink /> : null,
     },
   ].filter(Boolean) as {
     tabTitle: ETabs;
@@ -76,6 +79,9 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   }
   if (getDeleteGroupModal) {
     return <GroupDeleteDialog setOpen={setDeleteGroupModal} />;
+  }
+  if (getUserId) {
+    return <UserConfigPanelDialog />;
   }
 
   return (
