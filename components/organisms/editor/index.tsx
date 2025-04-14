@@ -143,28 +143,28 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="flex h-full relative bg-primary">
-      {currentPath === "/admin/sharedDocuments" ||
-      sharedDocuments === "true" ? (
-        <DocumentEnableUserGroup />
-      ) : null}
-      {listDrawer && getEditorConfig().ref ? (
-        <div className="w-full xs:w-[300px]">
-          <EditorDrawer version={versionData} />
+        {currentPath === "/admin/sharedDocuments" ||
+        sharedDocuments === "true" ? (
+          <DocumentEnableUserGroup />
+        ) : null}
+        {listDrawer && getEditorConfig().ref ? (
+          <div className="w-full xs:w-[300px]">
+            <EditorDrawer version={versionData} />
+          </div>
+        ) : null}
+        <div
+          className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"} h-full`}
+        >
+          {renderContent()}
+          <FloatingButtons version={version} />
         </div>
-      ) : null}
-      <div
-        className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"} h-full`}
-      >
-        {renderContent()}
-        <FloatingButtons version={version} />
+        {openTemplateDialog ? (
+          <TemplateContentDialog
+            setOpen={setOpenTemplateDialog}
+            editorRef={getEditorConfig().ref}
+          />
+        ) : null}
       </div>
-      {openTemplateDialog ? (
-        <TemplateContentDialog
-          setOpen={setOpenTemplateDialog}
-          editorRef={getEditorConfig().ref}
-        />
-      ) : null}
-    </div>
   );
 };
 

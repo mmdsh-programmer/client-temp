@@ -1,3 +1,5 @@
+import { Author, Message } from "react-bell-chat";
+
 export interface ICreateThread {
   hasError: boolean;
   cache: boolean;
@@ -118,7 +120,7 @@ export interface IAddContact {
 
 export interface IInvitees {
   id: number;
-  idType: any;
+  idType: string;
 }
 
 export interface IChatError {
@@ -130,3 +132,35 @@ export interface IChatError {
   message: string;
   uniqueId: string;
 }
+
+export interface IChatState {
+  authors: Author<string>[];
+  messages: Message<string>[];
+  useCustomBubble: boolean;
+  currentUser: number;
+  messageText: string;
+  showAvatar: boolean;
+  showLastSeen: boolean;
+  showDateRow: boolean;
+  showIsTyping: boolean;
+  showLoadingMessages: boolean;
+  hasOldMessages: boolean;
+  useCustomStyles: boolean;
+  useAvatarBg: boolean;
+  useCustomIsTyping: boolean;
+  showMsgProgress: boolean;
+  chatDisabled: boolean;
+  replyedMessage: string | null;
+}
+
+export interface IChatBubbleProps {
+  message: Message<string>;
+  author: Author<string>;
+  currentUser: number;
+}
+
+export interface IChatInputProps {
+  messageText: string;
+  onMessageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onMessageSubmit: (e: React.FormEvent) => void;
+} 

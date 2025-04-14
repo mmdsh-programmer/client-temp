@@ -12,6 +12,7 @@ import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
 import DocumentEnableUserGroup from "./documentEnableUserGroup";
 import { Spinner } from "@material-tailwind/react";
+import ChatBox from "../chatBox";
 
 export enum ETabs {
   CHAT = "گفتگو",
@@ -53,6 +54,10 @@ const EditorDrawer = ({ version }: IProps) => {
           tabContent: <Comments version={version} />,
         }
       : null,
+    {
+      tabTitle: ETabs.CHAT,
+      tabContent: <ChatBox />,
+    },
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;
