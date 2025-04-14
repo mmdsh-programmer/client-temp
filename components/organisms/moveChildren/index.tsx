@@ -56,7 +56,7 @@ const MoveChildren = ({
   });
 
   return (
-    <div>
+    <div className={`move-${target}-list`}>
       {isLoading ? (
         <div className="px-2 py-1">
           <Spinner className="h-4 w-4" color="deep-purple" />
@@ -78,7 +78,7 @@ const MoveChildren = ({
                   return (
                     <div
                       key={`move-category-${subItem.id}`}
-                      className="flex items-center gap-2 px-2 py-1 cursor-pointer"
+                      className="move-category-item flex items-center gap-2 px-2 py-1 cursor-pointer"
                       onClick={() => {
                         setCategoryMoveDest(subItem as ICategoryMetadata);
                       }}

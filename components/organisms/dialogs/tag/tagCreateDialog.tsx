@@ -7,9 +7,14 @@ import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import { useForm } from "react-hook-form";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
+import useCreateDomainTag from "@hooks/domainTags/useCreateDomainTag";
+import TextareaAtom from "@components/atoms/textarea/textarea";
 
 interface IForm {
   name: string;
+  description: string;
+  order: number;
 }
 
 interface IProps {
@@ -24,7 +29,10 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const createTag = useCreateTag();
+  const createDomainTag = useCreateDomainTag();
+
   const {
     register,
     handleSubmit,
@@ -44,6 +52,16 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    if (userInfo?.domainConfig.useDomainTag) {
+      return createDomainTag.mutate({
+        name: dataForm.name,
+        description: dataForm.description,
+        order: dataForm.order,
+        callBack: () => {
+          handleClose();
+        },
+      });
+    }
     if (!repoId) return;
     createTag.mutate({
       repoId,
@@ -59,23 +77,62 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
 
   return (
     <CreateDialog
-      isPending={createTag.isPending}
+      isPending={createTag.isPending || createDomainTag.isPending}
       dialogHeader="ساخت تگ"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "
+      className="tag-create-dialog h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "
     >
-      <form className="flex flex-col gap-2 ">
-        <Typography className="label">نام تگ</Typography>
-        <FormInput
-          placeholder="نام تگ"
-          register={{ ...register("name", { value: name?.toString() }) }}
-        />
-        {errors.name && (
-          <Typography className="warning_text">
-            {errors.name?.message}
-          </Typography>
-        )}
+      <form className="flex flex-col gap-6 ">
+        <div className="flex flex-col gap-2">
+          <Typography className="label">نام تگ</Typography>
+          <FormInput
+            placeholder="نام تگ"
+            register={{ ...register("name", { value: name?.toString() }) }}
+            className="tag-create-dialog__name"
+          />
+          {errors.name && (
+            <Typography className="warning_text">
+              {errors.name?.message}
+            </Typography>
+          )}
+        </div>
+        {userInfo?.domainConfig.useDomainTag ? (
+          <>
+            <div className="flex flex-col gap-2">
+              <Typography className="form_label">اولویت تگ </Typography>
+              <FormInput
+                type="number"
+                min={0}
+                placeholder="اولویت تگ"
+                register={{
+                  ...register("order"),
+                }}
+                className="tag-create-dialog__priority"
+              />
+              {errors.order && (
+                <Typography className="warning_text">
+                  {errors.order?.message}
+                </Typography>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Typography className="form_label">توضیحات تگ</Typography>
+              <TextareaAtom
+                placeholder="توضیحات تگ"
+                register={{
+                  ...register("description"),
+                }}
+                className="tag-create-dialog__description"
+              />
+              {errors.description && (
+                <Typography className="warning_text">
+                  {errors.description?.message}
+                </Typography>
+              )}
+            </div>
+          </>
+        ) : null}
       </form>
     </CreateDialog>
   );

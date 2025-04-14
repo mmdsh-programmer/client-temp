@@ -36,7 +36,7 @@ const InfoDialog = ({
     >
       <DialogHeader
         placeholder="dialog header"
-        className="flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <div className="block xs:hidden">

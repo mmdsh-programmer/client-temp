@@ -12,15 +12,15 @@ const PublicLink = () => {
   });
 
   return (
-    <div className="flex flex-wrap items-center">
-      <div className="share-link-content min-h-[300px] mt-4 w-full overflow-auto bg-white">
+    <div className="repo-public-link flex flex-wrap items-center">
+      <div className="min-h-[300px] mt-4 w-full overflow-auto bg-white">
         <div className="border-b-[1px] bg-gray-200 w-full" />
         {isLoading ? (
           <div className="flex justify-center mt-4 items-center  w-full">
             <Spinner color="deep-purple" />
           </div>
         ) : (
-          <div className="flex flex-col pt-5 gap-y-5">
+          <div className="repo-public-link__list flex flex-col pt-5 gap-y-5">
             {roleOptions?.map((role) => {
               return <LinkWrapper key={role.id} role={role} />;
             })}

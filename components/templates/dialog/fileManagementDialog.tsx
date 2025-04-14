@@ -36,14 +36,14 @@ const fileManagementDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={dialogClassName || ""}
+      className={`file-management-dialog ${dialogClassName || ""}`}
       dismiss={{
         enabled: false,
       }}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <BackButton onClick={handleClose} />
@@ -55,18 +55,18 @@ const fileManagementDialog = ({
       </DialogHeader>
       <DialogBody
         placeholder="dialog body"
-        className={dialogBodyClassName || ""}
+        className={`${dialogBodyClassName || ""} dialog-body`}
       >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <Button
           placeholder=" button"
           variant="text"
-          className="flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-purple-normal bg-purple-normal active:bg-purple-normal "
+          className="dialog-footer__submit-button flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-purple-normal bg-purple-normal active:bg-purple-normal "
           onClick={handleSelect}
         >
           <Typography

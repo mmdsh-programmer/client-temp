@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPositionAction } from "@actions/position";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
 
 const useCreatePosition = () => {
   const queryClient = useQueryClient();
@@ -21,6 +22,9 @@ const useCreatePosition = () => {
       const { callBack, branchId } = values;
       queryClient.invalidateQueries({ queryKey: [`positions-${branchId}`] });
       callBack?.();
+    },
+    onError: (error) => {
+      toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });
 };

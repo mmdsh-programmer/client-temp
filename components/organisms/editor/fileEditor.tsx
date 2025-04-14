@@ -8,7 +8,6 @@ import Files from "../fileManagement";
 import { IFile } from "@interface/file.interface";
 import PreviewFile from "./previewFile";
 import RenderIf from "@components/atoms/renderIf";
-import { pdfjs } from "react-pdf";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedFileAtom } from "@atom/file";
@@ -20,8 +19,6 @@ export interface IFileHash {
   fileName: string;
   fileExtension: string;
 }
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 const FileEditor = () => {
   const [showFilePicker, setShowFilePicker] = useState(false);

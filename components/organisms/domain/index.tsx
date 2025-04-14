@@ -3,9 +3,12 @@ import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
+import DomainParticipant from "../domainParticipant";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export enum ETabs {
   SETTING = "تنطیمات",
+  PARTICIPANT = "دسترسی افراد",
   PUBLIC_FEEDS = "خبرنامه‌ عمومی",
   PRIVATE_FEEDS = "خبرنامه‌ خصوصی",
   COMMENTS = "نظرات",
@@ -17,6 +20,8 @@ export enum ETabs {
 const DomainConfig = () => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.SETTING);
 
+  const { data: userInfo } = useGetUser();
+
   const tabList = [
     {
       tabTitle: ETabs.SETTING,
@@ -26,6 +31,12 @@ const DomainConfig = () => {
         </div>
       ),
     },
+    userInfo?.domainRole === "owner"
+      ? {
+          tabTitle: ETabs.PARTICIPANT,
+          tabContent: <DomainParticipant />,
+        }
+      : null,
     {
       tabTitle: ETabs.PUBLIC_FEEDS,
       tabContent: <DomainPublicFeed />,
@@ -66,7 +77,10 @@ const DomainConfig = () => {
         </div>
       ),
     },
-  ];
+  ].filter(Boolean) as {
+    tabTitle: ETabs;
+    tabContent: React.JSX.Element;
+  }[];
 
   return (
     <TabComponent

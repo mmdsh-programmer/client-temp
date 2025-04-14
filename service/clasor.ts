@@ -54,6 +54,11 @@ import {
   IGetGroups,
   IUpdateGroup,
 } from "@interface/group.interface";
+import {
+  IDomainSubscriptionList,
+  IDomainTag,
+  IDomainTagList,
+} from "@interface/domain.interface";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   IListResponse,
@@ -67,7 +72,6 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
-import { IDomainSubscriptionList } from "@interface/domain.interface";
 import { IFeedItem } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
@@ -86,36 +90,39 @@ const axiosClasorInstance = axios.create({
   },
 });
 
-axiosClasorInstance.interceptors.request.use((request) => {
-  const { headers, baseURL, method, url, data } = request;
-  const log = {
-    type: "REQUEST",
-    headers,
-    baseURL,
-    method,
-    url,
-    data,
-  };
+axiosClasorInstance.interceptors.request.use(
+  (request) => {
+    const { headers, baseURL, method, url, data } = request;
+    const log = {
+      type: "REQUEST",
+      headers,
+      baseURL,
+      method,
+      url,
+      data,
+    };
 
-  Logger.info(JSON.stringify(log));
-  return request;
-}, (error) => {
-  const log = {
-    type: "REQUEST_ERROR",
-    message: error.message,
-    config: {
-      url: error.config?.url,
-      method: error.config?.method,
-      data: error.config?.data,
-    },
-    response: {
-      status: error.response?.status,
-      data: error.response?.data,
-    },
-  };
-  Logger.error(JSON.stringify(log));
-  return Promise.reject(error);
-});
+    Logger.info(JSON.stringify(log));
+    return request;
+  },
+  (error) => {
+    const log = {
+      type: "REQUEST_ERROR",
+      message: error.message,
+      config: {
+        url: error.config?.url,
+        method: error.config?.method,
+        data: error.config?.data,
+      },
+      response: {
+        status: error.response?.status,
+        data: error.response?.data,
+      },
+    };
+    Logger.error(JSON.stringify(log));
+    return Promise.reject(error);
+  }
+);
 
 axiosClasorInstance.interceptors.response.use(
   (response) => {
@@ -192,10 +199,13 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (accessToken: string, domainUrl: string) => {
+export const userInfo = async (
+  accessToken: string,
+  domainUrl: string,
+  expiresAt: number
+) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
-
   if (cachedUser) {
     Logger.warn(
       JSON.stringify({
@@ -205,7 +215,6 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
     );
     return JSON.parse(cachedUser);
   }
-
   try {
     const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
       "auth/getMe",
@@ -216,22 +225,13 @@ export const userInfo = async (accessToken: string, domainUrl: string) => {
         },
       }
     );
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
-export const renewToken = async (refreshToken: string) => {
-  try {
-    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
-      "auth/renewToken",
+    await redisClient?.set(
+      `user:${accessToken}`,
+      JSON.stringify(response.data.data),
       {
-        refreshToken,
+        EX: expiresAt,
       }
     );
-
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1355,7 +1355,7 @@ export const createCategory = async (
   parentId: number | null,
   name: string,
   description: string,
-  order: number | null
+  order?: number | null
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<ICategory>>(
@@ -1364,7 +1364,7 @@ export const createCategory = async (
         parentId,
         name,
         description,
-        order: order && order > 0 ? Number(order) : undefined,
+        order: order === null ? null : Number(order),
       },
       {
         headers: {
@@ -1392,7 +1392,13 @@ export const editCategory = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
       `repositories/${repoId}/categories/${categoryId}`,
-      { name, description, order: Number(order), isHidden, parentId },
+      {
+        name,
+        description,
+        order: order === null ? null : Number(order),
+        isHidden,
+        parentId,
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -1680,7 +1686,7 @@ export const getPublishDocumentVersion = async (
 
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
-      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}`,
+      `repositories/${repoId}/publish/document/${documentId}/versions/${versionId}?innerDocument=true&innerOutline=true`,
       {
         headers,
         params: {
@@ -1814,7 +1820,7 @@ export const createDocument = async (
   contentType: EDocumentTypes,
   isTemplate: boolean,
   description?: string,
-  order?: number,
+  order?: number | null,
   imageUrl?: string,
   publicKeyId?: string
 ) => {
@@ -1827,7 +1833,7 @@ export const createDocument = async (
         categoryId,
         description,
         imageUrl,
-        order: order && order > 0 ? Number(order) : undefined,
+        order: order === null ? null : Number(order),
         isTemplate,
         publicKeyId,
       },
@@ -1853,8 +1859,9 @@ export const createDocumentTemplate = async (
   versionNumber: string,
   templateId: number,
   description?: string,
-  order?: number,
-  imageUrl?: string
+  order?: number | null,
+  imageUrl?: string,
+  publicKeyId?: string
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IDocument>>(
@@ -1865,7 +1872,8 @@ export const createDocumentTemplate = async (
         categoryId,
         description,
         imageUrl,
-        order,
+        order: order === null ? null : Number(order),
+        publicKeyId
       },
       {
         headers: {
@@ -1896,7 +1904,15 @@ export const editDocument = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
-      { categoryId, title, contentType, order: Number(order), description, isHidden, tagIds },
+      {
+        categoryId,
+        title,
+        contentType,
+        order: order === null ? null : Number(order),
+        description,
+        isHidden,
+        tagIds,
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -2174,6 +2190,132 @@ export const documentEnableUserGroupHash = async (
       }
     );
 
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createDocumentPublishLink = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  expireTime?: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/publish`,
+      {
+        expireTime,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDocumentPublishLink = async (
+  accessToken: string | undefined,
+  documentId: number,
+  getVersions: boolean,
+  offset?: number,
+  size?: number,
+) => {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
+
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<any>>(
+      `publish/document/${documentId}`,
+      {
+        headers,
+        params: {
+          getVersions,
+          offset,
+          size,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteDocumentPublishLink = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/publish`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishedDocumentLastVersion = async (
+  accessToken: string | undefined,
+  documentId: number,
+  password?: string,
+) => {
+  const headers = accessToken
+    ? { Authorization: `Bearer ${accessToken}` }
+    : undefined;
+
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IVersion | null>
+    >(`publish/document/${documentId}/lastVersion`, {
+      headers,
+      params: {
+        password,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishedDocumentVersion = async (
+  accessToken: string | undefined,
+  documentId: number,
+  versionId: number,
+  password?: string,
+) => {
+  const headers = accessToken
+  ? { Authorization: `Bearer ${accessToken}` }
+  : undefined;
+
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IVersion>
+    >(`publish/document/${documentId}/versions/${versionId}`, {
+      headers,
+      params: {
+       password
+      },
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -3497,7 +3639,6 @@ export const getDomainPublicFeeds = async (
       },
     });
 
-
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -3509,8 +3650,7 @@ export const getDomainPrivateFeeds = async (
   accessToken: string,
   offset: number,
   size: number,
-  repoId?: number,
-  
+  repoId?: number
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -3523,7 +3663,7 @@ export const getDomainPrivateFeeds = async (
       params: {
         offset,
         size,
-        repoId
+        repoId,
       },
     });
 
@@ -4292,6 +4432,7 @@ export const acceptSubscription = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
 export const getCustomPostByDomain = async (
   domain: string
 ): Promise<IDomainMetadata> => {
@@ -4303,13 +4444,14 @@ export const getCustomPostByDomain = async (
     const redisClient = await getRedisClient();
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
+      const cacheResult = JSON.parse(cachedDomain);
       Logger.warn(
         JSON.stringify({
           type: "Redis cache data",
-          data: cachedDomain,
+          data: cacheResult,
         })
       );
-      return JSON.parse(cachedDomain);
+      return cacheResult;
     }
     const { data } = await axiosClasorInstance.get<
       IClasorResult<IClasorDomainResult>
@@ -4366,6 +4508,227 @@ export const enableDocChat = async (
     );
 
     return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+// ////////////////////////////// DOMAIN TAGS //////////////////////////////////
+
+export const createDomainTag = async (
+  domainUrl: string,
+  accessToken: string,
+  name: string,
+  description: string,
+  order: number
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IDomainTag>(
+      "/domain/tags",
+      {
+        name,
+        description,
+        order,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getAllDomainTags = async (
+  domainUrl: string,
+  accessToken: string,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IDomainTagList>
+    >("/domain/tags", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDomainTagById = async (
+  domainUrl: string,
+  accessToken: string,
+  tagId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IDomainTag>(
+      `/domain/tags/${tagId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateDomainTag = async (
+  domainUrl: string,
+  accessToken: string,
+  tagId: number,
+  name?: string,
+  description?: string
+) => {
+  try {
+    const data: { name?: string; description?: string } = {};
+    if (name !== undefined) data.name = name;
+    if (description !== undefined) data.description = description;
+
+    const response = await axiosClasorInstance.put<IDomainTag>(
+      `/domain/tags/${tagId}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteDomainTag = async (
+  domainUrl: string,
+  accessToken: string,
+  tagId: number
+) => {
+  try {
+    await axiosClasorInstance.delete(`/domain/tags/${tagId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+    });
+    return true;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const setDocumentDomainTags = async (
+  domainUrl: string,
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  tagIds: number[],
+  isDirectAccess?: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      `repositories/${repoId}/documents/${documentId}/setDomainTags`,
+      {
+        tagIds,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+        params: {
+          isDirectAccess,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const addPartyToDomainParticipants = async (
+  domainUrl: string,
+  accessToken: string,
+  userNameList: string
+) => {
+  const redisClient = await getRedisClient();
+  const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
+  const cachedUser = await redisClient?.get(`user:${accessToken}`);
+  
+  try {
+    const response = await axiosClasorInstance.patch(
+      "domain/participants/addParty",
+      {
+        userNameList: [userNameList],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+    if (cachedDomain) {
+      redisClient?.del(`domain:${domainUrl}`);
+    }
+
+    if (cachedUser) {
+      redisClient?.del(`user:${accessToken}`);
+    }
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const removePartyFromDomainParticipants = async (
+  domainUrl: string,
+  accessToken: string,
+  userNameList: string[]
+) => {
+  const redisClient = await getRedisClient();
+  const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
+  const cachedUser = await redisClient?.get(`user:${accessToken}`);
+   
+  try {
+    const response = await axiosClasorInstance.patch(
+      "domain/participants/removeParty",
+      {
+        userNameList,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+      }
+    );
+    if (cachedDomain) {
+      redisClient?.del(`domain:${domainUrl}`);
+    }
+    if (cachedUser) {
+      redisClient?.del(`user:${accessToken}`);
+    }
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

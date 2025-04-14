@@ -67,8 +67,8 @@ const Editor = ({ setOpen }: IProps) => {
   } = useGetLastVersion(
     repoId,
     getSelectedDocument!.id,
-    !getSelectedVersion && repoId !== 0,
-    true
+    currentPath === "/admin/sharedDocuments",
+    !getSelectedVersion
   );
 
   const { data, isLoading, error, isSuccess } = useGetVersion(
@@ -219,6 +219,7 @@ const Editor = ({ setOpen }: IProps) => {
       dialogHeader={getSelectedDocument?.name}
       setOpen={handleClose}
       editorRef={getEditorConfig().ref}
+      isEditorReady={!!getVersionData}
     >
       {renderContent()}
     </EditorDialog>

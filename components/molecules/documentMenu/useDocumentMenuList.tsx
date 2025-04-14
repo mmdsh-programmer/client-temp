@@ -6,12 +6,14 @@ import { versionModalListAtom } from "@atom/version";
 import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import {
   ArrowLeftRectangleIcon,
+  CopyIcon,
   DeleteIcon,
   DocumentBookmarkIcon,
   DocumentTagsIcon,
   EditContentIcon,
   EditDocumentIcon,
   EditIcon,
+  GlobeIcon,
   HiddenIcon,
   LastVersionIcon,
   LimitationIcon,
@@ -24,6 +26,7 @@ import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
+import { toPersianDigit } from "@utils/index";
 
 interface UseDocumentMenuListProps {
   document?: IDocumentMetadata;
@@ -44,7 +47,9 @@ type Modals = {
   updatePassword: boolean;
   deletePassword: boolean;
   documentAccessPublishing: boolean;
-  documentDirectAccess: false;
+  documentDirectAccess: boolean;
+  createPublishLink: boolean;
+  deletePublishLink: boolean;
 };
 
 const useDocumentMenuList = ({
@@ -52,7 +57,7 @@ const useDocumentMenuList = ({
   toggleModal,
 }: UseDocumentMenuListProps) => {
   const getRepo = useRecoilValue(repoAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
+  const  setDocument = useSetRecoilState(selectedDocumentAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
   const setShowVersionList = useSetRecoilState(versionModalListAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
@@ -76,6 +81,7 @@ const useDocumentMenuList = ({
           setDocument(document);
         }
       },
+      className: "document-edit-content"
     },
     {
       text: "ویرایش سند",
@@ -87,6 +93,7 @@ const useDocumentMenuList = ({
         toggleModal("editDocument", true);
         if (document) setDocument(document);
       },
+      className: "document-edit"
     },
     {
       text: "تگ های سند",
@@ -97,10 +104,11 @@ const useDocumentMenuList = ({
           setDocument(document);
         }
       },
+      className: "document-edit-tags"
     },
   ];
 
-  const publishDocOptions = [
+  const publishLimitationDocOptions = [
     {
       text: document?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
       icon: document?.isHidden ? (
@@ -117,6 +125,7 @@ const useDocumentMenuList = ({
         toggleModal(document?.isHidden ? "visible" : "hide", true);
         if (document) setDocument(document);
       },
+      className: `${document?.isHidden ? "document-visible" : "document-hide"}`
     },
     {
       text: "محدودیت کاربران",
@@ -131,6 +140,7 @@ const useDocumentMenuList = ({
         toggleModal("documentAccessPublishing", true);
         if (document) setDocument(document);
       },
+      className: "document-limitation"
     },
     ...(document?.hasPassword
       ? [
@@ -147,6 +157,7 @@ const useDocumentMenuList = ({
               toggleModal("updatePassword", true);
               if (document) setDocument(document);
             },
+            className: "document-edit-password"
           },
           {
             text: "حذف رمز عبور",
@@ -161,6 +172,7 @@ const useDocumentMenuList = ({
               toggleModal("deletePassword", true);
               if (document) setDocument(document);
             },
+            className: "document-delete-password"
           },
         ]
       : [
@@ -177,8 +189,41 @@ const useDocumentMenuList = ({
               toggleModal("createPassword", true);
               if (document) setDocument(document);
             },
+            className: "document-create-password"
           },
         ]),
+  ];
+
+  const publishDocOptions = [
+      {
+        text: " لینک انتشار",
+        icon: <CopyIcon className="w-4 h-4 fill-icon-active" />,
+        onClick: () => {
+          const url = toPersianDigit(
+            `/share/${toPersianDigit(
+              `${getRepo?.name.replaceAll(/\s+/g, "-")}`
+            )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`
+          );
+          window.open(url, "_blank");
+        },
+        className: "document-copy-publish-link"
+      },
+      {
+        text: "حذف لینک انتشار",
+        icon: <DeleteIcon className="w-4 h-4" />,
+        disabled:
+          currentPath === "/admin/sharedDocuments" ||
+          currentPath === "/admin/myDocuments" ||
+          (getRepo?.roleName === ERoles.admin) ||
+          getRepo?.roleName === ERoles.writer ||
+          getRepo?.roleName === ERoles.viewer ||
+          getRepo?.roleName === ERoles.editor,
+        onClick: () => {
+          toggleModal("deletePublishLink", true);
+          if (document) setDocument(document);
+        },
+        className: "document-delete-publish-link"
+      },
   ];
 
   const menuList = [
@@ -198,6 +243,7 @@ const useDocumentMenuList = ({
         toggleModal("bookmarkDocument", true);
         if (document) setDocument(document);
       },
+      className: `${document?.isBookmarked ? "document-delete-bookmark" : "document-bookmark"}`
     },
     {
       text: "انتقال",
@@ -210,6 +256,7 @@ const useDocumentMenuList = ({
         toggleModal("move", true);
         if (document) setDocument(document);
       },
+      className: "document-move"
     },
     {
       text: "نسخه های سند",
@@ -221,6 +268,7 @@ const useDocumentMenuList = ({
           setDocumentShow(document);
         }
       },
+      className: "document-version-list"
     },
     {
       text: "دسترسی مستقیم به سند",
@@ -233,6 +281,7 @@ const useDocumentMenuList = ({
         toggleModal("documentDirectAccess", true);
         if (document) setDocument(document);
       },
+      className: "document-direct-access"
     },
     {
       text: "محدودیت دسترسی در پنل",
@@ -247,11 +296,33 @@ const useDocumentMenuList = ({
         toggleModal("documentAccess", true);
         if (document) setDocument(document);
       },
+      className: "document-access"
     },
+    ...(document?.isPublish ?  [{
+      text: "سند منتشر شده",
+      subMenu: publishDocOptions,
+      onClick: () => {},
+      icon: <GlobeIcon className="w-4 h-4 fill-icon-active" />,
+    }] : [{
+      text: "ایجاد لینک انتشار",
+      icon: <GlobeIcon className="w-4 h-4 fill-icon-active" />,
+      disabled:
+        currentPath === "/admin/sharedDocuments" ||
+        currentPath === "/admin/myDocuments" ||
+        (getRepo?.roleName === ERoles.admin) ||
+        (getRepo?.roleName === ERoles.editor) ||
+        (getRepo?.roleName === ERoles.writer) ||
+        getRepo?.roleName === ERoles.viewer,
+      onClick: () => {
+        toggleModal("createPublishLink", true);
+        if (document) setDocument(document);
+      },
+      className: "document-create-publish-link"
+    }]),
     {
       text: "محدودیت در انتشار",
       icon: <PublishedLimitationIcon className="w-4 h-4" />,
-      subMenu: publishDocOptions,
+      subMenu: publishLimitationDocOptions,
       onClick: () => {},
     },
     {
@@ -266,6 +337,7 @@ const useDocumentMenuList = ({
         toggleModal("deleteDocument", true);
         if (document) setDocument(document);
       },
+      className: "document-delete"
     },
   ];
 

@@ -42,7 +42,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
   return (
     <>
       {showDrawer ? (
-        <div className="xs:hidden flex">
+        <div className="version-menu xs:hidden flex">
           <DrawerTemplate
             openDrawer={openVersionActionDrawer}
             setOpenDrawer={setOpenVersionActionDrawer}
@@ -61,6 +61,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
               <MoreDotIcon className="w-4 h-4" />
             </div>
           }
+          className="version-menu"
         />
       )}
       <VersionDialogs

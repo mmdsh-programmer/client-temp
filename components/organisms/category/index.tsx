@@ -23,7 +23,7 @@ const CategoryList = () => {
               لیست اسناد
             </Typography>
             <Button
-              className="rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
+              className="category-tour rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
               onClick={() => {
                 setActiveTour(ETourSection.DOCUMENTS);
               }}

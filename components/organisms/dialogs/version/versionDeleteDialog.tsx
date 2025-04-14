@@ -46,7 +46,7 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       isDirectAccess:
         sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
-        toast.error(" نسخه حذف شد.");
+        toast.success(" نسخه حذف شد.");
         handleClose();
       },
     });
@@ -58,7 +58,7 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       dialogHeader={getVersion?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه"}
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="version-delete-dialog"
     >
       <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"

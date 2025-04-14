@@ -1,16 +1,17 @@
 import React, { useMemo } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { useRecoilValue } from "recoil";
-import { repoSearchParamAtom } from "@atom/repository";
-import { ERepoGrouping } from "@interface/enums";
-import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
-import useGetAccessList from "@hooks/repository/useGetAccessList";
-import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
-import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
 import CardView from "../repoView/cardView";
+import { ERepoGrouping } from "@interface/enums";
 import { Spinner } from "@material-tailwind/react";
+import { repoSearchParamAtom } from "@atom/repository";
+import useGetAccessList from "@hooks/repository/useGetAccessList";
+import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
+import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
+import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
+import { useRecoilValue } from "recoil";
 
 const AllRepoList = () => {
+  // TODO REFACTOR REQUIRED - REMOVE repoSearchParamAtom - REMOVE DOUBLE USAGE OF useGetAllRepositories
   const getSearchParam = useRecoilValue(repoSearchParamAtom);
   const repoType = getSearchParam?.repoType;
   const search = getSearchParam?.search;
@@ -89,7 +90,7 @@ const AllRepoList = () => {
   };
 
   return (
-    <div className="flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4">
+    <div className={`${search ? "searchRepo__list" :"allRepo__list"} flex flex-col h-full min-h-[calc(100vh-340px)] gap-y-4`}>
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

@@ -5,7 +5,6 @@ import {
   getPublishRepositoryInfo,
 } from "@service/clasor";
 import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
-
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import Logger from "@utils/logger";
@@ -95,7 +94,7 @@ export default async function PublishContentPage({
     const documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
-    if (toEnglishDigit(documentInfoName) !== documentName) {
+    if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
       await generateCachePageTag([
         `dc-${documentId}`,
         `rp-ph-${repository.id}`,

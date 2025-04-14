@@ -102,7 +102,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
       dialogHeader="ایجاد گروه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="xs:!min-w-[450px] xs:!max-w-[450px]"
+      className="repo-group-create-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
       backToMain
     >
       <form className="flex flex-col gap-5">
@@ -111,6 +111,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           <FormInput
             placeholder="نام گروه"
             register={{ ...register("title") }}
+            className="repo-group-create-form__input"
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -123,6 +124,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           <TextareaAtom
             placeholder="توضیحات گروه"
             register={{ ...register("description") }}
+            className="repo-group-create-form__textarea"
           />
           {errors.description && (
             <Typography className="warning_text">
@@ -161,13 +163,13 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
             </Typography>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 group-create-form__members-list">
           {updatedUsers.map((item) => {
             return (
               <ChipMolecule
                 key={item.username}
                 value={`${item.username}`}
-                className="w-auto border-[1px] border-normal pl-2 text-primary"
+                className="group-create-form__members-item w-auto border-[1px] border-normal pl-2 text-primary"
                 icon={
                   item?.picture ? (
                     <ImageComponent
@@ -181,7 +183,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                 }
                 actionIcon={
                   <Button
-                    className="bg-transparent p-0"
+                    className="group-create-form__member-delete-button bg-transparent p-0"
                     onClick={() => {
                       handleDelete(item.username);
                     }}

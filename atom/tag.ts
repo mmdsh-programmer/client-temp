@@ -1,6 +1,7 @@
 import { ITag } from "@interface/tags.interface";
 import { atom } from "recoil";
 import { logEffect } from "@utils/index";
+import { IDomainTag } from "@interface/domain.interface";
 
 export const createTagAtom = atom<boolean | null>({
   key: "createTagAtom",
@@ -8,7 +9,7 @@ export const createTagAtom = atom<boolean | null>({
   effects: [logEffect("createTagAtom")],
 });
 
-export const selectedTagAtom = atom<ITag | undefined>({
+export const selectedTagAtom = atom<ITag | IDomainTag | undefined>({
   key: "selectedTagAtom",
   default: undefined,
   effects: [logEffect("selectedTagAtom")],

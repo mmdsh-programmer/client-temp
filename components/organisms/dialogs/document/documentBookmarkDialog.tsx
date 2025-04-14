@@ -60,9 +60,9 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
       }
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className={document?.isBookmarked ? "document-remove-bookmark": "document-bookmark"}
     >
-      آیا از{" "}
+      آیا از
       {document?.isBookmarked ? " حذف نشان سند  " : " نشان‌دار کردن سند "}"
       <Typography
         title={document?.name}

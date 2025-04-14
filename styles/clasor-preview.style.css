@@ -5,3 +5,78 @@
 .clasor-preview-content .clasor-preview-content__render-server-content {
   @apply !rounded-none px-5 xs:px-8;
 }
+
+.clasor-preview-content__render-server-content * {
+  direction: ltr;
+}
+
+.publish-file-preview .preview-wrapper {
+  @apply !h-[calc(100vh-200px)];
+}
+
+/* Chart styles - ensure proper centering */
+.clasor-preview-content .chartjs {
+  text-align: center !important;
+}
+
+.clasor-preview-content .chartjs * {
+  text-align: center !important;
+}
+
+.clasor-preview-content .chartjs canvas {
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.clasor-preview-content .chart-title {
+  text-align: center !important;
+  width: 100%;
+}
+
+/* Direction control rules */
+/* All elements outside clasor-editor-content and without inline text-align get RTL */
+.clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
+  text-align: right;
+}
+
+.clasor-preview-content .clasor-editor-content *:not([style*="text-align"]) {
+  text-align: left;
+}
+
+.clasor-preview-content .clasor-editor-content :is(video, audio) {
+  margin: 0 auto !important;
+}
+
+.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet *) {
+  direction: rtl;
+}
+
+.clasor-preview-content *:not(.clasor-editor-content *) .table:not([dir]) {
+  direction: ltr;
+}
+
+/* Force RTL direction for table figures with dir="rtl" attribute */
+.clasor-preview-content figure.table[dir="rtl"] {
+  direction: rtl !important;
+}
+
+.clasor-preview-content figure.table[dir="rtl"] table {
+  direction: rtl !important;
+}
+
+/* Elements with inline text-align maintain their own alignment */
+.clasor-preview-content [style*="text-align"] {
+  text-align: inherit;
+}
+
+.clasor-preview-content figure img {
+  width: unset;
+}
+
+.clasor-preview-content__render-server-content figure img {
+  width: unset;
+}
+
+.clasor-preview-content__render-server-content table {
+  width: 100%;
+}

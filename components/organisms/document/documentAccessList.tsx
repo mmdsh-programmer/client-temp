@@ -49,7 +49,7 @@ const DocumentAccessList = () => {
             <Spinner className="h-6 w-6" color="deep-purple" />
           </div>
         ) : (
-          <div className="flex flex-wrap gap-2">
+          <div className="docuemnt-direct-access-list flex flex-wrap gap-2">
             {getAccessList?.pages.map((page) => {
               return page.list.length ? (
                 page.list.map((accessItem) => {
@@ -58,7 +58,7 @@ const DocumentAccessList = () => {
                       <ChipMolecule
                         key={accessItem.userName}
                         value={`${accessItem.userName} _ ${translateRoles(accessItem.userRole)}`}
-                        className="w-auto border-[1px] border-normal pl-2 text-primary"
+                        className="direct-access-item w-auto border-[1px] border-normal pl-2 text-primary"
                         icon={
                           accessItem.img ? (
                             <ImageComponent
@@ -76,7 +76,7 @@ const DocumentAccessList = () => {
                             <Spinner className="h-4 w-4" color="deep-purple" />
                           ) : (
                             <Button
-                              className="bg-transparent p-0"
+                              className="delete-button bg-transparent p-0"
                               onClick={() => {
                                 setSelectedUser(accessItem.userName);
                                 handleDelete(accessItem);

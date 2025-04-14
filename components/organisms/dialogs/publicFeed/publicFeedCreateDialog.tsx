@@ -8,11 +8,13 @@ import TextareaAtom from "@components/atoms/textarea/textarea";
 import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { publicFeedSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
   content: string;
-  link?: string
+  link?: string;
 }
 
 interface IProps {
@@ -21,11 +23,11 @@ interface IProps {
 
 const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
   const [imageHash, setImageHash] = useState<string | undefined>();
-  
+
   const { data: feedImages, isLoading } = useGetFeedImages(30);
   const createPublicFeed = useCreatePublicFeed();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(publicFeedSchema) });
   const {
     register,
     handleSubmit,
@@ -63,7 +65,7 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
       dialogHeader="ایجاد خبرنامه عمومی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="custom-dialog sm:!min-w-[500px] sm:!max-w-[500px] m-0"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -76,11 +78,19 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">متن </Typography>
+          <Typography className="form_label">توضیحات </Typography>
           <TextareaAtom
-            placeholder="متن"
+            placeholder="توضیحات"
             register={{ ...register("content") }}
+            rows={10}
+            resize
+            className="min-h-[200px] h-auto max-h-[500px]"
           />
+          {errors.content && (
+            <Typography className="warning_text">
+              {errors.content?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> لینک</Typography>

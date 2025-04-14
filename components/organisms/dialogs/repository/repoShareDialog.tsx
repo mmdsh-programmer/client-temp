@@ -82,7 +82,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="اشتراک گذاری"
       setOpen={handleClose}
-      className="xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
+      className="repo-share-dialog xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
     >
       <DialogBody placeholder="dialog body" className="p-0 h-full">
         <div className="flex flex-col gap-4 p-4 xs:p-6">

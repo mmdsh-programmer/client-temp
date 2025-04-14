@@ -27,6 +27,7 @@ const RepoTypesCards = () => {
           return setRepoGroup(ERepoGrouping.MY_REPO);
         },
         repoNumber: getMyInfo?.owner || 0,
+        className: "repo-type-card-myRepo",
       },
       {
         cardTitle: "مخزن‌های اشتراکی",
@@ -35,6 +36,7 @@ const RepoTypesCards = () => {
           return setRepoGroup(ERepoGrouping.ACCESS_REPO);
         },
         repoNumber: getMyInfo?.access || 0,
+        className: "repo-type-card-accessRepo",
       },
       {
         cardTitle: "مخزن‌های نشان‌شده",
@@ -45,6 +47,7 @@ const RepoTypesCards = () => {
           return setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
         },
         repoNumber: getMyInfo?.bookmark || 0,
+        className: "repo-type-card-bookmarkRepo",
       },
       {
         cardTitle: "مخزن‌های بایگانی‌شده",
@@ -53,6 +56,7 @@ const RepoTypesCards = () => {
           return setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
         },
         repoNumber: getMyInfo?.archived || 0,
+        className: "repo-type-card-archiveRepo",
       },
     ];
   }, [getMyInfo]);
@@ -68,6 +72,7 @@ const RepoTypesCards = () => {
             icon={item.icon}
             repoNumber={item.repoNumber}
             onClick={item.onClick}
+            className={item.className}
           />
         );
       })}

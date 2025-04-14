@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { createCatDocDrawerAtom } from "@atom/category";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { categoryAtom, categoryShowAtom, createCatDocDrawerAtom } from "@atom/category";
 import {
   AddIcon,
   ArrowDownIcon,
@@ -26,6 +26,8 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
   const [createCategoryModal, setCreateCategoryModal] = useState(false);
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
+  const setCategory = useSetRecoilState(categoryAtom);
+  const getCategoryShow = useRecoilValue(categoryShowAtom);
   const [openCreateDrawer, setOpenCreateDrawer] = useRecoilState(
     createCatDocDrawerAtom
   );
@@ -35,6 +37,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
     icon?: React.JSX.Element;
     disabled?: boolean;
     onClick: () => void;
+    className?: string;
   }[] = [
     {
       text: "سند جدید",
@@ -42,7 +45,9 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
       disabled: getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         setCreateDocumentModal(true);
+        setCategory(getCategoryShow);
       },
+      className: "create-document",
     },
     {
       text: "نمونه سند",
@@ -53,7 +58,9 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         getRepo?.roleName === ERoles.editor,
       onClick: () => {
         setCreateTemplateModal(true);
+        setCategory(getCategoryShow);
       },
+      className: "create-template",
     },
     {
       text: "ایجاد دسته بندی",
@@ -63,14 +70,16 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         setCreateCategoryModal(true);
+        setCategory(getCategoryShow);
       },
+      className: "create-category",
     },
   ];
 
   return (
     <>
       {showDrawer ? (
-        <div className="xs:hidden flex createMenu">
+        <div className="categoryCreateMenu xs:hidden flex">
           <DrawerTemplate
             openDrawer={openCreateDrawer}
             setOpenDrawer={setOpenCreateDrawer}
@@ -79,7 +88,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         </div>
       ) : (
         <>
-          <div className="createMenu hidden xs:flex">
+          <div className="categoryCreateMenu hidden xs:flex">
             <MenuTemplate
               setOpenDrawer={() => {
                 setOpenCreateDrawer(true);

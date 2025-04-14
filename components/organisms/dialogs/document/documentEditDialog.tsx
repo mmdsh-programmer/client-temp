@@ -100,9 +100,9 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       dialogHeader="ویرایش سند"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="document-edit-dialog"
     >
-      <form className="flex flex-col gap-6">
+      <form className="document-edit__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نام سند</Typography>
           <FormInput
@@ -112,6 +112,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
                 value: document?.name,
               }),
             }}
+            className="document-edit__form-name"
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -123,13 +124,14 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">اولویت سند </Typography>
           <FormInput
             type="number"
-            min={0}
+            min={1}
             placeholder="اولویت سند"
             register={{
               ...register("order", {
                 value: document?.order,
               }),
             }}
+            className="document-edit__form-order "
           />
           {errors.order && (
             <Typography className="warning_text">
@@ -144,6 +146,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("description", { value: document?.description }),
             }}
+            className="document-edit__form-description "
           />
           {errors.description && (
             <Typography className="warning_text">

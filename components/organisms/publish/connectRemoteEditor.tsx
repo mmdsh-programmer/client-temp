@@ -39,7 +39,7 @@ const ConnectRemoteEditor = ({ versionData }: IProps) => {
   };
 
   return editorUrl ? (
-    <div className="remote-editor-container px-1 h-[calc(100vh-156px)]">
+    <div className="remote-editor-container px-1 h-[calc(100vh-81px)]">
       <RemoteEditor
         url={`${editorUrl}?timestamp=${Date.now()}`}
         editorMode="preview"

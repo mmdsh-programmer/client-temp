@@ -52,6 +52,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const { data: userInfo } = useGetUser();
   const saveEditorHook = useSaveEditor();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const writerRole = () => {
     if (currentPath === "/admin/myDocuments") {
       return false;
@@ -142,6 +144,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = (data: any) => {
+    setIsLoading(true);
+
     let encryptedContent: string | null = null;
     const content: string =
       selectedDocument?.contentType === EDocumentTypes.classic
@@ -150,6 +154,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
     if (selectedDocument?.publicKeyId) {
       encryptedContent = encryptData(content) as string;
+      console.log("-------------------- save data -------------------", data);
+      console.log("----------------- encrypted -----------------", encryptedContent);
     }
 
     if (getVersionData && selectedDocument && repoId) {
@@ -167,11 +173,17 @@ const EditorFooter = ({ editorRef }: IProps) => {
         versionNumber: getVersionData.versionNumber,
         versionState: getVersionData.state,
         isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+          sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
         callBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
+          setIsLoading(false);
+        },
+        errorCallback: () => {
+          setIsLoading(false);
         },
       });
+    } else {
+      setIsLoading(false);
     }
   };
 
@@ -210,6 +222,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   useEffect(() => {
+    editorRef.current?.on("getData", handleSave);
+  
     return () => {
       stopWorker();
     };
@@ -220,9 +234,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
   }
 
   return editorMode === "preview" ? (
-    <div className="w-full flex justify-between items-center gap-2">
+    <div className="editor-footer__preview-mode w-full flex justify-between items-center gap-2">
       <Button
-        className="w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+        className="editor-footer__version-number w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
@@ -243,15 +257,16 @@ const EditorFooter = ({ editorRef }: IProps) => {
           writerRole() &&
           getVersionData?.creator?.userName !== userInfo?.username
         }
+        className="editor-footer__edit-button"
       >
         ویرایش
       </CancelButton>
     </div>
   ) : (
-    <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
+    <div className="editor-footer__edit-mode w-full flex flex-col md:flex-row gap-4 justify-between items-center">
       <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
         <Button
-          className="w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+          className="editor-footer__version-number w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
@@ -273,7 +288,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
               ذخیره‌سازی خودکار
             </Typography>
           }
-          className=""
+          className="editor-footer__auto-save-checkbox"
           color="deep-purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
@@ -288,7 +303,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             );
             setEditorMode(editorMode === "edit" ? "temporaryPreview" : "edit");
           }}
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
+          className="editor-footer__change-mode-button !h-12 md:!h-8 !w-[50%] md:!w-[100px]"
           disabled={
             saveEditorHook.isPending ||
             (writerRole() &&
@@ -298,14 +313,12 @@ const EditorFooter = ({ editorRef }: IProps) => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
-          onClick={async () => {
-            const value = await editorRef.current?.getData();
-            if (value) {
-              handleSave(value);
-            }
+          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          onClick={() => {
+            editorRef.current?.getData();
           }}
-          disabled={saveEditorHook.isPending}
+          disabled={saveEditorHook.isPending || isLoading}
+          loading={isLoading || saveEditorHook.isPending}
         >
           <Typography className="text__label__button text-white">
             ذخیره

@@ -1,28 +1,26 @@
 import React, { useRef, useState } from "react";
-import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import {
   editorDecryptedContentAtom,
   editorListDrawerAtom,
   editorModeAtom,
 } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
 import FileEditor from "./fileEditor";
 import FloatingButtons from "./floatingButtons";
-import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
 import { Spinner } from "@material-tailwind/react";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
-import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
+import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
+import { IClassicData } from "clasor-remote-editor/dist/interface";
 
 interface IProps {
   getEditorConfig: () => {
@@ -42,7 +40,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const getRepo = useRecoilValue(repoAtom);
-  const selectedCategory = useRecoilValue(categoryAtom);
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
@@ -94,15 +91,15 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             accessToken: userInfo?.access_token,
             refreshToken: userInfo?.refresh_token,
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
+            userHasDirectAccess:
+              currentPath === "/admin/sharedDocuments" ||
+              sharedDocuments === "true",
+            documentHasDirectAccess: selectedDocument.hasDirectAccess,
           },
           publicUserGroupHash: repoGroupHash() || undefined,
-          privateUserGroupHash: selectedCategory?.userGroupHash || undefined,
-          repositoryId:
-            currentPath === "/admin/sharedDocuments" ||
-            sharedDocuments === "true"
-              ? selectedDocument.id
-              : repoId || undefined,
-          resourceId: selectedCategory?.id || undefined,
+          privateUserGroupHash: undefined,
+          repositoryId: repoId,
+          resourceId: selectedDocument.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
         } as IClassicData;

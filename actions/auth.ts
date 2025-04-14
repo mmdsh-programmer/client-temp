@@ -14,6 +14,7 @@ import {
 } from "@service/account";
 
 import { IActionError } from "@interface/app.interface";
+import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -39,13 +40,14 @@ const refreshCookieHeader = async (
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + (expires_in * 1000),
+      expiresAt: +new Date() + ((expires_in - 60) * 1000),
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
+ 
   cookies().set("token", token, {
     httpOnly: true,
     secure: process.env.SECURE === "TRUE",
@@ -54,14 +56,8 @@ const refreshCookieHeader = async (
     sameSite: "lax",
   });
 
-  const userData = await userInfo(access_token, domain);
-  const redisClient = await getRedisClient();
-  await redisClient?.set(
-    `user:${access_token}`,
-    JSON.stringify(userData),
-    { EX: expires_in }
-  );
-  const mySocialProfile = await getMySocialProfile(access_token);
+  const userData = await userInfo(access_token, domain, expires_in - 60);
+  const mySocialProfile = await getMySocialProfile(access_token, expires_in - 60 );
   return {
     ...userData,
     private: mySocialProfile.result.private,
@@ -99,7 +95,6 @@ export const getMe = async () => {
   };
 
   try {
-    console.log(tokenInfo.expiresAt, +new Date());
     if(tokenInfo.expiresAt < +new Date()){
       return refreshCookieHeader(
         tokenInfo.refresh_token,
@@ -107,8 +102,10 @@ export const getMe = async () => {
         clientSecret
       );
     }
-    const userData = await userInfo(tokenInfo.access_token, domain);
-    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token);
+
+    const expiresAt = Math.floor((tokenInfo.expiresAt - +new Date()) / 1000);
+    const userData = await userInfo(tokenInfo.access_token, domain, +tokenInfo.expiresAt);
+    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, expiresAt);
     const userDataWithPrivate = {
       ...userData,
       private: mySocialProfile.result.private,
@@ -177,11 +174,12 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 
   
 
+  const expiresAt = +new Date() + ((expires_in - 60) * 1000);
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + (expires_in * 1000),
+      expiresAt,
     }),
     cryptoSecretKey,
     cryptoInitVectorKey
@@ -239,10 +237,12 @@ export const logoutAction = async () => {
     const redisClient = await getRedisClient();
     if(redisClient && redisClient.isReady){
       await redisClient.del(`user:${access_token}`);
-      console.log({
-        type: "Redis remove data",
-        data: `user:${access_token}`
-      });
+      Logger.warn(
+        JSON.stringify({
+          type: "Redis remove data",
+          data: `user:${access_token}`,
+        })
+      );
     }
   } catch (error) {
     cookies().delete("token");
@@ -265,7 +265,6 @@ export const editSocialProfileAction = async (isPrivate: boolean) => {
   const userData = await getMe();
   try {
     const response = await editSocialProfile(userData.access_token, isPrivate);
-
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

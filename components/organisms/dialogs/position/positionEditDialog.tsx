@@ -13,10 +13,12 @@ import useGetPositionInfo from "@hooks/position/useGetPositionInfo";
 import EditDialog from "@components/templates/dialog/editDialog";
 import ImageComponent from "@components/atoms/image";
 import useUpdatePosition from "@hooks/position/useUpdatePosition";
+import { positionSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
-  members: string[];
+  members?: string[];
 }
 
 interface IProps {
@@ -37,7 +39,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
 
   const updatePosition = useUpdatePosition();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(positionSchema) });
   const {
     register,
     handleSubmit,
@@ -187,6 +189,11 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
               );
             })}
           </div>
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
       </form>
     </EditDialog>

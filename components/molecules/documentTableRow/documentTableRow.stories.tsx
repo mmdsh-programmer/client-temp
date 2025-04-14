@@ -39,7 +39,24 @@ const mockDocument: IDocumentMetadata = {
   attachmentUserGroup: null,
   hasWhiteList: false,
   hasBlackList: false,
-  repoName: ""
+  repoName: "",
+  hasDirectAccess: false,
+  createDate: 0,
+  customPostEntityId: 0,
+  customPostId: 0,
+  deleteDate: null,
+  domainTags: [],
+  imageAlt: null,
+  imageUrl: null,
+  isCommitted: false,
+  isPublished: false,
+  parentId: null,
+  participants: [],
+  participantsRoles: {},
+  readTime: null,
+  repoTypeId: 0,
+  sharedArray: [],
+  updateDate: 0
 };
 
 const meta: Meta<typeof DocumentTableRow> = {

@@ -19,6 +19,7 @@ const useSaveEditor = () => {
       versionState: string;
       isDirectAccess?: boolean;
       callBack?: () => void;
+      errorCallback?: () => void;
     }) => {
       const {
         repoId,
@@ -57,7 +58,9 @@ const useSaveEditor = () => {
 
       callBack?.();
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      const { errorCallback } = values;
+      errorCallback?.();
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

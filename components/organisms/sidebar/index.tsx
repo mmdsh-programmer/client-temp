@@ -43,7 +43,7 @@ const Sidebar = ({ children }: IProps) => {
   };
 
   return (
-    <aside className="hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
+    <aside className="sidebar hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
       <div className="p-4 h-[80px] flex items-center justify-center ">
         {children}
       </div>
@@ -51,12 +51,13 @@ const Sidebar = ({ children }: IProps) => {
       <ListItem
         key={ERepoGrouping.DASHBOARD}
         placeholder="sidebar-item"
-        className="p-2 dashboard hover:!bg-transparent"
+        className={`sidebar-item-${getRepoGroup} p-2 dashboard hover:!bg-transparent`}
       >
         <Button
           placeholder="sidebar-button"
           className={` bg-transparent justify-start w-full 
                      text-secondary gap-1 px-3 h-[44px]
+                     sidebar-button-${getRepoGroup}
                    ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
                   hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
@@ -73,7 +74,7 @@ const Sidebar = ({ children }: IProps) => {
       </ListItem>
       <hr className="" />
       <Accordion
-        className="max-w-full w-full "
+        className="personal-document-sidebar max-w-full w-full "
         open={open === 1}
         icon={
           <ChevronLeftIcon
@@ -97,7 +98,7 @@ const Sidebar = ({ children }: IProps) => {
         </AccordionBody>
       </Accordion>
       <Accordion
-        className="max-w-full w-full "
+        className="repo-list-sidebar max-w-full w-full "
         open={open === 2}
         icon={
           <ChevronLeftIcon
@@ -120,11 +121,11 @@ const Sidebar = ({ children }: IProps) => {
           </div>
         </AccordionBody>
       </Accordion>
-      {userInfo?.isDomainOwner ? (
+      {userInfo?.domainRole === "owner" || userInfo?.domainRole === "participant" ? (
         <>
           <ListItem
             placeholder="sidebar-item"
-            className="p-2 dashboard hover:!bg-transparent"
+            className="domain-management-sidebar p-2 dashboard hover:!bg-transparent"
           >
             <Button
               placeholder="sidebar-button"
@@ -148,7 +149,7 @@ const Sidebar = ({ children }: IProps) => {
 
       <ListItem
         placeholder="sidebar-item"
-        className="p-2 dashboard hover:!bg-transparent"
+        className="branch-management-sidebar p-2 dashboard hover:!bg-transparent"
       >
         <Button
           placeholder="sidebar-button"

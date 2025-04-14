@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { IRemoteEditorRef } from "clasor-remote-editor";
+import { documentTemplateAtom } from "@atom/document";
 import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { documentTemplateAtom } from "@atom/document";
-import { toast } from "react-toastify";
-import { IRemoteEditorRef } from "clasor-remote-editor";
 import { usePathname } from "next/navigation";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -18,11 +18,12 @@ const LoadHtml = ({ editorRef, handleClose }: IProps) => {
 
   const getRepo = useRecoilValue(repoAtom);
   const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
-
+  
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
     getRepo!.id,
     getDocumentTemplate!.id,
-    !!getDocumentTemplate?.id
+    !!getDocumentTemplate?.id,
+    !!getDocumentTemplate
   );
 
   const { data, error } = useGetVersion(

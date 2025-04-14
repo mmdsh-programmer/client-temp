@@ -19,8 +19,9 @@ const useCreateDocumentTemplate = () => {
       versionNumber: string;
       templateId: number;
       description?: string;
-      order?: number;
+      order?: number | null;
       imageUrl?: string;
+      publicKeyId?: string;
       callBack?: () => void;
     }) => {
       const {
@@ -33,6 +34,7 @@ const useCreateDocumentTemplate = () => {
         templateId,
         order,
         imageUrl,
+        publicKeyId
       } = values;
       const response = await createDocumentTemplateAction(
         repoId,
@@ -44,6 +46,7 @@ const useCreateDocumentTemplate = () => {
         description,
         order,
         imageUrl,
+        publicKeyId
       );
       handleClientSideHookError(response as IActionError);
       return response as IDocument;

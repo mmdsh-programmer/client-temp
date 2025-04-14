@@ -79,7 +79,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       dialogHeader="ایجاد نسخه جدید از این نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className=""
+      className="version-clone-dialog"
     >
       {isLoading ? (
         <Spinner className="h-4 w-4" color="deep-purple" />

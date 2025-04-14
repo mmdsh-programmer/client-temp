@@ -35,7 +35,7 @@ const RepoRestoreDialog = ({ setOpen }: IProps) => {
       dialogHeader="بازگردانی مخزن"
       onSubmit={handleSubmit}
       setOpen={handleClose}
-      className=""
+      className="repo-restore-dialog"
     >
       آیا از بازگردانی"
       <Typography

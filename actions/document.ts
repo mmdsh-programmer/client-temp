@@ -8,15 +8,18 @@ import {
   bookmarkDocument,
   createDocument,
   createDocumentPassword,
+  createDocumentPublishLink,
   createDocumentTemplate,
   deleteDocument,
   deleteDocumentPassword,
+  deleteDocumentPublishLink,
   documentEnableUserGroupHash,
   editDocument,
   getClasorField,
   getCustomPostByDomain,
   getDocument,
   getDocumentBlocklist,
+  getDocumentPublishLink,
   getDocumentWhiteBlackList,
   getUserDocument,
   updateDocumentPassword,
@@ -24,7 +27,7 @@ import {
 
 import { EDocumentTypes } from "@interface/enums";
 import { ISortProps } from "@atom/sortParam";
-import { getMe } from "./auth";
+import { getMe, userInfoAction } from "./auth";
 import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
@@ -73,7 +76,7 @@ export const createDocumentAction = async (
   contentType: EDocumentTypes,
   isTemplate: boolean,
   description?: string,
-  order?: number,
+  order?: number | null,
   imageUrl?: string,
   publicKeyId?: string
 ) => {
@@ -106,8 +109,9 @@ export const createDocumentTemplateAction = async (
   versionNumber: string,
   templateId: number,
   description?: string,
-  order?: number,
-  imageUrl?: string
+  order?: number | null,
+  imageUrl?: string,
+  publicKeyId?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -121,7 +125,8 @@ export const createDocumentTemplateAction = async (
       templateId,
       description,
       order,
-      imageUrl
+      imageUrl,
+      publicKeyId
     );
 
     return response;
@@ -350,7 +355,7 @@ export const addToDocumentWhiteListAction = async (
       usernameList
     );
 
-    
+
     // revalidate page of document if exists
     revalidateTag(`dc-${documentId}`);
 
@@ -439,6 +444,65 @@ export const documentEnableUserGroupHashAction = async (
       isDirectAccess
     );
 
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const createDocumentPublishLinkAction = async (
+  repoId: number,
+  documentId: number,
+  expireTime?: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await createDocumentPublishLink(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      expireTime,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getDocumentPublishLinkAction = async (
+  documentId: number,
+  getVersions: boolean,
+  offset?: number,
+  size?: number,
+) => {
+  const userInfo = await userInfoAction();
+  try {
+    const accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+
+    const response = await getDocumentPublishLink(
+      accessToken,
+      documentId,
+      getVersions,
+      offset,
+      size,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const deleteDocumentPublishLinkAction = async (
+  repoId: number,
+  documentId: number
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await deleteDocumentPublishLink(
+      userInfo.access_token,
+      repoId,
+      documentId
+    );
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

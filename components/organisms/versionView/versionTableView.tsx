@@ -4,7 +4,6 @@ import { Spinner, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
 import { LastVersionIcon } from "@components/atoms/icons";
@@ -60,7 +59,7 @@ const VersionTableView = ({
           <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
-        <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg h-[calc(100vh-200px)]">
+        <div className="version-list-table w-full overflow-auto border-[0.5px] border-normal rounded-lg h-[calc(100vh-200px)]">
           <table className="w-full overflow-hidden min-w-max ">
             <TableHead
               tableHead={[
@@ -90,6 +89,7 @@ const VersionTableView = ({
                   return (
                     <TableCell
                       key={`version-table-item-${version.id}`}
+                      className="version-table-item"
                       onClick={() => {
                         if (
                           getSelectedDocument?.contentType !==

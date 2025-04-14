@@ -10,6 +10,9 @@ import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 import { TickIcon } from "@components/atoms/icons";
 import useGetRepoPublicKeys from "@hooks/repository/useGetRepoPublicKeys";
+import { useRecoilValue } from "recoil";
+import { repoAtom } from "@atom/repository";
+import { ERoles } from "@interface/enums";
 
 interface IProps {
   repoId: number;
@@ -36,8 +39,10 @@ const RepoKeyList = ({
     error,
     refetch,
   } = useGetRepoPublicKeys(repoId, 10);
+  
+  const getRepo = useRecoilValue(repoAtom);
 
-  const tableHead = hasAction
+  const tableHead = hasAction && getRepo?.roleName === ERoles.owner
     ? [
         {
           key: "keyName",
@@ -88,8 +93,9 @@ const RepoKeyList = ({
             return (
               <TableCell
                 key={`publick-key-table-item-${key.id}`}
+                className="public-key-table-item"
                 tableCell={
-                  hasAction
+                  hasAction && getRepo?.roleName === ERoles.owner
                     ? [
                         { data: key.name },
                         {

@@ -93,53 +93,40 @@ const CategoryTour = () => {
       createStep(
         "step1",
         `
-            <div class="tour-step-container">
-            <h1 class="tour-step-header"> جست و جو در محتوا  </h1>
-            <p class="tour-step-text">
-            جست و جو در محتوای تمام اسناد موجود، کافیست کلمه یا جمله مورد نظر را
-            وارد کنیدتا جست و جو در اسناد انجام شود و نتیجه به شما نمایش داده شود.
-            </p>
-          </div>`,
-
-        ".categorySearchContent",
-        "bottom",
-      ),
-      createStep(
-        "step2",
-        `
-          <div class="tour-step-container">
-            <h1 class="tour-step-header">جست و جوی پیشرفته</h1>
-            <p class="tour-step-text">
-             در این قسمت می توانید جست و جوی پیشرفته در مستندات و دسته بندی ها داشته باشید.
-            </p>
-          </div>
-            `,
-        ".categorySearch",
-        "bottom",
-      ),
-    //   createStep(
-    //     "step3",
-    //     `
-    //       <div class="tour-step-container">
-    //       <h1 class="tour-step-header"> نمایش درختی </h1>
-    //       <p class="tour-step-text">
-    //       نمایش درختی و مدیریت دسته بندی ها و اسناد موجود در مخزن
-    //       </p>
-    //     </div>`,
-    //     ".categoryTreeMode",
-    //     "bottom",
-    //   ),
-      createStep(
-        "step3",
-        `
           <div class="tour-step-container">
             <h1 class="tour-step-header">عملیات مربوط به دسته بندی نمونه سند و سند</h1>
             <p class="tour-step-text">
               از این گزینه می توانید برای ایجاد دسته بندی ، نمونه سند و سند استفاده کنید. 
             </p>
           </div>`,
-        ".createMenu",
+        ".categoryCreateMenu",
         "bottom",
+        "back"
+      ),
+      createStep(
+        "step2",
+        `
+          <div class="tour-step-container">
+            <h1 class="tour-step-header"> جست و جو در محتوا  </h1>
+            <p class="tour-step-text">
+              جست و جو در محتوای تمام اسناد موجود، کافیست کلمه یا جمله مورد نظر را
+              وارد کنیدتا جست و جو در اسناد انجام شود و نتیجه به شما نمایش داده شود.
+            </p>
+          </div>`,
+        ".searchContent",
+        "bottom"
+      ),
+      createStep(
+        "step3",
+        `
+          <div class="tour-step-container">
+            <h1 class="tour-step-header">جست و جوی پیشرفته</h1>
+            <p class="tour-step-text">
+             در این قسمت می توانید جست و جوی پیشرفته در مستندات و دسته بندی ها داشته باشید.
+            </p>
+          </div>`,
+        ".advancedFilter",
+        "bottom"
       ),
       createStep(
         "step4",
@@ -150,10 +137,9 @@ const CategoryTour = () => {
               با انتخاب دو یا چند سند/ دسته بندی امکان جابجایی به یک دسته بندی و یا حذف
               موارد انتخاب شده وجود دارد.
             </p>
-          </div>
-        `,
+          </div>`,
         ".categoryBulk",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step5",
@@ -164,10 +150,9 @@ const CategoryTour = () => {
               اگر برای سند یا دسته بندی الویت وارد شده باشد،بر اساس این الویت بندی ها
               لیست مرتب می شود.
             </p>
-          </div>
-        `,
+          </div>`,
         ".categoryOrder",
-        "bottom",
+        "bottom"
       ),
       createStep(
         "step-last",
@@ -179,12 +164,11 @@ const CategoryTour = () => {
               <p class="tour-step-text">
               عملیات مربوط به ساخت، ویرایش، انتقال، حذف در این قسمت وجود دارد.
               </p>
-          </div>
-        `,
+          </div>`,
         ".category-action",
-        "bottom",
+        "bottom"
       ),
-    ];
+    ].filter(Boolean) as StepOptions[];
 
     categoryTourSteps?.forEach((step) => {
       return categoryTour.addStep(step as StepOptions);

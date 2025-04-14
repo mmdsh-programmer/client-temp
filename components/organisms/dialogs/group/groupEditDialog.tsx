@@ -152,14 +152,15 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       dialogHeader="ویرایش گروه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="xs:!min-w-[450px] xs:!max-w-[450px]"
+      className="repo-group-edit-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
     >
-      <form className="flex flex-col gap-5">
+      <form className="repo-group-edit-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> نام گروه </Typography>
           <FormInput
             placeholder="نام گروه"
             register={{ ...register("title", { value: group?.title }) }}
+            className="repo-group-edit-form__input"
           />
           {errors.title && (
             <Typography className="warning_text">
@@ -174,6 +175,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("description", { value: group?.description }),
             }}
+            className="repo-group-edit-form__textarea"
           />
           {errors.description && (
             <Typography className="warning_text">
@@ -181,7 +183,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
             </Typography>
           )}
         </div>
-        <div className="flex flex-col gap-2 ">
+        <div className="flex flex-col gap-2 repo-group-edit-form__members">
           <Typography className="form_label"> اعضای گروه</Typography>
           <SearchableDropdown
             background="gray-50"
@@ -216,7 +218,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
             </Typography>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 group-edit-form__members-list">
           {isLoading || isFetching ? (
             <Spinner className="h-4 w-4" color="deep-purple" />
           ) : (
@@ -225,7 +227,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                 <ChipMolecule
                   key={item.username}
                   value={`${item.username}`}
-                  className="w-auto border-[1px] border-normal pl-2 text-primary"
+                  className="group-edit-form__members-item w-auto border-[1px] border-normal pl-2 text-primary"
                   icon={
                     item.picture ? (
                       <ImageComponent
@@ -239,7 +241,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                   }
                   actionIcon={
                     <Button
-                      className="bg-transparent p-0"
+                      className="group-edit-form__member-delete-button bg-transparent p-0"
                       onClick={() => {
                         handleDelete(item.username);
                       }}

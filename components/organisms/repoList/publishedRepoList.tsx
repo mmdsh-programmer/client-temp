@@ -40,7 +40,7 @@ const PublishedRepoList = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="publishedRepo__list flex flex-col gap-6">
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
           <Spinner className="h-8 w-8" color="deep-purple" />

@@ -8,17 +8,17 @@ import {
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+import { headers } from "next/headers";
 
 export const getDomainSubscriptionAction = async (
   offset: number,
   size: number
 ) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await getDomainSubscription(
       userInfo.access_token,
@@ -34,11 +34,10 @@ export const getDomainSubscriptionAction = async (
 
 export const rejectSubscriptionAction = async (requestId: number) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await rejectSubscription(
       userInfo.access_token,
@@ -53,11 +52,10 @@ export const rejectSubscriptionAction = async (requestId: number) => {
 
 export const acceptSubscriptionAction = async (requestId: number) => {
   const userInfo = await getMe();
-  // const domain = headers().get("host");
-  // if (!domain) {
-  //   throw new Error("Domain is not found");
-  // }
-  const domain = "http://zahraesp.ir";
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await acceptSubscription(
       userInfo.access_token,

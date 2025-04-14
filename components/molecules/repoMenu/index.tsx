@@ -59,7 +59,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
   return (
     <>
       {!showDrawer ? (
-        <div className=" flex items-center gap-1 justify-end">
+        <div className="repo-menu flex items-center gap-1 justify-end">
           {currentPath === "/admin/repositories" ? (
             <Button
               placeholder="button"
@@ -96,7 +96,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
           </div>
         </div>
       ) : (
-        <div className="xs:hidden flex">
+        <div className="repo-menu xs:hidden flex">
           <DrawerTemplate
             openDrawer={openRepoActionDrawer}
             setOpenDrawer={setOpenRepoActionDrawer}

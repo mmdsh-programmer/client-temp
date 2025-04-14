@@ -64,7 +64,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
       dialogHeader="حذف دسته بندی"
       onSubmit={handleDelete}
       setOpen={handleClose}
-      className=""
+      className="category-delete-dialog"
     >
       <form className="flex flex-col gap-5">
         <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
@@ -89,6 +89,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
                 return setForceDelete(!forceDelete);
               }}
               checked={!!forceDelete}
+              className="category-delete-dialog__checkbox"
             />
             <Typography className="warning_text">
               دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه

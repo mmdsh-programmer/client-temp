@@ -37,6 +37,7 @@ const RepoList = () => {
           return <RepoCreateDialogStepper close={close} />;
         }}
         renderSearch={<RepoSearch />}
+        className="repo-list-header"
       />
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
         <>

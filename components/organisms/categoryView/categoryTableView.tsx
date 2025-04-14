@@ -47,9 +47,9 @@ const TableView = ({
   const renderContent = () => {
     if (listLength) {
       return (
-        <div className="px-5 py-4 overflow-auto">
+        <div className="category-table-view px-5 py-4 overflow-auto">
           <div className="w-full border-[0.5px] overflow-auto border-normal rounded-lg">
-            <table className="w-full overflow-hidden min-w-max ">
+            <table className="w-full overflow-hidden min-w-max table-auto">
               <TableHead
                 tableHead={
                   [
@@ -57,31 +57,39 @@ const TableView = ({
                       ? {
                           key: "select",
                           value: "انتخاب",
-                          className: "categoryBulk",
+                          className:
+                            "categoryBulk !pr-2 !pl-0 !max-w-[50px] !w-[50px]",
                         }
                       : null,
                     {
                       key: "order",
                       value: "اولویت",
                       isSorted: true,
-                      className: "categoryOrder hidden xl:flex",
+                      className:
+                        "categoryOrder whitespace-nowrap hidden !px-1 xl:table-cell !max-w-[70px] !w-[70px]",
                     },
-                    { key: "name", value: "نام دسته", isSorted: true },
-                    { key: "createDate", value: "تاریخ ایجاد", isSorted: true },
+                    {
+                      key: "name",
+                      value: "نام دسته",
+                      isSorted: true,
+                      className: "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%] !px-2",
+                    },
+                    { key: "createDate", value: "تاریخ ایجاد", isSorted: true, className: "!px-2 whitespace-nowrap" },
                     {
                       key: "editDate",
                       value: "تاریخ ویرایش",
-                      className: "hidden xl:table-cell",
+                      className: "hidden xl:table-cell whitespace-nowrap",
                     },
                     {
                       key: "creator",
                       value: "نام سازنده",
-                      className: "hidden lg:table-cell",
+                      className: "hidden lg:table-cell whitespace-nowrap",
                     },
                     {
                       key: "action",
                       value: "عملیات",
-                      className: "category-action ",
+                      className:
+                        "category-action !pr-0 !pl-1 !max-w-[50px] !w-[50px]",
                     },
                   ].filter(Boolean) as ITableHead[]
                 }

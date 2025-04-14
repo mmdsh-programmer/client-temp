@@ -81,6 +81,7 @@ const DocumentTableRow = ({ document }: IProps) => {
     <TableCell
       key={`document-table-item-${document.id}`}
       onClick={handleRowClick}
+      className="document-table-row"
       tableCell={
         [
           currentPath === "/admin/sharedDocuments"
@@ -97,25 +98,29 @@ const DocumentTableRow = ({ document }: IProps) => {
                   />
                 ),
                 stopPropagation: true,
+                className: "!px-0",
               },
           {
             data:
               document.order || document.order === 0 ? document.order : "--",
             title: String(document.order) || "--",
-            className: "hidden xl:table-cell",
+            className:
+              "hidden xl:table-cell text-center !px-0",
           },
           {
             data: (
               <div className="flex">
                 <DocumentIcon document={document} />
                 <span
-                  className="max-w-[150px] truncate flex gap-2 mr-2 text-ellipsis overflow-hidden w-12 sm:w-20 md:w-auto"
+                  className="truncate flex gap-2 mr-2 text-ellipsis overflow-hidden"
                   title={document.name}
                 >
                   {document.name}
                 </span>
               </div>
             ),
+            className:
+              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%]",
           },
           {
             data: document.createdAt
@@ -124,6 +129,7 @@ const DocumentTableRow = ({ document }: IProps) => {
             title: document.createdAt
               ? FaDateFromTimestamp(+document.createdAt)
               : "--",
+            className: "!px-3",
           },
           {
             data: document.updatedAt
@@ -132,14 +138,18 @@ const DocumentTableRow = ({ document }: IProps) => {
             title: document.updatedAt
               ? FaDateFromTimestamp(+document.updatedAt)
               : "--",
-            className: "hidden xl:table-cell",
+            className: "hidden xl:table-cell !px-3",
           },
           {
             data: document.creator?.name || "--",
             title: document.creator?.name || "--",
-            className: "hidden lg:table-cell",
+            className: "hidden lg:table-cell !px-3",
           },
-          { data: <DocumentMenu document={document} />, stopPropagation: true },
+          {
+            data: <DocumentMenu document={document} />,
+            stopPropagation: true,
+            className: "!px-2",
+          },
         ].filter(Boolean) as ITableCell[]
       }
       active={!!document.newOne}

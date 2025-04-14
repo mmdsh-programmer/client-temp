@@ -92,14 +92,15 @@ const RepoKeyCreateDialog = ({
       dialogHeader="ساخت کلید"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4"
+      className="repo-key-create-dialog h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4"
     >
-      <form className="flex flex-col gap-2">
+      <form className="repo-key-create-dialog__form flex flex-col gap-2">
         <Typography className="label">نام کلید</Typography>
         <FormInput
           id="repo-key-name"
           placeholder="نام کلید"
           register={{ ...register("name") }}
+          className="repo-key-create-dialog__input"
         />
         {errors.name ? (
           <Typography className="warning_text">
@@ -112,6 +113,7 @@ const RepoKeyCreateDialog = ({
           id="repo-public-key"
           placeholder="کلید عمومی..."
           register={{ ...register("publicKey") }}
+          className="repo-public-key__textarea"
         />
         {errors.publicKey ? (
           <Typography className="warning_text">
@@ -127,6 +129,7 @@ const RepoKeyCreateDialog = ({
               placeholder="کلید خصوصی..."
               readOnly
               register={{ ...register("privateKey") }}
+              className="repo-private-key__textarea"
             />
             <Typography className="text-xs mt-1">
               *کلید خصوصی را کپی کنید. کلید خصوصی ذخیره نخواهد شد*
@@ -138,7 +141,7 @@ const RepoKeyCreateDialog = ({
           {showPrivateKey ? (
             <Button
               placeholder="button"
-              className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !p-2 !px-3"
+              className="repo-private-key__delete-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !p-2 !px-3"
               onClick={clearKeys}
             >
               حذف کلید ها
@@ -146,7 +149,7 @@ const RepoKeyCreateDialog = ({
           ) : null}
           <Button
             placeholder="button"
-            className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !p-2 !px-3"
+            className="repo-key__generate-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !p-2 !px-3"
             onClick={generateKey}
           >
             تولید کلید

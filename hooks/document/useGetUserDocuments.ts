@@ -1,11 +1,12 @@
-import { getUserDocumentAction } from "@actions/document";
-import { ISortProps } from "@atom/sortParam";
 import { IActionError, IReportFilter } from "@interface/app.interface";
+
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { ISortProps } from "@atom/sortParam";
+import { getUserDocumentAction } from "@actions/document";
 import { handleClientSideHookError } from "@utils/error";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetUserDocuments = (
   repoId: number | undefined,
@@ -15,10 +16,15 @@ const useGetUserDocuments = (
   reportType: "myDocuments" | "myAccessDocuments" | null,
   enabled: boolean
 ) => {
+  const queryKey: string[] = [];
+  if(repoId){
+    queryKey.push(`repo-${repoId}-documents`);
+  }
+  if(reportType){
+    queryKey.push("personal-documents");
+  }
   return useInfiniteQuery({
-    queryKey: [
-      `repo-${repoId}-children-user-document-${JSON.stringify(filters)}`,
-    ],
+    queryKey,
     queryFn: async ({ signal, pageParam }) => {
       const response = await getUserDocumentAction(
         repoId,

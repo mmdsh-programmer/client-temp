@@ -30,6 +30,7 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
           setGroup(group);
         }
       },
+      className: "repo-group-menu__edit",
     },
     {
       text: "حذف گروه",
@@ -39,11 +40,12 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
           setGroup(group);
         }
       },
+      className: "repo-group-menu__delete",
     },
   ];
 
   return showDrawer ? (
-    <div className="xs:hidden flex">
+    <div className="repo-group-menu xs:hidden flex">
       <DrawerTemplate
         openDrawer={getGroupDrawer}
         setOpenDrawer={setGroupDrawer}
@@ -57,6 +59,7 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
         setGroupDrawer(true);
       }}
       menuList={menuList}
+      className="repo-group-menu"
     />
   );
 };

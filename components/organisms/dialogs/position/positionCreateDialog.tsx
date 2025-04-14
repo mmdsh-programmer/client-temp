@@ -11,10 +11,12 @@ import { UserIcon, XIcon } from "@components/atoms/icons";
 import ImageComponent from "next/image";
 import ChipMolecule from "@components/molecules/chip";
 import { toast } from "react-toastify";
+import { positionSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
-  members: string[];
+  members?: string[];
 }
 
 interface IProps {
@@ -29,7 +31,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
 
   const setPositionForBranch = useCreatePosition();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(positionSchema) });
   const {
     register,
     handleSubmit,
@@ -77,6 +79,9 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!getBranchId) return;
+    if (!selectedUserList.length) {
+      return toast.error("اعضای سمت نمی تواند خالی باشد.");
+    }
     const usernameArray = selectedUserList?.length
       ? selectedUserList.map((userItem) => {
           return userItem.username;
@@ -123,7 +128,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
             value={inputValue}
             onChange={handleInputChange}
           />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {selectedUserList.map((item) => {
               return (
                 <ChipMolecule
@@ -158,6 +163,11 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
               );
             })}
           </div>
+          {errors.members && (
+            <Typography className="warning_text">
+              {errors.members?.message}
+            </Typography>
+          )}
         </div>
       </form>
     </CreateDialog>

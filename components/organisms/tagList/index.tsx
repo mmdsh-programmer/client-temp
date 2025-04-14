@@ -10,6 +10,8 @@ import TagListDialog from "./tagListDialog";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
 import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
+import useGetUser from "@hooks/auth/useGetUser";
+import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 
 const TagList = ({ repoId }: { repoId: number }) => {
   const [openTagsModal, setOpenTagsModal] = useState(false);
@@ -17,12 +19,27 @@ const TagList = ({ repoId }: { repoId: number }) => {
   const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
   const getRepo = useRecoilValue(repoAtom);
-  const { data: getTags, isLoading, isFetching } = useGetTags(repoId, undefined, 2, true);
+
+  
+  const { data: userInfo } = useGetUser();
+  const { data: getDomainTags, isLoading: isLoadingDomainTags } =
+    useGetDomainTags(2, !!userInfo?.domainConfig.useDomainTag);
+  
+    const { data: getTags, isLoading: isLoadingRepoTags } = useGetTags(
+    repoId,
+    undefined,
+    2,
+    !userInfo?.domainConfig.useDomainTag
+  );
 
   const adminRole =
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin" || getRepo?.roleName === "editor";
+    getRepo?.roleName === "owner" ||
+    getRepo?.roleName === "admin" ||
+    getRepo?.roleName === "editor";
 
-  const tagCount = getTags?.pages[0].total;
+  const tagCount = userInfo?.domainConfig.useDomainTag
+    ? getDomainTags?.pages[0].total
+    : getTags?.pages[0].total;
 
   const renderDialogs = () => {
     if (openTagsModal && getRepo) {
@@ -37,25 +54,34 @@ const TagList = ({ repoId }: { repoId: number }) => {
     return null;
   };
 
+  const isLoading = isLoadingRepoTags || isLoadingDomainTags;
+  const tags = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
+
   return (
     <div className="">
-      {isLoading || isFetching ? (
+      {isLoading ? (
         <Spinner color="deep-purple" className="" />
       ) : (
-        <div className="flex flex-wrap gap-2">
-          {getTags?.pages.map((page) => {
+        <div className="tag-list flex flex-wrap gap-2">
+          {tags?.pages.map((page) => {
             return page.list.map((tag) => {
               return (
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
-                  actionIcon={adminRole ? <TagMenu tag={tag} /> : null}
+                  className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
+                  actionIcon={userInfo?.domainConfig.useDomainTag && 
+                    (userInfo?.domainRole === "owner" || 
+                    userInfo.domainRole === "participant") || 
+                    !userInfo?.domainConfig.useDomainTag && adminRole ? <TagMenu tag={tag} /> : null}
                 />
               );
             });
           })}
-          {adminRole ? (
+          {userInfo?.domainConfig.useDomainTag && 
+                    (userInfo?.domainRole === "owner" || 
+                    userInfo.domainRole === "participant")
+          || (!userInfo?.domainConfig.useDomainTag && adminRole) ? (
             <div
               onClick={() => {
                 setOpenTagCreateModal(true);
@@ -63,7 +89,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
             >
               <ChipMolecule
                 value="افزودن تگ"
-                className="repoTags border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
+                className="createTag border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
               />
             </div>
           ) : null}
@@ -73,7 +99,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
                 setOpenTagsModal(true);
               }}
               placeholder=""
-              className="shadow-none hover:shadow-none p-0 font-iranYekan bg-transparent text-gray-400 text-[10px]"
+              className="all-tags__button shadow-none hover:shadow-none p-0 font-iranYekan bg-transparent text-gray-400 text-[10px]"
             >
               نمایش بیشتر
             </Button>

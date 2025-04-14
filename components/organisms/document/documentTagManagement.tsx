@@ -9,6 +9,8 @@ import { repoAtom } from "@atom/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetTags from "@hooks/tag/useGetTags";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
+import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 
 interface IProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +26,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const repoId = useRepoId();
+  const { data: userInfo } = useGetUser();
 
   const adminOrOwnerRole = () => {
     if (currentPath === "/admin/myDocuments") {
@@ -43,13 +46,16 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     }
   };
 
+  const { data: getDomainTags, isLoading: isLoadingDomainTags } =
+    useGetDomainTags(30, !!userInfo?.domainConfig.useDomainTag);
+
   const { data: getTags, isLoading: isLoadingTags } = useGetTags(
     repoId,
     currentPath === "/admin/sharedDocuments" || sharedDocuments === "true"
       ? true
       : undefined,
     30,
-    true
+    !userInfo?.domainConfig.useDomainTag
   );
 
   const { data: documentInfo, isLoading } = useGetDocument(
@@ -61,7 +67,9 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     `document-${getDocument!.id}-info-tags`
   );
 
-  const updatedAvailableTags = getTags?.pages[0].list
+  const tags = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
+
+  const updatedAvailableTags = tags?.pages[0].list
     .filter((repoTag) => {
       return getTempDocTag.every((tag) => {
         return tag.id !== +repoTag.id;
@@ -83,33 +91,43 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   useEffect(() => {
     if (!documentInfo) return;
+    
+    const resourceTags = userInfo?.domainConfig.useDomainTag
+      ? documentInfo.domainTags
+      : documentInfo.tags;
+
     setTempDocTag(
-      documentInfo?.tags.map((tag) => {
+      resourceTags.map((tag) => {
         return tag;
       })
     );
   }, [documentInfo]);
 
-  return isLoading || isLoadingTags ? (
+  return isLoading || isLoadingTags || isLoadingDomainTags ? (
     <div className="w-full flex justify-center mt-2">
       <Spinner className="h-5 w-5" color="deep-purple" />
     </div>
   ) : (
-    <div className="flex flex-col gap-2">
-      {adminOrOwnerRole() ? (
-        <SearchableDropdown
-          options={updatedAvailableTags}
-          handleSelect={handleTagSelect}
-          handleChange={setTagName}
-          setOpen={setOpen}
-          createIcon={
-            currentPath !== "/admin/sharedDocuments" &&
-            sharedDocuments !== "true"
-          }
-        />
-      ) : null}
-      <DocumentTagList tagList={getTempDocTag} />
-    </div>
+      <div className="flex flex-col gap-2">
+        {userInfo?.domainConfig.useDomainTag &&
+          (userInfo?.domainRole === "owner" ||
+            userInfo.domainRole === "participant") ||
+          (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole()) ?
+          <SearchableDropdown
+            options={updatedAvailableTags}
+            handleSelect={handleTagSelect}
+            handleChange={setTagName}
+            setOpen={setOpen}
+            createIcon={
+              userInfo?.domainConfig.useDomainTag &&
+              (userInfo?.domainRole === "owner" ||
+                userInfo.domainRole === "participant") ||
+              (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole())
+            }
+          />
+          : null}
+        <DocumentTagList tagList={getTempDocTag} />
+      </div>
   );
 };
 

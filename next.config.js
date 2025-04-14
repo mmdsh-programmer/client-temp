@@ -21,6 +21,7 @@ const nextConfig = {
   },
   webpack: (config, { isServer }) => {
     const newConfig = { ...config };
+    newConfig.resolve.alias.canvas = false;
     if (!isServer) {
       newConfig.resolve.fallback = {
         fs: false,
