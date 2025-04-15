@@ -29,7 +29,7 @@ axiosTinyLinkInstance.interceptors.request.use(
       data,
     };
 
-    Logger.info(JSON.stringify(log));
+    Logger.info(JSON.stringify(log, null, 0));
     return request;
   },
   (error) => {
@@ -46,7 +46,7 @@ axiosTinyLinkInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log));
+    Logger.error(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -58,7 +58,7 @@ axiosTinyLinkInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(JSON.stringify(log));
+    Logger.info(JSON.stringify(log, null, 0));
     return response;
   },
   (error) => {
@@ -75,7 +75,7 @@ axiosTinyLinkInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.error(log);
+    Logger.error(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );

@@ -7,20 +7,7 @@ winston.addColors({
   debug: "cyan"
 });
 
-const logFormat = winston.format.combine(
-  winston.format.colorize({
-    all: true,
-  }),
-  winston.format.timestamp(),
-  winston.format.printf((info) => {
-    const { message } = info;
-    // Remove newlines while preserving ANSI codes and spaces
-    return `${message as string} \n`;
-  }),
-);
-
 const Logger = winston.createLogger({
-  format: logFormat,
   transports: [
     new winston.transports.Console({
       level: "info",

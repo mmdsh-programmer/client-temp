@@ -241,7 +241,7 @@ export const logoutAction = async () => {
         JSON.stringify({
           type: "Redis remove data",
           data: `user:${access_token}`,
-        })
+        }, null, 0)
       );
     }
   } catch (error) {

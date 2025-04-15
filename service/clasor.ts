@@ -102,7 +102,7 @@ axiosClasorInstance.interceptors.request.use(
       data,
     };
 
-    Logger.info(JSON.stringify(log));
+    Logger.info(JSON.stringify(log, null, 0));
     return request;
   },
   (error) => {
@@ -119,7 +119,7 @@ axiosClasorInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log));
+    Logger.error(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -132,7 +132,7 @@ axiosClasorInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(JSON.stringify(log));
+    Logger.info(JSON.stringify(log, null, 0));
     return response;
   },
   (error) => {
@@ -154,7 +154,7 @@ axiosClasorInstance.interceptors.response.use(
         Authorization: headers?.Authorization,
       },
     };
-    Logger.error(JSON.stringify(log));
+    Logger.error(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -211,7 +211,7 @@ export const userInfo = async (
       JSON.stringify({
         type: "Redis cache data",
         data: cachedUser,
-      })
+      }, null, 0)
     );
     return JSON.parse(cachedUser);
   }
@@ -4451,7 +4451,7 @@ export const getCustomPostByDomain = async (
         JSON.stringify({
           type: "Redis cache data",
           data: cacheResult,
-        })
+        }, null, 0)
       );
       return cacheResult;
     }

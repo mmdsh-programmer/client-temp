@@ -37,7 +37,7 @@ axiosSocialInstance.interceptors.request.use(
       url,
       data,
     };
-    Logger.info(JSON.stringify(log));
+    Logger.info(JSON.stringify(log, null, 0));
     return request;
   },
   (error) => {
@@ -54,7 +54,7 @@ axiosSocialInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log));
+    Logger.error(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -68,7 +68,7 @@ axiosSocialInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(JSON.stringify(log));
+    Logger.info(JSON.stringify(log, null, 0));
     return response;
   },
   (error) => {
@@ -85,7 +85,7 @@ axiosSocialInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log));
+    Logger.error(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -503,7 +503,7 @@ export const getMySocialProfile = async (accessToken: string, expiresAt: number)
       JSON.stringify({
         type: "Redis cache data",
         data: cacheResult,
-      })
+      }, null, 0)
     );
     return cacheResult;
   }

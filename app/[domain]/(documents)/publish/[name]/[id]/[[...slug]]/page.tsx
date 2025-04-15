@@ -5,6 +5,7 @@ import {
   getPublishRepositoryInfo,
 } from "@service/clasor";
 import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
+
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import Logger from "@utils/logger";
@@ -173,7 +174,7 @@ export default async function PublishContentPage({
       errorCode,
       error: true,
       referenceNumber: "NOT_DEFINED",
-    }));
+    }, null, 0));
     
     const message =
       error instanceof Error ? error.message : "خطای نامشخصی رخ داد";

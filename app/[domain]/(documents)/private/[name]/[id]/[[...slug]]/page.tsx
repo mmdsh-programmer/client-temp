@@ -209,7 +209,7 @@ export default async function PublishContentPage({
       errorCode,
       error: true,
       referenceNumber: "NOT_DEFINED",
-    }));
+    }, null, 0));
 
     const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if((error as unknown as IActionError).errorCode === 401){
