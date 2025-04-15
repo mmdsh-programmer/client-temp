@@ -21,6 +21,7 @@ const logFormat = winston.format.combine(
 );
 
 const Logger = winston.createLogger({
+  format: logFormat,
   transports: [
     new winston.transports.Console({
       level: "info",
