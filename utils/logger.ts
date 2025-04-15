@@ -16,7 +16,7 @@ const logFormat = winston.format.combine(
   winston.format.printf((info) => {
     const { message } = info;
     // Remove newlines while preserving ANSI codes and spaces
-    return `${message as string} \n`.replaceAll("\\\"", "\"");
+    return `${message as string}`.replaceAll("\\\\\"", "\\\"");
   }),
 );
 
