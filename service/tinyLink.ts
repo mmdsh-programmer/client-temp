@@ -7,7 +7,6 @@ import {
 import axios, { AxiosError } from "axios";
 
 import { ITinyActionError } from "@hooks/tinyLink/useCreateTinyLink";
-import Logger from "@utils/logger";
 
 const { TINY_LINK_BASE_URL, API_TOKEN } = process.env;
 
@@ -29,7 +28,7 @@ axiosTinyLinkInstance.interceptors.request.use(
       data,
     };
 
-    Logger.info(JSON.stringify(log, null, 0));
+    console.log(JSON.stringify(log, null, 0));
     return request;
   },
   (error) => {
@@ -46,7 +45,7 @@ axiosTinyLinkInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log, null, 0));
+    console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -58,7 +57,7 @@ axiosTinyLinkInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(JSON.stringify(log, null, 0));
+    console.log(JSON.stringify(log, null, 0));
     return response;
   },
   (error) => {
@@ -75,7 +74,7 @@ axiosTinyLinkInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log, null, 0));
+    console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );

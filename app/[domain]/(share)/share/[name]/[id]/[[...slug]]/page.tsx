@@ -3,7 +3,6 @@ import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
-import Logger from "@utils/logger";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
@@ -143,7 +142,7 @@ const SharePage = async ({ params,
             errorList: string[];
             errorCode: number;
         };
-        Logger.error(JSON.stringify({
+        console.log(JSON.stringify({
             errorList,
             errorCode,
             error: true,
