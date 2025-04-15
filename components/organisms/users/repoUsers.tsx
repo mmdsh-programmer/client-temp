@@ -38,7 +38,7 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
         <Spinner className="h-0 w-0" />
       ) : (
         <div
-          className={`repo-users__list flex flex-col overflow-auto overflow-y-auto
+          className={`repo-users__list flex flex-col overflow-y-auto overflow-x-hidden
         ${createRepoDialog ? "!h-[250px] xs:!h-[168px]" : "!h-[370px] xs:!h-[250px]"}`}
         >
           {getRepoUsers?.pages.map((page) => {

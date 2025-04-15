@@ -15,3 +15,11 @@ export interface IUser {
   };
   userRole: ERoles;
 }
+
+export interface IUserConfigPanel {
+  serviceName: string;
+  title: string;
+  allowed: boolean;
+  blocked: boolean;
+  notificationAccess: boolean;
+}

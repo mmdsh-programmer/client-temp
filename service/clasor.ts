@@ -67,7 +67,7 @@ import {
   IRepoSubscriptionStatus,
   IReport,
 } from "@interface/repo.interface";
-import { IRoles, IUser } from "@interface/users.interface";
+import { IRoles, IUser, IUserConfigPanel } from "@interface/users.interface";
 import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
@@ -2609,8 +2609,10 @@ export const getResourceFiles = async (
   offset: number,
   size: number,
   name?: string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _order?: string,
-  _type?: string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _dataType?: string
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -4487,6 +4489,34 @@ export const getCustomPostByDomain = async (
   }
 };
 
+/// /////////////////////////////// CHAT //////////////////////
+
+export const enableDocChat = async (
+  accessToken: string,
+  repoId: number,
+  docId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<
+      IServerResult<{
+        chatThreadId: number;
+      }>
+    >(
+      `repositories/${repoId}/documents/${docId}/enableChat`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 // ////////////////////////////// DOMAIN TAGS //////////////////////////////////
 
 export const createDomainTag = async (
@@ -4702,6 +4732,58 @@ export const removePartyFromDomainParticipants = async (
     if (cachedUser) {
       redisClient?.del(`user:${accessToken}`);
     }
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// ///////////////////////// CONFIG PANEL /////////////////////////
+
+export const getUserConfigPanel = async (
+  accessToken: string,
+  repoId: number,
+  ssoId: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IUserConfigPanel[]>>(
+      `repositories/${repoId}/userConfigPanel/${ssoId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateUserConfigPanel = async (
+  accessToken: string,
+  repoId: number,
+  ssoId: number,
+  blockedServices?: string[],
+  notificationServices?: string[],
+  allowedServices?: string[],
+) => {
+  try {
+
+    const response = await axiosClasorInstance.put<any>(
+      `repositories/${repoId}/userConfigPanel/${ssoId}`,
+      {
+        notificationServices,
+        allowedServices,
+        blockedServices,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

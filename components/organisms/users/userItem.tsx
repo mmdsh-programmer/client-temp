@@ -11,8 +11,9 @@ import { translateRoles } from "@utils/index";
 import useDeleteUser from "@hooks/user/useDeleteUser";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
+import { userIdAtom } from "@atom/app";
 
 interface IProps {
   user: IUser;
@@ -20,6 +21,7 @@ interface IProps {
 
 const UserItem = ({ user }: IProps) => {
   const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const  setUserId = useSetRecoilState(userIdAtom);
   const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
@@ -44,6 +46,11 @@ const UserItem = ({ user }: IProps) => {
       className: "repo-user__transfer-ownership",
     },
     {
+      label: "تنطیمات پیشرفته",
+      value: "setting",
+      className: "repo-user__advanced-setting",
+    },
+    {
       label: "حذف کاربر",
       value: "delete",
       className: "!text-error repo-user__delete-user",
@@ -52,16 +59,20 @@ const UserItem = ({ user }: IProps) => {
 
   const handleChange = (value: IOption) => {
     if (!getRepo) return;
+    if (value.value === "setting") {
+      return setUserId(user.userInfo.ssoId);
+    }
     if (value.value === "delete") {
-      deleteUser.mutate({
+      return deleteUser.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
         callBack: () => {
           toast.success(`کاربر ${user.userInfo.userName} با موفقیت حذف شد.`);
         },
       });
-    } else if (value.value === "transferOwnership") {
-      transferOwnership.mutate({
+    } 
+    if (value.value === "transferOwnership") {
+     return transferOwnership.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
         callBack: () => {
@@ -72,7 +83,7 @@ const UserItem = ({ user }: IProps) => {
           toast.success("انتقال مالکیت با موفقیت انجام شد.");
         },
       });
-    } else {
+    } 
       editRole.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
@@ -83,7 +94,7 @@ const UserItem = ({ user }: IProps) => {
           );
         },
       });
-    }
+    
   };
 
   const renderUserRole = () => {
