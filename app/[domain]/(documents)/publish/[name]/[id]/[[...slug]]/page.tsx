@@ -8,7 +8,6 @@ import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
-import Logger from "@utils/logger";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
@@ -169,7 +168,7 @@ export default async function PublishContentPage({
       errorList: string[];
       errorCode: number;
     };
-    Logger.error(JSON.stringify({
+    console.log(JSON.stringify({
       errorList,
       errorCode,
       error: true,

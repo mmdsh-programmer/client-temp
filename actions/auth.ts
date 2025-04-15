@@ -14,7 +14,6 @@ import {
 } from "@service/account";
 
 import { IActionError } from "@interface/app.interface";
-import Logger from "@utils/logger";
 import { getRedisClient } from "@utils/redis";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -237,12 +236,10 @@ export const logoutAction = async () => {
     const redisClient = await getRedisClient();
     if(redisClient && redisClient.isReady){
       await redisClient.del(`user:${access_token}`);
-      Logger.warn(
-        JSON.stringify({
-          type: "Redis remove data",
-          data: `user:${access_token}`,
-        }, null, 0)
-      );
+      console.log(JSON.stringify({ 
+        type: "Redis remove data",
+        data: `user:${access_token}`,
+      }, null, 0));
     }
   } catch (error) {
     cookies().delete("token");
