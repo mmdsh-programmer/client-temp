@@ -153,7 +153,12 @@ export interface IChatState {
   replyedMessage: string | null;
 }
 
-export interface IChatBubbleProps {
+export interface IRepoLogMessage {
+  user: { ssoId: number; img: string; contactId: string; name: string; userName: string };
+  message: string;
+  action: string;
+}
+export interface IRepoLogBubbleProps {
   message: Message<string>;
   author: Author<string>;
   currentUser: number;
@@ -163,4 +168,58 @@ export interface IChatInputProps {
   messageText: string;
   onMessageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onMessageSubmit: (e: React.FormEvent) => void;
-} 
+}
+
+export interface IParticipantResult {
+  hasError: boolean;
+  result: {
+    participants: Array<{
+      id: number;
+      name: string;
+      username: string;
+      image: string;
+    }>;
+  };
+}
+
+export interface IHistoryResult {
+  result: {
+    history: Array<{
+      id: number;
+      timeMiliSeconds: number;
+      message: string;
+      ownerId: number;
+      participant: Record<string, unknown>;
+      editable: boolean;
+      deletable: boolean;
+      replyInfo?: Record<string, unknown>;
+    }>;
+  };
+}
+
+export interface IMessageType extends Message<string> {
+  id: number;
+  createdOn: Date;
+  message: string;
+  authorId: number;
+  isSend: boolean;
+  participant: Record<string, unknown>;
+  editable: boolean;
+  deletable: boolean;
+  replyInfo: Record<string, unknown> | null;
+}
+
+export interface ChatState {
+  authors: Author<string>[];
+  messages: IMessageType[];
+  currentUser: number;
+  showAvatar: boolean;
+  showDateRow: boolean;
+  showIsTyping: boolean;
+  showLoadingMessages: boolean;
+  hasOldMessages: boolean;
+}
+
+export interface IThreadParams {
+  threadId: number;
+}

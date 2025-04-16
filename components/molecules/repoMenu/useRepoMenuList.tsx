@@ -9,6 +9,7 @@ import {
   LastVersionIcon,
   LeaveRepoIcon,
   PublishIcon,
+  RepoActivityIcon,
   RestoreIcon,
   ShareIcon,
 } from "@components/atoms/icons";
@@ -16,9 +17,9 @@ import {
 import { ERoles } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
-import { repoAtom } from "@atom/repository";
+import { repoActivityAtom, repoAtom } from "@atom/repository";
 import { toPersianDigit } from "@utils/index";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 type ModalType =
   | "delete"
@@ -30,7 +31,8 @@ type ModalType =
   | "leave"
   | "archive"
   | "fileManagement"
-  | "versionRequests";
+  | "versionRequests"
+  | "repoActivity";
 
 export interface MenuItem {
   text: string;
@@ -46,6 +48,7 @@ const useMenuList = (
   setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>
 ): MenuItem[] => {
   const setRepo = useSetRecoilState(repoAtom);
+  const [showRepoActivity, setShowRepoActivity] = useRecoilState(repoActivityAtom);
 
   const createMenuItem = (
     menuText: string,
@@ -132,6 +135,17 @@ const useMenuList = (
           }
         },
         "repo-menu__item--version-requests"
+      ),
+      createMenuItem(
+        "فعالیت های مخزن",
+        <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
+        () => {
+          setShowRepoActivity(!showRepoActivity);
+          if (repo) {
+            setRepo(repo);
+          }
+        },
+        "repo-menu__item--repo-activity"
       ),
       repo?.isPublish &&
         createMenuItem(
@@ -269,6 +283,17 @@ const useMenuList = (
             },
             "repo-menu__item--bookmark-remove"
           ),
+      createMenuItem(
+        "فعالیت های مخزن",
+        <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
+        () => {
+          setShowRepoActivity(!showRepoActivity);
+          if (repo) {
+            setRepo(repo);
+          }
+        },
+        "repo-menu__item--repo-activity"
+      ),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",

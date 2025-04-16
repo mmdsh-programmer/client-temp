@@ -4517,6 +4517,31 @@ export const enableDocChat = async (
   }
 };
 
+export const enableRepoChat = async (
+  accessToken: string,
+  repoId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<
+      IServerResult<{
+        chatThreadId: number;
+      }>
+    >(
+      `repositories/${repoId}/enableChat`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 // ////////////////////////////// DOMAIN TAGS //////////////////////////////////
 
 export const createDomainTag = async (

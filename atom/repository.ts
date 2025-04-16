@@ -73,3 +73,9 @@ export const createRepoKeyAtom = atom<boolean>({
   default: false,
   effects: [logEffect("createRepoKeyAtom")],
 });
+
+export const repoActivityAtom = atom<boolean>({
+  key: "repoActivityAtom",
+  default: false,
+  effects: [logEffect("repoActivityAtom")],
+});

@@ -71,7 +71,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
     );
   }
 
-  return <div className="check-repo-info">{children}</div>;
+  return <div className="check-repo-info flex gap-3">{children}</div>;
 };
 
 export default CheckRepoInfo;

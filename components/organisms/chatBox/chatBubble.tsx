@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import { FaDateFromTimestamp } from "@utils/index";
-import { IChatBubbleProps } from "@interface/chat.interface";
+import { IRepoLogBubbleProps } from "@interface/chat.interface";
 
-const ChatBubble = ({ message, author, currentUser }: IChatBubbleProps) => {
+const ChatBubble = ({ message, author, currentUser }: IRepoLogBubbleProps) => {
   const isUser = author.id === currentUser;
   const timestamp =
     message.createdOn instanceof Date

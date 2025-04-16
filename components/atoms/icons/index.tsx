@@ -11,12 +11,7 @@ interface IProps {
 export const AddIcon = (props: IProps) => {
   const { className, fill, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         d="M6 12H12M12 12H18M12 12V18M12 12V6"
         stroke={stroke}
@@ -31,12 +26,7 @@ export const AddIcon = (props: IProps) => {
 export const AddRectangleIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -50,12 +40,7 @@ export const AddRectangleIcon = (props: IProps) => {
 export const AddImageIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 25"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M21.0038 13.5005V17.5022C21.0038 19.7122 19.2122 21.5038 17.0022 21.5038H6.998C4.78795 21.5038 2.99634 19.7122 2.99634 17.5022V7.498C2.99634 5.28795 4.78795 3.49634 6.998 3.49634H10.9997"
         stroke="#9AA6B1"
@@ -107,12 +92,7 @@ export const AddImageIcon = (props: IProps) => {
 export const AlertIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 14 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -126,12 +106,7 @@ export const AlertIcon = (props: IProps) => {
 export const ArchiveActionIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -145,12 +120,7 @@ export const ArchiveActionIcon = (props: IProps) => {
 export const ArchiveIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 18 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 18 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M5.25999 19C5.67421 19 6.00999 18.6642 6.00999 18.25C6.00999 17.8358 5.67421 17.5 5.25999 17.5V19ZM1.86 3.1L1.38791 2.51722L1.38643 2.51842L1.86 3.1ZM3.64999 1.65L4.12208 2.23279L4.12448 2.23083L3.64999 1.65ZM14.35 1.65L13.8755 2.23084L13.8779 2.23278L14.35 1.65ZM16.14 3.1L16.6136 2.51842L16.6121 2.51722L16.14 3.1ZM16.5 8.26C16.5 8.67421 16.8358 9.01 17.25 9.01C17.6642 9.01 18 8.67421 18 8.26H16.5ZM14 15.5C14.4142 15.5 14.75 15.1642 14.75 14.75C14.75 14.3358 14.4142 14 14 14V15.5ZM12 14C11.5858 14 11.25 14.3358 11.25 14.75C11.25 15.1642 11.5858 15.5 12 15.5V14ZM5.25999 17.5H3.75V19H5.25999V17.5ZM3.75 17.5C2.50421 17.5 1.5 16.4958 1.5 15.25H0C0 17.3242 1.67579 19 3.75 19V17.5ZM1.5 15.25V5.43H0V15.25H1.5ZM1.5 5.43C1.5 4.75663 1.80766 4.10982 2.33357 3.68158L1.38643 2.51842C0.512346 3.23018 0 4.30337 0 5.43H1.5ZM2.33209 3.68278L4.12208 2.23278L3.17791 1.06722L1.38791 2.51722L2.33209 3.68278ZM4.12448 2.23083C4.70145 1.7595 5.4241 1.5 6.17 1.5V0C5.0759 0 4.01853 0.380502 3.17551 1.06917L4.12448 2.23083ZM6.17 1.5H11.83V0H6.17V1.5ZM11.83 1.5C12.5759 1.5 13.2985 1.7595 13.8755 2.23083L14.8245 1.06917C13.9815 0.380502 12.9241 0 11.83 0V1.5ZM13.8779 2.23278L15.6679 3.68278L16.6121 2.51722L14.8221 1.06722L13.8779 2.23278ZM15.6664 3.68158C16.1934 4.11068 16.5 4.74797 16.5 5.43H18C18 4.29203 17.4866 3.22932 16.6136 2.51842L15.6664 3.68158ZM16.5 5.43V8.26H18V5.43H16.5ZM0.75 5.5H17.25V4H0.75V5.5ZM8.25 0.75V4.25H9.75V0.75H8.25ZM10.69 12H15.31V10.5H10.69V12ZM15.31 12C15.9672 12 16.5 12.5328 16.5 13.19H18C18 11.7044 16.7956 10.5 15.31 10.5V12ZM16.5 13.19V17.31H18V13.19H16.5ZM16.5 17.31C16.5 17.9672 15.9672 18.5 15.31 18.5V20C16.7956 20 18 18.7956 18 17.31H16.5ZM15.31 18.5H10.69V20H15.31V18.5ZM10.69 18.5C10.0328 18.5 9.5 17.9672 9.5 17.31H8C8 18.7956 9.20436 20 10.69 20V18.5ZM9.5 17.31V13.19H8V17.31H9.5ZM9.5 13.19C9.5 12.5328 10.0328 12 10.69 12V10.5C9.20436 10.5 8 11.7044 8 13.19H9.5ZM14 14H12V15.5H14V14Z"
         fill={fill}
@@ -162,12 +132,7 @@ export const ArchiveIcon = (props: IProps) => {
 export const ArchiveCardIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M5.25999 19C5.67421 19 6.00999 18.6642 6.00999 18.25C6.00999 17.8358 5.67421 17.5 5.25999 17.5V19ZM1.86 3.1L1.38791 2.51722L1.38643 2.51842L1.86 3.1ZM3.64999 1.65L4.12208 2.23279L4.12448 2.23083L3.64999 1.65ZM14.35 1.65L13.8755 2.23084L13.8779 2.23278L14.35 1.65ZM16.14 3.1L16.6136 2.51842L16.6121 2.51722L16.14 3.1ZM16.5 8.26C16.5 8.67421 16.8358 9.01 17.25 9.01C17.6642 9.01 18 8.67421 18 8.26H16.5ZM14 15.5C14.4142 15.5 14.75 15.1642 14.75 14.75C14.75 14.3358 14.4142 14 14 14V15.5ZM12 14C11.5858 14 11.25 14.3358 11.25 14.75C11.25 15.1642 11.5858 15.5 12 15.5V14ZM5.25999 17.5H3.75V19H5.25999V17.5ZM3.75 17.5C2.50421 17.5 1.5 16.4958 1.5 15.25H0C0 17.3242 1.67579 19 3.75 19V17.5ZM1.5 15.25V5.43H0V15.25H1.5ZM1.5 5.43C1.5 4.75663 1.80766 4.10982 2.33357 3.68158L1.38643 2.51842C0.512346 3.23018 0 4.30337 0 5.43H1.5ZM2.33209 3.68278L4.12208 2.23278L3.17791 1.06722L1.38791 2.51722L2.33209 3.68278ZM4.12448 2.23083C4.70145 1.7595 5.4241 1.5 6.17 1.5V0C5.0759 0 4.01853 0.380502 3.17551 1.06917L4.12448 2.23083ZM6.17 1.5H11.83V0H6.17V1.5ZM11.83 1.5C12.5759 1.5 13.2985 1.7595 13.8755 2.23083L14.8245 1.06917C13.9815 0.380502 12.9241 0 11.83 0V1.5ZM13.8779 2.23278L15.6679 3.68278L16.6121 2.51722L14.8221 1.06722L13.8779 2.23278ZM15.6664 3.68158C16.1934 4.11068 16.5 4.74797 16.5 5.43H18C18 4.29203 17.4866 3.22932 16.6136 2.51842L15.6664 3.68158ZM16.5 5.43V8.26H18V5.43H16.5ZM0.75 5.5H17.25V4H0.75V5.5ZM8.25 0.75V4.25H9.75V0.75H8.25ZM10.69 12H15.31V10.5H10.69V12ZM15.31 12C15.9672 12 16.5 12.5328 16.5 13.19H18C18 11.7044 16.7956 10.5 15.31 10.5V12ZM16.5 13.19V17.31H18V13.19H16.5ZM16.5 17.31C16.5 17.9672 15.9672 18.5 15.31 18.5V20C16.7956 20 18 18.7956 18 17.31H16.5ZM15.31 18.5H10.69V20H15.31V18.5ZM10.69 18.5C10.0328 18.5 9.5 17.9672 9.5 17.31H8C8 18.7956 9.20436 20 10.69 20V18.5ZM9.5 17.31V13.19H8V17.31H9.5ZM9.5 13.19C9.5 12.5328 10.0328 12 10.69 12V10.5C9.20436 10.5 8 11.7044 8 13.19H9.5ZM14 14H12V15.5H14V14Z"
         fill={fill}
@@ -179,12 +144,7 @@ export const ArchiveCardIcon = (props: IProps) => {
 export const ArrowDownIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M14.0049 7.41675H9.79232H5.99897C5.34984 7.41675 5.02528 8.20111 5.48508 8.66091L8.98767 12.1635C9.5489 12.7247 10.4617 12.7247 11.023 12.1635L12.355 10.8314L14.5256 8.66091C14.9786 8.20111 14.654 7.41675 14.0049 7.41675Z"
         fill="white"
@@ -196,12 +156,7 @@ export const ArrowDownIcon = (props: IProps) => {
 export const ArrowLeftRectangleIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -215,11 +170,7 @@ export const ArrowLeftRectangleIcon = (props: IProps) => {
 export const ArrowRightIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 16 17"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 16 17" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M-6.11959e-07 9.5L12.17 9.5L6.58 15.09L8 16.5L16 8.5L8 0.500001L6.59 1.91L12.17 7.5L-7.86805e-07 7.5L-6.11959e-07 9.5Z"
         fill={fill ?? "#181C20"}
@@ -231,12 +182,7 @@ export const ArrowRightIcon = (props: IProps) => {
 export const BackIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -250,12 +196,7 @@ export const BackIcon = (props: IProps) => {
 export const BreadcrumbIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M14.1654 16.1668C14.1654 16.443 13.9415 16.6668 13.6654 16.6668H11.332C11.0559 16.6668 10.832 16.443 10.832 16.1668V13.8335C10.832 13.5574 11.0559 13.3335 11.332 13.3335H13.6654C13.9415 13.3335 14.1654 13.5574 14.1654 13.8335V16.1668ZM9.16536 16.1668C9.16536 16.443 8.94151 16.6668 8.66536 16.6668H6.33203C6.05589 16.6668 5.83203 16.443 5.83203 16.1668V13.8335C5.83203 13.5574 6.05589 13.3335 6.33203 13.3335H8.66536C8.94151 13.3335 9.16536 13.5574 9.16536 13.8335V16.1668ZM14.1654 11.1668C14.1654 11.443 13.9415 11.6668 13.6654 11.6668H11.332C11.0559 11.6668 10.832 11.443 10.832 11.1668V8.8335C10.832 8.55735 11.0559 8.3335 11.332 8.3335H13.6654C13.9415 8.3335 14.1654 8.55735 14.1654 8.8335V11.1668ZM9.16536 11.1668C9.16536 11.443 8.94151 11.6668 8.66536 11.6668H6.33203C6.05589 11.6668 5.83203 11.443 5.83203 11.1668V8.8335C5.83203 8.55735 6.05589 8.3335 6.33203 8.3335H8.66536C8.94151 8.3335 9.16536 8.55735 9.16536 8.8335V11.1668ZM14.1654 6.16683C14.1654 6.44297 13.9415 6.66683 13.6654 6.66683H11.332C11.0559 6.66683 10.832 6.44297 10.832 6.16683V3.8335C10.832 3.55735 11.0559 3.3335 11.332 3.3335H13.6654C13.9415 3.3335 14.1654 3.55735 14.1654 3.8335V6.16683ZM9.16536 6.16683C9.16536 6.44297 8.94151 6.66683 8.66536 6.66683H6.33203C6.05589 6.66683 5.83203 6.44297 5.83203 6.16683V3.8335C5.83203 3.55735 6.05589 3.3335 6.33203 3.3335H8.66536C8.94151 3.3335 9.16536 3.55735 9.16536 3.8335V6.16683Z"
         fill="#667585"
@@ -267,12 +208,7 @@ export const BreadcrumbIcon = (props: IProps) => {
 export const BookmarkIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M15.7801 20.88L13.2801 18.68C12.5401 18.02 11.4501 18.02 10.7101 18.68L8.21006 20.88C7.23006 21.74 5.75006 21.01 5.75006 19.67V5.9C5.74006 4.16 7.08006 2.75 8.74006 2.75H15.2401C16.9001 2.75 18.2401 4.16 18.2401 5.9V19.67C18.2401 21.01 16.7501 21.74 15.7801 20.88Z"
         stroke={stroke}
@@ -287,12 +223,7 @@ export const BookmarkIcon = (props: IProps) => {
 export const BookmarkRepoIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M19.43 21.14V21.89C19.7468 21.89 20.0294 21.691 20.1361 21.3927C20.2429 21.0945 20.1507 20.7613 19.9059 20.5603L19.43 21.14ZM17.81 19.81L17.3298 20.3862L17.3341 20.3897L17.81 19.81ZM17.18 19.81L17.6559 20.3897L17.6601 20.3862L17.18 19.81ZM15.56 21.14L16.0349 21.7205L16.0359 21.7197L15.56 21.14ZM19.42 21.14V20.39C19.103 20.39 18.8202 20.5893 18.7136 20.8879C18.6071 21.1864 18.6997 21.5197 18.9451 21.7205L19.42 21.14ZM11 21C11.4142 21 11.75 20.6642 11.75 20.25C11.75 19.8358 11.4142 19.5 11 19.5V21ZM4.86 5.1L4.38791 4.51722L4.38643 4.51842L4.86 5.1ZM6.65 3.65L7.12209 4.23279L7.12448 4.23083L6.65 3.65ZM17.35 3.65L16.8755 4.23084L16.8779 4.23278L17.35 3.65ZM19.14 5.1L19.6136 4.51842L19.6121 4.51722L19.14 5.1ZM19.5 10C19.5 10.4142 19.8358 10.75 20.25 10.75C20.6642 10.75 21 10.4142 21 10H19.5ZM19.9059 20.5603L18.2859 19.2303L17.3341 20.3897L18.9541 21.7197L19.9059 20.5603ZM18.2901 19.2338C17.832 18.8521 17.158 18.8521 16.6999 19.2338L17.6601 20.3862C17.6074 20.4302 17.5473 20.4475 17.495 20.4475C17.4427 20.4475 17.3826 20.4302 17.3299 20.3862L18.2901 19.2338ZM16.7041 19.2303L15.0841 20.5603L16.0359 21.7197L17.6559 20.3897L16.7041 19.2303ZM15.0851 20.5595C15.2551 20.4204 15.49 20.5507 15.49 20.75H13.99C13.99 21.7893 15.2049 22.3996 16.0349 21.7205L15.0851 20.5595ZM15.49 20.75V15.77H13.99V20.75H15.49ZM15.49 15.77C15.49 15.0718 16.0566 14.51 16.74 14.51V13.01C15.2233 13.01 13.99 14.2482 13.99 15.77H15.49ZM16.74 14.51H18.24V13.01H16.74V14.51ZM18.24 14.51C18.9233 14.51 19.49 15.0718 19.49 15.77H20.99C20.99 14.2482 19.7566 13.01 18.24 13.01V14.51ZM19.49 15.77V20.75H20.99V15.77H19.49ZM19.49 20.75C19.49 20.5507 19.7249 20.4204 19.8949 20.5595L18.9451 21.7205C19.7751 22.3996 20.99 21.7893 20.99 20.75H19.49ZM19.42 21.89H19.43V20.39H19.42V21.89ZM11 19.5H6.75V21H11V19.5ZM6.75 19.5C5.50421 19.5 4.5 18.4958 4.5 17.25H3C3 19.3242 4.67579 21 6.75 21V19.5ZM4.5 17.25V7.43H3V17.25H4.5ZM4.5 7.43C4.5 6.75663 4.80766 6.10982 5.33357 5.68158L4.38643 4.51842C3.51235 5.23018 3 6.30337 3 7.43H4.5ZM5.33209 5.68278L7.12209 4.23278L6.17792 3.06722L4.38791 4.51722L5.33209 5.68278ZM7.12448 4.23083C7.70146 3.7595 8.4241 3.5 9.17 3.5V2C8.0759 2 7.01854 2.3805 6.17552 3.06917L7.12448 4.23083ZM9.17 3.5H14.83V2H9.17V3.5ZM14.83 3.5C15.5759 3.5 16.2985 3.7595 16.8755 4.23083L17.8245 3.06917C16.9815 2.3805 15.9241 2 14.83 2V3.5ZM16.8779 4.23278L18.6679 5.68278L19.6121 4.51722L17.8221 3.06722L16.8779 4.23278ZM18.6664 5.68158C19.1934 6.11068 19.5 6.74797 19.5 7.43H21C21 6.29203 20.4866 5.22932 19.6136 4.51842L18.6664 5.68158ZM19.5 7.43V10H21V7.43H19.5ZM3.75 7.5H20.25V6H3.75V7.5ZM11.25 2.75V6.25H12.75V2.75H11.25Z"
         fill={fill}
@@ -304,12 +235,7 @@ export const BookmarkRepoIcon = (props: IProps) => {
 export const CancelIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M17.4999 17.4999L12 12M12 12L6.5 6.5M12 12L17.5 6.5M12 12L6.5 17.5"
         stroke="#1B1B1D"
@@ -324,36 +250,11 @@ export const CancelIcon = (props: IProps) => {
 export const CardIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M6 1H1V6H6V1Z"
-        stroke="#0C0E10"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15 1H10V6H15V1Z"
-        stroke="#0C0E10"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M6 10H1V15H6V10Z"
-        stroke="#0C0E10"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15 10H10V15H15V10Z"
-        stroke="#0C0E10"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 1H1V6H6V1Z" stroke="#0C0E10" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M15 1H10V6H15V1Z" stroke="#0C0E10" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M6 10H1V15H6V10Z" stroke="#0C0E10" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M15 10H10V15H15V10Z" stroke="#0C0E10" strokeWidth="1.5" strokeLinejoin="round" />
     </svg>
   );
 };
@@ -361,12 +262,7 @@ export const CardIcon = (props: IProps) => {
 export const CategoryAddIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -380,12 +276,7 @@ export const CategoryAddIcon = (props: IProps) => {
 export const ChatIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 21 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -423,12 +314,7 @@ export const ChatIcon = (props: IProps) => {
 export const ChevronLeftIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 7 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M6 11L1 6L6 1"
         stroke={stroke}
@@ -443,12 +329,7 @@ export const ChevronLeftIcon = (props: IProps) => {
 export const CircleIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 4 4"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 4 4" fill="none">
       <circle cx="2" cy="2" r="2" fill="#9AA6B1" />
     </svg>
   );
@@ -457,12 +338,7 @@ export const CircleIcon = (props: IProps) => {
 export const ComparisionIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M10.0026 15.8334H5.83594C4.45523 15.8334 3.33594 14.7141 3.33594 13.3334V6.66669C3.33594 5.28598 4.45523 4.16669 5.83594 4.16669H10.0026"
         stroke={stroke}
@@ -491,12 +367,7 @@ export const ComparisionIcon = (props: IProps) => {
 export const ConfirmationVersionIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M5 5.25C4.58579 5.25 4.25 5.58579 4.25 6C4.25 6.41421 4.58579 6.75 5 6.75V5.25ZM15 6.75C15.4142 6.75 15.75 6.41421 15.75 6C15.75 5.58579 15.4142 5.25 15 5.25V6.75ZM5 9.25C4.58579 9.25 4.25 9.58579 4.25 10C4.25 10.4142 4.58579 10.75 5 10.75V9.25ZM13 10.75C13.4142 10.75 13.75 10.4142 13.75 10C13.75 9.58579 13.4142 9.25 13 9.25V10.75ZM5 13.25C4.58579 13.25 4.25 13.5858 4.25 14C4.25 14.4142 4.58579 14.75 5 14.75V13.25ZM7 14.75C7.41421 14.75 7.75 14.4142 7.75 14C7.75 13.5858 7.41421 13.25 7 13.25V14.75ZM12.4697 16.5303C12.7626 16.8232 13.2374 16.8232 13.5303 16.5303C13.8232 16.2374 13.8232 15.7626 13.5303 15.4697L12.4697 16.5303ZM11.5303 13.4697C11.2374 13.1768 10.7626 13.1768 10.4697 13.4697C10.1768 13.7626 10.1768 14.2374 10.4697 14.5303L11.5303 13.4697ZM16.5303 13.5303C16.8232 13.2374 16.8232 12.7626 16.5303 12.4697C16.2374 12.1768 15.7626 12.1768 15.4697 12.4697L16.5303 13.5303ZM12.4697 15.4697C12.1768 15.7626 12.1768 16.2374 12.4697 16.5303C12.7626 16.8232 13.2374 16.8232 13.5303 16.5303L12.4697 15.4697ZM5 6.75H15V5.25H5V6.75ZM5 10.75H13V9.25H5V10.75ZM5 14.75H7V13.25H5V14.75ZM17 18.25H3V19.75H17V18.25ZM3 18.25C2.30921 18.25 1.75 17.6908 1.75 17H0.25C0.25 18.5192 1.48079 19.75 3 19.75V18.25ZM1.75 17V3H0.25V17H1.75ZM1.75 3C1.75 2.30921 2.30921 1.75 3 1.75V0.25C1.48079 0.25 0.25 1.48079 0.25 3H1.75ZM3 1.75H17V0.25H3V1.75ZM17 1.75C17.6908 1.75 18.25 2.30921 18.25 3H19.75C19.75 1.48079 18.5192 0.25 17 0.25V1.75ZM18.25 3V17H19.75V3H18.25ZM18.25 17C18.25 17.6908 17.6908 18.25 17 18.25V19.75C18.5192 19.75 19.75 18.5192 19.75 17H18.25ZM13.5303 15.4697L11.5303 13.4697L10.4697 14.5303L12.4697 16.5303L13.5303 15.4697ZM15.4697 12.4697L12.4697 15.4697L13.5303 16.5303L16.5303 13.5303L15.4697 12.4697Z"
         fill={fill}
@@ -508,12 +379,7 @@ export const ConfirmationVersionIcon = (props: IProps) => {
 export const CopyIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 17 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 17 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M14.8333 17.4999H5.66666V5.83325H14.8333V17.4999ZM14.8333 4.16659H5.66666C5.22463 4.16659 4.80071 4.34218 4.48815 4.65474C4.17558 4.9673 3.99999 5.39122 3.99999 5.83325V17.4999C3.99999 17.9419 4.17558 18.3659 4.48815 18.6784C4.80071 18.991 5.22463 19.1666 5.66666 19.1666H14.8333C15.2754 19.1666 15.6993 18.991 16.0118 18.6784C16.3244 18.3659 16.5 17.9419 16.5 17.4999V5.83325C16.5 5.39122 16.3244 4.9673 16.0118 4.65474C15.6993 4.34218 15.2754 4.16659 14.8333 4.16659V4.16659ZM12.3333 0.833252H2.33332C1.8913 0.833252 1.46737 1.00885 1.15481 1.32141C0.842251 1.63397 0.666656 2.05789 0.666656 2.49992V14.1666H2.33332V2.49992H12.3333V0.833252Z" />
     </svg>
   );
@@ -522,12 +388,7 @@ export const CopyIcon = (props: IProps) => {
 export const DashboardIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M12 5V7"
         stroke={stroke}
@@ -607,12 +468,7 @@ export const DashboardIcon = (props: IProps) => {
 export const DashedLineIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 277 2"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 277 2" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 1L277 1" stroke={stroke} strokeDasharray="5 5" />
     </svg>
   );
@@ -621,12 +477,7 @@ export const DashedLineIcon = (props: IProps) => {
 export const DeleteIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         d="M6.74748 8.99875C6.74748 8.58454 6.4117 8.24875 5.99748 8.24875C5.58327 8.24875 5.24748 8.58454 5.24748 8.99875H6.74748ZM18.7525 8.99875C18.7525 8.58454 18.4167 8.24875 18.0025 8.24875C17.5883 8.24875 17.2525 8.58454 17.2525 8.99875H18.7525ZM14.7508 9.99917C14.7508 9.58495 14.415 9.24917 14.0008 9.24917C13.5866 9.24917 13.2508 9.58495 13.2508 9.99917H14.7508ZM13.2508 17.0021C13.2508 17.4163 13.5866 17.7521 14.0008 17.7521C14.415 17.7521 14.7508 17.4163 14.7508 17.0021H13.2508ZM10.7491 9.99917C10.7491 9.58495 10.4134 9.24917 9.99915 9.24917C9.58493 9.24917 9.24915 9.58495 9.24915 9.99917H10.7491ZM9.24915 17.0021C9.24915 17.4163 9.58493 17.7521 9.99915 17.7521C10.4134 17.7521 10.7491 17.4163 10.7491 17.0021H9.24915ZM4.49686 5.2475C4.08264 5.2475 3.74686 5.58329 3.74686 5.9975C3.74686 6.41171 4.08264 6.7475 4.49686 6.7475V5.2475ZM19.5031 6.7475C19.9173 6.7475 20.2531 6.41171 20.2531 5.9975C20.2531 5.58329 19.9173 5.2475 19.5031 5.2475V6.7475ZM7.2868 5.76033C7.15582 6.15328 7.36819 6.57802 7.76114 6.70901C8.1541 6.84 8.57884 6.62763 8.70983 6.23467L7.2868 5.76033ZM8.54254 4.36482L9.25405 4.60199L9.25411 4.60182L8.54254 4.36482ZM10.4413 2.99625L10.4412 3.74625H10.4413V2.99625ZM13.5586 2.99625V3.74625L13.5596 3.74625L13.5586 2.99625ZM15.4594 4.36482L16.1712 4.12843L16.171 4.12782L15.4594 4.36482ZM15.2899 6.23388C15.4204 6.62699 15.8449 6.83982 16.238 6.70927C16.6311 6.57872 16.844 6.15421 16.7134 5.76111L15.2899 6.23388ZM5.24748 8.99875V19.0029H6.74748V8.99875H5.24748ZM5.24748 19.0029C5.24748 20.5222 6.47907 21.7537 7.99831 21.7537V20.2537C7.3075 20.2537 6.74748 19.6937 6.74748 19.0029H5.24748ZM7.99831 21.7537H16.0016V20.2537H7.99831V21.7537ZM16.0016 21.7537C17.5209 21.7537 18.7525 20.5222 18.7525 19.0029H17.2525C17.2525 19.6937 16.6925 20.2537 16.0016 20.2537V21.7537ZM18.7525 19.0029V8.99875H17.2525V19.0029H18.7525ZM13.2508 9.99917V17.0021H14.7508V9.99917H13.2508ZM9.24915 9.99917V17.0021H10.7491V9.99917H9.24915ZM4.49686 6.7475H19.5031V5.2475H4.49686V6.7475ZM8.70983 6.23467L9.25405 4.60199L7.83103 4.12765L7.2868 5.76033L8.70983 6.23467ZM9.25411 4.60182C9.42431 4.0908 9.90253 3.74612 10.4412 3.74625L10.4415 2.24625C9.25698 2.24596 8.20528 3.00399 7.83097 4.12782L9.25411 4.60182ZM10.4413 3.74625H13.5586V2.24625H10.4413V3.74625ZM13.5596 3.74625C14.0986 3.74558 14.5775 4.09036 14.7479 4.60182L16.171 4.12782C15.7964 3.00303 14.7432 2.24478 13.5577 2.24625L13.5596 3.74625ZM14.7476 4.60121L15.2899 6.23388L16.7134 5.76111L16.1712 4.12843L14.7476 4.60121Z"
         fill={fill}
@@ -638,12 +489,7 @@ export const DeleteIcon = (props: IProps) => {
 export const DislikeIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 21 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M14.2668 4.70825L11.6834 2.70825C11.3501 2.37492 10.6001 2.20825 10.1001 2.20825H6.93344C5.93344 2.20825 4.8501 2.95825 4.6001 3.95825L2.6001 10.0416C2.18344 11.2083 2.93344 12.2083 4.18344 12.2083H7.51677C8.01677 12.2083 8.43344 12.6249 8.3501 13.2083L7.93344 15.8749C7.76677 16.6249 8.26677 17.4583 9.01677 17.7083C9.68344 17.9583 10.5168 17.6249 10.8501 17.1249L14.2668 12.0416"
         stroke={stroke}
@@ -664,12 +510,7 @@ export const DislikeIcon = (props: IProps) => {
 export const DocIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -683,12 +524,7 @@ export const DocIcon = (props: IProps) => {
 export const DocumentAddIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 17 21"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 17 21" fill="none">
       <path
         d="M11.5 11.25H5M8.25 14.5V8M10.5 1.5V4C10.5 5.1 11.4 6 12.5 6H15M12.5 19.5H4C2.34 19.5 1 18.16 1 16.5V4C1 2.34 2.34 1 4 1H10.01C10.81 1 11.57 1.32 12.13 1.88L14.62 4.37C15.18 4.93 15.5 5.7 15.5 6.49V16.5C15.5 18.16 14.16 19.5 12.5 19.5Z"
         stroke="black"
@@ -703,12 +539,7 @@ export const DocumentAddIcon = (props: IProps) => {
 export const DocumentClassicIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -722,12 +553,7 @@ export const DocumentClassicIcon = (props: IProps) => {
 export const DocumentWordIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -747,12 +573,7 @@ export const DocumentWordIcon = (props: IProps) => {
 export const DocumentExcelIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -772,12 +593,7 @@ export const DocumentExcelIcon = (props: IProps) => {
 export const DocumentFlowchartIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -791,12 +607,7 @@ export const DocumentFlowchartIcon = (props: IProps) => {
 export const DocumentFileIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -810,12 +621,7 @@ export const DocumentFileIcon = (props: IProps) => {
 export const DocumentBookmarkIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -829,12 +635,7 @@ export const DocumentBookmarkIcon = (props: IProps) => {
 export const DocumentEditIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -879,12 +680,7 @@ export const DocumentEditIcon = (props: IProps) => {
 export const DocumentTagsIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -898,12 +694,7 @@ export const DocumentTagsIcon = (props: IProps) => {
 export const DuplicateIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M7 15H5C3.895 15 3 14.105 3 13V5C3 3.895 3.895 3 5 3H13C14.105 3 15 3.895 15 5V7"
         stroke={stroke}
@@ -939,12 +730,7 @@ export const DuplicateIcon = (props: IProps) => {
 export const DownloadIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M8.00311 2.14893V11.1562M8.00311 11.1562L11.6629 7.49645M8.00311 11.1562L4.34375 7.49645"
         stroke="#0C8CE9"
@@ -959,12 +745,7 @@ export const DownloadIcon = (props: IProps) => {
 export const EditIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -988,12 +769,7 @@ export const EditIcon = (props: IProps) => {
 export const EditContentIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1007,12 +783,7 @@ export const EditContentIcon = (props: IProps) => {
 export const EditDocumentIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1026,12 +797,7 @@ export const EditDocumentIcon = (props: IProps) => {
 export const EditVersionIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M7.4974 17.5H14.5807C15.7313 17.5 16.6641 16.5673 16.6641 15.4167V6.97639C16.6641 6.31335 16.4007 5.67747 15.9318 5.20862L13.9554 3.23223C13.4866 2.76339 12.8507 2.5 12.1877 2.5H6.2474C5.0968 2.5 4.16406 3.43274 4.16406 4.58333V10.8333"
         stroke="#667585"
@@ -1076,12 +842,7 @@ export const EditVersionIcon = (props: IProps) => {
 export const ExpandIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 16 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 16 24" fill="none">
       <path d="M12 14L8 10L16 10L12 14Z" fill={fill} />
     </svg>
   );
@@ -1090,12 +851,7 @@ export const ExpandIcon = (props: IProps) => {
 export const FaqIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M9.68469 9.68471C9.92172 8.66315 10.8522 7.95485 11.8999 7.99833C13.0726 7.93338 14.0779 8.82698 14.1509 9.99917C14.1509 11.5037 12 12 12 13.0004"
         stroke="#1B1B1D"
@@ -1126,12 +882,7 @@ export const FaqIcon = (props: IProps) => {
 export const FileAccessIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1162,12 +913,7 @@ export const FileAccessIcon = (props: IProps) => {
 export const FileConfirmIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M19 12.981V7.828C19 7.298 18.789 6.789 18.414 6.414L15.586 3.586C15.211 3.211 14.702 3 14.172 3H7C5.895 3 5 3.895 5 5V19C5 20.105 5.895 21 7 21H14.868"
         stroke="#1B1B1D"
@@ -1205,12 +951,7 @@ export const FileConfirmIcon = (props: IProps) => {
 export const FileManagementIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1224,12 +965,7 @@ export const FileManagementIcon = (props: IProps) => {
 export const FilePreviewIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M19 11V7.828C19 7.298 18.789 6.789 18.414 6.414L15.586 3.586C15.211 3.211 14.702 3 14.172 3H7C5.895 3 5 3.895 5 5V19C5 20.105 5.895 21 7 21H11"
         stroke="#1B1B1D"
@@ -1267,12 +1003,7 @@ export const FilePreviewIcon = (props: IProps) => {
 export const FilePublicIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1303,12 +1034,7 @@ export const FilePublicIcon = (props: IProps) => {
 export const FileRenameIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M9 21H17.5C18.8807 21 20 19.8807 20 18.5V8.37167C20 7.57602 19.6839 6.81296 19.1213 6.25035L16.7497 3.87868C16.187 3.31607 15.424 3 14.6283 3H7.5C6.11929 3 5 4.11929 5 5.5V13"
         stroke="#1B1B1D"
@@ -1353,12 +1079,7 @@ export const FileRenameIcon = (props: IProps) => {
 export const FileTransformIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M8.5 14H11"
         stroke="#1B1B1D"
@@ -1408,12 +1129,7 @@ export const FileTransformIcon = (props: IProps) => {
 export const FillArrow = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 9 5"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 4.77345L4.5 0L9 4.77345H0Z" />
     </svg>
   );
@@ -1422,12 +1138,7 @@ export const FillArrow = (props: IProps) => {
 export const FilterIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M9.79267 19.622V17.4147H14.2073V19.622H9.79267ZM5.37801 14.1037V11.8963H18.622V14.1037H5.37801ZM2.06702 8.58534V6.37801H21.933V8.58534H2.06702Z"
         fill="#1B1B1D"
@@ -1439,12 +1150,7 @@ export const FilterIcon = (props: IProps) => {
 export const FolderArchiveIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect
         x="2"
         y="12"
@@ -1477,12 +1183,7 @@ export const FolderArchiveIcon = (props: IProps) => {
 export const FolderBookmarkIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M13 20H19C19.5305 20.0001 20.0393 19.7895 20.4144 19.4144C20.7895 19.0393 21.0001 18.5305 21 18V8.94C21 7.83545 20.1045 6.94005 19 6.94H12.529C12.1978 6.93999 11.8881 6.77596 11.702 6.502L10.297 4.437C10.1109 4.16368 9.80166 4.00008 9.471 4H5C4.46952 3.99985 3.96073 4.21052 3.58563 4.58563C3.21052 4.96073 2.99985 5.46952 3 6L3 8.94"
         stroke={stroke}
@@ -1513,14 +1214,7 @@ export const FolderEmptyIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g clipPath="url(#clip0_2128_97060)">
-        <mask
-          id="mask0_2128_97060"
-          maskUnits="userSpaceOnUse"
-          x="0"
-          y="0"
-          width="200"
-          height="150"
-        >
+        <mask id="mask0_2128_97060" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="150">
           <path d="M200 0H0V150H200V0Z" fill="white" />
         </mask>
         <g mask="url(#mask0_2128_97060)">
@@ -1598,16 +1292,8 @@ export const FolderEmptyIcon = () => {
           colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          />
-          <feGaussianBlur
-            stdDeviation="10"
-            result="effect1_foregroundBlur_2128_97060"
-          />
+          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur_2128_97060" />
         </filter>
         <filter
           id="filter1_f_2128_97060"
@@ -1619,16 +1305,8 @@ export const FolderEmptyIcon = () => {
           colorInterpolationFilters="sRGB"
         >
           <feFlood floodOpacity="0" result="BackgroundImageFix" />
-          <feBlend
-            mode="normal"
-            in="SourceGraphic"
-            in2="BackgroundImageFix"
-            result="shape"
-          />
-          <feGaussianBlur
-            stdDeviation="3"
-            result="effect1_foregroundBlur_2128_97060"
-          />
+          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur_2128_97060" />
         </filter>
         <linearGradient
           id="paint0_linear_2128_97060"
@@ -1674,12 +1352,7 @@ export const FolderEmptyIcon = () => {
 export const FolderIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1696,12 +1369,7 @@ export const FolderIcon = (props: IProps) => {
 export const FolderInfoIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M7.99832 18.4198V16.584"
         stroke="#1B1B1D"
@@ -1739,12 +1407,7 @@ export const FolderInfoIcon = (props: IProps) => {
 export const FolderPlusIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M12.001 15.4974L12 12"
         stroke="#1B1B1D"
@@ -1775,12 +1438,7 @@ export const FolderPlusIcon = (props: IProps) => {
 export const FolderRenameIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1818,12 +1476,7 @@ export const FolderRenameIcon = (props: IProps) => {
 export const FolderRequestIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M16.0017 19.0029H19.0029C20.1079 19.0029 21.0037 18.1071 21.0037 17.0021V7.93831C21.0037 6.83328 20.1079 5.93748 19.0029 5.93748H12.5292C12.1968 5.93765 11.886 5.77269 11.6999 5.49729L10.2993 3.43343C10.1125 3.15918 9.80179 2.99541 9.46994 2.99625H4.99708C3.89205 2.99625 2.99625 3.89206 2.99625 4.99708V8.99875"
         stroke="#1B1B1D"
@@ -1859,12 +1512,7 @@ export const FolderRequestIcon = (props: IProps) => {
 export const FolderShareIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M8 21C8.41421 21 8.75 20.6642 8.75 20.25C8.75 19.8358 8.41421 19.5 8 19.5V21ZM4.86 5.1L4.38791 4.51722L4.38643 4.51842L4.86 5.1ZM6.65 3.65L7.12209 4.23279L7.12448 4.23083L6.65 3.65ZM17.35 3.65L16.8755 4.23084L16.8779 4.23278L17.35 3.65ZM19.14 5.1L19.6136 4.51842L19.6121 4.51722L19.14 5.1ZM19.5 11C19.5 11.4142 19.8358 11.75 20.25 11.75C20.6642 11.75 21 11.4142 21 11H19.5ZM20.32 15.87H21.07C21.07 15.6408 20.9652 15.4242 20.7855 15.282L20.32 15.87ZM15.81 12.3L15.337 12.8822L15.3445 12.8881L15.81 12.3ZM15.42 14.44V15.19C15.8342 15.19 16.17 14.8542 16.17 14.44H15.42ZM11.96 20.14L12.5362 20.6202L12.5438 20.6108L11.96 20.14ZM12.46 19.52L13.0438 19.9908L13.0457 19.9885L12.46 19.52ZM15.42 18.06H16.17C16.17 17.8577 16.0883 17.664 15.9434 17.5228C15.7985 17.3816 15.6027 17.305 15.4004 17.3103L15.42 18.06ZM15.81 20.21L15.3445 19.622L15.3415 19.6244L15.81 20.21ZM20.32 16.64L20.7855 17.2281L20.7855 17.2281L20.32 16.64ZM20.32 15.89H19.57C19.57 16.1192 19.6748 16.3358 19.8545 16.4781L20.32 15.89ZM8 19.5H6.75V21H8V19.5ZM6.75 19.5C5.50421 19.5 4.5 18.4958 4.5 17.25H3C3 19.3242 4.67579 21 6.75 21V19.5ZM4.5 17.25V7.43H3V17.25H4.5ZM4.5 7.43C4.5 6.75663 4.80766 6.10982 5.33357 5.68158L4.38643 4.51842C3.51235 5.23018 3 6.30337 3 7.43H4.5ZM5.33209 5.68278L7.12209 4.23278L6.17792 3.06722L4.38791 4.51722L5.33209 5.68278ZM7.12448 4.23083C7.70146 3.7595 8.4241 3.5 9.17 3.5V2C8.0759 2 7.01854 2.3805 6.17552 3.06917L7.12448 4.23083ZM9.17 3.5H14.83V2H9.17V3.5ZM14.83 3.5C15.5759 3.5 16.2985 3.7595 16.8755 4.23083L17.8245 3.06917C16.9815 2.3805 15.9241 2 14.83 2V3.5ZM16.8779 4.23278L18.6679 5.68278L19.6121 4.51722L17.8221 3.06722L16.8779 4.23278ZM18.6664 5.68158C19.1934 6.11068 19.5 6.74797 19.5 7.43H21C21 6.29203 20.4866 5.22932 19.6136 4.51842L18.6664 5.68158ZM19.5 7.43V11H21V7.43H19.5ZM3.75 7.5H20.25V6H3.75V7.5ZM11.25 2.75V6.25H12.75V2.75H11.25ZM20.7855 15.282L16.2755 11.712L15.3445 12.8881L19.8545 16.4581L20.7855 15.282ZM16.2829 11.7179C15.5979 11.1614 14.67 11.7039 14.67 12.49H16.17C16.17 12.8762 15.7021 13.1787 15.3371 12.8821L16.2829 11.7179ZM14.67 12.49V14.44H16.17V12.49H14.67ZM15.42 13.69H15.39V15.19H15.42V13.69ZM15.39 13.69C12.8334 13.69 10.75 15.7383 10.75 18.29H12.25C12.25 16.5818 13.6466 15.19 15.39 15.19V13.69ZM10.75 18.29V19.98H12.25V18.29H10.75ZM10.75 19.98C10.75 20.4688 11.0798 20.8086 11.4338 20.9281C11.7801 21.045 12.235 20.9815 12.5362 20.6202L11.3838 19.6599C11.535 19.4785 11.7599 19.455 11.9137 19.5069C12.0752 19.5615 12.25 19.7313 12.25 19.98H10.75ZM12.5438 20.6108L13.0438 19.9908L11.8762 19.0492L11.3762 19.6692L12.5438 20.6108ZM13.0457 19.9885C13.6246 19.2648 14.5056 18.8341 15.4396 18.8098L15.4004 17.3103C14.0344 17.3459 12.7354 17.9752 11.8743 19.0515L13.0457 19.9885ZM14.67 18.06V20.02H16.17V18.06H14.67ZM14.67 20.02C14.67 20.8572 15.644 21.3033 16.2785 20.7957L15.3415 19.6244C15.5235 19.4788 15.7405 19.4909 15.8812 19.5579C16.0268 19.6272 16.17 19.792 16.17 20.02H14.67ZM16.2755 20.7981L20.7855 17.2281L19.8545 16.052L15.3445 19.622L16.2755 20.7981ZM20.7855 17.2281C21.4048 16.7378 21.4048 15.7923 20.7855 15.302L19.8545 16.4781C19.7152 16.3678 19.7152 16.1623 19.8545 16.052L20.7855 17.2281ZM21.07 15.89V15.87H19.57V15.89H21.07Z"
         fill={fill}
@@ -1876,12 +1524,7 @@ export const FolderShareIcon = (props: IProps) => {
 export const GlobeIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1895,12 +1538,7 @@ export const GlobeIcon = (props: IProps) => {
 export const HiddenIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M12 19C11.158 19 10.315 18.822 9.49597 18.505"
         stroke="#1B1B1D"
@@ -1950,12 +1588,7 @@ export const HiddenIcon = (props: IProps) => {
 export const ImageIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -1969,12 +1602,7 @@ export const ImageIcon = (props: IProps) => {
 export const InfoIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M11.999 8C11.861 8 11.749 8.112 11.75 8.25C11.75 8.388 11.862 8.5 12 8.5C12.138 8.5 12.25 8.388 12.25 8.25C12.25 8.112 12.138 8 11.999 8"
         stroke={stroke}
@@ -2005,12 +1633,7 @@ export const InfoIcon = (props: IProps) => {
 export const InvisibleIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2024,12 +1647,7 @@ export const InvisibleIcon = (props: IProps) => {
 export const LastVersionIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2043,12 +1661,7 @@ export const LastVersionIcon = (props: IProps) => {
 export const LeaveRepoIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M10.8333 17.5H4.375C3.33917 17.5 2.5 16.6608 2.5 15.625V6.78333C2.5 6.53 2.55167 6.27917 2.65083 6.04667L3.68 3.63833C3.97583 2.94833 4.65333 2.5 5.40417 2.5H14.595C15.3458 2.5 16.0242 2.94833 16.3192 3.63833L17.3483 6.04667C17.4483 6.28 17.5 6.53 17.5 6.78333V10"
         stroke={stroke}
@@ -2098,12 +1711,7 @@ export const LeaveRepoIcon = (props: IProps) => {
 export const LikeIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 21 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M6.73438 15.2916L9.31771 17.2916C9.65104 17.6249 10.401 17.7916 10.901 17.7916H14.0677C15.0677 17.7916 16.151 17.0416 16.401 16.0416L18.401 9.95823C18.8177 8.79156 18.0677 7.79156 16.8177 7.79156H13.4844C12.9844 7.79156 12.5677 7.37489 12.651 6.79156L13.0677 4.12489C13.2344 3.37489 12.7344 2.54156 11.9844 2.29156C11.3177 2.04156 10.4844 2.37489 10.151 2.87489L6.73438 7.95823"
         stroke={stroke}
@@ -2124,12 +1732,7 @@ export const LikeIcon = (props: IProps) => {
 export const LimitationIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2143,12 +1746,7 @@ export const LimitationIcon = (props: IProps) => {
 export const ListIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M9.99531 10.7497C10.4095 10.7497 10.7453 10.4139 10.7453 9.99971C10.7453 9.58549 10.4095 9.24971 9.99531 9.24971V10.7497ZM5.82691 9.24971C5.4127 9.24971 5.07691 9.58549 5.07691 9.99971C5.07691 10.4139 5.4127 10.7497 5.82691 10.7497V9.24971ZM12.4964 14.0844C12.9106 14.0844 13.2464 13.7486 13.2464 13.3344C13.2464 12.9202 12.9106 12.5844 12.4964 12.5844V14.0844ZM5.82691 12.5844C5.4127 12.5844 5.07691 12.9202 5.07691 13.3344C5.07691 13.7486 5.4127 14.0844 5.82691 14.0844V12.5844ZM14.1637 7.41498C14.5779 7.41498 14.9137 7.0792 14.9137 6.66498C14.9137 6.25077 14.5779 5.91498 14.1637 5.91498V7.41498ZM5.82691 5.91498C5.4127 5.91498 5.07691 6.25077 5.07691 6.66498C5.07691 7.0792 5.4127 7.41498 5.82691 7.41498V5.91498ZM9.99531 9.24971H5.82691V10.7497H9.99531V9.24971ZM12.4964 12.5844H5.82691V14.0844H12.4964V12.5844ZM13.33 16.7528H6.66059V18.2528H13.33V16.7528ZM6.66059 16.7528C4.77266 16.7528 3.24219 15.2224 3.24219 13.3344H1.74219C1.74219 16.0508 3.94423 18.2528 6.66059 18.2528V16.7528ZM3.24219 13.3344V6.66498H1.74219V13.3344H3.24219ZM3.24219 6.66498C3.24219 4.77705 4.77266 3.24658 6.66059 3.24658V1.74658C3.94423 1.74658 1.74219 3.94863 1.74219 6.66498H3.24219ZM6.66059 3.24658H13.33V1.74658H6.66059V3.24658ZM13.33 3.24658C15.218 3.24658 16.7484 4.77705 16.7484 6.66498H18.2484C18.2484 3.94863 16.0464 1.74658 13.33 1.74658V3.24658ZM16.7484 6.66498V13.3344H18.2484V6.66498H16.7484ZM16.7484 13.3344C16.7484 15.2224 15.218 16.7528 13.33 16.7528V18.2528C16.0464 18.2528 18.2484 16.0508 18.2484 13.3344H16.7484ZM14.1637 5.91498H5.82691V7.41498H14.1637V5.91498Z"
         fill="white"
@@ -2160,12 +1758,7 @@ export const ListIcon = (props: IProps) => {
 export const LogoIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 36 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M24.1432 23.2414V22.9359H22.6982C21.4309 22.9361 20.2127 22.4462 19.2984 21.5686H1.63672L4.24239 24.1811H23.2034C23.4527 24.1811 23.6917 24.0821 23.868 23.9059C24.0442 23.7296 24.1432 23.4906 24.1432 23.2414Z"
         fill="#7446B2"
@@ -2197,12 +1790,7 @@ export const LogoIcon = (props: IProps) => {
 export const LogoMobileIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 80 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 80 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1149_59127)">
         <path
           d="M24.6154 17.6599C24.6154 18.2141 24.8355 18.7456 25.2274 19.1374C25.6193 19.5293 26.1508 19.7495 26.705 19.7495H37.3439C37.9235 19.7495 38.4796 19.52 38.8905 19.1111C39.3014 18.7023 39.5337 18.1474 39.5366 17.5678V15.9583C39.5366 15.3768 39.3055 14.8191 38.8943 14.4079C38.4831 13.9967 37.9254 13.7657 37.3439 13.7657H35.2718L36.4887 12.5487C36.8247 12.212 37.0134 11.7559 37.0134 11.2802C37.0134 10.8046 36.8247 10.3484 36.4887 10.0118L32.4279 14.0814C32.2539 14.2558 32.147 14.4861 32.1262 14.7316C32.1053 14.9771 32.1718 15.222 32.3139 15.4233C32.4178 15.5619 32.553 15.6739 32.7085 15.7501C32.864 15.8263 33.0353 15.8646 33.2085 15.8619H37.3439C37.3683 15.8619 37.3917 15.8716 37.409 15.8888C37.4263 15.9061 37.436 15.9295 37.436 15.9539V17.5634C37.436 17.5878 37.4263 17.6112 37.409 17.6285C37.3917 17.6458 37.3683 17.6555 37.3439 17.6555H30.6606C30.6606 17.6248 30.6606 17.5941 30.6606 17.5634V10.3867H28.571V17.5678C28.571 17.5922 28.5613 17.6156 28.544 17.6329C28.5267 17.6502 28.5033 17.6599 28.4789 17.6599H26.7006L26.6502 10.3955L24.5605 10.4108L24.611 17.6599"
@@ -2253,12 +1841,7 @@ export const LogoMobileIcon = (props: IProps) => {
 export const LogoutIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M14.0596 4.37977V4.15857C14.0596 3.054 13.1642 2.15857 12.0596 2.15857H5.86096C4.75639 2.15857 3.86096 3.054 3.86096 4.15857V15.8414C3.86096 16.946 4.75639 17.8414 5.86096 17.8414H12.0596C13.1642 17.8414 14.0596 16.946 14.0596 15.8414V15.5123M7.82643 10.0962H16.139M16.139 10.0962L13.5285 7.48564M16.139 10.0962L13.5285 12.7068"
         stroke="#181C20"
@@ -2273,12 +1856,7 @@ export const LogoutIcon = (props: IProps) => {
 export const MoreDotIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_363_33395)">
         <path
           d="M12 4.5C11.1161 4.5 10.3929 5.22321 10.3929 6.10714C10.3929 6.99107 11.1161 7.71429 12 7.71429C12.884 7.71429 13.6072 6.99107 13.6072 6.10714C13.6072 5.22321 12.884 4.5 12 4.5ZM12 16.2857C11.1161 16.2857 10.3929 17.0089 10.3929 17.8929C10.3929 18.7768 11.1161 19.5 12 19.5C12.884 19.5 13.6072 18.7768 13.6072 17.8929C13.6072 17.0089 12.884 16.2857 12 16.2857ZM12 10.3929C11.1161 10.3929 10.3929 11.1161 10.3929 12C10.3929 12.8839 11.1161 13.6071 12 13.6071C12.884 13.6071 13.6072 12.8839 13.6072 12C13.6072 11.1161 12.884 10.3929 12 10.3929Z"
@@ -2297,12 +1875,7 @@ export const MoreDotIcon = (props: IProps) => {
 export const MoreLineIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M4 6H20M4 12H20M4 18H20" stroke={stroke} strokeWidth="1.5" />
     </svg>
   );
@@ -2311,12 +1884,7 @@ export const MoreLineIcon = (props: IProps) => {
 export const MyFolderIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M3.75 6.75H20.25M12 2.75V6.25M17.25 20.25H6.75C5.09 20.25 3.75 18.91 3.75 17.25V7.43C3.75 6.53 4.16 5.67 4.86 5.1L6.65 3.65C7.36 3.07 8.25 2.75 9.17 2.75H14.83C15.75 2.75 16.64 3.07 17.35 3.65L19.14 5.1C19.84 5.67 20.25 6.52 20.25 7.43V17.25C20.25 18.91 18.91 20.25 17.25 20.25Z"
         stroke={stroke}
@@ -2330,12 +1898,7 @@ export const MyFolderIcon = (props: IProps) => {
 export const PasswordIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2349,12 +1912,7 @@ export const PasswordIcon = (props: IProps) => {
 export const PlusIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2368,12 +1926,7 @@ export const PlusIcon = (props: IProps) => {
 export const PDFIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M16.25 21.25H7.75C6.09 21.25 4.75 19.91 4.75 18.25V5.75C4.75 4.09 6.09 2.75 7.75 2.75H13.76C14.56 2.75 15.32 3.07 15.88 3.63L18.37 6.12C18.93 6.68 19.25 7.45 19.25 8.24V18.25C19.25 19.91 17.91 21.25 16.25 21.25Z"
         stroke="black"
@@ -2401,12 +1954,7 @@ export const PDFIcon = (props: IProps) => {
 export const PublishIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M8.28 21C8.69421 21 9.03 20.6642 9.03 20.25C9.03 19.8358 8.69421 19.5 8.28 19.5V21ZM4.86 5.1L4.38791 4.51722L4.38643 4.51842L4.86 5.1ZM6.64999 3.65L7.12208 4.23279L7.12448 4.23083L6.64999 3.65ZM17.35 3.65L16.8755 4.23084L16.8779 4.23278L17.35 3.65ZM19.14 5.1L19.6136 4.51842L19.6121 4.51722L19.14 5.1ZM19.5 11.24C19.5 11.6542 19.8358 11.99 20.25 11.99C20.6642 11.99 21 11.6542 21 11.24H19.5ZM17.25 13.5C16.8358 13.5 16.5 13.8358 16.5 14.25C16.5 14.6642 16.8358 15 17.25 15V13.5ZM17.25 19.5C16.8358 19.5 16.5 19.8358 16.5 20.25C16.5 20.6642 16.8358 21 17.25 21V19.5ZM13.75 15C14.1642 15 14.5 14.6642 14.5 14.25C14.5 13.8358 14.1642 13.5 13.75 13.5V15ZM13.75 21C14.1642 21 14.5 20.6642 14.5 20.25C14.5 19.8358 14.1642 19.5 13.75 19.5V21ZM17.25 18C17.6642 18 18 17.6642 18 17.25C18 16.8358 17.6642 16.5 17.25 16.5V18ZM13.75 16.5C13.3358 16.5 13 16.8358 13 17.25C13 17.6642 13.3358 18 13.75 18V16.5ZM8.28 19.5H6.75V21H8.28V19.5ZM6.75 19.5C5.50421 19.5 4.5 18.4958 4.5 17.25H3C3 19.3242 4.67579 21 6.75 21V19.5ZM4.5 17.25V7.43H3V17.25H4.5ZM4.5 7.43C4.5 6.75663 4.80766 6.10982 5.33357 5.68158L4.38643 4.51842C3.51235 5.23018 3 6.30337 3 7.43H4.5ZM5.33209 5.68278L7.12208 4.23278L6.17791 3.06722L4.38791 4.51722L5.33209 5.68278ZM7.12448 4.23083C7.70145 3.7595 8.4241 3.5 9.17 3.5V2C8.0759 2 7.01853 2.3805 6.17551 3.06917L7.12448 4.23083ZM9.17 3.5H14.83V2H9.17V3.5ZM14.83 3.5C15.5759 3.5 16.2985 3.7595 16.8755 4.23083L17.8245 3.06917C16.9815 2.3805 15.9241 2 14.83 2V3.5ZM16.8779 4.23278L18.6679 5.68278L19.6121 4.51722L17.8221 3.06722L16.8779 4.23278ZM18.6664 5.68158C19.1934 6.11068 19.5 6.74797 19.5 7.43H21C21 6.29203 20.4866 5.22932 19.6136 4.51842L18.6664 5.68158ZM19.5 7.43V11.24H21V7.43H19.5ZM3.75 7.5H20.25V6H3.75V7.5ZM11.25 2.75V6.25H12.75V2.75H11.25ZM17.25 15C18.4958 15 19.5 16.0042 19.5 17.25H21C21 15.1758 19.3242 13.5 17.25 13.5V15ZM19.5 17.25C19.5 18.4958 18.4958 19.5 17.25 19.5V21C19.3242 21 21 19.3242 21 17.25H19.5ZM13.75 13.5C11.6758 13.5 10 15.1758 10 17.25H11.5C11.5 16.0042 12.5042 15 13.75 15V13.5ZM10 17.25C10 19.3242 11.6758 21 13.75 21V19.5C12.5042 19.5 11.5 18.4958 11.5 17.25H10ZM17.25 16.5H13.75V18H17.25V16.5Z"
         fill={fill}
@@ -2418,12 +1966,7 @@ export const PublishIcon = (props: IProps) => {
 export const PublishedLimitationIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2437,12 +1980,7 @@ export const PublishedLimitationIcon = (props: IProps) => {
 export const QuestionIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 16 17"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -2490,12 +2028,7 @@ export const ReloadIcon = (props: IProps) => {
 export const RepoIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 58 47"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 58 47" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M3.61298 4.97998C3.60378 4.64673 3.66142 4.31502 3.78249 4.00441C3.90357 3.6938 4.08562 3.41058 4.31792 3.17147C4.55022 2.93235 4.82806 2.74219 5.13504 2.61219C5.44203 2.48219 5.77194 2.41499 6.10531 2.41455H18.4925C18.9746 2.41455 19.4441 2.56356 19.8391 2.84048L24.7507 6.29151C25.1443 6.56844 25.6152 6.71744 26.0974 6.71744H51.8754C53.2839 6.71744 54.4141 7.88278 54.3705 9.2899L53.4188 40.0441C53.3812 41.261 52.8714 42.4154 51.9974 43.2629C51.1234 44.1104 49.9538 44.5844 48.7364 44.5846H9.26817C8.04813 44.5847 6.87617 44.1089 6.00148 43.2583C5.12679 42.4078 4.61837 41.2496 4.58433 40.0301L3.61157 4.97857L3.61298 4.97998Z"
         fill="url(#paint0_linear_624_87481)"
@@ -2530,15 +2063,8 @@ export const RepoIcon = (props: IProps) => {
           />
           <feOffset dy="0.250217" />
           <feComposite in2="hardAlpha" operator="out" />
-          <feColorMatrix
-            type="matrix"
-            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0"
-          />
-          <feBlend
-            mode="normal"
-            in2="BackgroundImageFix"
-            result="effect1_dropShadow_624_87481"
-          />
+          <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.4 0" />
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_624_87481" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -2576,12 +2102,7 @@ export const RepoIcon = (props: IProps) => {
 export const RepoPurpleIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 100 100"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 100 100" fill="none">
       <path
         d="M21.6815 20.5207L5.60962 40.6962H94.3853L78.3134 20.5207C75.0173 16.3831 70.0157 13.9728 64.7257 13.9728H35.2692C29.9793 13.9728 24.9776 16.3831 21.6815 20.5207Z"
         fill="url(#paint0_linear_4933_130177)"
@@ -2672,12 +2193,7 @@ export const RepoPurpleIcon = (props: IProps) => {
 export const RepoRedIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 100 100"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 100 100" fill="none">
       <path
         d="M21.6815 20.5207L5.60962 40.6962H94.3853L78.3134 20.5207C75.0173 16.3831 70.0157 13.9728 64.7257 13.9728H35.2692C29.9793 13.9728 24.9776 16.3831 21.6815 20.5207Z"
         fill="url(#paint0_linear_4931_130170)"
@@ -2768,12 +2284,7 @@ export const RepoRedIcon = (props: IProps) => {
 export const RepoBlueIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 100 100"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 100 100" fill="none">
       <path
         d="M21.6815 20.5207L5.60962 40.6962H94.3853L78.3134 20.5207C75.0173 16.3831 70.0157 13.9728 64.7257 13.9728H35.2692C29.9793 13.9728 24.9776 16.3831 21.6815 20.5207Z"
         fill="url(#paint0_linear_4931_130141)"
@@ -2875,12 +2386,7 @@ export const RepoBlueIcon = (props: IProps) => {
 export const RepoYellowIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 101 100"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 101 100" fill="none">
       <path
         d="M22.5426 20.5207L6.4707 40.6962H95.2464L79.1745 20.5207C75.8784 16.3831 70.8767 13.9728 65.5868 13.9728H36.1303C30.8403 13.9728 25.8386 16.3831 22.5426 20.5207Z"
         fill="url(#paint0_linear_3703_3703)"
@@ -3015,11 +2521,7 @@ export const RepoYellowIcon = (props: IProps) => {
 export const RestoreIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24">
       <path fill="none" d="M0 0h24v24H0V0z" />
       <path d="M15.5 4l-1-1h-5l-1 1H5v2h14V4zM6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2-5V9h8v10H8v-5zm2 4h4v-4h2l-4-4-4 4h2z" />
     </svg>
@@ -3029,12 +2531,7 @@ export const RestoreIcon = (props: IProps) => {
 export const SearchIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M15.7138 6.8382C18.1647 9.28913 18.1647 13.2629 15.7138 15.7138C13.2629 18.1647 9.28913 18.1647 6.8382 15.7138C4.38727 13.2629 4.38727 9.28913 6.8382 6.8382C9.28913 4.38727 13.2629 4.38727 15.7138 6.8382"
         stroke={stroke}
@@ -3056,12 +2553,7 @@ export const SearchIcon = (props: IProps) => {
 export const SettingIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 25"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M11.9141 15.3475C13.2257 15.3475 14.2891 14.2841 14.2891 12.9725C14.2891 11.6608 13.2257 10.5975 11.9141 10.5975C10.6024 10.5975 9.53906 11.6608 9.53906 12.9725C9.53906 14.2841 10.6024 15.3475 11.9141 15.3475Z"
         stroke={stroke}
@@ -3085,12 +2577,7 @@ export const SettingIcon = (props: IProps) => {
 export const ShareIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M8.14636 10.75L16.2407 6.75M16.0323 17.23L7.93799 13.22M8.20572 12C8.20572 13.5188 6.98442 14.75 5.47786 14.75C3.97131 14.75 2.75 13.5188 2.75 12C2.75 10.4812 3.97131 9.25 5.47786 9.25C6.98442 9.25 8.20572 10.4812 8.20572 12ZM21.25 5.5C21.25 7.01878 20.0287 8.25 18.5221 8.25C17.0156 8.25 15.7943 7.01878 15.7943 5.5C15.7943 3.98122 17.0156 2.75 18.5221 2.75C20.0287 2.75 21.25 3.98122 21.25 5.5ZM21.25 18.5C21.25 20.0188 20.0287 21.25 18.5221 21.25C17.0156 21.25 15.7943 20.0188 15.7943 18.5C15.7943 16.9812 17.0156 15.75 18.5221 15.75C20.0287 15.75 21.25 16.9812 21.25 18.5Z"
         stroke={stroke}
@@ -3104,12 +2591,7 @@ export const ShareIcon = (props: IProps) => {
 export const SpeedDialIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3153,12 +2635,7 @@ export const SpeedDialIcon = (props: IProps) => {
 export const StarIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3175,12 +2652,7 @@ export const StarIcon = (props: IProps) => {
 export const StepperIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 25"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 25" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         d="M0.75 12.5C0.75 6.2868 5.7868 1.25 12 1.25C18.2132 1.25 23.25 6.2868 23.25 12.5C23.25 18.7132 18.2132 23.75 12 23.75C5.7868 23.75 0.75 18.7132 0.75 12.5Z"
         fill="#F6F7F8"
@@ -3198,12 +2670,7 @@ export const StepperIcon = (props: IProps) => {
 export const StorageIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 28 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M20.4901 25.8001L17.3692 20.3968C18.8908 19.2789 19.9467 17.5399 20.164 15.5525H26.4213C26.1573 19.8378 23.8594 23.5643 20.4901 25.8001ZM15.5526 6.28302V0.0257568C22.2291 0.429451 27.5703 5.77064 27.974 12.4471H21.7167C21.3596 9.20204 18.7977 6.64014 15.5526 6.28302ZM6.23656 14.7761C6.23656 15.7698 6.43841 16.717 6.82658 17.5709L1.42328 20.6918C0.522734 18.9062 0.0258789 16.9033 0.0258789 14.7761C0.0258789 7.74253 5.52233 1.99765 12.4472 1.57843V7.83569C8.95374 8.22386 6.23656 11.1739 6.23656 14.7761ZM13.2236 27.9738C8.61215 27.9738 4.55968 25.6448 2.19962 22.0426L7.60291 18.9218C8.8761 20.6452 10.8946 21.7632 13.2236 21.7632C14.2173 21.7632 15.1644 21.5613 16.0184 21.1731L19.1393 26.5764C17.3537 27.477 15.3507 27.9738 13.2236 27.9738Z"
         fill="currentColor;"
@@ -3215,12 +2682,7 @@ export const StorageIcon = (props: IProps) => {
 export const TickIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 12 11"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 12 11" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         d="M11.3853 1.41155L4.3047 9.98671C3.83335 10.5576 2.93517 10.4747 2.57625 9.82719L0.604991 6.27117C0.18297 5.50987 1.12541 4.72747 1.79607 5.28235L3.50011 6.69222C3.70138 6.85875 3.99446 6.852 4.18787 6.6764L10.7032 0.76071C11.1374 0.36643 11.7588 0.959267 11.3853 1.41155Z"
         fill={fill}
@@ -3232,12 +2694,7 @@ export const TickIcon = (props: IProps) => {
 export const SupportIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3286,12 +2743,7 @@ export const SupportIcon = (props: IProps) => {
 export const KeyIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3305,12 +2757,7 @@ export const KeyIcon = (props: IProps) => {
 export const TemplateAddIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3324,12 +2771,7 @@ export const TemplateAddIcon = (props: IProps) => {
 export const TemplateClassicIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3343,12 +2785,7 @@ export const TemplateClassicIcon = (props: IProps) => {
 export const TemplateWordIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3362,12 +2799,7 @@ export const TemplateWordIcon = (props: IProps) => {
 export const TemplateExcelIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3381,12 +2813,7 @@ export const TemplateExcelIcon = (props: IProps) => {
 export const TemplateFlowchartIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3400,12 +2827,7 @@ export const TemplateFlowchartIcon = (props: IProps) => {
 export const TemplateFileIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3419,12 +2841,7 @@ export const TemplateFileIcon = (props: IProps) => {
 export const ThemeIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 18 18"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M0 4.05C0 1.81325 1.81325 0 4.05 0C6.28675 0 8.1 1.81325 8.1 4.05V6.75C8.1 7.06387 8.1 7.2208 8.0655 7.34955C7.97188 7.69896 7.69896 7.97188 7.34955 8.0655C7.2208 8.1 7.06387 8.1 6.75 8.1H4.05C1.81325 8.1 0 6.28675 0 4.05Z"
         fill="#9AA6B1"
@@ -3448,12 +2865,7 @@ export const ThemeIcon = (props: IProps) => {
 export const ThemeDarkIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_3370_84920)">
         <path
           d="M10 17.07L10 2.93002C11.81 2.93002 13.62 3.62002 15 5.00002C17.76 7.76001 17.76 12.24 15 15C13.62 16.38 11.81 17.07 10 17.07Z"
@@ -3522,12 +2934,7 @@ export const TreeIcon = (props: IProps) => {
 export const UpdateIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M8.80648 6.09887C9.18397 5.98352 9.58471 5.92147 9.99995 5.92147C12.2524 5.92147 14.0784 7.74748 14.0784 9.99997C14.0784 10.99 13.7257 11.8976 13.1391 12.604M8.80648 6.09887L9.90551 4.82399M8.80648 6.09887L10.2558 7.07157M11.1812 13.809C10.8037 13.9244 10.403 13.9864 9.98775 13.9864C7.73526 13.9864 5.90925 12.1604 5.90925 9.90795C5.90925 8.91796 6.26197 8.01036 6.8486 7.30395M11.1812 13.809L10.0881 15.2419M11.1812 13.809L9.87134 12.7731M17.5694 9.99997C17.5694 14.1804 14.1804 17.5694 9.99997 17.5694C5.81949 17.5694 2.43054 14.1804 2.43054 9.99997C2.43054 5.81949 5.81949 2.43054 9.99997 2.43054C14.1804 2.43054 17.5694 5.81949 17.5694 9.99997Z"
         stroke="#181C20"
@@ -3542,12 +2949,7 @@ export const UpdateIcon = (props: IProps) => {
 export const UploadIcon = (props: IProps) => {
   const { className, stroke } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M16.0654 13.9544C17.2374 13.1066 18 11.7276 18 10.1705C18 7.59295 15.9105 5.50346 13.333 5.50346C13.2413 5.50346 13.1502 5.50611 13.0598 5.51132C11.9975 3.83412 10.1254 2.72064 7.99314 2.72064C4.68322 2.72064 2 5.40386 2 8.71379C2 10.3319 2.64126 11.8002 3.68351 12.8785M10.0075 17.2794V10.052M10.0075 10.052L6.76626 13.2932M10.0075 10.052L13.2488 13.2932"
         stroke={stroke || "#667585"}
@@ -3562,12 +2964,7 @@ export const UploadIcon = (props: IProps) => {
 export const UserIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3581,12 +2978,7 @@ export const UserIcon = (props: IProps) => {
 export const UserFillIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill={fill}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill={fill}>
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3600,12 +2992,7 @@ export const UserFillIcon = (props: IProps) => {
 export const UserEditIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 20 20"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M9.0161 12.8626H5.8595C3.65036 12.8626 1.8595 14.6535 1.8595 16.8626V17.6337M13.3101 5.70602C13.3101 7.81401 11.6012 9.52287 9.49321 9.52287C7.38522 9.52287 5.67635 7.81401 5.67635 5.70602C5.67635 3.59802 7.38522 1.88916 9.49321 1.88916C11.6012 1.88916 13.3101 3.59802 13.3101 5.70602ZM11.4016 18.1108V15.7253L15.048 12.0789C15.4385 11.6884 16.0717 11.6884 16.4622 12.0789L17.4335 13.0503C17.824 13.4408 17.824 14.0739 17.4335 14.4645L13.7872 18.1108H11.4016Z"
         stroke="#181C20"
@@ -3640,12 +3027,7 @@ export const UserGroupIcon = (props: IProps) => {
 export const VisibleIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3659,12 +3041,7 @@ export const VisibleIcon = (props: IProps) => {
 export const XIcon = (props: IProps) => {
   const { className, fill } = props;
   return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill={fill}
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg className={className} viewBox="0 0 24 24" fill={fill} xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -3882,11 +3259,7 @@ export const HeroIcon = (props: IProps) => {
         opacity="0.58"
       />
       <path fill={fill} d="M511.5 83.5h3v12h-3v-12z" opacity="0.353" />
-      <path
-        fill={fill}
-        d="M302.5 84.5h25v4h-26c-.067-1.459.266-2.792 1-4z"
-        opacity="0.305"
-      />
+      <path fill={fill} d="M302.5 84.5h25v4h-26c-.067-1.459.266-2.792 1-4z" opacity="0.305" />
       <path
         fill={fill}
         d="M-.5 149.5v-51a74.26 74.26 0 009-11.5 267.236 267.236 0 0140 .5 265.196 265.196 0 011 32c6.667.667 6.667 1.333 0 2a116.725 116.725 0 001 21c-.446 2.776-1.446 5.276-3 7.5-16.074.817-32.074.65-48-.5zm12-61h35v59h-45v-45c3.507.506 6.674-.16 9.5-2 .499-3.986.665-7.986.5-12zm-4 4c.968 2.107 1.302 4.44 1 7a18.436 18.436 0 01-6-.5 25.549 25.549 0 005-6.5z"
@@ -4216,11 +3589,7 @@ export const HeroIcon = (props: IProps) => {
         d="M441.5 150.5a49.87 49.87 0 0114 1l-7 1c-2.769-.029-5.103-.695-7-2z"
         opacity="0.608"
       />
-      <path
-        fill={fill}
-        d="M458.5 150.5h15v3c-5.419-.173-10.419-1.173-15-3z"
-        opacity="0.56"
-      />
+      <path fill={fill} d="M458.5 150.5h15v3c-5.419-.173-10.419-1.173-15-3z" opacity="0.56" />
       <path
         fill={fill}
         d="M529.5 152.5c13.579-.323 27.079.01 40.5 1a78.664 78.664 0 009 12 412.207 412.207 0 01-.5 49.5 156.693 156.693 0 01-24.5 1.5l-22.5-.5a9.454 9.454 0 01-2.5-1.5c-1.38-5.165-1.213-10.332.5-15.5-13.136-1.464-13.136-2.464 0-3a241.235 241.235 0 010-43.5zm2 2h35a72.367 72.367 0 00.5 12c2.826 1.84 5.993 2.506 9.5 2v45h-45v-59zm38 4a69.52 69.52 0 016 6.5 18.453 18.453 0 01-6 .5v-7z"
@@ -4275,16 +3644,8 @@ export const HeroIcon = (props: IProps) => {
         opacity="0.014"
       />
       <path fill={fill} d="M66.5 177.5h32v3h-32v-3z" opacity="0.35" />
-      <path
-        fill={fill}
-        d="M135.5 178.5v2c-6.667-.667-6.667-1.333 0-2z"
-        opacity="0.439"
-      />
-      <path
-        fill={fill}
-        d="M141.5 178.5c6.667.667 6.667 1.333 0 2v-2z"
-        opacity="0.418"
-      />
+      <path fill={fill} d="M135.5 178.5v2c-6.667-.667-6.667-1.333 0-2z" opacity="0.439" />
+      <path fill={fill} d="M141.5 178.5c6.667.667 6.667 1.333 0 2v-2z" opacity="0.418" />
       <path
         fill={fill}
         d="M170.5 179.5c1.277 1.194 1.944 2.86 2 5l-1 5a25.879 25.879 0 01-1-10z"
@@ -4393,12 +3754,7 @@ export const HeroIcon = (props: IProps) => {
 export const MyDocumentsIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -4422,12 +3778,7 @@ export const MyDocumentsIcon = (props: IProps) => {
 export const SharedDocumentsIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         d="M8.3741 19.6005H5.58594C4.48094 19.6005 3.58594 18.7055 3.58594 17.6005V3.60046C3.58594 2.49546 4.48094 1.60046 5.58594 1.60046H12.7579C13.2879 1.60046 13.7969 1.81146 14.1719 2.18646L16.9999 5.01446C17.3749 5.38946 17.5859 5.89846 17.5859 6.42846V9.97113M18.9634 18.8973L19.5177 18.343C20.6328 17.2719 20.7281 15.5202 19.7358 14.3344C19.2162 13.7557 18.4815 13.4161 17.7041 13.3952C16.9266 13.3744 16.1748 13.6742 15.625 14.2243L14.9578 14.8916M12.9549 16.8964L12.4007 17.4507C11.2856 18.5218 11.1903 20.2735 12.1826 21.4593C12.7022 22.0381 13.4368 22.3777 14.2143 22.3985C14.9917 22.4193 15.7435 22.1195 16.2933 21.5694L16.9606 20.9021M14.2905 19.5656L17.6279 16.2282"
         stroke="#B4B4B9"
@@ -4469,12 +3820,7 @@ export const DocumentIcon = (props: IProps) => {
 export const LockIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -4567,11 +3913,7 @@ export const AdminPanelIcon = (props: IProps) => {
 export const FeedIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      viewBox="0 0 24 24"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24">
       <path
         fill="currentColor;"
         d="M5.23 20q-.507 0-.868-.362T4 18.77t.362-.869t.869-.361t.869.361t.362.87t-.362.869t-.87.361m12.309 0q0-2.829-1.064-5.283t-2.902-4.29t-4.29-2.902Q6.827 6.461 4 6.461V5q3.127 0 5.846 1.18t4.756 3.218t3.217 4.752T19 20zM12 20q0-1.675-.625-3.113T9.65 14.35t-2.537-1.725T4 12v-1.461q1.973 0 3.688.738t3.01 2.025q1.286 1.292 2.025 3.004T13.46 20z"
@@ -4601,15 +3943,27 @@ export const SendIcon = (props: IProps) => {
 export const EnableChatIcon = (props: IProps) => {
   const { className } = props;
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 16 16"
-      className={className}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={className}>
       <g fill="currentColor">
         <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855a.75.75 0 0 0-.124 1.329l4.995 3.178l1.531 2.406a.5.5 0 0 0 .844-.536L6.637 10.07l7.494-7.494l-1.895 4.738a.5.5 0 1 0 .928.372l2.8-7Zm-2.54 1.183L5.93 9.363L1.591 6.602l11.833-4.733Z" />
         <path d="M16 12.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95l-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z" />
       </g>
+    </svg>
+  );
+};
+
+export const RepoActivityIcon = (props: IProps) => {
+  const { className } = props;
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24">
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm12 8h2m-6-3h6m-4-3h4"
+      />
     </svg>
   );
 };
