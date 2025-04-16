@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { Spinner, Switch, Typography } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userIdAtom } from "@atom/app";
-import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
+
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUserConfigPanel from "@hooks/configPanel/useGetUserConfigPanel";
-import { repoAtom } from "@atom/repository";
-import { Spinner, Switch, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-
+import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
+import { userIdAtom } from "@atom/app";
 
 const UserConfigPanelDialog = () => {
     const getRepo = useRecoilValue(repoAtom);
@@ -56,7 +56,7 @@ const UserConfigPanelDialog = () => {
             ssoId: getUserId,
             blockedServices: blockServices,
             callBack: () => {
-                toast.success("تنطیمات دسترسی برای کاربر به روز شد.")
+                toast.success("تنطیمات دسترسی برای کاربر به روز شد.");
             }
         });
     };
