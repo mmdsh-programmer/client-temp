@@ -17,7 +17,7 @@ export async function GET() {
       const value = await client.get("ping");
       return NextResponse.json({ data : value });
     }
-    return NextResponse.json({ "message" : "ok" });
+    return NextResponse.json({ message : "Redis is not connected"  });
   } catch (error) {
     console.error("Redis GET Error:", error);
     return NextResponse.json(

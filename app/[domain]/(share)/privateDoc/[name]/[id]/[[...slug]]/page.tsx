@@ -1,17 +1,17 @@
-import React from "react";
-import { getDocumentPublishLink, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
-import { FolderEmptyIcon } from "@components/atoms/icons";
-import { notFound } from "next/navigation";
-import Logger from "@utils/logger";
-import PublishVersionContent from "@components/pages/publish";
-import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
 import BasicError, { AuthorizationError, ServerError } from "@utils/error";
-import RedirectPage from "@components/pages/redirectPage";
-import { getMe } from "@actions/auth";
-import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
-import { cookies } from "next/headers";
+import { getDocumentPublishLink, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
+import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
+
+import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError } from "@interface/app.interface";
 import LoginRequiredButton from "@components/molecules/loginRequiredButton";
+import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
+import PublishVersionContent from "@components/pages/publish";
+import React from "react";
+import RedirectPage from "@components/pages/redirectPage";
+import { cookies } from "next/headers";
+import { getMe } from "@actions/auth";
+import { notFound } from "next/navigation";
 
 export const generateStaticParams = async () => {
     return [];
@@ -179,12 +179,12 @@ export default async function  PrivateSharePage ({ params,
             errorList: string[];
             errorCode: number;
         };
-        Logger.error(JSON.stringify({
+        console.log(JSON.stringify({
             errorList,
             errorCode,
             error: true,
             referenceNumber: "NOT_DEFINED",
-        }));
+        }, null, 0));
 
         const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
         if ((error as unknown as IActionError).errorCode === 401) {

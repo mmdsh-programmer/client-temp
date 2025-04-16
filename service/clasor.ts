@@ -78,7 +78,6 @@ import { IOfferResponse } from "@interface/offer.interface";
 import { IPositionList } from "@interface/position.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
-import Logger from "@utils/logger";
 import { decryptKey } from "@utils/crypto";
 import { getRedisClient } from "@utils/redis";
 import qs from "qs";
@@ -102,7 +101,7 @@ axiosClasorInstance.interceptors.request.use(
       data,
     };
 
-    Logger.info(JSON.stringify(log));
+    console.log(JSON.stringify(log, null, 0));
     return request;
   },
   (error) => {
@@ -119,7 +118,7 @@ axiosClasorInstance.interceptors.request.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log));
+    console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -132,7 +131,7 @@ axiosClasorInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(JSON.stringify(log));
+    console.log(JSON.stringify(log, null, 0));
     return response;
   },
   (error) => {
@@ -154,7 +153,7 @@ axiosClasorInstance.interceptors.response.use(
         Authorization: headers?.Authorization,
       },
     };
-    Logger.error(JSON.stringify(log));
+    console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
@@ -207,12 +206,10 @@ export const userInfo = async (
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
   if (cachedUser) {
-    Logger.warn(
-      JSON.stringify({
+    console.log(JSON.stringify({
         type: "Redis cache data",
         data: cachedUser,
-      })
-    );
+    }, null, 0));
     return JSON.parse(cachedUser);
   }
   try {
@@ -4449,12 +4446,10 @@ export const getCustomPostByDomain = async (
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
       const cacheResult = JSON.parse(cachedDomain);
-      Logger.warn(
-        JSON.stringify({
-          type: "Redis cache data",
-          data: cacheResult,
-        })
-      );
+      console.log(JSON.stringify({
+        type: "Redis cache data",
+        data: cacheResult,
+      }, null, 0));
       return cacheResult;
     }
     const { data } = await axiosClasorInstance.get<

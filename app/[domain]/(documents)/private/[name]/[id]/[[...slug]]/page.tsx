@@ -9,7 +9,6 @@ import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError } from "@interface/app.interface";
-import Logger from "@utils/logger";
 import LoginRequiredButton from "@components/molecules/loginRequiredButton";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
 import PublishVersionContent from "@components/pages/publish";
@@ -204,12 +203,12 @@ export default async function PublishContentPage({
       errorList: string[];
       errorCode: number;
     };
-    Logger.error(JSON.stringify({
+    console.log(JSON.stringify({
       errorList,
       errorCode,
       error: true,
       referenceNumber: "NOT_DEFINED",
-    }));
+    }, null, 0));
 
     const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if((error as unknown as IActionError).errorCode === 401){

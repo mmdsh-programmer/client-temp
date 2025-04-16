@@ -1,14 +1,14 @@
-import React from "react";
 import { getDocumentPublishLink, getPublishedDocumentLastVersion, getPublishedDocumentVersion } from "@service/clasor";
-import { IVersion } from "@interface/version.interface";
-import { FolderEmptyIcon } from "@components/atoms/icons";
-import { notFound } from "next/navigation";
-import Logger from "@utils/logger";
-import PublishVersionContent from "@components/pages/publish";
 import { hasEnglishDigits, toEnglishDigit } from "@utils/index";
-import { ServerError } from "@utils/error";
+
+import { FolderEmptyIcon } from "@components/atoms/icons";
+import { IVersion } from "@interface/version.interface";
+import PublishVersionContent from "@components/pages/publish";
+import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
+import { ServerError } from "@utils/error";
 import { generateCachePageTag } from "@utils/redis";
+import { notFound } from "next/navigation";
 
 export const generateStaticParams = async () => {
     return [];
@@ -142,12 +142,12 @@ const SharePage = async ({ params,
             errorList: string[];
             errorCode: number;
         };
-        Logger.error(JSON.stringify({
+        console.log(JSON.stringify({
             errorList,
             errorCode,
             error: true,
             referenceNumber: "NOT_DEFINED",
-        }));
+        }, null, 0));
 
         const message =
             error instanceof Error ? error.message : "خطای نامشخصی رخ داد";

@@ -10,7 +10,6 @@ import {
 import axios, { AxiosError, isAxiosError } from "axios";
 
 import { IGetTokenResponse } from "@interface/app.interface";
-import Logger from "@utils/logger";
 import { bracketStringify } from "@utils/index";
 import { getRedisClient } from "@utils/redis";
 import { userInfo } from "./clasor";
@@ -30,7 +29,7 @@ axiosAccountsInstance.interceptors.request.use((request) => {
     data,
   };
 
-  Logger.info(JSON.stringify(log));
+  console.log(JSON.stringify(log, null, 0));
   return request;
 });
 
@@ -42,7 +41,7 @@ axiosAccountsInstance.interceptors.response.use(
       data,
       status,
     };
-    Logger.info(JSON.stringify(log));
+    console.log(JSON.stringify(log, null, 0));
     return response;
   },
   (error) => {
@@ -59,7 +58,7 @@ axiosAccountsInstance.interceptors.response.use(
         data: error.response?.data,
       },
     };
-    Logger.error(JSON.stringify(log));
+    console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
   }
 );
