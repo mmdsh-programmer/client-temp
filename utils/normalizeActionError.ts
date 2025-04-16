@@ -1,7 +1,6 @@
 "use server";
 
 import { IActionError } from "@interface/app.interface";
-import Logger from "./logger";
 
 export const normalizeError = async (error: IActionError) => {
   // this handler will return an standard object of error
@@ -17,7 +16,7 @@ export const normalizeError = async (error: IActionError) => {
   if (originalError?.response?.data?.referenceNumber) {
     actionError.referenceNumber = originalError.response.data.referenceNumber;
   } else if(!originalError?.response){
-    Logger.error(JSON.stringify(actionError, null, 0));
+    console.log(JSON.stringify(actionError, null, 0));
   }
 
   return actionError;
