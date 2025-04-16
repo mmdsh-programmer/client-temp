@@ -1,5 +1,5 @@
-import React from "react";
 import { FolderEmptyIcon } from "@components/atoms/icons";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 
 export enum EEmptyList {

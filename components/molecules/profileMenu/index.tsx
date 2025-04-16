@@ -47,7 +47,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
       <>
         {renderSideButton || null}
         <LoadingButton
-          className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
+          className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 bg-tertiary text-white font-iranYekan !max-h-[unset]"
           onClick={() => {
             window.localStorage.setItem(
               "CLASOR:LAST_PAGE",

@@ -52,7 +52,7 @@ const PublishCardView = ({
     return <EmptyList type={type} />;
   };
 
-  return <div className="pb-4 mt-4">{renderContent()}</div>;
+  return <div className="publish-card-view pb-4 mt-4">{renderContent()}</div>;
 };
 
 export default PublishCardView;

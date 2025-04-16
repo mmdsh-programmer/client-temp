@@ -23,7 +23,7 @@ const PublishRepositories = () => {
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
-    type: EEmptyList.MY_REPO,
+    type: EEmptyList.PUBLISHED_REPO,
   };
 
   return <PublishCardView {...commonProps} />;
