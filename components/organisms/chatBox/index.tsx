@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useRef } from "react";
-import { Author, ChatFeed } from "react-bell-chat";
-import Chat from "@utils/chatAgent";
 
-import { toast } from "react-toastify";
-import useGetUser from "@hooks/auth/useGetUser";
-import useEnableDocChat from "@hooks/chat/useEnableDocChat";
-import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
-import LoadingButton from "@components/molecules/loadingButton";
-import { Typography } from "@material-tailwind/react";
+import { Author, ChatFeed } from "react-bell-chat";
+import { IChatError, IChatState } from "@interface/chat.interface";
+import React, { useEffect, useRef, useState } from "react";
 import {
   avatarStyles,
   chatBubbleStyles,
   chatFeedStyle,
   lastSeenAvatarStyles,
 } from "./styles";
+
+import Chat from "@utils/chatAgent";
 import ChatBubble from "./chatBubble";
 import ChatInput from "./chatInput";
-import { IChatError, IChatState } from "@interface/chat.interface";
+import LoadingButton from "@components/molecules/loadingButton";
+import { Typography } from "@material-tailwind/react";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useEnableDocChat from "@hooks/chat/useEnableDocChat";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
 
 const ChatBox = () => {
   const chat = React.useRef<any>();
@@ -314,7 +315,7 @@ const ChatBox = () => {
     return (
       <div className="h-full flex items-end px-6 py-4">
         <LoadingButton
-          className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="!w-full bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={enableChat}
           loading={enableChatHook.isPending}
         >
@@ -330,7 +331,7 @@ const ChatBox = () => {
     return (
       <div className="h-full flex items-end px-6 py-4">
         <LoadingButton
-          className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="!w-full bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={enableChat}
           loading={enableChatHook.isPending}
         >

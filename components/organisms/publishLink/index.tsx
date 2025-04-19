@@ -1,11 +1,12 @@
-import React from "react";
 import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { Typography } from "@material-tailwind/react";
+
 import CreateRepoPublishLink from "./createRepoPublishLink";
 import LoadingButton from "@components/molecules/loadingButton";
-import useDeletePublishLink from "@hooks/publish/useDeletePublishLink";
+import React from "react";
+import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
+import useDeletePublishLink from "@hooks/publish/useDeletePublishLink";
 
 const PublishLink = () => {
   const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
@@ -31,7 +32,7 @@ const PublishLink = () => {
               مخزن شما قبلا انتشار یافته. آیا می‌خواهید آن را لغو کنید؟
             </Typography>
             <LoadingButton
-              className="repo-publish-link__delete-publish-button self-end bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="repo-publish-link__delete-publish-button self-end bg-secondary hover:bg-secondary active:bg-secondary"
               onClick={handleDelete}
               loading={deletePublishLink.isPending}
             >

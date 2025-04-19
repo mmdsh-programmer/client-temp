@@ -80,7 +80,7 @@ const ConfirmDialog = ({
           انصراف
         </CancelButton>
         <LoadingButton
-          className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={onSubmit}
           loading={isPending}
         >

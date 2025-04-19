@@ -91,7 +91,7 @@ const RepoImage = ({
           انصراف
         </CancelButton>
         <LoadingButton
-          className="repo-image__dialog-next-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-image__dialog-next-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >

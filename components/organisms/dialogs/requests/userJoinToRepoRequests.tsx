@@ -1,11 +1,12 @@
-import React from "react";
 import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
-import InfoDialog from "@components/templates/dialog/infoDialog";
-import useGetUserJoinRepoRequests from "@hooks/requests/useGetUserJoinRepoRequests";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { translateRoles } from "@utils/index";
-import RequestMenu from "./requestMenu";
+
 import ChipMolecule from "@components/molecules/chip";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import React from "react";
+import RequestMenu from "./requestMenu";
+import { translateRoles } from "@utils/index";
+import useGetUserJoinRepoRequests from "@hooks/requests/useGetUserJoinRepoRequests";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,13 +45,13 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
                     >
                       <div className="flex flex-grow gap-1">
                         <Typography
-                          className="label_l2 text-primary truncate w-auto max-w-[50px] xs:max-w-[90px] cursor-pointer"
+                          className="label_l2 text-primary-normal truncate w-auto max-w-[50px] xs:max-w-[90px] cursor-pointer"
                           title={request.repoName}
                         >
                           {request.repoName}
                         </Typography>
                         <ChipMolecule
-                          className="label_l4 !text-purple-normal h-5 px-2 bg-purple-light"
+                          className="label_l4 !text-secondary-normal h-5 px-2 bg-secondary-light"
                           value={translateRoles(request.role)}
                         />
                       </div>

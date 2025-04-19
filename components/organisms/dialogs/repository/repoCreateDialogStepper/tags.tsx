@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DialogBody,
   DialogFooter,
@@ -6,10 +5,12 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 import { repoActiveStepAtom } from "@atom/stepper";
 import { repoAtom } from "@atom/repository";
 import { repoTagSchema } from "../validation.yup";
@@ -106,7 +107,7 @@ const Tags = ({ handleClose }: IProps) => {
           انصراف
         </CancelButton>
         <LoadingButton
-          className="repo-tags__dialog-next-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-tags__dialog-next-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={() => {
             return setActiveStep(3);
           }}

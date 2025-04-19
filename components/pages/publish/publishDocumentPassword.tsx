@@ -88,7 +88,7 @@ const PublishDocumentPassword = ({
         </div>
 
         <LoadingButton
-          className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="!w-full bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={handleSubmit(onSubmit)}
           loading={loading}
         >

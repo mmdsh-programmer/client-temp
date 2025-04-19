@@ -1,6 +1,7 @@
-import React from "react";
 import { Step, Stepper, Typography } from "@material-tailwind/react";
 import { StepperIcon, TickIcon } from "@components/atoms/icons";
+
+import React from "react";
 
 interface IProps {
   getActiveStep: number;
@@ -22,7 +23,7 @@ const StepperComponent = ({ getActiveStep, stepList }: IProps) => {
             placeholder="step"
             className="stepper__step h-8 w-8"
             activeClassName="!bg-gray-400"
-            completedClassName="bg-purple-normal"
+            completedClassName="bg-secondary"
           >
             {getActiveStep > index ? (
               <TickIcon className="h-4 w-4 fill-white" />

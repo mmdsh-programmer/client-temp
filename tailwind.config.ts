@@ -48,8 +48,11 @@ module.exports = withMT({
       },
       backgroundColor: {
         primary: "var(--bg-primary-color)",
+        "primary-light": "var(--bg-primary-light-color)",
         secondary: "var(--bg-secondary-color)",
+        "secondary-light": "var(--bg-secondary-light-color)",
         tertiary: "var(--bg-tertiary-color)",
+        "tertiary-light": "var(--bg-tertiary-light-color)",
       },
       borderColor: {
         normal: "var(--border-normal)",

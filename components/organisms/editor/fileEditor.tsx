@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
+import React, { useEffect, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
+
 import Files from "../fileManagement";
 import { IFile } from "@interface/file.interface";
 import PreviewFile from "./previewFile";
@@ -114,7 +115,7 @@ const FileEditor = () => {
             ) : null}
 
             <Button
-              className="gap-1 items-center px-2-0 py-0 mt-4 z-50 bg-purple-normal h-12"
+              className="gap-1 items-center px-2-0 py-0 mt-4 z-50 bg-secondary h-12"
               onClick={() => {
                 setShowFilePicker(true);
               }}

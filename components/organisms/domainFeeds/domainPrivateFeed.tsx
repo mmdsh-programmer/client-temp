@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { AddIcon } from "@components/atoms/icons";
-import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
-import DomainPrivateFeedList from "./domainPrivateFeedList";
 import {
   Tab,
   TabPanel,
@@ -9,7 +6,11 @@ import {
   TabsBody,
   TabsHeader,
 } from "@material-tailwind/react";
+
+import { AddIcon } from "@components/atoms/icons";
+import DomainPrivateFeedList from "./domainPrivateFeedList";
 import DomainSubscription from "./domainSubscription";
+import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import PrivateFeedCreateDialog from "../dialogs/privateFeed/privateFeedCreateDialog";
 
 export enum ETabs {
@@ -65,7 +66,7 @@ const DomainPrivateFeed = () => {
             text="ایجاد خبرنامه جدید"
             icon={<AddIcon className="h-5 w-5 stroke-white pr-1" />}
             classNameText="text-white text-[13px] leading-[19.5px] -tracking-[0.13px] font-medium !px-2  font-iranYekan"
-            classNameButton=" rounded-lg h-9 !px-[6px] bg-purple-normal "
+            classNameButton=" rounded-lg h-9 !px-[6px] bg-secondary "
             onClick={() => {
               return setOpenCreateFeedDialog(true);
             }}

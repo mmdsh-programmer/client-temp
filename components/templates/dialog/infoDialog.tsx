@@ -1,7 +1,8 @@
-import React from "react";
 import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
-import CloseButton from "@components/atoms/button/closeButton";
+
 import BackButton from "@components/atoms/button/backButton";
+import CloseButton from "@components/atoms/button/closeButton";
+import React from "react";
 import { size } from "@material-tailwind/react/types/components/dialog";
 
 export interface IProps {
@@ -32,7 +33,7 @@ const InfoDialog = ({
       dismiss={{
         enabled: false,
       }}
-      className={`${className} flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
+      className={`${className} flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] rounded-none xs:rounded-lg `}
     >
       <DialogHeader
         placeholder="dialog header"

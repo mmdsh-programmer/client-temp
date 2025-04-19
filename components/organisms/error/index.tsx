@@ -22,7 +22,7 @@ const Error = ({ error, retry }: IProps) => {
       {retry ? (
         <Button
           onClick={retry}
-          className="mt-2 py-3 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal flex justify-center items-center w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg"
+          className="mt-2 py-3 bg-secondary hover:bg-secondary active:bg-secondary flex justify-center items-center w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg"
         >
           تلاش مجدد
         </Button>

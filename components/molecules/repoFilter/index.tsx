@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { EDocumentTypes } from "@interface/enums";
 import { IOption } from "../select";
 import InputAtom from "@components/atoms/input";
@@ -97,7 +98,7 @@ const RepoFilter = ({ repoId }: { repoId?: number }) => {
         </div>
         <div className="flex flex-grow items-end justify-end w-full">
           <LoadingButton
-            className="!h-10 !w-full sm:!w-auto !px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="!h-10 !w-full sm:!w-auto !px-4 bg-secondary hover:bg-secondary active:bg-secondary"
             onClick={handleFilter}
           >
             <Typography className="text__label__button text-white">

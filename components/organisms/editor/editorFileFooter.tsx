@@ -1,19 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Typography } from "@material-tailwind/react";
+import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
+import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedFileAtom } from "@atom/file";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
-import { selectedFileAtom } from "@atom/file";
-import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
-import { IVersion } from "@interface/version.interface";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
 
 const EditorFileFooter = () => {
   const repoId = useRepoId();
@@ -189,7 +190,7 @@ const EditorFileFooter = () => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={async () => {
             return handleSave();
           }}

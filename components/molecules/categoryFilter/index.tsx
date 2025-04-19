@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -8,8 +9,8 @@ import { Typography } from "@material-tailwind/react";
 import { filterChildrenAtom } from "@atom/filter";
 import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 const CategoryFilter = () => {
   const currentPath = usePathname();
@@ -114,7 +115,7 @@ const CategoryFilter = () => {
         ) : null}
         <div className="flex flex-grow items-end justify-end w-full">
           <LoadingButton
-            className="!h-10 !w-full sm:!w-auto !px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="!h-10 !w-full sm:!w-auto !px-4 bg-secondary hover:bg-secondary active:bg-secondary"
             onClick={handleFilter}
           >
             <Typography className="text__label__button text-white">

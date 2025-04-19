@@ -1,12 +1,13 @@
-import React, { useState } from "react";
 import {
   Button,
   DialogBody,
   Spinner,
   Typography,
 } from "@material-tailwind/react";
+import React, { useState } from "react";
 import { deleteTagAtom, editTagAtom, tagDrawerAtom } from "@atom/tag";
 import { useRecoilState, useRecoilValue } from "recoil";
+
 import ChipMolecule from "@components/molecules/chip";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
@@ -14,9 +15,9 @@ import TagDeleteDialog from "../dialogs/tag/tagDeleteDialog";
 import TagEditDialog from "../dialogs/tag/tagEditDialog";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
 import { repoAtom } from "@atom/repository";
+import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
-import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -124,7 +125,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                 </ul>
                 <div className="w-full self-end">
                   <Button
-                    className="create-tag w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+                    className="create-tag w-full bg-secondary hover:bg-secondary active:bg-secondary"
                     onClick={() => {
                       setOpenTagCreateModal(true);
                     }}

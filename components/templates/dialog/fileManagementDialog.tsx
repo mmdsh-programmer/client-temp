@@ -1,14 +1,15 @@
-import React from "react";
 import {
   Button,
   Dialog,
-  DialogFooter,
   DialogBody,
+  DialogFooter,
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
+
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
+import React from "react";
 
 interface IProps {
   children: React.ReactNode;
@@ -66,7 +67,7 @@ const fileManagementDialog = ({
         <Button
           placeholder=" button"
           variant="text"
-          className="dialog-footer__submit-button flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-purple-normal bg-purple-normal active:bg-purple-normal "
+          className="dialog-footer__submit-button flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-secondary bg-secondary active:bg-secondary "
           onClick={handleSelect}
         >
           <Typography

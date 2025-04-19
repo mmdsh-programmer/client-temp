@@ -136,7 +136,7 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .primary_button {
-    @apply bg-purple-normal hover:bg-purple-normal text-white;
+    @apply bg-secondary hover:bg-secondary text-white;
   }
 
   .form__input {
@@ -185,7 +185,7 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .label_l2 {
-    @apply text-primary !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan;
+    @apply text-primary_normal !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan;
   }
 
   .label_l3 {

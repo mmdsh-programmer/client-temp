@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogBody,
@@ -6,12 +5,14 @@ import {
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
+
 import BackButton from "@components/atoms/button/backButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import { size } from "@material-tailwind/react/types/components/dialog";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
+import { size } from "@material-tailwind/react/types/components/dialog";
 
 export interface IProps {
   isPending: boolean;
@@ -97,7 +98,7 @@ const CreateDialog = ({
             انصراف
           </CancelButton>
           <LoadingButton
-            className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
             onClick={onSubmit}
             loading={isPending}
           >

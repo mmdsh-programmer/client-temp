@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import TableHead from "@components/molecules/tableHead";
-import TableCell from "@components/molecules/tableCell";
+import { AddIcon, DeleteIcon } from "@components/atoms/icons";
 import { Button, Spinner } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
-import SearchInput from "@components/molecules/searchInput";
-import { AddIcon, DeleteIcon } from "@components/atoms/icons";
-import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
+import React, { useState } from "react";
+
 import AddDomainParticipantDialog from "../dialogs/domainParticipant/addDomainParticipantDialog";
+import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import RemoveDomainParticipantDialog from "../dialogs/domainParticipant/removeDomainParticipantDialog";
+import SearchInput from "@components/molecules/searchInput";
+import TableCell from "@components/molecules/tableCell";
+import TableHead from "@components/molecules/tableHead";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 const DomainParticipant = () => {
   const [openAddParticipantDialog, setOpenAddParticipantDialog] =
@@ -72,7 +73,7 @@ const DomainParticipant = () => {
           text="افزودن کاربر جدید"
           icon={<AddIcon className="h-5 w-5 stroke-white pr-1" />}
           classNameText="text-white text-[13px] leading-[19.5px] -tracking-[0.13px] font-medium !px-2  font-iranYekan"
-          classNameButton=" rounded-lg h-9 !px-[6px] bg-purple-normal "
+          classNameButton=" rounded-lg h-9 !px-[6px] bg-secondary "
           onClick={() => {
             return setOpenAddParticipantDialog(true);
           }}

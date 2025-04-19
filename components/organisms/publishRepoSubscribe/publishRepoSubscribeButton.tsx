@@ -1,13 +1,13 @@
 "use client";
 
+import { ERepoSubscriptionStatus } from "@interface/enums";
+import { IRepo } from "@interface/repo.interface";
+import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
 import { TUserData } from "@interface/app.interface";
-import { IRepo } from "@interface/repo.interface";
+import { toast } from "react-toastify";
 import useGetRepoSubscriptionStatus from "@hooks/repository/useGetRepoSubscriptionStatus";
 import useSubscribeRepo from "@hooks/repository/useSubscribeRepo";
-import { ERepoSubscriptionStatus } from "@interface/enums";
-import { toast } from "react-toastify";
-import LoadingButton from "@components/molecules/loadingButton";
 import useUnsubscribeRepo from "@hooks/repository/useUnsubscribeRepo";
 
 const PublishRepoSubscribeButton = ({
@@ -57,7 +57,7 @@ const PublishRepoSubscribeButton = ({
       case ERepoSubscriptionStatus.ACCEPTED:
         return (
           <LoadingButton
-            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
+            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-secondary text-white font-iranYekan !max-h-[unset] bg-transparent"
             onClick={handleUnsubscribeRepo}
             loading={loading}
             disabled={loading}
@@ -68,7 +68,7 @@ const PublishRepoSubscribeButton = ({
       case ERepoSubscriptionStatus.PENDING:
         return (
           <LoadingButton
-            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
+            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-secondary text-white font-iranYekan !max-h-[unset] bg-transparent"
             onClick={handleUnsubscribeRepo}
             loading={loading}
             disabled={loading}
@@ -79,7 +79,7 @@ const PublishRepoSubscribeButton = ({
       case ERepoSubscriptionStatus.REJECTED:
         return (
           <LoadingButton
-            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
+            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-secondary text-white font-iranYekan !max-h-[unset] bg-transparent"
             onClick={handleSubscribeRepo}
             loading={loading}
             disabled={loading}
@@ -90,7 +90,7 @@ const PublishRepoSubscribeButton = ({
       default:
         return (
           <LoadingButton
-            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
+            className="flex justify-center items-center leading-5 py-6 !w-fit px-2 sm:!px-10 rounded-lg lg:mt-0 sm:bg-secondary text-white font-iranYekan !max-h-[unset] bg-transparent"
             onClick={handleSubscribeRepo}
             loading={loading}
             disabled={loading}
