@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { Spinner, Switch, Typography } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userIdAtom } from "@atom/app";
-import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
+
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUserConfigPanel from "@hooks/configPanel/useGetUserConfigPanel";
-import { repoAtom } from "@atom/repository";
-import { Spinner, Switch, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-
+import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
+import { userIdAtom } from "@atom/app";
 
 const UserConfigPanelDialog = () => {
     const getRepo = useRecoilValue(repoAtom);
@@ -71,7 +71,6 @@ const UserConfigPanelDialog = () => {
                     return userConfig.serviceName;
                 });
             setBlockServices(services);
-
         }
 
     }, [getUserConfigPanel]);
@@ -96,7 +95,11 @@ const UserConfigPanelDialog = () => {
                                 className="flex w-full justify-between p-2 border rounded-md mb-1 hover:border-primary"
                             >
                                 <Typography className="form_label">{userConfig.title} </Typography>
-                                <Switch color="green" defaultChecked={!userConfig.blocked} crossOrigin onChange={() => { return handleChange(userConfig.serviceName); }} />
+                                <Switch color="green" defaultChecked={!userConfig.blocked} crossOrigin 
+                                    onChange={() => { 
+                                        return handleChange(userConfig.serviceName); 
+                                    }} 
+                                />
                             </div>
 
                         );

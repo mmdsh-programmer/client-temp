@@ -23,7 +23,7 @@ const PublishHeader = ({ projectName, logo, domain }: IProps) => {
             className="flex h-8 w-8 mr-7 ml-auto items-center md:mr-0 w-fit"
             href={`${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}`}
           >
-            <div className="p-1 rounded-md">
+            <div className="rounded-md">
               {logo ? (
                 <ImageComponent
                   alt="repo-image"
