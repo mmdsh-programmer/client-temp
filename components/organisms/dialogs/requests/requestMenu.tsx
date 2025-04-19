@@ -41,7 +41,7 @@ const RequestMenu = ({ request }: IProps) => {
             className="request-menu__reject-button w-16 xs:w-20 h-8 hover:bg-gray-50 bg-gray-50 "
             onClick={handleRejectRequest}
           >
-            <Typography className="text__label__button text-primary">
+            <Typography className="text__label__button text-primary_normal">
               ردکردن
             </Typography>
           </Button>

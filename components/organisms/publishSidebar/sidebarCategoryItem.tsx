@@ -105,7 +105,7 @@ const SidebarCategoryItem = ({
 
       {!!hasNextPage && !isFetchingNextPage && (
         <button
-          className="underline underline-offset-8 text-[10px] text-primary mb-3 mt-2 w-fit"
+          className="underline underline-offset-8 text-[10px] text-primary_normal mb-3 mt-2 w-fit"
           onClick={() => {
             fetchNextPage();
           }}

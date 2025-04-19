@@ -1,7 +1,8 @@
-import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
 import { IChildrenFilter } from "@interface/app.interface";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import TreeCatItem from "./treeCatItem";
@@ -9,9 +10,9 @@ import { categoryQueryParamsAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "@atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
-import { useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   move?: boolean;
@@ -101,7 +102,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
         )}
         <RenderIf isTrue={!!hasNextPage}>
           <LoadMore
-            className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+            className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
           />

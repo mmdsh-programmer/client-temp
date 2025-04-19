@@ -113,7 +113,7 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
             </h4>
           ) : (
             <>
-              <h2 className="card-title text-xl font-bold text-primary">
+              <h2 className="card-title text-xl font-bold text-primary_normal">
                 به {projectName} خوش آمدید!
               </h2>
               <p className="text-base mt-4 flex-grow text-sm">

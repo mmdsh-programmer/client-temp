@@ -1,10 +1,11 @@
-import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { useRecoilState } from "recoil";
+
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { useForm } from "react-hook-form";
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import useLeaveRepo from "@hooks/repository/useLeaveRepo";
+import { useRecoilState } from "recoil";
 
 interface IForm {
   name: string;
@@ -53,11 +54,11 @@ const RepoLeaveDialog = ({ setOpen }: IProps) => {
       className="repo-leave-dialog"
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از ترک"
           <span
             title={getRepo?.name}
-            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
           >
             {getRepo?.name}
           </span>

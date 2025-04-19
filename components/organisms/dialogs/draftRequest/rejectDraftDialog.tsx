@@ -1,11 +1,11 @@
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
 import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
 import { selectedRequestAtom } from "@atom/releaseDocs";
-import { useForm } from "react-hook-form";
-import useRejectDraft from "@hooks/release/useRejectDraft";
 import { toast } from "react-toastify";
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import useRejectDraft from "@hooks/release/useRejectDraft";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -46,9 +46,9 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="repo-reject-draft-dialog"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از رد تایید پیش‌نویس "
-        <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+        <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
           {getRequest?.versionNumber}
         </span>
         " اطمینان دارید؟

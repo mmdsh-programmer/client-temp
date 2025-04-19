@@ -1,13 +1,14 @@
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useState } from "react";
-import TableHead from "@components/molecules/tableHead";
+
+import AdminFeedbackDialog from "../dialogs/admin/adminFeedbackDialog";
 import { IFeedbackView } from "./adminPanelFeedback";
+import { IOffer } from "@interface/offer.interface";
+import LoadMore from "@components/molecules/loadMore";
+import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import AdminFeedbackDialog from "../dialogs/admin/adminFeedbackDialog";
-import { IOffer } from "@interface/offer.interface";
+import TableHead from "@components/molecules/tableHead";
 
 const AdminTableView = ({
   isLoading,
@@ -81,7 +82,7 @@ const AdminTableView = ({
                     <td colSpan={3} className="!text-center py-4">
                       <div className="flex justify-center items-center">
                         <LoadMore
-                          className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                          className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
                           isFetchingNextPage={isFetchingNextPage}
                           fetchNextPage={fetchNextPage}
                         />

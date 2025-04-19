@@ -1,9 +1,9 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import { selectedDocumentAtom } from "@atom/document";
 import { IDocumentMetadata } from "@interface/document.interface";
+import React from "react";
+import { selectedDocumentAtom } from "@atom/document";
 import useDeleteDocumentPublishLink from "@hooks/document/useDeleteDocumentPublishLink";
+import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
@@ -42,11 +42,11 @@ const DocumentDeletePublishLinkDialog = ({ document, setOpen }: IProps) => {
       setOpen={handleClose}
       className="document-delete-publish-link-dialog"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
       آیا از حذف لینک انتشار "
         <span
           title={(document || getDocument)?.name}
-          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
         >
           {(document || getDocument)?.name}
         </span>

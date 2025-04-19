@@ -62,7 +62,7 @@ const FreeDraftDialog = ({
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <div className="body_b3 flex text-primary">
+        <div className="body_b3 flex text-primary_normal">
           مهلت استفاده شما از ویرایشگر به پایان رسیده.
           <br />
           آیا ادامه میدهید؟

@@ -50,8 +50,8 @@ const SidebarDocuments = () => {
           placeholder="sidebar-button"
           className={`bg-transparent justify-start w-full 
             text-link gap-1 px-3 h-[44px]
-             ${documentType === "سندهای من" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
-            active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
+             ${documentType === "سندهای من" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
+            active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal !stroke-icon-hover
             hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             setDocumentType("سندهای من");
@@ -73,8 +73,8 @@ const SidebarDocuments = () => {
           placeholder="sidebar-button"
           className={`bg-transparent justify-start w-full 
             text-link gap-1 px-3 h-[44px]
-             ${documentType === "سندهای اشتراکی" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
-            active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
+             ${documentType === "سندهای اشتراکی" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
+            active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal !stroke-icon-hover
             hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             setDocumentType("سندهای اشتراکی");

@@ -59,7 +59,7 @@ const Sidebar = ({ children }: IProps) => {
           className={` bg-transparent justify-start w-full 
                      text-link gap-1 px-3 h-[44px]
                      sidebar-button-${getRepoGroup}
-                   ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
+                   ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
                   hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             router.push("/admin/dashboard");
@@ -132,7 +132,7 @@ const Sidebar = ({ children }: IProps) => {
               placeholder="sidebar-button"
               className={` bg-transparent justify-start w-full 
                      text-link gap-1 px-3 h-[44px]
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
               onClick={() => {
                 router.push("/admin/domainManagement");
                 setSearchParam(null);

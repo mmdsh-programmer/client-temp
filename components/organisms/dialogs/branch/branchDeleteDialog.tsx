@@ -1,7 +1,7 @@
-import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import { toast } from "react-toastify";
 import { IBranch } from "@interface/branch.interface";
+import React from "react";
+import { toast } from "react-toastify";
 import useDeleteBranch from "@hooks/branch/useDeleteBranch";
 
 interface IProps {
@@ -36,11 +36,11 @@ const BranchDeleteDialog = ({ setOpen, branch }: IProps) => {
       className=""
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
             title={branch?.title}
-            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
           >
             {branch?.title}
           </span>

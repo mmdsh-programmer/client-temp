@@ -1,13 +1,13 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import useDeleteDocument from "@hooks/document/useDeleteDocument";
-import { selectedDocumentAtom } from "@atom/document";
 import { IDocumentMetadata } from "@interface/document.interface";
-import { usePathname } from "next/navigation";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useDeleteDocument from "@hooks/document/useDeleteDocument";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -53,11 +53,11 @@ const DocumentDeleteDialog = ({ document, setOpen }: IProps) => {
       setOpen={handleClose}
       className="document-delete-dialog"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"
         <span
           title={(document || getDocument)?.name}
-          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
         >
           {(document || getDocument)?.name}
         </span>

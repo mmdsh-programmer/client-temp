@@ -1,5 +1,5 @@
-import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import React from "react";
 import useRemovePartyFromDomain from "@hooks/domainParticipants/useRemovePartyFromDomain";
 
 interface IProps {
@@ -28,11 +28,11 @@ const RemoveDomainParticipantDialog = ({ user, setOpen }: IProps) => {
       onSubmit={handleDelete}
       dialogHeader="حذف کاربر"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"
         <span
           title={user}
-          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
         >
           {user}
         </span>

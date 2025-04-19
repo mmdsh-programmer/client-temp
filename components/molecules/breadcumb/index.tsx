@@ -1,7 +1,8 @@
-import React from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
+
+import React from "react";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
 
@@ -70,7 +71,7 @@ const Breadcrumb = () => {
                     <Typography
                       title={breadcrumbItem as string}
                       className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
-                    ${realIndex === list.length - 1 ? "text-primary" : "text-secondary"}`}
+                    ${realIndex === list.length - 1 ? "text-primary_normal" : "text-secondary"}`}
                     >
                       {breadcrumbItem}
                     </Typography>
@@ -105,7 +106,7 @@ const Breadcrumb = () => {
                   <Typography
                     title={breadcrumbItem as string}
                     className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
-                ${index === list.length - 1 ? "text-primary" : "text-secondary"}`}
+                ${index === list.length - 1 ? "text-primary_normal" : "text-secondary"}`}
                   >
                     {breadcrumbItem}
                   </Typography>

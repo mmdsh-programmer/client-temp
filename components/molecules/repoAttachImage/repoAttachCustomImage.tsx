@@ -1,6 +1,7 @@
-import React from "react";
 import { Button, Radio, Typography } from "@material-tailwind/react";
+
 import { AddImageIcon } from "@components/atoms/icons";
+import React from "react";
 import RepoAttachDefaultImage from "@components/molecules/repoAttachImage/repoAttachDefaultImage";
 import RepoDefaultImage from "../repoDefaultImage";
 
@@ -29,7 +30,7 @@ const RepoAttachCustomImage = ({
           className="repo-attach-default-image__radio"
           label={
             <div>
-              <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 تصویر پیش‌فرض
               </Typography>
               <Typography className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
@@ -62,7 +63,7 @@ const RepoAttachCustomImage = ({
           color="deep-purple"
           label={
             <div>
-              <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 تصویر سفارشی
               </Typography>
               <Typography className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">

@@ -37,6 +37,10 @@ module.exports = withMT({
           normal: "var(--critical-normal)" 
         },
         error: "var(--error)",
+        primary: {
+          normal: "var(--primary-normal)",
+          secondary: "var(--primary-secondary)",
+        },
         success: {
           normal: "var(--success-normal)",
           secondary: "var(--success-secondary)",

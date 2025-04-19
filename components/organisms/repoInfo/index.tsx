@@ -1,6 +1,8 @@
 "use client";
 
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
+
+import ChipMolecule from "@components/molecules/chip";
 import React from "react";
 import RepoImage from "@components/molecules/repoDefaultImage";
 import RepoMenu from "@components/molecules/repoMenu";
@@ -8,7 +10,6 @@ import TagList from "../tagList";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { useRecoilValue } from "recoil";
-import ChipMolecule from "@components/molecules/chip";
 
 const RepoInfo = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -24,7 +25,7 @@ const RepoInfo = () => {
             <div className=" flex flex-col flex-grow w-[70%]">
               <div className="repoCreationDate flex items-center gap-1">
                 <Typography
-                  className="title_t1 !text-primary !font-[450] truncate max-w-[50%]"
+                  className="title_t1 !text-primary_normal !font-[450] truncate max-w-[50%]"
                   title={getRepo?.name}
                 >
                   {getRepo?.name}

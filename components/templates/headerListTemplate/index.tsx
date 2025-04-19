@@ -29,7 +29,7 @@ const HeaderListTemplate = ({
   return (
     <header className={`flex justify-between items-center ${className}`}>
       <div className="flex items-center gap-1">
-        <Typography className="title_t1 text-primary version-list">
+        <Typography className="title_t1 text-primary_normal version-list">
           {header}
         </Typography>
         <Button

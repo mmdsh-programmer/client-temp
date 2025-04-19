@@ -1,6 +1,6 @@
+import { IReport } from "@interface/repo.interface";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { IReport } from "@interface/repo.interface";
 
 interface IProps {
   report?: IReport;
@@ -37,7 +37,7 @@ const ProgressBar = ({ report }: IProps) => {
   return (
     <Typography
       placeholder="progress-bar"
-      className="font-iranYekan text-xs text-primary truncate cursor-default"
+      className="font-iranYekan text-xs text-primary_normal truncate cursor-default"
     >
       {volumeUnit(usage)} از {volumeUnit(total)}
     </Typography>

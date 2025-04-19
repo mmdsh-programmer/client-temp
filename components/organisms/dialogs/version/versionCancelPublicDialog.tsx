@@ -1,12 +1,13 @@
+import { usePathname, useSearchParams } from "next/navigation";
+
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
+import { selectedDocumentAtom } from "@atom/document";
+import { selectedVersionAtom } from "@atom/version";
+import { toast } from "react-toastify";
+import useCancelPublicVersion from "@hooks/version/useCancelPublicVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import useCancelPublicVersion from "@hooks/version/useCancelPublicVersion";
-import { selectedVersionAtom } from "@atom/version";
-import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
@@ -59,7 +60,7 @@ const VersionCancelPublicDialog = ({ setOpen }: IProps) => {
       className="version-cancel-public-dialog"
     >
       آیا از لغو عمومی سازی نسخه "
-      <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
         {getVersion?.versionNumber}
       </span>
       " اطمینان دارید؟

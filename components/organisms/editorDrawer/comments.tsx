@@ -48,7 +48,7 @@ const Comments = ({ version }: IProps) => {
                           <UserIcon className="h-5 w-5 fill-icon-hover" />
                         </div>
                       )}
-                      <Typography className="title_t4 text-primary">
+                      <Typography className="title_t4 text-primary_normal">
                         {comment.user.name}
                       </Typography>
                     </div>
@@ -70,7 +70,7 @@ const Comments = ({ version }: IProps) => {
             <RenderIf isTrue={!!hasNextPage}>
               <div className="w-full py-2 flex justify-center">
                 <LoadMore
-                  className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
+                  className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary_normal !font-normal"
                   isFetchingNextPage={isFetchingNextPage}
                   fetchNextPage={fetchNextPage}
                 />

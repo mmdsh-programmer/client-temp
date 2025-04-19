@@ -140,11 +140,11 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .form__input {
-    @apply flex items-center !h-12 gap-2 pr-3 pl-2 placeholder: !opacity-100 !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan font-normal text-primary text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-placeholder placeholder:text-[13px] text-right !bg-gray-50 border-[1px] !border-normal focus:!border-normal;
+    @apply flex items-center !h-12 gap-2 pr-3 pl-2 placeholder: !opacity-100 !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan font-normal text-primary_normal text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-placeholder placeholder:text-[13px] text-right !bg-gray-50 border-[1px] !border-normal focus:!border-normal;
   }
 
   .input {
-    @apply flex items-center !min-w-0 !font-iranYekan focus:font-iranYekan placeholder:!font-iranYekan font-normal text-primary text-[13px] placeholder:!text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-hint text-right;
+    @apply flex items-center !min-w-0 !font-iranYekan focus:font-iranYekan placeholder:!font-iranYekan font-normal text-primary_normal text-[13px] placeholder:!text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-hint text-right;
   }
 
   .form__title,
@@ -189,11 +189,11 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .label_l3 {
-    @apply text-primary truncate !text-[13px] font-normal !leading-[18.2px] !-tracking-[0.13px] !font-iranYekan;
+    @apply text-primary_normal truncate !text-[13px] font-normal !leading-[18.2px] !-tracking-[0.13px] !font-iranYekan;
   }
 
   .label_l4 {
-    @apply text-primary !text-[12px] font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
+    @apply text-primary_normal !text-[12px] font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
   }
 
   .text__label__button {

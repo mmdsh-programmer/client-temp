@@ -54,7 +54,7 @@ const CategoryHideDialog = ({ setOpen }: IProps) => {
       className="category-hide-dialog"
     >
       آیا از مخفی سازی"
-      <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
         {getCategory?.name}
       </span>
       " اطمینان دارید؟

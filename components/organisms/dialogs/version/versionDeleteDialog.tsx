@@ -1,12 +1,13 @@
-import React from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import React from "react";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
 import useDeleteVersion from "@hooks/version/useDeleteVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { selectedVersionAtom } from "@atom/version";
-import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
@@ -60,11 +61,11 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="version-delete-dialog"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"
         <span
           title={getVersion?.versionNumber}
-          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
         >
           {getVersion?.versionNumber}
         </span>

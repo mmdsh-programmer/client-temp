@@ -70,7 +70,9 @@ const ConfirmDialog = ({
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <div className="dialog-body__content body_b3 flex text-primary">{children}</div>
+        <div className="dialog-body__content body_b3 flex text-primary_normal">
+          {children}
+        </div>
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"

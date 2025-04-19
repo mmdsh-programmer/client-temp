@@ -16,7 +16,7 @@ const GroupItem = ({ group }: IProps) => {
       </div>
       <div className="flex flex-col flex-grow">
         <Typography className="title_t3 text-primary_normal">{group.title}</Typography>
-        <Typography className="label text-primary">
+        <Typography className="label text-primary_normal">
           {group.description}
         </Typography>
       </div>

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import React, { useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
 import FormInput from "@components/atoms/input/formInput";
 import { IUserList } from "../dialogs/document/documentAccessPublishingDialog";
@@ -92,7 +93,7 @@ const DocumentBlackList = ({
                   <ChipMolecule
                     key={item.username}
                     value={item.name || item.username}
-                    className={`black-item ${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+                    className={`black-item ${item.name ? "bg-white !text-primary_normal" : "bg-gray-50 !text-hint"} 
                        w-auto pl-2 border-[1px] border-normal`}
                     icon={
                       item.picture ? (

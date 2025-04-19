@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { Checkbox, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import { DatePicker } from "zaman";
 import { categoryAtom } from "@atom/category";
+import { onDatePickerChangePayload } from "zaman/dist/types";
 import { selectedDocumentAtom } from "@atom/document";
+import useCreateDocumentPublishLink from "@hooks/document/useCreateDocumentPublishLink";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { DatePicker } from "zaman";
-import { onDatePickerChangePayload } from "zaman/dist/types";
-import useCreateDocumentPublishLink from "@hooks/document/useCreateDocumentPublishLink";
 import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
@@ -70,7 +71,7 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
                     <Checkbox
                         crossOrigin="anonymous"
                         label={
-                            <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                            <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                                 افزودن تاریخ انقضای لینک
                             </Typography>
                         }

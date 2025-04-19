@@ -1,15 +1,16 @@
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import CategoryDeleteDialog from "../category/categoryDeleteDialog";
+import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import DocumentDeleteDialog from "../document/documentDeleteDialog";
 import React from "react";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
 import useDeleteBulk from "@hooks/bulk/useDeleteBulk";
 import { useForm } from "react-hook-form";
-import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import CategoryDeleteDialog from "../category/categoryDeleteDialog";
-import DocumentDeleteDialog from "../document/documentDeleteDialog";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -71,7 +72,7 @@ const BulkDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="bulk-delete-dialog"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف موارد انتخاب شده مطمئن هستید؟
       </div>
     </DeleteDialog>

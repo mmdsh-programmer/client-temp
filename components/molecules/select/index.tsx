@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Spinner, Typography } from "@material-tailwind/react";
 
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import { Spinner, Typography } from "@material-tailwind/react";
 
 export interface IOption {
   label: string;
@@ -69,7 +69,7 @@ const SelectAtom = ({
         onClick={toggleDropdown}
         className={`${className || ""}
         flex items-center leading-[18.2px] -tracking-[0.13px]
-         truncate text-[13px] text-primary font-iranYekan font-normal gap-x-2
+         truncate text-[13px] text-primary_normal font-iranYekan font-normal gap-x-2
         bg-transparent rounded-md focus:outline-none`}
       >
         {selectedOption?.label ?? defaultOption?.label}
@@ -100,7 +100,7 @@ const SelectAtom = ({
                   }}
                 >
                   <Typography
-                    className={`${option.className || ""} select_option__text truncate text-right text-primary`}
+                    className={`${option.className || ""} select_option__text truncate text-right text-primary_normal`}
                   >
                     {option.label}
                   </Typography>

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import { Collapse, Radio, Typography } from "@material-tailwind/react";
 import {
@@ -7,7 +6,10 @@ import {
   categoryMoveDestAtom,
   categoryQueryParamsAtom,
 } from "atom/category";
+import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+
+import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
@@ -17,9 +19,8 @@ import { docTemplateFilter } from ".";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "atom/sortParam";
 import useGetChildren from "@hooks/category/useGetChildren";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
-import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   catItem: ICategoryTreeItem | IDocumentTreeItem;
@@ -103,7 +104,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
             </div>
             <FolderIcon className="fill-gray-400 w-5 h-5" />
           </div>
-          <Typography className="text-primary lowercase mr-2" key={catItem.id}>
+          <Typography className="text-primary_normal lowercase mr-2" key={catItem.id}>
             {catItem.name}
           </Typography>
           {enableAction ? (
@@ -152,7 +153,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
             })}
             <RenderIf isTrue={!!hasNextPage}>
               <LoadMore
-                className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
                 isFetchingNextPage={isFetchingNextPage}
                 fetchNextPage={fetchNextPage}
               />

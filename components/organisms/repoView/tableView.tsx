@@ -1,13 +1,14 @@
-import React from "react";
-import EmptyList from "@components/molecules/emptyList";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
+
+import EmptyList from "@components/molecules/emptyList";
+import { IRepoView } from "@interface/repo.interface";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
 import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
-import { IRepoView } from "@interface/repo.interface";
 
 const TableView = ({
   isLoading,
@@ -80,7 +81,7 @@ const TableView = ({
                   <td colSpan={4} className="!text-center py-4">
                     <div className="flex justify-center items-center">
                       <LoadMore
-                        className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                        className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
                         isFetchingNextPage={isFetchingNextPage}
                         fetchNextPage={fetchNextPage}
                       />

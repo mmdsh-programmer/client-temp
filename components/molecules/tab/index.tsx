@@ -46,7 +46,7 @@ const TabComponent = ({
                 ${tabClassName || ""}
                 leading-[18px] -tracking-[0.12px] font-medium text-nowrap`}
               placeholder="tab"
-              activeClassName={`text-primary ${activeTabClassName || ""} `}
+              activeClassName={`text-primary_normal ${activeTabClassName || ""} `}
             >
               {tab.tabTitle}
             </Tab>

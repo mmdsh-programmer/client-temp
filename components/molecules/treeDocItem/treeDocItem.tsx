@@ -1,11 +1,12 @@
-import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { TickIcon } from "@components/atoms/icons";
+
+import DocumentIcon from "../documentIcon";
+import DocumentMenu from "../documentMenu";
 import { IDocumentTreeItem } from "atom/category";
+import React from "react";
+import { TickIcon } from "@components/atoms/icons";
 import { documentTemplateAtom } from "atom/document";
 import { useRecoilState } from "recoil";
-import DocumentMenu from "../documentMenu";
-import DocumentIcon from "../documentIcon";
 
 interface IProps {
   docItem: IDocumentTreeItem;
@@ -36,7 +37,7 @@ const TreeDocItem = ({ docItem, enableAction }: IProps) => {
             ) : null}
           </div>
           <DocumentIcon document={docItem} />
-          <Typography className="text-primary lowercase mr-2" key={docItem.id}>
+          <Typography className="text-primary_normal lowercase mr-2" key={docItem.id}>
             {docItem.name}
           </Typography>
           {enableAction ? (

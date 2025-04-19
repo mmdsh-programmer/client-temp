@@ -1,16 +1,17 @@
-import React, { useState } from "react";
-import { selectedDocumentAtom } from "@atom/document";
-import { useRecoilValue } from "recoil";
-import useGetResourceUsers from "@hooks/accessManagement/useGetResourceUsers";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
-import ChipMolecule from "@components/molecules/chip";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import useDeleteAccessOfResource from "@hooks/accessManagement/useDeleteAccessOfResource";
-import { toast } from "react-toastify";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import React, { useState } from "react";
+import { UserIcon, XIcon } from "@components/atoms/icons";
+
+import ChipMolecule from "@components/molecules/chip";
 import { IResourceUser } from "@interface/access.interface";
 import ImageComponent from "@components/atoms/image";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
+import useDeleteAccessOfResource from "@hooks/accessManagement/useDeleteAccessOfResource";
+import useGetResourceUsers from "@hooks/accessManagement/useGetResourceUsers";
+import { useRecoilValue } from "recoil";
 
 const DocumentAccessList = () => {
   const [selectedUser, setSelectedUser] = useState("");
@@ -58,7 +59,7 @@ const DocumentAccessList = () => {
                       <ChipMolecule
                         key={accessItem.userName}
                         value={`${accessItem.userName} _ ${translateRoles(accessItem.userRole)}`}
-                        className="direct-access-item w-auto border-[1px] border-normal pl-2 text-primary"
+                        className="direct-access-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
                         icon={
                           accessItem.img ? (
                             <ImageComponent

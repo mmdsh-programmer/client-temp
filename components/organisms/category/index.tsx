@@ -1,16 +1,17 @@
 "use client";
 
-import React from "react";
+import { Button, Typography } from "@material-tailwind/react";
+import { ETourSection, activeTourAtom } from "@atom/tour";
+
+import CategoryChildren from "./categoryChildren";
 import CategoryDocumentCreateMenu from "../../molecules/categoryDocumentCreateMenu";
+import CategoryListMode from "@components/molecules/categoryListMode";
 import CategoryMenu from "../../molecules/categoryMenu/categoryMenu";
 import DocumentMenu from "@components/molecules/documentMenu";
-import { Button, Typography } from "@material-tailwind/react";
-import CategoryChildren from "./categoryChildren";
 import FilterMobileView from "../advancedFilterView/filterMobileView";
-import { activeTourAtom, ETourSection } from "@atom/tour";
 import { InfoIcon } from "@components/atoms/icons";
+import React from "react";
 import { useSetRecoilState } from "recoil";
-import CategoryListMode from "@components/molecules/categoryListMode";
 
 const CategoryList = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -19,7 +20,7 @@ const CategoryList = () => {
       <div className="flex flex-col gap-4 xs:gap-6">
         <div className="category-header flex justify-between items-center px-4 xs:px-0">
           <div className="flex items-center gap-1">
-            <Typography className="title_t1 text-primary">
+            <Typography className="title_t1 text-primary_normal">
               لیست اسناد
             </Typography>
             <Button

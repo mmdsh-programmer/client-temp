@@ -1,9 +1,11 @@
-import React from "react";
 import {
- Button, Typography 
+ Button,
+ Typography
 } from "@material-tailwind/react";
+
 import { AddIcon } from "@components/atoms/icons";
 import GroupList from "./groupList";
+import React from "react";
 import { createGroupAtom } from "@atom/group";
 import { useSetRecoilState } from "recoil";
 
@@ -26,7 +28,7 @@ const Groups = () => {
             }}
           >
             <AddIcon className="h-5 w-5 stroke-icon-active" />
-            <Typography className="title_t4 text-primary px-2">
+            <Typography className="title_t4 text-primary_normal px-2">
               ایجاد گروه
             </Typography>
           </Button>

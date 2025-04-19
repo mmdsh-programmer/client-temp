@@ -1,17 +1,18 @@
-import React from "react";
-import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { Button, Typography } from "@material-tailwind/react";
-import { InfoIcon } from "@components/atoms/icons";
+import { ETourSection, activeTourAtom } from "@atom/tour";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { activeTourAtom, ETourSection } from "@atom/tour";
-import { ICategoryView } from "@interface/category.interface";
+
 import { EEmptyList } from "@components/molecules/emptyList";
-import { categoryQueryParamsAtom } from "@atom/category";
-import { sortAtom } from "@atom/sortParam";
-import { filterReportAtom } from "@atom/filter";
 import FilterMobileView from "@components/organisms/advancedFilterView/filterMobileView";
-import TableView from "@components/organisms/categoryView/categoryTableView";
+import { ICategoryView } from "@interface/category.interface";
+import { InfoIcon } from "@components/atoms/icons";
 import MobileView from "@components/organisms/categoryView/categoryMobileView";
+import React from "react";
+import TableView from "@components/organisms/categoryView/categoryTableView";
+import { categoryQueryParamsAtom } from "@atom/category";
+import { filterReportAtom } from "@atom/filter";
+import { sortAtom } from "@atom/sortParam";
+import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 
 const SharedDocumentList = () => {
   const setActiveTour = useSetRecoilState(activeTourAtom);
@@ -49,7 +50,7 @@ const SharedDocumentList = () => {
     <div className="flex flex-col gap-4 xs:gap-6">
       <div className="category-header flex justify-between items-center px-4 xs:px-0">
         <div className="flex items-center gap-1">
-          <Typography className="title_t1 text-primary">لیست اسناد</Typography>
+          <Typography className="title_t1 text-primary_normal">لیست اسناد</Typography>
           <Button
             className="rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
             onClick={() => {

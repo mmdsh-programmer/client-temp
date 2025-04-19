@@ -45,7 +45,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
                     >
                       <div className="flex flex-grow gap-1">
                         <Typography
-                          className="label_l2 text-primary-normal truncate w-auto max-w-[50px] xs:max-w-[90px] cursor-pointer"
+                          className="label_l2 text-primary_normal truncate w-auto max-w-[50px] xs:max-w-[90px] cursor-pointer"
                           title={request.repoName}
                         >
                           {request.repoName}

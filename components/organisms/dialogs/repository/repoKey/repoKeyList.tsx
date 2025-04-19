@@ -1,18 +1,19 @@
-import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import { ERoles } from "@interface/enums";
 import Error from "@components/organisms/error";
 import { IPublicKey } from "@interface/repo.interface";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoKeyMenu from "@components/molecules/repoKeyMenu";
 import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 import { TickIcon } from "@components/atoms/icons";
+import { repoAtom } from "@atom/repository";
 import useGetRepoPublicKeys from "@hooks/repository/useGetRepoPublicKeys";
 import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { ERoles } from "@interface/enums";
 
 interface IProps {
   repoId: number;
@@ -135,7 +136,7 @@ const RepoKeyList = ({
               {
                 data: (
                   <LoadMore
-                    className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                    className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
                     isFetchingNextPage={isFetchingNextPage}
                     fetchNextPage={fetchNextPage}
                   />

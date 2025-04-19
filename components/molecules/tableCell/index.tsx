@@ -22,7 +22,7 @@ const TableCell = ({
   const router = useRouter();
   return (
     <tr
-      className={`table-cell-track cursor-pointer text-[13px] font-normal text-primary border-b-[1px] border-normal ${active ? "bg-gray-300" : ""} ${className || ""}`}
+      className={`table-cell-track cursor-pointer text-[13px] font-normal text-primary_normal border-b-[1px] border-normal ${active ? "bg-gray-300" : ""} ${className || ""}`}
       onClick={() => {
         onClick?.();
         if (navigateTo) {

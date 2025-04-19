@@ -1,8 +1,8 @@
-import React from "react";
-import { Typography } from "@material-tailwind/react";
+import { IChatInputProps } from "@interface/chat.interface";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
-import { IChatInputProps } from "@interface/chat.interface";
+import React from "react";
+import { Typography } from "@material-tailwind/react";
 
 const ChatInput = ({
   messageText,
@@ -33,7 +33,7 @@ const ChatInput = ({
               className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               isPrimary
             >
-              <Typography className="text__label__button !text-primary px-3 font-medium">
+              <Typography className="text__label__button !text-primary_normal px-3 font-medium">
                 ارسال
               </Typography>
             </LoadingButton>

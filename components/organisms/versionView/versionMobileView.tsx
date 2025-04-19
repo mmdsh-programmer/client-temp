@@ -1,17 +1,18 @@
-import React from "react";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
+import { IVersion, IVersionView } from "@interface/version.interface";
+import { Spinner, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
-import { IVersion, IVersionView } from "@interface/version.interface";
 import LoadMore from "@components/molecules/loadMore";
 import MobileCard from "@components/molecules/mobileCard";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner, Typography } from "@material-tailwind/react";
 import VersionMenu from "@components/molecules/versionMenu";
 import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 
 const VersionMobileView = ({
   isLoading,
@@ -70,7 +71,7 @@ const VersionMobileView = ({
                     (version.status === "private" ||
                       version.status === "accepted") ? (
                       <div className="flex items-center gap-1">
-                        <Typography className="text-primary title_t2">
+                        <Typography className="text-primary_normal title_t2">
                           {version.versionNumber}
                         </Typography>
                         <Typography className="label text-green-400">
@@ -121,7 +122,7 @@ const VersionMobileView = ({
           })}
           <RenderIf isTrue={!!hasNextPage}>
             <LoadMore
-              className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+              className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
               isFetchingNextPage={isFetchingNextPage}
               fetchNextPage={fetchNextPage}
             />

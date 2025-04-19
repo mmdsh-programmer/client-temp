@@ -1,7 +1,8 @@
-import React, { useState } from "react";
 import { Button, Spinner } from "@material-tailwind/react";
+import React, { useState } from "react";
 import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import { useRecoilState, useRecoilValue } from "recoil";
+
 import ChipMolecule from "@components/molecules/chip";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
 import TagDelete from "../dialogs/tag/tagDeleteDialog";
@@ -9,9 +10,9 @@ import TagEdit from "../dialogs/tag/tagEditDialog";
 import TagListDialog from "./tagListDialog";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
 import { repoAtom } from "@atom/repository";
+import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
-import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 
 const TagList = ({ repoId }: { repoId: number }) => {
   const [openTagsModal, setOpenTagsModal] = useState(false);
@@ -69,7 +70,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
+                  className="tag-item bg-gray-50 h-6 px-2 text-primary_normal max-w-[150px] "
                   actionIcon={userInfo?.domainConfig.useDomainTag && 
                     (userInfo?.domainRole === "owner" || 
                     userInfo.domainRole === "participant") || 

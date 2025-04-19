@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -227,7 +228,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                 <ChipMolecule
                   key={item.username}
                   value={`${item.username}`}
-                  className="group-edit-form__members-item w-auto border-[1px] border-normal pl-2 text-primary"
+                  className="group-edit-form__members-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
                   icon={
                     item.picture ? (
                       <ImageComponent

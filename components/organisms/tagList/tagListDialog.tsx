@@ -93,7 +93,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                         <ChipMolecule
                           value={tag.name}
                           key={tag.id}
-                          className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px]"
+                          className="tag-item bg-gray-50 h-6 px-2 text-primary_normal max-w-[150px]"
                           actionIcon={userInfo?.domainConfig.useDomainTag && (userInfo?.domainRole === "owner" ||
                             userInfo.domainRole === "participant")
                             || (!userInfo?.domainConfig.useDomainTag && adminRole) ? <TagMenu tag={tag} /> : null}
@@ -112,7 +112,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                           key={tag.id}
                           className="tag-item flex py-1 px-2 rounded-lg justify-between items-center  hover:bg-gray-50"
                         >
-                          <Typography className="label_l2 text-primary cursor-default lowercase">
+                          <Typography className="label_l2 text-primary_normal cursor-default lowercase">
                             {tag.name}
                           </Typography>
                           {userInfo?.domainConfig.useDomainTag && (userInfo?.domainRole === "owner" ||

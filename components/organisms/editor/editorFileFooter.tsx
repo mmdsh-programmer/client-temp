@@ -142,7 +142,7 @@ const EditorFileFooter = () => {
           setVersionModalList(true);
         }}
       >
-        <Typography className="label_l3 text-primary">
+        <Typography className="label_l3 text-primary_normal">
           {renderTitle()}
         </Typography>
         <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
@@ -159,7 +159,7 @@ const EditorFileFooter = () => {
             setVersionModalList(true);
           }}
         >
-          <Typography className="label_l3 text-primary">
+          <Typography className="label_l3 text-primary_normal">
             {renderTitle()}
           </Typography>
           <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />

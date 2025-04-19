@@ -1,14 +1,15 @@
-import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
-import { IRepo } from "@interface/repo.interface";
-import RepoMenu from "@components/molecules/repoMenu";
-import RepoCardMoreInfo from "./repoCardMoreInfo";
-import { useRecoilValue } from "recoil";
-import { repoInfoAtom } from "@atom/repository";
-import RepoDefaultImage from "../repoDefaultImage";
-import { useRouter } from "next/navigation";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
+
 import { CircleIcon } from "@components/atoms/icons";
+import { IRepo } from "@interface/repo.interface";
+import React from "react";
+import RepoCardMoreInfo from "./repoCardMoreInfo";
+import RepoDefaultImage from "../repoDefaultImage";
+import RepoMenu from "@components/molecules/repoMenu";
+import { repoInfoAtom } from "@atom/repository";
+import { useRecoilValue } from "recoil";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   repo: IRepo;
@@ -37,7 +38,7 @@ const RepoCardMode = ({ repo }: IProps) => {
             <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
           <div className="repo__info flex flex-col max-w-[80%] flex-grow">
-            <Typography className="repo__name title_t1 !text-primary max-w-full truncate font-[450]">
+            <Typography className="repo__name title_t1 !text-primary_normal max-w-full truncate font-[450]">
               {repo.name}
             </Typography>
             <div className="repo__info-details flex items-center gap-2 ">

@@ -190,7 +190,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
                 <UploadIcon className="h-5 w-5" />
               </div>
               <div className="flex gap-[3px]">
-                <Typography className="select_option__text text-primary">
+                <Typography className="select_option__text text-primary_normal">
                   برای آپلود کلیک کنید
                 </Typography>
                 <Typography className="select_option__text">

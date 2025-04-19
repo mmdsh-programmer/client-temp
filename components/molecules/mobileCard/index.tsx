@@ -1,5 +1,5 @@
-import React from "react";
 import CardItemRow from "./cardItemRow";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
@@ -28,11 +28,11 @@ const MobileCard = ({
         <div className="flex items-start max-w-[70%] gap-3 flex-grow">
           {icon}
           {typeof name === "string" ? (
-            <Typography className="title_t2 !text-primary max-w-full truncate">
+            <Typography className="title_t2 !text-primary_normal max-w-full truncate">
               {name}
             </Typography>
           ) : (
-            <Typography className="text-primary title_t2 max-w-full truncate">
+            <Typography className="text-primary_normal title_t2 max-w-full truncate">
               {name}
             </Typography>
           )}

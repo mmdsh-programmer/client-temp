@@ -1,17 +1,18 @@
-import React from "react";
-import InfoDialog from "@components/templates/dialog/infoDialog";
 import { Button, Typography } from "@material-tailwind/react";
-import { AddIcon } from "@components/atoms/icons";
-import { useRecoilState, useRecoilValue } from "recoil";
 import {
   createRepoKeyAtom,
   deleteRepoKeyAtom,
   repoAtom,
 } from "@atom/repository";
-import RepoKeyDeleteDialog from "./repoKeyDeleteDialog";
-import RepoKeyCreateDialog from "./repoKeyCreateDialog";
-import RepoKeyList from "./repoKeyList";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { AddIcon } from "@components/atoms/icons";
 import { ERoles } from "@interface/enums";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import React from "react";
+import RepoKeyCreateDialog from "./repoKeyCreateDialog";
+import RepoKeyDeleteDialog from "./repoKeyDeleteDialog";
+import RepoKeyList from "./repoKeyList";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -46,7 +47,7 @@ const RepoKeyDialog = ({ setOpen }: IProps) => {
             }}
           >
             <AddIcon className="h-5 w-5 stroke-icon-active" />
-            <Typography className="text__label__button text-primary px-2">
+            <Typography className="text__label__button text-primary_normal px-2">
               ایجاد کلید
             </Typography>
           </Button>

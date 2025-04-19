@@ -72,7 +72,7 @@ const Tags = ({ handleClose }: IProps) => {
                 onClick={handleSubmit(onSubmit)}
                 className="repo-tags__add-button !h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
-                <Typography className="!text-primary text__label__button px-3">
+                <Typography className="!text-primary_normal text__label__button px-3">
                   افزودن
                 </Typography>
               </LoadingButton>
@@ -91,7 +91,7 @@ const Tags = ({ handleClose }: IProps) => {
                   <ChipMolecule
                     value={tag.name}
                     key={tag.id}
-                    className="repo-tag-item bg-gray-50 h-6 px-3 text-primary max-w-[150px] "
+                    className="repo-tag-item bg-gray-50 h-6 px-3 text-primary_normal max-w-[150px] "
                   />
                 );
               });

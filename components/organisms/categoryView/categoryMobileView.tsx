@@ -1,14 +1,14 @@
 /* eslint-disable no-nested-ternary */
 
-import React from "react";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
-import EmptyList from "@components/molecules/emptyList";
-import LoadMore from "@components/molecules/loadMore";
-import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
-import { ICategoryView } from "@interface/category.interface";
 import CategoryMobileCard from "@components/molecules/categoryMobileCard";
 import DocumentMobileCard from "@components/molecules/documentMobileCard";
+import EmptyList from "@components/molecules/emptyList";
+import { ICategoryView } from "@interface/category.interface";
+import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import { Spinner } from "@material-tailwind/react";
 
 const MobileView = ({
   isLoading,
@@ -44,7 +44,7 @@ const MobileView = ({
           })}
           <RenderIf isTrue={!!hasNextPage}>
             <LoadMore
-              className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+              className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
               isFetchingNextPage={isFetchingNextPage}
               fetchNextPage={fetchNextPage}
             />

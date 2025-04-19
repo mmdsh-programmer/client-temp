@@ -43,7 +43,7 @@ const RepoFilter = ({ repoId }: { repoId?: number }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 grid-rows-[min-content] flex-wrap gap-4 xs:gap-2 pb-2">
           <div className="flex-grow max-w-full sm:col-span-3 md:col-span-3 lg:col-span-1">
             <InputAtom
-              className="!h-12 xs:!h-10 flex-grow placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
+              className="!h-12 xs:!h-10 flex-grow placeholder:!font-iranYekan !text-[13px] !text-primary_normal bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
               placeholder="جستجو در عنوان"
               onChange={(e) => {
                 return setSearchTitle(e.target.value);

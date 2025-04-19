@@ -77,7 +77,7 @@ const CreateRepoPublishLink = () => {
             <Checkbox
               crossOrigin="anonymous"
               label={
-                <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                   افزودن تاریخ انقضای لینک
                 </Typography>
               }

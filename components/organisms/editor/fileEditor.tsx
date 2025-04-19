@@ -75,7 +75,7 @@ const FileEditor = () => {
             <>
               <PreviewFile file={getSelectedFile as IFile} />
               <div className="flex gap-2 mt-4 items-center justify-center">
-                <Typography className="title_t2 !text-primary">
+                <Typography className="title_t2 !text-primary_normal">
                   دانلود فایل
                 </Typography>
                 <a

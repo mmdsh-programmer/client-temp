@@ -84,14 +84,14 @@ const MoveChildren = ({
                       }}
                     >
                       <FolderIcon className="w-4 h-4 stroke-icon-active" />
-                      <Typography className="caption_c1 text-primary">
+                      <Typography className="caption_c1 text-primary_normal">
                         {subItem.name}
                       </Typography>
                     </div>
                   );
                 })
               ) : (
-                <Typography className="caption_c1 text-primary p-2">
+                <Typography className="caption_c1 text-primary_normal p-2">
                   موردی برای نمایش وجود ندارد
                 </Typography>
               )}

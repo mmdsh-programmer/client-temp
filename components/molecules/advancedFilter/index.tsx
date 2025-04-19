@@ -140,7 +140,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
               <div className="flex flex-grow flex-col gap-2">
                 <Typography className="form_label">جستجو</Typography>
                 <InputAtom
-                  className="flex-grow rounded-md !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
+                  className="flex-grow rounded-md !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary_normal bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
                   placeholder="جستجو در عنوان"
                   defaultValue={searchTitle}
                   onChange={(e) => {

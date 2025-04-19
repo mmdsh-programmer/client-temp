@@ -1,16 +1,17 @@
-import React, { useState } from "react";
 import { Checkbox, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import { ERepoGrouping } from "@interface/enums";
 import FormInput from "@components/atoms/input/formInput";
+import { repoGroupingAtom } from "@atom/repository";
 import { subscribeScheme } from "../dialogs/repository/validation.yup";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useSetRecoilState } from "recoil";
 import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSetRecoilState } from "recoil";
-import { repoGroupingAtom } from "@atom/repository";
-import { ERepoGrouping } from "@interface/enums";
 
 interface IDataForm {
   password: string;
@@ -75,7 +76,7 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
           <Checkbox
             crossOrigin="anonymous"
             label={
-              <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 نمایش رمز عبور
               </Typography>
             }

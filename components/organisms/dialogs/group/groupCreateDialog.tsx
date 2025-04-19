@@ -1,6 +1,7 @@
-import React, { useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -169,7 +170,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
               <ChipMolecule
                 key={item.username}
                 value={`${item.username}`}
-                className="group-create-form__members-item w-auto border-[1px] border-normal pl-2 text-primary"
+                className="group-create-form__members-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
                 icon={
                   item?.picture ? (
                     <ImageComponent

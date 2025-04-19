@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useRef, useState } from "react";
-import { ChevronLeftIcon } from "@components/atoms/icons";
+
 import { Checkbox, Typography } from "@material-tailwind/react";
+import React, { useEffect, useRef, useState } from "react";
+
+import { ChevronLeftIcon } from "@components/atoms/icons";
 
 interface IProps {
   options: any[];
@@ -123,7 +125,7 @@ const SelectBox = ({
                       color="deep-purple"
                       crossOrigin=""
                     />
-                    <Typography className="select_option__text truncate text-right text-primary">
+                    <Typography className="select_option__text truncate text-right text-primary_normal">
                       {option.label}
                     </Typography>
                   </div>

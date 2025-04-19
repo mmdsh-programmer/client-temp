@@ -246,7 +246,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setVersionData(null);
         }}
       >
-        <Typography className="label_l3 text-primary">
+        <Typography className="label_l3 text-primary_normal">
           {renderTitle()}
         </Typography>
         <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
@@ -276,7 +276,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             setVersionData(null);
           }}
         >
-          <Typography className="label_l3 text-primary">
+          <Typography className="label_l3 text-primary_normal">
             {renderTitle()}
           </Typography>
           <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />

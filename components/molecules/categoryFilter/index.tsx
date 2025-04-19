@@ -62,7 +62,7 @@ const CategoryFilter = () => {
       <div className="flex w-full flex-col gap-4 xs:gap-2">
         <div className="flex flex-wrap w-full xs:flex-nowrap max-w-full gap-4 xs:gap-2">
           <InputAtom
-            className="flex-grow !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
+            className="flex-grow !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary_normal bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
             placeholder="جستجو در عنوان"
             onChange={(e) => {
               return setSearchTitle(e.target.value);

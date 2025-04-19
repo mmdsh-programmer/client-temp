@@ -55,7 +55,7 @@ const DomainPrivateFeed = () => {
                   className={`flex font-iranYekan h-9 p-2 text-secondary text-[12px]
                 leading-[18px] -tracking-[0.12px] font-medium text-nowrap`}
                   placeholder="tab"
-                  activeClassName="text-primary  "
+                  activeClassName="text-primary_normal "
                 >
                   {tab.tabTitle}
                 </Tab>
