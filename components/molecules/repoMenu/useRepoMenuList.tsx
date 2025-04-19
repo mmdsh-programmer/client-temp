@@ -45,7 +45,8 @@ const useMenuList = (
   repo: IRepo | null,
   setModalState: (type: ModalType, state: boolean) => void,
   handleRepoInfo: () => void,
-  setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>
+  setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>,
+  showLog?: boolean
 ): MenuItem[] => {
   const setRepo = useSetRecoilState(repoAtom);
   const [showRepoActivity, setShowRepoActivity] = useRecoilState(repoActivityAtom);
@@ -136,7 +137,7 @@ const useMenuList = (
         },
         "repo-menu__item--version-requests"
       ),
-      createMenuItem(
+      showLog && createMenuItem(
         "فعالیت های مخزن",
         <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
         () => {
@@ -283,7 +284,7 @@ const useMenuList = (
             },
             "repo-menu__item--bookmark-remove"
           ),
-      createMenuItem(
+      showLog && createMenuItem(
         "فعالیت های مخزن",
         <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
         () => {

@@ -38,7 +38,7 @@ const RepoInfo = () => {
                 {getRepo && FaDateFromTimestamp(+new Date(getRepo.createDate))}
               </Typography>
             </div>
-            {getRepo ? <RepoMenu repo={getRepo} /> : null}
+            {getRepo ? <RepoMenu repo={getRepo} showLog /> : null}
           </div>
           <div className="mt-2 sm:mt-0 md:mt-2 lg:mt-0">
             <Typography className="body_b3 h-[26px] truncate">
@@ -50,7 +50,7 @@ const RepoInfo = () => {
           </div>
         </div>
       </div>
-      <RepoMenu showDrawer />
+      <RepoMenu showDrawer showLog />
     </div>
   );
 };

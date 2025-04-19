@@ -14,9 +14,10 @@ import { activeTourAtom, ETourSection } from "@atom/tour";
 interface IProps {
   repo?: IRepo;
   showDrawer?: boolean;
+  showLog?: boolean;
 }
 
-const RepoMenu = ({ repo, showDrawer }: IProps) => {
+const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
   const currentPath = usePathname();
 
   const [getRepo, setRepo] = useRecoilState(repoAtom);
@@ -54,7 +55,8 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     repo || getRepo,
     setModalState,
     handleRepoInfo,
-    setOpenRepoActionDrawer
+    setOpenRepoActionDrawer,
+    showLog
   ).filter(Boolean) as MenuItem[];
 
   return (
