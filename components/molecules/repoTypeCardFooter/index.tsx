@@ -1,6 +1,7 @@
-import React from "react";
-import { QuestionIcon } from "@components/atoms/icons";
 import { Tooltip, Typography } from "@material-tailwind/react";
+
+import { QuestionIcon } from "@components/atoms/icons";
+import React from "react";
 
 interface IProps {
   repoNumber: number;
@@ -16,7 +17,7 @@ const RepoTypeCardFooter = ({ icon, repoNumber, tooltipContent }: IProps) => {
         <div className="max-w-[100px] overflow-hidden">
           <Typography
             placeholder=""
-            className="repo-number font-iranYekan text-secondary text-[12px] mr-1 truncate"
+            className="repo-number font-iranYekan text-link text-[12px] mr-1 truncate"
             title={repoNumber !== 0 ? `${repoNumber} مخزن` : "مخزنی وجود ندارد"}
           >
             {repoNumber !== 0 ? `${repoNumber} مخزن` : "مخزنی وجود ندارد"}

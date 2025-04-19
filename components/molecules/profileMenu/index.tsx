@@ -109,7 +109,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
       >
         <Button
           placeholder=""
-          className="userProfile rounded-full p-0 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+          className="userProfile rounded-full p-1 bg-white shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
         >
           {userData?.profileImage ? (
             <ImageComponent

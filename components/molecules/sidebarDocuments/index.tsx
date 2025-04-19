@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
-import { usePathname, useRouter } from "next/navigation";
-import { useSetRecoilState } from "recoil";
-import { repoAtom, repoGroupingAtom } from "@atom/repository";
-import { categoryAtom } from "@atom/category";
 import { MyDocumentsIcon, SharedDocumentsIcon } from "@components/atoms/icons";
+import React, { useEffect, useState } from "react";
+import { repoAtom, repoGroupingAtom } from "@atom/repository";
+import { usePathname, useRouter } from "next/navigation";
+
+import { categoryAtom } from "@atom/category";
 import { selectedDocumentAtom } from "@atom/document";
+import { useSetRecoilState } from "recoil";
 
 const SidebarDocuments = () => {
   const router = useRouter();
@@ -48,10 +49,10 @@ const SidebarDocuments = () => {
         <Button
           placeholder="sidebar-button"
           className={`bg-transparent justify-start w-full 
-            text-secondary gap-1 px-3 h-[44px]
+            text-link gap-1 px-3 h-[44px]
              ${documentType === "سندهای من" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
             active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
-            hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+            hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             setDocumentType("سندهای من");
             return handleNavigation("/admin/myDocuments");
@@ -71,10 +72,10 @@ const SidebarDocuments = () => {
         <Button
           placeholder="sidebar-button"
           className={`bg-transparent justify-start w-full 
-            text-secondary gap-1 px-3 h-[44px]
+            text-link gap-1 px-3 h-[44px]
              ${documentType === "سندهای اشتراکی" ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
             active:bg-gray-100 active:!stroke-icon-active active:text-primary !stroke-icon-hover
-            hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+            hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             setDocumentType("سندهای اشتراکی");
 

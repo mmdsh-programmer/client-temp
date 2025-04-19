@@ -1,8 +1,8 @@
-import React from "react";
-import { IGetGroups } from "@interface/group.interface";
-import { UserGroupIcon } from "@components/atoms/icons";
 import GroupMenu from "../groupMenu";
+import { IGetGroups } from "@interface/group.interface";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { UserGroupIcon } from "@components/atoms/icons";
 
 interface IProps {
   group: IGetGroups;
@@ -15,7 +15,7 @@ const GroupItem = ({ group }: IProps) => {
         <UserGroupIcon className="w-7 h-7 overflow-hidden" />
       </div>
       <div className="flex flex-col flex-grow">
-        <Typography className="title_t3 text-primary">{group.title}</Typography>
+        <Typography className="title_t3 text-primary_normal">{group.title}</Typography>
         <Typography className="label text-primary">
           {group.description}
         </Typography>

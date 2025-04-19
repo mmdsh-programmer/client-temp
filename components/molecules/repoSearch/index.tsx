@@ -19,7 +19,7 @@ const RepoSearch = () => {
   return (
     <div className="searchRepo hidden w-full xs:flex justify-between">
       <div
-        className="flex flex-grow overflow-hidden gap-2 w-full items-center h-9 pr-3 pl-0 border-[1px] border-normal bg-primary rounded-lg "
+        className="flex flex-grow overflow-hidden gap-2 w-full items-center h-9 pr-3 pl-0 border-[1px] border-normal bg-white rounded-lg "
         onKeyDown={(event) => {
           if (event.code === "Enter" || event.code === "NumpadEnter") {
             event.preventDefault();
