@@ -76,6 +76,8 @@ export interface RepoLogProps {
   ) => JSX.Element;
   handleClose: () => void;
   isCheckingAccess: boolean;
+  handleScroll: (e: React.UIEvent<HTMLDivElement>) => void;
+  isLoadingMore: boolean;
 }
 
 const RepoLog = () => {
@@ -92,6 +94,8 @@ const RepoLog = () => {
   const [permissionError, setPermissionError] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isCheckingAccess, setIsCheckingAccess] = useState(false);
+  const [messageOffset, setMessageOffset] = useState(0);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { width } = useWindowSize();
 
   const [chatState, setChatState] = useState<ChatState>({
@@ -179,12 +183,12 @@ const RepoLog = () => {
                         deletable: false, // Disable deletion in log view
                         replyInfo: messageInfo.replyInfo || null,
                       } as IMessageType;
-                    })
-                    .reverse(),
+                    }),
                 ],
-                hasOldMessages: false, // No need to load more in log view
+                hasOldMessages: history.length >= historyCount, // If we got a full page, there might be more
               };
             });
+            setMessageOffset(history.length);
             if (history.length > 0 && history[0].ownerId !== currentAuthorId && chatAgentRef.current?.seen) {
               // Mark message as seen if it's not from current user
               chatAgentRef.current.seen({
@@ -202,6 +206,67 @@ const RepoLog = () => {
           }
         },
       );
+    }
+  };
+
+  const loadMoreMessages = () => {
+    if (chatAgentRef.current && selectedRepo?.chatThreadId && !isLoadingMore) {
+      setIsLoadingMore(true);
+      const historyCount = 20;
+      chatAgentRef.current.getHistory(
+        {
+          count: historyCount,
+          offset: messageOffset,
+          threadId: selectedRepo.chatThreadId,
+        },
+        (historyResult: IHistoryResult) => {
+          const { history } = historyResult.result;
+          if (history.length) {
+            setChatState((previousState) => {
+              return {
+                ...previousState,
+                messages: [
+                  ...previousState.messages,
+                  ...history
+                    .map((messageInfo) => {
+                      return {
+                        id: messageInfo.id,
+                        createdOn: new Date(messageInfo.timeMiliSeconds),
+                        message: messageInfo.message,
+                        authorId: messageInfo.ownerId,
+                        isSend: true,
+                        participant: messageInfo.participant,
+                        editable: false, // Disable editing in log view
+                        deletable: false, // Disable deletion in log view
+                        replyInfo: messageInfo.replyInfo || null,
+                      } as IMessageType;
+                    }),
+                ],
+                hasOldMessages: history.length >= historyCount, // There are more messages if we filled the page
+              };
+            });
+            setMessageOffset((prevOffset) => {
+              return prevOffset + history.length;
+            });
+          } else {
+            setChatState((previousState) => {
+              return {
+                ...previousState,
+                hasOldMessages: false,
+              };
+            });
+          }
+          setIsLoadingMore(false);
+        },
+      );
+    }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    // If we're at the bottom of the scroll and have more messages to load
+    if (scrollHeight - scrollTop - clientHeight < 100 && chatState.hasOldMessages && !isLoadingMore) {
+      loadMoreMessages();
     }
   };
 
@@ -224,7 +289,6 @@ const RepoLog = () => {
                   })
                     ? previousState.messages
                     : [
-                        ...previousState.messages,
                         {
                           id: res.result.message.id,
                           createdOn: new Date(res.result.message.timeMiliSeconds),
@@ -236,6 +300,7 @@ const RepoLog = () => {
                           deletable: false, // Disable deletion in log view
                           replyInfo: res.result.message.replyInfo || null,
                         } as IMessageType,
+                        ...previousState.messages,
                       ],
                 };
               });
@@ -421,6 +486,8 @@ const RepoLog = () => {
     renderCustomChatBubble,
     handleClose,
     isCheckingAccess,
+    handleScroll,
+    isLoadingMore,
   };
 
   return isMobile ? <ChatMobileRepoLog {...props} /> : <ChatDesktopRepoLog {...props} />;

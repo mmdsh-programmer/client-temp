@@ -15,11 +15,14 @@ interface IProps {
     authors: Author<string>[];
     messages: Message<string>[];
     currentUser: number;
+    hasOldMessages: boolean;
   };
   chatRef: React.RefObject<ChatFeed<string>>;
   containerRef: React.RefObject<HTMLDivElement>;
   renderCustomChatBubble: (props: ChatBubbleProps<string, Message<string>, Author<string>>) => JSX.Element;
   isMobile: boolean;
+  handleScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
+  isLoadingMore?: boolean;
 }
 
 const ChatFeedContent = ({
@@ -28,7 +31,9 @@ const ChatFeedContent = ({
   chatRef,
   containerRef,
   renderCustomChatBubble,
-  isMobile
+  isMobile,
+  handleScroll,
+  isLoadingMore
 }: IProps) => {
   // Configure styles based on mobile or desktop
   const feedStyle = {
@@ -46,7 +51,16 @@ const ChatFeedContent = ({
         <CloseButton onClose={handleClose} />
       </CardHeader>
       <CardBody className="p-0 flex-grow overflow-hidden">
-        <div className="chat-log flex h-full flex-col" ref={containerRef}>
+        <div 
+          className="chat-log flex h-full flex-col" 
+          ref={containerRef}
+          onScroll={handleScroll}
+        >
+          {isLoadingMore && chatState.hasOldMessages && (
+            <div className="text-center py-2">
+              <Typography className="text-sm">در حال بارگذاری پیام‌های بیشتر...</Typography>
+            </div>
+          )}
           {chatState.messages.length > 0 ? (
             <ChatFeed
               ref={chatRef}
@@ -58,6 +72,7 @@ const ChatFeedContent = ({
               lastSeenAvatarStyles={lastSeenAvatarStyles}
               chatBubbleStyles={chatBubbleStyles}
               CustomChatBubble={renderCustomChatBubble}
+              hasOldMessages={chatState.hasOldMessages}
             />
           ) : (
             <Typography className="text-center">هیچ تغییری یافت نشد</Typography>

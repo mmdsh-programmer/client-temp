@@ -40,7 +40,7 @@ const ChatLogBubble = ({ message: messageProps, author, currentUser }: IProps) =
                 />
               </div>
               <p
-                className="max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap text-sm"
+                className="whitespace-nowrap text-sm"
                 title={action}
               >
                 {action}
@@ -48,7 +48,7 @@ const ChatLogBubble = ({ message: messageProps, author, currentUser }: IProps) =
             </div>
 
             <span
-              className="mr-auto max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-400"
+              className="mr-auto max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-400"
               title={timestamp ? timestamp.toLocaleString() : ""}
             >
               {timestamp ? formatTimeAgo(timestamp) : ""}

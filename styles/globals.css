@@ -347,7 +347,11 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 }
 
 .repo-log .react-bell-chat__chat-messages {
-  @apply !p-0;
+  @apply !p-0 mt-14;
+}
+
+.repo-log .react-bell-chat__bubble-group {
+  @apply !mt-0;
 }
 
 @media (max-width: 480px) {

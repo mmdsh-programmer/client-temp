@@ -18,6 +18,8 @@ const ChatDesktopRepoLog = ({
   renderCustomChatBubble,
   handleClose,
   isCheckingAccess,
+  handleScroll,
+  isLoadingMore,
 }: RepoLogProps) => {
   // Show loading while checking access
   if (isCheckingAccess) {
@@ -58,7 +60,7 @@ const ChatDesktopRepoLog = ({
   }
 
   return (
-    <Card className="repo-log overflow-hidden flex w-full h-full max-h-[calc(100vh-120px)] flex-col rounded-none bg-primary shadow-small xs:w-80 xs:rounded-lg sticky top-0">
+    <Card className="repo-log overflow-hidden flex w-full h-full max-h-[calc(100vh-120px)] flex-col rounded-none bg-primary shadow-small xs:w-96 xs:rounded-lg sticky top-0">
       <ChatFeedContent
         handleClose={handleClose}
         chatState={chatState}
@@ -66,6 +68,8 @@ const ChatDesktopRepoLog = ({
         containerRef={containerRef}
         renderCustomChatBubble={renderCustomChatBubble}
         isMobile={false}
+        handleScroll={handleScroll}
+        isLoadingMore={isLoadingMore}
       />
     </Card>
   );

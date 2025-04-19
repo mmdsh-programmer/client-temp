@@ -19,6 +19,8 @@ const ChatMobileRepoLog = ({
   renderCustomChatBubble,
   handleClose,
   isCheckingAccess,
+  handleScroll,
+  isLoadingMore,
 }: RepoLogProps) => {
   // Content to render inside the drawer
   const renderContent = () => {
@@ -62,6 +64,8 @@ const ChatMobileRepoLog = ({
         containerRef={containerRef}
         renderCustomChatBubble={renderCustomChatBubble}
         isMobile
+        handleScroll={handleScroll}
+        isLoadingMore={isLoadingMore}
       />
     );
   };
