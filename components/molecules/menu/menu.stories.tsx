@@ -1,6 +1,7 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+
 import MenuComponent from ".";
+import React from "react";
 
 const meta: Meta<typeof MenuComponent> = {
   title: "Components/Molecules/MenuComponent",
@@ -61,7 +62,7 @@ export const MediumVariant: StoryObj<typeof MenuComponent> = {
         },
       },
       {
-        text: "تنطیمات",
+        text: "تنظیمات",
         icon: <span>⚙️</span>,
         onClick: () => {
           return alert("Medium Item 2 clicked");
@@ -85,7 +86,7 @@ export const LargeVariant: StoryObj<typeof MenuComponent> = {
         },
       },
       {
-        text: "تنطیمات",
+        text: "تنظیمات",
         icon: <span>⚙️</span>,
         onClick: () => {
           return alert("Large Item 2 clicked");

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React from "react";
+
 import {
   Menu,
   MenuHandler,
@@ -7,7 +7,9 @@ import {
   MenuList,
   Typography,
 } from "@material-tailwind/react";
+
 import NestedMenu from "./nestedMenu";
+import React from "react";
 
 interface IProps {
   variant: "small" | "medium" | "large";
@@ -37,7 +39,7 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
     <Menu placement="bottom">
       <MenuHandler>{children}</MenuHandler>
       <MenuList
-        className={` ${className} !z-[99999] ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
+        className={` ${className} !z-[99999] ml-4 font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
         placeholder="menu-list"
       >
         {menuList.map((menuItem, index) => {

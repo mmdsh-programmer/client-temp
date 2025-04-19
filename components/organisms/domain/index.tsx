@@ -1,13 +1,14 @@
 import React, { useState } from "react";
+
+import DomainParticipant from "../domainParticipant";
+import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
+import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
-import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
-import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
-import DomainParticipant from "../domainParticipant";
 import useGetUser from "@hooks/auth/useGetUser";
 
 export enum ETabs {
-  SETTING = "تنطیمات",
+  SETTING = "تنظیمات",
   PARTICIPANT = "دسترسی افراد",
   PUBLIC_FEEDS = "خبرنامه‌ عمومی",
   PRIVATE_FEEDS = "خبرنامه‌ خصوصی",

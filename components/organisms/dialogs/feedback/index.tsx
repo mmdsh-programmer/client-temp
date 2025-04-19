@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useRef, useState } from "react";
 import FileUploaderInput, {
   IFileUploaderInput,
 } from "@components/organisms/fileUploader";
+import React, { ChangeEvent, useRef, useState } from "react";
+
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { IPodspaceResult } from "@interface/app.interface";
 import TextareaAtom from "@components/atoms/textarea/textarea";
@@ -167,7 +168,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     >
       <form className="feedback__form flex flex-col gap-4 ">
         <div className="feedback__form-content flex flex-col gap-2">
-          <Typography className="form_label"> متن بازخورد</Typography>
+          <Typography className="form_label text-primary_normal"> متن بازخورد</Typography>
           <TextareaAtom
             placeholder="لطفا متن خود را وارد کنید"
             register={{ ...register("content") }}
@@ -189,10 +190,10 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
                 <UploadIcon className="h-5 w-5" />
               </div>
               <div className="flex gap-[3px]">
-                <Typography className="select_option__text text-[#0369CD] ">
+                <Typography className="select_option__text text-primary">
                   برای آپلود کلیک کنید
                 </Typography>
-                <Typography className="select_option__text text-secondary">
+                <Typography className="select_option__text">
                   یا بکشید و رها کنید
                 </Typography>
               </div>

@@ -56,7 +56,7 @@ const UserConfigPanelDialog = () => {
             ssoId: getUserId,
             blockedServices: blockServices,
             callBack: () => {
-                toast.success("تنطیمات دسترسی برای کاربر به روز شد.")
+                toast.success("تنظیمات دسترسی برای کاربر به روز شد.")
             }
         });
     };

@@ -1,9 +1,11 @@
-import React from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import { Spinner, Typography } from "@material-tailwind/react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { ERoles } from "@interface/enums";
 import { IUser } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
+import React from "react";
 import { UserIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -11,7 +13,6 @@ import { translateRoles } from "@utils/index";
 import useDeleteUser from "@hooks/user/useDeleteUser";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
 import { userIdAtom } from "@atom/app";
 
@@ -46,7 +47,7 @@ const UserItem = ({ user }: IProps) => {
       className: "repo-user__transfer-ownership",
     },
     {
-      label: "تنطیمات پیشرفته",
+      label: "تنظیمات پیشرفته",
       value: "setting",
       className: "repo-user__advanced-setting",
     },

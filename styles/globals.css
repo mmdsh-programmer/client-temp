@@ -149,7 +149,7 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 
   .form__title,
   .title_t1 {
-    @apply text-primary !text-[16px] !leading-6 !-tracking-[0.32px] font-medium !font-iranYekan;
+    @apply text-primary_normal !text-[16px] !leading-6 !-tracking-[0.32px] font-medium !font-iranYekan;
   }
 
   .title_t2 {
@@ -177,7 +177,7 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .form_label {
-    @apply !text-primary !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
+    @apply !text-primary_normal !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
   }
 
   .label {
