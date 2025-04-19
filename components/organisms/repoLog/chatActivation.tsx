@@ -24,7 +24,7 @@ const ChatActivation = ({ handleClose, enableChat, isLoading, message }: IProps)
           loading={isLoading}
         >
           <Typography className="text__label__button text-white">
-            {message || "فعالسازی چت مخزن"}
+            {message || "مشاهده تغییرات مخزن"}
           </Typography>
         </LoadingButton>
       </CardBody>
