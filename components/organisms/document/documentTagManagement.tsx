@@ -109,10 +109,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     </div>
   ) : (
       <div className="flex flex-col gap-2">
-        {userInfo?.domainConfig.useDomainTag &&
-          (userInfo?.domainRole === "owner" ||
-            userInfo.domainRole === "participant") ||
-          (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole()) ?
+        {adminOrOwnerRole() ?
           <SearchableDropdown
             options={updatedAvailableTags}
             handleSelect={handleTagSelect}

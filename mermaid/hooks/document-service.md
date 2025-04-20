@@ -130,7 +130,7 @@ direction TB
         +isPublished: boolean
         +parentId: number | null
         +participants: string[]
-        +participantsRoles: { [participantId: string]: ParticipantRole }
+        +participantsRoles:  [participantId: string]: ParticipantRole 
         +readTime: number | null
         +repoTypeId: number
         +sharedArray: any[]
