@@ -5,36 +5,31 @@ import { handleClientSideHookError } from "@utils/error";
 import { IActionError } from "@interface/app.interface";
 
 const useDeleteDocumentPublishLink = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: async (values: {
-            repoId: number;
-            documentId: number;
-            categoryId: number;
-            callBack?: () => void;
-        }) => {
-            const { repoId, documentId } = values;
-            const response = await deleteDocumentPublishLinkAction(
-                repoId,
-                documentId
-            );
-
-            handleClientSideHookError(response as IActionError);
-
-            return response;
-        },
-        onSuccess: (response, values) => {
-            const { categoryId, callBack } = values;
-            queryClient.invalidateQueries({
-                queryKey: [`category-${categoryId || "root"}-children`],
-              });
-            toast.success("لینک انتشار سند با موفقیت حذف شد");
-            callBack?.();
-        },
-        onError: (error: Error) => {
-            toast.error(error.message || "خطا در حذف لینک انتشار سند");
-        },
-    });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (values: {
+      repoId: number;
+      documentId: number;
+      categoryId: number;
+      callBack?: () => void;
+    }) => {
+      const { repoId, documentId } = values;
+      const response = await deleteDocumentPublishLinkAction(repoId, documentId);
+      handleClientSideHookError(response as IActionError);
+      return response;
+    },
+    onSuccess: (response, values) => {
+      const { categoryId, callBack } = values;
+      queryClient.invalidateQueries({
+        queryKey: [`category-${categoryId || "root"}-children`],
+      });
+      toast.success("لینک انتشار سند با موفقیت حذف شد");
+      callBack?.();
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "خطا در حذف لینک انتشار سند");
+    },
+  });
 };
 
 export default useDeleteDocumentPublishLink;
