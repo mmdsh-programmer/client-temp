@@ -1,5 +1,6 @@
 "use client";
 
+import RepoLog from "@components/organisms/repoLog";
 import CheckPanelUrlData from "../checkPanelUrlData";
 import CheckRepoInfo from "../checkRepoInfo";
 import React from "react";
@@ -13,7 +14,8 @@ const RepositoryTemplate = ({ children }: IProps) => {
     <>
       <CheckPanelUrlData />
       <CheckRepoInfo>
-        <div className="">{children}</div>
+        <div className="w-full">{children}</div>
+        <RepoLog />
       </CheckRepoInfo>
     </>
   );

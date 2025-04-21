@@ -15,9 +15,10 @@ import { usePathname } from "next/navigation";
 interface IProps {
   repo?: IRepo;
   showDrawer?: boolean;
+  showLog?: boolean;
 }
 
-const RepoMenu = ({ repo, showDrawer }: IProps) => {
+const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
   const currentPath = usePathname();
 
   const [getRepo, setRepo] = useRecoilState(repoAtom);
@@ -38,6 +39,7 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     leave: false,
     fileManagement: false,
     versionRequests: false,
+    repoActivity: false,
   });
 
   const setModalState = (key: keyof typeof modals, state: boolean) => {
@@ -54,7 +56,8 @@ const RepoMenu = ({ repo, showDrawer }: IProps) => {
     repo || getRepo,
     setModalState,
     handleRepoInfo,
-    setOpenRepoActionDrawer
+    setOpenRepoActionDrawer,
+    showLog
   ).filter(Boolean) as MenuItem[];
 
   return (

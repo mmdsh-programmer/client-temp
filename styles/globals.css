@@ -338,6 +338,22 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   @apply !min-h-[60%] !max-h-[60%] !h-[60%]
 }
 
+.repo-log .react-bell-chat__chat-scroll-area {
+  @apply !p-0;
+}
+
+.repo-log .react-bell-chat__loading-messages {
+  @apply !hidden;
+}
+
+.repo-log .react-bell-chat__chat-messages {
+  @apply !p-0 mt-14;
+}
+
+.repo-log .react-bell-chat__bubble-group {
+  @apply !mt-0;
+}
+
 @media (max-width: 480px) {
   .custom-dialog {
     @apply !min-h-[100%] !max-h-[100%] !h-[100%] !w-full !m-0 !rounded-none

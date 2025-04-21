@@ -3,6 +3,7 @@ import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import moment from "moment-jalaali";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const logger = (key: string, newValue: any, oldValue: any) => {
   if (process.env.NODE_ENV === "development") {
     console.log(
@@ -189,6 +190,7 @@ export const mapOrder = (array: IRepo[], order: number[]) => {
   return [...inSortList, ...notInSortList];
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const bracketStringify = (data: Record<string, any>): string => {
   const queryString = Object.keys(data)
     .map((key) => {
@@ -303,4 +305,24 @@ export const isPrivate = (item: IDocumentMetadata) => {
 
 export const hasEnglishDigits = (str: string) => {
   return /[0-9]/.test(str);
+};
+
+export const formatTimeAgo = (date: Date): string => {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffDay > 0) {
+    return `${diffDay} روز پیش`;
+  } 
+  if (diffHour > 0) {
+    return `${diffHour} ساعت پیش`;
+  } 
+  if (diffMin > 0) {
+    return `${diffMin} دقیقه پیش`;
+  }
+  return "لحظاتی پیش";
 };
