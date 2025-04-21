@@ -56,7 +56,7 @@ const EmptyList = ({ type }: IProps) => {
             </Typography>
             <Typography
               placeholder="empty-message"
-              className="text-secondary caption_c1"
+              className="text-gray-500 caption_c1"
             >
               برای ایجاد مخزن جدید می توانید روی دکمه ایجاد مخزن کلیک کنید و
               اطلاعات مخزن خود را وارد کنید.
@@ -110,7 +110,7 @@ const EmptyList = ({ type }: IProps) => {
             </Typography>
             <Typography
               placeholder="empty-message"
-              className="text-secondary caption_c1"
+              className="text-gray-500 caption_c1"
             >
               برای ایجاد دسته‌بندی یا سند جدید می توانید روی دکمه ایجاد کلیک
               کنید و اطلاعات دسته‌بندی یا سند خود را وارد کنید.
@@ -333,7 +333,7 @@ const EmptyList = ({ type }: IProps) => {
                 </Typography>
                 <Typography
                   placeholder="empty-message"
-                  className="text-secondary caption_c1"
+                  className="text-gray-500 caption_c1"
                 >
                   برای نمایش اطلاعات شعبه، شعبه موردنظرتان را انتخاب کنید.
                 </Typography>

@@ -31,7 +31,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
       >
         {isLoading ? (
           <div className="flex justify-center items-center w-full">
-          <Spinner className="w-6 h-6" color="deep-purple" />
+          <Spinner className="w-6 h-6" color="purple" />
           </div>
         ) : (
           <div className="join-to-repo-request-list flex flex-col gap-3">

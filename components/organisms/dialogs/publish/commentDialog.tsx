@@ -1,8 +1,9 @@
-import React from "react";
 import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
+
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import PublishComments from "@components/organisms/publishFeedback/PublishComments";
+import React from "react";
 
 interface IProps {
   postId: number;
@@ -18,7 +19,7 @@ const CommentDialog = ({ postId, setOpen }: IProps) => {
     <Dialog placeholder="" size="lg" open handler={handleClose}>
       <DialogHeader
         placeholder="dialog header"
-        className="flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="bg-white flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <div className="block xs:hidden">

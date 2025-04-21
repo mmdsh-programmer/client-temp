@@ -44,7 +44,7 @@ const CategoryBlockList = () => {
       </Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6" color="purple" />
         ) : (
           <div className="category-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
@@ -68,7 +68,7 @@ const CategoryBlockList = () => {
                       }
                       actionIcon={
                         blockDocument.isPending ? (
-                          <Spinner className="h-4 w-4" color="deep-purple" />
+                          <Spinner className="h-4 w-4" color="purple" />
                         ) : (
                           <Button
                             className="delete-button bg-transparent p-0"

@@ -290,7 +290,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             </Typography>
           }
           className="editor-footer__auto-save-checkbox"
-          color="deep-purple"
+          color="purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
           containerProps={{ className: "-mr-3 " }}

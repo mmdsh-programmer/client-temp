@@ -1,12 +1,13 @@
-import React from "react";
-import TableHead from "@components/molecules/tableHead";
-import TableCell from "@components/molecules/tableCell";
-import { Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
-import useGetSubscriptionList from "@hooks/domainSubscription/useGetSubscriptionList";
+import { Spinner, Typography } from "@material-tailwind/react";
+
 import DomainSubscriptionMenu from "@components/molecules/domainSubscriptionMenu";
+import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import TableCell from "@components/molecules/tableCell";
+import TableHead from "@components/molecules/tableHead";
+import useGetSubscriptionList from "@hooks/domainSubscription/useGetSubscriptionList";
 
 const DomainSubscription = () => {
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -61,7 +62,7 @@ const DomainSubscription = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8" color="purple" />
       </div>
     );
   }

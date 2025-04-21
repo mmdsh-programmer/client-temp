@@ -82,7 +82,7 @@ const DocumentWhiteList = ({
       </Typography>
       {isLoading ? (
         <div className="flex justify-center mt-4">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4" color="purple" />
         </div>
       ) : (
         <div className="flex flex-col gap-4">

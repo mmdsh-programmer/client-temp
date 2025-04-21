@@ -15,7 +15,7 @@ const RepoInfo = () => {
   const getRepo = useRecoilValue(repoAtom);
 
   return (
-    <div className="repo-info rounded-none xs:rounded-lg bg-primary flex p-4 shadow-small">
+    <div className="repo-info rounded-none xs:rounded-lg bg-primary flex p-4 shadow-small bg-white">
       <div className="w-full">
         <div className="float-right p-0 sm:p-4 md:p-0 lg:p-4 ml-2 xs:ml-4 w-[54px] h-[40px] sm:w-[160px] sm:h-[130px] md:w-[54px] md:h-[40px] lg:w-[160px] lg:h-[130px] rounded-lg overflow-hidden shrink-0">
           <RepoImage imageHash={getRepo?.imageFileHash} />
@@ -32,7 +32,7 @@ const RepoInfo = () => {
                 </Typography>
                 <ChipMolecule
                   value={translateRoles(getRepo?.roleName)}
-                  className="px-2 py-[2px] border-[1px] border-normal bg-purple-light text-purple-normal"
+                  className="px-2 py-[2px] border-[1px] border-normal bg-secondary-light text-primary"
                 />
               </div>
               <Typography className="caption_c2 text-hint">

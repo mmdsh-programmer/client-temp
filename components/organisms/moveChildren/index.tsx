@@ -59,7 +59,7 @@ const MoveChildren = ({
     <div className={`move-${target}-list`}>
       {isLoading ? (
         <div className="px-2 py-1">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4" color="purple" />
         </div>
       ) : (
         moveChildren?.pages.map((page) => {

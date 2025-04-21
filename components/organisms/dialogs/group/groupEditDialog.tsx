@@ -221,7 +221,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
         </div>
         <div className="flex flex-wrap gap-2 group-edit-form__members-list">
           {isLoading || isFetching ? (
-            <Spinner className="h-4 w-4" color="deep-purple" />
+            <Spinner className="h-4 w-4" color="purple" />
           ) : (
             updatedUsers?.map((item) => {
               return (

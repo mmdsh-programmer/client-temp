@@ -1,15 +1,16 @@
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
-import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
-import { yupResolver } from "@hookform/resolvers/yup";
+import TextareaAtom from "@components/atoms/textarea/textarea";
 import { publicFeedSchema } from "./validation.yup";
+import { toast } from "react-toastify";
+import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
+import { useForm } from "react-hook-form";
+import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   name: string;
@@ -105,7 +106,7 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5" color="purple" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">

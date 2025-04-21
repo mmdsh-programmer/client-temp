@@ -141,7 +141,7 @@ const TableView = ({
 
   return (
     <div
-      className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+      className={`category-children-table flex flex-col bg-white ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
     >
       <div className="flex items-center py-4 px-5 justify-between">
         <CategoryBreadCrumb />
@@ -164,7 +164,7 @@ const TableView = ({
       ) : null}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : (
         renderContent()

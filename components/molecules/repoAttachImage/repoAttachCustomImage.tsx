@@ -26,7 +26,7 @@ const RepoAttachCustomImage = ({
         <Radio
           crossOrigin="anonymous"
           name="default_image"
-          color="deep-purple"
+          color="purple"
           className="repo-attach-default-image__radio"
           label={
             <div>
@@ -60,7 +60,7 @@ const RepoAttachCustomImage = ({
         <Radio
           crossOrigin="anonymous"
           name="custom_image"
-          color="deep-purple"
+          color="purple"
           label={
             <div>
               <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">

@@ -8,6 +8,7 @@ module.exports = withMT({
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/clasor-content-preview/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/not-found.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: ["class", "[data-mode=\"dark\"]"],
   theme: {
@@ -26,8 +27,8 @@ module.exports = withMT({
           900: "var(--gray-900)", // text-primary
         },
         purple: {
-          normal: "var(--purple-normal)",
-          light: "var(--purple-light)",
+          normal: "var(--primary-normal)",
+          light: "var(--primary-light)",
         },
         icon: {
           active: "var(--icon-active)",
@@ -48,6 +49,9 @@ module.exports = withMT({
         info: {
           normal: "var(--info)",
           secondary: "var(--info-secondary)",
+        },
+        stroke: {
+          primary: "var(--stroke-primary)",
         },
       },
       backgroundColor: {

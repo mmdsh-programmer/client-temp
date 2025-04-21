@@ -1,17 +1,18 @@
+import { Checkbox, Typography } from "@material-tailwind/react";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
+import DocumentIcon from "../documentIcon";
+import DocumentMenu from "../documentMenu";
+import { FaDateFromTimestamp } from "@utils/index";
+import { IDocumentMetadata } from "@interface/document.interface";
+import MobileCard from "../mobileCard";
 import React from "react";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryAtom } from "@atom/category";
-import { toast } from "react-toastify";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import MobileCard from "../mobileCard";
-import { Checkbox, Typography } from "@material-tailwind/react";
-import { FaDateFromTimestamp } from "@utils/index";
-import { IDocumentMetadata } from "@interface/document.interface";
+import { editorModeAtom } from "@atom/editor";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import { editorModeAtom } from "@atom/editor";
-import DocumentMenu from "../documentMenu";
-import DocumentIcon from "../documentIcon";
+import { toast } from "react-toastify";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -74,7 +75,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
       name={
         <div className="flex items-center gap-2 w-full">
           <Checkbox
-            color="deep-purple"
+            color="purple"
             containerProps={{
               className: "p-[2px]",
             }}

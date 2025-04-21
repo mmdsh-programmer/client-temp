@@ -83,7 +83,7 @@ const RepoKeyList = ({
   // eslint-disable-next-line no-nested-ternary
   return isLoading ? (
     <div className="w-full h-full flex justify-center items-center my-2">
-      <Spinner className="h-8 w-8" color="deep-purple" />
+      <Spinner className="h-8 w-8" color="purple" />
     </div>
   ) : itemCount ? (
     <table className="w-full min-w-max ">

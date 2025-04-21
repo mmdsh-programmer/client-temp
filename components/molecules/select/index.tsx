@@ -110,7 +110,7 @@ const SelectAtom = ({
           </ul>
           {isLoading && (
             <div className="flex justify-center p-2">
-              <Spinner className="h-4 w-4" color="deep-purple" />
+              <Spinner className="h-4 w-4" color="purple" />
             </div>
           )}
         </div>

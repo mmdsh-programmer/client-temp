@@ -57,7 +57,7 @@ const SharedDocumentList = () => {
               setActiveTour(ETourSection.DOCUMENTS);
             }}
           >
-            <InfoIcon className="w-5 h-5 stroke-purple-normal" />
+            <InfoIcon className="w-5 h-5 stroke-primary-normal" />
           </Button>
         </div>
         <div className="flex xs:!hidden">

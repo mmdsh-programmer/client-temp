@@ -3,10 +3,11 @@
 import React, { useEffect } from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState } from "recoil";
+
 import EditorTab from "@components/organisms/editorTab";
 import { selectedDocumentAtom } from "@atom/document";
 import useGetDocument from "@hooks/document/useGetDocument";
+import { useRecoilState } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 
 const EditPage = () => {
@@ -50,7 +51,7 @@ const EditPage = () => {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <Typography className="font-bold ml-2">لطفا صبر کنید</Typography>
-        <Spinner className="h-5 w-5 " color="deep-purple" />
+        <Spinner className="h-5 w-5 " color="purple" />
       </div>
     );
   }

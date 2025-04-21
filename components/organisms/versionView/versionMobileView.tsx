@@ -56,7 +56,7 @@ const VersionMobileView = ({
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : listLength ? (
         <div className="version-list-mobile flex flex-col gap-3 rounded-lg overflow-auto h-[calc(100vh-140px)]">

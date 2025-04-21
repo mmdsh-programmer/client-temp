@@ -16,7 +16,7 @@ const SidebarHeader = ({ domainInfo }: IProps) => {
       className="sidebar-header shadow-none px-3 py-2 rounded-md bg-gray-100 w-full border-[1px] border-gray-200"
     >
       <div className="flex items-center">
-        <div className="w-10 h-10 min-w-10 min-h-10 rounded-md bg-secondary p-1">
+        <div className="w-10 h-10 min-w-10 min-h-10 rounded-md p-1">
           {domainInfo?.logo ? (
             <ImageComponent
               className="h-8 w-8"

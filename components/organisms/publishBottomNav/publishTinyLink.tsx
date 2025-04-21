@@ -1,9 +1,10 @@
-import { ShareIcon } from "@components/atoms/icons";
-import useCreateTinyLink from "@hooks/tinyLink/useCreateTinyLink";
 import { Button, Spinner } from "@material-tailwind/react";
-import copy from "copy-to-clipboard";
 import React, { useEffect, useState } from "react";
+
+import { ShareIcon } from "@components/atoms/icons";
+import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
+import useCreateTinyLink from "@hooks/tinyLink/useCreateTinyLink";
 
 const PublishTinyLink = () => {
   const createTinyLinkHook = useCreateTinyLink();
@@ -32,7 +33,7 @@ const PublishTinyLink = () => {
   if (createTinyLinkHook.isPending) {
     return (
       <div className="flex items-center w-fit">
-        <Spinner className="h-5 w-5" color="deep-purple" />
+        <Spinner className="h-5 w-5" color="purple" />
       </div>
     );
   }

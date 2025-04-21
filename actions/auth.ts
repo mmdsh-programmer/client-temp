@@ -151,7 +151,7 @@ export const login = async () => {
   const url =
     `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
       `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}/signin`
-    )}&scope=profile+social_write+social`.replace("http:", "https:");
+    )}&scope=profile`.replace("http:", "https:");
   redirect(url);
 };
 

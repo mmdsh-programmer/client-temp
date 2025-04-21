@@ -1,10 +1,11 @@
-import React from "react";
-import { FolderIcon } from "@components/atoms/icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
+
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { Checkbox } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
+import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
+import React from "react";
 import TableCell from "@components/molecules/tableCell";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
@@ -50,7 +51,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
         {
           data: (
             <Checkbox
-              color="deep-purple"
+              color="purple"
               crossOrigin=""
               onChange={handleCheckItem}
               checked={getBulkItems.some((bulkItem) => {

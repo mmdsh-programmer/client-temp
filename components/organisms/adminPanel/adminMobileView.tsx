@@ -1,12 +1,13 @@
-import React, { useState } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import React, { useState } from "react";
+
+import AdminFeedbackDialog from "../dialogs/admin/adminFeedbackDialog";
 import CardItemRow from "@components/molecules/mobileCard/cardItemRow";
 import { IFeedbackView } from "./adminPanelFeedback";
+import { IOffer } from "@interface/offer.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
-import { IOffer } from "@interface/offer.interface";
-import AdminFeedbackDialog from "../dialogs/admin/adminFeedbackDialog";
 
 const renderFeedbackSection = (
   isLoading,
@@ -18,7 +19,7 @@ const renderFeedbackSection = (
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8" color="purple" />
       </div>
     );
   }

@@ -48,7 +48,7 @@ const Breadcrumb = () => {
       return (
         <div className="breadcumb-list flex items-center">
           <div className="flex items-center">
-            <Typography className="text-xs xs:text-sm font-iranYekan mx-2 text-secondary">
+            <Typography className="text-xs xs:text-sm font-iranYekan mx-2 text-link">
               ...
             </Typography>
             <div className="h-6 w-[14px] flex items-center justify-center">
@@ -71,7 +71,7 @@ const Breadcrumb = () => {
                     <Typography
                       title={breadcrumbItem as string}
                       className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
-                    ${realIndex === list.length - 1 ? "text-primary_normal" : "text-secondary"}`}
+                    ${realIndex === list.length - 1 ? "text-primary_normal" : "text-link"}`}
                     >
                       {breadcrumbItem}
                     </Typography>
@@ -106,7 +106,7 @@ const Breadcrumb = () => {
                   <Typography
                     title={breadcrumbItem as string}
                     className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
-                ${index === list.length - 1 ? "text-primary_normal" : "text-secondary"}`}
+                ${index === list.length - 1 ? "text-primary_normal" : "text-link"}`}
                   >
                     {breadcrumbItem}
                   </Typography>

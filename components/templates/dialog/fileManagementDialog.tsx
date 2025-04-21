@@ -44,7 +44,7 @@ const fileManagementDialog = ({
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header bg-white rounded-md rounded-b-none flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <BackButton onClick={handleClose} />
@@ -62,7 +62,7 @@ const fileManagementDialog = ({
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer bg-white rounded-md rounded-t-none p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <Button
           placeholder=" button"

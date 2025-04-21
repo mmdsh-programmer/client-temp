@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import SelectAtom, { IOption } from "@components/molecules/select";
+import { Spinner, Typography } from "@material-tailwind/react";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { Spinner, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import { branchIdAtom } from "@atom/branch";
-import useGetPositions from "@hooks/position/useGetPositions";
-import useAddMembers from "@hooks/position/useAddMembers";
-import SelectAtom, { IOption } from "@components/molecules/select";
 import { toast } from "react-toastify";
+import useAddMembers from "@hooks/position/useAddMembers";
+import { useForm } from "react-hook-form";
+import useGetPositions from "@hooks/position/useGetPositions";
+import { useRecoilValue } from "recoil";
 
 interface IForm {
   username: string;
@@ -90,7 +91,7 @@ const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label">انتخاب گروه </Typography>
           {isLoading ? (
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5" color="purple" />
           ) : (
             <SelectAtom
               options={groupOptions}

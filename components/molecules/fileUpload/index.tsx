@@ -15,7 +15,7 @@ const FileUpload = ({ progress, onUpload }: IProps) => {
     >
       <div className="flex w-full">
         <div className="relative !w-full !h-12 flex justify-center items-center bg-purple-light rounded-lg hover:bg-purple-light active:bg-purple-light">
-          <Typography className="text__label__button text-purple-normal">
+          <Typography className="text__label__button text-primary">
             بارگذاری فایل ضمیمه
           </Typography>
           <div

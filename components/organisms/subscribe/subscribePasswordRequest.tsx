@@ -80,7 +80,7 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
                 نمایش رمز عبور
               </Typography>
             }
-            color="deep-purple"
+            color="purple"
             checked={showPassword}
             onChange={() => {
               setShowPassword(!showPassword);

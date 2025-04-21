@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+
 import { Spinner } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   redirectUrl: string;

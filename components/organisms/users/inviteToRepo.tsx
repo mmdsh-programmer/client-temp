@@ -67,7 +67,7 @@ const InviteToRepo = () => {
   };
   return isFetchingRoles ? (
     <div className="flex p-6 justify-center items-center">
-      <Spinner color="deep-purple" />
+      <Spinner color="purple" />
     </div>
   ) : (
     <form className="repo-invite-form pb-6" onSubmit={handleSubmit(onSubmit)}>

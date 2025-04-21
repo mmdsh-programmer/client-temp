@@ -81,7 +81,7 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
   if (loading) {
     return (
       <div className="get-user-info w-screen h-screen flex items-center justify-center bg-slate-50">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8" color="purple" />
         <Typography className="font-bold mr-2 title_t1">
           در حال دریافت اطلاعات کاربری
         </Typography>

@@ -173,7 +173,7 @@ const EditorFileFooter = () => {
             </Typography>
           }
           className=""
-          color="deep-purple"
+          color="purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
           containerProps={{ className: "-mr-3 " }}

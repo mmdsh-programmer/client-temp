@@ -49,7 +49,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
   if (isLoading) {
     return (
       <div className="w-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8" color="purple" />
       </div>
     );
   }

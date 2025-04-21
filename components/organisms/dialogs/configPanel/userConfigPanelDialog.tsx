@@ -85,7 +85,7 @@ const UserConfigPanelDialog = () => {
         >
             {isLoading ?
                 <div className="w-full flex justify-center">
-                    <Spinner className="" color="deep-purple" />
+                    <Spinner className="" color="purple" />
                 </div> :
                 <div className="w-full flex flex-col gap-2 h-[calc(100vh-210px)] xs:h-[calc(100vh-300px)] overflow-y-auto overflow-x-hidden px-2">
                     {getUserConfigPanel?.map((userConfig) => {

@@ -80,7 +80,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
         {errorMessage === "ریسورس دارای زیرمجموعه است" ? (
           <div className="flex items-center gap-1">
             <Checkbox
-              color="deep-purple"
+              color="purple"
               containerProps={{
                 className: "p-[2px]",
               }}

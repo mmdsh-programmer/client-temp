@@ -1,15 +1,18 @@
 import React, { useRef, useState } from "react";
+import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import {
   editorDecryptedContentAtom,
   editorListDrawerAtom,
   editorModeAtom,
 } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
+
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
 import FileEditor from "./fileEditor";
 import FloatingButtons from "./floatingButtons";
+import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
 import { Spinner } from "@material-tailwind/react";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
@@ -19,8 +22,6 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
-import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
-import { IClassicData } from "clasor-remote-editor/dist/interface";
 
 interface IProps {
   getEditorConfig: () => {
@@ -136,7 +137,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   if (isLoading) {
     return (
       <div className="main w-full h-full text-center flex items-center justify-center">
-        <Spinner className="h-5 w-5 " color="deep-purple" />
+        <Spinner className="h-5 w-5 " color="purple" />
       </div>
     );
   }

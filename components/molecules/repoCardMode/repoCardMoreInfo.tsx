@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import { UserIcon } from "@components/atoms/icons";
-import { Spinner } from "@material-tailwind/react";
-import ProgressBar from "@components/molecules/progressBar";
-import useGetUsers from "@hooks/user/useGetRepoUsers";
+
 import { IRepo } from "@interface/repo.interface";
-import useGetReport from "@hooks/report/useGetReport";
-import { useSetRecoilState } from "recoil";
-import { repoInfoAtom } from "@atom/repository";
 import ImageComponent from "@components/atoms/image";
+import ProgressBar from "@components/molecules/progressBar";
+import { Spinner } from "@material-tailwind/react";
+import { UserIcon } from "@components/atoms/icons";
+import { repoInfoAtom } from "@atom/repository";
+import useGetReport from "@hooks/report/useGetReport";
+import useGetUsers from "@hooks/user/useGetRepoUsers";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   repo: IRepo;

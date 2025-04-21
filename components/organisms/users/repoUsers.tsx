@@ -35,7 +35,7 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
   return (
     <div className="repo-users overflow-y-auto">
       {isLoadingInviteToRepoRequests || isLoadingRepoUsers ? (
-        <Spinner className="h-0 w-0" />
+        <Spinner className="h-8 w-8" color="purple" />
       ) : (
         <div
           className={`repo-users__list flex flex-col overflow-y-auto overflow-x-hidden

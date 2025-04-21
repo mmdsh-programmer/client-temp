@@ -14,7 +14,7 @@ interface IProps {
 
 const TableHead = ({ tableHead, className }: IProps) => {
   return (
-    <thead className={`${className || ""} top-0 z-[9999] bg-tertiary h-10 `}>
+    <thead className={`${className || ""} top-0 z-[9999] bg-primary h-10 `}>
       <tr>
         {tableHead.map((head) => {
           return (
@@ -24,14 +24,14 @@ const TableHead = ({ tableHead, className }: IProps) => {
             >
               {head.isSorted ? (
                 <div className=" flex items-center">
-                  <Typography className="table-head py-1 text-secondary">
+                  <Typography className="table-head py-1 text-primary_normal">
                     {head.value}
                   </Typography>
                   <Sort />
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <Typography className="table-head py-1 text-secondary">
+                  <Typography className="table-head py-1 text-primary_normal">
                     {head.value}
                   </Typography>
                 </div>

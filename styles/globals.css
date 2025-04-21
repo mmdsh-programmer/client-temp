@@ -75,7 +75,7 @@
 }
 .tour-step-text,
 .tour-step-list {
-  @apply !text-[13px] text-secondary !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan;
+  @apply !text-[13px] text-primary_normal !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan;
 }
 .tour-step-list {
   @apply text-sm pb-4;

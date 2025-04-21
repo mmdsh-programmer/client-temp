@@ -28,7 +28,7 @@ const AdminTableView = ({
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading || isFetching ? (
           <div className="w-full h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="deep-purple" />
+            <Spinner className="h-8 w-8" color="purple" />
           </div>
         ) : listLength ? (
           <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">

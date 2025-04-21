@@ -42,7 +42,7 @@ const HeaderListTemplate = ({
             );
           }}
         >
-          <InfoIcon className="w-5 h-5 stroke-purple-normal" />
+          <InfoIcon className="w-5 h-5 stroke-primary-normal" />
         </Button>
       </div>
       <div className="flex items-center gap-2">

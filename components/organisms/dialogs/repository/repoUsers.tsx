@@ -45,7 +45,7 @@ const RepoUsers = () => {
       <div className="h-2 border-b-2 border-gray-300" />
       {isFetchingInviteRequests || isFetchingUsers ? (
         <div className="h-full w-full flex justify-center items-center">
-          <Spinner color="deep-purple" className="" />
+          <Spinner color="purple" className="" />
         </div>
       ) : (
         <div className="repo-users__list">

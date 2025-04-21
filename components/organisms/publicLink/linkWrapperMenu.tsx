@@ -1,12 +1,13 @@
-import React from "react";
-import { IRoles } from "@interface/users.interface";
-import { useRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { DeleteIcon } from "@components/atoms/icons";
 import { Button, Spinner } from "@material-tailwind/react";
-import useDeletePublicLink from "@hooks/public/useDeletePublicLink";
-import { toast } from "react-toastify";
+
+import { DeleteIcon } from "@components/atoms/icons";
 import { IRepo } from "@interface/repo.interface";
+import { IRoles } from "@interface/users.interface";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import useDeletePublicLink from "@hooks/public/useDeletePublicLink";
+import { useRecoilState } from "recoil";
 
 interface IProps {
   role: IRoles;
@@ -34,7 +35,7 @@ const LinkWrapperMenu = ({ role }: IProps) => {
       onClick={handleRemovePublicLink}
     >
       {deletePublicLinkHook.isPending ? (
-        <Spinner color="deep-purple" />
+        <Spinner color="purple" />
       ) : (
         <DeleteIcon className="h-5 w-5" />
       )}

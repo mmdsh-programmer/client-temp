@@ -81,7 +81,7 @@ const Tags = ({ handleClose }: IProps) => {
         </form>
         {isLoading ? (
           <div className="mt-4 w-full justify-center">
-            <Spinner color="deep-purple" className="w-5 h-5" />
+            <Spinner color="purple" className="w-5 h-5" />
           </div>
         ) : (
           <div className="repo-tags__list flex flex-wrap gap-2 py-4">

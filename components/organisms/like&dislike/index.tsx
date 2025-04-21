@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import useGetLikeList from "@hooks/core/useGetLikeList";
-import useGetDislikeList from "@hooks/core/useGetDislikeList";
-import useLike from "@hooks/core/useLike";
-import useDislike from "@hooks/core/useDislike";
+
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
-import useGetPostInfo from "@hooks/core/useGetPostInfo";
 import { Spinner } from "@material-tailwind/react";
+import useDislike from "@hooks/core/useDislike";
+import useGetDislikeList from "@hooks/core/useGetDislikeList";
+import useGetLikeList from "@hooks/core/useGetLikeList";
+import useGetPostInfo from "@hooks/core/useGetPostInfo";
+import useLike from "@hooks/core/useLike";
 
 interface IProps {
   postId: number;
@@ -98,7 +99,7 @@ const LikeAndDislike = ({
   if (isLoading) {
     return (
       <div className={`flex items-center w-fit ${wrapperClassName}`}>
-        <Spinner className="h-5 w-5" color="deep-purple" />
+        <Spinner className="h-5 w-5" color="purple" />
       </div>
     );
   }
