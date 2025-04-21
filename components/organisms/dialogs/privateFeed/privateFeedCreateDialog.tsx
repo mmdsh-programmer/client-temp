@@ -148,7 +148,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label">عکس خبرنامه </Typography>
           {ImagesIsLoading ? (
-            <div className="w-full justify-color="purple"enter flex h-[50px]">
+            <div className="w-full justify-center items-center flex h-[50px]">
               <Spinner className="h-5 w-5" color="purple" />
             </div>
           ) : (
