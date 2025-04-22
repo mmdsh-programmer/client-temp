@@ -62,6 +62,7 @@ module.exports = withMT({
         "secondary-light": "var(--bg-secondary-light-color)",
         tertiary: "var(--bg-tertiary-color)",
         "tertiary-light": "var(--bg-tertiary-light-color)",
+        "card-background": "var(--bg-card-background-color)",
       },
       borderColor: {
         normal: "var(--border-normal)",
