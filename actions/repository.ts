@@ -457,7 +457,7 @@ export const getPublishRepositoriesAction = async (
     throw new Error("Domain is not found");
   }
   const { types } = await getCustomPostByDomain(domain);
-  const response = await getPublishRepoList(offset, size, types); // TODO: it should not be array
+  const response = await getPublishRepoList(domain, offset, size, types); // TODO: it should not be array
   return response;
 };
 
