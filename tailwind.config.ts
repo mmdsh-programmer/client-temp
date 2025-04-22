@@ -29,6 +29,7 @@ module.exports = withMT({
         purple: {
           normal: "var(--primary-normal)",
           light: "var(--primary-light)",
+          500: "var(--primary-normal)",
         },
         icon: {
           active: "var(--icon-active)",

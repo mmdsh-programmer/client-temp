@@ -8,8 +8,10 @@ import {
 
 import { IRepo } from "@interface/repo.interface";
 import ImageComponent from "@components/atoms/image";
-// import PublishRepoSubscribe from "../publishRepoSubscribe";
 import React from "react";
+
+// import PublishRepoSubscribe from "../publishRepoSubscribe";
+
 
 const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
   const getImage = async () => {
@@ -26,7 +28,7 @@ const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
     }
     return (
       <ImageComponent
-        className="h-64 w-64 rounded-md border-[3px] border-gray-200 mx-auto shadow-md"
+        className="h-64 w-64 rounded-md border-[3px] border-gray-200 mx-auto shadow-md bg-tertiary"
         src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${repository.imageFileHash}`}
         alt={repository.name}
       />
