@@ -32,7 +32,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
 
   return (
     <div
-      className="dialog-content flex flex-col min-h-[100px] max-h-64 overflow-y-auto px-2"
+      className="dialog-content bg-red-500 flex flex-col min-h-[100px] max-h-64 overflow-y-auto px-2"
       onScroll={onScroll}
       ref={listInnerRef}
     >
@@ -43,7 +43,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
       </RenderIf>
       {isLoading ? (
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5" color="purple" />
         </div>
       ) : (
         <ul className="flex flex-col gap-2" role="menu">
@@ -70,7 +70,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
           })}
           {isFetchingNextPage && (
             <div className="w-full flex justify-center pt-4">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5" color="purple" />
             </div>
           )}
         </ul>

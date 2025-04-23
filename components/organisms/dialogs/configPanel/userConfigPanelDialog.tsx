@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { Spinner, Switch, Typography } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue } from "recoil";
+
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUserConfigPanel from "@hooks/configPanel/useGetUserConfigPanel";
 import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
 import { userIdAtom } from "@atom/app";
-import { repoAtom } from "@atom/repository";
-import { Spinner, Switch, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 
 const UserConfigPanelDialog = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -80,7 +81,7 @@ const UserConfigPanelDialog = () => {
     >
       {isLoading ? (
         <div className="flex w-full justify-center">
-          <Spinner className="" color="deep-purple" />
+          <Spinner className="" color="purple" />
         </div>
       ) : (
         <div className="flex h-[calc(100vh-210px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-300px)]">

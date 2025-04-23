@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-import PreviewFile from "../editor/previewFile";
-import { Typography } from "@material-tailwind/react";
 import { DownloadIcon } from "@components/atoms/icons";
+import PreviewFile from "../editor/previewFile";
+import React from "react";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   fileInfo: {
@@ -28,7 +28,7 @@ const PublishFilePreview = ({ fileInfo }: IProps) => {
         isPublic
       />
       <div className="flex gap-2 mt-4 items-center justify-center">
-        <Typography className="title_t2 !text-primary">دانلود فایل</Typography>
+        <Typography className="title_t2 !text-primary_normal">دانلود فایل</Typography>
         <a
           href={source}
           download

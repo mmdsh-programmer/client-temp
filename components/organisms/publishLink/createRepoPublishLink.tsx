@@ -1,12 +1,13 @@
-import React, { useState } from "react";
 import {
   Checkbox,
   DialogBody,
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
+import React, { useState } from "react";
 import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { DatePicker } from "zaman";
 import LoadingButton from "@components/molecules/loadingButton";
 import { onDatePickerChangePayload } from "zaman/dist/types";
@@ -76,11 +77,11 @@ const CreateRepoPublishLink = () => {
             <Checkbox
               crossOrigin="anonymous"
               label={
-                <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                   افزودن تاریخ انقضای لینک
                 </Typography>
               }
-              color="deep-purple"
+              color="purple"
               checked={hasExpireTime}
               onChange={() => {
                 setHasExpireTime(!hasExpireTime);
@@ -111,7 +112,7 @@ const CreateRepoPublishLink = () => {
         className="dialog-footer p-5 xs:p-0 xs:pt-6 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <LoadingButton
-          className="repo-create-publish-link__create-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-create-publish-link__create-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={handleSubmit(onSubmit)}
           loading={createPublishLink.isPending}
         >

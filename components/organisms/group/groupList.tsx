@@ -17,7 +17,7 @@ const GroupList = () => {
     <div className="repo-group-list flex flex-col gap-2 !h-[470px] xs:!h-[350px] overflow-auto">
       {isFetching ? (
         <div className="w-full flex justify-center">
-          <Spinner className="" color="deep-purple" />
+          <Spinner className="" color="purple" />
         </div>
       ) : (
         getGroups?.pages.map((page) => {

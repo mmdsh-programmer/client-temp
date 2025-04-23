@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { usePathname, useSearchParams } from "next/navigation";
+
 import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
 import LoadingButton from "@components/molecules/loadingButton";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
@@ -78,7 +79,7 @@ const EditorTags = () => {
       />
       {adminOrOwnerRole() ? (
         <LoadingButton
-          className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="!w-full bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={handleSubmit}
           loading={editDocument.isPending}
         >

@@ -1,20 +1,21 @@
-import React, { useState } from "react";
-import LoadingButton from "@components/molecules/loadingButton";
-import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
-import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
-import useAddAccessToResource from "@hooks/accessManagement/useAddAccessToResource";
-import { toast } from "react-toastify";
-import InputAtom from "@components/atoms/input";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-import useGetRoles from "@hooks/user/useGetRoles";
-import { ERoles } from "@interface/enums";
-import { translateRoles } from "@utils/index";
+
 import DocumentAccessList from "@components/organisms/document/documentAccessList";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { ERoles } from "@interface/enums";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import InputAtom from "@components/atoms/input";
+import LoadingButton from "@components/molecules/loadingButton";
 import { documentDirectAccessSchema } from "./validation.yup";
+import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import { translateRoles } from "@utils/index";
+import useAddAccessToResource from "@hooks/accessManagement/useAddAccessToResource";
+import { useForm } from "react-hook-form";
+import useGetRoles from "@hooks/user/useGetRoles";
+import { useRecoilValue } from "recoil";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   username: string;
@@ -91,7 +92,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 register={{ ...register("username") }}
               />
               {isFetchingRoles ? (
-                <Spinner className="h-3 w-3" color="deep-purple" />
+                <Spinner className="h-3 w-3" color="purple" />
               ) : (
                 <SelectAtom
                   className="direct-access-form__role w-auto"
@@ -111,7 +112,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 onClick={handleSubmit(onSubmit)}
                 className="direct-access-form__add !h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
-                <Typography className="text__label__button !text-primary font-medium">
+                <Typography className="text__label__button !text-primary_normal font-medium">
                   افزودن
                 </Typography>
               </LoadingButton>

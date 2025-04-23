@@ -1,25 +1,26 @@
 /* eslint-disable no-nested-ternary */
 
-import React, { useState } from "react";
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import {
   ICategoryMetadata,
   ICategoryView,
 } from "@interface/category.interface";
+import React, { useState } from "react";
+import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+
 import AdvancedFilter from "@components/molecules/advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
+import { DeleteIcon } from "@components/atoms/icons";
 import DocumentTableRow from "@components/molecules/documentTableRow";
 import EmptyList from "@components/molecules/emptyList";
 import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import SearchFilter from "@components/molecules/searchFilter";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
 import TableHead from "@components/molecules/tableHead";
 import { usePathname } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { DeleteIcon } from "@components/atoms/icons";
 
 interface ITableHead {
   key: string;
@@ -117,7 +118,7 @@ const TableView = ({
                     <td colSpan={7} className="!text-center py-4">
                       <div className="flex justify-center items-center">
                         <LoadMore
-                          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
+                          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary_normal !font-normal"
                           isFetchingNextPage={isFetchingNextPage}
                           fetchNextPage={fetchNextPage}
                         />
@@ -140,7 +141,7 @@ const TableView = ({
 
   return (
     <div
-      className={`category-children-table flex flex-col bg-primary ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+      className={`category-children-table flex flex-col bg-white ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
     >
       <div className="flex items-center py-4 px-5 justify-between">
         <CategoryBreadCrumb />
@@ -163,7 +164,7 @@ const TableView = ({
       ) : null}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : (
         renderContent()

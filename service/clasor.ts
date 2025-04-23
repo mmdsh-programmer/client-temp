@@ -3379,6 +3379,7 @@ export const getDislike = async (
 /// /////////////////////////////// PUBLISH SERVICES //////////////////////
 
 export const getPublishRepoList = async (
+  domainUrl: string,
   offset: number,
   size: number,
   repoTypes: string[]
@@ -3389,6 +3390,7 @@ export const getPublishRepoList = async (
     >("repositories/publishRepoList", {
       headers: {
         "Content-Type": "application/json",
+        domainUrl
       },
       params: {
         offset,

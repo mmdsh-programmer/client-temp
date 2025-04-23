@@ -1,6 +1,7 @@
-import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+
 import IconTextButton from "./iconTextButton";
+import React from "react";
 
 const meta: Meta<typeof IconTextButton> = {
   title: "components/Molecules/IconTextButton",
@@ -20,7 +21,7 @@ type Story = StoryObj<typeof IconTextButton>;
 export const Example: Story = {
   args: {
     classNameButton:
-      "primary-button flex justify-center items-center rounded-lg h-12 w-48 bg-purple-normal gap-x-4",
+      "primary-button flex justify-center items-center rounded-lg h-12 w-48 bg-secondary gap-x-4",
     classNameText: "text-white text-sm font-medium",
   },
   render: function Render(args) {

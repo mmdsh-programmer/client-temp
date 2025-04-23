@@ -1,12 +1,13 @@
-import React from "react";
-import { branchIdAtom } from "@atom/branch";
-import { useRecoilValue } from "recoil";
-import useGetPositions from "@hooks/position/useGetPositions";
-import TableHead from "@components/molecules/tableHead";
-import TableCell from "@components/molecules/tableCell";
-import BranchGroupMenu from "@components/molecules/branchGroupMenu";
-import { Spinner } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import BranchGroupMenu from "@components/molecules/branchGroupMenu";
+import React from "react";
+import { Spinner } from "@material-tailwind/react";
+import TableCell from "@components/molecules/tableCell";
+import TableHead from "@components/molecules/tableHead";
+import { branchIdAtom } from "@atom/branch";
+import useGetPositions from "@hooks/position/useGetPositions";
+import { useRecoilValue } from "recoil";
 
 const BranchGroupList = () => {
   const getBranchId = useRecoilValue(branchIdAtom);
@@ -40,7 +41,7 @@ const BranchGroupList = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8" color="purple" />
       </div>
     );
   }

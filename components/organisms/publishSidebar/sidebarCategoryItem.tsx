@@ -49,7 +49,7 @@ const SidebarCategoryItem = ({
     <>
       {isLoading ? (
         <div className="w-full flex justify-center py-2">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5" color="purple" />
         </div>
       ) : (
         categoryChildren?.pages.map((page) => {
@@ -105,7 +105,7 @@ const SidebarCategoryItem = ({
 
       {!!hasNextPage && !isFetchingNextPage && (
         <button
-          className="underline underline-offset-8 text-[10px] text-primary mb-3 mt-2 w-fit"
+          className="underline underline-offset-8 text-[10px] text-primary_normal mb-3 mt-2 w-fit"
           onClick={() => {
             fetchNextPage();
           }}
@@ -117,7 +117,7 @@ const SidebarCategoryItem = ({
 
       {isFetchingNextPage && (
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5" color="purple" />
         </div>
       )}
     </>

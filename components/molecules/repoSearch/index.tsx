@@ -1,10 +1,11 @@
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { ERepoGrouping } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import { SearchIcon } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
 
 const RepoSearch = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
@@ -18,7 +19,7 @@ const RepoSearch = () => {
   return (
     <div className="searchRepo hidden w-full xs:flex justify-between">
       <div
-        className="flex flex-grow overflow-hidden gap-2 w-full items-center h-9 pr-3 pl-0 border-[1px] border-normal bg-primary rounded-lg "
+        className="flex flex-grow overflow-hidden gap-2 w-full items-center h-9 pr-3 pl-0 border-[1px] border-normal bg-white rounded-lg "
         onKeyDown={(event) => {
           if (event.code === "Enter" || event.code === "NumpadEnter") {
             event.preventDefault();
@@ -40,7 +41,7 @@ const RepoSearch = () => {
           value={search}
         />
         <Button
-          className="search-repo__button rounded-none h-[34px] px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="search-repo__button rounded-none h-[34px] px-4 bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={() => {
             if (search.trim() !== "") {
               setSearchParam({ repoType, search });

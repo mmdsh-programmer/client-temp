@@ -1,8 +1,8 @@
 import LoadingButton from "@components/molecules/loadingButton";
-import useEditSocialProfile from "@hooks/auth/useEditSocialProfile";
-import { Typography } from "@material-tailwind/react";
 import React from "react";
+import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
+import useEditSocialProfile from "@hooks/auth/useEditSocialProfile";
 
 interface IProps {
   customText?: string;
@@ -27,7 +27,7 @@ const PublishForcePublicProfile = ({ customText }: IProps) => {
       </Typography>
 
       <LoadingButton
-        className="flex justify-center items-center !px-2 py-5 rounded-lg lg:mt-0 bg-purple-normal text-white font-iranYekan !max-h-[unset] !w-fit"
+        className="flex justify-center items-center !px-2 py-5 rounded-lg lg:mt-0 bg-secondary text-white font-iranYekan !max-h-[unset] !w-fit"
         onClick={handlePublicUserProfile}
         disabled={editSocialProfile.isPending}
         loading={editSocialProfile.isPending}

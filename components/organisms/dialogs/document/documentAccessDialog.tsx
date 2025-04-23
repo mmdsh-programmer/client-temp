@@ -1,8 +1,9 @@
-import React, { useState } from "react";
 import {
  DialogBody,
  Typography
 } from "@material-tailwind/react";
+import React, { useState } from "react";
+
 import DocumentBlockList from "@components/organisms/document/documentBlockList";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -77,7 +78,7 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
               />
             </div>
             <LoadingButton
-              className="add-button !h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="add-button !h-10 bg-secondary hover:bg-secondary active:bg-secondary"
               onClick={handleBlock}
               loading={blockDocument.isPending}
               disabled={!value}

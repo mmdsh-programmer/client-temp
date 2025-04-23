@@ -1,15 +1,16 @@
-import React from "react";
-import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import ImageComponent from "@components/atoms/image";
-import { UserIcon, XIcon } from "@components/atoms/icons";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import { UserIcon, XIcon } from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
+import ImageComponent from "@components/atoms/image";
+import React from "react";
 import { categoryAtom } from "@atom/category";
-import useGetCategoryBlocklist from "@hooks/category/useGetCategoryBlocklist";
+import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
 import useBlockCategory from "@hooks/category/useBlockCategory";
+import useGetCategoryBlocklist from "@hooks/category/useGetCategoryBlocklist";
+import { useRecoilValue } from "recoil";
 
 const CategoryBlockList = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -43,7 +44,7 @@ const CategoryBlockList = () => {
       </Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6" color="purple" />
         ) : (
           <div className="category-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
@@ -53,7 +54,7 @@ const CategoryBlockList = () => {
                     <ChipMolecule
                       key={blockItem.userInfo.userName}
                       value={blockItem.userInfo.name}
-                      className="block-item w-auto border-[1px] border-normal pl-2 text-primary"
+                      className="block-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
                       icon={
                         blockItem.userInfo.img ? (
                           <ImageComponent
@@ -67,7 +68,7 @@ const CategoryBlockList = () => {
                       }
                       actionIcon={
                         blockDocument.isPending ? (
-                          <Spinner className="h-4 w-4" color="deep-purple" />
+                          <Spinner className="h-4 w-4" color="purple" />
                         ) : (
                           <Button
                             className="delete-button bg-transparent p-0"

@@ -22,7 +22,7 @@ const AdminPanelReport = () => {
   const reportList = [
     {
       title: "مخزن‌ها",
-      icon: <FolderIcon className="w-[18px] h-[18px] stroke-purple-normal " />,
+      icon: <FolderIcon className="w-[18px] h-[18px] stroke-primary-normal " />,
       description: [
         {
           label: "تعداد کل مخزن‌ها",
@@ -69,7 +69,7 @@ const AdminPanelReport = () => {
     {
       title: "تعداد کاربران",
       icon: (
-        <UserGroupIcon className="w-[18px] h-[18px] stroke-purple-normal" />
+        <UserGroupIcon className="w-[18px] h-[18px] stroke-primary-normal" />
       ),
       description: [
         {

@@ -1,11 +1,12 @@
-import React from "react";
 import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 import RepoShare from "@components/organisms/users";
 import { repoActiveStepAtom } from "@atom/stepper";
-import { useSetRecoilState } from "recoil";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useSetRecoilState } from "recoil";
 
 interface IProps {
   handleClose: () => void;
@@ -29,7 +30,7 @@ const RepoAddUser = ({ handleClose }: IProps) => {
       >
         <CancelButton onClick={handleClose}>انصراف</CancelButton>
         <LoadingButton
-          className="repo-add-user__dialog-next-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-add-user__dialog-next-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={() => {
             if ((userInfo?.domainConfig.useDomainTag &&
               (userInfo?.domainRole === "owner" ||

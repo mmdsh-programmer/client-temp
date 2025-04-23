@@ -1,18 +1,19 @@
-import React, { useState } from "react";
 import {
  DialogBody,
  Typography
 } from "@material-tailwind/react";
-import { useRecoilValue } from "recoil";
+import React, { useState } from "react";
+
+import CategoryBlockList from "@components/organisms/category/categoryBlocklist";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import LoadingButton from "@components/molecules/loadingButton";
+import SearchableDropdown from "@components/molecules/searchableDropdown";
+import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import SearchableDropdown from "@components/molecules/searchableDropdown";
-import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import LoadingButton from "@components/molecules/loadingButton";
-import InfoDialog from "@components/templates/dialog/infoDialog";
-import { categoryAtom } from "@atom/category";
 import useBlockCategory from "@hooks/category/useBlockCategory";
-import CategoryBlockList from "@components/organisms/category/categoryBlocklist";
+import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -72,7 +73,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
               />
             </div>
             <LoadingButton
-              className="add-button !h-10 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+              className="add-button !h-10 bg-secondary hover:bg-secondary active:bg-secondary"
               onClick={handleBlock}
               loading={blockCatgory.isPending}
               disabled={!value}

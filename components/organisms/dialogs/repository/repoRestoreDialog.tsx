@@ -1,10 +1,10 @@
-import React from "react";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
-import useRestoreRepo from "@hooks/repository/useRestoreRepo";
-import { useRecoilValue } from "recoil";
 import { repoAtom } from "@atom/repository";
+import { toast } from "react-toastify";
+import { useRecoilValue } from "recoil";
+import useRestoreRepo from "@hooks/repository/useRestoreRepo";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -41,7 +41,7 @@ const RepoRestoreDialog = ({ setOpen }: IProps) => {
       <Typography
         title={getRepo?.name}
         placeholder="name"
-        className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
+        className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
       >
         {getRepo?.name}
       </Typography>

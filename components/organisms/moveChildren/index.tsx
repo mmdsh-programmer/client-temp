@@ -59,7 +59,7 @@ const MoveChildren = ({
     <div className={`move-${target}-list`}>
       {isLoading ? (
         <div className="px-2 py-1">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4" color="purple" />
         </div>
       ) : (
         moveChildren?.pages.map((page) => {
@@ -84,14 +84,14 @@ const MoveChildren = ({
                       }}
                     >
                       <FolderIcon className="w-4 h-4 stroke-icon-active" />
-                      <Typography className="caption_c1 text-primary">
+                      <Typography className="caption_c1 text-primary_normal">
                         {subItem.name}
                       </Typography>
                     </div>
                   );
                 })
               ) : (
-                <Typography className="caption_c1 text-primary p-2">
+                <Typography className="caption_c1 text-primary_normal p-2">
                   موردی برای نمایش وجود ندارد
                 </Typography>
               )}

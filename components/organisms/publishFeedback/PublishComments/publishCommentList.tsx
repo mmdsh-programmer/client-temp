@@ -1,9 +1,10 @@
-import React from "react";
-import { Spinner } from "@material-tailwind/react";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import LoadMore from "@components/molecules/loadMore";
 import PublishCommentItem from "./publishCommentItem";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
+import { Spinner } from "@material-tailwind/react";
 import useGetPublishCommentList from "@hooks/publish/useGetPublishCommentList";
 
 interface IProps {
@@ -25,7 +26,7 @@ const PublishCommentList = ({ postId }: IProps) => {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6" color="purple" />
         </div>
       </div>
     );

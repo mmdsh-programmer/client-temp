@@ -1,14 +1,15 @@
-import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedTagAtom } from "@atom/tag";
 import { toast } from "react-toastify";
+import useDeleteDomainTag from "@hooks/domainTags/useDeleteDomainTag";
 import useDeleteTag from "@hooks/tag/useDeleteTag";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
-import useDeleteDomainTag from "@hooks/domainTags/useDeleteDomainTag";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -75,11 +76,11 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="tag-delete-dialog"
     >
-      <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
         آیا از حذف"
         <span
           title={getTag?.name}
-          className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
         >
           {getTag?.name}
         </span>

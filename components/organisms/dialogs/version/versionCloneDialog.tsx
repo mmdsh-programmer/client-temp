@@ -1,7 +1,9 @@
-import React from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
+import { usePathname, useSearchParams } from "next/navigation";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
@@ -9,10 +11,9 @@ import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { useRecoilValue } from "recoil";
+import useRepoId from "@hooks/custom/useRepoId";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { usePathname, useSearchParams } from "next/navigation";
-import useRepoId from "@hooks/custom/useRepoId";
 
 interface IForm {
   name: string;
@@ -82,7 +83,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       className="version-clone-dialog"
     >
       {isLoading ? (
-        <Spinner className="h-4 w-4" color="deep-purple" />
+        <Spinner className="h-4 w-4" color="purple" />
       ) : (
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">

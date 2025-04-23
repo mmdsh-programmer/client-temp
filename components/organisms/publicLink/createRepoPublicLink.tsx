@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
 import { Checkbox, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
+import { IRepo } from "@interface/repo.interface";
 import { onDatePickerChangePayload } from "zaman/dist/types";
 import { publicRoleAtom } from "@atom/public";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { IRepo } from "@interface/repo.interface";
 
 interface IData {
   expireTime?: number;
@@ -97,11 +98,11 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
           <Checkbox
             crossOrigin="anonymous"
             label={
-              <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 افزودن رمز عبور
               </Typography>
             }
-            color="deep-purple"
+            color="purple"
             checked={hasPassword}
             onChange={() => {
               setHasPassword(!hasPassword);
@@ -129,11 +130,11 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
           <Checkbox
             crossOrigin="anonymous"
             label={
-              <Typography className="text-primary font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-primary_normal_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
                 افزودن تاریخ انقضای لینک
               </Typography>
             }
-            color="deep-purple"
+            color="purple"
             checked={hasExpireTime}
             onChange={() => {
               setHasExpireTime(!hasExpireTime);

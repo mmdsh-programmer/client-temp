@@ -1,14 +1,15 @@
+import { Checkbox, Typography } from "@material-tailwind/react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
+import CategoryMenu from "../categoryMenu/categoryMenu";
+import { FaDateFromTimestamp } from "@utils/index";
+import { FolderIcon } from "@components/atoms/icons";
+import { ICategoryMetadata } from "@interface/category.interface";
+import MobileCard from "../mobileCard";
 import React from "react";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
-import { ICategoryMetadata } from "@interface/category.interface";
 import { toast } from "react-toastify";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import MobileCard from "../mobileCard";
-import { Checkbox, Typography } from "@material-tailwind/react";
-import { FaDateFromTimestamp } from "@utils/index";
-import CategoryMenu from "../categoryMenu/categoryMenu";
-import { FolderIcon } from "@components/atoms/icons";
 
 interface IProps {
   category: ICategoryMetadata;
@@ -45,7 +46,7 @@ const CategoryMobileCard = ({ category }: IProps) => {
       name={
         <div className="flex items-center gap-2 w-full">
           <Checkbox
-            color="deep-purple"
+            color="purple"
             containerProps={{
               className: "p-[2px]",
             }}

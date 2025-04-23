@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ArchiveIcon,
   BookmarkRepoIcon,
@@ -9,7 +8,9 @@ import {
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { ERepoGrouping } from "@interface/enums";
+import React from "react";
 import { useRouter } from "next/navigation";
 
 const SidebarRepoList = () => {
@@ -72,9 +73,9 @@ const SidebarRepoList = () => {
             <Button
               placeholder="sidebar-button"
               className={` bg-transparent justify-start w-full 
-                     text-secondary gap-1 px-3 h-[44px]
-                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+                     text-link gap-1 px-3 h-[44px]
+                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
+                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
               onClick={() => {
                 router.push("/admin/dashboard");
                 item.onClick();

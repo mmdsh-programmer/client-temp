@@ -1,5 +1,5 @@
-import React from "react";
 import { FolderEmptyIcon } from "@components/atoms/icons";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 
 export enum EEmptyList {
@@ -50,13 +50,13 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر مخزنی ندارید.
             </Typography>
             <Typography
               placeholder="empty-message"
-              className="text-secondary caption_c1"
+              className="text-gray-500 caption_c1"
             >
               برای ایجاد مخزن جدید می توانید روی دکمه ایجاد مخزن کلیک کنید و
               اطلاعات مخزن خود را وارد کنید.
@@ -67,7 +67,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر مخزن نشان شده‌ای ندارید.
           </Typography>
@@ -76,7 +76,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر مخزن بایگانی شده‌ای ندارید.
           </Typography>
@@ -85,7 +85,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر مخزن منتشر شده ای ندارید.
           </Typography>
@@ -94,7 +94,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر مخزن اشتراکی ندارید.
           </Typography>
@@ -104,13 +104,13 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر دسته‌بندی یا سندی ندارید.
             </Typography>
             <Typography
               placeholder="empty-message"
-              className="text-secondary caption_c1"
+              className="text-gray-500 caption_c1"
             >
               برای ایجاد دسته‌بندی یا سند جدید می توانید روی دکمه ایجاد کلیک
               کنید و اطلاعات دسته‌بندی یا سند خود را وارد کنید.
@@ -122,7 +122,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر دسته‌بندی ندارید.
             </Typography>
@@ -132,7 +132,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر درخواست فعالی ندارید.
           </Typography>
@@ -141,7 +141,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             نتیجه‌ای یافت نشد.
           </Typography>
@@ -150,7 +150,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر کلیدی ندارید
           </Typography>
@@ -159,7 +159,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر گروهی ندارید
           </Typography>
@@ -168,7 +168,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر نمونه سندی ندارید
           </Typography>
@@ -177,7 +177,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             در حال حاضر کاربر مسدود شده‌ای روی این سند وجود ندارد
           </Typography>
@@ -186,7 +186,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             در حال حاضر تگی روی این سند وجود ندارد
           </Typography>
@@ -195,7 +195,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             در حال حاضر لیست سفیدی وجود ندارد
           </Typography>
@@ -204,7 +204,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             در حال حاضر لیست سیاهی وجود ندارد
           </Typography>
@@ -213,7 +213,7 @@ const EmptyList = ({ type }: IProps) => {
         return (
           <Typography
             placeholder="empty-message"
-            className="title_t3 text-primary"
+            className="title_t3 text-primary_normal"
           >
             شما در حال حاضر درخواست دعوت به مخزنی ندارید.
           </Typography>
@@ -223,7 +223,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر لیست بازخوردی ندارید.
             </Typography>
@@ -234,7 +234,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر نسخه‌ای ندارید.
             </Typography>
@@ -245,7 +245,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر لیست درخواستی ندارید.
             </Typography>
@@ -256,7 +256,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر لیست درخواستی ندارید.
             </Typography>
@@ -267,7 +267,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر لیست نظراتی ندارید.
             </Typography>
@@ -278,7 +278,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               برای این سند سوالی وجود ندارد
             </Typography>
@@ -289,7 +289,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               برای این سوال، پاسخی وجود ندارد
             </Typography>
@@ -300,7 +300,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               شما در حال حاضر لیست مجازی ندارید.
             </Typography>
@@ -311,7 +311,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               خبرنامه ای برای نمایش وجود ندارد.
             </Typography>
@@ -322,18 +322,18 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               <div className="flex flex-col items-center justify-center">
                 <Typography
                   placeholder="empty-message"
-                  className="title_t3 text-primary"
+                  className="title_t3 text-primary_normal"
                 >
                   شما در حال حاضر شعبه‌ای را انتخاب نکرده‌اید.
                 </Typography>
                 <Typography
                   placeholder="empty-message"
-                  className="text-secondary caption_c1"
+                  className="text-gray-500 caption_c1"
                 >
                   برای نمایش اطلاعات شعبه، شعبه موردنظرتان را انتخاب کنید.
                 </Typography>
@@ -346,7 +346,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               گروهی برای نمایش وجود ندارد.
             </Typography>
@@ -357,7 +357,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               خبرنامه‌ای برای نمایش وجود ندارد
             </Typography>
@@ -368,7 +368,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               در شعبه موردنظر فردی دارای سمت وجود ندارد.
             </Typography>
@@ -379,7 +379,7 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography
               placeholder="empty-message"
-              className="title_t3 text-primary"
+              className="title_t3 text-primary_normal"
             >
               در حال حاضر هیچ کاربری به دامنه دسترسی ندارد
             </Typography>

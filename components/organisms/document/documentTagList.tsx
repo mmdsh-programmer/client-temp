@@ -1,12 +1,13 @@
-import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { usePathname } from "next/navigation";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import ChipMolecule from "@components/molecules/chip";
+import React from "react";
 import { XIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
+import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
@@ -64,7 +65,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="tag-item bg-gray-50 h-6 px-2 text-primary max-w-[150px] "
+                  className="tag-item bg-gray-50 h-6 px-2 text-primary_normal max-w-[150px] "
                   actionIcon={
                     adminOrOwnerRole() ? (
                       <Button

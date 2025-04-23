@@ -1,15 +1,16 @@
-import React from "react";
 import {
   Dialog,
-  DialogFooter,
   DialogBody,
+  DialogFooter,
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
-import CloseButton from "@components/atoms/button/closeButton";
-import LoadingButton from "@components/molecules/loadingButton";
+
 import CancelButton from "@components/atoms/button/cancelButton";
+import CloseButton from "@components/atoms/button/closeButton";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 
 interface IProps {
   onClose: () => void;
@@ -61,7 +62,7 @@ const FreeDraftDialog = ({
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <div className="body_b3 flex text-primary">
+        <div className="body_b3 flex text-primary_normal">
           مهلت استفاده شما از ویرایشگر به پایان رسیده.
           <br />
           آیا ادامه میدهید؟
@@ -84,7 +85,7 @@ const FreeDraftDialog = ({
         className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <LoadingButton
-          className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal !text-white flex-grow"
+          className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary !text-white flex-grow"
           onClick={onResume}
           disabled={onCloseLoading || onResumeLoading}
         >

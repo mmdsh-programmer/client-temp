@@ -1,9 +1,10 @@
-import React, { useState } from "react";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { CopyIcon, SettingIcon } from "@components/atoms/icons";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
+import React, { useState } from "react";
 import { openShareAccessAtom, publicRoleAtom } from "@atom/public";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { IPublicLink } from "@interface/repo.interface";
 import { IRoles } from "@interface/users.interface";
 import LinkWrapperMenu from "./linkWrapperMenu";
@@ -68,7 +69,7 @@ const LinkWrapper = ({ role }: IProps) => {
           >
             <Typography
               className={`truncate   ${
-                readLink() ? " text-primary" : "text-placeholder w-full"
+                readLink() ? " text-primary_normal" : "text-placeholder w-full"
               } text-sm font-300 cursor-pointer `}
               dir={readLink() ? "ltr" : "rtl"}
             >

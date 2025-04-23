@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-import { openPublishPageSearchContent } from "@atom/publish";
-import { SearchIcon } from "@components/atoms/icons";
-import PublishSearchContent from "@components/organisms/dialogs/publish";
 import { IconButton } from "@material-tailwind/react";
+import PublishSearchContent from "@components/organisms/dialogs/publish";
+import React from "react";
+import { SearchIcon } from "@components/atoms/icons";
+import { openPublishPageSearchContent } from "@atom/publish";
 import { useRecoilState } from "recoil";
 
 const PublishSearchButton = () => {
@@ -18,8 +18,8 @@ const PublishSearchButton = () => {
 
   return (
     <>
-      <IconButton variant="text" onClick={handleOpenSearch}>
-        <SearchIcon className="stroke-blue-gray-700 w-5 h-5 xs:w-7 xs:h-7" />
+      <IconButton className="bg-tertiary" variant="text" onClick={handleOpenSearch}>
+        <SearchIcon className="stroke-white w-5 h-5 xs:w-7 xs:h-7" />
       </IconButton>
 
       {getOpenSearch ? <PublishSearchContent /> : null}

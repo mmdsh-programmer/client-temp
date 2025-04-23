@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Menu,
   MenuHandler,
@@ -8,6 +7,8 @@ import {
   MenuList,
   Typography,
 } from "@material-tailwind/react";
+import React, { useState } from "react";
+
 import { ChevronLeftIcon } from "@components/atoms/icons";
 
 interface IProps {
@@ -48,7 +49,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon }: IProps) => {
         </MenuItem>
       </MenuHandler>
       <MenuList
-        className="!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary overflow-hidden p-[2px]"
+        className="!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary_normal overflow-hidden p-[2px]"
         placeholder="menu-list"
       >
         {subMenuList.map((menuItem, index) => {

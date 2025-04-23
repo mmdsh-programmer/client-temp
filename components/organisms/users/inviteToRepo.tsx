@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import { Spinner, Typography } from "@material-tailwind/react";
+
 import { ERoles } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -66,7 +67,7 @@ const InviteToRepo = () => {
   };
   return isFetchingRoles ? (
     <div className="flex p-6 justify-center items-center">
-      <Spinner color="deep-purple" />
+      <Spinner color="purple" />
     </div>
   ) : (
     <form className="repo-invite-form pb-6" onSubmit={handleSubmit(onSubmit)}>
@@ -97,7 +98,7 @@ const InviteToRepo = () => {
               onClick={handleSubmit(onSubmit)}
               className="repo-invite-form__button !h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
             >
-              <Typography className="text__label__button !text-primary font-medium">
+              <Typography className="text__label__button !text-primary_normal font-medium">
                 دعوت
               </Typography>
             </LoadingButton>

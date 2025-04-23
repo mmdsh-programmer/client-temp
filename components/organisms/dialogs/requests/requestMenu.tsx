@@ -1,9 +1,10 @@
+import { Button, Spinner, Typography } from "@material-tailwind/react";
+
+import { IAccessRequest } from "@interface/accessRequest.interface";
 import React from "react";
+import { toast } from "react-toastify";
 import useAcceptJoinToRepoRequest from "@hooks/requests/useAcceptJoinToRepoRequest";
 import useRejectJoinToRepoRequest from "@hooks/requests/useRejectJoinToRepoRequest";
-import { IAccessRequest } from "@interface/accessRequest.interface";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
 
 interface IProps {
   request: IAccessRequest;
@@ -25,7 +26,7 @@ const RequestMenu = ({ request }: IProps) => {
     rejectRequest.mutate({
       requestId: request.id,
       callBack: () => {
-        toast.error(`درخواست پیوستن به مخزن ${request.repoName} رد شد`);
+        toast.success(`درخواست پیوستن به مخزن ${request.repoName} رد شد`);
       },
     });
   };
@@ -33,19 +34,19 @@ const RequestMenu = ({ request }: IProps) => {
   return (
     <div className="request-menu flex gap-3">
       {acceptRequest.isPending || rejectRequest.isPending ? (
-        <Spinner className="h-5 w-5" color="deep-purple" />
+        <Spinner className="h-5 w-5" color="purple" />
       ) : (
         <>
           <Button
             className="request-menu__reject-button w-16 xs:w-20 h-8 hover:bg-gray-50 bg-gray-50 "
             onClick={handleRejectRequest}
           >
-            <Typography className="text__label__button text-primary">
+            <Typography className="text__label__button text-primary_normal">
               ردکردن
             </Typography>
           </Button>
           <Button
-            className="request-menu__accept-button w-16 xs:w-20 h-8 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="request-menu__accept-button w-16 xs:w-20 h-8 bg-secondary hover:bg-secondary active:bg-secondary"
             onClick={handleAcceptRequest}
           >
             <Typography className="text__label__button text-white">

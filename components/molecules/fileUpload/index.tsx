@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
@@ -14,12 +15,12 @@ const FileUpload = ({ progress, onUpload }: IProps) => {
     >
       <div className="flex w-full">
         <div className="relative !w-full !h-12 flex justify-center items-center bg-purple-light rounded-lg hover:bg-purple-light active:bg-purple-light">
-          <Typography className="text__label__button text-purple-normal">
+          <Typography className="text__label__button text-primary">
             بارگذاری فایل ضمیمه
           </Typography>
           <div
             className={`absolute !h-12 inset-0 rounded-lg px-6
-               ${progress > 0 && progress < 100 ? "bg-purple-normal opacity-50" : "bg-transparent opacity-100"}
+               ${progress > 0 && progress < 100 ? "bg-secondary opacity-50" : "bg-transparent opacity-100"}
            `}
             style={{
               width: `${progress}%`,

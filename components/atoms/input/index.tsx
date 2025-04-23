@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
  Input,
  InputProps
@@ -22,7 +23,7 @@ const InputAtom = ({
       className={`${className || ""}
         flex items-center gap-2 pr-3 pl-2 placeholder:!opacity-100
         !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
-        font-normal text-primary text-[13px] leading-[18.2px] -tracking-[0.13px]
+        font-normal text-primary_normal text-[13px] leading-[18.2px] -tracking-[0.13px]
         placeholder:!text-placeholder placeholder:text-[13px] text-right
          border-[1px] border-normal focus:border-normal !outline-0 focus:outline-0
         `}

@@ -45,7 +45,7 @@ const RepoUsers = () => {
       <div className="h-2 border-b-2 border-gray-300" />
       {isFetchingInviteRequests || isFetchingUsers ? (
         <div className="h-full w-full flex justify-center items-center">
-          <Spinner color="deep-purple" className="" />
+          <Spinner color="purple" className="" />
         </div>
       ) : (
         <div className="repo-users__list">
@@ -74,7 +74,7 @@ const RepoUsers = () => {
                   <Typography> {user.userInfo.userName}</Typography>
                   <select
                     id="user-create-role"
-                    className="repo-users__select-role text-[14px] font-iranYekan outline-none bg-transparent text-primary"
+                    className="repo-users__select-role text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"
                     {...register("roleName")}
                   >
                     {getRoles?.map((item: IRoles) => {
@@ -82,7 +82,7 @@ const RepoUsers = () => {
                         <option
                           key={item.name}
                           value={item.name}
-                          className="text-primary"
+                          className="text-primary_normal"
                         >
                           {translateRoles(item.name)}
                         </option>
@@ -118,7 +118,7 @@ const RepoUsers = () => {
                   <Typography> {user.user.preferred_username}</Typography>
                   <select
                     id="user-create-role"
-                    className="text-[14px] font-iranYekan outline-none bg-transparent text-primary"
+                    className="text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"
                     {...register("roleName", {value: user.role,})}
                   >
                     {getRoles?.map((item: IRoles) => {
@@ -126,7 +126,7 @@ const RepoUsers = () => {
                         <option
                           key={item.name}
                           value={item.name}
-                          className="text-primary"
+                          className="text-primary_normal"
                         >
                           {translateRoles(item.name)}
                         </option>

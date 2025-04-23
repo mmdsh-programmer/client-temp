@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import {
   Accordion,
   AccordionBody,
@@ -14,13 +13,15 @@ import {
   DashboardIcon,
   UserGroupIcon,
 } from "@components/atoms/icons";
-import SidebarDocuments from "@components/molecules/sidebarDocuments";
-import SidebarRepoList from "@components/molecules/sidebarRepoList";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { ERepoGrouping } from "@interface/enums";
+import SidebarDocuments from "@components/molecules/sidebarDocuments";
+import SidebarRepoList from "@components/molecules/sidebarRepoList";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRouter } from "next/navigation";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -44,7 +45,7 @@ const Sidebar = ({ children }: IProps) => {
 
   return (
     <aside className="sidebar hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
-      <div className="p-4 h-[80px] flex items-center justify-center ">
+      <div className="py-4 px-2 h-[80px] flex items-center justify-center ">
         {children}
       </div>
       <hr className="" />
@@ -56,10 +57,10 @@ const Sidebar = ({ children }: IProps) => {
         <Button
           placeholder="sidebar-button"
           className={` bg-transparent justify-start w-full 
-                     text-secondary gap-1 px-3 h-[44px]
+                     text-link gap-1 px-3 h-[44px]
                      sidebar-button-${getRepoGroup}
-                   ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary" : "!stroke-icon-hover"}
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+                   ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
+                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             router.push("/admin/dashboard");
             setRepoGroup(ERepoGrouping.DASHBOARD);
@@ -130,8 +131,8 @@ const Sidebar = ({ children }: IProps) => {
             <Button
               placeholder="sidebar-button"
               className={` bg-transparent justify-start w-full 
-                     text-secondary gap-1 px-3 h-[44px]
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+                     text-link gap-1 px-3 h-[44px]
+                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
               onClick={() => {
                 router.push("/admin/domainManagement");
                 setSearchParam(null);
@@ -154,8 +155,8 @@ const Sidebar = ({ children }: IProps) => {
         <Button
           placeholder="sidebar-button"
           className={` bg-transparent justify-start w-full 
-                     text-secondary gap-1 px-3 h-[44px]
-                  hover:bg-gray-100 hover:text-primary hover:!stroke-icon-active hover:!fill-icon-active`}
+                     text-link gap-1 px-3 h-[44px]
+                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
           onClick={() => {
             router.push("/admin/branchManagement");
             setSearchParam(null);

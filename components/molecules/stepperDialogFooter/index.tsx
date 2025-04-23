@@ -1,5 +1,6 @@
 import {
- DialogFooter, Typography 
+ DialogFooter,
+ Typography
 } from "@material-tailwind/react";
 
 import CancelButton from "@components/atoms/button/cancelButton";
@@ -30,7 +31,7 @@ const DialogStepperFooter = ({
         {hasPreviousStep ? " مرحله‌ قبلی" : "انصراف"}
       </CancelButton>
       <LoadingButton
-        className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+        className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
         onClick={handleNextStep}
         loading={loading}
       >

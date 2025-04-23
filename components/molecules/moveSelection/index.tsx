@@ -1,13 +1,14 @@
 import React, { useRef, useState } from "react";
+
 import { Button } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import MoveBreadCrumb from "../moveBreadCrumb";
 import MoveChildren from "@components/organisms/moveChildren";
 import { categoryMoveDestAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   target: "category" | "document";
@@ -43,7 +44,7 @@ const MoveSelection = ({ target }: IProps) => {
         onClick={toggleDropdown}
         className={`move-${target}__select w-full justify-between pr-3 pl-2 h-12 border-[1px] border-normal
     flex items-center leading-[18.2px] -tracking-[0.13px]
-     truncate text-[13px] text-primary font-iranYekan font-normal gap-x-2
+     truncate text-[13px] text-primary_normal font-iranYekan font-normal gap-x-2
     bg-transparent rounded-md focus:outline-none lowercase`}
       >
         {getCategoryMoveDest ? getCategoryMoveDest.name : " انتخاب کنید"}

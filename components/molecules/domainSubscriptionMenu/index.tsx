@@ -1,10 +1,11 @@
-import React from "react";
+import { Button, Typography } from "@material-tailwind/react";
+
 import { IDomainSubscription } from "@interface/domain.interface";
 import LoadingButton from "../loadingButton";
-import { Button, Typography } from "@material-tailwind/react";
-import useRejectSubscription from "@hooks/domainSubscription/useRejectSubscription";
-import useAcceptSubscription from "@hooks/domainSubscription/useAcceptSubscription";
+import React from "react";
 import { toast } from "react-toastify";
+import useAcceptSubscription from "@hooks/domainSubscription/useAcceptSubscription";
+import useRejectSubscription from "@hooks/domainSubscription/useRejectSubscription";
 
 interface IProps {
   request: IDomainSubscription;
@@ -73,7 +74,7 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
         </Typography>
       </LoadingButton>
       <LoadingButton
-        className="bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+        className="bg-secondary hover:bg-secondary active:bg-secondary"
         onClick={handleAccept}
         loading={acceptRequest.isPending}
       >

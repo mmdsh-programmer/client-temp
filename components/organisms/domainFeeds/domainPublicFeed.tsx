@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+
 import { AddIcon } from "@components/atoms/icons";
-import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import DomainPublicFeedList from "./domainPublicFeedList";
+import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import PublicFeedCreateDialog from "../dialogs/publicFeed/publicFeedCreateDialog";
 
 const DomainPublicFeed = () => {
@@ -15,7 +16,7 @@ const DomainPublicFeed = () => {
           text="ایجاد خبرنامه جدید"
           icon={<AddIcon className="h-5 w-5 stroke-white pr-1" />}
           classNameText="text-white text-[13px] leading-[19.5px] -tracking-[0.13px] font-medium !px-2  font-iranYekan"
-          classNameButton=" rounded-lg h-9 !px-[6px] bg-purple-normal "
+          classNameButton=" rounded-lg h-9 !px-[6px] bg-secondary "
           onClick={() => {
             return setOpenCreateFeedDialog(true);
           }}

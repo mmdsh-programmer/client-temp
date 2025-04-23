@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Button, Typography } from "@material-tailwind/react";
+import { DeleteIcon, ReloadIcon, TickIcon } from "@components/atoms/icons";
 import React, {
   Ref,
   useEffect,
@@ -6,8 +9,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Button, Typography } from "@material-tailwind/react";
-import { DeleteIcon, ReloadIcon, TickIcon } from "@components/atoms/icons";
+
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -184,7 +186,7 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
         )}
         <div className="uploaded-file__file-info flex flex-col flex-grow items-end max-w-[90%]">
           <Typography
-            className="uploaded-file__file-name title_t2 text-primary truncate max-w-full"
+            className="uploaded-file__file-name title_t2 text-primary_normal truncate max-w-full"
             dir="ltr"
           >
             {file.name}

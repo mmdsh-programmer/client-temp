@@ -1,11 +1,11 @@
-import React from "react";
+import { IVersion } from "@interface/version.interface";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
-import useCreateComment from "@hooks/core/useCreateComment";
-import { IVersion } from "@interface/version.interface";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import useCreateComment from "@hooks/core/useCreateComment";
+import { useForm } from "react-hook-form";
 
 interface IForm {
   text: string;
@@ -65,7 +65,7 @@ const CommentCreate = ({ version }: IProps) => {
               className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               isPrimary
             >
-              <Typography className="text__label__button !text-primary px-3 font-medium">
+              <Typography className="text__label__button !text-primary_normal px-3 font-medium">
                 ارسال
               </Typography>
             </LoadingButton>

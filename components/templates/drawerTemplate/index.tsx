@@ -46,7 +46,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
     >
       <ul
         className={`w-full
-               ml-4 font-iranYekan text-primary overflow-hidden p-[2px]`}
+               ml-4 font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
       >
         {menuList.map((menuItem) => {
           return menuItem?.subMenu ? (
@@ -57,7 +57,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
                   return toggleOpen(menuItem.text);
                 }}
               >
-                <Typography className="select_option__text text-primary font-normal ">
+                <Typography className="select_option__text text-primary_normal font-normal ">
                   {menuItem.text}
                 </Typography>
                 <ChevronLeftIcon
@@ -67,7 +67,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
                 />
               </Button>
               <Collapse open={openStates[menuItem.text]}>
-                <ul className="w-full ml-4 font-iranYekan text-primary overflow-hidden p-[2px]">
+                <ul className="w-full ml-4 font-iranYekan text-primary_normal overflow-hidden p-[2px]">
                   {menuItem.subMenu.map((subItem) => {
                     return (
                       <li

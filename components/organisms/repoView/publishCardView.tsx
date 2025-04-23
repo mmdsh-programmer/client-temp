@@ -20,7 +20,7 @@ const PublishCardView = ({
     if (isLoading) {
       return (
         <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       );
     }
@@ -52,7 +52,7 @@ const PublishCardView = ({
     return <EmptyList type={type} />;
   };
 
-  return <div className="pb-4 mt-4">{renderContent()}</div>;
+  return <div className="publish-card-view pb-4 mt-4">{renderContent()}</div>;
 };
 
 export default PublishCardView;

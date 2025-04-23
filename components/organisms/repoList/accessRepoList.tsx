@@ -1,11 +1,12 @@
-import React from "react";
-import CardView from "../repoView/cardView";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+
+import CardView from "../repoView/cardView";
+import { IRepoView } from "@interface/repo.interface";
+import React from "react";
+import { Spinner } from "@material-tailwind/react";
+import { repoSearchParamAtom } from "@atom/repository";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
 import { useRecoilValue } from "recoil";
-import { IRepoView } from "@interface/repo.interface";
-import { repoSearchParamAtom } from "@atom/repository";
-import { Spinner } from "@material-tailwind/react";
 
 const AccessRepoList = () => {
   const getSearchParam = useRecoilValue(repoSearchParamAtom);
@@ -41,7 +42,7 @@ const AccessRepoList = () => {
     <div className="accessRepo__list flex flex-col gap-6">
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : (
         renderList()

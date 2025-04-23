@@ -8,6 +8,7 @@ import {
 import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+
 import Breadcrumb from "@components/molecules/breadcumb";
 import FeedbackDialog from "../dialogs/feedback";
 import ProfileMenu from "@components/molecules/profileMenu";
@@ -42,7 +43,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="w-auto h-auto xs:h-20 px-0 xs:px-8 bg-white xs:bg-secondary flex flex-col xs:flex-row justify-between items-center">
+      <div className="w-auto h-auto xs:h-20 px-0 xs:px-8 bg-white xs:bg-primary flex flex-col xs:flex-row justify-between items-center">
         <div className="order-2 xs:order-1 px-4 py-3 xs:p-0 w-full flex items-center h-fit ">
           {currentPath?.includes("/panel-admin-clasor") ? (
             <div className="flex items-center gap-2">

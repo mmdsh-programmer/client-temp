@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import SelectAtom, { IOption } from "../select";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
+
 import { EDocumentTypes } from "@interface/enums";
-import SelectBox from "../selectBox";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "../loadingButton";
+import SelectBox from "../selectBox";
 import { Typography } from "@material-tailwind/react";
-import useGetTags from "@hooks/tag/useGetTags";
-import SelectAtom, { IOption } from "../select";
-import useGetUser from "@hooks/auth/useGetUser";
 import { repoAtom } from "@atom/repository";
+import useGetTags from "@hooks/tag/useGetTags";
+import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -139,7 +140,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
               <div className="flex flex-grow flex-col gap-2">
                 <Typography className="form_label">جستجو</Typography>
                 <InputAtom
-                  className="flex-grow rounded-md !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
+                  className="flex-grow rounded-md !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary_normal bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
                   placeholder="جستجو در عنوان"
                   defaultValue={searchTitle}
                   onChange={(e) => {
@@ -239,7 +240,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <LoadingButton
-                className="!h-10 !w-full col-span-1 sm:col-start-2 md:col-start-2 lg:col-start-3 xl:col-start-7 sm:!w-auto !px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+                className="!h-10 !w-full col-span-1 sm:col-start-2 md:col-start-2 lg:col-start-3 xl:col-start-7 sm:!w-auto !px-4 bg-secondary hover:bg-secondary active:bg-secondary"
                 onClick={handleFilter}
               >
                 <Typography className="text__label__button text-white">

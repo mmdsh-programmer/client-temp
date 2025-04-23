@@ -1,17 +1,18 @@
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import { UserIcon, XIcon } from "@components/atoms/icons";
+
+import ChipMolecule from "@components/molecules/chip";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { Button, Typography } from "@material-tailwind/react";
+import { IUserList } from "../document/documentAccessPublishingDialog";
+import ImageComponent from "next/image";
+import { branchIdAtom } from "@atom/branch";
+import { positionSchema } from "./validation.yup";
+import { toast } from "react-toastify";
+import useCreatePosition from "@hooks/position/useCreatePosition";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { branchIdAtom } from "@atom/branch";
-import useCreatePosition from "@hooks/position/useCreatePosition";
-import { IUserList } from "../document/documentAccessPublishingDialog";
-import { UserIcon, XIcon } from "@components/atoms/icons";
-import ImageComponent from "next/image";
-import ChipMolecule from "@components/molecules/chip";
-import { toast } from "react-toastify";
-import { positionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
@@ -134,7 +135,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
                 <ChipMolecule
                   key={item.username}
                   value={item.name || item.username}
-                  className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+                  className={`${item.name ? "bg-white !text-primary_normal" : "bg-gray-50 !text-hint"} 
                          w-auto pl-2 border-[1px] border-normal`}
                   icon={
                     item.picture ? (

@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
 import { AddIcon, ChevronLeftIcon, SearchIcon } from "@components/atoms/icons";
-import InputAtom from "@components/atoms/input";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useRef, useState } from "react";
+
+import InputAtom from "@components/atoms/input";
 
 interface IProps {
   options?: { label: string; value: string | number }[];
@@ -59,7 +60,7 @@ const SearchableDropdown = ({
                     return handleSelectOption(option);
                   }}
                 >
-                  <Typography className="select_option__text truncate text-right text-primary ">
+                  <Typography className="select_option__text truncate text-right text-primary_normal">
                     {option.label}
                   </Typography>
                 </li>
@@ -69,7 +70,7 @@ const SearchableDropdown = ({
         );
       }
       return (
-        <Typography className="select_option__text truncate text-right text-primary ">
+        <Typography className="select_option__text truncate text-right text-primary_normal">
           موردی یافت نشد.
         </Typography>
       );
@@ -86,7 +87,7 @@ const SearchableDropdown = ({
                   return handleSelectOption(option);
                 }}
               >
-                <Typography className="select_option__text truncate text-right text-primary ">
+                <Typography className="select_option__text truncate text-right text-primary_normal">
                   {option.label}
                 </Typography>
               </li>
@@ -96,7 +97,7 @@ const SearchableDropdown = ({
       );
     }
     return (
-      <Typography className="select_option__text truncate text-right text-primary ">
+      <Typography className="select_option__text truncate text-right text-primary_normal">
         موردی یافت نشد.
       </Typography>
     );

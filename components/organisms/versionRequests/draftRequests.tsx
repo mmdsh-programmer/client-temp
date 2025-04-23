@@ -1,21 +1,22 @@
-import React, { useEffect } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import React, { useEffect } from "react";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import useGetPendingDraft from "@hooks/release/useGetPendingDraft";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import RequestTableView from "../versionRequestsView/requestTableView";
-import TableCell from "@components/molecules/tableCell";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
-import { selectedVersionAtom } from "@atom/version";
-import useGetDocument from "@hooks/document/useGetDocument";
+import RequestTableView from "../versionRequestsView/requestTableView";
+import { Spinner } from "@material-tailwind/react";
+import TableCell from "@components/molecules/tableCell";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
+import useGetDocument from "@hooks/document/useGetDocument";
+import useGetPendingDraft from "@hooks/release/useGetPendingDraft";
 
 const DraftRequests = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -62,7 +63,7 @@ const DraftRequests = () => {
     if (isLoading) {
       return (
         <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       );
     }

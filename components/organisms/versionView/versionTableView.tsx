@@ -4,6 +4,7 @@ import { Spinner, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
 import { LastVersionIcon } from "@components/atoms/icons";
@@ -56,7 +57,7 @@ const VersionTableView = ({
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="w-full h-full flex justify-center items-center overflow-hidden">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : listLength ? (
         <div className="version-list-table w-full overflow-auto border-[0.5px] border-normal rounded-lg h-[calc(100vh-200px)]">
@@ -186,7 +187,7 @@ const VersionTableView = ({
                   <td colSpan={6} className="!text-center py-4">
                     <div className="flex justify-center items-center">
                       <LoadMore
-                        className="self-center !shadow-none underline text-[10px] text-primary !font-normal"
+                        className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
                         isFetchingNextPage={isFetchingNextPage}
                         fetchNextPage={fetchNextPage}
                       />

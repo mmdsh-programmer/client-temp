@@ -1,3 +1,4 @@
+import { IRoles } from "@interface/users.interface";
 import React from "react";
 import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
@@ -7,7 +8,6 @@ import useAddUser from "@hooks/user/useAddUser";
 import { useForm } from "react-hook-form";
 import useGetRoles from "@hooks/user/useGetRoles";
 import { useRecoilValue } from "recoil";
-import { IRoles } from "@interface/users.interface";
 
 interface IForm {
   username: string;
@@ -54,11 +54,11 @@ const RepoInvite = () => {
   };
 
   return isFetchingRoles ? (
-    <Spinner color="deep-purple" />
+    <Spinner color="purple" />
   ) : (
     <form className="repo-invite-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">
-        <label htmlFor="title" className="text-sm text-primary font-normal">
+        <label htmlFor="title" className="text-sm text-primary_normal font-normal">
           اشتراک گذاری با
         </label>
         <div className="border-2 p-2 border-gray-200 bg-gray-50 rounded-lg flex ">
@@ -68,12 +68,12 @@ const RepoInvite = () => {
             placeholder="شناسه پادی"
             {...register("username")}
             className="repo-invite-form__input flex-grow bg-transparent px-[15px] py-[9px] rounded-[4px] focus:px-[15px] focus:outline-none text-[13px] 
-               font-iranYekan font-normal text-primary placeholder:text-placeholder w-full
+               font-iranYekan font-normal text-primary_normal placeholder:text-placeholder w-full
                 outline-none"
           />
           <select
             id="user-create-role"
-            className="repo-invite-form__select text-[14px] font-iranYekan outline-none bg-transparent text-primary"
+            className="repo-invite-form__select text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"
             {...register("accessName")}
           >
             {getRoles?.map((item: IRoles) => {
@@ -81,7 +81,7 @@ const RepoInvite = () => {
                 <option
                   key={item.name}
                   value={item.name}
-                  className="text-primary"
+                  className="text-primary_normal"
                 >
                   {translateRoles(item.name)}
                 </option>
@@ -89,7 +89,7 @@ const RepoInvite = () => {
             })}
           </select>
           {isPending ? (
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5" color="purple" />
           ) : (
             <button
               disabled={isPending}

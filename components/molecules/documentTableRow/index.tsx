@@ -1,17 +1,18 @@
-import React from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+
 import { Checkbox } from "@material-tailwind/react";
+import DocumentIcon from "../documentIcon";
 import DocumentMenu from "../documentMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { IDocumentMetadata } from "@interface/document.interface";
+import React from "react";
 import TableCell from "../tableCell";
 import { bulkItemsAtom } from "@atom/bulk";
-import { toast } from "react-toastify";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
-import { usePathname } from "next/navigation";
+import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
-import DocumentIcon from "../documentIcon";
+import { usePathname } from "next/navigation";
 
 interface ITableCell {
   data: string | React.ReactNode;
@@ -89,7 +90,7 @@ const DocumentTableRow = ({ document }: IProps) => {
             : {
                 data: (
                   <Checkbox
-                    color="deep-purple"
+                    color="purple"
                     crossOrigin=""
                     onChange={handleCheckItem}
                     checked={getBulkItems.some((bulkItem) => {

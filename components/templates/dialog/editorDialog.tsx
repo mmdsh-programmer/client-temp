@@ -4,9 +4,10 @@ import {
   DialogFooter,
   DialogHeader,
 } from "@material-tailwind/react";
-import { IRemoteEditorRef } from "clasor-remote-editor";
+
 import EditorFooter from "@components/organisms/editor/editorFooter";
 import EditorHeader from "@components/organisms/editor/editorHeader";
+import { IRemoteEditorRef } from "clasor-remote-editor";
 import React from "react";
 
 export interface IProps {
@@ -43,7 +44,7 @@ const EditorDialog = ({
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header bg-white flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <EditorHeader dialogHeader={dialogHeader} setOpen={handleClose} />
       </DialogHeader>

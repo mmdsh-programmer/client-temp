@@ -21,7 +21,7 @@ const LandingHero = () => {
       <div className="container max-w-[1220px]">
         <div className="flex flex-col relative">
           <h1 className="landing-hero__title text-4xl leading-[60px] xs:text-[clamp(40px,3.329vw,48px)] text-center w-full font-bold mt-[18.5vh]">
-            <strong className="text-primary text-5xl xs:text-[clamp(56px,4.438vw,64px)] ml-2">
+            <strong className="text-primary_normal text-5xl xs:text-[clamp(56px,4.438vw,64px)] ml-2">
               کلاسور
             </strong>
             <span className="px-5 mx-1 inline-block">

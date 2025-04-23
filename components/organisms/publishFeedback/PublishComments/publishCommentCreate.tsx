@@ -1,14 +1,14 @@
-import React from "react";
 import LoadingButton from "@components/molecules/loadingButton";
-import useGetUser from "@hooks/auth/useGetUser";
-import { Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
 import PublishForceLogin from "../publishForceLogin";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { publishCreateCommentSchema } from "../validation.yup";
 import PublishForcePublicProfile from "../publishForcePublicProfile";
+import React from "react";
+import { Typography } from "@material-tailwind/react";
+import { publishCreateCommentSchema } from "../validation.yup";
+import { toast } from "react-toastify";
 import useCreatePublishComment from "@hooks/publish/useCreatePublishComment";
+import { useForm } from "react-hook-form";
+import useGetUser from "@hooks/auth/useGetUser";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   text: string;
@@ -82,7 +82,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
         )}
 
         <LoadingButton
-          className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-purple-normal text-white font-iranYekan !max-h-[unset]"
+          className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-secondary text-white font-iranYekan !max-h-[unset]"
           onClick={handleSubmit(onSubmit)}
           disabled={createComment.isPending}
           loading={createComment.isPending}

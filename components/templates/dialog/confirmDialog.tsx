@@ -70,7 +70,9 @@ const ConfirmDialog = ({
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <div className="dialog-body__content body_b3 flex text-primary">{children}</div>
+        <div className="dialog-body__content body_b3 flex text-primary_normal">
+          {children}
+        </div>
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
@@ -80,7 +82,7 @@ const ConfirmDialog = ({
           انصراف
         </CancelButton>
         <LoadingButton
-          className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={onSubmit}
           loading={isPending}
         >

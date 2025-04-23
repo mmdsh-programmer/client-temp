@@ -1,6 +1,6 @@
-import React from "react";
 import PublishCommentCreate from "./publishCommentCreate";
 import PublishCommentList from "./publishCommentList";
+import React from "react";
 
 interface IProps {
   postId: number;
@@ -17,7 +17,6 @@ const PublishComments = ({ postId, isQuestionAnswerComments }: IProps) => {
         />
       </div>
       <hr className="w-full h-[2px] bg-blue-gray-50" />
-
       <PublishCommentList postId={postId} />
     </>
   );

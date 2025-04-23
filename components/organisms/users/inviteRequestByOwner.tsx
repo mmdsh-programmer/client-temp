@@ -1,11 +1,12 @@
-import React from "react";
 import {
  Spinner,
  Typography
 } from "@material-tailwind/react";
+
 import { ERoles } from "@interface/enums";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import ImageComponent from "@components/atoms/image";
+import React from "react";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
@@ -39,7 +40,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
     if (user.role === ERoles.owner) {
       return (
         <div className="repo-invite-request-by-owner__role w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
-          <Typography className="select_option__text text-primary">
+          <Typography className="select_option__text text-primary_normal">
             {translateRoles(user.role)}
           </Typography>
         </div>
@@ -47,7 +48,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
     } if (deleteInviteRequest.isPending) {
       return (
         <div className="w-5">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4" color="purple" />
         </div>
       );
     } 
@@ -56,7 +57,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
           className="repo-invite-request-by-owner__delete-user w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
           onClick={handleChange}
         >
-          <Typography className="select_option__text text-primary">
+          <Typography className="select_option__text text-primary_normal">
             حذف کاربر
           </Typography>
         </div>

@@ -1,23 +1,25 @@
-import React from "react";
 import {
   RepoBlueIcon,
   RepoPurpleIcon,
   RepoRedIcon,
   RepoYellowIcon,
 } from "@components/atoms/icons";
-import useGetUser from "@hooks/auth/useGetUser";
+
 import ImageComponent from "@components/atoms/image";
+import React from "react";
 import { Spinner } from "@material-tailwind/react";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   imageHash?: string;
+  className?: string;
 }
 
-const RepoDefaultImage = ({ imageHash }: IProps) => {
+const RepoDefaultImage = ({ imageHash, className }: IProps) => {
   const { data: getUserInfo, isFetching } = useGetUser();
 
   if (isFetching) {
-    return <Spinner className="h-5 w-5" color="deep-purple" />;
+    return <Spinner className="h-5 w-5" color="purple" />;
   }
 
   if (!imageHash) {
@@ -37,7 +39,7 @@ const RepoDefaultImage = ({ imageHash }: IProps) => {
       default:
         return (
           <ImageComponent
-            className="repo-image object-cover max-h-full"
+            className={`repo-image object-cover max-h-full ${className}`}
             alt="repo-image"
             src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${imageHash}?&checkUserGroupAccess=true&Authorization=${getUserInfo?.access_token}&time=${Date.now()})`}
           />

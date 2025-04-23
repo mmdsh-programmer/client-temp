@@ -1,13 +1,14 @@
-import React from "react";
-import useGetUser from "@hooks/auth/useGetUser";
-import useGetBranchList from "@hooks/branch/useGetBranchList";
-import Error from "../error";
 import { Spinner, Typography } from "@material-tailwind/react";
-import RenderIf from "@components/atoms/renderIf";
-import LoadMore from "@components/molecules/loadMore";
+
 import BranchCollapse from "../../molecules/branchCollapse";
-import { useRecoilValue } from "recoil";
+import Error from "../error";
+import LoadMore from "@components/molecules/loadMore";
+import React from "react";
+import RenderIf from "@components/atoms/renderIf";
 import { branchIdAtom } from "@atom/branch";
+import useGetBranchList from "@hooks/branch/useGetBranchList";
+import useGetUser from "@hooks/auth/useGetUser";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   branchId: number | null;
@@ -45,7 +46,7 @@ const BranchList = ({ branchId }: IProps) => {
     <>
       {isLoading ? (
         <div className="w-full flex justify-center h-3 my-3">
-          <Spinner className="w-4 h-4" color="deep-purple" />
+          <Spinner className="w-4 h-4" color="purple" />
         </div>
       ) : (
         branchList?.pages.map((page) => {
@@ -72,7 +73,7 @@ const BranchList = ({ branchId }: IProps) => {
       )}
       <RenderIf isTrue={!!hasNextPage}>
         <LoadMore
-          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary !font-normal"
+          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary_normal !font-normal"
           isFetchingNextPage={isFetchingNextPage}
           fetchNextPage={fetchNextPage}
         />

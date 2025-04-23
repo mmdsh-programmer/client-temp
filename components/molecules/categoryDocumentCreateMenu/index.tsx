@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { categoryAtom, categoryShowAtom, createCatDocDrawerAtom } from "@atom/category";
 import {
   AddIcon,
   ArrowDownIcon,
@@ -8,12 +5,16 @@ import {
   DocumentAddIcon,
   TemplateAddIcon,
 } from "@components/atoms/icons";
-import MenuTemplate from "@components/templates/menuTemplate";
-import DrawerTemplate from "@components/templates/drawerTemplate";
+import { Button, Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { categoryAtom, categoryShowAtom, createCatDocDrawerAtom } from "@atom/category";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import CategoryCreateDialog from "@components/organisms/dialogs/category/categoryCreateDialog";
 import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
-import { Button, Typography } from "@material-tailwind/react";
+import DrawerTemplate from "@components/templates/drawerTemplate";
 import { ERoles } from "@interface/enums";
+import MenuTemplate from "@components/templates/menuTemplate";
 import { repoAtom } from "@atom/repository";
 
 interface IProps {
@@ -107,12 +108,12 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
                   </div>
                 </>
               }
-              className="rounded-lg h-9 w-9 md:w-auto !px-[6px] !bg-purple-normal "
+              className="rounded-lg h-9 w-9 md:w-auto !px-[6px] !bg-secondary "
             />
           </div>
           <div className="absolute z-[999] bottom-20 left-6 xs:hidden">
             <Button
-              className=" h-[54px] w-[54px] z-[99] p-0 bg-purple-normal rounded-full "
+              className=" h-[54px] w-[54px] z-[99] p-0 bg-secondary rounded-full "
               onClick={() => {
                 setOpenCreateDrawer(true);
               }}

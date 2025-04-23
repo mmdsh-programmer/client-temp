@@ -1,13 +1,14 @@
-import React from "react";
+import { usePathname, useRouter } from "next/navigation";
+
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import FormInput from "@components/atoms/input/formInput";
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { repoDeleteSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useDeleteRepo from "@hooks/repository/useDeleteRepo";
 import { useForm } from "react-hook-form";
-import { usePathname, useRouter } from "next/navigation";
 import { useRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -68,11 +69,11 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
       className="repo-delete-dialog !-mb-[50vh] xs:!mb-0"
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
             title={getRepo?.name}
-            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
           >
             {getRepo?.name}
           </span>

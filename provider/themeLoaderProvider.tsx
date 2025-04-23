@@ -40,7 +40,7 @@ const ThemeLoaderProvider = async ({ children, domain }: IProps) => {
 
   return (
     <body
-      className={`${iranYekanFont.variable} !font-iranYekan h-full w-full`}
+      className={`${iranYekanFont.variable} bg-white !font-iranYekan h-full w-full`}
       style={theme as IThemeInfo}
     >
       {children}

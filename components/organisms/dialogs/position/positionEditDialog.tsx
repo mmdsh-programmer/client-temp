@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import FormInput from "@components/atoms/input/formInput";
 import { Button, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { branchIdAtom } from "@atom/branch";
-import { IUserList } from "../document/documentAccessPublishingDialog";
+import React, { useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
+
 import ChipMolecule from "@components/molecules/chip";
-import { toast } from "react-toastify";
-import { IPosition } from "@interface/position.interface";
-import useGetPositionInfo from "@hooks/position/useGetPositionInfo";
 import EditDialog from "@components/templates/dialog/editDialog";
+import FormInput from "@components/atoms/input/formInput";
+import { IPosition } from "@interface/position.interface";
+import { IUserList } from "../document/documentAccessPublishingDialog";
 import ImageComponent from "@components/atoms/image";
-import useUpdatePosition from "@hooks/position/useUpdatePosition";
+import { branchIdAtom } from "@atom/branch";
 import { positionSchema } from "./validation.yup";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import useGetPositionInfo from "@hooks/position/useGetPositionInfo";
+import { useRecoilValue } from "recoil";
+import useUpdatePosition from "@hooks/position/useUpdatePosition";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
@@ -160,7 +161,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
                 <ChipMolecule
                   key={item.username}
                   value={item.name || item.username}
-                  className={`${item.name ? "bg-white !text-primary" : "bg-gray-50 !text-hint"} 
+                  className={`${item.name ? "bg-white !text-primary_normal" : "bg-gray-50 !text-hint"} 
                          w-auto pl-2 border-[1px] border-normal`}
                   icon={
                     item.picture ? (

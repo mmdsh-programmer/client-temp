@@ -2,10 +2,10 @@ import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
 import { useSetRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
 
 interface IProps {
   repo?: IRepo;
@@ -60,7 +60,7 @@ const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
       <Typography
         title={repo?.name}
         placeholder="name"
-        className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
+        className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
       >
         {repo?.name}
       </Typography>

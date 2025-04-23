@@ -69,11 +69,9 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
         await sendCode(code);
       } catch {
         setError("خطا در دریافت اطلاعات کاربری");
-        setLoading(false);
       }
-    } else {
-      setLoading(false);
-    }
+    } 
+    setLoading(false);
   }, 100);
 
   useEffect(() => {
@@ -83,7 +81,7 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
   if (loading) {
     return (
       <div className="get-user-info w-screen h-screen flex items-center justify-center bg-slate-50">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8" color="purple" />
         <Typography className="font-bold mr-2 title_t1">
           در حال دریافت اطلاعات کاربری
         </Typography>
@@ -92,7 +90,7 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
   }
   return (
     <main className="w-screen min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="flex flex-col lg:flex-row rounded-2xl shadow-xl bg-gradient-to-l to-deep-purple-50 from-deep-purple-300">
+      <div className="flex flex-col lg:flex-row rounded-2xl shadow-xl bg-secondary">
         <div className="flex justify-center items-center">
           <figure className="flex sm:w-[400px] sm:h-[400px] w-full h-auto items-center justify-center">
             {logo ? (
@@ -110,12 +108,12 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
         </div>
         <div className="card-body flex flex-col flex-1 my-10 px-10">
           {error ? (
-            <h4 className="text-dashboard-secondary flex-grow">
+            <h4 className="text-secondary flex-grow">
               خطایی به وجود آمده لطفا دوباره تلاش کنید.
             </h4>
           ) : (
             <>
-              <h2 className="card-title text-xl font-bold text-primary">
+              <h2 className="card-title text-xl font-bold text-primary_normal">
                 به {projectName} خوش آمدید!
               </h2>
               <p className="text-base mt-4 flex-grow text-sm">
@@ -126,7 +124,7 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
 
           <div className="flex justify-end items-center card-actions h-12">
             <LoadingButton
-              className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-purple-normal  text-white font-iranYekan"
+              className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-tertiary  text-white font-iranYekan"
               onClick={() => {
                 return login();
               }}

@@ -1,16 +1,17 @@
-import React, { useState } from "react";
-import FormInput from "@components/atoms/input/formInput";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import { IFeedItem } from "@interface/feeds.interface";
-import useUpdatePublicFeed from "@hooks/publicFeed/useUpdatePublicFeed";
-import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
-import ImageComponent from "@components/atoms/image";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { publicFeedSchema } from "./validation.yup";
+import React, { useState } from "react";
+
 import EditDialog from "@components/templates/dialog/editDialog";
+import FormInput from "@components/atoms/input/formInput";
+import { IFeedItem } from "@interface/feeds.interface";
+import ImageComponent from "@components/atoms/image";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { publicFeedSchema } from "./validation.yup";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
+import useUpdatePublicFeed from "@hooks/publicFeed/useUpdatePublicFeed";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   name: string;
@@ -109,7 +110,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5" color="purple" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">

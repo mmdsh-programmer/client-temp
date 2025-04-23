@@ -1,13 +1,14 @@
-import React, { useRef } from "react";
-import LoadingButton from "@components/molecules/loadingButton";
-import useGetUser from "@hooks/auth/useGetUser";
-import { Typography } from "@material-tailwind/react";
 import QuestionAnswerEditor, { IQaEditorRef } from "./questionAnswerEditor";
-import { toast } from "react-toastify";
-import useCreateQuestionAnswer from "@hooks/questionAnswer/useCreateQuestionAnswer";
-import { config } from "@utils/clasorEditor";
+import React, { useRef } from "react";
+
+import LoadingButton from "@components/molecules/loadingButton";
 import PublishForceLogin from "../publishForceLogin";
 import PublishForcePublicProfile from "../publishForcePublicProfile";
+import { Typography } from "@material-tailwind/react";
+import { config } from "@utils/clasorEditor";
+import { toast } from "react-toastify";
+import useCreateQuestionAnswer from "@hooks/questionAnswer/useCreateQuestionAnswer";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   postId: number;
@@ -68,7 +69,7 @@ const CreateQuestion = ({ postId }: IProps) => {
       </div>
 
       <LoadingButton
-        className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-purple-normal text-white font-iranYekan !max-h-[unset]"
+        className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-secondary text-white font-iranYekan !max-h-[unset]"
         onClick={saveQuestion}
         disabled={createQuestionHook.isPending}
         loading={createQuestionHook.isPending}

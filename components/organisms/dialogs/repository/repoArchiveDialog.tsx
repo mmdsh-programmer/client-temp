@@ -1,10 +1,11 @@
-import React from "react";
+import { usePathname, useRouter } from "next/navigation";
+
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
+import React from "react";
+import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useArchiveRepo from "@hooks/repository/useArchiveRepo";
 import { useRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { usePathname, useRouter } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,11 +49,11 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
       isArchive
     >
       <form className="archive-repo-dialog__form flex flex-col gap-5">
-        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از آرشیو"
           <span
             title={getRepo?.name}
-            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
           >
             {getRepo?.name}
           </span>

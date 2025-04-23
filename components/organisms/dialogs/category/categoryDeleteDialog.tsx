@@ -67,11 +67,11 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
       className="category-delete-dialog"
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
           آیا از حذف"
           <span
             title={(category || getCategory)?.name}
-            className="body_b3 text-primary max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
           >
             {(category || getCategory)?.name}
           </span>
@@ -80,7 +80,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
         {errorMessage === "ریسورس دارای زیرمجموعه است" ? (
           <div className="flex items-center gap-1">
             <Checkbox
-              color="deep-purple"
+              color="purple"
               containerProps={{
                 className: "p-[2px]",
               }}

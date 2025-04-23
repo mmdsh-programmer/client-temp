@@ -1,8 +1,9 @@
-import React from "react";
-import InfoDialog from "@components/templates/dialog/infoDialog";
-import { IOffer } from "@interface/offer.interface";
 import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
+
 import { DocIcon } from "@components/atoms/icons";
+import { IOffer } from "@interface/offer.interface";
+import InfoDialog from "@components/templates/dialog/infoDialog";
+import React from "react";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -16,7 +17,7 @@ const AdminFeedbackDialog = ({ setOpen, feedback }: IProps) => {
   if (isFetching) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-4 w-4" color="deep-purple" />
+        <Spinner className="h-4 w-4" color="purple" />
       </div>
     );
   }
@@ -28,7 +29,7 @@ const AdminFeedbackDialog = ({ setOpen, feedback }: IProps) => {
         className="flex-grow px-5 py-3 xs:p-6"
       >
         <div className="flex flex-col gap-4">
-          <Typography className="body_b3 text-primary">
+          <Typography className="body_b3 text-primary_normal">
             {feedback?.data.message}
           </Typography>
           <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">

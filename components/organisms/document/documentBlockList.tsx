@@ -1,10 +1,10 @@
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import React, { useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
 
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
-import React, { useState } from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
@@ -48,7 +48,7 @@ const DocumentBlockList = () => {
       </Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6" color="purple" />
         ) : (
           <div className="document-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
@@ -58,7 +58,7 @@ const DocumentBlockList = () => {
                     <ChipMolecule
                       key={blockItem.userInfo.userName}
                       value={blockItem.userInfo.name}
-                      className="document-block-item w-auto border-[1px] border-normal pl-2 text-primary"
+                      className="document-block-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
                       icon={
                         blockItem.userInfo.img ? (
                           <ImageComponent
@@ -73,7 +73,7 @@ const DocumentBlockList = () => {
                       actionIcon={
                         blockDocument.isPending &&
                         selectedUser === blockItem.userInfo.userName ? (
-                          <Spinner className="h-4 w-4" color="deep-purple" />
+                          <Spinner className="h-4 w-4" color="purple" />
                         ) : (
                           <Button
                             className="delete-button bg-transparent p-0"

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
 import { categoryAtom, categoryShowAtom } from "atom/category";
 import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { ICategoryMetadata } from "@interface/category.interface";
 import { bulkItemsAtom } from "atom/bulk";
 
@@ -85,7 +86,7 @@ const CategoryBreadCrumb = () => {
                     }}
                   >
                     <Typography
-                      className={`caption_c1 ${breadItem.id === getCategoryShow?.id ? "text-primary" : "text-secondary"} lowercase`}
+                      className={`caption_c1 ${breadItem.id === getCategoryShow?.id ? "text-primary_normal" : "text-secondary"} lowercase`}
                     >
                       {breadItem.name}
                     </Typography>

@@ -1,7 +1,8 @@
-import React from "react";
-import { IFile } from "cls-file-management";
 import { Button, Typography } from "@material-tailwind/react";
 import { DeleteIcon, DownloadIcon } from "@components/atoms/icons";
+
+import { IFile } from "cls-file-management";
+import React from "react";
 
 interface IProps {
   file: IFile;
@@ -18,7 +19,7 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
     <div className="w-full flex gap-2 justify-between items-center p-4 rounded-lg border-normal border-[1px]">
       <div className="flex flex-col flex-grow items-start max-w-[90%]">
         <Typography
-          className="title_t2 text-primary truncate max-w-full"
+          className="title_t2 text-primary_normal truncate max-w-full"
           dir="ltr"
         >
           {file.name}

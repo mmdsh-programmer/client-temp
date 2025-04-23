@@ -1,15 +1,16 @@
+import { Button, Spinner, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import SelectAtom, { IOption } from "@components/molecules/select";
+
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import ImageComponent from "@components/atoms/image";
+import TextareaAtom from "@components/atoms/textarea/textarea";
+import { toast } from "react-toastify";
 import useCreatePrivateFeed from "@hooks/privateFeed/useCreatePrivateFeed";
-import SelectAtom, { IOption } from "@components/molecules/select";
+import { useForm } from "react-hook-form";
 import useGetDomainPublishRepoList from "@hooks/domain/useGetDomainPublishRepoList";
+import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 
 interface IForm {
   name: string;
@@ -121,7 +122,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">مخزن</Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5" color="purple" />
             </div>
           ) : (
             <SelectAtom
@@ -148,7 +149,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {ImagesIsLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5" color="purple" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">

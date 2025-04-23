@@ -18,13 +18,13 @@ import EditorComponent from "@components/organisms/editor";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import PublicKeyInfo from "./publicKeyInfo";
 import { Spinner } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
-import PublicKeyInfo from "./publicKeyInfo";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -182,7 +182,7 @@ const Editor = ({ setOpen }: IProps) => {
     if (isLoading) {
       return (
         <div className="main w-full h-full text-center flex items-center justify-center">
-          <Spinner className="h-5 w-5 " color="deep-purple" />
+          <Spinner className="h-5 w-5 " color="purple" />
         </div>
       );
     }

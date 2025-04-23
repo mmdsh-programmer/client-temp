@@ -1,15 +1,16 @@
-import React, { useState } from "react";
 import { BookmarkIcon, InfoIcon, MoreDotIcon } from "@components/atoms/icons";
+import { ETourSection, activeTourAtom } from "@atom/tour";
+import React, { useState } from "react";
 import { repoActionDrawerAtom, repoAtom, repoInfoAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
+
 import { Button } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { IRepo } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
-import { usePathname } from "next/navigation";
 import RepoDialogs from "../repoDialogs";
-import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
-import { activeTourAtom, ETourSection } from "@atom/tour";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   repo?: IRepo;
@@ -72,7 +73,7 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
                 setActiveTour(ETourSection.REPO);
               }}
             >
-              <InfoIcon className="w-4 h-4 stroke-purple-normal" />
+              <InfoIcon className="w-4 h-4 stroke-primary-normal" />
             </Button>
           ) : null}
           <div

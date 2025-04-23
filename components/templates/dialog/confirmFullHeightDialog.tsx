@@ -42,7 +42,7 @@ const ConfirmFullHeightDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary rounded-none xs:rounded-lg `}
+      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] rounded-none xs:rounded-lg `}
       dismiss={{
         enabled: false,
       }}
@@ -76,7 +76,7 @@ const ConfirmFullHeightDialog = ({
           انصراف
         </CancelButton>
         <LoadingButton
-          className="dialog-footer__submit-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={onSubmit}
           loading={isPending}
           disabled={disabled}

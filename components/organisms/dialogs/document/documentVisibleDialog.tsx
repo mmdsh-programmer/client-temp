@@ -1,11 +1,11 @@
-import React from "react";
-import { useRecoilValue } from "recoil";
-import { toast } from "react-toastify";
-import { repoAtom } from "@atom/repository";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { useForm } from "react-hook-form";
-import useEditDocument from "@hooks/document/useEditDocument";
+import React from "react";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { toast } from "react-toastify";
+import useEditDocument from "@hooks/document/useEditDocument";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -52,7 +52,7 @@ const DocumentVisibleDialog = ({ setOpen }: IProps) => {
       className="doccument-visible-dialog"
     >
       آیا از عدم مخفی سازی"
-      <span className="text-primary max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
         {document?.name}
       </span>
       " اطمینان دارید؟

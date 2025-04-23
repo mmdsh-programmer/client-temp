@@ -47,7 +47,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
       <>
         {renderSideButton || null}
         <LoadingButton
-          className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 sm:bg-purple-normal text-white font-iranYekan !max-h-[unset] bg-transparent"
+          className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 bg-tertiary text-white font-iranYekan !max-h-[unset]"
           onClick={() => {
             window.localStorage.setItem(
               "CLASOR:LAST_PAGE",
@@ -109,7 +109,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
       >
         <Button
           placeholder=""
-          className="userProfile rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+          className="userProfile rounded-full p-1 bg-white shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
         >
           {userData?.profileImage ? (
             <ImageComponent

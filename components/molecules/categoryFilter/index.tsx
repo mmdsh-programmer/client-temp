@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { EDocumentTypes } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -8,8 +9,8 @@ import { Typography } from "@material-tailwind/react";
 import { filterChildrenAtom } from "@atom/filter";
 import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { usePathname } from "next/navigation";
 
 const CategoryFilter = () => {
   const currentPath = usePathname();
@@ -61,7 +62,7 @@ const CategoryFilter = () => {
       <div className="flex w-full flex-col gap-4 xs:gap-2">
         <div className="flex flex-wrap w-full xs:flex-nowrap max-w-full gap-4 xs:gap-2">
           <InputAtom
-            className="flex-grow !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
+            className="flex-grow !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary_normal bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
             placeholder="جستجو در عنوان"
             onChange={(e) => {
               return setSearchTitle(e.target.value);
@@ -114,7 +115,7 @@ const CategoryFilter = () => {
         ) : null}
         <div className="flex flex-grow items-end justify-end w-full">
           <LoadingButton
-            className="!h-10 !w-full sm:!w-auto !px-4 bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+            className="!h-10 !w-full sm:!w-auto !px-4 bg-secondary hover:bg-secondary active:bg-secondary"
             onClick={handleFilter}
           >
             <Typography className="text__label__button text-white">

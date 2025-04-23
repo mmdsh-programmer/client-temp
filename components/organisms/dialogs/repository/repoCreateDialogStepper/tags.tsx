@@ -1,4 +1,3 @@
-import React from "react";
 import {
   DialogBody,
   DialogFooter,
@@ -6,10 +5,12 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
+import React from "react";
 import { repoActiveStepAtom } from "@atom/stepper";
 import { repoAtom } from "@atom/repository";
 import { repoTagSchema } from "../validation.yup";
@@ -71,7 +72,7 @@ const Tags = ({ handleClose }: IProps) => {
                 onClick={handleSubmit(onSubmit)}
                 className="repo-tags__add-button !h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
-                <Typography className="!text-primary text__label__button px-3">
+                <Typography className="!text-primary_normal text__label__button px-3">
                   افزودن
                 </Typography>
               </LoadingButton>
@@ -80,7 +81,7 @@ const Tags = ({ handleClose }: IProps) => {
         </form>
         {isLoading ? (
           <div className="mt-4 w-full justify-center">
-            <Spinner color="deep-purple" className="w-5 h-5" />
+            <Spinner color="purple" className="w-5 h-5" />
           </div>
         ) : (
           <div className="repo-tags__list flex flex-wrap gap-2 py-4">
@@ -90,7 +91,7 @@ const Tags = ({ handleClose }: IProps) => {
                   <ChipMolecule
                     value={tag.name}
                     key={tag.id}
-                    className="repo-tag-item bg-gray-50 h-6 px-3 text-primary max-w-[150px] "
+                    className="repo-tag-item bg-gray-50 h-6 px-3 text-primary_normal max-w-[150px] "
                   />
                 );
               });
@@ -106,7 +107,7 @@ const Tags = ({ handleClose }: IProps) => {
           انصراف
         </CancelButton>
         <LoadingButton
-          className="repo-tags__dialog-next-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-tags__dialog-next-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={() => {
             return setActiveStep(3);
           }}

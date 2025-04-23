@@ -1,7 +1,8 @@
+import { Alert, Typography } from "@material-tailwind/react";
+
 import React from "react";
 import { compareVersionAtom } from "@atom/version";
 import { useRecoilState } from "recoil";
-import { Alert, Typography } from "@material-tailwind/react";
 
 const DiffVersionAlert = () => {
   const [compareVersion, setCompareVersion] =
@@ -11,7 +12,7 @@ const DiffVersionAlert = () => {
     <div className="fixed top-5 left-[10%] flex justify-center w-full z-[1000]">
       <Alert
         className=" shadow-lg w-auto "
-        color="deep-purple"
+        color="purple"
         open={!!compareVersion?.version}
         onClose={() => {
           return setCompareVersion(null);

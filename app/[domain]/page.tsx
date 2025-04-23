@@ -19,18 +19,18 @@ interface MainPageProps {
 const MainPage = async ({ params }: MainPageProps) => {
   try {
     const domain = decodeKey(params.domain);
-    const { content } = await getCustomPostByDomain(domain);
+    const { content, enablePublishPage } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`]);
-    if (domainInfo.enablePublishPage) {
-      const { projectName, projectDescription, heroImage, theme } = domainInfo;
+    if (enablePublishPage) {
+      const { projectName, projectDescription, heroImage, logo } = domainInfo;
       return (
         <>
-          <PublishHeader projectName={projectName} logo={heroImage} domain={domain} />
+          <PublishHeader projectName={projectName} logo={logo} domain={domain} />
           <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
-            <div className="w-full mt-8 bg-primary px-4 py-8 rounded-md">
+            <div className="w-full mt-8 bg-primary px-4 py-8 rounded-md bg-secondary">
               <div
-                className={`flex w-full ${!heroImage ? "bg-gray-500 py-4" : ""} relative justify-center`}
+                className="flex w-full py-4 relative justify-center"
               >
                 <ImageComponent
                   src={
@@ -44,7 +44,7 @@ const MainPage = async ({ params }: MainPageProps) => {
                 />
               </div>
 
-              <h1 className="text-primary-normal text-[40px] text-center mt-8">
+              <h1 className="text-secondary text-[40px] text-center mt-8">
                 {projectName ?? "نام پروژه"}
               </h1>
               <p className="gray-500 text-lg text-center mt-4">
@@ -55,7 +55,8 @@ const MainPage = async ({ params }: MainPageProps) => {
           </main>
           <PublishFooter
             projectDescription={projectDescription}
-            themeInfo={theme}
+            logo={logo}
+
           />
         </>
       );

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 
 import ChildrenTree from "@components/organisms/childrenTree";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import LoadHtml from "./loadHtml";
+import { Typography } from "@material-tailwind/react";
 import { documentTemplateAtom } from "@atom/document";
 import { useRecoilState } from "recoil";
-import { usePathname, useSearchParams } from "next/navigation";
-import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -45,7 +45,7 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
     >
       {currentPath === "/admin/sharedDocuments" ||
       sharedDocuments === "true" ? (
-        <Typography className="title_t3 text-primary">شما به نمونه‌ سندهای این منبع دسترسی ندارید.</Typography>
+        <Typography className="title_t3 text-primary_normal">شما به نمونه‌ سندهای این منبع دسترسی ندارید.</Typography>
       ) : (
         <>
           <ChildrenTree move={false} enableAction={false} />

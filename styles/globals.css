@@ -75,7 +75,7 @@
 }
 .tour-step-text,
 .tour-step-list {
-  @apply !text-[13px] text-secondary !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan;
+  @apply !text-[13px] text-primary_normal !leading-[26px] !-tracking-[0.13px] font-normal !font-iranYekan;
 }
 .tour-step-list {
   @apply text-sm pb-4;
@@ -136,20 +136,20 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .primary_button {
-    @apply bg-purple-normal hover:bg-purple-normal text-white;
+    @apply bg-secondary hover:bg-secondary text-white;
   }
 
   .form__input {
-    @apply flex items-center !h-12 gap-2 pr-3 pl-2 placeholder: !opacity-100 !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan font-normal text-primary text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-placeholder placeholder:text-[13px] text-right !bg-gray-50 border-[1px] !border-normal focus:!border-normal;
+    @apply flex items-center !h-12 gap-2 pr-3 pl-2 placeholder: !opacity-100 !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan font-normal text-primary_normal text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-placeholder placeholder:text-[13px] text-right !bg-gray-50 border-[1px] !border-normal focus:!border-normal;
   }
 
   .input {
-    @apply flex items-center !min-w-0 !font-iranYekan focus:font-iranYekan placeholder:!font-iranYekan font-normal text-primary text-[13px] placeholder:!text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-hint text-right;
+    @apply flex items-center !min-w-0 !font-iranYekan focus:font-iranYekan placeholder:!font-iranYekan font-normal text-primary_normal text-[13px] placeholder:!text-[13px] !leading-[18.2px] !-tracking-[0.13px] placeholder:!text-hint text-right;
   }
 
   .form__title,
   .title_t1 {
-    @apply text-primary !text-[16px] !leading-6 !-tracking-[0.32px] font-medium !font-iranYekan;
+    @apply text-primary_normal !text-[16px] !leading-6 !-tracking-[0.32px] font-medium !font-iranYekan;
   }
 
   .title_t2 {
@@ -177,7 +177,7 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .form_label {
-    @apply !text-primary !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
+    @apply !text-primary_normal !p-0 !text-[12px] !font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
   }
 
   .label {
@@ -185,15 +185,15 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   }
 
   .label_l2 {
-    @apply text-primary !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan;
+    @apply text-primary_normal !text-[14px] font-normal !leading-[19.6px] !-tracking-[0.14px] !font-iranYekan;
   }
 
   .label_l3 {
-    @apply text-primary truncate !text-[13px] font-normal !leading-[18.2px] !-tracking-[0.13px] !font-iranYekan;
+    @apply text-primary_normal truncate !text-[13px] font-normal !leading-[18.2px] !-tracking-[0.13px] !font-iranYekan;
   }
 
   .label_l4 {
-    @apply text-primary !text-[12px] font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
+    @apply text-primary_normal !text-[12px] font-normal !leading-[16.8px] !-tracking-[0.12px] !font-iranYekan;
   }
 
   .text__label__button {

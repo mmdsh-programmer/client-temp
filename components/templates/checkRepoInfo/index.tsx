@@ -66,7 +66,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
   if (loading || isFetching) {
     return (
       <div className="w-full h-full flex-col flex justify-center items-center">
-        <Spinner className="h-10 w-10" color="deep-purple" />
+        <Spinner className="h-10 w-10" color="purple" />
       </div>
     );
   }

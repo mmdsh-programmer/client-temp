@@ -8,6 +8,7 @@ module.exports = withMT({
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/clasor-content-preview/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/not-found.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: ["class", "[data-mode=\"dark\"]"],
   theme: {
@@ -26,8 +27,9 @@ module.exports = withMT({
           900: "var(--gray-900)", // text-primary
         },
         purple: {
-          normal: "var(--purple-normal)",
-          light: "var(--purple-light)",
+          normal: "var(--primary-normal)",
+          light: "var(--primary-light)",
+          500: "var(--primary-normal)",
         },
         icon: {
           active: "var(--icon-active)",
@@ -37,6 +39,10 @@ module.exports = withMT({
           normal: "var(--critical-normal)" 
         },
         error: "var(--error)",
+        primary: {
+          normal: "var(--primary-normal)",
+          secondary: "var(--primary-secondary)",
+        },
         success: {
           normal: "var(--success-normal)",
           secondary: "var(--success-secondary)",
@@ -45,11 +51,18 @@ module.exports = withMT({
           normal: "var(--info)",
           secondary: "var(--info-secondary)",
         },
+        stroke: {
+          primary: "var(--stroke-primary)",
+        },
       },
       backgroundColor: {
         primary: "var(--bg-primary-color)",
+        "primary-light": "var(--bg-primary-light-color)",
         secondary: "var(--bg-secondary-color)",
+        "secondary-light": "var(--bg-secondary-light-color)",
         tertiary: "var(--bg-tertiary-color)",
+        "tertiary-light": "var(--bg-tertiary-light-color)",
+        "card-background": "var(--bg-card-background-color)",
       },
       borderColor: {
         normal: "var(--border-normal)",

@@ -104,7 +104,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
           انصراف
         </CancelButton>
         <LoadingButton
-          className="repo-create-dialog__create-button bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="repo-create-dialog__create-button bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >

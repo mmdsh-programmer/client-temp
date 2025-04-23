@@ -1,16 +1,17 @@
+import { Radio, Spinner } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import DocumentBlackList from "@components/organisms/document/documentBlackList";
+import DocumentWhiteList from "@components/organisms/document/documentWhiteList";
+import WhiteBlackAlertDialog from "./whiteBlackAlertDialog";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
-import { Radio, Spinner } from "@material-tailwind/react";
-import useGetWhiteBlackList from "@hooks/document/useGetWhiteBlackList";
-import DocumentWhiteList from "@components/organisms/document/documentWhiteList";
-import DocumentBlackList from "@components/organisms/document/documentBlackList";
-import WhiteBlackAlertDialog from "./whiteBlackAlertDialog";
-import useAddWhiteList from "@hooks/document/useAddWhiteList";
-import useAddBlackList from "@hooks/document/useAddBlackList";
 import { toast } from "react-toastify";
-import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
+import useAddBlackList from "@hooks/document/useAddBlackList";
+import useAddWhiteList from "@hooks/document/useAddWhiteList";
+import useGetWhiteBlackList from "@hooks/document/useGetWhiteBlackList";
+import { useRecoilValue } from "recoil";
 
 export interface IUserList {
   username: string;
@@ -134,7 +135,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
               className: "p-0 ml-2",
             }}
             className="document-white-list__radio-button radio !hover:shadow-none"
-            color="deep-purple"
+            color="purple"
             name="type"
             label="لیست سفید"
             crossOrigin=""
@@ -150,7 +151,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
               className: "p-0 ml-2",
             }}
             className="document-black-list__radio-button !hover:shadow-none"
-            color="deep-purple"
+            color="purple"
             name="type"
             label="لیست سیاه"
             crossOrigin=""
@@ -160,7 +161,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
           />
         </div>
         {isLoading ? (
-          <Spinner className="w-6 h-6" color="deep-purple" />
+          <Spinner className="w-6 h-6" color="purple" />
         ) : (
           renderList()
         )}

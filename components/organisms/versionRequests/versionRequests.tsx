@@ -1,21 +1,22 @@
-import React, { useEffect } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import React, { useEffect } from "react";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import { FaDateFromTimestamp } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import useGetPendingVersion from "@hooks/release/useGetPendingVersion";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import RequestTableView from "../versionRequestsView/requestTableView";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
+import RequestTableView from "../versionRequestsView/requestTableView";
+import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import VersionRequestMenu from "@components/molecules/versionRequestMenu";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
-import { selectedVersionAtom } from "@atom/version";
-import useGetDocument from "@hooks/document/useGetDocument";
+import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
+import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
+import useGetDocument from "@hooks/document/useGetDocument";
+import useGetPendingVersion from "@hooks/release/useGetPendingVersion";
 
 const VersionRequests = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -62,7 +63,7 @@ const VersionRequests = () => {
     if (isLoading) {
       return (
         <div className="w-full h-full flex justify-center items-center ">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8" color="purple" />
         </div>
       );
     }

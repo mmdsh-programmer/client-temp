@@ -1,9 +1,11 @@
-import React from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import { Spinner, Typography } from "@material-tailwind/react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+
 import { ERoles } from "@interface/enums";
 import { IUser } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
+import React from "react";
 import { UserIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -11,7 +13,6 @@ import { translateRoles } from "@utils/index";
 import useDeleteUser from "@hooks/user/useDeleteUser";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
 import { userIdAtom } from "@atom/app";
 
@@ -46,7 +47,7 @@ const UserItem = ({ user }: IProps) => {
       className: "repo-user__transfer-ownership",
     },
     {
-      label: "تنطیمات پیشرفته",
+      label: "تنظیمات پیشرفته",
       value: "setting",
       className: "repo-user__advanced-setting",
     },
@@ -101,7 +102,7 @@ const UserItem = ({ user }: IProps) => {
     if (user.userRole === ERoles.owner) {
       return (
         <div className="repo-user__role w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
-          <Typography className="select_option__text text-primary">
+          <Typography className="select_option__text text-primary_normal">
             {translateRoles(user.userRole)}
           </Typography>
         </div>
@@ -114,7 +115,7 @@ const UserItem = ({ user }: IProps) => {
     ) {
       return (
         <div className="w-5">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4" color="purple" />
         </div>
       );
     }
@@ -151,7 +152,7 @@ const UserItem = ({ user }: IProps) => {
           <UserIcon className="w-full h-full p-1 border-[2px] border-normal rounded-[64px] overflow-hidden fill-icon-hover" />
         )}
       </div>
-      <Typography className="title_t3 flex-grow text-primary ">
+      <Typography className="title_t3 flex-grow text-primary_normal">
         {user.userInfo.name}
       </Typography>
       {renderUserRole()}

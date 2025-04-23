@@ -1,18 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React, { useCallback, useState } from "react";
 import { ClasorFileManagement, IFile } from "cls-file-management";
+import React, { useCallback, useState } from "react";
+
 import FileManagementDialog from "@components/templates/dialog/fileManagementDialog";
 import axios from "axios";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
+import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
 import useRenameFile from "@hooks/files/useRenameFile";
-import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 
 const fileTablePageSize = 20;
 
@@ -201,7 +202,7 @@ const Files = ({
   return (
     <FileManagementDialog
       dialogClassName="flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
-      dialogBodyClassName="bg-secondary h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
+      dialogBodyClassName="bg-white h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
       dialogHeader="افزودن عکس"
       setOpen={() => {
         return handleClose?.();

@@ -191,7 +191,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
       <div className="h-[calc(100vh-220px)] overflow-y-auto pl-2">
         {overalLoading ? (
           <div className="w-full flex justify-center pt-4">
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5" color="purple" />
           </div>
         ) : (
           renderTree?.pages.map((page, pageIndex) => {
@@ -227,7 +227,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
 
         {fetchingNextPage && (
           <div className="w-full flex justify-center pt-4">
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5" color="purple" />
           </div>
         )}
       </div>
@@ -255,7 +255,7 @@ const SidebarTreeViewWrapper = ({
     return (
       <div className="h-[calc(100vh-200px)]">
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5" color="purple" />
         </div>
       </div>
     );

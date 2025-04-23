@@ -9,6 +9,7 @@ import {
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { EDocumentTypes } from "@interface/enums";
@@ -22,8 +23,8 @@ import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
-import useSaveEditor from "@hooks/editor/useSaveEditor";
 import useRepoId from "@hooks/custom/useRepoId";
+import useSaveEditor from "@hooks/editor/useSaveEditor";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -245,7 +246,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setVersionData(null);
         }}
       >
-        <Typography className="label_l3 text-primary">
+        <Typography className="label_l3 text-primary_normal">
           {renderTitle()}
         </Typography>
         <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
@@ -275,7 +276,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             setVersionData(null);
           }}
         >
-          <Typography className="label_l3 text-primary">
+          <Typography className="label_l3 text-primary_normal">
             {renderTitle()}
           </Typography>
           <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
@@ -289,7 +290,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             </Typography>
           }
           className="editor-footer__auto-save-checkbox"
-          color="deep-purple"
+          color="purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
           containerProps={{ className: "-mr-3 " }}
@@ -313,7 +314,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
+          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-secondary hover:bg-secondary active:bg-secondary"
           onClick={() => {
             editorRef.current?.getData();
           }}
