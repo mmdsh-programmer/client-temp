@@ -131,7 +131,7 @@ export default async function PublishContentPage({
           `rp-ph-${repository.id}`,
           `i-${domain}`,
         ]);
-        throw new ServerError(["سند مورد نظر فاقد آخرین نسخه می باشد."]);
+        throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
       }
 
       versionData = await getPublishDocumentVersion(

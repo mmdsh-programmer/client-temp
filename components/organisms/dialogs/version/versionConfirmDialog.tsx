@@ -9,6 +9,8 @@ import useConfirmVersion from "@hooks/version/useConfirmVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
+import { repoAtom } from "@atom/repository";
+import { ERoles } from "@interface/enums";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,6 +18,7 @@ interface IProps {
 
 const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
+  const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
   const currentPath = usePathname();
@@ -43,10 +46,13 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
       repoId,
       documentId: getDocument!.id,
       versionId: getVersion.id,
-      isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+      isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
-        toast.success(" نسخه با موفقیت تایید شد.");
+        if (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin) {
+          toast.success("نسخه با موفقیت تایید شد.");
+        } else {
+          toast.success("درخواست تایید نسخه برای مدیر ارسال شد.");
+        }
         handleClose();
       },
     });
@@ -60,7 +66,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
       className="version-confirm-dialog"
     >
       آیا از تایید نسخه "
-      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {getVersion?.versionNumber}
       </span>
       " اطمینان دارید؟

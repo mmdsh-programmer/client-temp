@@ -69,7 +69,7 @@ const BulkMoveDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="bulk-move-dialog min-h-[350px]"
     >
-      <MoveSelection target="category" />
+      <MoveSelection target="document" />
     </ConfirmFullHeightDialog>
   );
 };

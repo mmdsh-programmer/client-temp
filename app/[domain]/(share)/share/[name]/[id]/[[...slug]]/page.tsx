@@ -107,7 +107,7 @@ const SharePage = async ({ params,
                     `dc-ph-${documentId}`,
                     `i-${domain}`,
                   ]);
-                throw new ServerError(["سند مورد نظر فاقد آخرین نسخه می باشد."]);
+                throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
 
             }
             versionData = await getPublishedDocumentVersion(
