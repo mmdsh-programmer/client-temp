@@ -53,7 +53,7 @@ const HeaderListTemplate = ({
               text={buttonText}
               icon={<AddIcon className="h-5 w-5 stroke-white pr-1" />}
               classNameText="text-white text-[13px] leading-[19.5px] -tracking-[0.13px] font-medium !px-2  font-iranYekan"
-              classNameButton=" rounded-lg h-9 !px-[6px] bg-secondary "
+              classNameButton=" rounded-lg h-9 !px-[6px] bg-primary-normal "
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
@@ -61,7 +61,7 @@ const HeaderListTemplate = ({
           </div>
           <div className="hidden xs:flex md:!hidden">
             <Button
-              className="rounded-lg h-9 w-9 p-0 bg-secondary "
+              className="rounded-lg h-9 w-9 p-0 bg-primary-normal "
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
@@ -71,7 +71,7 @@ const HeaderListTemplate = ({
           </div>
           <div className="absolute z-[999] bottom-20 left-6 xs:hidden">
             <Button
-              className=" h-[54px] w-[54px] z-[99] p-0 bg-secondary rounded-full "
+              className=" h-[54px] w-[54px] z-[99] p-0 bg-primary-normal rounded-full "
               onClick={() => {
                 setOpenCreateRepo(true);
               }}

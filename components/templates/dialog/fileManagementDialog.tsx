@@ -37,14 +37,14 @@ const fileManagementDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`file-management-dialog ${dialogClassName || ""}`}
+      className={`file-management-dialog bg-white ${dialogClassName || ""}`}
       dismiss={{
         enabled: false,
       }}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header bg-white rounded-md rounded-b-none flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header rounded-md rounded-b-none flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <BackButton onClick={handleClose} />
@@ -67,7 +67,7 @@ const fileManagementDialog = ({
         <Button
           placeholder=" button"
           variant="text"
-          className="dialog-footer__submit-button flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-secondary bg-secondary active:bg-secondary "
+          className="dialog-footer__submit-button flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-primary-normal bg-primary-normal active:bg-primary-normal "
           onClick={handleSelect}
         >
           <Typography

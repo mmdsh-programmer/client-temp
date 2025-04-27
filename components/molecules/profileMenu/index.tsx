@@ -29,7 +29,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
         window.localStorage.clear();
         if (redirect) {
           setTimeout(() => {
-            return window.location.assign("/signin");
+            return window.location.assign("/");
           }, 1500);
         } else {
           queryClient.invalidateQueries({

@@ -37,7 +37,7 @@ const EditorDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] bg-primary rounded-none xs:rounded-lg `}
+      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] bg-white rounded-none xs:rounded-lg `}
       dismiss={{
         enabled: false,
       }}

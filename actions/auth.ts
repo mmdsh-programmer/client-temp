@@ -68,7 +68,7 @@ const refreshCookieHeader = async (
 export const getMe = async () => {
   const encodedToken = cookies().get("token")?.value;
   if (!encodedToken) {
-    return redirect("/signin");
+    return redirect("/");
   }
 
   const payload = jwt.verify(

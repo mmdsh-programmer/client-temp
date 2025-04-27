@@ -32,7 +32,7 @@ const PublishLink = () => {
               مخزن شما قبلا انتشار یافته. آیا می‌خواهید آن را لغو کنید؟
             </Typography>
             <LoadingButton
-              className="repo-publish-link__delete-publish-button self-end bg-secondary hover:bg-secondary active:bg-secondary"
+              className="repo-publish-link__delete-publish-button self-end bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
               onClick={handleDelete}
               loading={deletePublishLink.isPending}
             >

@@ -108,12 +108,12 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
                   </div>
                 </>
               }
-              className="rounded-lg h-9 w-9 md:w-auto !px-[6px] !bg-secondary "
+              className="rounded-lg h-9 w-9 md:w-auto !px-[6px] !bg-primary-normal "
             />
           </div>
           <div className="absolute z-[999] bottom-20 left-6 xs:hidden">
             <Button
-              className=" h-[54px] w-[54px] z-[99] p-0 bg-secondary rounded-full "
+              className=" h-[54px] w-[54px] z-[99] p-0 bg-primary-normal rounded-full "
               onClick={() => {
                 setOpenCreateDrawer(true);
               }}

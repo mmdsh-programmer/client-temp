@@ -49,25 +49,24 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
         tagIds: getTempDocTag.map((tag) => {
           return tag.id;
         }),
-      isDirectAccess:
-      sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       });
-    }
-    editDocument.mutate({
-      repoId,
-      documentId: document.id,
-      categoryId: document.categoryId,
-      title: document.name,
-      contentType: document.contentType,
-      tagIds: getTempDocTag.map((tag) => {
-        return tag.id;
-      }),
-      isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-      callBack: () => {
-        toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
-      },
-    });
+    } 
+      editDocument.mutate({
+        repoId,
+        documentId: document.id,
+        categoryId: document.categoryId,
+        title: document.name,
+        contentType: document.contentType,
+        tagIds: getTempDocTag.map((tag) => {
+          return tag.id;
+        }),
+        isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        callBack: () => {
+          toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
+        },
+      });
+    
   };
 
   if (openCreateTagDialog) {
@@ -90,10 +89,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit}
     >
       <form className="flex flex-col gap-5">
-        <DocumentTagManagement
-          setTagName={setTagName}
-          setOpen={setOpenCreateTagDialog}
-        />
+        <DocumentTagManagement setTagName={setTagName} setOpen={setOpenCreateTagDialog} />
       </form>
     </ConfirmFullHeightDialog>
   );

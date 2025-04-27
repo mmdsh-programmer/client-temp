@@ -135,7 +135,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="repo-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="label">عنوان مخزن</Typography>
+          <Typography className="form_label">عنوان مخزن</Typography>
           <FormInput
             placeholder="عنوان"
             register={{ ...register("name", { value: getRepo?.name }) }}
@@ -147,7 +147,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="label">توضیحات مخزن</Typography>
+          <Typography className="form_label">توضیحات مخزن</Typography>
           <TextareaAtom
             placeholder="توضیحات"
             register={{

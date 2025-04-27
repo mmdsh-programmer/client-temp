@@ -41,7 +41,7 @@ const Start = ({ children }: IProps) => {
   }
 
   if (!data) {
-    return redirect("/signin");
+    return redirect("/");
   }
 
   return (

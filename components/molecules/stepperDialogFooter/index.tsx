@@ -31,7 +31,7 @@ const DialogStepperFooter = ({
         {hasPreviousStep ? " مرحله‌ قبلی" : "انصراف"}
       </CancelButton>
       <LoadingButton
-        className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
+        className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
         onClick={handleNextStep}
         loading={loading}
       >

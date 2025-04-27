@@ -7,7 +7,7 @@ const SearchInput = () => {
 
   return (
     <div
-      className="flex gap-2 items-center h-10 px-3 border-[1px] border-normal bg-primary rounded-lg "
+      className="flex gap-2 items-center h-10 px-3 border-[1px] border-normal rounded-lg "
       onKeyDown={(event) => {
         if (event.code === "Enter") {
           event.preventDefault();

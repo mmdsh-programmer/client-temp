@@ -24,14 +24,14 @@ const TableHead = ({ tableHead, className }: IProps) => {
             >
               {head.isSorted ? (
                 <div className=" flex items-center">
-                  <Typography className="table-head py-1 text-primary_normal">
+                  <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>
                   <Sort />
                 </div>
               ) : (
                 <div className="flex items-center">
-                  <Typography className="table-head py-1 text-primary_normal">
+                  <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>
                 </div>

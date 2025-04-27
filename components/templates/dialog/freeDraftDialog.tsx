@@ -39,7 +39,7 @@ const FreeDraftDialog = ({
       size="sm"
       open
       handler={onResume}
-      className="free-draft-dialog rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0"
+      className="free-draft-dialog rounded-lg flex flex-col bg-white w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0"
       dismiss={{
         enabled: false,
       }}
@@ -85,7 +85,7 @@ const FreeDraftDialog = ({
         className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <LoadingButton
-          className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary !text-white flex-grow"
+          className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !text-white flex-grow"
           onClick={onResume}
           disabled={onCloseLoading || onResumeLoading}
         >

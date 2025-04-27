@@ -32,7 +32,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
 
   return (
     <div
-      className="dialog-content bg-red-500 flex flex-col min-h-[100px] max-h-64 overflow-y-auto px-2"
+      className="dialog-content flex flex-col min-h-[100px] max-h-64 overflow-y-auto px-2"
       onScroll={onScroll}
       ref={listInnerRef}
     >

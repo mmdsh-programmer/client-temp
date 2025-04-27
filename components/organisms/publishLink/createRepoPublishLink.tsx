@@ -112,7 +112,7 @@ const CreateRepoPublishLink = () => {
         className="dialog-footer p-5 xs:p-0 xs:pt-6 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <LoadingButton
-          className="repo-create-publish-link__create-button bg-secondary hover:bg-secondary active:bg-secondary"
+          className="repo-create-publish-link__create-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={handleSubmit(onSubmit)}
           loading={createPublishLink.isPending}
         >

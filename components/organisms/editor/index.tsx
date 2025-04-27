@@ -143,7 +143,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   }
 
   return (
-    <div className="flex h-full relative bg-primary">
+    <div className="flex h-full relative bg-white">
         {currentPath === "/admin/sharedDocuments" ||
         sharedDocuments === "true" ? (
           <DocumentEnableUserGroup />

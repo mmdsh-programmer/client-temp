@@ -314,7 +314,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-secondary hover:bg-secondary active:bg-secondary"
+          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={() => {
             editorRef.current?.getData();
           }}

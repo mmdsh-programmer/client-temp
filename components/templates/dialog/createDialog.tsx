@@ -53,7 +53,7 @@ const CreateDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
-      className={`${className} flex flex-col !rounded-none shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-primary xs:!rounded-lg `}
+      className={`${className} flex flex-col !rounded-none shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-white xs:!rounded-lg `}
       onClick={handleBackdropClick}
       dismiss={{
         enabled: false,
@@ -98,7 +98,7 @@ const CreateDialog = ({
             انصراف
           </CancelButton>
           <LoadingButton
-            className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
+            className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
             onClick={onSubmit}
             loading={isPending}
           >

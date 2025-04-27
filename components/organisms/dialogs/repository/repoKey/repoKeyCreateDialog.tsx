@@ -141,7 +141,7 @@ const RepoKeyCreateDialog = ({
           {showPrivateKey ? (
             <Button
               placeholder="button"
-              className="repo-private-key__delete-button bg-secondary hover:bg-secondary active:bg-secondary !p-2 !px-3"
+              className="repo-private-key__delete-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !p-2 !px-3"
               onClick={clearKeys}
             >
               حذف کلید ها
@@ -149,7 +149,7 @@ const RepoKeyCreateDialog = ({
           ) : null}
           <Button
             placeholder="button"
-            className="repo-key__generate-button bg-secondary hover:bg-secondary active:bg-secondary !p-2 !px-3"
+            className="repo-key__generate-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !p-2 !px-3"
             onClick={generateKey}
           >
             تولید کلید

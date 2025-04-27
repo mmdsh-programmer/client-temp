@@ -41,7 +41,7 @@ module.exports = withMT({
         error: "var(--error)",
         primary: {
           normal: "var(--primary-normal)",
-          secondary: "var(--primary-secondary)",
+          light: "var(--primary-light)",
         },
         success: {
           normal: "var(--success-normal)",
@@ -57,7 +57,8 @@ module.exports = withMT({
       },
       backgroundColor: {
         primary: "var(--bg-primary-color)",
-        "primary-light": "var(--bg-primary-light-color)",
+        "primary-light": "var(--primary-light)",
+        "primary-normal": "var(--primary-normal)",
         secondary: "var(--bg-secondary-color)",
         "secondary-light": "var(--bg-secondary-light-color)",
         tertiary: "var(--bg-tertiary-color)",

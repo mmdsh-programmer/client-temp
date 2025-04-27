@@ -73,7 +73,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
               />
             </div>
             <LoadingButton
-              className="add-button !h-10 bg-secondary hover:bg-secondary active:bg-secondary"
+              className="add-button !h-10 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
               onClick={handleBlock}
               loading={blockCatgory.isPending}
               disabled={!value}

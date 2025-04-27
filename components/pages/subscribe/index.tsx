@@ -29,7 +29,7 @@ const SubscribePage = ({ hash, hasPassword }: IProps) => {
       "CLASOR:LAST_PAGE",
       `/subscribe/${hash}${hasPassword ? "?hasPassword=true" : ""}`
     );
-    router.push("/signin");
+    router.push("/");
   }
 
   if (userInfo && hash && !hasPassword) {

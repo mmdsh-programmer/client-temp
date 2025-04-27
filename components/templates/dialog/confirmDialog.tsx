@@ -41,7 +41,7 @@ const ConfirmDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className}  rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0 `}
+      className={`${className} bg-white rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0 `}
       dismiss={{
         enabled: false,
       }}
@@ -82,7 +82,7 @@ const ConfirmDialog = ({
           انصراف
         </CancelButton>
         <LoadingButton
-          className="dialog-footer__submit-button bg-secondary hover:bg-secondary active:bg-secondary"
+          className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={onSubmit}
           loading={isPending}
         >

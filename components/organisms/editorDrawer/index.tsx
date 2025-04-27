@@ -11,7 +11,6 @@ import { editorModeAtom } from "@atom/editor";
 import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
 import DocumentEnableUserGroup from "./documentEnableUserGroup";
-import { Spinner } from "@material-tailwind/react";
 import ChatBox from "../chatBox";
 
 export enum ETabs {
@@ -37,18 +36,13 @@ const EditorDrawer = ({ version }: IProps) => {
           tabContent: <EditorTags />,
         }
       : null,
-    getDocument?.contentType === EDocumentTypes.classic &&
-    getDocument.attachmentUserGroup
+    getDocument?.contentType === EDocumentTypes.classic && getDocument.attachmentUserGroup
       ? {
           tabTitle: ETabs.ATTACH_FILE,
-          tabContent: (
-            <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />
-          ),
+          tabContent: <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />,
         }
       : null,
-    version?.state !== "draft" &&
-    version?.status === "accepted" &&
-    editorMode === "preview"
+    version?.state !== "draft" && version?.status === "accepted" && editorMode === "preview"
       ? {
           tabTitle: ETabs.COMMENTS,
           tabContent: <Comments version={version} />,
@@ -66,17 +60,7 @@ const EditorDrawer = ({ version }: IProps) => {
   return (
     <>
       <DocumentEnableUserGroup />
-      {!getDocument?.attachmentUserGroup ? (
-        <div className="h-full mt-4 flex justify-center">
-          <Spinner className="h-5 w-5" />
-        </div>
-      ) : (
-        <TabComponent
-          tabList={tabList}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-        />
-      )}
+      <TabComponent tabList={tabList} activeTab={activeTab} setActiveTab={setActiveTab} />
     </>
   );
 };

@@ -28,7 +28,7 @@ const TabComponent = ({
   return (
     <Tabs value={activeTab} className="h-full">
       <TabsHeader
-        className={`flex items-center p-[2px] rounded-lg bg-secondary text-secondary  ${headerClassName || ""}`}
+        className={`flex items-center p-[2px] bg-secondary rounded-lg bg text-secondary ${headerClassName || ""}`}
         indicatorProps={{
           className: `p-2 rounded-lg shadow-small !text-purple-normal ${activeTabClassName || ""}`,
         }}
@@ -46,7 +46,7 @@ const TabComponent = ({
                 ${tabClassName || ""}
                 leading-[18px] -tracking-[0.12px] font-medium text-nowrap`}
               placeholder="tab"
-              activeClassName={`text-primary_normal ${activeTabClassName || ""} `}
+              activeClassName={`!text-primary_normal ${activeTabClassName || ""} `}
             >
               {tab.tabTitle}
             </Tab>

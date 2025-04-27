@@ -240,7 +240,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <LoadingButton
-                className="!h-10 !w-full col-span-1 sm:col-start-2 md:col-start-2 lg:col-start-3 xl:col-start-7 sm:!w-auto !px-4 bg-secondary hover:bg-secondary active:bg-secondary"
+                className="!h-10 !w-full col-span-1 sm:col-start-2 md:col-start-2 lg:col-start-3 xl:col-start-7 sm:!w-auto !px-4 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
                 onClick={handleFilter}
               >
                 <Typography className="text__label__button text-white">

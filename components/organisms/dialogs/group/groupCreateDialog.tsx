@@ -136,7 +136,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> اعضای گروه</Typography>
           <SearchableDropdown
-            background="gray-50"
+            background="!bg-gray-50"
             options={filteredUsers}
             handleSelect={(val) => {
               if (val) {
