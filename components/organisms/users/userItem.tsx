@@ -38,13 +38,12 @@ const UserItem = ({ user }: IProps) => {
     value: ERoles | string;
     className?: string;
   }[];
-
   const userOptions = rolesOption.concat([
-    {
+    ...(getRepo?.roleName === ERoles.owner ? [{
       label: "انتقال مالکیت",
       value: "transferOwnership",
       className: "repo-user__transfer-ownership",
-    },
+    }] : []),
     ...(getSelectedUser?.userInfo ? [] : [{
       label: "تنظیمات پیشرفته",
       value: "setting",

@@ -4,7 +4,7 @@ import { handleClientSideHookError } from "@utils/error";
 import { getUserConfigPanelAction } from "@actions/configPanel";
 import { IUserConfigPanel } from "@interface/users.interface";
 
-const useGetUserConfigPanel = (repoId: number, ssoId: number) => {
+const useGetUserConfigPanel = (repoId: number, ssoId?: number) => {
   return useQuery({
     queryKey: [`getUserConfig-${ssoId}`, repoId],
     queryFn: async () => {

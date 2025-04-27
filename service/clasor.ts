@@ -10,10 +10,7 @@ import {
   ServerError,
   UnprocessableError,
 } from "@utils/error";
-import {
-  IAccessRequest,
-  IAccessRequestResponse,
-} from "@interface/accessRequest.interface";
+import { IAccessRequest, IAccessRequestResponse } from "@interface/accessRequest.interface";
 import {
   IAddVersion,
   IComment,
@@ -33,32 +30,16 @@ import {
   IServerResult,
   IUserInfo,
 } from "@interface/app.interface";
-import {
-  IClasorDomainResult,
-  IClasorReport,
-  IClasorResult,
-} from "@interface/clasor";
+import { IClasorDomainResult, IClasorReport, IClasorResult } from "@interface/clasor";
 import {
   IClasorField,
   IDocument,
   IDocumentMetadata,
   IWhiteList,
 } from "@interface/document.interface";
-import {
-  IContentSearchListItem,
-  IContentSearchResult,
-} from "@interface/contentSearch.interface";
-import {
-  ICreateGroup,
-  IGetGroup,
-  IGetGroups,
-  IUpdateGroup,
-} from "@interface/group.interface";
-import {
-  IDomainSubscriptionList,
-  IDomainTag,
-  IDomainTagList,
-} from "@interface/domain.interface";
+import { IContentSearchListItem, IContentSearchResult } from "@interface/contentSearch.interface";
+import { ICreateGroup, IGetGroup, IGetGroups, IUpdateGroup } from "@interface/group.interface";
+import { IDomainSubscriptionList, IDomainTag, IDomainTagList } from "@interface/domain.interface";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   IListResponse,
@@ -120,7 +101,7 @@ axiosClasorInstance.interceptors.request.use(
     };
     console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
-  }
+  },
 );
 
 axiosClasorInstance.interceptors.response.use(
@@ -155,7 +136,7 @@ axiosClasorInstance.interceptors.response.use(
     };
     console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
-  }
+  },
 );
 
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
@@ -175,10 +156,7 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
       case 422:
         throw new UnprocessableError(message, error as IOriginalError);
       default:
-        throw new ServerError(
-          ["خطا در ارتباط با سرویس خارجی"],
-          error as IOriginalError
-        );
+        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
@@ -187,10 +165,10 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
 
 export const getToken = async (code: string, redirectUrl: string) => {
   try {
-    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
-      "auth/login",
-      { code, redirectUrl }
-    );
+    const response = await axiosClasorInstance.post<IServerResult<IGetToken>>("auth/login", {
+      code,
+      redirectUrl,
+    });
 
     return response.data.data;
   } catch (error) {
@@ -198,37 +176,32 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
-export const userInfo = async (
-  accessToken: string,
-  domainUrl: string,
-  expiresAt: number
-) => {
+export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
   if (cachedUser) {
-    console.log(JSON.stringify({
-        type: "Redis cache data",
-        data: cachedUser,
-    }, null, 0));
+    console.log(
+      JSON.stringify(
+        {
+          type: "Redis cache data",
+          data: cachedUser,
+        },
+        null,
+        0,
+      ),
+    );
     return JSON.parse(cachedUser);
   }
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>(
-      "auth/getMe",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          domainUrl,
-        },
-      }
-    );
-    await redisClient?.set(
-      `user:${accessToken}`,
-      JSON.stringify(response.data.data),
-      {
-        EX: expiresAt,
-      }
-    );
+    const response = await axiosClasorInstance.get<IServerResult<IUserInfo>>("auth/getMe", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+    });
+    await redisClient?.set(`user:${accessToken}`, JSON.stringify(response.data.data), {
+      EX: expiresAt,
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -246,7 +219,7 @@ export const logout = async (access_token: string, refresh_token: string) => {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -266,7 +239,7 @@ export const userMetadata = async (access_token: string, data: object) => {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -278,22 +251,19 @@ export const userMetadata = async (access_token: string, data: object) => {
 /// /////////////////////// INFO /////////////////////////
 export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>(
-      "myInfo",
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        params: {
-          repoTypes,
-        },
-        paramsSerializer: (params) => {
-          return qs.stringify(params, {
-            indexes: false,
-          });
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>("myInfo", {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+      params: {
+        repoTypes,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, {
+          indexes: false,
+        });
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -310,7 +280,7 @@ export const getReport = async (accessToken: string, repoId: number) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -325,27 +295,28 @@ export const getAllRepositories = async (
   offset: number,
   size: number,
   name?: string,
-  repoTypes?: string[]
+  repoTypes?: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IRepo>>
-    >("repositories", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
+      "repositories",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          title: name,
+          repoTypes,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       },
-      params: {
-        offset,
-        size,
-        title: name,
-        repoTypes,
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          indexes: false,
-        });
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -356,7 +327,7 @@ export const getAllRepositories = async (
 export const getPublishRepositoryInfo = async (repoId: number) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
-      `repositories/${repoId}/publish`
+      `repositories/${repoId}/publish`,
     );
 
     return response.data.data;
@@ -369,20 +340,21 @@ export const getRepositoryKeys = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IPublicKey>>
-    >(`repositories/${repoId}/publicKey`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IPublicKey>>>(
+      `repositories/${repoId}/publicKey`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -390,11 +362,7 @@ export const getRepositoryKeys = async (
   }
 };
 
-export const deleteRepositoryKey = async (
-  accessToken: string,
-  repoId: number,
-  keyId: number
-) => {
+export const deleteRepositoryKey = async (accessToken: string, repoId: number, keyId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/publicKey/${keyId}`,
@@ -402,7 +370,7 @@ export const deleteRepositoryKey = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -415,7 +383,7 @@ export const createRepositoryKey = async (
   accessToken: string,
   repoId: number,
   name: string,
-  key: string
+  key: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -428,7 +396,7 @@ export const createRepositoryKey = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -441,7 +409,7 @@ export const getKey = async (
   accessToken: string,
   repoId: number,
   keyId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IPublicKey>>(
@@ -453,7 +421,7 @@ export const getKey = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -469,29 +437,30 @@ export const getMyRepositories = async (
   archived: boolean,
   name?: string,
   isPublish?: boolean,
-  repoTypes?: string[]
+  repoTypes?: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IRepo>>
-    >("repositories/myRepoList", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
+      "repositories/myRepoList",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          archived,
+          title: name,
+          isPublish,
+          repoTypes,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       },
-      params: {
-        offset,
-        size,
-        archived,
-        title: name,
-        isPublish,
-        repoTypes,
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          indexes: false,
-        });
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -499,19 +468,13 @@ export const getMyRepositories = async (
   }
 };
 
-export const getRepository = async (
-  accessToken: string,
-  repoId: number | null
-) => {
+export const getRepository = async (accessToken: string, repoId: number | null) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IRepo>>(
-      `repositories/${repoId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<IServerResult<IRepo>>(`repositories/${repoId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -524,27 +487,28 @@ export const getAccessRepositories = async (
   offset: number,
   size: number,
   name?: string,
-  repoTypes?: string[]
+  repoTypes?: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IRepo>>
-    >("repositories/myAccessRepoList", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
+      "repositories/myAccessRepoList",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          title: name,
+          repoTypes,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       },
-      params: {
-        offset,
-        size,
-        title: name,
-        repoTypes,
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          indexes: false,
-        });
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -557,27 +521,28 @@ export const getBookmarkRepositories = async (
   offset: number,
   size: number,
   name?: string,
-  repoTypes?: string[]
+  repoTypes?: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IRepo>>
-    >("repositories/myBookmarkList", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
+      "repositories/myBookmarkList",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          title: name,
+          repoTypes,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       },
-      params: {
-        offset,
-        size,
-        title: name,
-        repoTypes,
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          indexes: false,
-        });
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -589,7 +554,7 @@ export const editRepo = async (
   accessToken: string,
   repoId: number,
   name: string,
-  description: string
+  description: string,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -602,7 +567,7 @@ export const editRepo = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -622,7 +587,7 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
         params: {
           forceDelete: true,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -631,10 +596,7 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
   }
 };
 
-export const archiveRepository = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const archiveRepository = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/archive`,
@@ -643,7 +605,7 @@ export const archiveRepository = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -652,10 +614,7 @@ export const archiveRepository = async (
   }
 };
 
-export const restoreRepository = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const restoreRepository = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/restore`,
@@ -664,7 +623,7 @@ export const restoreRepository = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -677,7 +636,7 @@ export const createRepo = async (
   accessToken: string,
   name: string,
   repoTypes: string[],
-  description?: string
+  description?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -691,7 +650,7 @@ export const createRepo = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -708,7 +667,7 @@ export const leaveRepository = async (accessToken: string, repoId: number) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -717,11 +676,7 @@ export const leaveRepository = async (accessToken: string, repoId: number) => {
   }
 };
 
-export const bookmarkRepository = async (
-  accessToken: string,
-  repoId: number,
-  detach?: boolean
-) => {
+export const bookmarkRepository = async (accessToken: string, repoId: number, detach?: boolean) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `repositories/${repoId}/bookmark`,
@@ -733,7 +688,7 @@ export const bookmarkRepository = async (
         params: {
           detach,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -745,7 +700,7 @@ export const bookmarkRepository = async (
 export const imageRepository = async (
   accessToken: string,
   repoId: number,
-  fileHash: string | null
+  fileHash: string | null,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -757,7 +712,7 @@ export const imageRepository = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -769,7 +724,7 @@ export const imageRepository = async (
 export const transferOwnershipRepository = async (
   accessToken: string,
   repoId: number,
-  userName: string
+  userName: string,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -779,7 +734,7 @@ export const transferOwnershipRepository = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -792,7 +747,7 @@ export const subscribeToRepository = async (
   domain: string,
   accessToken: string,
   repoId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post(
@@ -806,7 +761,7 @@ export const subscribeToRepository = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data;
@@ -819,21 +774,18 @@ export const unsubscribeFromRepository = async (
   domain: string,
   accessToken: string,
   repoId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
-    const response = await axiosClasorInstance.delete(
-      `repositories/${repoId}/subscription`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          domainUrl: domain,
-        },
-        params: {
-          isDirectAccess,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.delete(`repositories/${repoId}/subscription`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl: domain,
+      },
+      params: {
+        isDirectAccess,
+      },
+    });
 
     return response.data;
   } catch (error) {
@@ -841,18 +793,16 @@ export const unsubscribeFromRepository = async (
   }
 };
 
-export const getRepositorySubscription = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const getRepositorySubscription = async (accessToken: string, repoId: number) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IRepoSubscriptionStatus>
-    >(`repositories/${repoId}/subscription/userStatus`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IRepoSubscriptionStatus>>(
+      `repositories/${repoId}/subscription/userStatus`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -865,20 +815,21 @@ export const getRepositoryUsers = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IUser>>
-    >(`repositories/${repoId}/acl/getRepoUsers`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IUser>>>(
+      `repositories/${repoId}/acl/getRepoUsers`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -890,20 +841,21 @@ export const getRepositoryInviteRequestsByOwner = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IAccessRequest>>
-    >(`repositories/${repoId}/userAccessRequest`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IAccessRequest>>>(
+      `repositories/${repoId}/userAccessRequest`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -913,14 +865,11 @@ export const getRepositoryInviteRequestsByOwner = async (
 
 export const getRoles = async (accessToken: string) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IRoles[]>>(
-      "admin/getRoles",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<IServerResult<IRoles[]>>("admin/getRoles", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -932,7 +881,7 @@ export const addUserToRepo = async (
   accessToken: string,
   repoId: number,
   username: string,
-  accessName: string
+  accessName: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -945,7 +894,7 @@ export const addUserToRepo = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -958,7 +907,7 @@ export const editUserRole = async (
   accessToken: string,
   repoId: number,
   userName: string,
-  roleName: string
+  roleName: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -968,7 +917,7 @@ export const editUserRole = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -977,11 +926,7 @@ export const editUserRole = async (
   }
 };
 
-export const deleteUser = async (
-  accessToken: string,
-  repoId: number,
-  userName: string
-) => {
+export const deleteUser = async (accessToken: string, repoId: number, userName: string) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/acl`,
@@ -992,7 +937,7 @@ export const deleteUser = async (
         data: {
           userName,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1001,11 +946,7 @@ export const deleteUser = async (
   }
 };
 
-export const deleteInviteRequest = async (
-  accessToken: string,
-  repoId: number,
-  userId: number
-) => {
+export const deleteInviteRequest = async (accessToken: string, repoId: number, userId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/userAccessRequest/${userId}`,
@@ -1013,7 +954,7 @@ export const deleteInviteRequest = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1027,20 +968,21 @@ export const getRepositoryGroups = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IGetGroups>>
-    >(`repositories/${repoId}/groups/getRepoGroups`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IGetGroups>>>(
+      `repositories/${repoId}/groups/getRepoGroups`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -1048,11 +990,7 @@ export const getRepositoryGroups = async (
   }
 };
 
-export const getGroupInfo = async (
-  accessToken: string,
-  repoId: number,
-  title: string
-) => {
+export const getGroupInfo = async (accessToken: string, repoId: number, title: string) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IGetGroup>>(
       `repositories/${repoId}/groups/${title}`,
@@ -1060,7 +998,7 @@ export const getGroupInfo = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1074,19 +1012,17 @@ export const createGroup = async (
   repoId: number,
   title: string,
   description?: string,
-  members?: string[]
+  members?: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.post<
-      IServerResult<ICreateGroup>
-    >(
+    const response = await axiosClasorInstance.post<IServerResult<ICreateGroup>>(
       `repositories/${repoId}/groups`,
       { title, description, members, memberType: "username" },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1101,19 +1037,17 @@ export const updateGroup = async (
   title: string,
   description?: string,
   newTitle?: string,
-  members?: string[]
+  members?: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.patch<
-      IServerResult<IUpdateGroup>
-    >(
+    const response = await axiosClasorInstance.patch<IServerResult<IUpdateGroup>>(
       `repositories/${repoId}/groups/${title}`,
       { title: newTitle, description, members, memberType: "username" },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1122,19 +1056,16 @@ export const updateGroup = async (
   }
 };
 
-export const deleteGroup = async (
-  accessToken: string,
-  repoId: number,
-  title: string
-) => {
+export const deleteGroup = async (accessToken: string, repoId: number, title: string) => {
   try {
-    const response = await axiosClasorInstance.delete<
-      IServerResult<IUpdateGroup>
-    >(`repositories/${repoId}/groups/${title}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.delete<IServerResult<IUpdateGroup>>(
+      `repositories/${repoId}/groups/${title}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -1148,21 +1079,22 @@ export const getRepositoryTags = async (
   repoId: number,
   offset: number,
   size: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<ITag>>
-    >(`repositories/${repoId}/tags`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ITag>>>(
+      `repositories/${repoId}/tags`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          isDirectAccess,
+        },
       },
-      params: {
-        offset,
-        size,
-        isDirectAccess,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -1174,7 +1106,7 @@ export const createTag = async (
   accessToken: string,
   repoId: number,
   name: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -1187,7 +1119,7 @@ export const createTag = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1201,7 +1133,7 @@ export const editTag = async (
   repoId: number,
   tagId: number,
   name: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -1214,7 +1146,7 @@ export const editTag = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1227,7 +1159,7 @@ export const deleteTag = async (
   accessToken: string,
   repoId: number,
   idTag: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -1239,7 +1171,7 @@ export const deleteTag = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1258,7 +1190,7 @@ export const getChildren = async (
   size: number,
   title?: string | null,
   type?: "category" | "document",
-  filters?: IChildrenFilter | null
+  filters?: IChildrenFilter | null,
 ) => {
   let finalType = type;
 
@@ -1317,7 +1249,7 @@ export const getChildren = async (
             indexes: false,
           });
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1326,19 +1258,16 @@ export const getChildren = async (
   }
 };
 
-export const getCategory = async (
-  accessToken: string,
-  repoId: number,
-  categoryId: number
-) => {
+export const getCategory = async (accessToken: string, repoId: number, categoryId: number) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<ICategoryMetadata>
-    >(`repositories/${repoId}/categories/${categoryId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<ICategoryMetadata>>(
+      `repositories/${repoId}/categories/${categoryId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -1352,7 +1281,7 @@ export const createCategory = async (
   parentId: number | null,
   name: string,
   description: string,
-  order?: number | null
+  order?: number | null,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<ICategory>>(
@@ -1367,7 +1296,7 @@ export const createCategory = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1384,7 +1313,7 @@ export const editCategory = async (
   name: string,
   description: string | undefined,
   order: number | null,
-  isHidden: boolean
+  isHidden: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<ICategory>>(
@@ -1400,7 +1329,7 @@ export const editCategory = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1413,7 +1342,7 @@ export const deleteCategory = async (
   accessToken: string,
   repoId: number,
   categoryId: number,
-  forceDelete: boolean
+  forceDelete: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<ICategory>>(
@@ -1425,7 +1354,7 @@ export const deleteCategory = async (
         params: {
           forceDelete,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1439,7 +1368,7 @@ export const getCategoryBlocklist = async (
   repoId: number,
   categoryId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<any>>(
@@ -1452,7 +1381,7 @@ export const getCategoryBlocklist = async (
           offset,
           size,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1466,7 +1395,7 @@ export const addUserToCategoryBlocklist = async (
   repoId: number,
   categoryId: number,
   username: string,
-  type: "block" | "unblock"
+  type: "block" | "unblock",
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<ICategory>>(
@@ -1476,7 +1405,7 @@ export const addUserToCategoryBlocklist = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1491,12 +1420,10 @@ export const getContent = async (
   repoId: number,
   searchParam: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IContentSearchResult>
-    >(
+    const response = await axiosClasorInstance.get<IServerResult<IContentSearchResult>>(
       `publicContent/repository/${repoId}/search/${encodeURIComponent(searchParam)}`,
       {
         headers: {
@@ -1506,7 +1433,7 @@ export const getContent = async (
           offset,
           size,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1524,12 +1451,10 @@ export const getUserDocument = async (
   size: number,
   filters: IReportFilter | null | undefined,
   reportType: "myDocuments" | "myAccessDocuments" | null,
-  repoTypes: string[]
+  repoTypes: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IDocumentMetadata>>
-    >(
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IDocumentMetadata>>>(
       `report/myDocument?${[
         {
           field: "type",
@@ -1575,7 +1500,7 @@ export const getUserDocument = async (
             indexes: false,
           });
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1589,7 +1514,7 @@ export const moveBulk = async (
   accessToken: string,
   repoId: number,
   parentId: number | null,
-  children: number[]
+  children: number[],
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -1602,7 +1527,7 @@ export const moveBulk = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1615,7 +1540,7 @@ export const deleteBulk = async (
   accessToken: string,
   repoId: number,
   children: number[],
-  forceDelete?: boolean
+  forceDelete?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -1628,7 +1553,7 @@ export const deleteBulk = async (
           forceDelete,
         },
         data: { children },
-      }
+      },
     );
 
     return response.data.data;
@@ -1645,12 +1570,10 @@ export const getDocument = async (
   isDirectAccess?: boolean,
   offset?: number,
   size?: number,
-  disableVersions?: boolean
+  disableVersions?: boolean,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IDocumentMetadata>
-    >(
+    const response = await axiosClasorInstance.get<IServerResult<IDocumentMetadata>>(
       `repositories/${repoId}/documents/${documentId}/info?type=document&disableVersions=${disableVersions}`,
       {
         headers: {
@@ -1661,7 +1584,7 @@ export const getDocument = async (
           size,
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1675,11 +1598,9 @@ export const getPublishDocumentVersion = async (
   documentId: number,
   versionId: number,
   password?: string,
-  accessToken?: string
+  accessToken?: string,
 ) => {
-  const headers = accessToken
-    ? { Authorization: `Bearer ${accessToken}` }
-    : undefined;
+  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
 
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
@@ -1689,7 +1610,7 @@ export const getPublishDocumentVersion = async (
         params: {
           password,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -1701,21 +1622,20 @@ export const getPublishDocumentLastVersion = async (
   repoId: number,
   documentId: number,
   password?: string,
-  accessToken?: string
+  accessToken?: string,
 ) => {
-  const headers = accessToken
-    ? { Authorization: `Bearer ${accessToken}` }
-    : undefined;
+  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
 
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IVersion | null>
-    >(`repositories/${repoId}/publish/document/${documentId}/lastVersion`, {
-      headers,
-      params: {
-        password,
+    const response = await axiosClasorInstance.get<IServerResult<IVersion | null>>(
+      `repositories/${repoId}/publish/document/${documentId}/lastVersion`,
+      {
+        headers,
+        params: {
+          password,
+        },
       },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -1728,18 +1648,19 @@ export const getPublishDocumentVersions = async (
   documentId: number,
   offset: number,
   size: number,
-  ssoId?: number
+  ssoId?: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IVersion>>
-    >(`repositories/${repoId}/publish/document/${documentId}/versions`, {
-      params: {
-        offset,
-        size,
-        userssoid: ssoId,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IVersion>>>(
+      `repositories/${repoId}/publish/document/${documentId}/versions`,
+      {
+        params: {
+          offset,
+          size,
+          userssoid: ssoId,
+        },
       },
-    });
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1749,16 +1670,17 @@ export const getPublishDocumentVersions = async (
 export const getPublishDocumentInfo = async (
   repoId: number,
   documentId: number,
-  disableVersions?: boolean
+  disableVersions?: boolean,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IDocumentMetadata>
-    >(`repositories/${repoId}/publish/document/${documentId}`, {
-      params: {
-        disableVersions,
+    const response = await axiosClasorInstance.get<IServerResult<IDocumentMetadata>>(
+      `repositories/${repoId}/publish/document/${documentId}`,
+      {
+        params: {
+          disableVersions,
+        },
       },
-    });
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1769,23 +1691,20 @@ export const searchPublishContent = async (
   repoId: number,
   searchText: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IContentSearchListItem>>
-    >(
-      `publicContent/repository/${repoId}/search/${encodeURIComponent(searchText)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.API_TOKEN}`,
-        },
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    >(`publicContent/repository/${repoId}/search/${encodeURIComponent(searchText)}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.API_TOKEN}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -1795,9 +1714,7 @@ export const searchPublishContent = async (
 
 export const getClasorField = async (accessToken: string) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IClasorField[]>
-    >("clasorFields", {
+    const response = await axiosClasorInstance.get<IServerResult<IClasorField[]>>("clasorFields", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -1819,7 +1736,7 @@ export const createDocument = async (
   description?: string,
   order?: number | null,
   imageUrl?: string,
-  publicKeyId?: string
+  publicKeyId?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IDocument>>(
@@ -1838,7 +1755,7 @@ export const createDocument = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1858,7 +1775,7 @@ export const createDocumentTemplate = async (
   description?: string,
   order?: number | null,
   imageUrl?: string,
-  publicKeyId?: string
+  publicKeyId?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IDocument>>(
@@ -1870,13 +1787,13 @@ export const createDocumentTemplate = async (
         description,
         imageUrl,
         order: order === null ? null : Number(order),
-        publicKeyId
+        publicKeyId,
       },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1896,7 +1813,7 @@ export const editDocument = async (
   order?: number | null,
   isHidden?: boolean,
   tagIds?: number[],
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
@@ -1917,7 +1834,7 @@ export const editDocument = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1926,11 +1843,7 @@ export const editDocument = async (
   }
 };
 
-export const deleteDocument = async (
-  accessToken: string,
-  repoId: number,
-  documentId: number
-) => {
+export const deleteDocument = async (accessToken: string, repoId: number, documentId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<IDocument>>(
       `repositories/${repoId}/documents/${documentId}`,
@@ -1938,7 +1851,7 @@ export const deleteDocument = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1951,7 +1864,7 @@ export const bookmarkDocument = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  detach?: boolean
+  detach?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -1964,7 +1877,7 @@ export const bookmarkDocument = async (
         params: {
           detach,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -1978,7 +1891,7 @@ export const getDocumentBlocklist = async (
   repoId: number,
   documentId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<any>>(
@@ -1991,7 +1904,7 @@ export const getDocumentBlocklist = async (
           offset,
           size,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2005,7 +1918,7 @@ export const addUserToDocumentBlocklist = async (
   repoId: number,
   documentId: number,
   username: string,
-  type: "block" | "unblock"
+  type: "block" | "unblock",
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<ICategory>>(
@@ -2015,7 +1928,7 @@ export const addUserToDocumentBlocklist = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2026,7 +1939,7 @@ export const addUserToDocumentBlocklist = async (
 export const getDocumentWhiteBlackList = async (
   accessToken: string,
   repoId: number,
-  documentId: number
+  documentId: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IWhiteList>>(
@@ -2035,7 +1948,7 @@ export const getDocumentWhiteBlackList = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2048,7 +1961,7 @@ export const addToDocumentBlackList = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  usernameList: string[]
+  usernameList: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2058,7 +1971,7 @@ export const addToDocumentBlackList = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2071,7 +1984,7 @@ export const addToDocumentWhiteList = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  usernameList: string[]
+  usernameList: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2081,7 +1994,7 @@ export const addToDocumentWhiteList = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2094,7 +2007,7 @@ export const createDocumentPassword = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  password: string
+  password: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2106,7 +2019,7 @@ export const createDocumentPassword = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2120,7 +2033,7 @@ export const updateDocumentPassword = async (
   repoId: number,
   documentId: number,
   oldPassword: string | undefined,
-  newPassword: string
+  newPassword: string,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2133,7 +2046,7 @@ export const updateDocumentPassword = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2146,7 +2059,7 @@ export const deleteDocumentPassword = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  oldPassword: string
+  oldPassword: string,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<IDocument>>(
@@ -2158,7 +2071,7 @@ export const deleteDocumentPassword = async (
         data: {
           oldPassword,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2171,7 +2084,7 @@ export const documentEnableUserGroupHash = async (
   access_token: string,
   repoId: number,
   documentId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2184,7 +2097,7 @@ export const documentEnableUserGroupHash = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2209,7 +2122,7 @@ export const createDocumentPublishLink = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2225,9 +2138,7 @@ export const getDocumentPublishLink = async (
   offset?: number,
   size?: number,
 ) => {
-  const headers = accessToken
-    ? { Authorization: `Bearer ${accessToken}` }
-    : undefined;
+  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
 
   try {
     const response = await axiosClasorInstance.get<IServerResult<any>>(
@@ -2239,7 +2150,7 @@ export const getDocumentPublishLink = async (
           offset,
           size,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2251,7 +2162,7 @@ export const getDocumentPublishLink = async (
 export const deleteDocumentPublishLink = async (
   accessToken: string,
   repoId: number,
-  documentId: number
+  documentId: number,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -2260,7 +2171,7 @@ export const deleteDocumentPublishLink = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2274,19 +2185,18 @@ export const getPublishedDocumentLastVersion = async (
   documentId: number,
   password?: string,
 ) => {
-  const headers = accessToken
-    ? { Authorization: `Bearer ${accessToken}` }
-    : undefined;
+  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
 
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IVersion | null>
-    >(`publish/document/${documentId}/lastVersion`, {
-      headers,
-      params: {
-        password,
+    const response = await axiosClasorInstance.get<IServerResult<IVersion | null>>(
+      `publish/document/${documentId}/lastVersion`,
+      {
+        headers,
+        params: {
+          password,
+        },
       },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -2300,19 +2210,18 @@ export const getPublishedDocumentVersion = async (
   versionId: number,
   password?: string,
 ) => {
-  const headers = accessToken
-  ? { Authorization: `Bearer ${accessToken}` }
-  : undefined;
+  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
 
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IVersion>
-    >(`publish/document/${documentId}/versions/${versionId}`, {
-      headers,
-      params: {
-       password
+    const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
+      `publish/document/${documentId}/versions/${versionId}`,
+      {
+        headers,
+        params: {
+          password,
+        },
       },
-    });
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2328,7 +2237,7 @@ export const getVersion = async (
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     let versionPath = "";
@@ -2348,7 +2257,7 @@ export const getVersion = async (
           innerOutline,
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2364,7 +2273,7 @@ export const createVersion = async (
   versionNumber: string,
   content: string,
   outline: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IAddVersion>>(
@@ -2377,7 +2286,7 @@ export const createVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2392,7 +2301,7 @@ export const createFileVersion = async (
   documentId: number,
   versionNumber: string,
   fileHash?: IFileVersion,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2405,7 +2314,7 @@ export const createFileVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2420,7 +2329,7 @@ export const deleteVersion = async (
   documentId: number,
   versionId: number,
   state: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -2434,7 +2343,7 @@ export const deleteVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2447,7 +2356,7 @@ export const getLastVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
@@ -2459,7 +2368,7 @@ export const getLastVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2472,7 +2381,7 @@ export const setLastVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<IVersion>>(
@@ -2485,7 +2394,7 @@ export const setLastVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2499,7 +2408,7 @@ export const publicVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2512,7 +2421,7 @@ export const publicVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2525,7 +2434,7 @@ export const cancelPublicVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2538,7 +2447,7 @@ export const cancelPublicVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2552,7 +2461,7 @@ export const confirmVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IVersion>>(
@@ -2565,7 +2474,7 @@ export const confirmVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2578,7 +2487,7 @@ export const cancelConfirmVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -2591,7 +2500,7 @@ export const cancelConfirmVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2609,7 +2518,7 @@ export const getResourceFiles = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _order?: string,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _dataType?: string
+  _dataType?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2639,7 +2548,7 @@ export const editFile = async (
   accessToken: string,
   resourceId: number,
   newName: string,
-  hash: string
+  hash: string,
 ) => {
   try {
     const response = await axiosClasorInstance.patch(
@@ -2651,7 +2560,7 @@ export const editFile = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2665,7 +2574,7 @@ export const deleteFile = async (
   repoId: number,
   resourceId: number,
   fileHash: string,
-  type: "private" | "public"
+  type: "private" | "public",
 ) => {
   try {
     const response = await axiosClasorInstance.delete(
@@ -2677,7 +2586,7 @@ export const deleteFile = async (
         params: {
           type,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2689,7 +2598,7 @@ export const deleteFile = async (
 export const createUploadLink = async (
   accessToken: string,
   resourceId: number,
-  userGroupHash: string
+  userGroupHash: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post(
@@ -2703,7 +2612,7 @@ export const createUploadLink = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2717,20 +2626,21 @@ export const getPendingDrafts = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IVersion>>
-    >(`repositories/${repoId}/getPendingDrafts`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IVersion>>>(
+      `repositories/${repoId}/getPendingDrafts`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -2742,20 +2652,21 @@ export const getPendingVersion = async (
   accessToken: string,
   repoId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IVersion>>
-    >(`admin/${repoId}/getRepoPendingVersion`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IVersion>>>(
+      `admin/${repoId}/getRepoPendingVersion`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -2767,7 +2678,7 @@ export const acceptDraft = async (
   accessToken: string,
   repoId: number,
   docId: number,
-  draftId: number
+  draftId: number,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IVersion>>(
@@ -2777,7 +2688,7 @@ export const acceptDraft = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2785,11 +2696,7 @@ export const acceptDraft = async (
   }
 };
 
-export const acceptVersion = async (
-  accessToken: string,
-  repoId: number,
-  versionId: number
-) => {
+export const acceptVersion = async (accessToken: string, repoId: number, versionId: number) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `admin/${repoId}/acceptVersion/${versionId}`,
@@ -2798,7 +2705,7 @@ export const acceptVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2810,7 +2717,7 @@ export const rejectDraft = async (
   accessToken: string,
   repoId: number,
   docId: number,
-  draftId: number
+  draftId: number,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2820,7 +2727,7 @@ export const rejectDraft = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2828,11 +2735,7 @@ export const rejectDraft = async (
   }
 };
 
-export const rejectVersion = async (
-  accessToken: string,
-  repoId: number,
-  versionId: number
-) => {
+export const rejectVersion = async (accessToken: string, repoId: number, versionId: number) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `admin/${repoId}/rejectVersion/${versionId}`,
@@ -2841,7 +2744,7 @@ export const rejectVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2855,7 +2758,7 @@ export const createRepoPublicLink = async (
   repoId: number,
   roleId: number,
   expireTime?: number,
-  password?: string
+  password?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2869,7 +2772,7 @@ export const createRepoPublicLink = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -2877,11 +2780,7 @@ export const createRepoPublicLink = async (
   }
 };
 
-export const deletePublicLink = async (
-  accessToken: string,
-  repoId: number,
-  roleId: number
-) => {
+export const deletePublicLink = async (accessToken: string, repoId: number, roleId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/publicLink`,
@@ -2892,7 +2791,7 @@ export const deletePublicLink = async (
         data: {
           roleId,
         },
-      }
+      },
     );
 
     return response.data;
@@ -2901,15 +2800,9 @@ export const deletePublicLink = async (
   }
 };
 
-export const subscribeRepo = async (
-  accessToken: string,
-  hash: string,
-  password?: string
-) => {
+export const subscribeRepo = async (accessToken: string, hash: string, password?: string) => {
   try {
-    const response = await axiosClasorInstance.put<
-      IServerResult<{ repository: IRepo }>
-    >(
+    const response = await axiosClasorInstance.put<IServerResult<{ repository: IRepo }>>(
       `repositories/subscribe/${hash}`,
       {
         password,
@@ -2918,7 +2811,7 @@ export const subscribeRepo = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -2931,7 +2824,7 @@ export const createRepoPublishLink = async (
   accessToken: string,
   repoId: number,
   expireTime?: number,
-  password?: string
+  password?: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<void>>(
@@ -2944,7 +2837,7 @@ export const createRepoPublishLink = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -2952,10 +2845,7 @@ export const createRepoPublishLink = async (
   }
 };
 
-export const deletePublishLink = async (
-  accessToken: string,
-  repoId: number
-) => {
+export const deletePublishLink = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/publish`,
@@ -2963,7 +2853,7 @@ export const deletePublishLink = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -2972,23 +2862,20 @@ export const deletePublishLink = async (
 };
 
 /// ///////////////////// REQUESTS ///////////////////
-export const getUserToRepoRequests = async (
-  accessToken: string,
-  offset: number,
-  size: number
-) => {
+export const getUserToRepoRequests = async (accessToken: string, offset: number, size: number) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IAccessRequestResponse>
-    >("acl/userRequests", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IAccessRequestResponse>>(
+      "acl/userRequests",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -2996,10 +2883,7 @@ export const getUserToRepoRequests = async (
   }
 };
 
-export const acceptUserToRepoRequest = async (
-  accessToken: string,
-  requestId: number
-) => {
+export const acceptUserToRepoRequest = async (accessToken: string, requestId: number) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `acl/userRequest/${requestId}/accept`,
@@ -3011,7 +2895,7 @@ export const acceptUserToRepoRequest = async (
         params: {
           requestId,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3020,10 +2904,7 @@ export const acceptUserToRepoRequest = async (
   }
 };
 
-export const rejectUserToRepoRequest = async (
-  accessToken: string,
-  requestId: number
-) => {
+export const rejectUserToRepoRequest = async (accessToken: string, requestId: number) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
       `acl/userRequest/${requestId}/reject`,
@@ -3035,7 +2916,7 @@ export const rejectUserToRepoRequest = async (
         params: {
           requestId,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3053,7 +2934,7 @@ export const saveVersion = async (
   versionNumber: string,
   content: string,
   outline: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3069,7 +2950,7 @@ export const saveVersion = async (
         },
         maxContentLength: Infinity,
         maxBodyLength: Infinity,
-      }
+      },
     );
 
     return response.data;
@@ -3089,7 +2970,7 @@ export const saveFileVersion = async (
     fileName: string;
     fileExtension: string;
   },
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3102,7 +2983,7 @@ export const saveFileVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3119,7 +3000,7 @@ export const freeDraftVersion = async (
   versionNumber: string,
   content: string,
   outline: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3132,7 +3013,7 @@ export const freeDraftVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3146,12 +3027,10 @@ export const createBlockVersion = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
-    const response = await axiosClasorInstance.post<
-      IServerResult<IBLockDocument>
-    >(
+    const response = await axiosClasorInstance.post<IServerResult<IBLockDocument>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/block`,
       {},
       {
@@ -3161,7 +3040,7 @@ export const createBlockVersion = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3175,7 +3054,7 @@ export const createBlockVersion = async (
 export const sendFeedback = async (
   accessToken: string,
   content: string,
-  fileHashList: { hash: string; fileName: string; fileExtension: string }[]
+  fileHashList: { hash: string; fileName: string; fileExtension: string }[],
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3185,7 +3064,7 @@ export const sendFeedback = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3196,16 +3075,14 @@ export const sendFeedback = async (
 
 export const addUserToFeedbackGroupHash = async (accessToken: string) => {
   try {
-    const response = await axiosClasorInstance.post<
-      IServerResult<{ isAddUser: boolean }>
-    >(
+    const response = await axiosClasorInstance.post<IServerResult<{ isAddUser: boolean }>>(
       "feedback/addUser",
       {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3218,13 +3095,14 @@ export const addUserToFeedbackGroupHash = async (accessToken: string) => {
 
 export const getAdminPanelReport = async (accessToken: string) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IClasorReport>
-    >("admin/clasorReport", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IClasorReport>>(
+      "admin/clasorReport",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3232,23 +3110,20 @@ export const getAdminPanelReport = async (accessToken: string) => {
   }
 };
 
-export const getAdminPanelFeedback = async (
-  accessToken: string,
-  top: number,
-  skip: number
-) => {
+export const getAdminPanelFeedback = async (accessToken: string, top: number, skip: number) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IOfferResponse>
-    >(`admin/feedback?top=${top}&skip=${skip}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IOfferResponse>>(
+      `admin/feedback?top=${top}&skip=${skip}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          top,
+          skip,
+        },
       },
-      params: {
-        top,
-        skip,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3261,39 +3136,20 @@ export const getCommentList = async (
   access_token: string,
   postId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IComment>>
-    >(`core/content/${postId}/comment`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-      params: {
-        offset,
-        size,
-      },
-    });
-
-    return response.data.data;
-  } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
-  }
-};
-
-export const deleteComment = async (
-  access_token: string,
-  commentId: number
-) => {
-  try {
-    const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `core/comment/${commentId}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
+      `core/content/${postId}/comment`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      }
+        params: {
+          offset,
+          size,
+        },
+      },
     );
 
     return response.data.data;
@@ -3302,11 +3158,24 @@ export const deleteComment = async (
   }
 };
 
-export const createComment = async (
-  access_token: string,
-  postId: number,
-  text: string
-) => {
+export const deleteComment = async (access_token: string, commentId: number) => {
+  try {
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(
+      `core/comment/${commentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createComment = async (access_token: string, postId: number, text: string) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `core/content/${postId}/comment`,
@@ -3315,7 +3184,7 @@ export const createComment = async (
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3328,21 +3197,22 @@ export const getLike = async (
   access_token: string,
   postId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<ILikeList>>
-    >(`core/content/${postId}/like`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
+      `core/content/${postId}/like`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          hasUser: true,
+        },
       },
-      params: {
-        offset,
-        size,
-        hasUser: true,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3354,21 +3224,22 @@ export const getDislike = async (
   access_token: string,
   postId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<ILikeList>>
-    >(`core/content/${postId}/dislike`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
+      `core/content/${postId}/dislike`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        params: {
+          offset,
+          size,
+          hasUser: true,
+        },
       },
-      params: {
-        offset,
-        size,
-        hasUser: true,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3382,27 +3253,28 @@ export const getPublishRepoList = async (
   domainUrl: string,
   offset: number,
   size: number,
-  repoTypes: string[]
+  repoTypes: string[],
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IRepo>>
-    >("repositories/publishRepoList", {
-      headers: {
-        "Content-Type": "application/json",
-        domainUrl
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
+      "repositories/publishRepoList",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          domainUrl,
+        },
+        params: {
+          offset,
+          size,
+          repoTypes,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            indexes: false,
+          });
+        },
       },
-      params: {
-        offset,
-        size,
-        repoTypes,
-      },
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          indexes: false,
-        });
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3415,7 +3287,7 @@ export const getPublishChildren = async (
   offset: number,
   size: number,
   categoryId?: number,
-  ssoId?: number
+  ssoId?: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -3453,7 +3325,7 @@ export const getPublishChildren = async (
           size,
           userssoid: ssoId,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3468,7 +3340,7 @@ export const getAllPublishChildren = async (
   size: number,
   title?: string,
   categoryId?: number,
-  ssoId?: number
+  ssoId?: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -3507,7 +3379,7 @@ export const getAllPublishChildren = async (
           userssoid: ssoId,
           title,
         },
-      }
+      },
     );
     return response.data.data;
   } catch (error) {
@@ -3519,21 +3391,22 @@ export const getDomainPublishRepoList = async (
   accessToken: string,
   domainUrl: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IRepo>>
-    >("repositories/publishRepoList", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        domainUrl,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
+      "repositories/publishRepoList",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3546,20 +3419,21 @@ export const getUsersOfResource = async (
   accessToken: string,
   resourceId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IGetUserAccesses>
-    >(`acl/${resourceId}/users`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IGetUserAccesses>>(
+      `acl/${resourceId}/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3572,7 +3446,7 @@ export const addAccessToResource = async (
   resourceId: number,
   accessNames: string[],
   username: string,
-  cascadeToChildren: boolean
+  cascadeToChildren: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3586,7 +3460,7 @@ export const addAccessToResource = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -3600,22 +3474,19 @@ export const deleteAccessOfResource = async (
   resourceId: number,
   accessNames: string[],
   username: string,
-  validate: boolean
+  validate: boolean,
 ) => {
   try {
-    const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `acl/${resourceId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        data: {
-          accessNames,
-          username,
-          validate,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(`acl/${resourceId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: {
+        accessNames,
+        username,
+        validate,
+      },
+    });
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -3624,23 +3495,20 @@ export const deleteAccessOfResource = async (
 
 /// /////////////////////////////// FEEDS SERVICES //////////////////////
 
-export const getDomainPublicFeeds = async (
-  domain: string,
-  offset: number,
-  size: number
-) => {
+export const getDomainPublicFeeds = async (domain: string, offset: number, size: number) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IFeedItem>>
-    >("domain/feeds", {
-      headers: {
-        domainUrl: domain,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IFeedItem>>>(
+      "domain/feeds",
+      {
+        headers: {
+          domainUrl: domain,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3653,22 +3521,23 @@ export const getDomainPrivateFeeds = async (
   accessToken: string,
   offset: number,
   size: number,
-  repoId?: number
+  repoId?: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IFeedItem>>
-    >("report/social/userPosts", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        domainUrl: domain,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IFeedItem>>>(
+      "report/social/userPosts",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl: domain,
+        },
+        params: {
+          offset,
+          size,
+          repoId,
+        },
       },
-      params: {
-        offset,
-        size,
-        repoId,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3683,23 +3552,20 @@ export const getBranchList = async (
   parentId: number | undefined,
   ownerSSOID: number | undefined,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IBranchList>>(
-      "branch",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          parentId,
-          ownerSSOID,
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<IServerResult<IBranchList>>("branch", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        parentId,
+        ownerSSOID,
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -3707,10 +3573,7 @@ export const getBranchList = async (
   }
 };
 
-export const getBranchInfo = async (
-  accessToken: string,
-  branchId: number | undefined
-) => {
+export const getBranchInfo = async (accessToken: string, branchId: number | undefined) => {
   try {
     const response = await axiosClasorInstance.get<any>(`branch/${branchId}`, {
       headers: {
@@ -3728,7 +3591,7 @@ export const createRootBranch = async (
   accessToken: string,
   name: string,
   repoType: string,
-  username: string
+  username: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3738,7 +3601,7 @@ export const createRootBranch = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3752,7 +3615,7 @@ export const createSubBranch = async (
   branchId: number,
   name: string,
   repoType: string,
-  username: string
+  username: string,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3762,7 +3625,7 @@ export const createSubBranch = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3771,11 +3634,7 @@ export const createSubBranch = async (
   }
 };
 
-export const updateRootBranch = async (
-  accessToken: string,
-  name: string,
-  username: string
-) => {
+export const updateRootBranch = async (accessToken: string, name: string, username: string) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       "branch",
@@ -3784,7 +3643,7 @@ export const updateRootBranch = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3797,7 +3656,7 @@ export const updateSubBranch = async (
   accessToken: string,
   branchId: number,
   name: string,
-  username: string
+  username: string,
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3807,7 +3666,7 @@ export const updateSubBranch = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3818,14 +3677,11 @@ export const updateSubBranch = async (
 
 export const deleteBranch = async (accessToken: string, branchId: number) => {
   try {
-    const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `branch/${branchId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.delete<IServerResult<any>>(`branch/${branchId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data;
   } catch (error) {
@@ -3839,20 +3695,21 @@ export const getPositionOfBranch = async (
   accessToken: string,
   branchId: number | undefined,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IPositionList>
-    >(`branch/${branchId}/position`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IPositionList>>(
+      `branch/${branchId}/position`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -3863,7 +3720,7 @@ export const getPositionOfBranch = async (
 export const getPositionInfo = async (
   accessToken: string,
   branchId: number | undefined,
-  positionName: string
+  positionName: string,
 ) => {
   try {
     const response = await axiosClasorInstance.get<any>(
@@ -3872,7 +3729,7 @@ export const getPositionInfo = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data.data;
@@ -3885,7 +3742,7 @@ export const setPositionForBranch = async (
   accessToken: string,
   branchId: number,
   title: string,
-  members?: string[]
+  members?: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -3895,7 +3752,7 @@ export const setPositionForBranch = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3908,7 +3765,7 @@ export const addMembersToPosition = async (
   accessToken: string,
   branchId: number,
   positionName: string,
-  members: string[]
+  members: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -3918,7 +3775,7 @@ export const addMembersToPosition = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3931,7 +3788,7 @@ export const setGrantsForPosition = async (
   accessToken: string,
   branchId: number,
   positionName: string,
-  serviceNames: string[]
+  serviceNames: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -3941,7 +3798,7 @@ export const setGrantsForPosition = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3954,7 +3811,7 @@ export const assignPositionForSubBranch = async (
   accessToken: string,
   branchId: number,
   subBranchId: number,
-  positionName: string
+  positionName: string,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -3963,7 +3820,7 @@ export const assignPositionForSubBranch = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -3977,7 +3834,7 @@ export const updatePosition = async (
   branchId: number,
   positionName: string,
   title: string,
-  members: string[]
+  members: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
@@ -3987,7 +3844,7 @@ export const updatePosition = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -4000,7 +3857,7 @@ export const deleteMembersFromPosition = async (
   accessToken: string,
   branchId: number,
   positionName: string,
-  members: string[]
+  members: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -4012,7 +3869,7 @@ export const deleteMembersFromPosition = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -4024,7 +3881,7 @@ export const deleteMembersFromPosition = async (
 export const deletePosition = async (
   accessToken: string,
   branchId: number,
-  positionName: string
+  positionName: string,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
@@ -4033,7 +3890,7 @@ export const deletePosition = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data;
@@ -4046,20 +3903,21 @@ export const getBranchUsers = async (
   accessToken: string,
   branchId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IBranchUserList>
-    >(`branch/${branchId}/users`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const response = await axiosClasorInstance.get<IServerResult<IBranchUserList>>(
+      `branch/${branchId}/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -4083,11 +3941,7 @@ export const getRepoTypes = async (accessToken: string) => {
   }
 };
 
-export const createRepoTypes = async (
-  accessToken: string,
-  name: string,
-  username: string
-) => {
+export const createRepoTypes = async (accessToken: string, name: string, username: string) => {
   try {
     const response = await axiosClasorInstance.post<any>(
       "admin/repoTypes/user/BlogBox",
@@ -4096,7 +3950,7 @@ export const createRepoTypes = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4107,14 +3961,11 @@ export const createRepoTypes = async (
 
 export const deleteRepoType = async (accessToken: string, id: number) => {
   try {
-    const response = await axiosClasorInstance.delete<any>(
-      `admin/repoTypes/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.delete<any>(`admin/repoTypes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -4128,21 +3979,22 @@ export const getDomainFeeds = async (
   accessToken: string,
   domainUrl: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IListResponse<IFeedItem>>
-    >("domain/feeds", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        domainUrl,
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IFeedItem>>>(
+      "domain/feeds",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -4156,7 +4008,7 @@ export const createDomainFeed = async (
   name: string,
   content: string,
   link?: string,
-  image?: string
+  image?: string,
 ) => {
   const data: any = {
     name,
@@ -4178,7 +4030,7 @@ export const createDomainFeed = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4194,7 +4046,7 @@ export const updateDomainFeed = async (
   name: string,
   content: string,
   link?: string,
-  image?: string
+  image?: string,
 ) => {
   const data: any = {
     name,
@@ -4216,7 +4068,7 @@ export const updateDomainFeed = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4225,11 +4077,7 @@ export const updateDomainFeed = async (
   }
 };
 
-export const deleteDomainFeed = async (
-  accessToken: string,
-  domainUrl: string,
-  feedId: number
-) => {
+export const deleteDomainFeed = async (accessToken: string, domainUrl: string, feedId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `domain/feeds/${feedId}`,
@@ -4238,7 +4086,7 @@ export const deleteDomainFeed = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4249,16 +4097,13 @@ export const deleteDomainFeed = async (
 
 export const getFeedImages = async (offset: number, size: number) => {
   try {
-    const response = await axiosClasorInstance.get<any>(
-      "podSpace/publicFolder/images",
-      {
-        headers: {},
-        params: {
-          offset,
-          size,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<any>("podSpace/publicFolder/images", {
+      headers: {},
+      params: {
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -4274,7 +4119,7 @@ export const createPrivateFeed = async (
   name: string,
   content: string,
   link?: string,
-  image?: string
+  image?: string,
 ) => {
   const data: any = {
     name,
@@ -4295,7 +4140,7 @@ export const createPrivateFeed = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4311,7 +4156,7 @@ export const updatePrivateFeed = async (
   name: string,
   content: string,
   link?: string,
-  image?: string
+  image?: string,
 ) => {
   const data: any = {
     name,
@@ -4332,7 +4177,7 @@ export const updatePrivateFeed = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4341,11 +4186,7 @@ export const updatePrivateFeed = async (
   }
 };
 
-export const deletePrivateFeed = async (
-  accessToken: string,
-  repoId: number,
-  feedId: number
-) => {
+export const deletePrivateFeed = async (accessToken: string, repoId: number, feedId: number) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
       `repositories/${repoId}/feeds/${feedId}`,
@@ -4353,7 +4194,7 @@ export const deletePrivateFeed = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4368,21 +4209,22 @@ export const getDomainSubscription = async (
   accessToken: string,
   domainUrl: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IDomainSubscriptionList>
-    >("domain/subscription/requests", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        domainUrl,
+    const response = await axiosClasorInstance.get<IServerResult<IDomainSubscriptionList>>(
+      "domain/subscription/requests",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+        params: {
+          offset,
+          size,
+        },
       },
-      params: {
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {
@@ -4393,7 +4235,7 @@ export const getDomainSubscription = async (
 export const rejectSubscription = async (
   accessToken: string,
   domainUrl: string,
-  requestId: number
+  requestId: number,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -4404,7 +4246,7 @@ export const rejectSubscription = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4416,7 +4258,7 @@ export const rejectSubscription = async (
 export const acceptSubscription = async (
   accessToken: string,
   domainUrl: string,
-  requestId: number
+  requestId: number,
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
@@ -4427,7 +4269,7 @@ export const acceptSubscription = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4436,9 +4278,7 @@ export const acceptSubscription = async (
   }
 };
 
-export const getCustomPostByDomain = async (
-  domain: string
-): Promise<IDomainMetadata> => {
+export const getCustomPostByDomain = async (domain: string): Promise<IDomainMetadata> => {
   try {
     if (domain === "") {
       throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
@@ -4448,24 +4288,31 @@ export const getCustomPostByDomain = async (
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
       const cacheResult = JSON.parse(cachedDomain);
-      console.log(JSON.stringify({
-        type: "Redis cache data",
-        data: cacheResult,
-      }, null, 0));
+      console.log(
+        JSON.stringify(
+          {
+            type: "Redis cache data",
+            data: cacheResult,
+          },
+          null,
+          0,
+        ),
+      );
       return cacheResult;
     }
-    const { data } = await axiosClasorInstance.get<
-      IClasorResult<IClasorDomainResult>
-    >("domain/info", {
-      headers: {
-        domainUrl: domain,
+    const { data } = await axiosClasorInstance.get<IClasorResult<IClasorDomainResult>>(
+      "domain/info",
+      {
+        headers: {
+          domainUrl: domain,
+        },
       },
-    });
+    );
 
     const sensitiveStringData = await decryptKey(
       data.data.sensitiveData,
       process.env.CRYPTO_SECRET_KEY!,
-      process.env.CRYPTO_INIT_VECTOR_KEY!
+      process.env.CRYPTO_INIT_VECTOR_KEY!,
     );
     const sensitiveData = JSON.parse(sensitiveStringData);
 
@@ -4488,11 +4335,7 @@ export const getCustomPostByDomain = async (
 
 /// /////////////////////////////// CHAT //////////////////////
 
-export const enableDocChat = async (
-  accessToken: string,
-  repoId: number,
-  docId: number
-) => {
+export const enableDocChat = async (accessToken: string, repoId: number, docId: number) => {
   try {
     const response = await axiosClasorInstance.patch<
       IServerResult<{
@@ -4505,7 +4348,7 @@ export const enableDocChat = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4514,10 +4357,7 @@ export const enableDocChat = async (
   }
 };
 
-export const enableRepoChat = async (
-  accessToken: string,
-  repoId: number,
-) => {
+export const enableRepoChat = async (accessToken: string, repoId: number) => {
   try {
     const response = await axiosClasorInstance.patch<
       IServerResult<{
@@ -4530,7 +4370,7 @@ export const enableRepoChat = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4546,7 +4386,7 @@ export const createDomainTag = async (
   accessToken: string,
   name: string,
   description: string,
-  order: number
+  order: number,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IDomainTag>(
@@ -4561,7 +4401,7 @@ export const createDomainTag = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -4573,12 +4413,10 @@ export const getAllDomainTags = async (
   domainUrl: string,
   accessToken: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<
-      IServerResult<IDomainTagList>
-    >("/domain/tags", {
+    const response = await axiosClasorInstance.get<IServerResult<IDomainTagList>>("/domain/tags", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         domainUrl,
@@ -4594,21 +4432,14 @@ export const getAllDomainTags = async (
   }
 };
 
-export const getDomainTagById = async (
-  domainUrl: string,
-  accessToken: string,
-  tagId: number
-) => {
+export const getDomainTagById = async (domainUrl: string, accessToken: string, tagId: number) => {
   try {
-    const response = await axiosClasorInstance.get<IDomainTag>(
-      `/domain/tags/${tagId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          domainUrl,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.get<IDomainTag>(`/domain/tags/${tagId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+    });
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -4620,34 +4451,26 @@ export const updateDomainTag = async (
   accessToken: string,
   tagId: number,
   name?: string,
-  description?: string
+  description?: string,
 ) => {
   try {
     const data: { name?: string; description?: string } = {};
     if (name !== undefined) data.name = name;
     if (description !== undefined) data.description = description;
 
-    const response = await axiosClasorInstance.put<IDomainTag>(
-      `/domain/tags/${tagId}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          domainUrl,
-        },
-      }
-    );
+    const response = await axiosClasorInstance.put<IDomainTag>(`/domain/tags/${tagId}`, data, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+    });
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
 
-export const deleteDomainTag = async (
-  domainUrl: string,
-  accessToken: string,
-  tagId: number
-) => {
+export const deleteDomainTag = async (domainUrl: string, accessToken: string, tagId: number) => {
   try {
     await axiosClasorInstance.delete(`/domain/tags/${tagId}`, {
       headers: {
@@ -4667,7 +4490,7 @@ export const setDocumentDomainTags = async (
   repoId: number,
   documentId: number,
   tagIds: number[],
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.patch(
@@ -4683,7 +4506,7 @@ export const setDocumentDomainTags = async (
         params: {
           isDirectAccess,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {
@@ -4694,12 +4517,12 @@ export const setDocumentDomainTags = async (
 export const addPartyToDomainParticipants = async (
   domainUrl: string,
   accessToken: string,
-  userNameList: string
+  userNameList: string,
 ) => {
   const redisClient = await getRedisClient();
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
-  
+
   try {
     const response = await axiosClasorInstance.patch(
       "domain/participants/addParty",
@@ -4711,7 +4534,7 @@ export const addPartyToDomainParticipants = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
     if (cachedDomain) {
       redisClient?.del(`domain:${domainUrl}`);
@@ -4729,12 +4552,12 @@ export const addPartyToDomainParticipants = async (
 export const removePartyFromDomainParticipants = async (
   domainUrl: string,
   accessToken: string,
-  userNameList: string[]
+  userNameList: string[],
 ) => {
   const redisClient = await getRedisClient();
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
-   
+
   try {
     const response = await axiosClasorInstance.patch(
       "domain/participants/removeParty",
@@ -4746,7 +4569,7 @@ export const removePartyFromDomainParticipants = async (
           Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
-      }
+      },
     );
     if (cachedDomain) {
       redisClient?.del(`domain:${domainUrl}`);
@@ -4762,19 +4585,17 @@ export const removePartyFromDomainParticipants = async (
 
 /// ///////////////////////// CONFIG PANEL /////////////////////////
 
-export const getUserConfigPanel = async (
-  accessToken: string,
-  repoId: number,
-  ssoId: number
-) => {
+export const getUserConfigPanel = async (accessToken: string, repoId: number, ssoId?: number) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IUserConfigPanel[]>>(
-      `repositories/${repoId}/userConfigPanel/${ssoId}`,
+      ssoId
+        ? `repositories/${repoId}/userConfigPanel/${ssoId}`
+        : `repositories/${repoId}/userConfigPanel`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     return response.data.data;
@@ -4792,7 +4613,6 @@ export const updateUserConfigPanel = async (
   allowedServices?: string[],
 ) => {
   try {
-
     const response = await axiosClasorInstance.put<any>(
       `repositories/${repoId}/userConfigPanel/${ssoId}`,
       {
@@ -4804,7 +4624,7 @@ export const updateUserConfigPanel = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {

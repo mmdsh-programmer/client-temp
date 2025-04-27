@@ -10,16 +10,20 @@ import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPane
 import { selectedUserAtom } from "@atom/user";
 import { ERoles } from "@interface/enums";
 import UserItem from "@components/organisms/users/userItem";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const UserConfigPanelDialog = () => {
   const getRepo = useRecoilValue(repoAtom);
+  const { data: userInfo } = useGetUser();
   const [getSelectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
 
   const [blockServices, setBlockServices] = useState<string[]>([]);
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
     getRepo!.id,
-    getSelectedUser!.userInfo.ssoId,
+    userInfo?.ssoId === getSelectedUser!.userInfo.ssoId
+      ? undefined
+      : getSelectedUser!.userInfo.ssoId,
   );
   const updateUserConfigPanel = useUpdateUserConfigPanel();
 
@@ -116,6 +120,11 @@ const UserConfigPanelDialog = () => {
                       getRepo?.roleName === ERoles.writer ||
                       getRepo?.roleName === ERoles.viewer
                     }
+                    disabled={(getRepo?.roleName === ERoles.admin &&
+                      getSelectedUser?.userRole === ERoles.admin) ||
+                    getRepo?.roleName === ERoles.editor ||
+                    getRepo?.roleName === ERoles.writer ||
+                    getRepo?.roleName === ERoles.viewer}
                   />
                 </div>
               );
