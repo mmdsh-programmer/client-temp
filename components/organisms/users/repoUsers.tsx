@@ -35,7 +35,9 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
   return (
     <div className="repo-users overflow-y-auto">
       {isLoadingInviteToRepoRequests || isLoadingRepoUsers ? (
-        <Spinner className="h-8 w-8" color="purple" />
+        <div className="flex h-full w-full justify-center overflow-hidden">
+          <Spinner className="h-8 w-8" color="purple" />
+        </div>
       ) : (
         <div
           className={`repo-users__list flex flex-col overflow-y-auto overflow-x-hidden
@@ -58,10 +60,7 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
             });
           })}
           <RenderIf isTrue={hasNextPage}>
-            <LoadMore
-              fetchNextPage={fetchNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-            />
+            <LoadMore fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage} />
           </RenderIf>
         </div>
       )}

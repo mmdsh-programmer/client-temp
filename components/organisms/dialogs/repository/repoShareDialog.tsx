@@ -15,8 +15,8 @@ import TabComponent from "@components/molecules/tab";
 import Users from "@components/organisms/users";
 import { openShareAccessAtom } from "@atom/public";
 import { repoAtom } from "@atom/repository";
-import { userIdAtom } from "@atom/app";
 import UserConfigPanelDialog from "../configPanel/userConfigPanelDialog";
+import { selectedUserAtom } from "@atom/user";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
     useRecoilState(deleteGroupAtom);
   const [getOpenShareAccess, setOpenShareAccess] =
     useRecoilState(openShareAccessAtom);
-    const  getUserId = useRecoilValue(userIdAtom);
+    const getSelectedUser = useRecoilValue(selectedUserAtom);
 
   const handleClose = () => {
     setOpen(false);
@@ -80,7 +80,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   if (getDeleteGroupModal) {
     return <GroupDeleteDialog setOpen={setDeleteGroupModal} />;
   }
-  if (getUserId) {
+  if (getSelectedUser?.userInfo) {
     return <UserConfigPanelDialog />;
   }
 

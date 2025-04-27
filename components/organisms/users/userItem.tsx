@@ -1,11 +1,10 @@
+import React from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import { Spinner, Typography } from "@material-tailwind/react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-
+import { useRecoilState } from "recoil";
 import { ERoles } from "@interface/enums";
 import { IUser } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
-import React from "react";
 import { UserIcon } from "@components/atoms/icons";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
@@ -14,7 +13,7 @@ import useDeleteUser from "@hooks/user/useDeleteUser";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
-import { userIdAtom } from "@atom/app";
+import { selectedUserAtom } from "@atom/user";
 
 interface IProps {
   user: IUser;
@@ -22,7 +21,7 @@ interface IProps {
 
 const UserItem = ({ user }: IProps) => {
   const [getRepo, setRepo] = useRecoilState(repoAtom);
-  const  setUserId = useSetRecoilState(userIdAtom);
+  const [getSelectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
   const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
@@ -46,11 +45,11 @@ const UserItem = ({ user }: IProps) => {
       value: "transferOwnership",
       className: "repo-user__transfer-ownership",
     },
-    {
+    ...(getSelectedUser?.userInfo ? [] : [{
       label: "تنظیمات پیشرفته",
       value: "setting",
       className: "repo-user__advanced-setting",
-    },
+    }]),
     {
       label: "حذف کاربر",
       value: "delete",
@@ -61,7 +60,7 @@ const UserItem = ({ user }: IProps) => {
   const handleChange = (value: IOption) => {
     if (!getRepo) return;
     if (value.value === "setting") {
-      return setUserId(user.userInfo.ssoId);
+      return setSelectedUser(user);
     }
     if (value.value === "delete") {
       return deleteUser.mutate({
