@@ -41,7 +41,7 @@ const Start = ({ children }: IProps) => {
   }
 
   if (!userInfo) {
-    return router.push("/");
+    router.push("/");
   }
 
   return (
