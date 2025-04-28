@@ -46,7 +46,7 @@ const RequestMenu = ({ request }: IProps) => {
             </Typography>
           </Button>
           <Button
-            className="request-menu__accept-button w-16 xs:w-20 h-8 bg-secondary hover:bg-secondary active:bg-secondary"
+            className="request-menu__accept-button w-16 xs:w-20 h-8 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
             onClick={handleAcceptRequest}
           >
             <Typography className="text__label__button text-white">

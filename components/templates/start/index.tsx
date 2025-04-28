@@ -1,11 +1,10 @@
 "use client";
 
 import React, { ReactNode } from "react";
-
 import Error from "@app/error";
 import PanelUrl from "../panelUrl";
 import SpinnerText from "@components/molecules/spinnerText";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -13,7 +12,8 @@ interface IProps {
 }
 
 const Start = ({ children }: IProps) => {
-  const { isLoading, isError, error, refetch, data } = useGetUser();
+  const router = useRouter();
+  const { data: userInfo, isLoading, isError, error, refetch } = useGetUser();
 
   if (isError) {
     console.log({
@@ -34,14 +34,14 @@ const Start = ({ children }: IProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         <SpinnerText text="در حال دریافت اطلاعات" />
       </div>
     );
   }
 
-  if (!data) {
-    return redirect("/");
+  if (!userInfo) {
+    return router.push("/");
   }
 
   return (

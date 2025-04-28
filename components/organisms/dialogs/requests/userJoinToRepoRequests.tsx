@@ -51,7 +51,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
                           {request.repoName}
                         </Typography>
                         <ChipMolecule
-                          className="label_l4 !text-secondary-normal h-5 px-2 bg-secondary-light"
+                          className="label_l4 !text-primary h-5 px-2 bg-primary-light"
                           value={translateRoles(request.role)}
                         />
                       </div>

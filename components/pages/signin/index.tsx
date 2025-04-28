@@ -2,15 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { Spinner, Typography } from "@material-tailwind/react";
-import { getUserToken, login } from "@actions/auth";
+import { getUserToken } from "@actions/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-
-import ImageComponent from "@components/atoms/image";
-import { InfoIcon } from "@components/atoms/icons";
-import LoadingButton from "@components/molecules/loadingButton";
 import { useDebouncedCallback } from "use-debounce";
+import Error from "@components/organisms/error";
+import BasicError from "@utils/error";
 
-interface IProps{
+interface IProps {
   projectName: string;
   logo: string;
   projectDescription: string;
@@ -21,6 +19,8 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log(projectName, logo, projectDescription);
+
   const sendCode = async (code: string) => {
     const redirect_uri = `${window.location.origin}/signin`;
 
@@ -30,14 +30,10 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
       const lastPage = localStorage.getItem("CLASOR:LAST_PAGE") || null;
 
       if (lastPage === null) {
-        const selectedrepoString = window.localStorage.getItem(
-          "CLASOR:SELECTED_REPO"
-        );
-        const selectedRepo = selectedrepoString
-          ? JSON.parse(selectedrepoString)
-          : null;
+        const selectedrepoString = window.localStorage.getItem("CLASOR:SELECTED_REPO");
+        const selectedRepo = selectedrepoString ? JSON.parse(selectedrepoString) : null;
         if (selectedRepo) {
-          router.push("/admin/repositories");
+          router.push(`/admin/repositories?repoId?${selectedRepo.id}`);
         } else if (window.localStorage.getItem("CLASOR:PANEL_URL")) {
           const redirectLink = `${
             window.location.origin
@@ -70,72 +66,32 @@ const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
       } catch {
         setError("خطا در دریافت اطلاعات کاربری");
       }
-    } 
+    }
     setLoading(false);
   }, 100);
 
   useEffect(() => {
     init();
-  }, [searchParams]);
+  }, []);
 
   if (loading) {
     return (
-      <div className="get-user-info w-screen h-screen flex items-center justify-center bg-slate-50">
+      <div className="get-user-info bg-slate-50 flex h-screen w-screen items-center justify-center">
         <Spinner className="h-8 w-8" color="purple" />
-        <Typography className="font-bold mr-2 title_t1">
-          در حال دریافت اطلاعات کاربری
-        </Typography>
+        <Typography className="title_t1 mr-2 font-bold">در حال دریافت اطلاعات کاربری</Typography>
       </div>
     );
   }
-  return (
-    <main className="w-screen min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="flex flex-col lg:flex-row rounded-2xl shadow-xl bg-secondary">
-        <div className="flex justify-center items-center">
-          <figure className="flex sm:w-[400px] sm:h-[400px] w-full h-auto items-center justify-center">
-            {logo ? (
-              <ImageComponent
-                alt="repo-image"
-                src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${logo}`}
-                className="h-48 w-48"
-              />
-            ) : (
-              <div className="w-8 h-8 flex items-center justify-center">
-                <InfoIcon className="h-8 w-8" stroke="#000" />
-              </div>
-            )}
-          </figure>
-        </div>
-        <div className="card-body flex flex-col flex-1 my-10 px-10">
-          {error ? (
-            <h4 className="text-secondary flex-grow">
-              خطایی به وجود آمده لطفا دوباره تلاش کنید.
-            </h4>
-          ) : (
-            <>
-              <h2 className="card-title text-xl font-bold text-primary_normal">
-                به {projectName} خوش آمدید!
-              </h2>
-              <p className="text-base mt-4 flex-grow text-sm">
-                {projectDescription}
-              </p>
-            </>
-          )}
 
-          <div className="flex justify-end items-center card-actions h-12">
-            <LoadingButton
-              className="flex justify-center items-center mt-4 px-10 py-2 rounded-lg lg:mt-0 bg-tertiary  text-white font-iranYekan"
-              onClick={() => {
-                return login();
-              }}
-            >
-              ورود
-            </LoadingButton>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
+  if (error) {
+    return (
+      <Error
+        error={{
+          message: (error as unknown as BasicError).message ?? "خطا در دریافت اطلاعات ",
+        }}
+      />
+    );
+  }
 };
 
 export default SignInComponent;

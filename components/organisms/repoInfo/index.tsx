@@ -32,7 +32,7 @@ const RepoInfo = () => {
                 </Typography>
                 <ChipMolecule
                   value={translateRoles(getRepo?.roleName)}
-                  className="px-2 py-[2px] border-[1px] border-normal bg-secondary-light text-primary"
+                  className="px-2 py-[2px] border-[1px] border-normal bg-primary-light text-primary"
                 />
               </div>
               <Typography className="caption_c2 text-hint">

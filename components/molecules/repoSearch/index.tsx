@@ -41,7 +41,7 @@ const RepoSearch = () => {
           value={search}
         />
         <Button
-          className="search-repo__button rounded-none h-[34px] px-4 bg-secondary hover:bg-secondary active:bg-secondary"
+          className="search-repo__button rounded-none h-[34px] px-4 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={() => {
             if (search.trim() !== "") {
               setSearchParam({ repoType, search });
