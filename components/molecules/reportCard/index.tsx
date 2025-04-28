@@ -12,7 +12,7 @@ interface IProps {
 
 const ReportCard = ({ title, icon, description }: IProps) => {
   return (
-    <div className="w-full bg-primary rounded-lg p-4 max-h-[150px]">
+    <div className="w-full bg-white rounded-lg p-4 max-h-[150px]">
       <div className="float-right ml-2 p-[18px] bg-purple-light rounded-full">
         {icon}
       </div>

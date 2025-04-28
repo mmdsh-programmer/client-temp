@@ -29,7 +29,7 @@ const renderFeedbackSection = (
         return (
           <div
             key={feedback.id}
-            className=" flex flex-col w-full shadow-xSmall bg-primary rounded-lg p-4 gap-4"
+            className=" flex flex-col w-full shadow-xSmall bg-white rounded-lg p-4 gap-4"
             onClick={() => {
               setOpenFeedbackDialog(true);
               setSelectedFeedback(feedback);

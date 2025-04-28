@@ -75,7 +75,7 @@ const Editor = ({ setOpen }: IProps) => {
     repoId,
     getSelectedDocument!.id,
     getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
-    getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
+    getSelectedVersion ? getSelectedVersion.state : editorMode === "preview" ? getLastVersion?.state : "draft", // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
     currentPath === "/admin/sharedDocuments",
