@@ -103,7 +103,7 @@ export const getMe = async () => {
     }
 
     const expiresAt = Math.floor((tokenInfo.expiresAt - +new Date()) / 1000);
-    const userData = await userInfo(tokenInfo.access_token, domain, +tokenInfo.expiresAt);
+    const userData = await userInfo(tokenInfo.access_token, domain, expiresAt);
     const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, expiresAt);
     const userDataWithPrivate = {
       ...userData,
