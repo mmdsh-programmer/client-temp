@@ -1,9 +1,3 @@
-import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { IDocumentMetadata } from "@interface/document.interface";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import {
   ArrowLeftRectangleIcon,
   CopyIcon,
@@ -22,11 +16,18 @@ import {
   PublishedLimitationIcon,
   VisibleIcon,
 } from "@components/atoms/icons";
-import { repoAtom } from "@atom/repository";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { editorModalAtom, editorModeAtom } from "@atom/editor";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+
 import { ERoles } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
+import React from "react";
+import { repoAtom } from "@atom/repository";
+import { toPersianDigit } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { toPersianDigit } from "@utils/index";
+import { versionModalListAtom } from "@atom/version";
 
 interface UseDocumentMenuListProps {
   document?: IDocumentMetadata;
@@ -199,6 +200,7 @@ const useDocumentMenuList = ({
         text: " لینک انتشار",
         icon: <CopyIcon className="w-4 h-4 fill-icon-active" />,
         onClick: () => {
+          debugger;
           const url = toPersianDigit(
             `/share/${toPersianDigit(
               `${getRepo?.name.replaceAll(/\s+/g, "-")}`

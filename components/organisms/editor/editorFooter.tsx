@@ -22,6 +22,7 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
+import { useDebouncedCallback } from "use-debounce";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
@@ -144,7 +145,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSave = (data: any) => {
+  const handleSave = useDebouncedCallback((data: any) => {
     setIsLoading(true);
 
     let encryptedContent: string | null = null;
@@ -186,7 +187,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     } else {
       setIsLoading(false);
     }
-  };
+  }, 1000);
 
   const startWorker = (time?: number) => {
     if (!autoSaveRef.current) {

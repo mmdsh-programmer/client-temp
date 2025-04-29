@@ -24,7 +24,8 @@ const pages = [
   "/signin",
   "/subscribe",
   "/feeds",
-  "/share"
+  "/share",
+  "/privateDoc"
 ];
 
 function convertDocsUrlToPublishUrl(url: NextURL) {
@@ -220,6 +221,7 @@ export const config = {
     "/page/:path*",
     "/private/:path*",
     "/feeds/:path*",
-    "/share/:path*"
+    "/share/:path*",
+    "/privateDoc/:path*"
   ],
 };
