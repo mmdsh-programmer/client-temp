@@ -22,7 +22,9 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
   };
 
   if (acceptedRepo) {
-    return <JoinToRepoDialog repo={acceptedRepo} setAcceptedRepo={setAcceptedRepo} />;
+    return (
+      <JoinToRepoDialog repo={acceptedRepo} setAcceptedRepo={setAcceptedRepo} setOpen={setOpen} />
+    );
   }
 
   return (

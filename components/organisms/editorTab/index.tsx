@@ -23,29 +23,26 @@ import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import useRepoId from "@hooks/custom/useRepoId";
 import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
+import EditorFileFooter from "../editor/editorFileFooter";
 
 const EditorTab = () => {
   const currentPath = usePathname();
 
   const repoId = useRepoId();
-  const [getSelectedDocument, setSelectedDocument] =
-    useRecoilState(selectedDocumentAtom);
+  const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
-  const [getSelectedVersion, setSelectedVersion] =
-    useRecoilState(selectedVersionAtom);
+  const [versionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
-  const [decryptedContent, setDecryptedContent] = useRecoilState(
-    editorDecryptedContentAtom
-  );
+  const [decryptedContent, setDecryptedContent] = useRecoilState(editorDecryptedContentAtom);
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
   const searchParams = useSearchParams();
   const versionId = searchParams?.get("versionId");
   const versionState = searchParams?.get("versionState");
   const sharedDocuments = searchParams?.get("sharedDocuments");
+  const documentType = searchParams?.get("type");
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -55,17 +52,14 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const { data: getLastVersion, isSuccess: lastVersionIsSuccess } =
-    useGetLastVersion(
-      repoId,
-      getSelectedDocument!.id,
-      sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-      !getVersionData
-    );
+  const { data: getLastVersion, isSuccess: lastVersionIsSuccess } = useGetLastVersion(
+    repoId,
+    getSelectedDocument!.id,
+    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    !getVersionData,
+  );
 
-  const vId = getSelectedVersion
-    ? getSelectedVersion.id
-    : versionId || getLastVersion?.id;
+  const vId = getSelectedVersion ? getSelectedVersion.id : versionId || getLastVersion?.id;
   const vState = getSelectedVersion
     ? getSelectedVersion.state
     : versionState || getLastVersion?.state;
@@ -78,7 +72,7 @@ const EditorTab = () => {
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument
     sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    true
+    true,
   );
 
   const getEditorConfig = (): {
@@ -86,16 +80,13 @@ const EditorTab = () => {
     ref: React.RefObject<IRemoteEditorRef>;
   } => {
     const editors = {
-      [EDocumentTypes.classic]: process.env
-        .NEXT_PUBLIC_CLASSIC_EDITOR as string,
+      [EDocumentTypes.classic]: process.env.NEXT_PUBLIC_CLASSIC_EDITOR as string,
       [EDocumentTypes.word]: process.env.NEXT_PUBLIC_WORD_EDITOR as string,
       [EDocumentTypes.latex]: process.env.NEXT_PUBLIC_LATEX_EDITOR as string,
       [EDocumentTypes.excel]: process.env.NEXT_PUBLIC_EXCEL_EDITOR as string,
-      [EDocumentTypes.flowchart]: process.env
-        .NEXT_PUBLIC_FLOWCHART_EDITOR as string,
+      [EDocumentTypes.flowchart]: process.env.NEXT_PUBLIC_FLOWCHART_EDITOR as string,
     };
-    const contentType =
-      getSelectedDocument?.contentType || EDocumentTypes.classic;
+    const contentType = getSelectedDocument?.contentType || EDocumentTypes.classic;
     return {
       url: editors[contentType],
       ref: editorRefs[contentType],
@@ -109,15 +100,8 @@ const EditorTab = () => {
     } else if (!getLastVersion && isSuccess) {
       setVersionModalList(true);
     }
-    if (
-      document?.contentType === EDocumentTypes.board &&
-      getLastVersion &&
-      !versionModalList
-    ) {
-      window.open(
-        `http://localhost:8080/board/${getLastVersion?.id}`,
-        "_blank"
-      );
+    if (document?.contentType === EDocumentTypes.board && getLastVersion && !versionModalList) {
+      window.open(`http://localhost:8080/board/${getLastVersion?.id}`, "_blank");
     }
   }, [getLastVersion]);
 
@@ -152,12 +136,7 @@ const EditorTab = () => {
     return null;
   }
 
-  if (
-    showKey &&
-    !decryptedContent &&
-    getVersionData &&
-    getVersionData.content?.length
-  ) {
+  if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
     return (
       <EditorKey
         isPending={isFetching}
@@ -173,27 +152,26 @@ const EditorTab = () => {
   }
 
   return data ? (
-    <div className="h-screen flex-grow p-0 overflow-auto">
+    <div className="h-screen flex-grow overflow-auto p-0">
       <BlockDraft version={data}>
         <PublicKeyInfo
           repoId={repoId}
           publicKeyId={
-            getSelectedDocument?.publicKeyId
-              ? +getSelectedDocument.publicKeyId
-              : undefined
+            getSelectedDocument?.publicKeyId ? +getSelectedDocument.publicKeyId : undefined
           }
         >
           <>
-            <BlockDraftDialog
-              editorRef={getEditorConfig().ref}
-              onClose={handleClose}
-            />
-            <div className="flex items-center xs:justify-between gap-[10px] xs:gap-0 p-6 xs:px-6 xs:py-5 border-b-none xs:border-b-[0.5px] border-normal bg-primary">
+            <BlockDraftDialog editorRef={getEditorConfig().ref} onClose={handleClose} />
+            <div className="border-b-none flex items-center gap-[10px] border-normal bg-primary p-6 xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5">
               <EditorHeader dialogHeader={getSelectedDocument?.name} />
             </div>
             <EditorComponent version={data} getEditorConfig={getEditorConfig} />
-            <div className="flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] bg-primary">
-              <EditorFooter editorRef={getEditorConfig().ref} />
+            <div className="flex gap-2 border-t-[0.5px] border-t-gray-200 bg-primary p-5 xs:gap-3 xs:px-6 xs:py-4">
+              {documentType === EDocumentTypes.file ? (
+                <EditorFileFooter />
+              ) : (
+                <EditorFooter editorRef={getEditorConfig().ref} />
+              )}
             </div>
           </>
         </PublicKeyInfo>

@@ -15,10 +15,10 @@ const SidebarHeader = ({ domainInfo }: IProps) => {
     <Link href="/" className="w-full">
       <Card
         placeholder="sidebar-header"
-        className="sidebar-header shadow-none px-3 py-2 text-primary_normal hover:text-white rounded-md cursor-pointer hover:bg-card-background w-full border-[1px] border-gray-200"
+        className="sidebar-header shadow-none px-3 py-2 text-primary_normal bg-primary-light rounded-md cursor-pointer hover:bg-primary-light w-full border-[1px] border-gray-200"
       >
         <div className="flex items-center">
-          <div className="w-10 h-10 min-w-10 min-h-10 rounded-md p-1 bg-card-background">
+          <div className="w-10 h-10 min-w-10 min-h-10 rounded-md p-1">
             {domainInfo?.logo ? (
               <ImageComponent
                 className="h-8 w-8"

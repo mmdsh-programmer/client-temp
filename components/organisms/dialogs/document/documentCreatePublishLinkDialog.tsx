@@ -104,6 +104,7 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
           ) : null}
         </div>
         {isCreateLink ? (
+          <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <Typography className="form_label"> لینک منتشرشده سند</Typography>
             <div className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3">
@@ -134,6 +135,20 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
                 </Button>
               </div>
             </div>
+          </div>
+          <Button
+            className="text__label__button w-fit bg-transparent p-0 !text-[12px] text-[#0C8CE9]"
+            onClick={() => {
+              const url = toPersianDigit(
+                `/share/${toPersianDigit(
+                  `${getRepo?.name.replaceAll(/\s+/g, "-")}`,
+                )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`,
+              );
+              window.open(url, "_blank");
+            }}
+          >
+            ورود به صفحه سند منتشرشده
+          </Button>
           </div>
         ) : null}
       </form>
