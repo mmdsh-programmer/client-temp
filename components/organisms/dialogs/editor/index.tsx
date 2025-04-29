@@ -25,6 +25,7 @@ import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import { IVersion } from "@interface/version.interface";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,19 +35,14 @@ const Editor = ({ setOpen }: IProps) => {
   // TODO: REFACTOR NEEDED (HIGH PRIORITY)
 
   const repoId = useRepoId();
-  const [getSelectedDocument, setSelectedDocument] =
-    useRecoilState(selectedDocumentAtom);
+  const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const [getVersionData, setEditorData] = useRecoilState(editorDataAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
-  const [getSelectedVersion, setSelectedVersion] =
-    useRecoilState(selectedVersionAtom);
+  const [versionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
-  const [decryptedContent, setDecryptedContent] = useRecoilState(
-    editorDecryptedContentAtom
-  );
+  const [decryptedContent, setDecryptedContent] = useRecoilState(editorDecryptedContentAtom);
   const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
   const setListDrawer = useSetRecoilState(editorListDrawerAtom);
   const [getDocumentShow, setDocumentShow] = useRecoilState(documentShowAtom);
@@ -68,18 +64,18 @@ const Editor = ({ setOpen }: IProps) => {
     repoId,
     getSelectedDocument!.id,
     currentPath === "/admin/sharedDocuments",
-    !getSelectedVersion
+    !getSelectedVersion,
   );
 
-  const { data, isLoading, error, isSuccess } = useGetVersion(
+  const { data, isLoading, error, isSuccess, refetch } = useGetVersion(
     repoId,
     getSelectedDocument!.id,
     getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
-    getSelectedVersion ? getSelectedVersion.state : editorMode === "preview" ? getLastVersion?.state : "draft", // state
+    getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
     currentPath === "/admin/sharedDocuments",
-    true
+    true,
   );
 
   const getEditorConfig = (): {
@@ -87,16 +83,13 @@ const Editor = ({ setOpen }: IProps) => {
     ref: React.RefObject<IRemoteEditorRef>;
   } => {
     const editors = {
-      [EDocumentTypes.classic]: process.env
-        .NEXT_PUBLIC_CLASSIC_EDITOR as string,
+      [EDocumentTypes.classic]: process.env.NEXT_PUBLIC_CLASSIC_EDITOR as string,
       [EDocumentTypes.word]: process.env.NEXT_PUBLIC_WORD_EDITOR as string,
       [EDocumentTypes.latex]: process.env.NEXT_PUBLIC_LATEX_EDITOR as string,
       [EDocumentTypes.excel]: process.env.NEXT_PUBLIC_EXCEL_EDITOR as string,
-      [EDocumentTypes.flowchart]: process.env
-        .NEXT_PUBLIC_FLOWCHART_EDITOR as string,
+      [EDocumentTypes.flowchart]: process.env.NEXT_PUBLIC_FLOWCHART_EDITOR as string,
     };
-    const contentType =
-      getSelectedDocument?.contentType || EDocumentTypes.classic;
+    const contentType = getSelectedDocument?.contentType || EDocumentTypes.classic;
     return { url: editors[contentType], ref: editorRefs[contentType] };
   };
 
@@ -120,19 +113,25 @@ const Editor = ({ setOpen }: IProps) => {
   };
 
   useEffect(() => {
+    if (data && getLastVersion?.state === "version" && editorMode === "edit") {
+      const item = {
+        ...data,
+        id: data?.draftId ?? data?.id,
+        state: "draft",
+      } as IVersion;
+      setEditorData(item);
+      setSelectedVersion(item);
+      refetch();
+    }
+  }, [data]);
+
+  useEffect(() => {
     if (lastVersionError) {
       setSelectedDocument(null);
       setVersionModalList(false);
     }
-    if (
-      document?.contentType === EDocumentTypes.board &&
-      getLastVersion &&
-      !versionModalList
-    ) {
-      window.open(
-        `http://localhost:8080/board/${getLastVersion?.id}`,
-        "_blank"
-      );
+    if (document?.contentType === EDocumentTypes.board && getLastVersion && !versionModalList) {
+      window.open(`http://localhost:8080/board/${getLastVersion?.id}`, "_blank");
     }
   }, [getLastVersion]);
 
@@ -162,12 +161,7 @@ const Editor = ({ setOpen }: IProps) => {
     toast.warn("آخرین نسخه یافت نشد.");
   }
 
-  if (
-    showKey &&
-    !decryptedContent &&
-    getVersionData &&
-    getVersionData.content?.length
-  ) {
+  if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
     return (
       <EditorKey
         isPending={isLoading}
@@ -181,7 +175,7 @@ const Editor = ({ setOpen }: IProps) => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="main w-full h-full text-center flex items-center justify-center">
+        <div className="main flex h-full w-full items-center justify-center text-center">
           <Spinner className="h-5 w-5 " color="purple" />
         </div>
       );
@@ -192,20 +186,12 @@ const Editor = ({ setOpen }: IProps) => {
           <PublicKeyInfo
             repoId={repoId}
             publicKeyId={
-              getSelectedDocument?.publicKeyId
-                ? +getSelectedDocument.publicKeyId
-                : undefined
+              getSelectedDocument?.publicKeyId ? +getSelectedDocument.publicKeyId : undefined
             }
           >
             <>
-              <BlockDraftDialog
-                editorRef={getEditorConfig().ref}
-                onClose={handleClose}
-              />
-              <EditorComponent
-                version={data}
-                getEditorConfig={getEditorConfig}
-              />
+              <BlockDraftDialog editorRef={getEditorConfig().ref} onClose={handleClose} />
+              <EditorComponent version={data} getEditorConfig={getEditorConfig} />
             </>
           </PublicKeyInfo>
         </BlockDraft>

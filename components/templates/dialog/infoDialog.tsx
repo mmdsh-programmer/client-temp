@@ -11,6 +11,7 @@ export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
   customSize?: size;
+  backToMain?: boolean;
 }
 
 const InfoDialog = ({
@@ -19,6 +20,7 @@ const InfoDialog = ({
   setOpen,
   className,
   customSize,
+  backToMain,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -33,26 +35,28 @@ const InfoDialog = ({
       dismiss={{
         enabled: false,
       }}
-      className={`${className} bg-white flex flex-col h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] rounded-none xs:rounded-lg `}
+      className={`${className} flex h-full w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg `}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header border-b-none flex items-center justify-between gap-[10px] border-normal py-[6px] pl-4 pr-1 xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
       >
-        <div className="flex items-center">
-          <div className="block xs:hidden">
-            <BackButton onClick={handleClose} />
-          </div>
-          <Typography
-            className="form__title truncate flex-grow"
-            title={dialogHeader}
-          >
-            {dialogHeader}
-          </Typography>
+        <div className="block xs:hidden">
+          <BackButton onClick={handleClose} />
         </div>
-        <CloseButton onClose={handleClose} />
+        <div className="flex items-center">
+          {backToMain ? (
+            <div className="hidden xs:block">
+              <BackButton className="!py-0 !pl-2 !pr-0" onClick={handleClose} />
+            </div>
+          ) : null}
+          <Typography className="form__title">{dialogHeader}</Typography>
+        </div>
+        <div className="hidden xs:block">
+          <CloseButton onClose={handleClose} />
+        </div>
       </DialogHeader>
-      <div className="block xs:hidden h-2 w-full bg-secondary" />
+      <div className="block h-2 w-full bg-secondary xs:hidden" />
       {children}
     </Dialog>
   );
