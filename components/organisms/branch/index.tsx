@@ -20,7 +20,7 @@ const Branch = () => {
         <div className="flex items-center gap-2 p-3 justify-end border-b-2 border-normal">
           <IconButton
             placeholder="create button"
-            className="bg-secondary w-6 h-6 flex justify-center"
+            className="bg-primary-normal w-6 h-6 flex justify-center"
             onClick={() => {
               setOpen(true);
               setBranch(null);

@@ -1,9 +1,7 @@
-import { usePathname, useSearchParams } from "next/navigation";
-
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
 import useConfirmVersion from "@hooks/version/useConfirmVersion";
 import { useForm } from "react-hook-form";
@@ -11,6 +9,7 @@ import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
+import { editorDataAtom } from "@atom/editor";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,7 +19,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
+  const getVersion = useRecoilValue(editorDataAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");

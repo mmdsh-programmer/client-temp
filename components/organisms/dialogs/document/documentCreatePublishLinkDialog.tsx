@@ -1,6 +1,5 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { DatePicker } from "zaman";
 import { categoryAtom } from "@atom/category";
@@ -12,6 +11,9 @@ import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import { toPersianDigit } from "@utils/index";
 import { repoAtom } from "@atom/repository";
+import { CopyIcon } from "@components/atoms/icons";
+import copy from "copy-to-clipboard";
+import { toast } from "react-toastify";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -102,18 +104,36 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
           ) : null}
         </div>
         {isCreateLink ? (
-          <div
-            className="text__label__button !text-[10px] text-[#0C8CE9] cursor-pointer"
-            onClick={() => {
-              const url = toPersianDigit(
-                `/share/${toPersianDigit(
-                  `${getRepo?.name.replaceAll(/\s+/g, "-")}`,
-                )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`,
-              );
-              window.open(url, "_blank");
-            }}
-          >
-            لینک منتشرشده سند
+          <div className="flex flex-col gap-2">
+            <Typography className="form_label"> لینک منتشرشده سند</Typography>
+            <div className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3">
+              <Typography
+                className="font-300 w-full cursor-pointer truncate text-sm text-placeholder"
+                dir="ltr"
+              >
+                {toPersianDigit(
+                  `${window.location.origin}/share/${toPersianDigit(
+                    `${getRepo?.name.replaceAll(/\s+/g, "-")}`,
+                  )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`,
+                )}
+              </Typography>
+              <div className="flex items-center">
+                <Button
+                  className="repo-link-wrapper__copy-link-button h-7 w-8 rounded-none bg-white p-0"
+                  onClick={() => {
+                    const url = toPersianDigit(
+                      `${window.location.origin}/share/${toPersianDigit(
+                        `${getRepo?.name.replaceAll(/\s+/g, "-")}`,
+                      )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`,
+                    );
+                    copy(url);
+                    toast.success("لینک مخزن کپی شد");
+                  }}
+                >
+                  <CopyIcon className="h-4 w-4 fill-icon-active" />
+                </Button>
+              </div>
+            </div>
           </div>
         ) : null}
       </form>

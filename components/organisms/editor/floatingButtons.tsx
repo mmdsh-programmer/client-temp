@@ -17,7 +17,7 @@ import { editorListDrawerAtom } from "@atom/editor";
 import { useRecoilState } from "recoil";
 
 interface IProps {
-  version?: IVersion;
+  version: IVersion;
 }
 
 const FloatingButtons = ({ version }: IProps) => {

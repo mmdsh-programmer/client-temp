@@ -137,17 +137,17 @@ const useMenuList = (
         },
         "repo-menu__item--version-requests"
       ),
-      showLog && createMenuItem(
-        "فعالیت های مخزن",
-        <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
-        () => {
-          setShowRepoActivity(!showRepoActivity);
-          if (repo) {
-            setRepo(repo);
-          }
-        },
-        "repo-menu__item--repo-activity"
-      ),
+      // showLog && createMenuItem(
+      //   "فعالیت های مخزن",
+      //   <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
+      //   () => {
+      //     setShowRepoActivity(!showRepoActivity);
+      //     if (repo) {
+      //       setRepo(repo);
+      //     }
+      //   },
+      //   "repo-menu__item--repo-activity"
+      // ),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",

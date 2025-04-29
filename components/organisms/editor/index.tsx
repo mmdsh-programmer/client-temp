@@ -1,10 +1,6 @@
 import React, { useRef, useState } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
-import {
-  editorDecryptedContentAtom,
-  editorListDrawerAtom,
-  editorModeAtom,
-} from "@atom/editor";
+import { editorDecryptedContentAtom, editorListDrawerAtom, editorModeAtom } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
@@ -50,9 +46,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const { data: userInfo, isLoading } = useGetUser();
   const setUserMetadataHook = useSetUserMetadata();
 
-  const content = selectedDocument?.publicKeyId
-    ? decryptedContent
-    : version?.content || " ";
+  const content = selectedDocument?.publicKeyId ? decryptedContent : version?.content || " ";
 
   const handleChange = (value: { content: string; outline: string }) => {
     const { content: newContent, outline } = value;
@@ -73,10 +67,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.userGroupHash;
     }
-    if (
-      currentPath === "/admin/sharedDocuments" ||
-      sharedDocuments === "true"
-    ) {
+    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
       return selectedDocument!.userGroupHash;
     }
     return getRepo!.userGroupHash;
@@ -93,8 +84,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             refreshToken: userInfo?.refresh_token,
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
             userHasDirectAccess:
-              currentPath === "/admin/sharedDocuments" ||
-              sharedDocuments === "true",
+              currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
             documentHasDirectAccess: selectedDocument.hasDirectAccess,
           },
           publicUserGroupHash: repoGroupHash() || undefined,
@@ -136,36 +126,30 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   if (isLoading) {
     return (
-      <div className="main w-full h-full text-center flex items-center justify-center">
+      <div className="main flex h-full w-full items-center justify-center text-center">
         <Spinner className="h-5 w-5 " color="purple" />
       </div>
     );
   }
 
   return (
-    <div className="flex h-full relative bg-white">
-        {currentPath === "/admin/sharedDocuments" ||
-        sharedDocuments === "true" ? (
-          <DocumentEnableUserGroup />
-        ) : null}
-        {listDrawer && getEditorConfig().ref ? (
-          <div className="w-full xs:w-[300px]">
-            <EditorDrawer version={versionData} />
-          </div>
-        ) : null}
-        <div
-          className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"} h-full`}
-        >
-          {renderContent()}
-          <FloatingButtons version={version} />
+    <div className="relative flex h-full bg-white">
+      {currentPath === "/admin/sharedDocuments" || sharedDocuments === "true" ? (
+        <DocumentEnableUserGroup />
+      ) : null}
+      {listDrawer && getEditorConfig().ref ? (
+        <div className="w-full xs:w-[300px]">
+          <EditorDrawer version={versionData} />
         </div>
-        {openTemplateDialog ? (
-          <TemplateContentDialog
-            setOpen={setOpenTemplateDialog}
-            editorRef={getEditorConfig().ref}
-          />
-        ) : null}
+      ) : null}
+      <div className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"} h-full`}>
+        {renderContent()}
+        {version ? <FloatingButtons version={version} /> : null}
       </div>
+      {openTemplateDialog ? (
+        <TemplateContentDialog setOpen={setOpenTemplateDialog} editorRef={getEditorConfig().ref} />
+      ) : null}
+    </div>
   );
 };
 

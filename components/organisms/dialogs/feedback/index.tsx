@@ -187,14 +187,11 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
               className="h-[150px] flex flex-col gap-2 justify-center items-center rounded-lg border-normal border-[1px] cursor-pointer"
             >
               <div className="h-10 w-10 flex flex-col justify-center items-center rounded-lg border-normal border-[1px]">
-                <UploadIcon className="h-5 w-5" />
+                <UploadIcon className="h-5 w-5 stroke-[#667585]" />
               </div>
               <div className="flex gap-[3px]">
-                <Typography className="select_option__text text-primary_normal">
+                <Typography className="select_option__text text-[#0369CD]">
                   برای آپلود کلیک کنید
-                </Typography>
-                <Typography className="select_option__text">
-                  یا بکشید و رها کنید
                 </Typography>
               </div>
               <input

@@ -190,7 +190,7 @@ const EditorFileFooter = () => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-secondary hover:bg-secondary active:bg-secondary"
+          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={async () => {
             return handleSave();
           }}

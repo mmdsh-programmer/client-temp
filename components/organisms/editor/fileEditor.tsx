@@ -115,12 +115,12 @@ const FileEditor = () => {
             ) : null}
 
             <Button
-              className="gap-1 items-center px-2-0 py-0 mt-4 z-50 bg-secondary h-12"
+              className="gap-1 items-center px-2-0 py-0 mt-4 z-50 bg-primary-normal h-12"
               onClick={() => {
                 setShowFilePicker(true);
               }}
             >
-              <UploadIcon className="h-4 w-4 stroke-white" />
+              <UploadIcon className="h-4 w-4 !stroke-white" />
               <Typography className="title_t2 text-white">
                 انتخاب فایل
               </Typography>

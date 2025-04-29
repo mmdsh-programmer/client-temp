@@ -1,14 +1,12 @@
-import {
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-} from "@material-tailwind/react";
-
+import React from "react";
+import { Dialog, DialogBody, DialogFooter, DialogHeader } from "@material-tailwind/react";
 import EditorFooter from "@components/organisms/editor/editorFooter";
 import EditorHeader from "@components/organisms/editor/editorHeader";
 import { IRemoteEditorRef } from "clasor-remote-editor";
-import React from "react";
+import { EDocumentTypes } from "@interface/enums";
+import { useRecoilValue } from "recoil";
+import { selectedDocumentAtom } from "@atom/document";
+import EditorFileFooter from "@components/organisms/editor/editorFileFooter";
 
 export interface IProps {
   children: React.ReactNode;
@@ -27,8 +25,20 @@ const EditorDialog = ({
   editorRef,
   isEditorReady,
 }: IProps) => {
+  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const renderFooter = () => {
+    if (!isEditorReady) {
+      return null;
+    }
+    if (getSelectedDocument?.contentType === EDocumentTypes.file) {
+      return <EditorFileFooter />;
+    }
+    return <EditorFooter editorRef={editorRef} />;
   };
 
   return (
@@ -37,31 +47,26 @@ const EditorDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] bg-white rounded-none xs:rounded-lg `}
+      className={`${className} flex !h-full w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] xs:rounded-lg `}
       dismiss={{
         enabled: false,
       }}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header bg-white flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header border-b-none flex items-center gap-[10px] border-normal bg-white px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
       >
         <EditorHeader dialogHeader={dialogHeader} setOpen={handleClose} />
       </DialogHeader>
-      <div className="block xs:hidden h-2 w-full bg-secondary" />
-      <DialogBody
-        placeholder="dialog body"
-        className="dialog-body flex-grow p-0 overflow-auto"
-      >
+      <div className="block h-2 w-full bg-secondary xs:hidden" />
+      <DialogBody placeholder="dialog body" className="dialog-body flex-grow overflow-auto p-0">
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog-footer flex p-5 xs:px-6 xs:py-4 gap-2 xs:gap-3 border-t-gray-200 border-t-[0.5px] "
+        className="dialog-footer flex gap-2 border-t-[0.5px] border-t-gray-200 p-5 xs:gap-3 xs:px-6 xs:py-4 "
       >
-        {isEditorReady ? (
-          <EditorFooter editorRef={editorRef} />
-        ) : null}
+        {renderFooter()}
       </DialogFooter>
     </Dialog>
   );

@@ -1,5 +1,5 @@
-import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
+import { Button, Checkbox, Typography } from "@material-tailwind/react";
 import {
   editorDataAtom,
   editorModalAtom,
@@ -9,11 +9,9 @@ import {
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import CancelButton from "@components/atoms/button/cancelButton";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { EDocumentTypes } from "@interface/enums";
-import EditorFileFooter from "./editorFileFooter";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -230,10 +228,6 @@ const EditorFooter = ({ editorRef }: IProps) => {
       stopWorker();
     };
   }, []);
-
-  if (selectedDocument?.contentType === EDocumentTypes.file) {
-    return <EditorFileFooter />;
-  }
 
   return editorMode === "preview" ? (
     <div className="editor-footer__preview-mode w-full flex justify-between items-center gap-2">
