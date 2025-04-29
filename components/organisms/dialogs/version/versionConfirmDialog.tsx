@@ -10,6 +10,7 @@ import useRepoId from "@hooks/custom/useRepoId";
 import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
 import { editorDataAtom } from "@atom/editor";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,7 +20,8 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(editorDataAtom);
+  const editorData = useRecoilValue(editorDataAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
@@ -40,11 +42,11 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!repoId || !getVersion) return;
+    if (!repoId) return;
     confirmVersion.mutate({
       repoId,
       documentId: getDocument!.id,
-      versionId: getVersion.id,
+      versionId: getVersion ? getVersion!.id : editorData!.id,
       isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       callBack: () => {
         if (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin) {
@@ -66,7 +68,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
     >
       آیا از تایید نسخه "
       <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
-        {getVersion?.versionNumber}
+        {(getVersion || editorData)?.versionNumber}
       </span>
       " اطمینان دارید؟
     </ConfirmDialog>

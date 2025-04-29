@@ -200,7 +200,6 @@ const useDocumentMenuList = ({
         text: " لینک انتشار",
         icon: <CopyIcon className="w-4 h-4 fill-icon-active" />,
         onClick: () => {
-          debugger;
           const url = toPersianDigit(
             `/share/${toPersianDigit(
               `${getRepo?.name.replaceAll(/\s+/g, "-")}`
