@@ -11,10 +11,10 @@ import { editorModeAtom } from "@atom/editor";
 import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
 import DocumentEnableUserGroup from "./documentEnableUserGroup";
-import ChatBox from "../chatBox";
+// import ChatBox from "../chatBox";
 
 export enum ETabs {
-  CHAT = "گفتگو",
+  // CHAT = "گفتگو",
   TAGS = "تگ‌ها",
   ATTACH_FILE = "پیوست",
   COMMENTS = "نظرات",
@@ -48,10 +48,10 @@ const EditorDrawer = ({ version }: IProps) => {
           tabContent: <Comments version={version} />,
         }
       : null,
-    {
-      tabTitle: ETabs.CHAT,
-      tabContent: <ChatBox />,
-    },
+    // {
+    //   tabTitle: ETabs.CHAT,
+    //   tabContent: <ChatBox />,
+    // },
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;
