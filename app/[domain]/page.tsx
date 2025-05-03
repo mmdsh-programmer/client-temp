@@ -47,7 +47,7 @@ const MainPage = async ({ params }: MainPageProps) => {
               <h1 className="text-secondary text-[40px] text-center mt-8">
                 {projectName ?? "نام پروژه"}
               </h1>
-              <p className="gray-500 text-lg text-center mt-4">
+              <p className="text-secondary text-lg text-center mt-4">
                 {projectDescription ?? "توضیحات پروژه"}
               </p>
             </div>
