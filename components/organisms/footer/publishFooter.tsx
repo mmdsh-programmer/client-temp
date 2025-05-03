@@ -24,11 +24,11 @@ const PublishFooter = ({ logo, projectDescription }: IProps) => {
               </div>
             )}
           </div>
-          <p className="text-secondary text-sm mt-1 mr-2 flex justify-center items-center">
+          <p className="text-white text-sm mt-1 mr-2 flex justify-center items-center">
             {projectDescription ?? "توضیحات پروژه"}
           </p>
         </div>
-        <small className="text-xs text-secondary">1.16.2.3</small>
+        <small className="text-xs text-white">1.16.2.3</small>
       </div>
     </div>
   );
