@@ -1,21 +1,22 @@
+import React from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { Checkbox } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
 import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
-import React from "react";
-import TableCell from "@components/molecules/tableCell";
+import TableCell, { ITableCell } from "@components/molecules/tableCell";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   category: ICategoryMetadata;
 }
 
 const CategoryTableRow = ({ category: categoryProp }: IProps) => {
+  const currentPath = usePathname();
   const setCategoryParent = useSetRecoilState(categoryShowAtom);
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
 
@@ -47,75 +48,67 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
         return handleRowClick(categoryProp);
       }}
       className="category-table-row"
-      tableCell={[
-        {
-          data: (
-            <Checkbox
-              color="purple"
-              crossOrigin=""
-              onChange={handleCheckItem}
-              checked={getBulkItems.some((bulkItem) => {
-                return bulkItem.id === categoryProp.id;
-              })}
-            />
-          ),
-          className: "!px-0",
-          stopPropagation: true,
-        },
-        {
-          data:
-            categoryProp.order || categoryProp.order === 0
-              ? categoryProp.order
-              : "--",
+      tableCell={
+        [
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: (
+                  <Checkbox
+                    color="purple"
+                    crossOrigin=""
+                    onChange={handleCheckItem}
+                    checked={getBulkItems.some((bulkItem) => {
+                      return bulkItem.id === categoryProp.id;
+                    })}
+                  />
+                ),
+                className: "!px-0",
+                stopPropagation: true,
+              },
+          {
+            data: categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--",
 
-          title: String(categoryProp.order) || "--",
-          className:
-            "hidden xl:table-cell text-center !px-0",
-        },
-        {
-          data: (
-            <div className="flex">
-              <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
-              <span
-                className="truncate flex gap-2 mr-2 text-ellipsis overflow-hidden"
-                title={categoryProp.name}
-              >
-                {categoryProp.name}
-              </span>
-            </div>
-          ),
-          className:
-            "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%]",
-        },
-        {
-          data: categoryProp.createdAt
-            ? FaDateFromTimestamp(+categoryProp.createdAt)
-            : "--",
-          title: categoryProp.createdAt
-            ? FaDateFromTimestamp(+categoryProp.createdAt)
-            : "--",
-          className: "!px-3",
-        },
-        {
-          data: categoryProp.updatedAt
-            ? FaDateFromTimestamp(+categoryProp.updatedAt)
-            : "--",
-          title: categoryProp.updatedAt
-            ? FaDateFromTimestamp(+categoryProp.updatedAt)
-            : "--",
-          className: "hidden xl:table-cell !px-3",
-        },
-        {
-          data: categoryProp.creator?.name || "--",
-          title: categoryProp.creator?.name || "--",
-          className: "hidden lg:table-cell !px-3",
-        },
-        {
-          data: <CategoryMenu category={categoryProp} />,
-          stopPropagation: true,
-          className: "!px-2",
-        },
-      ]}
+            title: String(categoryProp.order) || "--",
+            className: "hidden xl:table-cell text-center !px-0",
+          },
+          {
+            data: (
+              <div className="flex">
+                <FolderIcon className="h-5 min-h-5 w-5 min-w-5 stroke-blue-gray-600" />
+                <span
+                  className="mr-2 flex gap-2 overflow-hidden truncate text-ellipsis"
+                  title={categoryProp.name}
+                >
+                  {categoryProp.name}
+                </span>
+              </div>
+            ),
+            className:
+              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%]",
+          },
+          {
+            data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+            title: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+            className: "!px-3",
+          },
+          {
+            data: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+            title: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+            className: "hidden xl:table-cell !px-3",
+          },
+          {
+            data: categoryProp.creator?.name || "--",
+            title: categoryProp.creator?.name || "--",
+            className: "hidden lg:table-cell !px-3",
+          },
+          {
+            data: <CategoryMenu category={categoryProp} />,
+            stopPropagation: true,
+            className: "!px-2",
+          },
+        ].filter(Boolean) as ITableCell[]
+      }
     />
   );
 };

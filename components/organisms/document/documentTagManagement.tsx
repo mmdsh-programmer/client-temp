@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import DocumentTagList from "@components/organisms/document/documentTagList";
 import SearchableDropdown from "../../molecules/searchableDropdown";
 import { Spinner } from "@material-tailwind/react";
@@ -30,42 +29,49 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
   const { data: userInfo } = useGetUser();
 
   const adminOrOwnerRole = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && getDocument?.repoId === userInfo?.repository.id)
+    ) {
       return true;
     }
     if (
       currentPath === "/admin/sharedDocuments" ||
-      sharedDocuments === "true"
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id)
     ) {
-      return (
-        getDocument?.accesses?.[0] === "admin" ||
-        getDocument?.accesses?.[0] === "owner"
-      );
+      return getDocument?.accesses?.[0] === "admin" || getDocument?.accesses?.[0] === "owner";
     }
     if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
     }
   };
 
-  const { data: getDomainTags, isLoading: isLoadingDomainTags } =
-    useGetDomainTags(30, !!userInfo?.domainConfig.useDomainTag);
+  const { data: getDomainTags, isLoading: isLoadingDomainTags } = useGetDomainTags(
+    30,
+    !!userInfo?.domainConfig.useDomainTag,
+  );
 
   const { data: getTags, isLoading: isLoadingTags } = useGetTags(
     repoId,
-    currentPath === "/admin/sharedDocuments" || sharedDocuments === "true"
+    currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id)
       ? true
       : undefined,
     30,
-    !userInfo?.domainConfig.useDomainTag
+    !userInfo?.domainConfig.useDomainTag,
   );
 
   const { data: documentInfo, isLoading } = useGetDocument(
     repoId,
     getDocument!.id,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id),
     true,
     true,
-    `document-${getDocument!.id}-info-tags`
+    `document-${getDocument!.id}-info-tags`,
   );
 
   const tags = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
@@ -92,7 +98,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   useEffect(() => {
     if (!documentInfo) return;
-    
+
     const resourceTags = userInfo?.domainConfig.useDomainTag
       ? documentInfo.domainTags
       : documentInfo.tags;
@@ -100,32 +106,31 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     setTempDocTag(
       resourceTags.map((tag) => {
         return tag;
-      })
+      }),
     );
   }, [documentInfo]);
 
   return isLoading || isLoadingTags || isLoadingDomainTags ? (
-    <div className="w-full flex justify-center mt-2">
+    <div className="mt-2 flex w-full justify-center">
       <Spinner className="h-5 w-5" color="purple" />
     </div>
   ) : (
-      <div className="flex flex-col gap-2">
-        {adminOrOwnerRole() ?
-          <SearchableDropdown
-            options={updatedAvailableTags}
-            handleSelect={handleTagSelect}
-            handleChange={setTagName}
-            setOpen={setOpen}
-            createIcon={
-              userInfo?.domainConfig.useDomainTag &&
-              (userInfo?.domainRole === "owner" ||
-                userInfo.domainRole === "participant") ||
-              (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole())
-            }
-          />
-          : null}
-        <DocumentTagList tagList={getTempDocTag} />
-      </div>
+    <div className="flex flex-col gap-2">
+      {adminOrOwnerRole() ? (
+        <SearchableDropdown
+          options={updatedAvailableTags}
+          handleSelect={handleTagSelect}
+          handleChange={setTagName}
+          setOpen={setOpen}
+          createIcon={
+            (userInfo?.domainConfig.useDomainTag &&
+              (userInfo?.domainRole === "owner" || userInfo.domainRole === "participant")) ||
+            (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole())
+          }
+        />
+      ) : null}
+      <DocumentTagList tagList={getTempDocTag} />
+    </div>
   );
 };
 

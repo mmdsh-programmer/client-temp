@@ -64,10 +64,17 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   };
 
   const repoGroupHash = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === selectedDocument?.repoId)
+    ) {
       return userInfo!.repository.userGroupHash;
     }
-    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== selectedDocument?.repoId)
+    ) {
       return selectedDocument!.userGroupHash;
     }
     return getRepo!.userGroupHash;
@@ -84,7 +91,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
             refreshToken: userInfo?.refresh_token,
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
             userHasDirectAccess:
-              currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
+              currentPath === "/admin/sharedDocuments" ||
+              sharedDocuments === "true" ||
+              (currentPath === "/admin/dashboard" &&
+                userInfo?.repository.id !== selectedDocument?.repoId),
             documentHasDirectAccess: selectedDocument.hasDirectAccess,
           },
           publicUserGroupHash: repoGroupHash() || undefined,

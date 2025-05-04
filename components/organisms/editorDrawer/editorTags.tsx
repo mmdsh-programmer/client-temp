@@ -30,10 +30,17 @@ const EditorTags = () => {
   const repoId = useRepoId();
 
   const adminOrOwnerRole = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && document?.repoId === userInfo?.repository.id)
+    ) {
       return true;
     }
-    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id)
+    ) {
       return document?.accesses?.[0] === "admin" || document?.accesses?.[0] === "owner";
     }
     if (getRepo) {
@@ -55,7 +62,10 @@ const EditorTags = () => {
         tagIds: getTempDocTag.map((tag) => {
           return tag.id;
         }),
-        isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        isDirectAccess:
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id),
       });
     }
     editDocument.mutate({
@@ -67,7 +77,10 @@ const EditorTags = () => {
       tagIds: getTempDocTag.map((tag) => {
         return tag.id;
       }),
-      isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+      isDirectAccess:
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id),
       callBack: () => {
         toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
       },

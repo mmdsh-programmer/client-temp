@@ -7,6 +7,7 @@ import { selectedDocumentAtom } from "atom/document";
 import { toast } from "react-toastify";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   children: JSX.Element;
@@ -23,6 +24,7 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();
 
   useEffect(() => {
@@ -33,7 +35,9 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
         versionId: version.id,
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments",
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" &&
+            userInfo?.repository.id !== selectedDocument?.repoId),
         handleError: () => {
           setEditorData(null);
         },
@@ -45,7 +49,7 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   }, [repoId, selectedDocument, version, editorMode]);
 
   return (
-    <div className=" h-full w-full max-w-full relative modal-box flex flex-col cursor-default p-0">
+    <div className=" modal-box relative flex h-full w-full max-w-full cursor-default flex-col p-0">
       {children}
     </div>
   );

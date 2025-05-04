@@ -1,10 +1,7 @@
 /* eslint-disable no-nested-ternary */
 
 import { Button, Spinner, Typography } from "@material-tailwind/react";
-import {
-  ICategoryMetadata,
-  ICategoryView,
-} from "@interface/category.interface";
+import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import React, { useState } from "react";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
 
@@ -39,8 +36,7 @@ const TableView = ({
 }: ICategoryView) => {
   const currentPath = usePathname();
   const [openFilter, setOpenFilter] = useState(false);
-  const [getFilterChildren, setFilterChildren] =
-    useRecoilState(filterChildrenAtom);
+  const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
   const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
 
   const listLength = getCategoryList?.pages[0].total;
@@ -48,20 +44,19 @@ const TableView = ({
   const renderContent = () => {
     if (listLength) {
       return (
-        <div className="category-table-view px-5 py-4 overflow-auto">
-          <div className="w-full border-[0.5px] overflow-auto border-normal rounded-lg">
-            <table className="w-full overflow-hidden min-w-max table-auto">
+        <div className="category-table-view overflow-auto px-5 py-4">
+          <div className="w-full overflow-auto rounded-lg border-[0.5px] border-normal">
+            <table className="w-full min-w-max table-auto overflow-hidden">
               <TableHead
                 tableHead={
                   [
-                    currentPath !== "/admin/sharedDocuments"
-                      ? {
+                    currentPath === "/admin/sharedDocuments" || currentPath === "/admin/dashboard"
+                      ? null
+                      : {
                           key: "select",
                           value: "انتخاب",
-                          className:
-                            "categoryBulk !pr-2 !pl-0 !max-w-[50px] !w-[50px]",
-                        }
-                      : null,
+                          className: "categoryBulk !pr-2 !pl-0 !max-w-[50px] !w-[50px]",
+                        },
                     {
                       key: "order",
                       value: "اولویت",
@@ -73,9 +68,15 @@ const TableView = ({
                       key: "name",
                       value: "نام دسته",
                       isSorted: true,
-                      className: "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%] !px-2",
+                      className:
+                        "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%] !px-2",
                     },
-                    { key: "createDate", value: "تاریخ ایجاد", isSorted: true, className: "!px-2 whitespace-nowrap" },
+                    {
+                      key: "createDate",
+                      value: "تاریخ ایجاد",
+                      isSorted: true,
+                      className: "!px-2 whitespace-nowrap",
+                    },
                     {
                       key: "editDate",
                       value: "تاریخ ویرایش",
@@ -89,8 +90,7 @@ const TableView = ({
                     {
                       key: "action",
                       value: "عملیات",
-                      className:
-                        "category-action !pr-0 !pl-1 !max-w-[50px] !w-[50px]",
+                      className: "category-action !pr-0 !pl-1 !max-w-[50px] !w-[50px]",
                     },
                   ].filter(Boolean) as ITableHead[]
                 }
@@ -100,25 +100,19 @@ const TableView = ({
                   return page.list.map((item) => {
                     return item ? (
                       item.type === "category" ? (
-                        <CategoryTableRow
-                          key={item.id}
-                          category={item as ICategoryMetadata}
-                        />
+                        <CategoryTableRow key={item.id} category={item as ICategoryMetadata} />
                       ) : (
-                        <DocumentTableRow
-                          key={item.id}
-                          document={item as IDocumentMetadata}
-                        />
+                        <DocumentTableRow key={item.id} document={item as IDocumentMetadata} />
                       )
                     ) : null;
                   });
                 })}
                 <RenderIf isTrue={!!hasNextPage}>
                   <tr>
-                    <td colSpan={7} className="!text-center py-4">
-                      <div className="flex justify-center items-center">
+                    <td colSpan={7} className="py-4 !text-center">
+                      <div className="flex items-center justify-center">
                         <LoadMore
-                          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary_normal !font-normal"
+                          className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none xl:bg-primary"
                           isFetchingNextPage={isFetchingNextPage}
                           fetchNextPage={fetchNextPage}
                         />
@@ -141,17 +135,19 @@ const TableView = ({
 
   return (
     <div
-      className={`category-children-table flex flex-col bg-white ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-grow flex-shrink-0 rounded-lg shadow-small`}
+      className={`category-children-table flex flex-col bg-white ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-shrink-0 flex-grow rounded-lg shadow-small`}
     >
-      <div className="flex items-center py-4 px-5 justify-between">
+      <div className="flex items-center justify-between px-5 py-4">
         <CategoryBreadCrumb />
-        <SearchFilter open={openFilter} setOpen={setOpenFilter} />
+        {currentPath === "/admin/dashboard" ? null : (
+          <SearchFilter open={openFilter} setOpen={setOpenFilter} />
+        )}
       </div>
       {openFilter ? <AdvancedFilter setOpen={setOpenFilter} /> : null}
       {!openFilter && (getFilterChildren || getFilterReport) ? (
         <div className="px-5">
           <Button
-            className="bg-error h-7 w-max rounded-full gap-1 px-3"
+            className="h-7 w-max gap-1 rounded-full bg-error px-3"
             onClick={() => {
               setFilterChildren(null);
               setFilterReport(null);
@@ -163,7 +159,7 @@ const TableView = ({
         </div>
       ) : null}
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : (

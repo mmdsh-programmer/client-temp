@@ -32,8 +32,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const queryParams = useRecoilValue(categoryQueryParamsAtom);
   const getSortParams = useRecoilValue(sortAtom);
-  const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDestAtom);
+  const [getCategoryMoveDest, setCategoryMoveDest] = useRecoilState(categoryMoveDestAtom);
 
   const [categoryId, setCategoryId] = useState<number>(0);
   const [openCategory, setOpenCategory] = useState<null | number>(null);
@@ -42,7 +41,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
 
   const { data: userInfo } = useGetUser();
   const repoId =
-    currentPath === "/admin/myDocuments"
+    currentPath === "/admin/myDocuments" || currentPath === "/admin/dashboard"
       ? userInfo!.repository.id
       : getRepo!.id;
 
@@ -59,7 +58,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
     queryParams.limit,
     undefined,
     move ? "category" : undefined,
-    move || enableAction ? undefined : docTemplateFilter
+    move || enableAction ? undefined : docTemplateFilter,
   );
 
   const handleClick = () => {
@@ -92,19 +91,19 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
             checked={getCategoryMoveDest?.id === catItem.id}
           />
         )}
-        <div className="flex items-center p-2 bg-transparent ">
+        <div className="flex items-center bg-transparent p-2 ">
           <div className="flex items-center">
             <div
-              className={`flex items-center justify-center cursor-pointer h-6 w-6 ${
+              className={`flex h-6 w-6 cursor-pointer items-center justify-center ${
                 isOpen ? "-rotate-90" : ""
               }`}
               onClick={handleClick}
             >
               <ChevronLeftIcon className="h-3 w-3 stroke-icon-hover" />
             </div>
-            <FolderIcon className="fill-gray-400 w-5 h-5" />
+            <FolderIcon className="h-5 w-5 fill-gray-400" />
           </div>
-          <Typography className="text-primary_normal lowercase mr-2" key={catItem.id}>
+          <Typography className="mr-2 lowercase text-primary_normal" key={catItem.id}>
             {catItem.name}
           </Typography>
           {enableAction ? (
@@ -120,40 +119,31 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
           <Collapse open={openCategory === catItem.id}>
             {categoryChildren?.pages.map((page) => {
               if (page.list.length) {
-                return page.list.map(
-                  (item: ICategoryMetadata | IDocumentMetadata) => {
-                    if (item.type === "document") {
-                      return !move ? (
-                        <TreeDocItem
-                          key={item.id}
-                          docItem={item}
-                          enableAction={enableAction}
-                        />
-                      ) : null;
-                    }
-                    return (
-                      <TreeCatItem
-                        catItem={item}
-                        key={item.id}
-                        move={move}
-                        enableAction={enableAction}
-                      />
-                    );
+                return page.list.map((item: ICategoryMetadata | IDocumentMetadata) => {
+                  if (item.type === "document") {
+                    return !move ? (
+                      <TreeDocItem key={item.id} docItem={item} enableAction={enableAction} />
+                    ) : null;
                   }
-                );
+                  return (
+                    <TreeCatItem
+                      catItem={item}
+                      key={item.id}
+                      move={move}
+                      enableAction={enableAction}
+                    />
+                  );
+                });
               }
               return (
-                <Typography
-                  className="text-xs text-center"
-                  key={`doc-create-no-item-${page}`}
-                >
+                <Typography className="text-center text-xs" key={`doc-create-no-item-${page}`}>
                   موردی برای نمایش وجود ندارد
                 </Typography>
               );
             })}
             <RenderIf isTrue={!!hasNextPage}>
               <LoadMore
-                className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
+                className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none"
                 isFetchingNextPage={isFetchingNextPage}
                 fetchNextPage={fetchNextPage}
               />
@@ -163,11 +153,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
       </div>
     </div>
   ) : (
-    <TreeDocItem
-      key={catItem.id}
-      docItem={catItem}
-      enableAction={enableAction}
-    />
+    <TreeDocItem key={catItem.id} docItem={catItem} enableAction={enableAction} />
   );
 };
 

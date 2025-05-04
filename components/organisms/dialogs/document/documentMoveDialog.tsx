@@ -19,17 +19,17 @@ const DocumentMoveDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const document = useRecoilValue(selectedDocumentAtom);
   const categoryShow = useRecoilValue(categoryShowAtom);
-  const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDestAtom);
-    const currentPath = usePathname();
+  const [getCategoryMoveDest, setCategoryMoveDest] = useRecoilState(categoryMoveDestAtom);
+  const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
   const moveDocument = useEditDocument();
 
   const repoId =
-  currentPath === "/admin/myDocuments"
-    ? userInfo!.repository.id
-    : getRepo!.id;
+    currentPath === "/admin/myDocuments" ||
+    (currentPath === "/admin/dashboard" && userInfo?.repository.id === document?.repoId)
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const { handleSubmit, clearErrors, reset } = useForm();
 

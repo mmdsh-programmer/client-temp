@@ -28,9 +28,10 @@ const DocumentDeleteDialog = ({ document, setOpen }: IProps) => {
 
   const handleDelete = async () => {
     const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === getDocument?.repoId)
+        ? userInfo!.repository.id
+        : getRepo!.id;
 
     const selectedDocument = document || getDocument;
     if (!repoId || !selectedDocument) return;
@@ -53,11 +54,11 @@ const DocumentDeleteDialog = ({ document, setOpen }: IProps) => {
       setOpen={handleClose}
       className="document-delete-dialog"
     >
-      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
         آیا از حذف"
         <span
           title={(document || getDocument)?.name}
-          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
         >
           {(document || getDocument)?.name}
         </span>

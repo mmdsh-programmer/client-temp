@@ -11,6 +11,7 @@ import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
 import { editorDataAtom } from "@atom/editor";
 import { selectedVersionAtom } from "@atom/version";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const confirmVersion = useConfirmVersion();
 
   const form = useForm();
@@ -47,7 +49,10 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
       repoId,
       documentId: getDocument!.id,
       versionId: getVersion ? getVersion!.id : editorData!.id,
-      isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+      isDirectAccess:
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
       callBack: () => {
         if (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin) {
           toast.success("نسخه با موفقیت تایید شد.");

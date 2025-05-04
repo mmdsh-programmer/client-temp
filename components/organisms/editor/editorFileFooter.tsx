@@ -12,9 +12,10 @@ import { selectedDocumentAtom } from "@atom/document";
 import { selectedFileAtom } from "@atom/file";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const EditorFileFooter = () => {
   const repoId = useRepoId();
@@ -30,9 +31,12 @@ const EditorFileFooter = () => {
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const timeout = 5 * 60; // seconds
 
+  const { data: userInfo } = useGetUser();
   const saveFileEditorHook = useSaveFileEditor();
 
   const renderTitle = () => {
@@ -42,8 +46,7 @@ const EditorFileFooter = () => {
     if (editorMode === "preview") {
       return `${getEditorData.versionNumber}
       ${` (${
-        translateVersionStatus(getEditorData.status, getEditorData.state)
-          .translated
+        translateVersionStatus(getEditorData.status, getEditorData.state).translated
       } ${getEditorData.status === "accepted" ? "-عمومی" : ""})`}`;
     }
 
@@ -80,7 +83,12 @@ const EditorFileFooter = () => {
           versionId: getEditorData.id,
           versionNumber: getEditorData.versionNumber,
           isDirectAccess:
-          currentPath === "/admin/sharedDocuments" ? true : undefined,    
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" &&
+              userInfo?.repository.id !== selectedDocument?.repoId) ||
+            sharedDocuments === "true"
+              ? true
+              : undefined,
           callBack: () => {},
         });
       } else {
@@ -92,17 +100,14 @@ const EditorFileFooter = () => {
   const startWorker = (time?: number) => {
     if (!autoSaveRef.current) {
       autoSaveRef.current = new Worker(
-        new URL("../../../hooks/worker/autoSave.worker.ts", import.meta.url)
+        new URL("../../../hooks/worker/autoSave.worker.ts", import.meta.url),
       );
 
       autoSaveRef.current?.postMessage({ action: "START", time });
       if (autoSaveRef.current) {
         autoSaveRef.current.onmessage = (event) => {
           const action = (event.data as string[]) || [];
-          if (
-            action[0] === "WORKER_SAVE_DATA" &&
-            !saveFileEditorHook.isPending
-          ) {
+          if (action[0] === "WORKER_SAVE_DATA" && !saveFileEditorHook.isPending) {
             saveBtnRef.current?.click();
           }
         };
@@ -116,9 +121,7 @@ const EditorFileFooter = () => {
     autoSaveRef.current = undefined;
   };
 
-  const handleAutoSaveCheckbox = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleAutoSaveCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       startWorker(timeout);
     } else {
@@ -134,44 +137,36 @@ const EditorFileFooter = () => {
   }, []);
 
   return editorMode === "preview" ? (
-    <div className="w-full flex justify-between items-center gap-2">
+    <div className="flex w-full items-center justify-between gap-2">
       <Button
-        className="w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+        className="flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase xs:w-[208px]"
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
         }}
       >
-        <Typography className="label_l3 text-primary_normal">
-          {renderTitle()}
-        </Typography>
-        <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+        <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+        <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
       </Button>
       <CancelButton onClick={handleChangeEditorMode}>ویرایش</CancelButton>
     </div>
   ) : (
-    <div className="w-full flex flex-col md:flex-row gap-4 justify-between items-center">
-      <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
+    <div className="flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+      <div className="flex w-full flex-col gap-5 md:w-auto xs:flex-row xs:gap-4">
         <Button
-          className="w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+          className="flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase md:w-[208px] xs:w-[50%]"
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
           }}
         >
-          <Typography className="label_l3 text-primary_normal">
-            {renderTitle()}
-          </Typography>
-          <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+          <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+          <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
         </Button>
-        <div className="!hidden xs:!block border-r-[1px] border-r-normal" />
+        <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
         <Checkbox
           crossOrigin=""
-          label={
-            <Typography className="title_t3 truncate">
-              ذخیره‌سازی خودکار
-            </Typography>
-          }
+          label={<Typography className="title_t3 truncate">ذخیره‌سازی خودکار</Typography>}
           className=""
           color="purple"
           checked={checked}
@@ -179,26 +174,24 @@ const EditorFileFooter = () => {
           containerProps={{ className: "-mr-3 " }}
         />
       </div>
-      <div className="flex w-full md:w-auto gap-2 xs:gap-3">
+      <div className="flex w-full gap-2 md:w-auto xs:gap-3">
         <CancelButton
           onClick={() => {
             setEditorMode(editorMode === "edit" ? "temporaryPreview" : "edit");
           }}
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px]"
+          className="!h-12 !w-[50%] md:!h-8 md:!w-[100px]"
           disabled={saveFileEditorHook.isPending}
         >
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="!h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+          className="!h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={async () => {
             return handleSave();
           }}
           disabled={saveFileEditorHook.isPending}
         >
-          <Typography className="text__label__button text-white">
-            ذخیره
-          </Typography>
+          <Typography className="text__label__button text-white">ذخیره</Typography>
         </LoadingButton>
       </div>
     </div>

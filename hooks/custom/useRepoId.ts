@@ -15,7 +15,11 @@ const useRepoId = () => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" &&
+        getSelectedDocument?.repoId === userInfo?.repository.id)
+    ) {
       return userInfo!.repository.id;
     }
     if (currentPath === "/admin/sharedDocuments" && getSelectedDocument) {
@@ -23,6 +27,12 @@ const useRepoId = () => {
     }
     if (sharedDocuments === "true") {
       return +getRepoId!;
+    }
+    if (
+      currentPath === "/admin/dashboard" &&
+      getSelectedDocument?.repoId !== userInfo?.repository.id
+    ) {
+      return getSelectedDocument!.repoId;
     }
     return getRepo!.id;
   };

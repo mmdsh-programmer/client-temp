@@ -9,6 +9,7 @@ import useCancelConfirmVersion from "@hooks/version/useCancelConfirmVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +23,7 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const cancelConfirmVersion = useCancelConfirmVersion();
 
   const form = useForm();
@@ -44,7 +46,9 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
       documentId: getDocument!.id,
       versionId: getVersion.id,
       isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
       callBack: () => {
         toast.error(" .تایید نسخه لغو شد");
         handleClose();
@@ -60,7 +64,7 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
       className="version-cancel-confirm-dialog"
     >
       آیا از لغو تایید نسخه "
-      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {getVersion?.versionNumber}
       </span>
       " اطمینان دارید؟

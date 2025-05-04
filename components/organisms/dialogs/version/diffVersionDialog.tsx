@@ -1,12 +1,12 @@
+import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import DiffViewerTable from "@components/organisms/version/diffViewerTable";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import React from "react";
 import { Spinner } from "@material-tailwind/react";
 import { compareVersionAtom } from "@atom/version";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { useRecoilValue } from "recoil";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +18,8 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
+
   const getVersionHook = useGetVersion(
     compareVersion?.version?.repoId ?? 0,
     compareVersion?.version?.document?.id ?? 0,
@@ -25,8 +27,12 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.version?.data?.state,
     true,
     true,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    true
+    sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" &&
+        userInfo?.repository.id !== compareVersion?.version?.repoId),
+
+    true,
   );
 
   const getCompareHook = useGetVersion(
@@ -36,18 +42,22 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     compareVersion?.compare?.data.state,
     true,
     true,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    true
+    sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" &&
+        userInfo?.repository.id !== compareVersion?.version?.repoId),
+
+    true,
   );
 
   return (
     <InfoDialog
       dialogHeader="مقایسه نسخه"
       setOpen={setOpen}
-      className="version-compare-dialog !min-w-[80%] !h-full overflow-auto"
+      className="version-compare-dialog !h-full !min-w-[80%] overflow-auto"
     >
       {getVersionHook.isFetching || getCompareHook.isFetching ? (
-        <div className="flex w-full h-full justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner className="h-10 w-10" color="purple" />
         </div>
       ) : (

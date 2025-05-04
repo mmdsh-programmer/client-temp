@@ -49,24 +49,29 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
         tagIds: getTempDocTag.map((tag) => {
           return tag.id;
         }),
-        isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        isDirectAccess:
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
       });
-    } 
-      editDocument.mutate({
-        repoId,
-        documentId: document.id,
-        categoryId: document.categoryId,
-        title: document.name,
-        contentType: document.contentType,
-        tagIds: getTempDocTag.map((tag) => {
-          return tag.id;
-        }),
-        isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-        callBack: () => {
-          toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
-        },
-      });
-    
+    }
+    editDocument.mutate({
+      repoId,
+      documentId: document.id,
+      categoryId: document.categoryId,
+      title: document.name,
+      contentType: document.contentType,
+      tagIds: getTempDocTag.map((tag) => {
+        return tag.id;
+      }),
+      isDirectAccess:
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
+      callBack: () => {
+        toast.success("تگ‌ها با موفقیت به سند اضافه شدند.");
+      },
+    });
   };
 
   if (openCreateTagDialog) {

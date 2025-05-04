@@ -1,6 +1,16 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
+export interface ITableCell {
+  data: string | React.ReactNode;
+  title?: string;
+  className?: string;
+  rowSpan?: number;
+  colSpan?: number;
+  onClick?: () => void;
+  stopPropagation?: boolean;
+}
+
 interface IProps {
   tableCell: {
     data: string | React.ReactNode;

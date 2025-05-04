@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useEffect } from "react";
-import RepoList from "@components/organisms/repoList";
-import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
 import { repoAtom } from "@atom/repository";
 import { useResetRecoilState } from "recoil";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { versionModalListAtom } from "@atom/version";
+import DashboardDocuments from "@components/organisms/dashboradDocuments";
+import DashboardRepositories from "@components/organisms/dashboardRepositories";
+import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
 
 const DashboardPage = () => {
   const resetRepo = useResetRecoilState(repoAtom);
@@ -27,8 +28,13 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 xs:gap-6 ">
-      <RepoList />
+    <div className="flex flex-col xl:flex-row gap-4 xs:gap-6">
+      <div className="w-full max-w-full xl:!max-w-1/2 xl:w-1/2">
+        <DashboardDocuments />
+      </div>
+      <div className="w-full max-w-full xl:!max-w-1/2 xl:w-1/2">
+        <DashboardRepositories />
+      </div>
       <RepoTypesMobileView />
     </div>
   );

@@ -1,6 +1,5 @@
 import { Checkbox, Typography } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import DocumentIcon from "../documentIcon";
 import DocumentMenu from "../documentMenu";
 import { FaDateFromTimestamp } from "@utils/index";
@@ -13,13 +12,14 @@ import { editorModeAtom } from "@atom/editor";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   document: IDocumentMetadata;
 }
 
 const DocumentMobileCard = ({ document }: IProps) => {
-  //   const setCategoryParent = useSetRecoilState(categoryShowAtom);
+  const currentPath = usePathname();
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
   const getRepo = useRecoilValue(repoAtom);
   const selectedCat = useRecoilValue(categoryAtom);
@@ -37,16 +37,12 @@ const DocumentMobileCard = ({ document }: IProps) => {
           selectedCat.id
         }&documentId=${document.id}&repoGroupHash=${
           getRepo?.userGroupHash
-        }&catGroupHash=${selectedCat.userGroupHash}&type=${
-          document?.contentType
-        }${
+        }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${
           document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
         }`
       : `edit?repoId=${document.repoId}&documentId=${
           document.id
-        }&repoGroupHash=${getRepo?.userGroupHash}&type=${
-          document?.contentType
-        }${
+        }&repoGroupHash=${getRepo?.userGroupHash}&type=${document?.contentType}${
           document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
         }`;
 
@@ -73,27 +69,30 @@ const DocumentMobileCard = ({ document }: IProps) => {
     <MobileCard
       className="document-mobile-card"
       name={
-        <div className="flex items-center gap-2 w-full">
-          <Checkbox
-            color="purple"
-            containerProps={{
-              className: "p-[2px]",
-            }}
-            onClick={(e) => {
-              return e.stopPropagation();
-            }}
-            crossOrigin=""
-            onChange={(e) => {
-              handleCheckItem(e);
-            }}
-            checked={getBulkItems.some((bulkItem) => {
-              return bulkItem.id === document.id;
-            })}
-          />
-          <div className="flex gap-2 max-w-full">
+        <div className="flex w-full items-center gap-2">
+          {currentPath === "/admin/dashboard" ||
+          currentPath === "/admin/sharedDocuments" ? null : (
+            <Checkbox
+              color="purple"
+              containerProps={{
+                className: "p-[2px]",
+              }}
+              onClick={(e) => {
+                return e.stopPropagation();
+              }}
+              crossOrigin=""
+              onChange={(e) => {
+                handleCheckItem(e);
+              }}
+              checked={getBulkItems.some((bulkItem) => {
+                return bulkItem.id === document.id;
+              })}
+            />
+          )}
+          <div className="flex max-w-full gap-2">
             <DocumentIcon document={document} />
             <Typography
-              className="flex text-ellipsis overflow-hidden truncate flex-grow max-w-[80%]"
+              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
               title={document.name}
             >
               {document.name}
@@ -104,9 +103,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
       description={[
         {
           title: "تاریخ ایجاد",
-          value: document.createdAt
-            ? FaDateFromTimestamp(+document.createdAt)
-            : "--",
+          value: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
         },
         { title: "سازنده", value: document.creator?.userName || "--" },
       ]}

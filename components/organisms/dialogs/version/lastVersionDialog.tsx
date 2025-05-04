@@ -8,6 +8,7 @@ import useSetLastVersion from "@hooks/version/useSetLastVersion";
 import { selectedVersionAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +22,7 @@ const LastVersionDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const setLastVersion = useSetLastVersion();
 
   const form = useForm();
@@ -43,7 +45,9 @@ const LastVersionDialog = ({ setOpen }: IProps) => {
       documentId: getDocument!.id,
       versionId: getVersion.id,
       isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
       callBack: () => {
         toast.success("به عنوان آخرین نسخه انتخاب شد.");
         handleClose();

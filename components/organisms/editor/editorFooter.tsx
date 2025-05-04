@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Checkbox, Typography } from "@material-tailwind/react";
-import {
-  editorDataAtom,
-  editorModalAtom,
-  editorModeAtom,
-  editorPublicKeyAtom,
-} from "@atom/editor";
+import { editorDataAtom, editorModalAtom, editorModeAtom, editorPublicKeyAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -47,7 +42,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const timeout = 5 * 60; // seconds
-  
+
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
   const saveEditorHook = useSaveEditor();
@@ -55,13 +50,19 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const writerRole = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === selectedDocument?.repoId)
+    ) {
       return false;
     }
-    if (currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== selectedDocument?.repoId)
+    ) {
       return (
-        selectedDocument?.accesses?.[0] === "writer" ||
-        selectedDocument?.accesses?.[0] === "viewer"
+        selectedDocument?.accesses?.[0] === "writer" || selectedDocument?.accesses?.[0] === "viewer"
       );
     }
     if (getRepo) {
@@ -76,8 +77,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     if (editorMode === "preview") {
       return `${getVersionData.versionNumber}
       ${` (${
-        translateVersionStatus(getVersionData.status, getVersionData.state)
-          .translated
+        translateVersionStatus(getVersionData.status, getVersionData.state).translated
       } ${getVersionData.status === "accepted" ? "-عمومی" : ""})`}`;
     }
 
@@ -111,28 +111,28 @@ const EditorFooter = ({ editorRef }: IProps) => {
     try {
       // Generate a random AES key
       const aesKey = forge.random.getBytesSync(32); // 256 bits
-      
+
       // Create cipher for AES encryption
       const cipher = forge.cipher.createCipher("AES-CBC", aesKey);
       const iv = forge.random.getBytesSync(16);
-      cipher.start({iv});
-      
+      cipher.start({ iv });
+
       // Encrypt content with AES
       cipher.update(forge.util.createBuffer(content, "utf8"));
       cipher.finish();
       const encryptedContent = cipher.output.getBytes();
-      
+
       // Encrypt the AES key with RSA public key
       const publicKey = forge.pki.publicKeyFromPem(key);
       const encryptedKey = publicKey.encrypt(aesKey, "RSA-OAEP", {
-        md: forge.md.sha256.create()
+        md: forge.md.sha256.create(),
       });
 
       // Combine IV, encrypted key and encrypted content
       const result = {
         iv: forge.util.encode64(iv),
         key: forge.util.encode64(encryptedKey),
-        content: forge.util.encode64(encryptedContent)
+        content: forge.util.encode64(encryptedContent),
       };
 
       return JSON.stringify(result);
@@ -148,9 +148,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
     let encryptedContent: string | null = null;
     const content: string =
-      selectedDocument?.contentType === EDocumentTypes.classic
-        ? data?.content
-        : data;
+      selectedDocument?.contentType === EDocumentTypes.classic ? data?.content : data;
 
     if (selectedDocument?.publicKeyId) {
       encryptedContent = encryptData(content) as string;
@@ -160,20 +158,18 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
     if (getVersionData && selectedDocument && repoId) {
       saveEditorHook.mutate({
-        content: selectedDocument?.publicKeyId
-          ? (encryptedContent as string)
-          : content,
-        outline:
-          selectedDocument?.contentType === EDocumentTypes.classic
-            ? data?.outline
-            : "[]",
+        content: selectedDocument?.publicKeyId ? (encryptedContent as string) : content,
+        outline: selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
         repoId,
         documentId: selectedDocument.id,
         versionId: getVersionData.id,
         versionNumber: getVersionData.versionNumber,
         versionState: getVersionData.state,
         isDirectAccess:
-          sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" &&
+            userInfo?.repository.id !== selectedDocument?.repoId),
         callBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
           setIsLoading(false);
@@ -190,7 +186,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   const startWorker = (time?: number) => {
     if (!autoSaveRef.current) {
       autoSaveRef.current = new Worker(
-        new URL("../../../hooks/worker/autoSave.worker.ts", import.meta.url)
+        new URL("../../../hooks/worker/autoSave.worker.ts", import.meta.url),
       );
       autoSaveRef.current?.postMessage({ action: "START", time });
       if (autoSaveRef.current) {
@@ -210,9 +206,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     autoSaveRef.current = undefined;
   };
 
-  const handleAutoSaveCheckbox = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleAutoSaveCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       startWorker(timeout);
     } else {
@@ -223,16 +217,16 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
   useEffect(() => {
     editorRef.current?.on("getData", handleSave);
-  
+
     return () => {
       stopWorker();
     };
   }, []);
 
   return editorMode === "preview" ? (
-    <div className="editor-footer__preview-mode w-full flex justify-between items-center gap-2">
+    <div className="editor-footer__preview-mode flex w-full items-center justify-between gap-2">
       <Button
-        className="editor-footer__version-number w-full xs:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+        className="editor-footer__version-number flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase xs:w-[208px]"
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
@@ -241,28 +235,23 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setVersionData(null);
         }}
       >
-        <Typography className="label_l3 text-primary_normal">
-          {renderTitle()}
-        </Typography>
-        <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+        <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+        <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
       </Button>
 
       <CancelButton
         onClick={handleChangeEditorMode}
-        disabled={
-          writerRole() &&
-          getVersionData?.creator?.userName !== userInfo?.username
-        }
+        disabled={writerRole() && getVersionData?.creator?.userName !== userInfo?.username}
         className="editor-footer__edit-button"
       >
         ویرایش
       </CancelButton>
     </div>
   ) : (
-    <div className="editor-footer__edit-mode w-full flex flex-col md:flex-row gap-4 justify-between items-center">
-      <div className="w-full md:w-auto flex flex-col xs:flex-row gap-5 xs:gap-4">
+    <div className="editor-footer__edit-mode flex w-full flex-col items-center justify-between gap-4 md:flex-row">
+      <div className="flex w-full flex-col gap-5 md:w-auto xs:flex-row xs:gap-4">
         <Button
-          className="editor-footer__version-number w-full xs:w-[50%] md:w-[208px] lowercase rounded-lg pr-3 pl-2 border-[1px] border-normal bg-transparent flex justify-between items-center"
+          className="editor-footer__version-number flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase md:w-[208px] xs:w-[50%]"
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
@@ -271,19 +260,13 @@ const EditorFooter = ({ editorRef }: IProps) => {
             setVersionData(null);
           }}
         >
-          <Typography className="label_l3 text-primary_normal">
-            {renderTitle()}
-          </Typography>
-          <ChevronLeftIcon className="-rotate-90 w-2.5 h-2.5 stroke-icon-active" />
+          <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+          <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
         </Button>
-        <div className="!hidden xs:!block border-r-[1px] border-r-normal" />
+        <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
         <Checkbox
           crossOrigin=""
-          label={
-            <Typography className="title_t3 truncate">
-              ذخیره‌سازی خودکار
-            </Typography>
-          }
+          label={<Typography className="title_t3 truncate">ذخیره‌سازی خودکار</Typography>}
           className="editor-footer__auto-save-checkbox"
           color="purple"
           checked={checked}
@@ -291,34 +274,29 @@ const EditorFooter = ({ editorRef }: IProps) => {
           containerProps={{ className: "-mr-3 " }}
         />
       </div>
-      <div className="flex w-full md:w-auto gap-2 xs:gap-3">
+      <div className="flex w-full gap-2 md:w-auto xs:gap-3">
         <CancelButton
           onClick={() => {
-            editorRef.current?.setMode(
-              editorMode === "edit" ? "temporaryPreview" : "edit"
-            );
+            editorRef.current?.setMode(editorMode === "edit" ? "temporaryPreview" : "edit");
             setEditorMode(editorMode === "edit" ? "temporaryPreview" : "edit");
           }}
-          className="editor-footer__change-mode-button !h-12 md:!h-8 !w-[50%] md:!w-[100px]"
+          className="editor-footer__change-mode-button !h-12 !w-[50%] md:!h-8 md:!w-[100px]"
           disabled={
             saveEditorHook.isPending ||
-            (writerRole() &&
-              getVersionData?.creator?.userName !== userInfo?.username)
+            (writerRole() && getVersionData?.creator?.userName !== userInfo?.username)
           }
         >
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="editor-footer__save-button !h-12 md:!h-8 !w-[50%] md:!w-[100px] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+          className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}
           loading={isLoading || saveEditorHook.isPending}
         >
-          <Typography className="text__label__button text-white">
-            ذخیره
-          </Typography>
+          <Typography className="text__label__button text-white">ذخیره</Typography>
         </LoadingButton>
       </div>
     </div>

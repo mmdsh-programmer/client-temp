@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
 
 interface IProps {
@@ -14,8 +13,6 @@ interface IProps {
 }
 
 const LoadHtml = ({ editorRef, handleClose }: IProps) => {
-  const currentPath = usePathname();
-
   const getRepo = useRecoilValue(repoAtom);
   const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
   
@@ -33,7 +30,7 @@ const LoadHtml = ({ editorRef, handleClose }: IProps) => {
     getLastVersion?.state, // state
     false, // innerDocument
     false, // innerOutline
-    currentPath === "/admin/sharedDocuments" ? true : undefined,
+    undefined,
     !!getDocumentTemplate?.id && !!getLastVersion?.id
   );
 

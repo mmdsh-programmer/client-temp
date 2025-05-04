@@ -55,12 +55,16 @@ const FileEditor = () => {
   }, [editorData]);
 
   const userGroupHash = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === selectedDocument?.repoId)
+    ) {
       return userInfo!.repository.userGroupHash;
     }
     if (
       currentPath === "/admin/sharedDocuments" ||
-      sharedDocuments === "true"
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== selectedDocument?.repoId)
     ) {
       return selectedDocument!.userGroupHash as string;
     }
@@ -74,10 +78,8 @@ const FileEditor = () => {
           <RenderIf isTrue={!!getSelectedFile}>
             <>
               <PreviewFile file={getSelectedFile as IFile} />
-              <div className="flex gap-2 mt-4 items-center justify-center">
-                <Typography className="title_t2 !text-primary_normal">
-                  دانلود فایل
-                </Typography>
+              <div className="mt-4 flex items-center justify-center gap-2">
+                <Typography className="title_t2 !text-primary_normal">دانلود فایل</Typography>
                 <a
                   href={source}
                   download
@@ -95,40 +97,32 @@ const FileEditor = () => {
           </RenderIf>
           <RenderIf isTrue={!getSelectedFile}>
             <div className="empty-file-message w-full text-center">
-              <Typography className="font-bold p-20">
-                هنوز فایلی بارگذاری نشده است!
-              </Typography>
+              <Typography className="p-20 font-bold">هنوز فایلی بارگذاری نشده است!</Typography>
             </div>
           </RenderIf>
         </div>
       ) : (
         <div className="h-full px-8">
           <div
-            className={`grid place-content-center place-items-center mx-auto transition-all duration-150 ${
-              showFilePicker
-                ? "h-0 opacity-0 invisible"
-                : "h-full opacity-100 visible"
+            className={`mx-auto grid place-content-center place-items-center transition-all duration-150 ${
+              showFilePicker ? "invisible h-0 opacity-0" : "visible h-full opacity-100"
             } `}
           >
-            {getSelectedFile ? (
-              <PreviewFile file={getSelectedFile} showIcon />
-            ) : null}
+            {getSelectedFile ? <PreviewFile file={getSelectedFile} showIcon /> : null}
 
             <Button
-              className="gap-1 items-center px-2-0 py-0 mt-4 z-50 bg-primary-normal h-12"
+              className="px-2-0 z-50 mt-4 h-12 items-center gap-1 bg-primary-normal py-0"
               onClick={() => {
                 setShowFilePicker(true);
               }}
             >
               <UploadIcon className="h-4 w-4 !stroke-white" />
-              <Typography className="title_t2 text-white">
-                انتخاب فایل
-              </Typography>
+              <Typography className="title_t2 text-white">انتخاب فایل</Typography>
             </Button>
           </div>
 
           {showFilePicker ? (
-            <div className="py-4 overflow-auto">
+            <div className="overflow-auto py-4">
               <Files
                 userGroupHash={userGroupHash()}
                 resourceId={repoId}

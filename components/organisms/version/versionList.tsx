@@ -11,6 +11,7 @@ import useGetVersionList from "@hooks/version/useGetVersionList";
 import { useRecoilValue } from "recoil";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const VersionList = () => {
   const repoId = useRepoId();
@@ -19,6 +20,8 @@ const VersionList = () => {
 
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
+
+  const { data: userInfo } = useGetUser();
 
   const {
     data: versionList,
@@ -29,25 +32,24 @@ const VersionList = () => {
   } = useGetVersionList(
     repoId,
     getSelectedDocument!.id,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    30
+    sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" &&
+        getSelectedDocument?.repoId !== userInfo?.repository.id),
+    30,
   );
 
   const { data: getLastVersion } = useGetLastVersion(
     repoId,
     getSelectedDocument!.id,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    true
+    sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" &&
+        getSelectedDocument?.repoId !== userInfo?.repository.id),
+    true,
   );
 
-  const order = [
-    "accpted",
-    "public",
-    "private",
-    "pending",
-    "rejected",
-    "editing",
-  ];
+  const order = ["accpted", "public", "private", "pending", "rejected", "editing"];
 
   const sortedVersion = versionList?.pages.map((page) => {
     return page
@@ -77,7 +79,7 @@ const VersionList = () => {
   };
 
   return (
-    <div className="version-list p-4 xs:p-0 flex flex-col gap-4 xs:gap-6">
+    <div className="version-list flex flex-col gap-4 p-4 xs:gap-6 xs:p-0">
       <HeaderListTemplate
         header="لیست نسخه‌ها"
         buttonText="ایجاد نسخه جدید"
@@ -86,10 +88,10 @@ const VersionList = () => {
         }}
         className="version-list-header"
       />
-      <div className="hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto">
+      <div className="hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
         <VersionTableView {...commonProps} />
       </div>
-      <div className="flex flex-col h-full min-h-[calc(100vh-100px)] xs:hidden gap-y-4 ">
+      <div className="flex h-full min-h-[calc(100vh-100px)] flex-col gap-y-4 xs:hidden ">
         <VersionMobileView {...commonProps} />
       </div>
     </div>

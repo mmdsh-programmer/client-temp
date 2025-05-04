@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   editorDataAtom,
@@ -6,7 +8,7 @@ import {
   editorPublicKeyAtom,
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
@@ -26,8 +28,6 @@ import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
 import EditorFileFooter from "../editor/editorFileFooter";
 
 const EditorTab = () => {
-  const currentPath = usePathname();
-
   const repoId = useRepoId();
   const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
   const editorMode = useRecoilValue(editorModeAtom);
@@ -55,7 +55,7 @@ const EditorTab = () => {
   const { data: getLastVersion, isSuccess: lastVersionIsSuccess } = useGetLastVersion(
     repoId,
     getSelectedDocument!.id,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    sharedDocuments === "true",
     !getVersionData,
   );
 
@@ -71,7 +71,7 @@ const EditorTab = () => {
     vState as "draft" | "version" | "public" | undefined,
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+    sharedDocuments === "true",
     true,
   );
 

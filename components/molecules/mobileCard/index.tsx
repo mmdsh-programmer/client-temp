@@ -21,7 +21,7 @@ const MobileCard = ({
 }: IProps) => {
   return (
     <div
-      className={`${className || ""} cursor-pointer flex flex-col w-full shadow-xSmall bg-primary rounded-lg p-4 gap-4`}
+      className={`${className || ""} cursor-pointer flex flex-col w-full shadow-xSmall bg-white rounded-lg p-4 gap-4`}
       onClick={onClick}
     >
       <div className="flex justify-between items-center w-full gap-[10px]">

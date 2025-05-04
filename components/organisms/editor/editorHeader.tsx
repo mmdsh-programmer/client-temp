@@ -10,6 +10,7 @@ import { selectedVersionAtom } from "@atom/version";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import useRepoId from "@hooks/custom/useRepoId";
 import DownloadPDF from "@components/molecules/downloadPDF";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
   dialogHeader?: string;
@@ -28,6 +29,7 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const freeDraftHook = useFreeDraft();
 
   const handleClose = () => {
@@ -50,7 +52,9 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
         outline: "",
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments",
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" &&
+            userInfo?.repository.id !== getSelectedDocument?.repoId),
       });
     }
     setVersion(null);
@@ -64,10 +68,8 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
         <BackButton onClick={handleClose} />
       </div>
       <Typography className="editor-header__title title_t1">{dialogHeader}</Typography>
-      <div className="hidden xs:flex items-center gap-2">
-        {editorMode === "preview" || editorMode === "temporaryPreview" ? (
-          <DownloadPDF />
-        ) : null}
+      <div className="hidden items-center gap-2 xs:flex">
+        {editorMode === "preview" || editorMode === "temporaryPreview" ? <DownloadPDF /> : null}
         <CloseButton onClose={handleClose} disabled={disabled} />
       </div>
     </>

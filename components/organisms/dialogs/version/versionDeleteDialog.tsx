@@ -9,6 +9,7 @@ import useDeleteVersion from "@hooks/version/useDeleteVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,6 +23,7 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const deleteVerion = useDeleteVersion();
 
   const form = useForm();
@@ -45,7 +47,9 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       versionId: getVersion.id,
       state: getVersion.state,
       isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
       callBack: () => {
         toast.success(" نسخه حذف شد.");
         handleClose();
@@ -61,11 +65,11 @@ const VersionDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="version-delete-dialog"
     >
-      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
         آیا از حذف"
         <span
           title={getVersion?.versionNumber}
-          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
         >
           {getVersion?.versionNumber}
         </span>

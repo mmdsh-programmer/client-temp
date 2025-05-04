@@ -26,6 +26,7 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import { IVersion } from "@interface/version.interface";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -48,6 +49,8 @@ const Editor = ({ setOpen }: IProps) => {
   const [getDocumentShow, setDocumentShow] = useRecoilState(documentShowAtom);
   const currentPath = usePathname();
 
+  const { data: userInfo } = useGetUser();
+
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
     word: useRef<IRemoteEditorRef>(null),
@@ -63,7 +66,9 @@ const Editor = ({ setOpen }: IProps) => {
   } = useGetLastVersion(
     repoId,
     getSelectedDocument!.id,
-    currentPath === "/admin/sharedDocuments",
+    currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" &&
+        userInfo?.repository.id !== getSelectedDocument?.repoId),
     !getSelectedVersion,
   );
 
@@ -74,7 +79,8 @@ const Editor = ({ setOpen }: IProps) => {
     getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
-    currentPath === "/admin/sharedDocuments",
+    currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getSelectedDocument?.repoId),
     true,
   );
 

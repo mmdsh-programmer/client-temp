@@ -38,7 +38,8 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
 
   const { data: userInfo } = useGetUser();
   const repoId =
-    currentPath === "/admin/myDocuments"
+    currentPath === "/admin/myDocuments" ||
+    currentPath === "/admin/dashboard" 
       ? userInfo!.repository.id
       : getRepo!.id;
 
@@ -56,19 +57,19 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
     undefined,
     move ? "category" : undefined,
     move || enableAction ? undefined : docTemplateFilter,
-    enableAction ? undefined : !!move
+    enableAction ? undefined : !!move,
   );
 
   return (
     <div
-      className={`tree-wrapper ${enableAction ? "!h-full min-h-[calc(100vh-340px)]" : "!h-[400px] xs:!h-[300px] min-h-[300px]"}`}
+      className={`tree-wrapper ${enableAction ? "!h-full min-h-[calc(100vh-340px)]" : "!h-[400px] min-h-[300px] xs:!h-[300px]"}`}
     >
       <div
-        className={`h-full flex flex-col ${enableAction ? "min-h-[calc(100vh-340px)] overflow-hidden" : "overflow-auto"} items-start`}
+        className={`flex h-full flex-col ${enableAction ? "min-h-[calc(100vh-340px)] overflow-hidden" : "overflow-auto"} items-start`}
       >
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
-          <div className="w-full justify-center items-center flex h-[50px]">
+          <div className="flex h-[50px] w-full items-center justify-center">
             <Spinner color="purple" />
           </div>
         ) : categoryChildren?.pages[0].list.length ? (
@@ -79,11 +80,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
               }
               return (
                 <div className="tree-item-wrapper w-full" key={item.id}>
-                  <TreeCatItem
-                    catItem={item}
-                    move={move}
-                    enableAction={enableAction}
-                  />
+                  <TreeCatItem catItem={item} move={move} enableAction={enableAction} />
                 </div>
               );
             });
@@ -92,17 +89,13 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
           <EmptyList
             type={
               // eslint-disable-next-line no-nested-ternary
-              move
-                ? EEmptyList.CATEGORY
-                : enableAction
-                  ? EEmptyList.CHILDREN
-                  : EEmptyList.TEMPLATE
+              move ? EEmptyList.CATEGORY : enableAction ? EEmptyList.CHILDREN : EEmptyList.TEMPLATE
             }
           />
         )}
         <RenderIf isTrue={!!hasNextPage}>
           <LoadMore
-            className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
+            className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none"
             isFetchingNextPage={isFetchingNextPage}
             fetchNextPage={fetchNextPage}
           />

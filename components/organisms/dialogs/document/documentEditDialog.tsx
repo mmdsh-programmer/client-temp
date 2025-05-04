@@ -56,10 +56,16 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
   };
 
   const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === document?.repoId)
+    ) {
       return userInfo!.repository.id;
     }
-    if (currentPath === "/admin/sharedDocuments") {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
+    ) {
       return document!.repoId;
     }
     return getRepo!.id;
@@ -86,7 +92,9 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       description: dataForm?.description,
       order: dataForm.order || undefined,
       isHidden: false,
-      isDirectAccess: currentPath === "/admin/sharedDocuments",
+      isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
       callBack: () => {
         toast.success("سند با موفقیت به روز رسانی شد.");
         handleClose();
@@ -115,9 +123,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             className="document-edit__form-name"
           />
           {errors.title && (
-            <Typography className="warning_text">
-              {errors.title?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.title?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -134,9 +140,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             className="document-edit__form-order "
           />
           {errors.order && (
-            <Typography className="warning_text">
-              {errors.order?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.order?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -149,9 +153,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             className="document-edit__form-description "
           />
           {errors.description && (
-            <Typography className="warning_text">
-              {errors.description?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.description?.message}</Typography>
           )}
         </div>
       </form>

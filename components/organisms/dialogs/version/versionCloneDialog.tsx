@@ -14,6 +14,7 @@ import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IForm {
   name: string;
@@ -31,6 +32,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const { data: getVersionInfo, isLoading } = useGetVersion(
     repoId,
     getDocument!.id,
@@ -38,8 +40,10 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     getVersion?.state,
     true,
     true,
-    sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
-    true
+    sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
+    true,
   );
   const createVersion = useCreateVersion();
 
@@ -67,7 +71,11 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       content: getVersionInfo?.content || "",
       outline: getVersionInfo?.outline || "",
       isDirectAccess:
-        currentPath === "/admin/sharedDocuments" ? true : undefined,
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+          ? true
+          : undefined,
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();
@@ -88,14 +96,9 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Typography className="form_label">نام نسخه</Typography>
-            <FormInput
-              placeholder="نام نسخه"
-              register={{ ...register("name") }}
-            />
+            <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
             {errors.name && (
-              <Typography className="warning_text">
-                {errors.name?.message}
-              </Typography>
+              <Typography className="warning_text">{errors.name?.message}</Typography>
             )}
           </div>
         </form>

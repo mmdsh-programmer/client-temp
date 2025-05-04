@@ -10,6 +10,7 @@ import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const timeout = 5 * 60; // seconds
 
@@ -32,6 +33,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
+  const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();
   const freeDraftHook = useFreeDraft();
 
@@ -41,7 +43,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
 
   const startWorker = (message?: number) => {
     workerRef.current = new Worker(
-      new URL("../../../../hooks/worker/autoDraft.worker.ts", import.meta.url)
+      new URL("../../../../hooks/worker/autoDraft.worker.ts", import.meta.url),
     );
 
     if (message) {
@@ -49,7 +51,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
     }
   };
 
-  const handleFreeDraft =  () => {
+  const handleFreeDraft = () => {
     if (editorData && repoId && selectedDocument) {
       editorRef.current?.on("getData", (value) => {
         console.log("------------------ value -----------------", value);
@@ -75,7 +77,9 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         versionNumber: editorData?.versionNumber,
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments",
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" &&
+            userInfo?.repository.id !== selectedDocument?.repoId),
 
         callBack: () => {
           setShowFreeDraftModal(false);
@@ -99,8 +103,9 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         ...data,
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments",
-
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" &&
+            userInfo?.repository.id !== selectedDocument?.repoId),
         callBack: () => {
           startWorker(timeout);
         },

@@ -10,12 +10,14 @@ import React from "react";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
 import { toast } from "react-toastify";
+import { usePathname } from "next/navigation";
 
 interface IProps {
   category: ICategoryMetadata;
 }
 
 const CategoryMobileCard = ({ category }: IProps) => {
+  const currentPath = usePathname();
   const setCategoryParent = useSetRecoilState(categoryShowAtom);
   const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
 
@@ -44,27 +46,29 @@ const CategoryMobileCard = ({ category }: IProps) => {
     <MobileCard
       className="category-mobile-card"
       name={
-        <div className="flex items-center gap-2 w-full">
-          <Checkbox
-            color="purple"
-            containerProps={{
-              className: "p-[2px]",
-            }}
-            onClick={(e) => {
-              return e.stopPropagation();
-            }}
-            crossOrigin=""
-            onChange={(e) => {
-              handleCheckItem(e);
-            }}
-            checked={getBulkItems.some((bulkItem) => {
-              return bulkItem.id === category.id;
-            })}
-          />
-          <div className="flex gap-2 max-w-full">
-            <FolderIcon className="stroke-blue-gray-600 w-5 h-5 min-w-5 min-h-5" />
+        <div className="flex w-full items-center gap-2">
+          {currentPath === "/admin/dashboard" ? null : (
+            <Checkbox
+              color="purple"
+              containerProps={{
+                className: "p-[2px]",
+              }}
+              onClick={(e) => {
+                return e.stopPropagation();
+              }}
+              crossOrigin=""
+              onChange={(e) => {
+                handleCheckItem(e);
+              }}
+              checked={getBulkItems.some((bulkItem) => {
+                return bulkItem.id === category.id;
+              })}
+            />
+          )}
+          <div className="flex max-w-full gap-2">
+            <FolderIcon className="h-5 min-h-5 w-5 min-w-5 stroke-blue-gray-600" />
             <Typography
-              className="flex text-ellipsis overflow-hidden truncate flex-grow max-w-[80%]"
+              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
               title={category.name}
             >
               {category.name}
@@ -75,9 +79,7 @@ const CategoryMobileCard = ({ category }: IProps) => {
       description={[
         {
           title: "تاریخ ایجاد",
-          value: category.createdAt
-            ? FaDateFromTimestamp(+category.createdAt)
-            : "--",
+          value: category.createdAt ? FaDateFromTimestamp(+category.createdAt) : "--",
         },
         { title: "سازنده", value: category.creator?.userName || "--" },
       ]}

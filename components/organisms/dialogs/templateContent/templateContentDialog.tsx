@@ -8,6 +8,7 @@ import LoadHtml from "./loadHtml";
 import { Typography } from "@material-tailwind/react";
 import { documentTemplateAtom } from "@atom/document";
 import { useRecoilState } from "recoil";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -18,12 +19,13 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
   // TODO CODE REVIEW REQUIRED
 
   const [loading, setLoading] = useState(false);
-  const [getDocumentTemplate, setDocumentTemplate] =
-    useRecoilState(documentTemplateAtom);
+  const [getDocumentTemplate, setDocumentTemplate] = useRecoilState(documentTemplateAtom);
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
+
+  const { data: userInfo } = useGetUser();
 
   const handleClose = () => {
     setOpen(false);
@@ -44,14 +46,16 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
       disabled={!getDocumentTemplate}
     >
       {currentPath === "/admin/sharedDocuments" ||
-      sharedDocuments === "true" ? (
-        <Typography className="title_t3 text-primary_normal">شما به نمونه‌ سندهای این منبع دسترسی ندارید.</Typography>
+      sharedDocuments === "true" ||
+      (currentPath === "/admin/dashboard" &&
+        userInfo?.repository.id !== getDocumentTemplate?.repoId) ? (
+        <Typography className="title_t3 text-primary_normal">
+          شما به نمونه‌ سندهای این منبع دسترسی ندارید.
+        </Typography>
       ) : (
         <>
           <ChildrenTree move={false} enableAction={false} />
-          {loading ? (
-            <LoadHtml handleClose={handleClose} editorRef={editorRef} />
-          ) : null}
+          {loading ? <LoadHtml handleClose={handleClose} editorRef={editorRef} /> : null}
         </>
       )}
     </ConfirmFullHeightDialog>

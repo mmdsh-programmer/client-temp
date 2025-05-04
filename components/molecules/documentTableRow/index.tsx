@@ -1,28 +1,17 @@
+import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import { Checkbox } from "@material-tailwind/react";
 import DocumentIcon from "../documentIcon";
 import DocumentMenu from "../documentMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { IDocumentMetadata } from "@interface/document.interface";
-import React from "react";
-import TableCell from "../tableCell";
+import TableCell, { ITableCell } from "../tableCell";
 import { bulkItemsAtom } from "@atom/bulk";
 import { categoryAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-
-interface ITableCell {
-  data: string | React.ReactNode;
-  title?: string;
-  className?: string;
-  rowSpan?: number;
-  colSpan?: number;
-  onClick?: () => void;
-  stopPropagation?: boolean;
-}
 
 interface IProps {
   document: IDocumentMetadata;
@@ -38,7 +27,8 @@ const DocumentTableRow = ({ document }: IProps) => {
   const { data: userInfo } = useGetUser();
 
   const repoUserGroupHash =
-    currentPath === "/admin/myDocuments"
+    currentPath === "/admin/myDocuments" ||
+    (currentPath === "/admin/dashboard" && document?.repoId === userInfo?.repository.id)
       ? userInfo?.repository.userGroupHash
       : getRepo?.userGroupHash;
 
@@ -48,16 +38,19 @@ const DocumentTableRow = ({ document }: IProps) => {
           selectedCat.id
         }&documentId=${document.id}&repoGroupHash=${
           repoUserGroupHash
-        }&catGroupHash=${selectedCat.userGroupHash}&type=${
-          document?.contentType
-        }${
+        }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${
           document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
         }`
       : `edit?repoId=${document.repoId}&documentId=${
           document.id
         }&repoGroupHash=${repoUserGroupHash}&type=${document?.contentType}${
           document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }${currentPath === "/admin/sharedDocuments" ? "&sharedDocuments=true" : ""}`;
+        }${
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id)
+            ? "&sharedDocuments=true"
+            : ""
+        }`;
 
     window.open(path, "_blank");
   };
@@ -85,7 +78,7 @@ const DocumentTableRow = ({ document }: IProps) => {
       className="document-table-row"
       tableCell={
         [
-          currentPath === "/admin/sharedDocuments"
+          currentPath === "/admin/sharedDocuments" || currentPath === "/admin/dashboard"
             ? null
             : {
                 data: (
@@ -102,18 +95,16 @@ const DocumentTableRow = ({ document }: IProps) => {
                 className: "!px-0",
               },
           {
-            data:
-              document.order || document.order === 0 ? document.order : "--",
+            data: document.order || document.order === 0 ? document.order : "--",
             title: String(document.order) || "--",
-            className:
-              "hidden xl:table-cell text-center !px-0",
+            className: "hidden xl:table-cell text-center !px-0",
           },
           {
             data: (
               <div className="flex">
                 <DocumentIcon document={document} />
                 <span
-                  className="truncate flex gap-2 mr-2 text-ellipsis overflow-hidden"
+                  className="mr-2 flex gap-2 overflow-hidden truncate text-ellipsis"
                   title={document.name}
                 >
                   {document.name}
@@ -124,21 +115,13 @@ const DocumentTableRow = ({ document }: IProps) => {
               "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%]",
           },
           {
-            data: document.createdAt
-              ? FaDateFromTimestamp(+document.createdAt)
-              : "--",
-            title: document.createdAt
-              ? FaDateFromTimestamp(+document.createdAt)
-              : "--",
+            data: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
+            title: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
             className: "!px-3",
           },
           {
-            data: document.updatedAt
-              ? FaDateFromTimestamp(+document.updatedAt)
-              : "--",
-            title: document.updatedAt
-              ? FaDateFromTimestamp(+document.updatedAt)
-              : "--",
+            data: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
+            title: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
             className: "hidden xl:table-cell !px-3",
           },
           {
