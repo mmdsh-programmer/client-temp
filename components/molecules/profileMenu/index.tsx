@@ -15,9 +15,10 @@ import { useRouter } from "next/navigation";
 
 interface IProps {
   redirect?: boolean;
-  renderSideButton?: React.ReactNode;
+  renderSearchButton?: React.ReactNode;
+  renderLoginButton?: React.ReactNode;
 }
-const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
+const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }: IProps) => {
   const { isFetching, data: userData } = useGetOptionalUser();
   const queryClient = useQueryClient();
   const logout = useLogout();
@@ -45,7 +46,7 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
   if (!isFetching && !userData) {
     return (
       <>
-        {renderSideButton || null}
+        {renderSearchButton || null}
         <LoadingButton
           className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 bg-tertiary text-white font-iranYekan !max-h-[unset]"
           onClick={() => {
@@ -64,7 +65,8 @@ const ProfileMenu = ({ redirect = true, renderSideButton }: IProps) => {
 
   return (
     <>
-      {renderSideButton || null}
+      {renderLoginButton || null}
+      {renderSearchButton || null}
       <MenuComponent
         variant="medium"
         menuList={[

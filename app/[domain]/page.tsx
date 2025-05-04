@@ -44,10 +44,10 @@ const MainPage = async ({ params }: MainPageProps) => {
                 />
               </div>
 
-              <h1 className="text-secondary text-[40px] text-center mt-8">
+              <h1 className="text-white text-[40px] text-center mt-8">
                 {projectName ?? "نام پروژه"}
               </h1>
-              <p className="gray-500 text-lg text-center mt-4">
+              <p className="text-white text-lg text-center mt-4">
                 {projectDescription ?? "توضیحات پروژه"}
               </p>
             </div>

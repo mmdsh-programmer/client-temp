@@ -38,17 +38,17 @@ const PublishHeader = ({ projectName, logo, domain }: IProps) => {
             </div>
 
             {projectName ? (
-              <h1 className="font-bold mr-2 text-secondary">{projectName}</h1>
+              <h1 className="font-bold mr-2 text-white">{projectName}</h1>
             ) : null}
           </Link>
           <div className="flex items-center gap-1 xs:gap-4 xs:mr-auto">
             <PublicFeedsButton />
             <ProfileMenu
-              renderSideButton={
-                <>
-                  <PublishSearchButton />
-                  <LoginPanelButton />
-                </>
+              renderLoginButton={
+                <LoginPanelButton />
+              }
+              renderSearchButton={
+                <PublishSearchButton />
               }
               redirect={false}
             />
