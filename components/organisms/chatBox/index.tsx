@@ -331,7 +331,7 @@ const ChatBox = () => {
     return (
       <div className="h-full flex items-end px-6 py-4">
         <LoadingButton
-          className="!w-full bg-secondary hover:bg-secondary active:bg-secondary"
+          className="!w-full bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={enableChat}
           loading={enableChatHook.isPending}
         >

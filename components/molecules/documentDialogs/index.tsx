@@ -14,6 +14,7 @@ import DocumentDeletePasswordDialog from "@components/organisms/dialogs/document
 import DocumentDirectAccessDialog from "@components/organisms/dialogs/document/documentDirectAccessDialog";
 import DocumentCreatePublishLinkDialog from "@components/organisms/dialogs/document/documentCreatePublishLinkDialog";
 import DocumentDeletePublishLinkDialog from "@components/organisms/dialogs/document/documentDeletePublishLinkDialog";
+import DocumentPublicVersionDialog from "@components/organisms/dialogs/document/documentPublicVersionDialog";
 
 interface DocumentDialogsProps {
   modalsState: {
@@ -34,17 +35,12 @@ interface DocumentDialogsProps {
     documentDirectAccess: boolean;
     createPublishLink: boolean;
     deletePublishLink: boolean;
+    documentPublicVersion: boolean;
   };
-  toggleModal: (
-    modalName: keyof DocumentDialogsProps["modalsState"],
-    value: boolean
-  ) => void;
+  toggleModal: (modalName: keyof DocumentDialogsProps["modalsState"], value: boolean) => void;
 }
 
-const DocumentDialogs: React.FC<DocumentDialogsProps> = ({
-  modalsState,
-  toggleModal,
-}) => {
+const DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleModal }) => {
   return (
     <>
       {modalsState.deleteDocument ? (
@@ -143,12 +139,19 @@ const DocumentDialogs: React.FC<DocumentDialogsProps> = ({
           setOpen={() => {
             return toggleModal("createPublishLink", false);
           }}
-          />
+        />
       ) : null}
       {modalsState.deletePublishLink ? (
         <DocumentDeletePublishLinkDialog
           setOpen={() => {
             return toggleModal("deletePublishLink", false);
+          }}
+        />
+      ) : null}
+      {modalsState.documentPublicVersion ? (
+        <DocumentPublicVersionDialog
+          setOpen={() => {
+            return toggleModal("documentPublicVersion", false);
           }}
         />
       ) : null}

@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import React, { useState } from "react";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import { EEmptyList } from "@components/molecules/emptyList";
 import TabComponent from "@components/molecules/tab";
 import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import CardView from "../repoView/cardView";
@@ -8,7 +8,7 @@ import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
 import RepoMenu from "@components/molecules/repoMenu";
 import { IRepoView } from "@interface/repo.interface";
-import { Spinner, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 
 export enum ETabs {
   ALL_REPO = "همه‌ی مخزن‌ها",
@@ -84,25 +84,14 @@ const DashboardRepositories = () => {
   };
 
   const renderList = () => {
-    if (commonProps.isLoading) {
-      return (
-        <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-8 w-8" color="purple" />
-        </div>
-      );
-    }
-    if (listLength) return <CardView {...commonProps} />;
-    return (
-      <EmptyList
-        type={
-          activeTab === ETabs.MY_REPO
-            ? EEmptyList.MY_REPO
-            : activeTab === ETabs.ALL_REPO
-              ? EEmptyList.DASHBOARD
-              : EEmptyList.ACCESS_REPO
-        }
-      />
-    );
+    // if (commonProps.isLoading) {
+    //   return (
+    //     <div className="flex h-full w-full items-center justify-center">
+    //       <Spinner className="h-8 w-8" color="purple" />
+    //     </div>
+    //   );
+    // }
+    return <CardView {...commonProps} />;
   };
 
   const tabList = [

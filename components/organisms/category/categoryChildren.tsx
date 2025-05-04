@@ -30,9 +30,9 @@ const CategoryChildren = () => {
 
   const repoId = useMemo(() => {
     if (currentPath === "/admin/myDocuments") {
-      return userInfo?.repository?.id;
+      return userInfo!.repository.id;
     }
-    return getRepo?.id;
+    return getRepo!.id;
   }, [currentPath, userInfo, getRepo]);
 
   const {
@@ -43,7 +43,7 @@ const CategoryChildren = () => {
     isLoading: childrenIsLoading,
     isFetching: childrenIsFetching,
   } = useGetCategoryChildren(
-    repoId ?? 0,
+    repoId,
     getCategoryShow?.id,
     getSortParams,
     queryParams.limit,
@@ -86,6 +86,7 @@ const CategoryChildren = () => {
         ? EEmptyList.FILTER
         : EEmptyList.CHILDREN,
   };
+
   return (
     <>
       <RenderIf isTrue={getListMode === "table"}>

@@ -1,5 +1,6 @@
 import {
   ArrowLeftRectangleIcon,
+  ConfirmationVersionIcon,
   CopyIcon,
   DeleteIcon,
   DocumentBookmarkIcon,
@@ -51,6 +52,7 @@ type Modals = {
   documentDirectAccess: boolean;
   createPublishLink: boolean;
   deletePublishLink: boolean;
+  documentPublicVersion: boolean;
 };
 
 const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps) => {
@@ -274,10 +276,27 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       className: "document-version-list",
     },
     {
+      text: "عمومی سازی آخرین نسخه",
+      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
+      disabled:
+        (currentPath === "/admin/dashboard" &&
+          document?.repoId !== userInfo?.repository.id &&
+          document?.accesses?.[0] !== ERoles.admin) ||
+        getRepo?.roleName === ERoles.writer ||
+        getRepo?.roleName === ERoles.viewer ||
+        getRepo?.roleName === ERoles.editor,
+      onClick: () => {
+        toggleModal("documentPublicVersion", true);
+        if (document) setDocument(document);
+      },
+      className: "document-public-version",
+    },
+    {
       text: "دسترسی مستقیم به سند",
       icon: <LockIcon className="h-4 w-4" />,
       disabled:
-        (document?.repoId !== userInfo?.repository.id &&
+        (currentPath === "/admin/dashboard" &&
+          document?.repoId !== userInfo?.repository.id &&
           document?.accesses?.[0] !== ERoles.admin) ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer ||

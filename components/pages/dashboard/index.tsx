@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { repoAtom } from "@atom/repository";
-import { useResetRecoilState } from "recoil";
+import { repoAtom, repoGroupingAtom } from "@atom/repository";
+import { useRecoilValue, useResetRecoilState } from "recoil";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { versionModalListAtom } from "@atom/version";
 import DashboardDocuments from "@components/organisms/dashboradDocuments";
 import DashboardRepositories from "@components/organisms/dashboardRepositories";
 import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
+import { ERepoGrouping } from "@interface/enums";
+import RepoList from "@components/organisms/repoList";
 
 const DashboardPage = () => {
   const resetRepo = useResetRecoilState(repoAtom);
@@ -17,6 +19,7 @@ const DashboardPage = () => {
   const resetDocument = useResetRecoilState(selectedDocumentAtom);
   const resetDocumentShow = useResetRecoilState(documentShowAtom);
   const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+  const getRepoGroup = useRecoilValue(repoGroupingAtom);
 
   useEffect(() => {
     resetRepo();
@@ -27,14 +30,19 @@ const DashboardPage = () => {
     resetShowVersionList();
   }, []);
 
-  return (
-    <div className="flex flex-col xl:flex-row gap-4 xs:gap-6">
-      <div className="w-full max-w-full xl:!max-w-1/2 xl:w-1/2">
+  return getRepoGroup === ERepoGrouping.DASHBOARD ? (
+    <div className="flex flex-col gap-4 xl:flex-row xs:gap-6">
+      <div className="xl:!max-w-1/2 w-full max-w-full xl:w-1/2">
         <DashboardDocuments />
       </div>
-      <div className="w-full max-w-full xl:!max-w-1/2 xl:w-1/2">
+      <div className="xl:!max-w-1/2 w-full max-w-full xl:w-1/2">
         <DashboardRepositories />
       </div>
+      <RepoTypesMobileView />
+    </div>
+  ) : (
+    <div className="flex flex-col gap-4 xs:gap-6 ">
+      <RepoList />
       <RepoTypesMobileView />
     </div>
   );

@@ -135,7 +135,10 @@ const TableView = ({
 
   return (
     <div
-      className={`category-children-table flex flex-col bg-white ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} h-full flex-shrink-0 flex-grow rounded-lg shadow-small`}
+      className={`category-children-table flex flex-col bg-white
+         ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"}
+         ${currentPath === "/admin/dashboard" ? "!min-h-[calc(100vh-220px)]" : "min-h-[calc(100vh-340px)]"}
+         h-full flex-shrink-0 flex-grow rounded-lg shadow-small`}
     >
       <div className="flex items-center justify-between px-5 py-4">
         <CategoryBreadCrumb />

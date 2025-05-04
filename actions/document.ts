@@ -22,6 +22,7 @@ import {
   getDocumentPublishLink,
   getDocumentWhiteBlackList,
   getUserDocument,
+  publicLastVersion,
   updateDocumentPassword,
 } from "@service/clasor";
 
@@ -503,6 +504,31 @@ export const deleteDocumentPublishLinkAction = async (
       repoId,
       documentId
     );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const publicLastVersionAction = async (
+  repoId: number,
+  documentId: number,
+  isDirectAccess?: boolean
+) => {
+  const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+
+  try {
+    const response = await publicLastVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      isDirectAccess
+    );
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

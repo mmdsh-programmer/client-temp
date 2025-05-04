@@ -2228,6 +2228,34 @@ export const getPublishedDocumentVersion = async (
   }
 };
 
+export const publicLastVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  isDirectAccess?: boolean
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
+      `repositories/${repoId}/documents/${documentId}/publicVersion`,
+      {
+        
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ////////////////// VERSION //////////////////
 export const getVersion = async (
   accessToken: string,
