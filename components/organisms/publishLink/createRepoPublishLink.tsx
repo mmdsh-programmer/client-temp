@@ -4,9 +4,11 @@ import {
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React from "react";
 import { repoAtom, repositoryIdAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import { DatePicker } from "zaman";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -16,28 +18,55 @@ import useCreatePublishLink from "@hooks/publish/useCreatePublishLink";
 import { useForm } from "react-hook-form";
 
 interface IData {
-  expireTime: number;
+  expireTime?: number;
+  password?: string;
+  hasExpireTime: boolean;
 }
 
-const CreateRepoPublishLink = () => {
-  const [hasExpireTime, setHasExpireTime] = useState(false);
+const validationSchema = yup.object().shape({
+  hasExpireTime: yup.boolean().required(),
+  expireTime: yup.number().when("hasExpireTime", {
+    is: true,
+    then: (schema) => {
+      return schema
+        .required("تاریخ انقضا الزامی است")
+        .test("is-future-date", "تاریخ انتخاب شده نمی‌تواند قبل از امروز باشد", (value) => {
+          if (!value) return true;
+          const selectedDate = new Date(value);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return selectedDate >= today;
+        });
+    },
+    otherwise: (schema) => {
+      return schema.nullable();
+    }
+  }),
+  password: yup.string().optional()
+});
 
+const CreateRepoPublishLink = () => {
   const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
   const getRepo = useRecoilValue(repoAtom);
   const createPublishLink = useCreatePublishLink();
 
-  const form = useForm<{
-    expireTime: number;
-    password?: string;
-  }>();
+  const form = useForm<IData>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      hasExpireTime: false
+    }
+  });
 
   const {
     handleSubmit,
     reset,
     clearErrors,
     setValue,
+    watch,
     formState: { errors },
   } = form;
+
+  const hasExpireTime = watch("hasExpireTime");
 
   const submitCalendar = (selectedTime: onDatePickerChangePayload) => {
     setValue("expireTime", +new Date(selectedTime.value));
@@ -55,8 +84,7 @@ const CreateRepoPublishLink = () => {
 
     createPublishLink.mutate({
       repoId: getRepo.id,
-      expireTime:
-        hasExpireTime && data.expireTime ? data.expireTime : undefined,
+      expireTime: data.hasExpireTime && data.expireTime ? data.expireTime : undefined,
       password: undefined,
       callBack: () => {
         setRepositoryAtomId(getRepo.id);
@@ -84,7 +112,7 @@ const CreateRepoPublishLink = () => {
               color="purple"
               checked={hasExpireTime}
               onChange={() => {
-                setHasExpireTime(!hasExpireTime);
+                setValue("hasExpireTime", !hasExpireTime);
               }}
               containerProps={{ className: "-mr-3" }}
               className="repo-create-publish-link__checkbox"
@@ -126,3 +154,4 @@ const CreateRepoPublishLink = () => {
 };
 
 export default CreateRepoPublishLink;
+
