@@ -7,6 +7,7 @@ interface IProps {
     key: string;
     value: string;
     isSorted?: boolean;
+    sortAction?: () => void;
     className?: string;
   }[];
   className?: string;
@@ -27,7 +28,7 @@ const TableHead = ({ tableHead, className }: IProps) => {
                   <Typography className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>
-                  <Sort />
+                  <Sort onClick={head.sortAction} />
                 </div>
               ) : (
                 <div className="flex items-center">

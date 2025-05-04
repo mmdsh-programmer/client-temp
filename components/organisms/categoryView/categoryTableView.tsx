@@ -18,6 +18,7 @@ import SearchFilter from "@components/molecules/searchFilter";
 import TableHead from "@components/molecules/tableHead";
 import { usePathname } from "next/navigation";
 import { useRecoilState } from "recoil";
+import { sortAtom } from "@atom/sortParam";
 
 interface ITableHead {
   key: string;
@@ -38,6 +39,7 @@ const TableView = ({
   const [openFilter, setOpenFilter] = useState(false);
   const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
   const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
+  const [getSortParams, setSortParams] = useRecoilState(sortAtom);
 
   const listLength = getCategoryList?.pages[0].total;
 
@@ -61,6 +63,14 @@ const TableView = ({
                       key: "order",
                       value: "اولویت",
                       isSorted: true,
+                      sortAction: () => {
+                        setSortParams((prevState) => {
+                          return {
+                            ...prevState,
+                            order: getSortParams.order === "asc" ? "desc" : "asc",
+                          };
+                        });
+                      },
                       className:
                         "categoryOrder whitespace-nowrap hidden !px-1 xl:table-cell !max-w-[70px] !w-[70px]",
                     },
@@ -68,6 +78,14 @@ const TableView = ({
                       key: "name",
                       value: "نام دسته",
                       isSorted: true,
+                      sortAction: () => {
+                        setSortParams((prevState) => {
+                          return {
+                            ...prevState,
+                            name: getSortParams.name === "asc" ? "desc" : "asc",
+                          };
+                        });
+                      },
                       className:
                         "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%] !px-2",
                     },
@@ -75,6 +93,14 @@ const TableView = ({
                       key: "createDate",
                       value: "تاریخ ایجاد",
                       isSorted: true,
+                      sortAction: () => {
+                        setSortParams((prevState) => {
+                          return {
+                            ...prevState,
+                            createdAt: getSortParams.createdAt === "asc" ? "desc" : "asc",
+                          };
+                        });
+                      },
                       className: "!px-2 whitespace-nowrap",
                     },
                     {

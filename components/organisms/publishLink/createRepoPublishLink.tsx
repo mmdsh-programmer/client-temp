@@ -1,15 +1,9 @@
-import {
-  Checkbox,
-  DialogBody,
-  DialogFooter,
-  Typography,
-} from "@material-tailwind/react";
 import React from "react";
-import { repoAtom, repositoryIdAtom } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Checkbox, DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
+import { useRecoilState } from "recoil";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import { DatePicker } from "zaman";
 import LoadingButton from "@components/molecules/loadingButton";
 import { onDatePickerChangePayload } from "zaman/dist/types";
@@ -40,27 +34,24 @@ const validationSchema = yup.object().shape({
     },
     otherwise: (schema) => {
       return schema.nullable();
-    }
+    },
   }),
-  password: yup.string().optional()
+  password: yup.string().optional(),
 });
 
 const CreateRepoPublishLink = () => {
-  const setRepositoryAtomId = useSetRecoilState(repositoryIdAtom);
-  const getRepo = useRecoilValue(repoAtom);
+  const [getRepo, setRepo] = useRecoilState(repoAtom);
   const createPublishLink = useCreatePublishLink();
 
   const form = useForm<IData>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      hasExpireTime: false
-    }
+      hasExpireTime: false,
+    },
   });
 
   const {
     handleSubmit,
-    reset,
-    clearErrors,
     setValue,
     watch,
     formState: { errors },
@@ -70,11 +61,6 @@ const CreateRepoPublishLink = () => {
 
   const submitCalendar = (selectedTime: onDatePickerChangePayload) => {
     setValue("expireTime", +new Date(selectedTime.value));
-  };
-
-  const handleReset = () => {
-    reset();
-    clearErrors();
   };
 
   const onSubmit = async (data: IData) => {
@@ -87,8 +73,10 @@ const CreateRepoPublishLink = () => {
       expireTime: data.hasExpireTime && data.expireTime ? data.expireTime : undefined,
       password: undefined,
       callBack: () => {
-        setRepositoryAtomId(getRepo.id);
-        handleReset();
+        setRepo({
+          ...getRepo,
+          isPublish: true,
+        });
         toast.success("انتشار مخزن با موفقيت انجام شد.");
       },
     });
@@ -100,12 +88,12 @@ const CreateRepoPublishLink = () => {
         placeholder="dialog body publish-repo"
         className="repo-create-publish-link__dialog-body flex-grow px-5 py-3 xs:p-0 xs:pb-6"
       >
-        <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Checkbox
               crossOrigin="anonymous"
               label={
-                <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+                <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal ">
                   افزودن تاریخ انقضای لینک
                 </Typography>
               }
@@ -126,9 +114,7 @@ const CreateRepoPublishLink = () => {
                   inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
                 />
                 {errors.expireTime && (
-                  <Typography className="warning_text">
-                    {errors.expireTime?.message}
-                  </Typography>
+                  <Typography className="warning_text">{errors.expireTime?.message}</Typography>
                 )}
               </>
             ) : null}
@@ -137,16 +123,14 @@ const CreateRepoPublishLink = () => {
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog-footer p-5 xs:p-0 xs:pt-6 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:p-0 xs:pt-6"
       >
         <LoadingButton
           className="repo-create-publish-link__create-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={handleSubmit(onSubmit)}
           loading={createPublishLink.isPending}
         >
-          <Typography className="text__label__button text-white">
-            ایجاد
-          </Typography>
+          <Typography className="text__label__button text-white">ایجاد</Typography>
         </LoadingButton>
       </DialogFooter>
     </>
@@ -154,4 +138,3 @@ const CreateRepoPublishLink = () => {
 };
 
 export default CreateRepoPublishLink;
-

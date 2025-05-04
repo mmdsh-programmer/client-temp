@@ -16,37 +16,44 @@ interface IProps {
 
 const CreateQuestion = ({ postId }: IProps) => {
   const editorRef = useRef<IQaEditorRef | null>(null);
+  const editorData = useRef<{ content: string; outline: string } | null>(null);
   const { data: userInfo } = useGetUser();
   const createQuestionHook = useCreateQuestionAnswer();
 
   const saveQuestion = async () => {
-    const editorData = await editorRef.current?.getData();
+    await editorRef.current?.getData();
+    await editorRef.current?.on("getData", (value: string) => {
+      console.log("----------------- value -----------------", value);
+      if (value) {
+        editorData.current = JSON.parse(value);
+      }
 
-    if (editorData && editorData.content.length === 0) {
-      return toast.error("متن سوال خالی است");
-    }
+      if (editorData.current && editorData.current.content.length === 0) {
+        return toast.error("متن سوال خالی است");
+      }
 
-    if (editorData && editorData.content.length > 1400) {
-      return toast.error("حداکثر کاراکتر مجاز 1400 کاراکتر میباشید");
-    }
+      if (editorData.current && editorData.current.content.length > 1400) {
+        return toast.error("حداکثر کاراکتر مجاز 1400 کاراکتر میباشید");
+      }
 
-    if (!editorData) {
-      return toast.error("خطا در دریافت متن سوال");
-    }
+      if (!editorData.current?.content) {
+        return toast.error("خطا در دریافت متن سوال");
+      }
 
-    createQuestionHook.mutate({
-      name: `post-${postId}-user-${userInfo?.ssoId}-question`,
-      content: editorData.content,
-      repliedPostId: postId,
-      metadata: JSON.stringify({ isQuestion: true }),
-      callBack: () => {
-        toast.success("سوال شما با موفقیت اضافه شد");
-        editorRef.current?.setData({
-          content: "",
-          outline: [],
-          ...config,
-        });
-      },
+      createQuestionHook.mutate({
+        name: `post-${postId}-user-${userInfo?.ssoId}-question`,
+        content: editorData.current.content,
+        repliedPostId: postId,
+        metadata: JSON.stringify({ isQuestion: true }),
+        callBack: () => {
+          toast.success("سوال شما با موفقیت اضافه شد");
+          editorRef.current?.setData({
+            content: "",
+            outline: [],
+            ...config,
+          });
+        },
+      });
     });
   };
 
@@ -60,16 +67,14 @@ const CreateQuestion = ({ postId }: IProps) => {
 
   return (
     <div>
-      <Typography className="text-xs text-gray-800 mb-2">
-        پرسش خود را بنویسید
-      </Typography>
+      <Typography className="mb-2 text-xs text-gray-800">پرسش خود را بنویسید</Typography>
 
       <div className="h-52">
         <QuestionAnswerEditor ref={editorRef} />
       </div>
 
       <LoadingButton
-        className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-primary-normal text-white font-iranYekan !max-h-[unset]"
+        className="!mt-5 mr-auto block !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-primary-normal !px-3 py-5 font-iranYekan text-white lg:mt-0"
         onClick={saveQuestion}
         disabled={createQuestionHook.isPending}
         loading={createQuestionHook.isPending}

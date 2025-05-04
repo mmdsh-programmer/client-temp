@@ -3,6 +3,7 @@ import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import { config } from "@utils/clasorEditor";
 import { IEditorValue } from "@interface/app.interface";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   defaultValue?: string;
@@ -11,15 +12,18 @@ interface IProps {
 export interface IQaEditorRef {
   getData: () => Promise<IEditorValue>;
   setData: (value: any) => void;
+  on: (event: "getData", callback: (data: string) => void) => void;
 }
 
 const QuestionAnswerEditor = forwardRef<IQaEditorRef, IProps>(({ defaultValue }, ref) => {
   const timestampRef = useRef(Date.now());
   const classicEditorRef = useRef<IRemoteEditorRef>(null);
 
+  const { data: userInfo } = useGetUser();
+
   const getData = async () => {
     if (classicEditorRef.current) {
-      const data = (await classicEditorRef.current.getData()) as unknown as IEditorValue;
+      const data = classicEditorRef.current.getData() as unknown as IEditorValue;
       return data;
     }
 
@@ -35,24 +39,32 @@ const QuestionAnswerEditor = forwardRef<IQaEditorRef, IProps>(({ defaultValue },
     }
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      getData,
-      setData,
-    };
-  });
+  useImperativeHandle(ref, () => 
+{return {
+    getData,
+    setData,
+    on: async (event: "getData", callback) => {
+      await classicEditorRef.current?.on(event, (editorData) => {
+        console.log("-------------------- editor data ------------------", editorData);
+        return callback(JSON.stringify(editorData));
+      });
+    },
+  };});
 
   return (
     <RemoteEditor
-      url={`${process.env.NEXT_PUBLIC_CLASSIC_EDITOR as string}?timestamp=${
-        timestampRef.current
-      }`}
+      url={`${process.env.NEXT_PUBLIC_CLASSIC_EDITOR as string}?timestamp=${timestampRef.current}`}
       editorMode="edit"
       ref={classicEditorRef}
       loadData={
         {
           content: defaultValue || " ",
           outline: [],
+          auth: {
+            accessToken: userInfo?.access_token,
+            refreshToken: userInfo?.refresh_token,
+            url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
+          },
           config: { ...config },
         } as any
       }

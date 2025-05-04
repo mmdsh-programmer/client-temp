@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
 import { sortAtom } from "@atom/sortParam";
 import { EEmptyList } from "@components/molecules/emptyList";
@@ -41,6 +41,7 @@ const DashboardDocuments = () => {
     isFetchingNextPage: reportIsFetchingNextPage,
     isLoading: reportIsLoading,
     isFetching: reportIsFetching,
+    refetch: refetchReport,
   } = useGetUserDocuments(
     undefined,
     getSortParams,
@@ -57,6 +58,7 @@ const DashboardDocuments = () => {
     isFetchingNextPage: childrenIsFetchingNextPage,
     isLoading: childrenIsLoading,
     isFetching: childrenIsFetching,
+    refetch: refetchChildren,
   } = useGetCategoryChildren(
     userInfo!.repository.id ?? 0,
     getCategoryShow?.id,
@@ -68,6 +70,14 @@ const DashboardDocuments = () => {
     false,
     !!userInfo!.repository.id && activeTab === ETabs.MY_DOCUMENTS,
   );
+
+  useEffect(() => {
+    if (activeTab === ETabs.MY_DOCUMENTS) {
+      refetchChildren();
+    } else {
+      refetchReport();
+    }
+  }, [getSortParams, activeTab, refetchChildren, refetchReport]);
 
   const commonProps: ICategoryView = {
     isLoading: activeTab === ETabs.MY_DOCUMENTS ? childrenIsLoading : reportIsLoading,

@@ -82,7 +82,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
         )}
 
         <LoadingButton
-          className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-secondary text-white font-iranYekan !max-h-[unset]"
+          className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-primary-normal text-white font-iranYekan !max-h-[unset]"
           onClick={handleSubmit(onSubmit)}
           disabled={createComment.isPending}
           loading={createComment.isPending}

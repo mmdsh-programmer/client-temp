@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
 import { EEmptyList } from "@components/molecules/emptyList";
@@ -42,6 +42,7 @@ const CategoryChildren = () => {
     isFetchingNextPage: childrenIsFetchingNextPage,
     isLoading: childrenIsLoading,
     isFetching: childrenIsFetching,
+    refetch: refetchChildren,
   } = useGetCategoryChildren(
     repoId,
     getCategoryShow?.id,
@@ -61,6 +62,7 @@ const CategoryChildren = () => {
     isFetchingNextPage: reportIsFetchingNextPage,
     isLoading: reportIsLoading,
     isFetching: reportIsFetching,
+    refetch: refetchReport,
   } = useGetUserDocuments(
     repoId,
     getSortParams,
@@ -69,6 +71,14 @@ const CategoryChildren = () => {
     null,
     !!repoId && !!getFilterReport && !getFilterChildren
   );
+
+  useEffect(() => {
+    if (getFilterReport) {
+      refetchReport();
+    } else {
+      refetchChildren();
+    }
+  }, [getSortParams, getFilterReport]);
 
   const commonProps: ICategoryView = {
     isLoading: reportIsLoading || childrenIsLoading,

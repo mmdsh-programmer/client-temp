@@ -2,7 +2,7 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 import { IChildrenFilter } from "@interface/app.interface";
 import LoadMore from "@components/molecules/loadMore";
-import React from "react";
+import React, { useEffect } from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
 import TreeCatItem from "./treeCatItem";
@@ -49,6 +49,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
     fetchNextPage,
     isFetchingNextPage,
     isLoading,
+    refetch,
   } = useGetCategoryChildren(
     repoId,
     undefined,
@@ -59,6 +60,10 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
     move || enableAction ? undefined : docTemplateFilter,
     enableAction ? undefined : !!move,
   );
+  
+  useEffect(() => {
+    refetch();
+  }, [getSortParams, refetch]);
 
   return (
     <div

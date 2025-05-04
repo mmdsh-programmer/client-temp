@@ -16,7 +16,7 @@ const PublishForceLogin = ({ customText }: IProps) => {
       </Typography>
 
       <LoadingButton
-        className="flex justify-center items-center px-10 py-5 rounded-lg lg:mt-0 bg-secondary text-white font-iranYekan !max-h-[unset]"
+        className="flex justify-center items-center px-10 py-5 rounded-lg lg:mt-0 bg-primary-normal text-white font-iranYekan !max-h-[unset]"
         onClick={() => {
           window.localStorage.setItem(
             "CLASOR:LAST_PAGE",

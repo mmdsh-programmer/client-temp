@@ -253,8 +253,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       icon: <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
       disabled:
         currentPath === "/admin/sharedDocuments" ||
-        currentPath === "/admin/dashboard" ||
-        document?.repoId !== userInfo?.repository.id ||
+        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
@@ -362,7 +361,8 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       icon: <DeleteIcon className="h-4 w-4" />,
       disabled:
         currentPath === "/admin/sharedDocuments" ||
-        document?.repoId !== userInfo?.repository.id ||
+        (currentPath === "/admin/dashboard" &&
+          document?.repoId !== userInfo?.repository.id) ||
         (getRepo?.roleName === ERoles.writer &&
           document?.creator?.userName !== userInfo?.username) ||
         getRepo?.roleName === ERoles.viewer,

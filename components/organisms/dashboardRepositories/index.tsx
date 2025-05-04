@@ -84,7 +84,7 @@ const DashboardRepositories = () => {
   const renderList = () => {
     return (
       <div className="min-h-[calc(100vh-220px)] h-[calc(100vh-220px)] overflow-auto">
-        <CardView {...commonProps} />;
+        <CardView {...commonProps} />
       </div>
     );
   };
