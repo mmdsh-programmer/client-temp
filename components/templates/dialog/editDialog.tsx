@@ -22,6 +22,7 @@ export interface IProps {
   className?: string;
   backToMain?: boolean;
   customSize?: size;
+  disabled?: boolean;
 }
 
 const EditDialog = ({
@@ -33,6 +34,7 @@ const EditDialog = ({
   className,
   backToMain,
   customSize,
+  disabled
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -90,6 +92,7 @@ const EditDialog = ({
           className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={onSubmit}
           loading={isPending}
+          disabled={disabled}
         >
           <Typography className="text__label__button text-white">
             ویرایش

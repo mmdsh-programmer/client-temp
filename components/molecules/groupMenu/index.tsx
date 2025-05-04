@@ -1,14 +1,11 @@
 import React from "react";
 import { IGetGroups } from "@interface/group.interface";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  deleteGroupAtom,
-  editGroupAtom,
-  groupDrawerAtom,
-  selectedGroupAtom,
-} from "@atom/group";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { deleteGroupAtom, editGroupAtom, groupDrawerAtom, selectedGroupAtom } from "@atom/group";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
+import { repoAtom } from "@atom/repository";
+import { ERoles } from "@interface/enums";
 
 interface IProps {
   group?: IGetGroups;
@@ -20,10 +17,11 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
   const setDeleteGroupModal = useSetRecoilState(deleteGroupAtom);
   const [getGroupDrawer, setGroupDrawer] = useRecoilState(groupDrawerAtom);
   const setGroup = useSetRecoilState(selectedGroupAtom);
+  const getRepo = useRecoilValue(repoAtom);
 
   const menuList = [
     {
-      text: "ویرایش",
+      text: "اطلاعات گروه",
       onClick: () => {
         setEditGroupModal(true);
         if (group) {
@@ -41,11 +39,12 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
         }
       },
       className: "repo-group-menu__delete",
+      disabled: getRepo?.roleName !== ERoles.owner,
     },
   ];
 
   return showDrawer ? (
-    <div className="repo-group-menu xs:hidden flex">
+    <div className="repo-group-menu flex xs:hidden">
       <DrawerTemplate
         openDrawer={getGroupDrawer}
         setOpenDrawer={setGroupDrawer}

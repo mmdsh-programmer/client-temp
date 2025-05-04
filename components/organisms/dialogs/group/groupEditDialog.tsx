@@ -18,6 +18,7 @@ import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
 import { useRecoilValue } from "recoil";
 import { userGroupSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { ERoles } from "@interface/enums";
 
 interface IForm {
   title: string;
@@ -154,6 +155,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-group-edit-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
+      disabled={getRepo?.roleName !== ERoles.owner}
     >
       <form className="repo-group-edit-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">

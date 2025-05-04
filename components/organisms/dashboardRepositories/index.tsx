@@ -42,8 +42,6 @@ const DashboardRepositories = () => {
     isLoading: accessRepoIsLoading,
   } = useGetAccessList(20, undefined, activeTab === ETabs.ACCESS_REPO);
 
-  const listLength = getMyRepoList?.pages[0].total;
-
   const commonProps: IRepoView = {
     isLoading:
       activeTab === ETabs.ALL_REPO
@@ -84,14 +82,11 @@ const DashboardRepositories = () => {
   };
 
   const renderList = () => {
-    // if (commonProps.isLoading) {
-    //   return (
-    //     <div className="flex h-full w-full items-center justify-center">
-    //       <Spinner className="h-8 w-8" color="purple" />
-    //     </div>
-    //   );
-    // }
-    return <CardView {...commonProps} />;
+    return (
+      <div className="min-h-[calc(100vh-220px)] h-[calc(100vh-220px)] overflow-auto">
+        <CardView {...commonProps} />;
+      </div>
+    );
   };
 
   const tabList = [

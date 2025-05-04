@@ -46,7 +46,7 @@ const useMenuList = (
   setModalState: (type: ModalType, state: boolean) => void,
   handleRepoInfo: () => void,
   setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>,
-  showLog?: boolean
+  showLog?: boolean,
 ): MenuItem[] => {
   const setRepo = useSetRecoilState(repoAtom);
   const [showRepoActivity, setShowRepoActivity] = useRecoilState(repoActivityAtom);
@@ -55,7 +55,7 @@ const useMenuList = (
     menuText: string,
     menuIcon: React.JSX.Element,
     menuOnClick: () => void,
-    className?: string
+    className?: string,
   ) => {
     return { text: menuText, icon: menuIcon, onClick: menuOnClick, className };
   };
@@ -65,77 +65,77 @@ const useMenuList = (
       window.location.pathname === "/admin/dashboard"
         ? createMenuItem(
             "اطلاعات پوشه",
-            <FolderInfoIcon className="w-4 h-4" />,
+            <FolderInfoIcon className="h-4 w-4" />,
             handleRepoInfo,
-            "repo-menu__item--folder-info"
+            "repo-menu__item--folder-info",
           )
         : null,
       createMenuItem(
-        "ویرایش", 
-        <EditIcon className="w-4 h-4" />, 
+        "ویرایش",
+        <EditIcon className="h-4 w-4" />,
         () => {
           setModalState("edit", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--edit"
+        "repo-menu__item--edit",
       ),
       !repo?.bookmark
         ? createMenuItem(
             "بوکمارک کردن",
-            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
               if (repo) {
                 setRepo(repo);
               }
             },
-            "repo-menu__item--bookmark"
+            "repo-menu__item--bookmark",
           )
         : createMenuItem(
             "حذف بوکمارک",
-            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
               if (repo) {
                 setRepo(repo);
               }
             },
-            "repo-menu__item--bookmark-remove"
+            "repo-menu__item--bookmark-remove",
           ),
       createMenuItem(
         "اشتراک گذاری",
-        <ShareIcon className="w-4 h-4 stroke-icon-active" />,
+        <ShareIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
           setModalState("share", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--share"
+        "repo-menu__item--share",
       ),
       createMenuItem(
         "مدیریت فایل",
-        <FileManagementIcon className="w-4 h-4 fill-icon-active" />,
+        <FileManagementIcon className="h-4 w-4 fill-icon-active" />,
         () => {
           setModalState("fileManagement", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--file-management"
+        "repo-menu__item--file-management",
       ),
       createMenuItem(
         "درخواست‌ها",
-        <LastVersionIcon className="w-4 h-4" />,
+        <LastVersionIcon className="h-4 w-4" />,
         () => {
           setModalState("versionRequests", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--version-requests"
+        "repo-menu__item--version-requests",
       ),
       // showLog && createMenuItem(
       //   "فعالیت های مخزن",
@@ -151,27 +151,25 @@ const useMenuList = (
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
-          <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+          <PublishIcon className="h-4 w-4 fill-icon-active stroke-0" />,
           () => {
             const url = toPersianDigit(
-              `/publish/${toPersianDigit(
-                `${repo.name.replaceAll(/\s+/g, "-")}`
-              )}/${repo.id}`
+              `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
             );
             window.open(url, "_blank");
           },
-          "repo-menu__item--publish"
+          "repo-menu__item--publish",
         ),
       createMenuItem(
         "کلید های مخزن",
-        <KeyIcon className="w-4 h-4 stroke-1" />,
+        <KeyIcon className="h-4 w-4 stroke-1" />,
         () => {
           setModalState("key", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--keys"
+        "repo-menu__item--keys",
       ),
     ].filter(Boolean) as MenuItem[];
   };
@@ -180,8 +178,8 @@ const useMenuList = (
     if (repo?.isArchived) {
       return [
         createMenuItem(
-          "حذف", 
-          <DeleteIcon className="w-4 h-4" />, 
+          "حذف",
+          <DeleteIcon className="h-4 w-4" />,
           () => {
             setModalState("delete", true);
             setOpenRepoActionDrawer(false);
@@ -189,11 +187,11 @@ const useMenuList = (
               setRepo(repo);
             }
           },
-          "repo-menu__item--delete"
+          "repo-menu__item--delete",
         ),
         createMenuItem(
-          "بازگردانی", 
-          <RestoreIcon className="w-4 h-4" />, 
+          "بازگردانی",
+          <RestoreIcon className="h-4 w-4" />,
           () => {
             setModalState("restore", true);
             setOpenRepoActionDrawer(false);
@@ -201,7 +199,7 @@ const useMenuList = (
               setRepo(repo);
             }
           },
-          "repo-menu__item--restore"
+          "repo-menu__item--restore",
         ),
       ];
     }
@@ -210,7 +208,7 @@ const useMenuList = (
       ...(ownerAdminActions() as MenuItem[]),
       createMenuItem(
         "بایگانی",
-        <ArchiveActionIcon className="w-4 h-4 fill-icon-active" />,
+        <ArchiveActionIcon className="h-4 w-4 fill-icon-active" />,
         () => {
           setModalState("archive", true);
           setOpenRepoActionDrawer(false);
@@ -218,11 +216,11 @@ const useMenuList = (
             setRepo(repo);
           }
         },
-        "repo-menu__item--archive"
+        "repo-menu__item--archive",
       ),
       createMenuItem(
-        "حذف", 
-        <DeleteIcon className="w-4 h-4" />, 
+        "حذف",
+        <DeleteIcon className="h-4 w-4" />,
         () => {
           setModalState("delete", true);
           setOpenRepoActionDrawer(false);
@@ -230,7 +228,7 @@ const useMenuList = (
             setRepo(repo);
           }
         },
-        "repo-menu__item--delete"
+        "repo-menu__item--delete",
       ),
     ];
   };
@@ -240,14 +238,14 @@ const useMenuList = (
       ...ownerAdminActions(),
       createMenuItem(
         "ترک مخزن",
-        <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
+        <LeaveRepoIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
           setModalState("leave", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--leave"
+        "repo-menu__item--leave",
       ),
     ];
   };
@@ -257,79 +255,89 @@ const useMenuList = (
       window.location.pathname === "dashboard" &&
         createMenuItem(
           "اطلاعات پوشه",
-          <FolderInfoIcon className="w-4 h-4" />,
+          <FolderInfoIcon className="h-4 w-4" />,
           handleRepoInfo,
-          "repo-menu__item--folder-info"
+          "repo-menu__item--folder-info",
         ),
       !repo?.bookmark
         ? createMenuItem(
             "بوکمارک کردن",
-            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
               if (repo) {
                 setRepo(repo);
               }
             },
-            "repo-menu__item--bookmark"
+            "repo-menu__item--bookmark",
           )
         : createMenuItem(
             "حذف بوکمارک",
-            <BookmarkRepoIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+            <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
               if (repo) {
                 setRepo(repo);
               }
             },
-            "repo-menu__item--bookmark-remove"
+            "repo-menu__item--bookmark-remove",
           ),
-      showLog && createMenuItem(
-        "فعالیت های مخزن",
-        <RepoActivityIcon className="w-4 h-4 stroke-icon-active" />,
+      createMenuItem(
+        "اشتراک گذاری",
+        <ShareIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
-          setShowRepoActivity(!showRepoActivity);
+          setModalState("share", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--repo-activity"
+        "repo-menu__item--share",
       ),
+      showLog &&
+        createMenuItem(
+          "فعالیت های مخزن",
+          <RepoActivityIcon className="h-4 w-4 stroke-icon-active" />,
+          () => {
+            setShowRepoActivity(!showRepoActivity);
+            if (repo) {
+              setRepo(repo);
+            }
+          },
+          "repo-menu__item--repo-activity",
+        ),
       repo?.isPublish &&
         createMenuItem(
           "مخزن منتشرشده",
-          <PublishIcon className="w-4 h-4 fill-icon-active stroke-0" />,
+          <PublishIcon className="h-4 w-4 fill-icon-active stroke-0" />,
           () => {
             const url = toPersianDigit(
-              `/publish/${toPersianDigit(
-                `${repo.name.replaceAll(/\s+/g, "-")}`
-              )}/${repo.id}`
+              `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
             );
             window.open(url, "_blank");
           },
-          "repo-menu__item--publish"
+          "repo-menu__item--publish",
         ),
       createMenuItem(
         "کلید های مخزن",
-        <KeyIcon className="w-4 h-4 stroke-1" />,
+        <KeyIcon className="h-4 w-4 stroke-1" />,
         () => {
           setModalState("key", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--keys"
+        "repo-menu__item--keys",
       ),
       createMenuItem(
         "ترک مخزن",
-        <LeaveRepoIcon className="w-4 h-4 stroke-icon-active" />,
+        <LeaveRepoIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
           setModalState("leave", true);
           if (repo) {
             setRepo(repo);
           }
         },
-        "repo-menu__item--leave"
+        "repo-menu__item--leave",
       ),
     ];
   };

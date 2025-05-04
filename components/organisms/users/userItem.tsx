@@ -38,23 +38,40 @@ const UserItem = ({ user }: IProps) => {
     value: ERoles | string;
     className?: string;
   }[];
-  const userOptions = rolesOption.concat([
-    ...(getRepo?.roleName === ERoles.owner ? [{
-      label: "انتقال مالکیت",
-      value: "transferOwnership",
-      className: "repo-user__transfer-ownership",
-    }] : []),
-    ...(getSelectedUser?.userInfo ? [] : [{
-      label: "تنظیمات پیشرفته",
-      value: "setting",
-      className: "repo-user__advanced-setting",
-    }]),
-    {
-      label: "حذف کاربر",
-      value: "delete",
-      className: "!text-error repo-user__delete-user",
-    },
-  ]);
+  const userOptions =
+    getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin
+      ? rolesOption.concat([
+          ...(getRepo?.roleName === ERoles.owner
+            ? [
+                {
+                  label: "انتقال مالکیت",
+                  value: "transferOwnership",
+                  className: "repo-user__transfer-ownership",
+                },
+              ]
+            : []),
+          ...(getSelectedUser?.userInfo
+            ? []
+            : [
+                {
+                  label: "تنظیمات پیشرفته",
+                  value: "setting",
+                  className: "repo-user__advanced-setting",
+                },
+              ]),
+          {
+            label: "حذف کاربر",
+            value: "delete",
+            className: "!text-error repo-user__delete-user",
+          },
+        ])
+      : [
+          {
+            label: "تنظیمات پیشرفته",
+            value: "setting",
+            className: "repo-user__advanced-setting",
+          },
+        ];
 
   const handleChange = (value: IOption) => {
     if (!getRepo) return;
@@ -69,9 +86,9 @@ const UserItem = ({ user }: IProps) => {
           toast.success(`کاربر ${user.userInfo.userName} با موفقیت حذف شد.`);
         },
       });
-    } 
+    }
     if (value.value === "transferOwnership") {
-     return transferOwnership.mutate({
+      return transferOwnership.mutate({
         repoId: getRepo.id,
         userName: user.userInfo.userName,
         callBack: () => {
@@ -82,35 +99,28 @@ const UserItem = ({ user }: IProps) => {
           toast.success("انتقال مالکیت با موفقیت انجام شد.");
         },
       });
-    } 
-      editRole.mutate({
-        repoId: getRepo.id,
-        userName: user.userInfo.userName,
-        roleName: value.value as string,
-        callBack: () => {
-          toast.success(
-            `نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`
-          );
-        },
-      });
-    
+    }
+    editRole.mutate({
+      repoId: getRepo.id,
+      userName: user.userInfo.userName,
+      roleName: value.value as string,
+      callBack: () => {
+        toast.success(`نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`);
+      },
+    });
   };
 
   const renderUserRole = () => {
     if (user.userRole === ERoles.owner) {
       return (
-        <div className="repo-user__role w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal">
+        <div className="repo-user__role flex h-9 w-[120px] items-center justify-between rounded-lg border-[1px] border-normal pl-2 pr-3">
           <Typography className="select_option__text text-primary_normal">
             {translateRoles(user.userRole)}
           </Typography>
         </div>
       );
     }
-    if (
-      editRole.isPending ||
-      deleteUser.isPending ||
-      transferOwnership.isPending
-    ) {
+    if (editRole.isPending || deleteUser.isPending || transferOwnership.isPending) {
       return (
         <div className="w-5">
           <Spinner className="h-4 w-4" color="purple" />
@@ -119,7 +129,7 @@ const UserItem = ({ user }: IProps) => {
     }
     return (
       <SelectAtom
-        className="repo-user__change-role !w-[120px] flex items-center justify-between pr-3 pl-2 rounded-lg h-9 border-[1px] border-normal"
+        className="repo-user__change-role flex h-9 !w-[120px] items-center justify-between rounded-lg border-[1px] border-normal pl-2 pr-3"
         defaultOption={{
           label: translateRoles(user.userRole),
           value: user.userRole,
@@ -136,18 +146,18 @@ const UserItem = ({ user }: IProps) => {
 
   return (
     <div
-      className="repo-user-item flex items-center gap-x-[10px] min-h-[50px] h-[50px] cursor-pointer"
+      className="repo-user-item flex h-[50px] min-h-[50px] cursor-pointer items-center gap-x-[10px]"
       title={user.userInfo.userName}
     >
       <div className="h-8 w-8">
         {user.userInfo.img ? (
           <ImageComponent
-            className="w-full h-full rounded-[64px] overflow-hidden"
+            className="h-full w-full overflow-hidden rounded-[64px]"
             src={user.userInfo.img}
             alt={user.userInfo.userName}
           />
         ) : (
-          <UserIcon className="w-full h-full p-1 border-[2px] border-normal rounded-[64px] overflow-hidden fill-icon-hover" />
+          <UserIcon className="h-full w-full overflow-hidden rounded-[64px] border-[2px] border-normal fill-icon-hover p-1" />
         )}
       </div>
       <Typography className="title_t3 flex-grow text-primary_normal">

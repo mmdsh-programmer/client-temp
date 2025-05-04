@@ -1,37 +1,34 @@
-import {
- Button,
- Typography
-} from "@material-tailwind/react";
-
+import React from "react";
+import { Button, Typography } from "@material-tailwind/react";
 import { AddIcon } from "@components/atoms/icons";
 import GroupList from "./groupList";
-import React from "react";
 import { createGroupAtom } from "@atom/group";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { repoAtom } from "@atom/repository";
+import { ERoles } from "@interface/enums";
 
 const Groups = () => {
+  const getRepo = useRecoilValue(repoAtom);
   const setCreateGroupModal = useSetRecoilState(createGroupAtom);
 
   return (
     <div className="repo-groups mt-4">
-      <div className="border-b-[1px] bg-gray-200 w-full" />
-      <div className="pt-5 flex flex-col gap-5">
+      <div className="w-full border-b-[1px] bg-gray-200" />
+      <div className="flex flex-col gap-5 pt-5">
         <div className="flex items-center justify-between">
-          <Typography className="title_t4 text-secondary ">
-            لیست گروه‌ها
-          </Typography>
-          <Button
-            placeholder="create group"
-            className="create-group-button flex justify-between items-center shadow-none hover:shadow-none px-1 h-8 bg-white hover:bg-transparent border-[1px] border-normal"
-            onClick={() => {
-              setCreateGroupModal(true);
-            }}
-          >
-            <AddIcon className="h-5 w-5 stroke-icon-active" />
-            <Typography className="title_t4 text-primary_normal px-2">
-              ایجاد گروه
-            </Typography>
-          </Button>
+          <Typography className="title_t4 text-secondary ">لیست گروه‌ها</Typography>
+          {getRepo?.roleName === ERoles.owner ? (
+            <Button
+              placeholder="create group"
+              className="create-group-button flex h-8 items-center justify-between border-[1px] border-normal bg-white px-1 shadow-none hover:bg-transparent hover:shadow-none"
+              onClick={() => {
+                setCreateGroupModal(true);
+              }}
+            >
+              <AddIcon className="h-5 w-5 stroke-icon-active" />
+              <Typography className="title_t4 px-2 text-primary_normal">ایجاد گروه</Typography>
+            </Button>
+          ) : null}
         </div>
         <GroupList />
       </div>
