@@ -12,10 +12,11 @@ const usePublicLastVersion = () => {
       repoId: number;
       documentId: number;
       isDirectAccess?: boolean;
+      draftId?: number;
       callBack?: () => void;
     }) => {
-      const { isDirectAccess, repoId, documentId } = values;
-      const response = await publicLastVersionAction(repoId, documentId, isDirectAccess);
+      const { isDirectAccess, repoId, documentId, draftId } = values;
+      const response = await publicLastVersionAction(repoId, documentId, isDirectAccess, draftId);
       handleClientSideHookError(response as IActionError);
       return response;
     },

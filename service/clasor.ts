@@ -2081,7 +2081,7 @@ export const deleteDocumentPassword = async (
 };
 
 export const documentEnableUserGroupHash = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   documentId: number,
   isDirectAccess?: boolean,
@@ -2092,7 +2092,7 @@ export const documentEnableUserGroupHash = async (
       {},
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           isDirectAccess,
@@ -2232,7 +2232,8 @@ export const publicLastVersion = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
+  draftId?: number
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
@@ -2246,6 +2247,7 @@ export const publicLastVersion = async (
         },
         params: {
           isDirectAccess,
+          draftId
         },
       },
     );

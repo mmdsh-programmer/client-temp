@@ -14,14 +14,24 @@ import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
 import { selectedUserAtom } from "@atom/user";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   user: IUser;
 }
 
+// تعریف اینترفیس برای گزینه‌های کاربر
+interface IUserOption {
+  label: string;
+  value: string;
+  className?: string;
+}
+
 const UserItem = ({ user }: IProps) => {
   const [getRepo, setRepo] = useRecoilState(repoAtom);
   const [getSelectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
+
+  const { data: userInfo } = useGetUser();
   const { data: getRoles } = useGetRoles();
   const editRole = useEditUserRole();
   const deleteUser = useDeleteUser();
@@ -33,45 +43,39 @@ const UserItem = ({ user }: IProps) => {
     })
     .map((item) => {
       return { label: translateRoles(item.name), value: item.name };
-    }) as {
-    label: string;
-    value: ERoles | string;
-    className?: string;
-  }[];
-  const userOptions =
-    getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin
-      ? rolesOption.concat([
-          ...(getRepo?.roleName === ERoles.owner
-            ? [
-                {
-                  label: "انتقال مالکیت",
-                  value: "transferOwnership",
-                  className: "repo-user__transfer-ownership",
-                },
-              ]
-            : []),
-          ...(getSelectedUser?.userInfo
-            ? []
-            : [
-                {
-                  label: "تنظیمات پیشرفته",
-                  value: "setting",
-                  className: "repo-user__advanced-setting",
-                },
-              ]),
-          {
-            label: "حذف کاربر",
-            value: "delete",
-            className: "!text-error repo-user__delete-user",
-          },
-        ])
-      : [
-          {
-            label: "تنظیمات پیشرفته",
-            value: "setting",
-            className: "repo-user__advanced-setting",
-          },
-        ];
+    }) as IUserOption[];
+
+  const userOptions: IUserOption[] = [];
+
+  if (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin) {
+    userOptions.push(...rolesOption);
+    if (getRepo?.roleName === ERoles.owner) {
+      userOptions.push({
+        label: "انتقال مالکیت",
+        value: "transferOwnership",
+        className: "repo-user__transfer-ownership",
+      });
+    }
+    if (!getSelectedUser?.userInfo) {
+      userOptions.push({
+        label: "تنظیمات پیشرفته",
+        value: "setting",
+        className: "repo-user__advanced-setting",
+      });
+    }
+
+    userOptions.push({
+      label: "حذف کاربر",
+      value: "delete",
+      className: "!text-error repo-user__delete-user",
+    });
+  } else if (userInfo?.username === user.userInfo.userName) {
+    userOptions.push({
+      label: "تنظیمات پیشرفته",
+      value: "setting",
+      className: "repo-user__advanced-setting",
+    });
+  }
 
   const handleChange = (value: IOption) => {
     if (!getRepo) return;
@@ -111,7 +115,11 @@ const UserItem = ({ user }: IProps) => {
   };
 
   const renderUserRole = () => {
-    if (user.userRole === ERoles.owner) {
+    if (
+      user.userRole === ERoles.owner ||
+      (!(getRepo?.roleName === ERoles.admin || getRepo?.roleName === ERoles.owner) &&
+        userInfo?.username !== user.userInfo.userName)
+    ) {
       return (
         <div className="repo-user__role flex h-9 w-[120px] items-center justify-between rounded-lg border-[1px] border-normal pl-2 pr-3">
           <Typography className="select_option__text text-primary_normal">

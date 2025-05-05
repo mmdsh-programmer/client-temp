@@ -87,7 +87,7 @@ const TableView = ({
                         });
                       },
                       className:
-                        "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%] !px-2",
+                        "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px] !px-2",
                     },
                     {
                       key: "createDate",

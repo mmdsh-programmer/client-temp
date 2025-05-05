@@ -513,7 +513,8 @@ export const deleteDocumentPublishLinkAction = async (
 export const publicLastVersionAction = async (
   repoId: number,
   documentId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
+  draftId?: number
 ) => {
   const userInfo = await getMe();
   const domain = headers().get("host");
@@ -526,7 +527,8 @@ export const publicLastVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      isDirectAccess
+      isDirectAccess,
+      draftId
     );
 
     return response;

@@ -112,7 +112,7 @@ const DocumentTableRow = ({ document }: IProps) => {
               </div>
             ),
             className:
-              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[40%] xl:!w-[40%]",
+              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]",
           },
           {
             data: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",

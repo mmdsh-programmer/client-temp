@@ -19,12 +19,13 @@ const fileTablePageSize = 20;
 
 interface IProps {
   setSelectedFile?: (
-    file?: IFile | null | { name: string; extension: string; hash: string }
+    file?: IFile | null | { name: string; extension: string; hash: string },
   ) => void;
   userGroupHash: string;
   resourceId: number;
   handleClose?: () => void;
   type: "private" | "public";
+  dialogHeader?: string;
 }
 
 const Files = ({
@@ -33,6 +34,7 @@ const Files = ({
   resourceId,
   type,
   handleClose,
+  dialogHeader,
 }: IProps) => {
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,13 +52,7 @@ const Files = ({
     isFetching,
     refetch,
     fetchNextPage,
-  } = useGetFiles(
-    resourceId,
-    userGroupHash,
-    fileTablePageSize,
-    name,
-    dataType
-  );
+  } = useGetFiles(resourceId, userGroupHash, fileTablePageSize, name, dataType);
 
   const createUploadLink = useCreateUploadLink();
   const renameHook = useRenameFile();
@@ -80,7 +76,7 @@ const Files = ({
         },
       });
     },
-    [renameHook, resourceId, refetch]
+    [renameHook, resourceId, refetch],
   );
 
   const handleDeleteFile = useCallback(
@@ -98,7 +94,7 @@ const Files = ({
         },
       });
     },
-    [deleteFile, getRepo, resourceId, userGroupHash, type, refetch]
+    [deleteFile, getRepo, resourceId, userGroupHash, type, refetch],
   );
 
   const handleFetchNextPage = useCallback(() => {
@@ -140,12 +136,10 @@ const Files = ({
                   _token_issuer_: "1",
                 },
                 onUploadProgress(progressEvent: any) {
-                  const progress = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  );
+                  const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                   setProcessCount(progress);
                 },
-              }
+              },
             );
             if (result.data.result) {
               onSuccess();
@@ -203,7 +197,7 @@ const Files = ({
     <FileManagementDialog
       dialogClassName="flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
       dialogBodyClassName="bg-white h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
-      dialogHeader="افزودن عکس"
+      dialogHeader={`${dialogHeader || "افزودن عکس"}`}
       setOpen={() => {
         return handleClose?.();
       }}

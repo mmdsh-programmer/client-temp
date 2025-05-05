@@ -112,6 +112,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
           type="public"
           userGroupHash={getRepo.userGroupHash}
           resourceId={getRepo?.id}
+          dialogHeader="افزودن فایل"
           handleClose={() => {
             setModalState("fileManagement", false);
             handleClose();

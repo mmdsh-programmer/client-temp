@@ -84,8 +84,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
                 </span>
               </div>
             ),
-            className:
-              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[50%] xl:!w-[40%]",
+            className: "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]"
           },
           {
             data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
