@@ -280,10 +280,8 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       disabled:
         (currentPath === "/admin/dashboard" &&
           document?.repoId !== userInfo?.repository.id &&
-          document?.accesses?.[0] !== ERoles.admin) ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
+          document?.accesses?.[0] === ERoles.viewer) ||
+        getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("documentPublicVersion", true);
         if (document) setDocument(document);
@@ -361,8 +359,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       icon: <DeleteIcon className="h-4 w-4" />,
       disabled:
         currentPath === "/admin/sharedDocuments" ||
-        (currentPath === "/admin/dashboard" &&
-          document?.repoId !== userInfo?.repository.id) ||
+        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
         (getRepo?.roleName === ERoles.writer &&
           document?.creator?.userName !== userInfo?.username) ||
         getRepo?.roleName === ERoles.viewer,

@@ -29,6 +29,7 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     public: false,
     cancelPublic: false,
     lastVersion: false,
+    confirmPublic: false,
   });
 
   const setModalState = (key: keyof typeof modals, state: boolean) => {

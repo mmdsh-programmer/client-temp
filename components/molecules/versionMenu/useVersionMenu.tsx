@@ -44,6 +44,7 @@ type ModalType = {
   public: boolean;
   cancelPublic: boolean;
   lastVersion: boolean;
+  confirmPublic: boolean;
 };
 
 const useVersionMenuList = (
@@ -203,6 +204,18 @@ const useVersionMenuList = (
   };
 
   const draftVersionOption = [
+    {
+      text: "تایید و عمومی‌سازی پیش‌نویس" ,
+      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
+      disabled: viewerRole(),
+      onClick: () => {
+        toggleModal("confirmPublic", true);
+        if (version) {
+          setVersion(version);
+        }
+      },
+      className: "confirmPublic-draft"
+    },
     {
       text: (() => {
         if (version?.status === "editing") {

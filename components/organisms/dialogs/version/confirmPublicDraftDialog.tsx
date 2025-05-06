@@ -3,20 +3,22 @@ import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import usePublicLastVersion from "@hooks/document/usePublicLastVersion";
 import { Typography } from "@material-tailwind/react";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
+const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
   const document = useRecoilValue(selectedDocumentAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
@@ -28,6 +30,7 @@ const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
     clearErrors();
     reset();
     setOpen(false);
+    setSelectedVersion(null);
   };
 
   const onSubmit = async () => {
@@ -37,8 +40,9 @@ const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
       documentId: document.id,
       isDirectAccess:
         currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId,
+      draftId: getSelectedVersion?.id,
       callBack: () => {
-        toast.success("آخرین نسخه از سند عمومی شد.");
+        toast.success(" نسخه باموفقیت تایید و عمومی شد.");
         handleClose();
       },
     });
@@ -47,21 +51,21 @@ const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={publicVersion.isPending}
-      dialogHeader="عمومی سازی آخرین نسخه سند"
+      dialogHeader="تایید و عمومی سازی پیش نویس"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="document-public-dialog !w-[450px] !min-w-[450px]"
+      className="version-confirm-public-dialog !w-[450px] !min-w-[450px]"
     >
-      آیا از عمومی سازی آخرین نسخه سند "
+      آیا از تایید و عمومی سازی پیش نویس"
       <Typography
-        title={document?.name}
+        title={getSelectedVersion?.versionNumber}
         className="flex max-w-[100px] cursor-pointer items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
       >
-        {document?.name}
+        {getSelectedVersion?.versionNumber}
       </Typography>
       " اطمینان دارید؟
     </ConfirmDialog>
   );
 };
 
-export default DocumentPublicVersionDialog;
+export default ConfirmPublicDraftDialog;

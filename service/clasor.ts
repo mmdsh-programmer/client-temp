@@ -2237,17 +2237,17 @@ export const publicLastVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
-      `repositories/${repoId}/documents/${documentId}/publicVersion`,
-      {
-        
-      },
+      draftId
+        ? `repositories/${repoId}/documents/${documentId}/publicVersion?draftId=${draftId}`
+        : `repositories/${repoId}/documents/${documentId}/publicVersion`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
           isDirectAccess,
-          draftId
+          draftId,
         },
       },
     );

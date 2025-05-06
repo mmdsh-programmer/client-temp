@@ -1,7 +1,7 @@
+import React from "react";
 import DiffVersionAlert from "../diffVersionAlert";
 import DiffVersionDialog from "@components/organisms/dialogs/version/diffVersionDialog";
 import LastVersionDialog from "@components/organisms/dialogs/version/lastVersionDialog";
-import React from "react";
 import VersionCancelConfirmDialog from "@components/organisms/dialogs/version/versionCancelConfirmDialog";
 import VersionCancelPublicDialog from "@components/organisms/dialogs/version/versionCancelPublicDialog";
 import VersionCloneDialog from "@components/organisms/dialogs/version/versionCloneDialog";
@@ -10,6 +10,7 @@ import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDe
 import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
 import { compareVersionAtom } from "@atom/version";
 import { useRecoilState } from "recoil";
+import ConfirmPublicDraftDialog from "@components/organisms/dialogs/version/confirmPublicDraftDialog";
 
 interface IVersionDialogsProps {
   modals: {
@@ -22,16 +23,13 @@ interface IVersionDialogsProps {
     public: boolean;
     cancelPublic: boolean;
     lastVersion: boolean;
+    confirmPublic: boolean;
   };
-  setModalState: (
-    key: keyof IVersionDialogsProps["modals"],
-    state: boolean
-  ) => void;
+  setModalState: (key: keyof IVersionDialogsProps["modals"], state: boolean) => void;
 }
 
 const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
-  const [compareVersion, setCompareVersion] =
-    useRecoilState(compareVersionAtom);
+  const [compareVersion, setCompareVersion] = useRecoilState(compareVersionAtom);
 
   return (
     <>
@@ -92,9 +90,14 @@ const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
           }}
         />
       ) : null}
-      {compareVersion?.version && !compareVersion.compare ? (
-        <DiffVersionAlert />
+      {modals.confirmPublic ? (
+        <ConfirmPublicDraftDialog
+          setOpen={() => {
+            return setModalState("confirmPublic", false);
+          }}
+        />
       ) : null}
+      {compareVersion?.version && !compareVersion.compare ? <DiffVersionAlert /> : null}
     </>
   );
 };
