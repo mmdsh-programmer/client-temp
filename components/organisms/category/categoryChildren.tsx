@@ -1,20 +1,21 @@
 import React, { useEffect, useMemo } from "react";
 import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+
+import ChildrenTree from "../childrenTree";
 import { EEmptyList } from "@components/molecules/emptyList";
 import { ICategoryView } from "@interface/category.interface";
 import MobileView from "../categoryView/categoryMobileView";
+import RenderIf from "@components/atoms/renderIf";
 import TableView from "../categoryView/categoryTableView";
+import { categoryListModeAtom } from "@atom/app";
 import { repoAtom } from "@atom/repository";
 import { sortAtom } from "@atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
-import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
-import { useRecoilValue } from "recoil";
-import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
-import { categoryListModeAtom } from "@atom/app";
-import RenderIf from "@components/atoms/renderIf";
-import ChildrenTree from "../childrenTree";
+import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
+import { usePathname } from "next/navigation";
+import { useRecoilValue } from "recoil";
 
 const CategoryChildren = () => {
   const getListMode = useRecoilValue(categoryListModeAtom);
@@ -52,7 +53,8 @@ const CategoryChildren = () => {
     undefined,
     getFilterChildren,
     false,
-    !!repoId && !getFilterReport
+    !!repoId && !getFilterReport,
+    currentPath
   );
 
   const {
