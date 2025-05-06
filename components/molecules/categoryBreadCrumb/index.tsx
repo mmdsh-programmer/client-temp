@@ -1,6 +1,6 @@
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { categoryAtom, categoryShowAtom } from "atom/category";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
@@ -11,27 +11,45 @@ const CategoryBreadCrumb = () => {
   const setCategory = useSetRecoilState(categoryAtom);
   const [getCategoryShow, setCategoryShow] = useRecoilState(categoryShowAtom);
   const setBulkItems = useSetRecoilState(bulkItemsAtom);
+  const breadCrumbRef = useRef<ICategoryMetadata[]>([]);
 
-  const [breadCrumb, setBreadCrumb] = useState<ICategoryMetadata[]>([]);
+  const breadCrumb = useMemo(() => {
+    if (!getCategoryShow) return [];
+    
+    const existInBreadCrumb = breadCrumbRef.current.filter((breadItem) => {
+      return breadItem.id === getCategoryShow.id;
+    });
+
+    if (!existInBreadCrumb.length) {
+      const newBreadCrumb = [...breadCrumbRef.current, getCategoryShow];
+      breadCrumbRef.current = newBreadCrumb;
+      return newBreadCrumb;
+    }
+
+    const selectedCategoryIndex = breadCrumbRef.current.findIndex((breadItem) => {
+      return breadItem.id === getCategoryShow.id;
+    });
+    const breadCrumbTemp = [...breadCrumbRef.current];
+    breadCrumbTemp.splice(
+      selectedCategoryIndex + 1,
+      breadCrumbRef.current.length - selectedCategoryIndex + 1
+    );
+    breadCrumbRef.current = breadCrumbTemp;
+    return breadCrumbTemp;
+  }, [getCategoryShow]);
+
+  const clearBreadCrumb = () => {
+    breadCrumbRef.current = [];
+    setCategoryShow(null);
+    setCategory(null);
+    setBulkItems([]);
+  };
 
   useEffect(() => {
-    const existInBreadCrumb = breadCrumb?.filter((breadItem) => {
-      return breadItem.id === getCategoryShow?.id;
-    });
-    if (!existInBreadCrumb?.length && getCategoryShow) {
-      setBreadCrumb([...breadCrumb, getCategoryShow]);
-    } else if (existInBreadCrumb?.length && getCategoryShow) {
-      const selectedCategoryIndex = breadCrumb.findIndex((breadItem) => {
-        return breadItem.id === getCategoryShow.id;
-      });
-      const breadCrumbTemp = [...breadCrumb];
-      breadCrumbTemp.splice(
-        selectedCategoryIndex + 1,
-        breadCrumb.length - selectedCategoryIndex + 1
-      );
-      setBreadCrumb(breadCrumbTemp);
-    }
-  }, [getCategoryShow]);
+    return () => {
+      clearBreadCrumb();
+    };
+  }, []);
 
   return (
     <div className="category-breadcrumb flex text-sm cursor-pointer pl-5 sticky top-0 bg-secondary xs:bg-white z-20">
@@ -40,12 +58,7 @@ const CategoryBreadCrumb = () => {
           <Button
             placeholder="button"
             className="bg-transparent h-5 w-5 p-0"
-            onClick={() => {
-              setCategoryShow(null);
-              setCategory(null);
-              setBulkItems([]);
-              setBreadCrumb([]);
-            }}
+            onClick={clearBreadCrumb}
           >
             <BreadcrumbIcon className="h-4 w-4 fill-icon-hover" />
           </Button>
@@ -55,12 +68,7 @@ const CategoryBreadCrumb = () => {
             <Button
               placeholder="button"
               className="block cursor-pointer text-secondary bg-transparent h-5 w-5 p-0"
-              onClick={() => {
-                setCategoryShow(null);
-                setCategory(null);
-                setBulkItems([]);
-                setBreadCrumb([]);
-              }}
+              onClick={clearBreadCrumb}
             >
               ...
             </Button>
