@@ -17,9 +17,13 @@ const useGetCategoryChildren = (
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
   forMove?: boolean,
-  enabled = true
+  enabled = true,
+  customQueryKey: string = "",
 ) => {
   const queryKey = [`category-${categoryId || "root"}-children`];
+  if (customQueryKey) {
+    queryKey.push(customQueryKey);
+  }
   if (forMove) {
     queryKey.push("for-move");
   }

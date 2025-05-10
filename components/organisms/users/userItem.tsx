@@ -19,8 +19,6 @@ import useGetUser from "@hooks/auth/useGetUser";
 interface IProps {
   user: IUser;
 }
-
-// تعریف اینترفیس برای گزینه‌های کاربر
 interface IUserOption {
   label: string;
   value: string;
@@ -108,6 +106,7 @@ const UserItem = ({ user }: IProps) => {
       repoId: getRepo.id,
       userName: user.userInfo.userName,
       roleName: value.value as string,
+      ssoId: user.userInfo.ssoId,
       callBack: () => {
         toast.success(`نقش کاربر ${user.userInfo.userName} با موفقیت تغییر کرد.`);
       },

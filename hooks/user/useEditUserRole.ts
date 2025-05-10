@@ -12,6 +12,7 @@ const useEditUserRole = () => {
       repoId: number;
       userName: string;
       roleName: string;
+      ssoId: number;
       callBack?: () => void;
     }) => {
       const { userName, roleName, repoId } = values;
@@ -20,9 +21,12 @@ const useEditUserRole = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack, repoId, ssoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoUsers-${repoId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`getUserConfig-${ssoId}`, repoId],
       });
       callBack?.();
     },

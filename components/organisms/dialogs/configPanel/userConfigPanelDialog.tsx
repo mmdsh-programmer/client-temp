@@ -21,7 +21,7 @@ const UserConfigPanelDialog = () => {
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
     getRepo!.id,
-    userInfo?.ssoId === getSelectedUser!.userInfo.ssoId
+    +userInfo!.ssoId === +getSelectedUser!.userInfo.ssoId
       ? undefined
       : getSelectedUser!.userInfo.ssoId,
   );
