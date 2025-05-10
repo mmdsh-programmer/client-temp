@@ -26,6 +26,10 @@ const nextConfig = {
       newConfig.resolve.fallback = {
         fs: false,
       };
+      newConfig.externals.push({
+        "utf-8-validate": "commonjs utf-8-validate",
+        "bufferutil": "commonjs bufferutil",
+      });
     }
     return newConfig;
   },
