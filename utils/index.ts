@@ -7,12 +7,12 @@ import moment from "moment-jalaali";
 const logger = (key: string, newValue: any, oldValue: any) => {
   if (process.env.NODE_ENV === "development") {
     console.log(
-      `############################################################################  ${key}`
+      `############################################################################  ${key}`,
     );
     console.log("newValue -->", newValue);
     console.log("oldValue -->", oldValue);
     console.log(
-      "####################################################################################"
+      "####################################################################################",
     );
   }
 };
@@ -63,6 +63,11 @@ export const translateVersionStatus = (status: string, state: string) => {
         translated = "در انتظار عمومی شدن";
       }
       break;
+    case "waitForDirectPublic":
+      translated = "در انتظار تایید و عمومی شدن";
+      className = "label !bg-primary-normal text-white ";
+
+      break;
     case "rejected":
       translated = "رد شده";
       break;
@@ -99,9 +104,7 @@ export const FaDate = (standardTime: string) => {
       dialect: "persian-modern",
     });
     return toPersianDigit(
-      moment(standardTime, "YYYY-MM-DDTHH:mm:ssZ").format(
-        "HH:mm:ss | jDD jMMMM jYYYY"
-      )
+      moment(standardTime, "YYYY-MM-DDTHH:mm:ssZ").format("HH:mm:ss | jDD jMMMM jYYYY"),
     );
   } catch {
     return "-";
@@ -111,12 +114,12 @@ export const FaDate = (standardTime: string) => {
 export const FaDateFromTimestamp = (timestamp: number) => {
   const newDate = new Date(timestamp);
   try {
-    const standardTime = `${newDate.getFullYear()}-${`0${
-      newDate.getMonth() + 1
-    }`.slice(-2)}-${`0${newDate.getDate()}`.slice(
-      -2
+    const standardTime = `${newDate.getFullYear()}-${`0${newDate.getMonth() + 1}`.slice(
+      -2,
+    )}-${`0${newDate.getDate()}`.slice(
+      -2,
     )}T${`0${newDate.getHours()}`.slice(-2)}:${`0${newDate.getMinutes()}`.slice(
-      -2
+      -2,
     )}:${`0${newDate.getSeconds()}`.slice(-2)}`;
     return FaDate(standardTime);
   } catch {
@@ -124,15 +127,11 @@ export const FaDateFromTimestamp = (timestamp: number) => {
   }
 };
 
-export const preventNegativeValues = (
-  event: React.KeyboardEvent<HTMLInputElement>
-) => {
+export const preventNegativeValues = (event: React.KeyboardEvent<HTMLInputElement>) => {
   return ["e", "E", "+", "-"].includes(event.key) && event.preventDefault();
 };
 
-export const preventPasteNegative = (
-  event: React.ClipboardEvent<HTMLInputElement>
-) => {
+export const preventPasteNegative = (event: React.ClipboardEvent<HTMLInputElement>) => {
   const { clipboardData } = event;
   const pastedData = Number.parseFloat(clipboardData.getData("text"));
 
@@ -163,10 +162,7 @@ export const stripPemHeaders = (pem: string) => {
   return pem.replace(/-{5}BEGIN [ A-Z]+-{5}|-{5}END [ A-Z]+-{5}|\r?\n|\r/g, "");
 };
 
-export const addPemHeaders = (
-  content: string,
-  type: string = "CERTIFICATE"
-) => {
+export const addPemHeaders = (content: string, type: string = "CERTIFICATE") => {
   const header = `-----BEGIN ${type}-----\n`;
   const footer = `\n-----END ${type}-----`;
   const formattedContent = content.match(/.{1,64}/g)?.join("\n") || content; // Splits content into lines of 64 characters
@@ -253,11 +249,11 @@ export const fileSize = (size: number) => {
 export const generateKey = (domain: string) => {
   try {
     return domain
-    .split("")
-    .map((char) => {
-      return char.charCodeAt(0);
-    })
-    .join("_");
+      .split("")
+      .map((char) => {
+        return char.charCodeAt(0);
+      })
+      .join("_");
   } catch (error) {
     console.log({
       type: "generateKey",
@@ -269,16 +265,20 @@ export const generateKey = (domain: string) => {
 
 export const decodeKey = (domainKey: string) => {
   try {
-    const domainSplitArray = domainKey
-      .split("_"); // Split the encoded string by "_"
+    const domainSplitArray = domainKey.split("_"); // Split the encoded string by "_"
 
-    if (!domainSplitArray.some((item) => {return /[0-9]/.test(item);})) {
+    if (
+      !domainSplitArray.some((item) => {
+        return /[0-9]/.test(item);
+      })
+    ) {
       return "";
     }
 
-    const decodedDomain = domainSplitArray.map((charCode) => {
-      return String.fromCharCode(Number(charCode));
-    }) // Convert each code back to a character
+    const decodedDomain = domainSplitArray
+      .map((charCode) => {
+        return String.fromCharCode(Number(charCode));
+      }) // Convert each code back to a character
       .join(""); // Join characters to form the original domain
 
     return decodedDomain;
@@ -317,10 +317,10 @@ export const formatTimeAgo = (date: Date): string => {
 
   if (diffDay > 0) {
     return `${diffDay} روز پیش`;
-  } 
+  }
   if (diffHour > 0) {
     return `${diffHour} ساعت پیش`;
-  } 
+  }
   if (diffMin > 0) {
     return `${diffMin} دقیقه پیش`;
   }
