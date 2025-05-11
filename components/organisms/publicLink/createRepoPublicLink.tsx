@@ -12,11 +12,37 @@ import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const validationSchema = yup.object().shape({
+  hasExpireTime: yup.boolean().required(),
+  expireTime: yup.number().when("hasExpireTime", {
+    is: true,
+    then: (schema) => {
+      return schema
+        .required("تاریخ انقضا الزامی است")
+        .test("is-future-date", "تاریخ انتخاب شده نمی‌تواند قبل از امروز باشد", (value) => {
+          if (!value) return true;
+          const selectedDate = new Date(value);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          return selectedDate >= today;
+        });
+    },
+    otherwise: (schema) => {
+      return schema.nullable();
+    },
+  }),
+  password: yup.string().optional(),
+  roleId: yup.number().required(),
+});
 
 interface IData {
   expireTime?: number;
   roleId: number;
   password?: string;
+  hasExpireTime: boolean;
 }
 
 interface IProps {
@@ -25,21 +51,27 @@ interface IProps {
 
 const CreateRepoPublicLink = ({ setOpen }: IProps) => {
   const [hasPassword, setHasPassword] = useState(false);
-  const [hasExpireTime, setHasExpireTime] = useState(false);
   const [getRepo, setRepo] = useRecoilState(repoAtom);
   const getSelectedRoleId = useRecoilValue(publicRoleAtom);
   const createPublicLink = useCreatePublicLink();
 
-  const form = useForm<IData>();
-
+  const form = useForm<IData>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      hasExpireTime: false,
+    },
+  });
   const {
     register,
     handleSubmit,
     reset,
     clearErrors,
     setValue,
+    watch,
     formState: { errors },
   } = form;
+
+  const hasExpireTime = watch("hasExpireTime");
 
   useEffect(() => {
     if (getSelectedRoleId) {
@@ -67,10 +99,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
     createPublicLink.mutate({
       repoId: getRepo.id,
       roleId: getSelectedRoleId,
-      expireTime:
-        hasExpireTime && data.expireTime
-          ? data.expireTime
-          : undefined,
+      expireTime: hasExpireTime && data.expireTime ? data.expireTime : undefined,
       password: hasPassword ? data.password : undefined,
       callBack: (result) => {
         const objKey = Object.keys(result)[0];
@@ -93,12 +122,15 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
       className="repo-create-public-link-dialog"
       dialogHeader="مدیریت لینک"
     >
-      <form className="repo-create-public-link-form flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="repo-create-public-link-form flex flex-col gap-6"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col gap-2">
           <Checkbox
             crossOrigin="anonymous"
             label={
-              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal ">
                 افزودن رمز عبور
               </Typography>
             }
@@ -119,9 +151,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
                 className="repo-create-public-link-form__password-input"
               />
               {errors.password && (
-                <Typography className="warning_text">
-                  {errors.password?.message}
-                </Typography>
+                <Typography className="warning_text">{errors.password?.message}</Typography>
               )}
             </>
           )}
@@ -130,14 +160,14 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
           <Checkbox
             crossOrigin="anonymous"
             label={
-              <Typography className="text-primary_normal_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-primary_normal_normal text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] ">
                 افزودن تاریخ انقضای لینک
               </Typography>
             }
             color="purple"
             checked={hasExpireTime}
             onChange={() => {
-              setHasExpireTime(!hasExpireTime);
+              setValue("hasExpireTime", !hasExpireTime);
             }}
             containerProps={{ className: "-mr-3" }}
             className="repo-create-public-link-form__add-expire-time-checkbox"
@@ -147,13 +177,11 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
               <Typography className="label"> انتخاب تاریخ</Typography>
               <DatePicker
                 onChange={submitCalendar}
-                className="z-[999999] delay-200 repo-create-public-link-form__date-picker"
+                className="repo-create-public-link-form__date-picker z-[999999] delay-200"
                 inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
               />
               {errors.expireTime && (
-                <Typography className="warning_text">
-                  {errors.expireTime?.message}
-                </Typography>
+                <Typography className="warning_text">{errors.expireTime?.message}</Typography>
               )}
             </>
           ) : null}
