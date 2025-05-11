@@ -49,7 +49,7 @@ const VersionList = () => {
     true,
   );
 
-  const order = ["accpted", "public", "private", "pending", "rejected", "editing"];
+  const order = ["accpted", "public", "private", "pending", "waitForDirectPublic", "rejected", "editing"];
 
   const sortedVersion = versionList?.pages.map((page) => {
     return page
