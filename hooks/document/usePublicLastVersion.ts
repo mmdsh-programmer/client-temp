@@ -25,7 +25,9 @@ const usePublicLastVersion = () => {
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-document-${documentId}`],
       });
-
+      queryClient.invalidateQueries({
+        queryKey: [`version-list-${repoId}-${documentId}`],
+      });
       callBack?.();
     },
     onError: (error) => {
