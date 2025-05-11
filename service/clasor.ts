@@ -2236,22 +2236,14 @@ export const publicLastVersion = async (
   draftId?: number,
 ) => {
   try {
-    const url = draftId
-      ? `repositories/${repoId}/documents/${documentId}/publicVersion?draftId=${draftId}`
-      : `repositories/${repoId}/documents/${documentId}/publicVersion`;
 
     const params = {
       isDirectAccess,
       draftId,
     };
 
-    console.log("------------------------ url ------------------------", url);
-    console.log("------------------------ params ------------------------", params);
-
-    debugger;
-
     const response = await axiosClasorInstance.put<IServerResult<IDocument>>(
-      url,
+      `repositories/${repoId}/documents/${documentId}/publicVersion`,
       {},
       {
         headers: {
