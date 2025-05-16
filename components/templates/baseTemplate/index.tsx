@@ -5,6 +5,7 @@ import { ICustomPostData } from "@interface/app.interface";
 import React from "react";
 import Sidebar from "@components/organisms/sidebar";
 import SidebarHeader from "@components/molecules/sidebarHeader";
+import SidebarMobileView from "@components/molecules/sidebarMobileView";
 import Start from "../start";
 import Tour from "@components/tour";
 import { usePathname } from "next/navigation";
@@ -35,6 +36,7 @@ const BaseTemplate = ({ children, domainInfo }: IProps) => {
             <div className="overflow-auto h-[calc(100vh-195px)] xs:h-[calc(100vh-68px)] flex flex-col px-0 py-0 xs:px-8 xs:pt-6 xs:pb-8">
               {children}
             </div>
+            <SidebarMobileView />
           </main>
         </div>
       </Start>

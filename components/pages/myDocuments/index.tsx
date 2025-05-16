@@ -5,7 +5,6 @@ import CategoryList from "@components/organisms/category";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { bulkItemsAtom } from "@atom/bulk";
 import CategoryBulk from "@components/molecules/categoryBulk";
-import RepoTypesMobileView from "@components/molecules/repoTypesMobileView";
 import { editorModalAtom } from "@atom/editor";
 import Editor from "@components/organisms/dialogs/editor";
 import { versionModalListAtom } from "@atom/version";
@@ -17,7 +16,7 @@ const MyDocumentsPage = () => {
   const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
 
   return (
-    <>
+    <div className="flex flex-col gap-4 xs:gap-6">
       <CategoryList />
       {getShowVersionList ? <VersionDialogView /> : null}
       {getEditorModal ? (
@@ -27,8 +26,10 @@ const MyDocumentsPage = () => {
           }}
         />
       ) : null}
-      {getBulkItems.length ? <CategoryBulk /> : <RepoTypesMobileView />}
-    </>
+      <div className="relative">
+        {getBulkItems.length ? <CategoryBulk /> : null}
+      </div>
+    </div>
   );
 };
 

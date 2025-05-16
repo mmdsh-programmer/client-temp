@@ -9,6 +9,7 @@ import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@material-tailwind/react";
+import { usePathname } from "next/navigation";
 
 const MobileView = ({
   isLoading,
@@ -18,15 +19,19 @@ const MobileView = ({
   isFetchingNextPage,
   type,
 }: ICategoryView) => {
+  const currentPath = usePathname();
+
   const listLength = getCategoryList?.pages[0].total;
 
   return (
-    <div className="category-mobile-view px-4 flex-grow flex-shrink-0">
+    <div
+      className={`category-mobile-view flex-shrink-0 flex-grow ${currentPath === "/admin/dashboard" ? "px-0" : "px-4"}`}
+    >
       <div className="flex flex-col">
         <CategoryBreadCrumb />
       </div>
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner className="h-8 w-8" color="purple" />
         </div>
       ) : listLength ? (
@@ -44,7 +49,7 @@ const MobileView = ({
           })}
           <RenderIf isTrue={!!hasNextPage}>
             <LoadMore
-              className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
+              className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none"
               isFetchingNextPage={isFetchingNextPage}
               fetchNextPage={fetchNextPage}
             />

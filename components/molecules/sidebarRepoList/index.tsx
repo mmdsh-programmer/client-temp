@@ -10,6 +10,7 @@ import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { ERepoGrouping } from "@interface/enums";
+import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 import React from "react";
 import { useRouter } from "next/navigation";
 
@@ -17,6 +18,7 @@ const SidebarRepoList = () => {
   const router = useRouter();
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
+  const [, setSidebarSection] = useRecoilState(sidebarSectionAtom);
 
   const sidebarList = [
     {
@@ -25,6 +27,7 @@ const SidebarRepoList = () => {
       className: "myRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.MY_REPO);
+        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
       },
     },
     {
@@ -33,6 +36,7 @@ const SidebarRepoList = () => {
       className: "myAccessList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ACCESS_REPO);
+        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
       },
     },
     {
@@ -41,6 +45,7 @@ const SidebarRepoList = () => {
       className: "myBookmarkList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
+        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
       },
     },
     {
@@ -49,6 +54,7 @@ const SidebarRepoList = () => {
       className: "myArchiveList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
+        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
       },
     },
     {
@@ -57,6 +63,7 @@ const SidebarRepoList = () => {
       className: "myPublishedRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.PUBLISHED_REPO);
+        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
       },
     },
   ];
@@ -66,15 +73,19 @@ const SidebarRepoList = () => {
       {sidebarList.map((item) => {
         return (
           <ListItem
-            key={item.text}
+            key={item.className}
             placeholder="sidebar-item"
             className={`p-0 ${item.className}`}
           >
             <Button
               placeholder="sidebar-button"
-              className={` bg-transparent justify-start w-full 
+              className={`bg-transparent justify-start w-full 
                      text-link gap-1 px-3 h-[44px]
-                   ${getRepoGroup === item.text ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
+                ${
+                  getRepoGroup === item.text
+                    ? "bg-gray-100 !stroke-icon-active text-primary_normal"
+                    : ""
+                }
                   hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
               onClick={() => {
                 router.push("/admin/dashboard");

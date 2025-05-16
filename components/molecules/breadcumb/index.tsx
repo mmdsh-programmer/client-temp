@@ -1,6 +1,7 @@
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
+import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 
 import React from "react";
 import { useRecoilValue } from "recoil";
@@ -9,6 +10,7 @@ import { useRouter } from "next/navigation";
 const Breadcrumb = () => {
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
   const getRepo = useRecoilValue(repoAtom);
+  const getSidebarSection = useRecoilValue(sidebarSectionAtom);
 
   const router = useRouter();
 
@@ -30,15 +32,36 @@ const Breadcrumb = () => {
     return () => {
       return window.removeEventListener("resize", checkOverflow);
     };
-  }, [getRepo, getRepoGroup]);
+  }, [getRepo, getRepoGroup, getSidebarSection]);
 
   const breadcrumbList = () => {
     const baseBreadcrumb = ["کلاسور"];
+    const personalDocuments = "اسناد شخصی";
 
+    // Handle repository-related breadcrumbs
     if (getRepo) {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name];
     }
-    return [...baseBreadcrumb, getRepoGroup];
+    
+    if (getRepoGroup) {
+      return [...baseBreadcrumb, getRepoGroup];
+    }
+
+    // Handle other sidebar sections
+    switch (getSidebarSection) {
+      case ESidebarSection.DASHBOARD:
+        return [...baseBreadcrumb, ESidebarSection.DASHBOARD];
+      case ESidebarSection.MY_DOCUMENTS:
+        return [...baseBreadcrumb, personalDocuments, ESidebarSection.MY_DOCUMENTS];
+      case ESidebarSection.SHARED_DOCUMENTS:
+        return [...baseBreadcrumb, personalDocuments, ESidebarSection.SHARED_DOCUMENTS];
+      case ESidebarSection.DOMAIN_MANAGEMENT:
+        return [...baseBreadcrumb, ESidebarSection.DOMAIN_MANAGEMENT];
+      case ESidebarSection.BRANCH_MANAGEMENT:
+        return [...baseBreadcrumb, ESidebarSection.BRANCH_MANAGEMENT];
+      default:
+        return baseBreadcrumb;
+    }
   };
 
   const renderBreadcrumbItems = () => {
@@ -55,27 +78,30 @@ const Breadcrumb = () => {
               <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
             </div>
           </div>
-          {list.slice(-2).map((breadcrumbItem, index) => {
-            const realIndex = list.length - 2 + index;
+          {list.slice(-2).map((breadcrumbItem) => {
+            // Create a unique key based on the breadcrumb item
+            const uniqueKey = `breadcrumb-${String(breadcrumbItem).replace(/\s+/g, "-")}`;
+            const isLast = list.indexOf(breadcrumbItem) === list.length - 1;
+            
             return (
-              <div key={breadcrumbItem} className="flex items-center">
+              <div key={uniqueKey} className="flex items-center">
                 <Button
                   className="border-none !shadow-none outline-none bg-transparent p-0"
                   onClick={() => {
-                    if (realIndex === 1) {
+                    if (list.indexOf(breadcrumbItem) === 1) {
                       router.push("/admin/dashboard");
                     }
                   }}
                 >
                   <div className="flex items-center">
                     <Typography
-                      title={breadcrumbItem as string}
+                      title={String(breadcrumbItem)}
                       className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
-                    ${realIndex === list.length - 1 ? "text-primary_normal" : "text-link"}`}
+                    ${isLast ? "text-primary_normal" : "text-link"}`}
                     >
                       {breadcrumbItem}
                     </Typography>
-                    {realIndex !== list.length - 1 && (
+                    {!isLast && (
                       <div className="h-6 w-[14px] flex items-center justify-center">
                         <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
                       </div>
@@ -91,26 +117,30 @@ const Breadcrumb = () => {
 
     return (
       <div className="flex items-center">
-        {list.map((breadcrumbItem, index) => {
+        {list.map((breadcrumbItem) => {
+          // Create a unique key based on the breadcrumb item
+          const uniqueKey = `breadcrumb-${String(breadcrumbItem).replace(/\s+/g, "-")}`;
+          const isLast = list.indexOf(breadcrumbItem) === list.length - 1;
+          
           return (
-            <div key={breadcrumbItem} className="flex items-center">
+            <div key={uniqueKey} className="flex items-center">
               <Button
                 className="border-none !shadow-none outline-none bg-transparent p-0"
                 onClick={() => {
-                  if (index === 1) {
+                  if (list.indexOf(breadcrumbItem) === 1) {
                     router.push("/admin/dashboard");
                   }
                 }}
               >
                 <div className="flex items-center">
                   <Typography
-                    title={breadcrumbItem as string}
+                    title={String(breadcrumbItem)}
                     className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
-                ${index === list.length - 1 ? "text-primary_normal" : "text-link"}`}
+                    ${isLast ? "text-primary_normal" : "text-link"}`}
                   >
                     {breadcrumbItem}
                   </Typography>
-                  {index !== list.length - 1 && (
+                  {!isLast && (
                     <div className="h-6 w-[14px] flex items-center justify-center">
                       <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
                     </div>

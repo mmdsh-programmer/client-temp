@@ -8,16 +8,12 @@ import {
   ListItem,
   Typography,
 } from "@material-tailwind/react";
-import {
-  ChevronLeftIcon,
-  DashboardIcon,
-  UserGroupIcon,
-} from "@components/atoms/icons";
+import { ChevronLeftIcon, DashboardIcon, UserGroupIcon } from "@components/atoms/icons";
 import React, { useState } from "react";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
 import { ERepoGrouping } from "@interface/enums";
+import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 import SidebarDocuments from "@components/molecules/sidebarDocuments";
 import SidebarRepoList from "@components/molecules/sidebarRepoList";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -34,8 +30,9 @@ interface IProps {
 const Sidebar = ({ children }: IProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(0);
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
+  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
+  const [getSidebarSection, setSidebarSection] = useRecoilState(sidebarSectionAtom);
 
   const { data: userInfo } = useGetUser();
 
@@ -44,38 +41,37 @@ const Sidebar = ({ children }: IProps) => {
   };
 
   return (
-    <aside className="sidebar hidden w-[250px] md:flex h-screen flex-col max-w-fit border-l-2 border-l-gray-100 bg-white">
-      <div className="py-4 px-2 h-[80px] flex items-center justify-center ">
-        {children}
-      </div>
+    <aside className="sidebar hidden h-screen w-[250px] max-w-fit flex-col border-l-2 border-l-gray-100 bg-white md:flex">
+      <div className="flex h-[80px] items-center justify-center px-2 py-4 ">{children}</div>
       <hr className="" />
       <ListItem
         key={ERepoGrouping.DASHBOARD}
         placeholder="sidebar-item"
-        className={`sidebar-item-${getRepoGroup} p-2 dashboard hover:!bg-transparent`}
+        className={`sidebar-item-${getSidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} dashboard p-2 hover:!bg-transparent`}
       >
         <Button
           placeholder="sidebar-button"
-          className={` bg-transparent justify-start w-full 
-                     text-link gap-1 px-3 h-[44px]
-                     sidebar-button-${getRepoGroup}
-                   ${getRepoGroup === ERepoGrouping.DASHBOARD ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
-                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
+          className={` h-[44px] w-full justify-start 
+                     gap-1 bg-transparent px-3 text-link
+                     sidebar-button-${getSidebarSection === ESidebarSection.DASHBOARD ? "active" : ""}
+                   ${getSidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"}
+                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
             router.push("/admin/dashboard");
             setRepoGroup(ERepoGrouping.DASHBOARD);
+            setSidebarSection(ESidebarSection.DASHBOARD);
             setSearchParam(null);
           }}
         >
           <DashboardIcon className="h-6 w-6" />
           <Typography placeholder="sidebar-text" className="title_t3">
-            {ERepoGrouping.DASHBOARD}
+            {ESidebarSection.DASHBOARD}
           </Typography>
         </Button>
       </ListItem>
       <hr className="" />
       <Accordion
-        className="personal-document-sidebar max-w-full w-full "
+        className="personal-document-sidebar w-full max-w-full "
         open={open === 1}
         icon={
           <ChevronLeftIcon
@@ -85,7 +81,7 @@ const Sidebar = ({ children }: IProps) => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className={`px-3 flex-row-reverse justify-end ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
+          className={`flex-row-reverse justify-end px-3 ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(1);
           }}
@@ -93,13 +89,13 @@ const Sidebar = ({ children }: IProps) => {
           <Typography className="title_t4">اسناد شخصی</Typography>
         </AccordionHeader>
         <AccordionBody>
-          <div className="px-3 pb-3 border-b-2 border-normal">
+          <div className="border-b-2 border-normal px-3 pb-3">
             <SidebarDocuments />
           </div>
         </AccordionBody>
       </Accordion>
       <Accordion
-        className="repo-list-sidebar max-w-full w-full "
+        className="repo-list-sidebar w-full max-w-full "
         open={open === 2}
         icon={
           <ChevronLeftIcon
@@ -109,7 +105,7 @@ const Sidebar = ({ children }: IProps) => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
-          className={`px-3 flex-row-reverse justify-end ${open === 2 ? "border-none" : "border-b-2 border-normal"}`}
+          className={`flex-row-reverse justify-end px-3 ${open === 2 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(2);
           }}
@@ -117,7 +113,7 @@ const Sidebar = ({ children }: IProps) => {
           <Typography className="title_t4">مدیریت مخزن‌ها</Typography>
         </AccordionHeader>
         <AccordionBody>
-          <div className="px-3 pb-3 border-b-2 border-normal">
+          <div className="border-b-2 border-normal px-3 pb-3">
             <SidebarRepoList />
           </div>
         </AccordionBody>
@@ -126,15 +122,18 @@ const Sidebar = ({ children }: IProps) => {
         <>
           <ListItem
             placeholder="sidebar-item"
-            className="domain-management-sidebar p-2 dashboard hover:!bg-transparent"
+            className="domain-management-sidebar dashboard p-2 hover:!bg-transparent"
           >
             <Button
               placeholder="sidebar-button"
-              className={` bg-transparent justify-start w-full 
-                     text-link gap-1 px-3 h-[44px]
-                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
+              className={` h-[44px] w-full justify-start 
+                     gap-1 bg-transparent px-3 text-link
+                     ${getSidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""}
+                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
               onClick={() => {
                 router.push("/admin/domainManagement");
+                setSidebarSection(ESidebarSection.DOMAIN_MANAGEMENT);
+                setRepoGroup(null);
                 setSearchParam(null);
               }}
             >
@@ -150,15 +149,18 @@ const Sidebar = ({ children }: IProps) => {
 
       <ListItem
         placeholder="sidebar-item"
-        className="branch-management-sidebar p-2 dashboard hover:!bg-transparent"
+        className="branch-management-sidebar dashboard p-2 hover:!bg-transparent"
       >
         <Button
           placeholder="sidebar-button"
-          className={` bg-transparent justify-start w-full 
-                     text-link gap-1 px-3 h-[44px]
-                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
+          className={` h-[44px] w-full justify-start 
+                     gap-1 bg-transparent px-3 text-link
+                     ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""}
+                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
             router.push("/admin/branchManagement");
+            setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
+            setRepoGroup(null);
             setSearchParam(null);
           }}
         >
