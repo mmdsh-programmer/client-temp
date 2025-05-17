@@ -11,10 +11,11 @@ const useCreateUploadLink = () => {
     mutationFn: async (values: {
       resourceId: number;
       userGroupHash: string;
+      isPublic?: boolean;
       successCallBack?: (result: string) => void;
     }) => {
-      const { resourceId, userGroupHash } = values;
-      const response = await createUploadLinkAction(resourceId, userGroupHash);
+      const { resourceId, userGroupHash, isPublic } = values;
+      const response = await createUploadLinkAction(resourceId, userGroupHash, isPublic);
       handleClientSideHookError(response as IActionError);
       return response;
     },

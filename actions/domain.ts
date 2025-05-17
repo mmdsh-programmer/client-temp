@@ -10,7 +10,8 @@ import {
   setDocumentDomainTags,
   getCustomPostByDomain,
   addPartyToDomainParticipants,
-  removePartyFromDomainParticipants
+  removePartyFromDomainParticipants,
+  updateCustomPostByDomain,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
@@ -31,22 +32,35 @@ export const getCustomPostByDomainAction = async () => {
   }
 };
 
-export const getDomainPublishRepositoriesAction = async (
-  offset: number,
-  size: number
+export const updateCustomPostByDomainAction = async (
+  content?: string,
+  useDomainTag?: boolean,
+  hasLikes?: boolean,
+  hasComments?: boolean,
+  hasQuestions?: boolean,
+  needsAdminApprovalForComments?: boolean,
+  needsAdminApprovalForQuestions?: boolean,
+  allowQuestionReplies?: boolean,
 ) => {
   try {
     const userInfo = await getMe();
 
     const domain = headers().get("host");
+
     if (!domain) {
       throw new Error("Domain is not found");
     }
-    const response = await getDomainPublishRepoList(
+    const response = await updateCustomPostByDomain(
       userInfo.access_token,
       domain,
-      offset,
-      size
+      content,
+      useDomainTag,
+      hasLikes,
+      hasComments,
+      hasQuestions,
+      needsAdminApprovalForComments,
+      needsAdminApprovalForQuestions,
+      allowQuestionReplies,
     );
     return response;
   } catch (error) {
@@ -54,11 +68,22 @@ export const getDomainPublishRepositoriesAction = async (
   }
 };
 
-export const createDomainTagAction = async (
-  name: string,
-  description: string,
-  order: number
-) => {
+export const getDomainPublishRepositoriesAction = async (offset: number, size: number) => {
+  try {
+    const userInfo = await getMe();
+
+    const domain = headers().get("host");
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+    const response = await getDomainPublishRepoList(userInfo.access_token, domain, offset, size);
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const createDomainTagAction = async (name: string, description: string, order: number) => {
   try {
     const userInfo = await getMe();
     const domain = headers().get("host");
@@ -67,13 +92,7 @@ export const createDomainTagAction = async (
       throw new Error("Domain is not found");
     }
 
-    const response = await createDomainTag(
-      domain,
-      userInfo.access_token,
-      name,
-      description,
-      order
-    );
+    const response = await createDomainTag(domain, userInfo.access_token, name, description, order);
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -89,12 +108,7 @@ export const getAllDomainTagsAction = async (offset: number, size: number) => {
       throw new Error("Domain is not found");
     }
 
-    const response = await getAllDomainTags(
-      domain,
-      userInfo.access_token,
-      offset,
-      size
-    );
+    const response = await getAllDomainTags(domain, userInfo.access_token, offset, size);
 
     return response;
   } catch (error) {
@@ -111,11 +125,7 @@ export const getDomainTagByIdAction = async (tagId: number) => {
       throw new Error("Domain is not found");
     }
 
-    const response = await getDomainTagById(
-      domain,
-      userInfo.access_token,
-      tagId
-    );
+    const response = await getDomainTagById(domain, userInfo.access_token, tagId);
 
     return response;
   } catch (error) {
@@ -123,11 +133,7 @@ export const getDomainTagByIdAction = async (tagId: number) => {
   }
 };
 
-export const updateDomainTagAction = async (
-  tagId: number,
-  name?: string,
-  description?: string
-) => {
+export const updateDomainTagAction = async (tagId: number, name?: string, description?: string) => {
   try {
     const userInfo = await getMe();
     const domain = headers().get("host");
@@ -136,13 +142,7 @@ export const updateDomainTagAction = async (
       throw new Error("Domain is not found");
     }
 
-    const response = await updateDomainTag(
-      domain,
-      userInfo.access_token,
-      tagId,
-      name,
-      description
-    );
+    const response = await updateDomainTag(domain, userInfo.access_token, tagId, name, description);
 
     return response;
   } catch (error) {
@@ -159,11 +159,7 @@ export const deleteDomainTagAction = async (tagId: number) => {
       throw new Error("Domain is not found");
     }
 
-    const response = await deleteDomainTag(
-      domain,
-      userInfo.access_token,
-      tagId
-    );
+    const response = await deleteDomainTag(domain, userInfo.access_token, tagId);
 
     return response;
   } catch (error) {
@@ -175,7 +171,7 @@ export const setDocumentDomainTagsAction = async (
   repoId: number,
   documentId: number,
   tagIds: number[],
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const userInfo = await getMe();
@@ -191,7 +187,7 @@ export const setDocumentDomainTagsAction = async (
       repoId,
       documentId,
       tagIds,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -200,9 +196,7 @@ export const setDocumentDomainTagsAction = async (
   }
 };
 
-export const addPartyToDomainParticipantsAction = async (
-  userNameList: string,
-) => {
+export const addPartyToDomainParticipantsAction = async (userNameList: string) => {
   try {
     const userInfo = await getMe();
     const domain = headers().get("host");
@@ -223,9 +217,7 @@ export const addPartyToDomainParticipantsAction = async (
   }
 };
 
-export const removePartyFromDomainParticipantsAction = async (
-  userNameList: string[],
-) => {
+export const removePartyFromDomainParticipantsAction = async (userNameList: string[]) => {
   try {
     const userInfo = await getMe();
     const domain = headers().get("host");
@@ -237,7 +229,7 @@ export const removePartyFromDomainParticipantsAction = async (
     const response = await removePartyFromDomainParticipants(
       domain,
       userInfo.access_token,
-      userNameList
+      userNameList,
     );
 
     return response;

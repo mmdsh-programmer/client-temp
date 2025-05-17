@@ -2236,7 +2236,6 @@ export const publicLastVersion = async (
   draftId?: number,
 ) => {
   try {
-
     const params = {
       isDirectAccess,
       draftId,
@@ -2630,6 +2629,7 @@ export const createUploadLink = async (
   accessToken: string,
   resourceId: number,
   userGroupHash: string,
+  isPublic?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post(
@@ -2637,7 +2637,7 @@ export const createUploadLink = async (
       {
         expireTime: (Date.now() + 3600 * 1000).toString(),
         userGroupHash,
-        isPublic: false,
+        isPublic: isPublic ?? false,
       },
       {
         headers: {
@@ -4381,6 +4381,51 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
     }
 
     return domainInfo as IDomainMetadata;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateCustomPostByDomain = async (
+  accessToken: string,
+  domain: string,
+  content?: string,
+  useDomainTag?: boolean,
+  hasLikes?: boolean,
+  hasComments?: boolean,
+  hasQuestions?: boolean,
+  needsAdminApprovalForComments?: boolean,
+  needsAdminApprovalForQuestions?: boolean,
+  allowQuestionReplies?: boolean,
+): Promise<any> => {
+  try {
+    if (domain === "") {
+      throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
+    }
+
+    const redisClient = await getRedisClient();
+    const cachedDomain = await redisClient?.get(`domain:${domain}`);
+    if (cachedDomain) {
+      await redisClient?.remove(`domain:${domain}`);
+    }
+    const response = await axiosClasorInstance.put<IClasorResult<any>>(
+      "domain",
+      {
+        content,
+        useDomainTag,
+        hasLikes,
+        hasComments,
+        hasQuestions,
+        needsAdminApprovalForComments,
+        needsAdminApprovalForQuestions,
+        allowQuestionReplies,
+      },
+      {
+        headers: { domainUrl: domain, Authorization: `Bearer ${accessToken}` },
+      },
+    );
+
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
