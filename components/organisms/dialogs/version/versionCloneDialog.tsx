@@ -34,7 +34,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
 
   const { data: userInfo } = useGetUser();
   const { data: getVersionInfo, isLoading } = useGetVersion(
-    repoId,
+    repoId!,
     getDocument!.id,
     getVersion?.id,
     getVersion?.state,

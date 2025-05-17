@@ -143,7 +143,7 @@ const useVersionMenuList = (
               },
             });
             toggleModal("compare", true);
-          } else if (getRepo && getDocument && version) {
+          } else if (getRepo && getDocument && version && repoId) {
             setCompareVersion({
               version: {
                 data: version,

@@ -6,6 +6,8 @@ import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import useGetUser from "@hooks/auth/useGetUser";
+import Settings from "@components/organisms/settings";
+import DomainTags from "../domainTags";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -26,58 +28,55 @@ const DomainConfig = () => {
   const tabList = [
     {
       tabTitle: ETabs.SETTING,
-      tabContent: (
-        <div className="flex justify-center items-center h-full w-full">
-          <Typography>اطلاعاتی در دست نیست</Typography>
-        </div>
-      ),
+      tabContent: activeTab === ETabs.SETTING ? <Settings /> : null,
     },
     userInfo?.domainRole === "owner"
       ? {
           tabTitle: ETabs.PARTICIPANT,
-          tabContent: <DomainParticipant />,
+          tabContent: activeTab === ETabs.PARTICIPANT ? <DomainParticipant /> : null,
         }
       : null,
     {
       tabTitle: ETabs.PUBLIC_FEEDS,
-      tabContent: <DomainPublicFeed />,
+      tabContent: activeTab === ETabs.PUBLIC_FEEDS ? <DomainPublicFeed /> : null,
     },
     {
       tabTitle: ETabs.PRIVATE_FEEDS,
-      tabContent: <DomainPrivateFeed />,
+      tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <DomainPrivateFeed /> : null,
     },
     {
       tabTitle: ETabs.COMMENTS,
-      tabContent: (
-        <div className="flex justify-center items-center h-full w-full">
-          <Typography>اطلاعاتی در دست نیست</Typography>
-        </div>
-      ),
+      tabContent:
+        activeTab === ETabs.COMMENTS ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Typography>اطلاعاتی در دست نیست</Typography>
+          </div>
+        ) : null,
     },
     {
       tabTitle: ETabs.QUESTIONS,
-      tabContent: (
-        <div className="flex justify-center items-center h-full w-full">
-          <Typography>اطلاعاتی در دست نیست</Typography>
-        </div>
-      ),
+      tabContent:
+        activeTab === ETabs.QUESTIONS ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Typography>اطلاعاتی در دست نیست</Typography>
+          </div>
+        ) : null,
     },
     {
       tabTitle: ETabs.VIOLATION_REPORT,
-      tabContent: (
-        <div className="flex justify-center items-center h-full w-full">
-          <Typography>اطلاعاتی در دست نیست</Typography>
-        </div>
-      ),
+      tabContent:
+        activeTab === ETabs.VIOLATION_REPORT ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Typography>اطلاعاتی در دست نیست</Typography>
+          </div>
+        ) : null,
     },
-    {
-      tabTitle: ETabs.TAGS,
-      tabContent: (
-        <div className="flex justify-center items-center h-full w-full">
-          <Typography>اطلاعاتی در دست نیست</Typography>
-        </div>
-      ),
-    },
+    userInfo?.domainConfig.useDomainTag
+      ? {
+          tabTitle: ETabs.TAGS,
+          tabContent: activeTab === ETabs.TAGS ? <DomainTags /> : null,
+        }
+      : null,
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;
@@ -91,6 +90,7 @@ const DomainConfig = () => {
       headerClassName="!bg-white !py-0 border-b-normal !border-b-2 rounded-none"
       activeTabClassName="!rounded-none !border-t-0 border-x-0 border-b-purple-normal !border-b-2 !shadow-none !text-purple-normal !py-3"
       tabClassName="!border-none !h-auto !py-3 !px-4"
+      tabContentClassName={`${activeTab === ETabs.SETTING ? "overflow-y-auto" : "overflow-hidden"}`}
     />
   );
 };

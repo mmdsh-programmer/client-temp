@@ -15,6 +15,7 @@ interface IProps {
   headerClassName?: string;
   tabClassName?: string;
   activeTabClassName?: string;
+  tabContentClassName?: string;
 }
 
 const TabComponent = ({
@@ -24,6 +25,7 @@ const TabComponent = ({
   headerClassName,
   tabClassName,
   activeTabClassName,
+  tabContentClassName,
 }: IProps) => {
   return (
     <Tabs value={activeTab} className="h-full">
@@ -53,7 +55,7 @@ const TabComponent = ({
           );
         })}
       </TabsHeader>
-      <TabsBody placeholder="tab-body" className="h-[calc(100%-40px)]">
+      <TabsBody placeholder="tab-body" className={`h-[calc(100%-40px)] ${tabContentClassName || ""}`}>
         {tabList.map((tab) => {
           return (
             <TabPanel

@@ -17,9 +17,10 @@ import DrawerTemplate from "@components/templates/drawerTemplate";
 import { ITag } from "@interface/tags.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
 import React from "react";
+import { IDomainTag } from "@interface/domain.interface";
 
 interface IProps {
-  tag?: ITag;
+  tag?: ITag | IDomainTag;
   showDrawer?: boolean;
 }
 

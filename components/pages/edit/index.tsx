@@ -26,7 +26,7 @@ const EditPage = () => {
     isFetching: isFetchingDocument,
     error,
   } = useGetDocument(
-    repoId,
+    repoId!,
     +documentId!,
     sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true,

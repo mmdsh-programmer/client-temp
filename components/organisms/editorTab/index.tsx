@@ -53,7 +53,7 @@ const EditorTab = () => {
   };
 
   const { data: getLastVersion, isSuccess: lastVersionIsSuccess } = useGetLastVersion(
-    repoId,
+    repoId!,
     getSelectedDocument!.id,
     sharedDocuments === "true",
     !getVersionData,
@@ -65,7 +65,7 @@ const EditorTab = () => {
     : versionState || getLastVersion?.state;
 
   const { data, isFetching, error, isSuccess } = useGetVersion(
-    repoId,
+    repoId!,
     getSelectedDocument!.id,
     +vId!,
     vState as "draft" | "version" | "public" | undefined,
@@ -155,7 +155,7 @@ const EditorTab = () => {
     <div className="h-screen flex-grow overflow-auto p-0">
       <BlockDraft version={data}>
         <PublicKeyInfo
-          repoId={repoId}
+          repoId={repoId!}
           publicKeyId={
             getSelectedDocument?.publicKeyId ? +getSelectedDocument.publicKeyId : undefined
           }

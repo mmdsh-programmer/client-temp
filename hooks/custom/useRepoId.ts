@@ -34,7 +34,10 @@ const useRepoId = () => {
     ) {
       return getSelectedDocument!.repoId;
     }
-    return getRepo!.id;
+    if (getRepo) {
+      return getRepo!.id;
+    }
+    return null;
   };
 
   return repoId();

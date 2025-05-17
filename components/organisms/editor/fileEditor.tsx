@@ -121,7 +121,7 @@ const FileEditor = () => {
             </Button>
           </div>
 
-          {showFilePicker ? (
+          {showFilePicker && repoId ? (
             <div className="overflow-auto py-4">
               <Files
                 userGroupHash={userGroupHash()}

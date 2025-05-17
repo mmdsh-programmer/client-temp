@@ -30,7 +30,7 @@ const VersionList = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useGetVersionList(
-    repoId,
+    repoId!,
     getSelectedDocument!.id,
     sharedDocuments === "true" ||
       currentPath === "/admin/sharedDocuments" ||
@@ -40,7 +40,7 @@ const VersionList = () => {
   );
 
   const { data: getLastVersion } = useGetLastVersion(
-    repoId,
+    repoId!,
     getSelectedDocument!.id,
     sharedDocuments === "true" ||
       currentPath === "/admin/sharedDocuments" ||

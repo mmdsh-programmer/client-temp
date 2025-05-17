@@ -1,9 +1,8 @@
+import React, { useEffect } from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import { repoAtom, repoGroupingAtom } from "@atom/repository";
 import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
-
-import React from "react";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/navigation";
 
@@ -18,11 +17,10 @@ const Breadcrumb = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkOverflow = () => {
       if (containerRef.current && contentRef.current) {
-        const isOverflowing =
-          contentRef.current.scrollWidth > containerRef.current.clientWidth;
+        const isOverflowing = contentRef.current.scrollWidth > containerRef.current.clientWidth;
         setShouldAnimate(isOverflowing);
       }
     };
@@ -38,16 +36,14 @@ const Breadcrumb = () => {
     const baseBreadcrumb = ["کلاسور"];
     const personalDocuments = "اسناد شخصی";
 
-    // Handle repository-related breadcrumbs
     if (getRepo) {
       return [...baseBreadcrumb, getRepoGroup, getRepo.name];
     }
-    
+
     if (getRepoGroup) {
       return [...baseBreadcrumb, getRepoGroup];
     }
 
-    // Handle other sidebar sections
     switch (getSidebarSection) {
       case ESidebarSection.DASHBOARD:
         return [...baseBreadcrumb, ESidebarSection.DASHBOARD];
@@ -71,22 +67,21 @@ const Breadcrumb = () => {
       return (
         <div className="breadcumb-list flex items-center">
           <div className="flex items-center">
-            <Typography className="text-xs xs:text-sm font-iranYekan mx-2 text-link">
+            <Typography className="mx-2 font-iranYekan text-xs text-link xs:text-sm">
               ...
             </Typography>
-            <div className="h-6 w-[14px] flex items-center justify-center">
-              <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
+            <div className="flex h-6 w-[14px] items-center justify-center">
+              <ChevronLeftIcon className="h-3 w-3 stroke-gray-500" />
             </div>
           </div>
           {list.slice(-2).map((breadcrumbItem) => {
-            // Create a unique key based on the breadcrumb item
             const uniqueKey = `breadcrumb-${String(breadcrumbItem).replace(/\s+/g, "-")}`;
             const isLast = list.indexOf(breadcrumbItem) === list.length - 1;
-            
+
             return (
               <div key={uniqueKey} className="flex items-center">
                 <Button
-                  className="border-none !shadow-none outline-none bg-transparent p-0"
+                  className="border-none bg-transparent p-0 !shadow-none outline-none"
                   onClick={() => {
                     if (list.indexOf(breadcrumbItem) === 1) {
                       router.push("/admin/dashboard");
@@ -96,16 +91,16 @@ const Breadcrumb = () => {
                   <div className="flex items-center">
                     <Typography
                       title={String(breadcrumbItem)}
-                      className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
+                      className={`mx-2 truncate whitespace-nowrap font-iranYekan text-xs lowercase xs:text-sm
                     ${isLast ? "text-primary_normal" : "text-link"}`}
                     >
                       {breadcrumbItem}
                     </Typography>
-                    {!isLast && (
-                      <div className="h-6 w-[14px] flex items-center justify-center">
-                        <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
+                    {!isLast ? (
+                      <div className="flex h-6 w-[14px] items-center justify-center">
+                        <ChevronLeftIcon className="h-3 w-3 stroke-gray-500" />
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 </Button>
               </div>
@@ -118,14 +113,12 @@ const Breadcrumb = () => {
     return (
       <div className="flex items-center">
         {list.map((breadcrumbItem) => {
-          // Create a unique key based on the breadcrumb item
           const uniqueKey = `breadcrumb-${String(breadcrumbItem).replace(/\s+/g, "-")}`;
           const isLast = list.indexOf(breadcrumbItem) === list.length - 1;
-          
           return (
             <div key={uniqueKey} className="flex items-center">
               <Button
-                className="border-none !shadow-none outline-none bg-transparent p-0"
+                className="border-none bg-transparent p-0 !shadow-none outline-none"
                 onClick={() => {
                   if (list.indexOf(breadcrumbItem) === 1) {
                     router.push("/admin/dashboard");
@@ -135,16 +128,16 @@ const Breadcrumb = () => {
                 <div className="flex items-center">
                   <Typography
                     title={String(breadcrumbItem)}
-                    className={`text-xs xs:text-sm font-iranYekan mx-2 lowercase truncate whitespace-nowrap
+                    className={`mx-2 truncate whitespace-nowrap font-iranYekan text-xs lowercase xs:text-sm
                     ${isLast ? "text-primary_normal" : "text-link"}`}
                   >
                     {breadcrumbItem}
                   </Typography>
-                  {!isLast && (
-                    <div className="h-6 w-[14px] flex items-center justify-center">
-                      <ChevronLeftIcon className="w-3 h-3 stroke-gray-500" />
+                  {!isLast ? (
+                    <div className="flex h-6 w-[14px] items-center justify-center">
+                      <ChevronLeftIcon className="h-3 w-3 stroke-gray-500" />
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </Button>
             </div>
@@ -156,15 +149,13 @@ const Breadcrumb = () => {
 
   return (
     <>
-      <div className="clasor-breadcrumb flex justify-center items-center bg-transparent">
+      <div className="clasor-breadcrumb flex items-center justify-center bg-transparent">
         <BreadcrumbIcon className="h-5 w-5 fill-gray-400" />
       </div>
-      <div ref={containerRef} className="relative overflow-hidden flex-1 xs:max-w-[70%] max-w-full">
+      <div ref={containerRef} className="relative max-w-full flex-1 overflow-hidden xs:max-w-[70%]">
         <div
           ref={contentRef}
-          className={`whitespace-nowrap ${
-            shouldAnimate ? "animate-marquee" : ""
-          }`}
+          className={`whitespace-nowrap ${shouldAnimate ? "animate-marquee" : ""}`}
         >
           {renderBreadcrumbItems()}
         </div>

@@ -17,7 +17,7 @@ const InputAtom = ({
   return (
     <Input
       labelProps={{className: "before:content-none after:content-none",}}
-      containerProps={{className: "!min-w-0 flex-grow h-auto",}}
+      containerProps={{className: "!min-w-0 flex-grow h-auto !w-auto",}}
       type="text"
       {...register}
       className={`${className || ""}

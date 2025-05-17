@@ -3,6 +3,7 @@
 import Header from "@components/organisms/header";
 import React from "react";
 import Start from "../start";
+import SidebarMobileView from "@components/molecules/sidebarMobileView";
 
 interface IProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ const AdminPanelTemplate = ({ children }: IProps) => {
             {children}
           </div>
         </main>
+        <SidebarMobileView />
       </div>
     </Start>
   );

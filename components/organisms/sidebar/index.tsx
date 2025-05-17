@@ -146,7 +146,6 @@ const Sidebar = ({ children }: IProps) => {
           <div className="border-b-2 border-normal" />
         </>
       ) : null}
-
       <ListItem
         placeholder="sidebar-item"
         className="branch-management-sidebar dashboard p-2 hover:!bg-transparent"

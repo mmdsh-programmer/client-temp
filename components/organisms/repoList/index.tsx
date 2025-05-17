@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  repoAtom,
-  repoGroupingAtom,
-  repoSearchParamAtom,
-} from "@atom/repository";
+import { repoAtom, repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import AccessRepoList from "./accessRepoList";
-import AllRepoList from "./allRepoList";
 import BookmarkRepoList from "./bookmarkList";
 import { ERepoGrouping } from "@interface/enums";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
@@ -15,7 +10,6 @@ import RenderIf from "@components/atoms/renderIf";
 import RepoCreateDialogStepper from "../dialogs/repository/repoCreateDialogStepper";
 import PublishedRepoList from "./publishedRepoList";
 import RepoMenu from "@components/molecules/repoMenu";
-import RepoTypesCards from "../repoTypesCards";
 import RepoSearch from "@components/molecules/repoSearch";
 
 const RepoList = () => {
@@ -29,7 +23,7 @@ const RepoList = () => {
   }, []);
 
   return (
-    <div className="p-4 xs:p-0 flex flex-col gap-4 xs:gap-6">
+    <div className="flex flex-col gap-4 p-4 xs:gap-6 xs:p-0">
       <HeaderListTemplate
         header="مخزن‌ها"
         buttonText="ایجاد مخزن جدید"
@@ -39,12 +33,6 @@ const RepoList = () => {
         renderSearch={<RepoSearch />}
         className="repo-list-header"
       />
-      <RenderIf isTrue={getRepoGroup === ERepoGrouping.DASHBOARD}>
-        <>
-          <RepoTypesCards />
-          <AllRepoList />
-        </>
-      </RenderIf>
       <RenderIf isTrue={getRepoGroup === ERepoGrouping.MY_REPO}>
         <MyRepoList archived={false} />
       </RenderIf>
