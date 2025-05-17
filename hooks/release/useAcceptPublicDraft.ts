@@ -1,32 +1,35 @@
-import { publicLastVersionAction } from "@actions/document";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
-import { IActionError } from "@interface/app.interface";
-import { handleClientSideHookError } from "@utils/error";
 
-const usePublicLastVersion = () => {
+import { IActionError } from "@interface/app.interface";
+import { acceptPublicDraftAction } from "@actions/releaseDocs";
+import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
+
+const useAcceptPublicDraft = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["public-last-version"],
+    mutationKey: ["acceptPublicDraft"],
     mutationFn: async (values: {
       repoId: number;
-      documentId: number;
-      isDirectAccess?: boolean;
-      draftId?: number;
+      docId: number;
+      draftId: number;
       callBack?: () => void;
     }) => {
-      const { isDirectAccess, repoId, documentId, draftId } = values;
-      const response = await publicLastVersionAction(repoId, documentId, isDirectAccess, draftId);
+      const { repoId, docId, draftId } = values;
+      const response = await acceptPublicDraftAction(repoId, docId, draftId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId, documentId } = values;
+      const { callBack, repoId, docId} = values;
       queryClient.invalidateQueries({
-        queryKey: [`repo-${repoId}-document-${documentId}`],
+        queryKey: [`pending-version-${repoId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`version-list-${repoId}-${documentId}`],
+        queryKey: [`repo-${repoId}-document-${docId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`version-list-${repoId}-${docId}`],
       });
       callBack?.();
     },
@@ -36,4 +39,4 @@ const usePublicLastVersion = () => {
   });
 };
 
-export default usePublicLastVersion;
+export default useAcceptPublicDraft;

@@ -4,7 +4,7 @@ import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
-import { FaDateFromTimestamp } from "@utils/index";
+import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
@@ -23,8 +23,7 @@ const DraftRequests = () => {
   const setDocument = useSetRecoilState(selectedDocumentAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getSelectedVersion, setSelectedVersion] =
-    useRecoilState(selectedVersionAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
 
   const {
     data: getDraftRequest,
@@ -43,7 +42,7 @@ const DraftRequests = () => {
     getSelectedVersion ? getSelectedVersion!.documentId : undefined,
     !!getSelectedVersion?.id,
     true,
-    undefined
+    undefined,
   );
 
   const listLength = getDraftRequest?.pages[0].total;
@@ -62,7 +61,7 @@ const DraftRequests = () => {
   const renderDraftRequests = () => {
     if (isLoading) {
       return (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner className="h-8 w-8" color="purple" />
         </div>
       );
@@ -70,7 +69,7 @@ const DraftRequests = () => {
     if (listLength) {
       return (
         <>
-          <div className="repo-draft-request-table hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto mt-4">
+          <div className="repo-draft-request-table mt-4 hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
             <RequestTableView>
               {getDraftRequest?.pages.map((page) => {
                 return page.list.map((request) => {
@@ -92,10 +91,24 @@ const DraftRequests = () => {
                           className: "hidden xl:table-cell",
                         },
                         {
+                          data: (
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="flex flex-wrap gap-1">
+                                <div
+                                  className={`${
+                                    translateVersionStatus(request.status, request.state).className
+                                  }`}
+                                >
+                                  {translateVersionStatus(request.status, request.state).translated}
+                                </div>
+                              </div>
+                            </div>
+                          ),
+                        },
+                        {
                           data: request.creator?.name,
                           className: "hidden sm:table-cell",
                         },
-
                         {
                           data: <DraftRequestMenu request={request} />,
                           stopPropagation: true,
@@ -107,12 +120,17 @@ const DraftRequests = () => {
               })}
             </RequestTableView>
           </div>
-          <div className="repo-draft-request-mobile flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
+          <div className="repo-draft-request-mobile flex h-[calc(100vh-20px)] flex-col gap-3 overflow-auto rounded-lg">
             {getDraftRequest?.pages.map((page) => {
               return page.list.map((request) => {
-                return <RequestMobileView request={request}  onClick={() => {
-                  return setSelectedVersion(request);
-                }} />;
+                return (
+                  <RequestMobileView
+                    request={request}
+                    onClick={() => {
+                      return setSelectedVersion(request);
+                    }}
+                  />
+                );
               });
             })}
           </div>
@@ -123,14 +141,11 @@ const DraftRequests = () => {
   };
 
   return (
-    <div className="flex flex-col h-full gap-4">
+    <div className="flex h-full flex-col gap-4">
       {renderDraftRequests()}
       <RenderIf isTrue={!!hasNextPage}>
         <div className="m-auto">
-          <LoadMore
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
+          <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
         </div>
       </RenderIf>
     </div>

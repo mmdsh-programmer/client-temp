@@ -9,11 +9,7 @@ import {
   LastVersionIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import {
-  compareVersionAtom,
-  selectedVersionAtom,
-  versionModalListAtom,
-} from "@atom/version";
+import { compareVersionAtom, selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IVersion } from "@interface/version.interface";
@@ -25,7 +21,7 @@ import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
-import { EDocumentTypes } from "@interface/enums";
+import { EDocumentTypes, EDraftStatus, ERoles, EVersionStatus } from "@interface/enums";
 
 interface MenuItem {
   text: string;
@@ -45,18 +41,23 @@ type ModalType = {
   cancelPublic: boolean;
   lastVersion: boolean;
   confirmPublic: boolean;
+  acceptConfirmDraft: boolean;
+  rejectConfirmDraft: boolean;
+  acceptPublicVersion: boolean;
+  rejectPublicVersion: boolean;
+  acceptPublicDraft: boolean;
+  rejectPublicDraft: boolean;
 };
 
 const useVersionMenuList = (
   version: IVersion | null,
   lastVersion: IVersion | undefined,
-  toggleModal: (modalName: keyof ModalType, value: boolean) => void
+  toggleModal: (modalName: keyof ModalType, value: boolean) => void,
 ): MenuItem[] => {
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const setVersion = useSetRecoilState(selectedVersionAtom);
-  const [compareVersion, setCompareVersion] =
-    useRecoilState(compareVersionAtom);
+  const [compareVersion, setCompareVersion] = useRecoilState(compareVersionAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
@@ -67,14 +68,20 @@ const useVersionMenuList = (
   const { data: userInfo } = useGetUser();
 
   const adminOrOwnerRole = () => {
-    if (currentPath === "/admin/myDocuments") {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === getDocument?.repoId)
+    ) {
       return true;
     }
-    if (currentPath === "/admin/sharedDocuments") {
-      return (
-        getDocument?.accesses?.[0] === "admin" ||
-        getDocument?.accesses?.[0] === "owner"
-      );
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+    ) {
+      return getDocument?.accesses?.[0] === "admin";
+    }
+    if (currentPath === "/admin/dashboard" && getDocument?.accesses?.[0] === "admin") {
+      return true;
     }
     if (getRepo) {
       return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
@@ -86,10 +93,7 @@ const useVersionMenuList = (
       return true;
     }
     if (currentPath === "/admin/sharedDocuments") {
-      return (
-        getDocument?.accesses?.[0] === "viewer" ||
-        getDocument?.accesses?.[0] === "writer"
-      );
+      return getDocument?.accesses?.[0] === "viewer" || getDocument?.accesses?.[0] === "writer";
     }
     if (getRepo) {
       return getRepo?.roleName === "viewer" || getRepo?.roleName === "writer";
@@ -108,13 +112,12 @@ const useVersionMenuList = (
             setVersion(version);
           }
         },
-        className: "clone-version"
+        className: "clone-version",
       },
       {
         text: "ویرایش",
         icon: <EditIcon className="h-4 w-4" />,
-        disabled:
-          viewerRole() && version?.creator?.userName !== userInfo?.username,
+        disabled: viewerRole() && version?.creator?.userName !== userInfo?.username,
         onClick: () => {
           setVersion(version);
           setEditorMode("edit");
@@ -122,7 +125,7 @@ const useVersionMenuList = (
           setVersionModalList(false);
           setVersionData(null);
         },
-        className: "edit-version"
+        className: "edit-version",
       },
 
       {
@@ -154,7 +157,7 @@ const useVersionMenuList = (
             });
           }
         },
-        className: "compare-version"
+        className: "compare-version",
       },
       ...otherOption,
       {
@@ -170,7 +173,7 @@ const useVersionMenuList = (
             toast.success("هش مربوط به پیش نویس کپی شد.");
           }
         },
-        className: "copy-version-hash"
+        className: "copy-version-hash",
       },
       {
         text: "کپی آدرس اشتراک‌ گذاری",
@@ -180,13 +183,11 @@ const useVersionMenuList = (
             setVersion(version);
           }
           if (version) {
-            copy(
-              `${window.location.href}&versionId=${version.id}&versionState=${version.state}`
-            );
+            copy(`${window.location.href}&versionId=${version.id}&versionState=${version.state}`);
             toast.success("آدرس کپی شد.");
           }
         },
-        className: "copy-version-url"
+        className: "copy-version-url",
       },
       {
         text: version?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه",
@@ -198,14 +199,14 @@ const useVersionMenuList = (
             setVersion(version);
           }
         },
-        className: "delete-version"
+        className: "delete-version",
       },
     ];
   };
 
   const draftVersionOption = [
     {
-      text: "تایید و عمومی‌سازی پیش‌نویس" ,
+      text: "تایید و عمومی‌سازی پیش‌نویس",
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       disabled: viewerRole(),
       onClick: () => {
@@ -214,18 +215,14 @@ const useVersionMenuList = (
           setVersion(version);
         }
       },
-      className: "confirmPublic-draft"
+      className: "confirmPublic-draft",
     },
     {
       text: (() => {
         if (version?.status === "editing") {
-          return adminOrOwnerRole()
-            ? "تایید پیش نویس"
-            : "ارسال درخواست تایید نسخه به مدیر";
+          return adminOrOwnerRole() ? "تایید پیش نویس" : "ارسال درخواست تایید نسخه به مدیر";
         }
-        return adminOrOwnerRole()
-          ? "عدم تایید پیش نویس"
-          : "لغوارسال درخواست تایید پیش نویس";
+        return adminOrOwnerRole() ? "عدم تایید پیش نویس" : "لغوارسال درخواست تایید پیش نویس";
       })(),
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
@@ -237,9 +234,35 @@ const useVersionMenuList = (
           toggleModal("cancelConfirm", true);
         }
       },
-      className: (version?.status === "editing" && "confirm-version") || 
-      (version?.status === "pending" && "cancel-confirm-version")    },
-  ];
+      className:
+        (version?.status === "editing" && "confirm-version") ||
+        (version?.status === "pending" && "cancel-confirm-version"),
+    },
+    version?.status === EDraftStatus.pending && adminOrOwnerRole()
+      ? [
+          {
+            text: "تایید درخواست تایید شدن",
+            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            onClick: () => {
+              toggleModal("acceptConfirmDraft", true);
+              if (version) {
+                setVersion(version);
+              }
+            },
+          },
+          {
+            text: "رد درخواست تایید شدن",
+            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            onClick: () => {
+              toggleModal("rejectConfirmDraft", true);
+              if (version) {
+                setVersion(version);
+              }
+            },
+          },
+        ]
+      : null,
+  ].filter(Boolean) as MenuItem[];
 
   const privateVersionOption = [
     adminOrOwnerRole()
@@ -248,8 +271,7 @@ const useVersionMenuList = (
             if (version?.status === "private") {
               return "ارسال درخواست عمومی شدن";
             }
-            if (version?.status === "pending")
-              return "لغو درخواست عمومی شدن نسخه";
+            if (version?.status === "pending") return "لغو درخواست عمومی شدن نسخه";
           })(),
           icon: <GlobeIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
@@ -265,8 +287,9 @@ const useVersionMenuList = (
               }
             }
           },
-          className: (version?.status === "private" && "public-version") || 
-            (version?.status === "private" && "cancel-public-version")
+          className:
+            (version?.status === "private" && "public-version") ||
+            (version?.status === "private" && "cancel-public-version"),
         }
       : null,
     version?.id !== lastVersion?.id
@@ -279,8 +302,35 @@ const useVersionMenuList = (
               setVersion(version);
             }
           },
-          className: "set-last-version"
+          className: "set-last-version",
         }
+      : null,
+    version?.status === EVersionStatus.pending &&
+    (getRepo?.roleName === ERoles.owner ||
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === getDocument?.repoId))
+      ? [
+          {
+            text: "تایید درخواست عمومی شدن",
+            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            onClick: () => {
+              toggleModal("acceptPublicVersion", true);
+              if (version) {
+                setVersion(version);
+              }
+            },
+          },
+          {
+            text: "رد درخواست عمومی شدن",
+            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            onClick: () => {
+              toggleModal("rejectPublicVersion", true);
+              if (version) {
+                setVersion(version);
+              }
+            },
+          },
+        ]
       : null,
   ].filter(Boolean) as MenuItem[];
 
@@ -297,6 +347,33 @@ const useVersionMenuList = (
           },
         }
       : null,
+    ...(version?.status === EDraftStatus.waitForDirectPublic &&
+    (getRepo?.roleName === ERoles.owner ||
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === getDocument?.repoId))
+      ? [
+          {
+            text: "تایید درخواست تایید و عمومی شدن",
+            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            onClick: () => {
+              toggleModal("acceptPublicDraft", true);
+              if (version) {
+                setVersion(version);
+              }
+            },
+          },
+          {
+            text: "رد درخواست تایید و عمومی شدن",
+            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            onClick: () => {
+              toggleModal("rejectPublicDraft", true);
+              if (version) {
+                setVersion(version);
+              }
+            },
+          },
+        ]
+      : []),
   ].filter(Boolean) as MenuItem[];
 
   if (

@@ -21,6 +21,7 @@ export enum EDraftStatus {
   pending = "pending",
   rejected = "rejected",
   accepted = "accepted",
+  waitForDirectPublic= "waitForDirectPublic"
 }
 
 export enum EVersionStatus {

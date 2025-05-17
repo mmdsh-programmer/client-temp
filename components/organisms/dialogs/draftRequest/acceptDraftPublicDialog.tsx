@@ -3,21 +3,21 @@ import React from "react";
 import { repoAtom } from "@atom/repository";
 import { selectedRequestAtom } from "@atom/releaseDocs";
 import { toast } from "react-toastify";
-import useAcceptDraft from "@hooks/release/useAcceptDraft";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
+import useAcceptPublicDraft from "@hooks/release/useAcceptPublicDraft";
 import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const AcceptDraftDialog = ({ setOpen }: IProps) => {
+const AcceptPublicDraftDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getRequest = useRecoilValue(selectedRequestAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
 
-  const acceptDraft = useAcceptDraft();
+  const acceptPublicDraft = useAcceptPublicDraft();
 
   const { handleSubmit, clearErrors, reset } = useForm();
 
@@ -29,12 +29,12 @@ const AcceptDraftDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async () => {
     if (!getRepo || !getRequest || !getVersion) return;
-    acceptDraft.mutate({
+    acceptPublicDraft.mutate({
       repoId: getRepo.id,
       docId: getRequest ? getRequest?.documentId : getVersion.documentId,
       draftId: getRequest ? getRequest.id : getVersion.id,
       callBack: () => {
-        toast.success("پیش‌نویس با موفقیت تایید شد.");
+        toast.success("پیش‌نویس با موفقیت تایید و عمومی شد.");
         handleClose();
       },
     });
@@ -42,14 +42,14 @@ const AcceptDraftDialog = ({ setOpen }: IProps) => {
 
   return (
     <ConfirmDialog
-      isPending={acceptDraft.isPending}
-      dialogHeader="تایید پیش نویس"
+      isPending={acceptPublicDraft.isPending}
+      dialogHeader="تایید و عمومی سازی پیش نویس"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="repo-accept-draft-dialog"
+      className="repo-accept-public-draft-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
       backToMain
     >
-      آیا از تایید پیش نویس "
+      آیا از تایید و عمومی سازی پیش نویس "
       <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {getRequest ? getRequest?.versionNumber : getVersion?.versionNumber}
       </span>
@@ -58,4 +58,4 @@ const AcceptDraftDialog = ({ setOpen }: IProps) => {
   );
 };
 
-export default AcceptDraftDialog;
+export default AcceptPublicDraftDialog;

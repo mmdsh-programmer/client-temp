@@ -27,6 +27,7 @@ const RequestTableView = ({ children, onClick }: IProps) => {
               value: "تاریخ ویرایش",
               className: "hidden xl:table-cell",
             },
+            { key: "status", value: "وضعیت", className: "version-status" },
             {
               key: "creator",
               value: "نام سازنده",

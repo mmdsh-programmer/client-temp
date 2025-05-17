@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useRejectDraft from "@hooks/release/useRejectDraft";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -14,6 +15,7 @@ interface IProps {
 const RejectDraftDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getRequest = useRecoilValue(selectedRequestAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const rejectRequest = useRejectDraft();
 
@@ -26,11 +28,11 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !getRequest) return;
+    if (!getRepo || !getRequest || !getVersion) return;
     rejectRequest.mutate({
       repoId: getRepo.id,
-      docId: getRequest?.documentId,
-      draftId: getRequest.id,
+      docId: getRequest ? getRequest?.documentId : getVersion.documentId,
+      draftId: getRequest ? getRequest.id : getVersion.id,
       callBack: () => {
         toast.error("تایید پیش‌نویس رد شد.");
         handleClose();
@@ -46,10 +48,10 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="repo-reject-draft-dialog"
     >
-      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
         آیا از رد تایید پیش‌نویس "
-        <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
-          {getRequest?.versionNumber}
+        <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
+          {getRequest ? getRequest?.versionNumber : getVersion?.versionNumber}
         </span>
         " اطمینان دارید؟
       </div>

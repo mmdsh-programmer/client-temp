@@ -2783,6 +2783,28 @@ export const rejectVersion = async (accessToken: string, repoId: number, version
   }
 };
 
+export const acceptPublicDraft = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  draftId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/versions/${draftId}/directPublic`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 /// ////////////////////// PUBLIC LINK ///////////////////
 export const createRepoPublicLink = async (
   accessToken: string,

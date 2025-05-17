@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import useAcceptVersion from "@hooks/release/useAcceptVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -14,6 +15,7 @@ interface IProps {
 const RejectDraft = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getRequest = useRecoilValue(selectedRequestAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const acceptRequest = useAcceptVersion();
 
@@ -26,11 +28,11 @@ const RejectDraft = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !getRequest) return;
+    if (!getRepo || !getRequest || !getVersion) return;
     acceptRequest.mutate({
       repoId: getRepo.id,
-      docId: getRequest.documentId,
-      versionId: getRequest.id,
+      docId: getRequest ? getRequest?.documentId : getVersion.documentId,
+      versionId: getRequest ? getRequest.id : getVersion.id,
       callBack: () => {
         toast.success("نسخه با موفقیت عمومی شد.");
         handleClose();
@@ -47,8 +49,8 @@ const RejectDraft = ({ setOpen }: IProps) => {
       className="repo-accept-public-version-dialog"
     >
       آیا از عمومی سازی نسخه "
-      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
-        {getRequest?.versionNumber}
+      <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
+        {getRequest ? getRequest?.versionNumber : getVersion?.versionNumber}
       </span>
       " اطمینان دارید؟
     </ConfirmDialog>

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useRejectVersion from "@hooks/release/useRejectVersion";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -14,6 +15,7 @@ interface IProps {
 const RejectVarionDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getRequest = useRecoilValue(selectedRequestAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
 
   const rejectRequest = useRejectVersion();
 
@@ -26,10 +28,10 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !getRequest) return;
+    if (!getRepo || !getRequest || !getVersion) return;
     rejectRequest.mutate({
       repoId: getRepo.id,
-      versionId: getRequest.id,
+      versionId: getRequest ? getRequest.id : getVersion.id,
       callBack: () => {
         toast.error("عمومی سازی نسخه رد شد");
         handleClose();
@@ -45,10 +47,10 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="repo-reject-public-version-dialog"
     >
-      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
         آیا از رد عمومی سازی نسخه "
-        <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
-          {getRequest?.versionNumber}
+        <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
+          {getRequest ? getRequest?.versionNumber : getVersion?.versionNumber}
         </span>
         " اطمینان دارید؟
       </div>

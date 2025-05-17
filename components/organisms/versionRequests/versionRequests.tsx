@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-import { FaDateFromTimestamp } from "@utils/index";
+import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
@@ -23,8 +23,7 @@ const VersionRequests = () => {
   const setDocument = useSetRecoilState(selectedDocumentAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getSelectedVersion, setSelectedVersion] =
-    useRecoilState(selectedVersionAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
 
   const {
     data: getVersionRequest,
@@ -43,7 +42,7 @@ const VersionRequests = () => {
     getSelectedVersion ? getSelectedVersion!.documentId : undefined,
     !!getSelectedVersion?.id,
     true,
-    undefined
+    undefined,
   );
 
   const listLength = getVersionRequest?.pages[0].total;
@@ -62,7 +61,7 @@ const VersionRequests = () => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="w-full h-full flex justify-center items-center ">
+        <div className="flex h-full w-full items-center justify-center ">
           <Spinner className="h-8 w-8" color="purple" />
         </div>
       );
@@ -70,7 +69,7 @@ const VersionRequests = () => {
     if (listLength) {
       return (
         <>
-          <div className="repo-version-request-table hidden xs:block h-full min-h-[calc(100vh-200px)] overflow-y-auto ">
+          <div className="repo-version-request-table hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block ">
             <RequestTableView>
               {getVersionRequest?.pages.map((page) => {
                 return page.list.map((request) => {
@@ -92,6 +91,21 @@ const VersionRequests = () => {
                           className: "hidden xl:table-cell",
                         },
                         {
+                          data: (
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="flex flex-wrap gap-1">
+                                <div
+                                  className={`${
+                                    translateVersionStatus(request.status, request.state).className
+                                  }`}
+                                >
+                                  {translateVersionStatus(request.status, request.state).translated}
+                                </div>
+                              </div>
+                            </div>
+                          ),
+                        },
+                        {
                           data: request.creator?.name,
                           className: "hidden sm:table-cell",
                         },
@@ -109,7 +123,7 @@ const VersionRequests = () => {
               })}
             </RequestTableView>
           </div>
-          <div className="repo-version-request-mobile flex flex-col gap-3 rounded-lg h-[calc(100vh-20px)] overflow-auto">
+          <div className="repo-version-request-mobile flex h-[calc(100vh-20px)] flex-col gap-3 overflow-auto rounded-lg">
             {getVersionRequest?.pages.map((page) => {
               return page.list.map((request) => {
                 return (
@@ -130,14 +144,11 @@ const VersionRequests = () => {
   };
 
   return (
-    <div className="flex flex-col h-full gap-4 mt-4">
+    <div className="mt-4 flex h-full flex-col gap-4">
       {renderContent()}
       <RenderIf isTrue={!!hasNextPage}>
         <div className="m-auto">
-          <LoadMore
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
-          />
+          <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
         </div>
       </RenderIf>
     </div>
