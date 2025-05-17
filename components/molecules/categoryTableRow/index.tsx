@@ -66,12 +66,13 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
                 className: "!px-0",
                 stopPropagation: true,
               },
-          {
-            data: categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--",
-
-            title: String(categoryProp.order) || "--",
-            className: "hidden xl:table-cell text-center !px-0",
-          },
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--",
+                title: String(categoryProp.order) || "--",
+                className: "hidden xl:table-cell text-center !px-0",
+              },
           {
             data: (
               <div className="flex">
@@ -84,18 +85,23 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
                 </span>
               </div>
             ),
-            className: "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]"
+            className:
+              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]",
           },
-          {
-            data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
-            title: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
-            className: "!px-3",
-          },
-          {
-            data: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
-            title: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
-            className: "hidden xl:table-cell !px-3",
-          },
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+                title: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+                className: "!px-3",
+              },
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+                title: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+                className: "hidden xl:table-cell !px-3",
+              },
           {
             data: categoryProp.creator?.name || "--",
             title: categoryProp.creator?.name || "--",

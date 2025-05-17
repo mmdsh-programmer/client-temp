@@ -59,11 +59,13 @@ const TableView = ({
                           value: "انتخاب",
                           className: "categoryBulk !pr-2 !pl-0 !max-w-[50px] !w-[50px]",
                         },
-                    {
-                      key: "order",
-                      value: "اولویت",
-                      isSorted: true,
-                      sortAction: () => {
+                    currentPath === "/admin/dashboard"
+                      ? null
+                      : {
+                          key: "order",
+                          value: "اولویت",
+                          isSorted: true,
+                          sortAction: () => {
                         setSortParams((prevState) => {
                           return {
                             ...prevState,
@@ -89,11 +91,13 @@ const TableView = ({
                       className:
                         "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px] !px-2",
                     },
-                    {
-                      key: "createDate",
-                      value: "تاریخ ایجاد",
-                      isSorted: true,
-                      sortAction: () => {
+                    currentPath === "/admin/dashboard"
+                      ? null
+                      : {
+                          key: "createDate",
+                          value: "تاریخ ایجاد",
+                          isSorted: true,
+                          sortAction: () => {
                         setSortParams((prevState) => {
                           return {
                             ...prevState,
@@ -103,11 +107,13 @@ const TableView = ({
                       },
                       className: "!px-2 whitespace-nowrap",
                     },
-                    {
-                      key: "editDate",
-                      value: "تاریخ ویرایش",
-                      className: "hidden xl:table-cell whitespace-nowrap",
-                    },
+                    currentPath === "/admin/dashboard"
+                      ? null
+                      : {
+                          key: "editDate",
+                          value: "تاریخ ویرایش",
+                          className: "hidden xl:table-cell whitespace-nowrap",
+                        },
                     {
                       key: "creator",
                       value: "نام سازنده",

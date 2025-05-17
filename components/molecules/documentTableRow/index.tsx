@@ -94,11 +94,13 @@ const DocumentTableRow = ({ document }: IProps) => {
                 stopPropagation: true,
                 className: "!px-0",
               },
-          {
-            data: document.order || document.order === 0 ? document.order : "--",
-            title: String(document.order) || "--",
-            className: "hidden xl:table-cell text-center !px-0",
-          },
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: document.order || document.order === 0 ? document.order : "--",
+                title: String(document.order) || "--",
+                className: "hidden xl:table-cell text-center !px-0",
+              },
           {
             data: (
               <div className="flex">
@@ -114,20 +116,24 @@ const DocumentTableRow = ({ document }: IProps) => {
             className:
               "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]",
           },
-          {
-            data: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
-            title: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
-            className: "!px-3",
-          },
-          {
-            data: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
-            title: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
-            className: "hidden xl:table-cell !px-3",
-          },
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
+                title: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
+                className: "!px-3",
+              },
+          currentPath === "/admin/dashboard"
+            ? null
+            : {
+                data: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
+                title: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
+                className: "hidden xl:table-cell !px-3",
+              },
           {
             data: document.creator?.name || "--",
             title: document.creator?.name || "--",
-            className: "hidden lg:table-cell !px-3",
+            className: "hidden lg:table-cell !px-3 ",
           },
           {
             data: <DocumentMenu document={document} />,
