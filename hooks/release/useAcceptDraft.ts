@@ -21,9 +21,12 @@ const useAcceptDraft = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack, repoId, docId } = values;
       queryClient.invalidateQueries({
         queryKey: [`pending-draft-${repoId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`version-list-${repoId}-${docId}`],
       });
       callBack?.();
     },

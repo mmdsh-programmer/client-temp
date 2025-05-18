@@ -1,4 +1,5 @@
 import {
+  CancelVersionIcon,
   ComparisionIcon,
   ConfirmationVersionIcon,
   CopyIcon,
@@ -40,11 +41,9 @@ type ModalType = {
   public: boolean;
   cancelPublic: boolean;
   lastVersion: boolean;
-  confirmPublic: boolean;
+  publicDraft: boolean;
   acceptConfirmDraft: boolean;
-  rejectConfirmDraft: boolean;
   acceptPublicVersion: boolean;
-  rejectPublicVersion: boolean;
   acceptPublicDraft: boolean;
   rejectPublicDraft: boolean;
 };
@@ -210,7 +209,7 @@ const useVersionMenuList = (
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       disabled: viewerRole(),
       onClick: () => {
-        toggleModal("confirmPublic", true);
+        toggleModal("publicDraft", true);
         if (version) {
           setVersion(version);
         }
@@ -224,7 +223,12 @@ const useVersionMenuList = (
         }
         return adminOrOwnerRole() ? "عدم تایید پیش نویس" : "لغوارسال درخواست تایید پیش نویس";
       })(),
-      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
+      icon:
+        version?.status === "editing" ? (
+          <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />
+        ) : (
+          <CancelVersionIcon className="h-4 w-4 stroke-white" />
+        ),
       onClick: () => {
         if (version?.status === "editing" && version) {
           setVersion(version);
@@ -239,28 +243,16 @@ const useVersionMenuList = (
         (version?.status === "pending" && "cancel-confirm-version"),
     },
     version?.status === EDraftStatus.pending && adminOrOwnerRole()
-      ? [
-          {
-            text: "تایید درخواست تایید شدن",
-            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
-            onClick: () => {
-              toggleModal("acceptConfirmDraft", true);
-              if (version) {
-                setVersion(version);
-              }
-            },
+      ? {
+          text: "تایید درخواست تایید پیش نویس",
+          icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+          onClick: () => {
+            toggleModal("acceptConfirmDraft", true);
+            if (version) {
+              setVersion(version);
+            }
           },
-          {
-            text: "رد درخواست تایید شدن",
-            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
-            onClick: () => {
-              toggleModal("rejectConfirmDraft", true);
-              if (version) {
-                setVersion(version);
-              }
-            },
-          },
-        ]
+        }
       : null,
   ].filter(Boolean) as MenuItem[];
 
@@ -273,7 +265,11 @@ const useVersionMenuList = (
             }
             if (version?.status === "pending") return "لغو درخواست عمومی شدن نسخه";
           })(),
-          icon: <GlobeIcon className="h-4 w-4 fill-icon-active" />,
+          icon: version?.status === "private" ? (
+            <GlobeIcon className="h-4 w-4 fill-icon-active" />
+          ) : (
+            <CancelVersionIcon className="h-4 w-4 stroke-white" />
+          ),
           onClick: () => {
             if (version?.status === "private" && adminOrOwnerRole()) {
               toggleModal("public", true);
@@ -309,28 +305,16 @@ const useVersionMenuList = (
     (getRepo?.roleName === ERoles.owner ||
       currentPath === "/admin/myDocuments" ||
       (currentPath === "/admin/dashboard" && userInfo?.repository.id === getDocument?.repoId))
-      ? [
-          {
-            text: "تایید درخواست عمومی شدن",
-            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
-            onClick: () => {
-              toggleModal("acceptPublicVersion", true);
-              if (version) {
-                setVersion(version);
-              }
-            },
+      ? {
+          text: "تایید درخواست عمومی شدن",
+          icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+          onClick: () => {
+            toggleModal("acceptPublicVersion", true);
+            if (version) {
+              setVersion(version);
+            }
           },
-          {
-            text: "رد درخواست عمومی شدن",
-            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
-            onClick: () => {
-              toggleModal("rejectPublicVersion", true);
-              if (version) {
-                setVersion(version);
-              }
-            },
-          },
-        ]
+        }
       : null,
   ].filter(Boolean) as MenuItem[];
 
@@ -354,7 +338,7 @@ const useVersionMenuList = (
       ? [
           {
             text: "تایید درخواست تایید و عمومی شدن",
-            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
             onClick: () => {
               toggleModal("acceptPublicDraft", true);
               if (version) {
@@ -364,7 +348,7 @@ const useVersionMenuList = (
           },
           {
             text: "رد درخواست تایید و عمومی شدن",
-            icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+            icon: <CancelVersionIcon className="h-4 w-4 stroke-white" />,
             onClick: () => {
               toggleModal("rejectPublicDraft", true);
               if (version) {

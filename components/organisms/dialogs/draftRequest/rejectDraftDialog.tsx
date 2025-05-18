@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
 import useRejectDraft from "@hooks/release/useRejectDraft";
 import { selectedVersionAtom } from "@atom/version";
+import { selectedDocumentAtom } from "@atom/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -16,6 +17,7 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const getRequest = useRecoilValue(selectedRequestAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
+  const getDocument = useRecoilValue(selectedDocumentAtom);
 
   const rejectRequest = useRejectDraft();
 
@@ -28,11 +30,11 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !getRequest || !getVersion) return;
+    if (!getRepo) return;
     rejectRequest.mutate({
       repoId: getRepo.id,
-      docId: getRequest ? getRequest?.documentId : getVersion.documentId,
-      draftId: getRequest ? getRequest.id : getVersion.id,
+      docId: getRequest ? getRequest?.documentId : getDocument!.id,
+      draftId: getRequest ? getRequest.id : getVersion!.id,
       callBack: () => {
         toast.error("تایید پیش‌نویس رد شد.");
         handleClose();

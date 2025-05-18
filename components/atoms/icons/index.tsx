@@ -247,6 +247,21 @@ export const CancelIcon = (props: IProps) => {
   );
 };
 
+export const CancelVersionIcon = (props: IProps) => {
+  const { className, stroke } = props;
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill="none">
+      <path
+        d="M15.25 4.25V6.63C15.25 7.8 16.2 8.75 17.37 8.75H19.75M11.22 20.25H6.75C5.09 20.25 3.75 18.91 3.75 17.25V6.75C3.75 5.09 5.09 3.75 6.75 3.75H14.76C15.56 3.75 16.32 4.07 16.88 4.63L19.37 7.12C19.93 7.68 20.25 8.45 20.25 9.24V11.26M20.2744 15.7493L18.0126 18.0067M18.0126 18.0067L15.7507 20.2641M18.0126 18.0067L20.2744 20.2641M18.0126 18.0067L15.7507 15.7493"
+        stroke={stroke}
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};
+
 export const CardIcon = (props: IProps) => {
   const { className } = props;
   return (

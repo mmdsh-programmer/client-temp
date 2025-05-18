@@ -64,7 +64,7 @@ const Editor = ({ setOpen }: IProps) => {
     error: lastVersionError,
     isSuccess: lastVersionIsSuccess,
   } = useGetLastVersion(
-    repoId,
+    repoId!,
     getSelectedDocument!.id,
     currentPath === "/admin/sharedDocuments" ||
       (currentPath === "/admin/dashboard" &&
@@ -73,7 +73,7 @@ const Editor = ({ setOpen }: IProps) => {
   );
 
   const { data, isLoading, error, isSuccess, refetch } = useGetVersion(
-    repoId,
+    repoId!,
     getSelectedDocument!.id,
     getSelectedVersion ? getSelectedVersion.id : getLastVersion?.id,
     getSelectedVersion ? getSelectedVersion.state : getLastVersion?.state, // state
@@ -190,7 +190,7 @@ const Editor = ({ setOpen }: IProps) => {
       return (
         <BlockDraft version={data}>
           <PublicKeyInfo
-            repoId={repoId}
+            repoId={repoId!}
             publicKeyId={
               getSelectedDocument?.publicKeyId ? +getSelectedDocument.publicKeyId : undefined
             }

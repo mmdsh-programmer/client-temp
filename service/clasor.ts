@@ -2667,6 +2667,7 @@ export const getPendingDrafts = async (
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
+          directPublic: false,
           offset,
           size,
         },

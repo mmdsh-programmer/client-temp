@@ -29,11 +29,9 @@ const VersionMenu = ({ lastVersion, version, showDrawer }: IProps) => {
     public: false,
     cancelPublic: false,
     lastVersion: false,
-    confirmPublic: false,
+    publicDraft: false,
     acceptConfirmDraft: false,
-    rejectConfirmDraft: false,
     acceptPublicVersion: false,
-    rejectPublicVersion: false,
     acceptPublicDraft: false,
     rejectPublicDraft: false,
   });

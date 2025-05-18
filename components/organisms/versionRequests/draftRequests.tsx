@@ -2,7 +2,6 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useEffect } from "react";
 import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";

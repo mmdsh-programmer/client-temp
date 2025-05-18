@@ -14,8 +14,6 @@ import ConfirmPublicDraftDialog from "@components/organisms/dialogs/version/conf
 import AcceptDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftDialog";
 import AcceptVersionDialog from "@components/organisms/dialogs/versionRequest/acceptVersionDialog";
 import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftPublicDialog";
-import RejectDraftDialog from "@components/organisms/dialogs/draftRequest/rejectDraftDialog";
-import RejectVarionDialog from "@components/organisms/dialogs/versionRequest/rejectVersionDialog";
 
 interface IVersionDialogsProps {
   modals: {
@@ -28,11 +26,9 @@ interface IVersionDialogsProps {
     public: boolean;
     cancelPublic: boolean;
     lastVersion: boolean;
-    confirmPublic: boolean;
+    publicDraft: boolean;
     acceptConfirmDraft: boolean;
-    rejectConfirmDraft: boolean;
     acceptPublicVersion: boolean;
-    rejectPublicVersion: boolean;
     acceptPublicDraft: boolean;
     rejectPublicDraft: boolean;
   };
@@ -101,10 +97,10 @@ const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
           }}
         />
       ) : null}
-      {modals.confirmPublic ? (
+      {modals.publicDraft ? (
         <ConfirmPublicDraftDialog
           setOpen={() => {
-            return setModalState("confirmPublic", false);
+            return setModalState("publicDraft", false);
           }}
         />
       ) : null}
@@ -129,22 +125,8 @@ const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
           }}
         />
       ) : null}
-      {modals.rejectConfirmDraft ? (
-        <RejectDraftDialog
-          setOpen={() => {
-            return setModalState("rejectConfirmDraft", false);
-          }}
-        />
-      ) : null}
-      {modals.rejectPublicVersion ? (
-        <RejectVarionDialog
-          setOpen={() => {
-            return setModalState("rejectPublicVersion", false);
-          }}
-        />
-      ) : null}
       {modals.rejectPublicDraft ? (
-        <RejectDraftDialog
+        <VersionCancelConfirmDialog
           setOpen={() => {
             return setModalState("rejectPublicDraft", false);
           }}
