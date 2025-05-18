@@ -57,13 +57,15 @@ export const renameFileAction = async (
 export const createUploadLinkAction = async (
   resourceId: number,
   userGroupHash: string,
+  isPublic?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
     const response = await createUploadLink(
       userInfo.access_token,
       resourceId,
-      userGroupHash
+      userGroupHash,
+      isPublic
     );
 
     return response;

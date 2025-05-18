@@ -40,3 +40,48 @@ export interface IDomainTagList {
   size: number;
   total: number;
 }
+
+export interface IDomainTheme {
+  name: string;
+  description?: string;
+  logo?: string | null;
+  mainColor: string;
+  primaryLight: string;
+  error: string;
+  successNormal: string;
+  info: string;
+  criticalNormal: string;
+  iconActive: string;
+  textPrimary: string;
+  textSecondary: string;
+  borderNormal: string;
+  bgCardBackground: string;
+  useDomainTag: boolean;
+  hasLikes: boolean;
+  hasComments: boolean;
+  hasQuestions: boolean;
+  needsAdminApprovalForComments: boolean;
+  needsAdminApprovalForQuestions: boolean;
+  allowQuestionReplies: boolean;
+}
+
+export interface ContentType {
+  projectName?: string;
+  projectDescription?: string;
+  logo?: string | null;
+  theme?: string;
+  settings?: {
+    hasLikes?: boolean;
+    hasComments?: boolean;
+    hasQuestions?: boolean;
+    needsAdminApprovalForComments?: boolean;
+    needsAdminApprovalForQuestions?: boolean;
+    allowQuestionReplies?: boolean;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface ThemeColors {
+  [key: string]: string;
+} 
