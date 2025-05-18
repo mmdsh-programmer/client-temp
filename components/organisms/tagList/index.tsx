@@ -2,7 +2,6 @@ import { Button, Spinner } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import ChipMolecule from "@components/molecules/chip";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
 import TagDelete from "../dialogs/tag/tagDeleteDialog";
@@ -21,16 +20,17 @@ const TagList = ({ repoId }: { repoId: number }) => {
   const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
   const getRepo = useRecoilValue(repoAtom);
 
-  
   const { data: userInfo } = useGetUser();
-  const { data: getDomainTags, isLoading: isLoadingDomainTags } =
-    useGetDomainTags(2, !!userInfo?.domainConfig.useDomainTag);
-  
-    const { data: getTags, isLoading: isLoadingRepoTags } = useGetTags(
+  const { data: getDomainTags, isLoading: isLoadingDomainTags } = useGetDomainTags(
+    2,
+    !!userInfo?.domainConfig.useDomainTag,
+  );
+
+  const { data: getTags, isLoading: isLoadingRepoTags } = useGetTags(
     repoId,
     undefined,
     2,
-    !userInfo?.domainConfig.useDomainTag
+    !userInfo?.domainConfig.useDomainTag,
   );
 
   const adminRole =
@@ -70,19 +70,15 @@ const TagList = ({ repoId }: { repoId: number }) => {
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="tag-item bg-gray-50 h-6 px-2 text-primary_normal max-w-[150px] "
-                  actionIcon={userInfo?.domainConfig.useDomainTag && 
-                    (userInfo?.domainRole === "owner" || 
-                    userInfo.domainRole === "participant") || 
-                    !userInfo?.domainConfig.useDomainTag && adminRole ? <TagMenu tag={tag} /> : null}
+                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal "
+                  actionIcon={
+                    !userInfo?.domainConfig.useDomainTag && adminRole ? <TagMenu tag={tag} /> : null
+                  }
                 />
               );
             });
           })}
-          {userInfo?.domainConfig.useDomainTag && 
-                    (userInfo?.domainRole === "owner" || 
-                    userInfo.domainRole === "participant")
-          || (!userInfo?.domainConfig.useDomainTag && adminRole) ? (
+          {!userInfo?.domainConfig.useDomainTag && adminRole ? (
             <div
               onClick={() => {
                 setOpenTagCreateModal(true);
@@ -90,7 +86,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
             >
               <ChipMolecule
                 value="افزودن تگ"
-                className="createTag border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
+                className="createTag h-6 border-[1px] border-dashed border-normal bg-primary px-2 text-placeholder"
               />
             </div>
           ) : null}
@@ -100,7 +96,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
                 setOpenTagsModal(true);
               }}
               placeholder=""
-              className="all-tags__button shadow-none hover:shadow-none p-0 font-iranYekan bg-transparent text-gray-400 text-[10px]"
+              className="all-tags__button bg-transparent p-0 font-iranYekan text-[10px] text-gray-400 shadow-none hover:shadow-none"
             >
               نمایش بیشتر
             </Button>

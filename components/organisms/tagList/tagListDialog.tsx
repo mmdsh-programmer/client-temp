@@ -1,9 +1,4 @@
-import {
-  Button,
-  DialogBody,
-  Spinner,
-  Typography,
-} from "@material-tailwind/react";
+import { Button, DialogBody, Spinner, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { deleteTagAtom, editTagAtom, tagDrawerAtom } from "@atom/tag";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -33,22 +28,23 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
 
   const { data: userInfo } = useGetUser();
-  const { data: getDomainTags, isLoading: isLoadingDomainTags } =
-    useGetDomainTags(20, !!userInfo?.domainConfig.useDomainTag);
+  const { data: getDomainTags, isLoading: isLoadingDomainTags } = useGetDomainTags(
+    20,
+    !!userInfo?.domainConfig.useDomainTag,
+  );
 
   const { data: getTags, isLoading: isLoadingRepoTags } = useGetTags(
     repoId,
     undefined,
     20,
-    !userInfo?.domainConfig.useDomainTag
+    !userInfo?.domainConfig.useDomainTag,
   );
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const adminRole =
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
+  const adminRole = getRepo?.roleName === "owner" || getRepo?.roleName === "admin";
 
   const isLoading = isLoadingRepoTags || isLoadingDomainTags;
   const tags = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
@@ -65,7 +61,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
 
   return (
     <InfoDialog dialogHeader="لیست تگ‌ها" setOpen={handleClose} className="tag-list-dialog">
-      <DialogBody placeholder="dialog body" className="dialog-body p-0 h-full">
+      <DialogBody placeholder="dialog body" className="dialog-body h-full p-0">
         <div className="h-full px-5 py-3 xs:p-6">
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
@@ -73,19 +69,19 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
             </div>
           ) : (
             <>
-                <div className="tag-list hidden xs:flex flex-wrap gap-2">
-                  {(!!userInfo?.domainConfig.useDomainTag && (userInfo?.domainRole === "owner" ||
-                    userInfo.domainRole === "participant"))
-                    || (!userInfo?.domainConfig.useDomainTag && adminRole) ? <div
-                      onClick={() => {
-                        setOpenTagCreateModal(true);
-                      }}
-                    >
+              <div className="tag-list hidden flex-wrap gap-2 xs:flex">
+                {!userInfo?.domainConfig.useDomainTag && adminRole ? (
+                  <div
+                    onClick={() => {
+                      setOpenTagCreateModal(true);
+                    }}
+                  >
                     <ChipMolecule
                       value="افزودن تگ"
-                      className="create-tag border-[1px] h-6 px-2 border-dashed border-normal bg-primary text-placeholder"
+                      className="create-tag h-6 border-[1px] border-dashed border-normal bg-primary px-2 text-placeholder"
                     />
-                  </div> : null}
+                  </div>
+                ) : null}
                 {tags?.pages.map((page) => {
                   return page.list.map((tag) => {
                     return (
@@ -93,48 +89,50 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                         <ChipMolecule
                           value={tag.name}
                           key={tag.id}
-                          className="tag-item bg-gray-50 h-6 px-2 text-primary_normal max-w-[150px]"
-                          actionIcon={userInfo?.domainConfig.useDomainTag && (userInfo?.domainRole === "owner" ||
-                            userInfo.domainRole === "participant")
-                            || (!userInfo?.domainConfig.useDomainTag && adminRole) ? <TagMenu tag={tag} /> : null}
+                          className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal"
+                          actionIcon={
+                            !userInfo?.domainConfig.useDomainTag && adminRole ? (
+                              <TagMenu tag={tag} />
+                            ) : null
+                          }
                         />
                       </div>
                     );
                   });
                 })}
               </div>
-              <div className="tag-list xs:hidden flex flex-col h-full justify-between">
-                <ul className="h-full flex flex-col gap-y-2">
+              <div className="tag-list flex h-full flex-col justify-between xs:hidden">
+                <ul className="flex h-full flex-col gap-y-2">
                   {tags?.pages.map((page) => {
                     return page.list.map((tag) => {
                       return (
                         <li
                           key={tag.id}
-                          className="tag-item flex py-1 px-2 rounded-lg justify-between items-center  hover:bg-gray-50"
+                          className="tag-item flex items-center justify-between rounded-lg px-2 py-1  hover:bg-gray-50"
                         >
-                          <Typography className="label_l2 text-primary_normal cursor-default lowercase">
+                          <Typography className="label_l2 cursor-default lowercase text-primary_normal">
                             {tag.name}
                           </Typography>
-                          {userInfo?.domainConfig.useDomainTag && (userInfo?.domainRole === "owner" ||
-                            userInfo.domainRole === "participant")
-                            || (!userInfo?.domainConfig.useDomainTag && adminRole) ? <TagMenu tag={tag} /> : null}
+                          {!userInfo?.domainConfig.useDomainTag && adminRole ? (
+                            <TagMenu tag={tag} />
+                          ) : null}
                         </li>
                       );
                     });
                   })}
                 </ul>
-                <div className="w-full self-end">
-                  <Button
-                    className="create-tag w-full bg-secondary hover:bg-secondary active:bg-secondary"
-                    onClick={() => {
-                      setOpenTagCreateModal(true);
-                    }}
-                  >
-                    <Typography className="text__label__button text-white">
-                      افزودن تگ
-                    </Typography>
-                  </Button>
-                </div>
+                {!userInfo?.domainConfig.useDomainTag && adminRole ? (
+                  <div className="w-full self-end">
+                    <Button
+                      className="create-tag w-full bg-secondary hover:bg-secondary active:bg-secondary"
+                      onClick={() => {
+                        setOpenTagCreateModal(true);
+                      }}
+                    >
+                      <Typography className="text__label__button text-white">افزودن تگ</Typography>
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </>
           )}

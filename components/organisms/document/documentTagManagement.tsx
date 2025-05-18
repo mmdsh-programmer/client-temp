@@ -122,11 +122,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
           handleSelect={handleTagSelect}
           handleChange={setTagName}
           setOpen={setOpen}
-          createIcon={
-            (userInfo?.domainConfig.useDomainTag &&
-              (userInfo?.domainRole === "owner" || userInfo.domainRole === "participant")) ||
-            (!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole())
-          }
+          createIcon={!userInfo?.domainConfig.useDomainTag && adminOrOwnerRole()}
         />
       ) : null}
       <DocumentTagList tagList={getTempDocTag} />
