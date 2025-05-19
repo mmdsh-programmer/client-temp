@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-
 import DomainParticipant from "../domainParticipant";
 import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
 import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import useGetUser from "@hooks/auth/useGetUser";
-import Settings from "@components/organisms/settings";
 import DomainTags from "../domainTags";
+import Settings from "../settings";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -71,7 +70,7 @@ const DomainConfig = () => {
           </div>
         ) : null,
     },
-    userInfo?.domainConfig.useDomainTag
+    userInfo?.domainConfig?.useDomainTag
       ? {
           tabTitle: ETabs.TAGS,
           tabContent: activeTab === ETabs.TAGS ? <DomainTags /> : null,
@@ -90,7 +89,7 @@ const DomainConfig = () => {
       headerClassName="!bg-white !py-0 border-b-normal !border-b-2 rounded-none"
       activeTabClassName="!rounded-none !border-t-0 border-x-0 border-b-purple-normal !border-b-2 !shadow-none !text-purple-normal !py-3"
       tabClassName="!border-none !h-auto !py-3 !px-4"
-      tabContentClassName={`${activeTab === ETabs.SETTING ? "overflow-y-auto" : "overflow-hidden"}`}
+      tabContentClassName="overflow-auto"
     />
   );
 };

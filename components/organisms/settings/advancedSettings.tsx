@@ -14,7 +14,7 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
         name="useDomainTag"
         checked={domain.useDomainTag}
         onChange={onCheckboxChange}
-        color="purple"
+        color="deep-purple"
         crossOrigin=""
         containerProps={{ className: "p-1" }}
         labelProps={{ className: "mr-2" }}
@@ -24,7 +24,7 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
         name="hasLikes"
         checked={domain.hasLikes}
         onChange={onCheckboxChange}
-        color="purple"
+        color="deep-purple"
         crossOrigin=""
         containerProps={{ className: "p-1" }}
         labelProps={{ className: "mr-2" }}
@@ -35,7 +35,7 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           name="hasComments"
           checked={domain.hasComments}
           onChange={onCheckboxChange}
-          color="purple"
+          color="deep-purple"
           crossOrigin=""
           containerProps={{ className: "p-1" }}
           labelProps={{ className: "mr-2" }}
@@ -46,13 +46,11 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
             name="needsAdminApprovalForComments"
             checked={domain.needsAdminApprovalForComments}
             onChange={onCheckboxChange}
-            color="purple"
+            color="deep-purple"
             crossOrigin=""
             containerProps={{ className: "p-1" }}
             labelProps={{ className: "mr-2" }}
-            label={
-              <Typography className="form_label">آیا نیاز به تایید ادمین دارد؟</Typography>
-            }
+            label={<Typography className="form_label">آیا نیاز به تایید ادمین دارد؟</Typography>}
           />
         </div>
       </div>
@@ -61,7 +59,7 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           name="hasQuestions"
           checked={domain.hasQuestions}
           onChange={onCheckboxChange}
-          color="purple"
+          color="deep-purple"
           crossOrigin=""
           containerProps={{ className: "p-1" }}
           labelProps={{ className: "mr-2" }}
@@ -72,26 +70,22 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
             name="needsAdminApprovalForQuestions"
             checked={domain.needsAdminApprovalForQuestions}
             onChange={onCheckboxChange}
-            color="purple"
+            color="deep-purple"
             crossOrigin=""
             containerProps={{ className: "p-1" }}
             labelProps={{ className: "mr-2" }}
-            label={
-              <Typography className="form_label">آیا نیاز به تایید ادمین دارد؟</Typography>
-            }
+            label={<Typography className="form_label">آیا نیاز به تایید ادمین دارد؟</Typography>}
           />
           <Checkbox
             name="allowQuestionReplies"
             checked={domain.allowQuestionReplies}
             onChange={onCheckboxChange}
-            color="purple"
+            color="deep-purple"
             crossOrigin=""
             containerProps={{ className: "p-1" }}
             labelProps={{ className: "mr-2" }}
             label={
-              <Typography className="form_label">
-                آیا امکان پاسخ به سوال وجود دارد؟
-              </Typography>
+              <Typography className="form_label">آیا امکان پاسخ به سوال وجود دارد؟</Typography>
             }
           />
         </div>
@@ -100,4 +94,4 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
   );
 };
 
-export default AdvancedSettings; 
+export default AdvancedSettings;

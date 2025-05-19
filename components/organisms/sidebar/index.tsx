@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import {
   Accordion,
   AccordionBody,
@@ -9,7 +10,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ChevronLeftIcon, DashboardIcon, UserGroupIcon } from "@components/atoms/icons";
-import React, { useState } from "react";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
@@ -40,6 +40,11 @@ const Sidebar = ({ children }: IProps) => {
     return setOpen(open === value ? 0 : value);
   };
 
+  const navigateTo = (path, onClick) => {
+    router.push(path);
+    if (onClick) onClick();
+  };
+
   return (
     <aside className="sidebar hidden h-screen w-[250px] max-w-fit flex-col border-l-2 border-l-gray-100 bg-white md:flex">
       <div className="flex h-[80px] items-center justify-center px-2 py-4 ">{children}</div>
@@ -57,10 +62,11 @@ const Sidebar = ({ children }: IProps) => {
                    ${getSidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"}
                   hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
-            router.push("/admin/dashboard");
-            setRepoGroup(ERepoGrouping.DASHBOARD);
-            setSidebarSection(ESidebarSection.DASHBOARD);
-            setSearchParam(null);
+            navigateTo("/admin/dashboard", () => {
+              setRepoGroup(ERepoGrouping.DASHBOARD);
+              setSidebarSection(ESidebarSection.DASHBOARD);
+              setSearchParam(null);
+            });
           }}
         >
           <DashboardIcon className="h-6 w-6" />
@@ -131,10 +137,11 @@ const Sidebar = ({ children }: IProps) => {
                      ${getSidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""}
                   hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
               onClick={() => {
-                router.push("/admin/domainManagement");
-                setSidebarSection(ESidebarSection.DOMAIN_MANAGEMENT);
-                setRepoGroup(null);
-                setSearchParam(null);
+                navigateTo("/admin/domainManagement", () => {
+                  setSidebarSection(ESidebarSection.DOMAIN_MANAGEMENT);
+                  setRepoGroup(null);
+                  setSearchParam(null);
+                });
               }}
             >
               <UserGroupIcon className="h-6 w-6" />
@@ -157,10 +164,11 @@ const Sidebar = ({ children }: IProps) => {
                      ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""}
                   hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
-            router.push("/admin/branchManagement");
-            setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
-            setRepoGroup(null);
-            setSearchParam(null);
+            navigateTo("/admin/branchManagement", () => {
+              setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
+              setRepoGroup(null);
+              setSearchParam(null);
+            });
           }}
         >
           <UserGroupIcon className="h-6 w-6" />

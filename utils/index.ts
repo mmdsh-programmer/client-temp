@@ -47,7 +47,7 @@ export const translateVersionStatus = (status: string, state: string) => {
     case "private":
     case "accepted":
       translated = "تایید شده";
-      className = "label bg-gray-50 text-success-normal ";
+      className = "label bg-gray-50 !text-success";
 
       break;
     case "editing":
@@ -59,22 +59,26 @@ export const translateVersionStatus = (status: string, state: string) => {
       translated = "در انتظار تایید";
       if (state === "draft") {
         translated = "در انتظار تایید مدیر مخزن";
+        className = "label !text-hint !bg-gray-100";
+        break;
       } else if (state === "version") {
         translated = "در انتظار عمومی شدن";
+        className = "label !text-secondary !bg-gray-100";
+        break;
       }
-      break;
     case "waitForDirectPublic":
       translated = "در انتظار تایید و عمومی شدن";
-      className = "label !bg-primary-normal text-white ";
+      className = "label !bg-gray-100 !text-primary";
 
       break;
     case "rejected":
       translated = "رد شده";
+      className = "label text-white !bg-error";
       break;
 
     case "public":
       translated = "عمومی";
-      className = "label text-info bg-gray-50";
+      className = "label text-secondary bg-info";
       break;
     default:
       translated = status;

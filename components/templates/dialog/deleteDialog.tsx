@@ -65,7 +65,7 @@ const DeleteDialog = ({
           انصراف
         </CancelButton>
         <LoadingButton
-          className="dialog-footer__submit-button bg-critical-normal hover:bg-critical-normal active:bg-critical-normal"
+          className="dialog-footer__submit-button bg-error hover:bg-error active:bg-error"
           onClick={onSubmit}
           loading={isPending}
           isPrimary={false}

@@ -31,7 +31,9 @@ const DomainTags = () => {
   return (
     <div className="p-5">
       {isLoading ? (
-        <Spinner color="purple" className="" />
+        <div className="flex w-full items-center justify-center">
+          <Spinner color="deep-purple" className="" />
+        </div>
       ) : (
         <div className="tag-list flex flex-wrap gap-2">
           {tags?.pages.map((page) => {

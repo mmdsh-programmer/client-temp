@@ -33,11 +33,11 @@ export interface IUserInfo {
     createDate: number;
   };
   domainConfig: {
-    useDomainTag: boolean
+    useDomainTag: boolean;
   };
   domainRole: string | null;
   metadata: string | null;
-};
+}
 
 export type TUserData = Pick<
   IUserInfo,
@@ -305,13 +305,19 @@ export interface IDomainMetadata {
   content: string;
   cryptoInitVectorKey: string;
   cryptoSecretKey: string;
-  enablePublishPage: false;
+  enablePublishPage: boolean;
   participants: {
     ssoId: number;
     userName: string;
     name: string;
   }[];
   useDomainTag: boolean;
+  hasLikes: boolean;
+  hasComments: boolean;
+  hasQuestions: boolean;
+  needsAdminApprovalForComments: boolean;
+  needsAdminApprovalForQuestions: boolean;
+  allowQuestionReplies: boolean;
 }
 
 export interface ICustomPostData {

@@ -10,11 +10,17 @@ module.exports = withMT({
     "./node_modules/clasor-content-preview/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/not-found.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: ["class", "[data-mode=\"dark\"]"],
+  darkMode: ["class", '[data-mode="dark"]'],
   theme: {
     extend: {
       colors: {
         "landing-text-color": "#3D3456",
+        orange: {
+          100: "var(--orange-100)",
+        },
+        "blue-green": {
+          100: "var(--blue-green)",
+        },
         gray: {
           50: "var(--gray-50)", // cancel background
           100: "var(--gray-100)",
@@ -26,17 +32,17 @@ module.exports = withMT({
           800: "var(--gray-800)", // icon-active
           900: "var(--gray-900)", // text-primary
         },
+
         purple: {
           normal: "var(--primary-normal)",
           light: "var(--primary-light)",
-          500: "var(--primary-normal)",
         },
         icon: {
           active: "var(--icon-active)",
           hover: "var(--icon-hover)",
         },
-        critical: { 
-          normal: "var(--critical-normal)" 
+        critical: {
+          normal: "var(--critical-normal)",
         },
         error: "var(--error)",
         primary: {
@@ -45,11 +51,9 @@ module.exports = withMT({
         },
         success: {
           normal: "var(--success-normal)",
-          secondary: "var(--success-secondary)",
         },
         info: {
           normal: "var(--info)",
-          secondary: "var(--info-secondary)",
         },
         stroke: {
           primary: "var(--stroke-primary)",
@@ -60,28 +64,25 @@ module.exports = withMT({
         "primary-light": "var(--primary-light)",
         "primary-normal": "var(--primary-normal)",
         secondary: "var(--bg-secondary-color)",
-        "secondary-light": "var(--bg-secondary-light-color)",
         tertiary: "var(--bg-tertiary-color)",
-        "tertiary-light": "var(--bg-tertiary-light-color)",
-        "card-background": "var(--bg-card-background-color)",
       },
       borderColor: {
         normal: "var(--border-normal)",
-        secondary: "var(--bg-secondary-color)",
       },
       iconColor: {
-        active: "var(--icon-active)"
+        active: "var(--icon-active)",
+        hover: "var(--icon-hover)",
       },
       textColor: {
         primary: "var(--text-primary)",
         secondary: "var(--text-secondary)",
         hint: "var(--text-hint)",
         placeholder: "var(--text-placeholder)",
-        disabled: "var(--text-disabled)",
         primary_normal: "var(--text-primary-normal)",
         link: "var(--text-link)",
+        success: "var(--success-normal)",
       },
-      fontFamily: {iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans],},
+      fontFamily: { iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans] },
       screens: {
         mobile: "300",
         xs: "480px",
@@ -102,10 +103,10 @@ module.exports = withMT({
         "2": "2 2 auto",
       },
       letterSpacing: {
-        tightest: "0.13px"
+        tightest: "0.13px",
       },
-      backdropBlur:{
-        sm: "0"
+      backdropBlur: {
+        sm: "0",
       },
       animation: {
         marquee: "marquee 20s linear infinite",

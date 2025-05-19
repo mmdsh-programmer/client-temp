@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ArchiveIcon,
   BookmarkRepoIcon,
@@ -8,14 +9,12 @@ import {
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
 import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
 import { ERepoGrouping } from "@interface/enums";
 import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
-import React from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SidebarRepoList = () => {
-  const router = useRouter();
+  
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
   const [, setSidebarSection] = useRecoilState(sidebarSectionAtom);
@@ -25,45 +24,50 @@ const SidebarRepoList = () => {
       text: ERepoGrouping.MY_REPO,
       icon: <MyFolderIcon className="h-6 w-6 stroke-icon-hover" />,
       className: "myRepoList",
+      path: "/admin/myRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.MY_REPO);
-        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
+        setSidebarSection(ESidebarSection.MY_REPOS);
       },
     },
     {
       text: ERepoGrouping.ACCESS_REPO,
       icon: <FolderShareIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myAccessList",
+      path: "/admin/accessRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ACCESS_REPO);
-        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
+        setSidebarSection(ESidebarSection.SHARED_REPOS);
       },
     },
     {
       text: ERepoGrouping.BOOKMARK_REPO,
       icon: <BookmarkRepoIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myBookmarkList",
+      path: "/admin/bookmarkRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
-        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
+        setSidebarSection(ESidebarSection.BOOKMARK_REPOS);
       },
     },
     {
       text: ERepoGrouping.ARCHIVE_REPO,
       icon: <ArchiveIcon className="h-6 w-6 stroke-0 fill-icon-hover" />,
       className: "myArchiveList",
+      path: "/admin/archiveRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
-        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
+        setSidebarSection(ESidebarSection.ARCHIVE_REPOS);
       },
     },
     {
       text: ERepoGrouping.PUBLISHED_REPO,
       icon: <PublishIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myPublishedRepoList",
+      path: "/admin/publishedRepoList",
       onClick: () => {
         setRepoGroup(ERepoGrouping.PUBLISHED_REPO);
-        setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
+        setSidebarSection(ESidebarSection.PUBLISHED_REPOS);
       },
     },
   ];
@@ -77,9 +81,10 @@ const SidebarRepoList = () => {
             placeholder="sidebar-item"
             className={`p-0 ${item.className}`}
           >
-            <Button
-              placeholder="sidebar-button"
-              className={`bg-transparent justify-start w-full 
+            <Link href={item.path} className="w-full">
+              <Button
+                placeholder="sidebar-button"
+                className={`bg-transparent justify-start w-full 
                      text-link gap-1 px-3 h-[44px]
                 ${
                   getRepoGroup === item.text
@@ -87,17 +92,17 @@ const SidebarRepoList = () => {
                     : ""
                 }
                   hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
-              onClick={() => {
-                router.push("/admin/dashboard");
-                item.onClick();
-                setSearchParam(null);
-              }}
-            >
-              {item.icon}
-              <Typography placeholder="sidebar-text" className="title_t3">
-                {item.text}
-              </Typography>
-            </Button>
+                onClick={() => {
+                  item.onClick();
+                  setSearchParam(null);
+                }}
+              >
+                {item.icon}
+                <Typography placeholder="sidebar-text" className="title_t3">
+                  {item.text}
+                </Typography>
+              </Button>
+            </Link>
           </ListItem>
         );
       })}

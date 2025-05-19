@@ -1,20 +1,39 @@
 "use client";
 
+import React, { useEffect } from "react";
 import Branch from "@components/organisms/branch";
 import BranchInfo from "@components/organisms/branch/branchInfo";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { repoAtom } from "@atom/repository";
+import { useResetRecoilState } from "recoil";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { versionModalListAtom } from "@atom/version";
 
 const BranchManagementPage = () => {
+  const resetRepo = useResetRecoilState(repoAtom);
+  const resetCategory = useResetRecoilState(categoryAtom);
+  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
+  const resetDocument = useResetRecoilState(selectedDocumentAtom);
+  const resetDocumentShow = useResetRecoilState(documentShowAtom);
+  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+
+  useEffect(() => {
+    resetRepo();
+    resetCategory();
+    resetCategoryShow();
+    resetDocument();
+    resetDocumentShow();
+    resetShowVersionList();
+  }, []);
+
   return (
-    <div className="flex flex-col h-full gap-6 overflow-hidden">
-      <div className="category-header flex justify-between items-center px-4 xs:px-0">
-        <Typography className="title_t1 text-primary_normal">
-          مدیریت شعبات
-        </Typography>
+    <div className="flex h-full flex-col gap-6 overflow-hidden">
+      <div className="category-header flex items-center justify-between px-4 xs:px-0">
+        <Typography className="title_t1 text-primary_normal">مدیریت شعبات</Typography>
       </div>
-      <div className="flex justify-evenly gap-2 h-[calc(100%-50px)]">
-        <div className="basis-1/5 w-[30%] max-w-[260px] h-full">
+      <div className="flex h-[calc(100%-50px)] justify-evenly gap-2">
+        <div className="h-full w-[30%] max-w-[260px] basis-1/5">
           <Branch />
         </div>
         <div className="basis-4/5 overflow-x-auto">

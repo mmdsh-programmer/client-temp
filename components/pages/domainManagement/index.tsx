@@ -4,11 +4,10 @@ import React, { useEffect } from "react";
 import DomainConfig from "@components/organisms/domain";
 import { Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useResetRecoilState } from "recoil";
 import { categoryAtom, categoryShowAtom } from "@atom/category";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { versionModalListAtom } from "@atom/version";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 
 const DomainManagementPage = () => {
   const resetRepo = useResetRecoilState(repoAtom);
@@ -17,7 +16,6 @@ const DomainManagementPage = () => {
   const resetDocument = useResetRecoilState(selectedDocumentAtom);
   const resetDocumentShow = useResetRecoilState(documentShowAtom);
   const resetShowVersionList = useResetRecoilState(versionModalListAtom);
-  const setSidebarSection = useSetRecoilState(sidebarSectionAtom);
 
   useEffect(() => {
     resetRepo();
@@ -26,7 +24,6 @@ const DomainManagementPage = () => {
     resetDocument();
     resetDocumentShow();
     resetShowVersionList();
-    setSidebarSection(ESidebarSection.DOMAIN_MANAGEMENT);
   }, []);
 
   return (

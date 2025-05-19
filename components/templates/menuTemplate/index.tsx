@@ -22,10 +22,10 @@ export interface IProps {
 const MenuTemplate = ({ menuList, setOpenDrawer, icon, className }: IProps) => {
   return (
     <>
-      <div className="hidden xs:flex justify-end">
+      <div className="desktop-menu hidden xs:flex justify-end">
         <DesktopMenu menuList={menuList} icon={icon} className={className} />
       </div>
-      <div className="xs:hidden flex">
+      <div className="mobile-menu xs:hidden flex">
         <MobileMenu
           setOpenDrawer={setOpenDrawer}
           icon={icon}

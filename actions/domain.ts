@@ -50,17 +50,34 @@ export const updateCustomPostByDomainAction = async (
     if (!domain) {
       throw new Error("Domain is not found");
     }
+
+    // Make sure all checkbox values are explicitly sent as booleans
+    const booleanCheckboxValues = {
+      useDomainTag: useDomainTag === true,
+      hasLikes: hasLikes === true,
+      hasComments: hasComments === true,
+      hasQuestions: hasQuestions === true,
+      needsAdminApprovalForComments: needsAdminApprovalForComments === true,
+      needsAdminApprovalForQuestions: needsAdminApprovalForQuestions === true,
+      allowQuestionReplies: allowQuestionReplies === true,
+    };
+
+    console.log("updateCustomPostByDomainAction sending values:", {
+      content,
+      ...booleanCheckboxValues
+    });
+
     const response = await updateCustomPostByDomain(
       userInfo.access_token,
       domain,
       content,
-      useDomainTag,
-      hasLikes,
-      hasComments,
-      hasQuestions,
-      needsAdminApprovalForComments,
-      needsAdminApprovalForQuestions,
-      allowQuestionReplies,
+      booleanCheckboxValues.useDomainTag,
+      booleanCheckboxValues.hasLikes,
+      booleanCheckboxValues.hasComments,
+      booleanCheckboxValues.hasQuestions,
+      booleanCheckboxValues.needsAdminApprovalForComments,
+      booleanCheckboxValues.needsAdminApprovalForQuestions,
+      booleanCheckboxValues.allowQuestionReplies,
     );
     return response;
   } catch (error) {
