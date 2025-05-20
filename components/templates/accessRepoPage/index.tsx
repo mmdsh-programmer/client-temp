@@ -1,23 +1,33 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { ERepoGrouping } from "@interface/enums";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
-import { repoGroupingAtom } from "@atom/repository";
-import AccessRepoList from "@components/organisms/repoList/accessRepoList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import RepoSearch from "@components/molecules/repoSearch";
 import RepoMenu from "@components/molecules/repoMenu";
+import { repoAtom } from "@atom/repository";
+import { useResetRecoilState } from "recoil";
+import { categoryAtom, categoryShowAtom } from "@atom/category";
+import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { versionModalListAtom } from "@atom/version";
+import AccessRepoList from "@components/organisms/repoList/accessRepoList";
+import RepoCreateDialogStepper from "@components/organisms/dialogs/repository/repoCreateDialogStepper";
 
 const AccessRepoPage = () => {
-  const [, setSidebarSection] = useRecoilState(sidebarSectionAtom);
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
+  const resetRepo = useResetRecoilState(repoAtom);
+  const resetCategory = useResetRecoilState(categoryAtom);
+  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
+  const resetDocument = useResetRecoilState(selectedDocumentAtom);
+  const resetDocumentShow = useResetRecoilState(documentShowAtom);
+  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
 
   useEffect(() => {
-    setSidebarSection(ESidebarSection.SHARED_REPOS);
-    setRepoGroup(ERepoGrouping.ACCESS_REPO);
-  }, [setSidebarSection, setRepoGroup]);
+    resetRepo();
+    resetCategory();
+    resetCategoryShow();
+    resetDocument();
+    resetDocumentShow();
+    resetShowVersionList();
+  }, []);
 
   return (
     <div className="page-container flex h-full w-full flex-col">
@@ -27,6 +37,9 @@ const AccessRepoPage = () => {
             header="مخزن‌های اشتراکی"
             buttonText="ایجاد مخزن جدید"
             renderSearch={<RepoSearch />}
+            renderDialog={(close: () => void) => {
+              return <RepoCreateDialogStepper close={close} />;
+            }}
             className="repo-list-header"
           />
           <AccessRepoList />

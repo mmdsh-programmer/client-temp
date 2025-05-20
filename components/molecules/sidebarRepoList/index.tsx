@@ -14,10 +14,9 @@ import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 import Link from "next/link";
 
 const SidebarRepoList = () => {
-  
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-  const [, setSidebarSection] = useRecoilState(sidebarSectionAtom);
+  const setSidebarSection = useSetRecoilState(sidebarSectionAtom);
 
   const sidebarList = [
     {
@@ -52,7 +51,7 @@ const SidebarRepoList = () => {
     },
     {
       text: ERepoGrouping.ARCHIVE_REPO,
-      icon: <ArchiveIcon className="h-6 w-6 stroke-0 fill-icon-hover" />,
+      icon: <ArchiveIcon className="h-6 w-6 fill-icon-hover stroke-0" />,
       className: "myArchiveList",
       path: "/admin/archiveRepoList",
       onClick: () => {
@@ -73,7 +72,7 @@ const SidebarRepoList = () => {
   ];
 
   return (
-    <List placeholder="sidebar-list" className="min-w-[200px] p-0 gap-1">
+    <List placeholder="sidebar-list" className="min-w-[200px] gap-1 p-0">
       {sidebarList.map((item) => {
         return (
           <ListItem
@@ -84,14 +83,14 @@ const SidebarRepoList = () => {
             <Link href={item.path} className="w-full">
               <Button
                 placeholder="sidebar-button"
-                className={`bg-transparent justify-start w-full 
-                     text-link gap-1 px-3 h-[44px]
+                className={`h-[44px] w-full justify-start 
+                     gap-1 bg-transparent px-3 text-link
                 ${
                   getRepoGroup === item.text
                     ? "bg-gray-100 !stroke-icon-active text-primary_normal"
                     : ""
                 }
-                  hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
+                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
                 onClick={() => {
                   item.onClick();
                   setSearchParam(null);
