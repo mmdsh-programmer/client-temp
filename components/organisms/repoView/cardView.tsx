@@ -1,7 +1,7 @@
-import React from "react";
 import EmptyList from "@components/molecules/emptyList";
 import { IRepoView } from "@interface/repo.interface";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCardMode from "@components/molecules/repoCardMode";
 import { Spinner } from "@material-tailwind/react";
@@ -18,9 +18,9 @@ const CardView = ({
   return (
     <div className="min-h-[calc(100vh-340px)]">
         {/* eslint-disable-next-line no-nested-ternary */}
-        {!isLoading ? (
+        {isLoading ? (
           <div className="w-full min-h-[calc(100vh-340px)] h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="purple" />
+            <Spinner className="h-8 w-8" color="deep-purple" />
           </div>
         ) : listLength ? (
           <>
