@@ -1,7 +1,7 @@
-import React from "react";
 import EmptyList from "@components/molecules/emptyList";
 import { IRepoView } from "@interface/repo.interface";
 import LoadMore from "@components/molecules/loadMore";
+import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCardMode from "@components/molecules/repoCardMode";
 import { Spinner } from "@material-tailwind/react";
