@@ -19,9 +19,9 @@ const Settings = () => {
 
   const { register, handleSubmit, setValue, watch, reset } = useForm<IDomainTheme>({
     defaultValues: {
-      name: "",
-      description: "",
-      logo: null,
+    name: "",
+    description: "",
+    logo: null,
       // colors
       mainColor: "",
       primaryLight: "",
@@ -63,8 +63,8 @@ const Settings = () => {
       hasLikes: false,
       hasComments: false,
       hasQuestions: false,
-      needsAdminApprovalForComments: false,
-      needsAdminApprovalForQuestions: false,
+    needsAdminApprovalForComments: false,
+    needsAdminApprovalForQuestions: false,
       allowQuestionReplies: false,
     },
   });
@@ -270,10 +270,10 @@ const Settings = () => {
           </div>
         </div>
         <div className="flex flex-col justify-between">
-          <div className="flex flex-col gap-5">
-            <Typography className="title_t2">تنظیمات پیشرفته</Typography>
+        <div className="flex flex-col gap-5">
+          <Typography className="title_t2">تنظیمات پیشرفته</Typography>
             <AdvancedSettings domain={formValues} onCheckboxChange={handleCheckboxChange} />
-          </div>
+              </div>
           <div className="flex w-full justify-end">
             <LoadingButton
               className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"

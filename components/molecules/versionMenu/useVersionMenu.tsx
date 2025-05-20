@@ -227,7 +227,7 @@ const useVersionMenuList = (
         version?.status === "editing" ? (
           <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />
         ) : (
-          <CancelVersionIcon className="h-4 w-4 stroke-white" />
+          <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
         ),
       onClick: () => {
         if (version?.status === "editing" && version) {
@@ -268,7 +268,7 @@ const useVersionMenuList = (
           icon: version?.status === "private" ? (
             <GlobeIcon className="h-4 w-4 fill-icon-active" />
           ) : (
-            <CancelVersionIcon className="h-4 w-4 stroke-white" />
+            <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
           ),
           onClick: () => {
             if (version?.status === "private" && adminOrOwnerRole()) {
@@ -348,7 +348,7 @@ const useVersionMenuList = (
           },
           {
             text: "رد درخواست تایید و عمومی شدن",
-            icon: <CancelVersionIcon className="h-4 w-4 stroke-white" />,
+            icon: <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />,
             onClick: () => {
               toggleModal("rejectPublicDraft", true);
               if (version) {
