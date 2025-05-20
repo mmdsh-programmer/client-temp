@@ -20,7 +20,7 @@ const CardView = ({
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="w-full min-h-[calc(100vh-340px)] h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="purple" />
+            <Spinner className="h-8 w-8" color="deep-purple" />
           </div>
         ) : listLength ? (
           <>
