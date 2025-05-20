@@ -9,7 +9,6 @@ import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import useRepoId from "@hooks/custom/useRepoId";
-import DownloadPDF from "@components/molecules/downloadPDF";
 import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
@@ -69,7 +68,6 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
       </div>
       <Typography className="editor-header__title title_t1">{dialogHeader}</Typography>
       <div className="hidden items-center gap-2 xs:flex">
-        {editorMode === "preview" || editorMode === "temporaryPreview" ? <DownloadPDF /> : null}
         <CloseButton onClose={handleClose} disabled={disabled} />
       </div>
     </>

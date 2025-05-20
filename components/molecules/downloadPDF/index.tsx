@@ -62,7 +62,7 @@ const DownloadPDF = () => {
   return (
     <>
       <Button
-        className="download-pdf__button bg-transparent p-0 mt-1"
+        className="download-pdf__button bg-transparent p-0"
         title="دانلود pdf"
         onClick={handleDownloadFile}
         disabled={loading || !getSelectedDocument}
@@ -70,7 +70,7 @@ const DownloadPDF = () => {
         {loading ? (
           <div className="spinner" />
         ) : (
-          <PDFIcon className="w-4 h-4" />
+          <PDFIcon className="w-5 h-5 fill-white" />
         )}
       </Button>
       <a hidden ref={linkRef} download>

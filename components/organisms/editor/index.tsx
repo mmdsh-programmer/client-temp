@@ -154,7 +154,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       ) : null}
       <div className={`${listDrawer ? "w-0 sm:w-[calc(100vw-300px)]" : "w-full"} h-full`}>
         {renderContent()}
-        {version ? <FloatingButtons version={version} /> : null}
+        {version ? <FloatingButtons version={version} editorRef={getEditorConfig().ref} /> : null}
       </div>
       {openTemplateDialog ? (
         <TemplateContentDialog setOpen={setOpenTemplateDialog} editorRef={getEditorConfig().ref} />

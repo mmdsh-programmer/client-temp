@@ -12,7 +12,7 @@ import LikeAndDislike from "../like&dislike";
 import RenderIf from "@components/atoms/renderIf";
 import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
 import VersionPublicDialog from "../dialogs/version/versionPublicDialog";
-import { editorListDrawerAtom } from "@atom/editor";
+import { editorListDrawerAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue } from "recoil";
 import VersionCancelConfirmDialog from "../dialogs/version/versionCancelConfirmDialog";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -24,17 +24,22 @@ import VersionCancelPublicDialog from "../dialogs/version/versionCancelPublicDia
 import AcceptVersionDialog from "../dialogs/versionRequest/acceptVersionDialog";
 import AcceptPublicDraftDialog from "../dialogs/draftRequest/acceptDraftPublicDialog";
 import ConfirmPublicDraftDialog from "../dialogs/version/confirmPublicDraftDialog";
-import { ERoles } from "@interface/enums";
+import { ERoles, EDocumentTypes } from "@interface/enums";
+import DownloadPDF from "@components/molecules/downloadPDF";
+import DownloadExcel from "@components/molecules/downloadExcel";
+import { IRemoteEditorRef } from "clasor-remote-editor";
 
 interface IProps {
   version: IVersion;
+  editorRef: React.RefObject<IRemoteEditorRef>;
 }
 
-const FloatingButtons = ({ version }: IProps) => {
+const FloatingButtons = ({ version, editorRef }: IProps) => {
   const currentPath = usePathname();
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const [getListDrawer, setListDrawer] = useRecoilState(editorListDrawerAtom);
+  const editorMode = useRecoilValue(editorModeAtom);
 
   const [draftConfirmModal, setDraftConfirmModal] = useState(false);
   const [draftAcceptConfirmModal, setDraftAcceptConfirmModal] = useState(false);
@@ -98,6 +103,12 @@ const FloatingButtons = ({ version }: IProps) => {
         </Button>
         {openSpeedDial ? (
           <>
+            {(editorMode === "preview" || editorMode === "temporaryPreview") &&
+              (getDocument?.contentType === EDocumentTypes.excel ? (
+                <DownloadExcel editorRef={editorRef} version={version} />
+              ) : (
+                <DownloadPDF />
+              ))}
             <Button
               className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
               onClick={() => {
