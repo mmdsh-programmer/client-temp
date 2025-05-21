@@ -58,7 +58,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     >
       {getVersionHook.isFetching || getCompareHook.isFetching ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-10 w-10" color="purple" />
+          <Spinner className="h-10 w-10" color="deep-purple" />
         </div>
       ) : (
         <DiffViewerTable

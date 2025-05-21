@@ -54,7 +54,7 @@ const RepoInvite = () => {
   };
 
   return isFetchingRoles ? (
-    <Spinner color="purple" />
+    <Spinner color="deep-purple" />
   ) : (
     <form className="repo-invite-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">
@@ -89,7 +89,7 @@ const RepoInvite = () => {
             })}
           </select>
           {isPending ? (
-            <Spinner className="h-5 w-5" color="purple" />
+            <Spinner className="h-5 w-5" color="deep-purple" />
           ) : (
             <button
               disabled={isPending}

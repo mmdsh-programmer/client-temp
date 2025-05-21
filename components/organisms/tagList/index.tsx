@@ -61,7 +61,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
   return (
     <div className="">
       {isLoading ? (
-        <Spinner color="purple" className="" />
+        <Spinner color="deep-purple" className="" />
       ) : (
         <div className="tag-list flex flex-wrap gap-2">
           {tags?.pages.map((page) => {

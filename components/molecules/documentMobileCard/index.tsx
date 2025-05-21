@@ -73,7 +73,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
           {currentPath === "/admin/dashboard" ||
           currentPath === "/admin/sharedDocuments" ? null : (
             <Checkbox
-              color="purple"
+              color="deep-purple"
               containerProps={{
                 className: "p-[2px]",
               }}

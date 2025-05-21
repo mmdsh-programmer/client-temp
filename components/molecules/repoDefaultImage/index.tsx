@@ -19,7 +19,7 @@ const RepoDefaultImage = ({ imageHash, className }: IProps) => {
   const { data: getUserInfo, isFetching } = useGetUser();
 
   if (isFetching) {
-    return <Spinner className="h-5 w-5" color="purple" />;
+    return <Spinner className="h-5 w-5" color="deep-purple" />;
   }
 
   if (!imageHash) {

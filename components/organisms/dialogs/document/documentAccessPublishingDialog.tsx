@@ -135,7 +135,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
               className: "p-0 ml-2",
             }}
             className="document-white-list__radio-button radio !hover:shadow-none"
-            color="purple"
+            color="deep-purple"
             name="type"
             label="لیست سفید"
             crossOrigin=""
@@ -151,7 +151,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
               className: "p-0 ml-2",
             }}
             className="document-black-list__radio-button !hover:shadow-none"
-            color="purple"
+            color="deep-purple"
             name="type"
             label="لیست سیاه"
             crossOrigin=""
@@ -161,7 +161,7 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
           />
         </div>
         {isLoading ? (
-          <Spinner className="w-6 h-6" color="purple" />
+          <Spinner className="w-6 h-6" color="deep-purple" />
         ) : (
           renderList()
         )}

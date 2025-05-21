@@ -33,7 +33,7 @@ const PublishTinyLink = () => {
   if (createTinyLinkHook.isPending) {
     return (
       <div className="flex items-center w-fit">
-        <Spinner className="h-5 w-5" color="purple" />
+        <Spinner className="h-5 w-5" color="deep-purple" />
       </div>
     );
   }

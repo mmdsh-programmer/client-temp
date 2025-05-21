@@ -46,7 +46,7 @@ const BranchList = ({ branchId }: IProps) => {
     <>
       {isLoading ? (
         <div className="w-full flex justify-center h-3 my-3">
-          <Spinner className="w-4 h-4" color="purple" />
+          <Spinner className="w-4 h-4" color="deep-purple" />
         </div>
       ) : (
         branchList?.pages.map((page) => {

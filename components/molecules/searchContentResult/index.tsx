@@ -43,7 +43,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
       </RenderIf>
       {isLoading ? (
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="purple" />
+          <Spinner className="h-5 w-5" color="deep-purple" />
         </div>
       ) : (
         <ul className="flex flex-col gap-2" role="menu">
@@ -70,7 +70,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
           })}
           {isFetchingNextPage && (
             <div className="w-full flex justify-center pt-4">
-              <Spinner className="h-5 w-5" color="purple" />
+              <Spinner className="h-5 w-5" color="deep-purple" />
             </div>
           )}
         </ul>

@@ -55,7 +55,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
             : {
                 data: (
                   <Checkbox
-                    color="purple"
+                    color="deep-purple"
                     crossOrigin=""
                     onChange={handleCheckItem}
                     checked={getBulkItems.some((bulkItem) => {

@@ -122,7 +122,7 @@ const SelectBox = ({
                       onChange={() => {
                         return handleOptionChange(option.value);
                       }}
-                      color="purple"
+                      color="deep-purple"
                       crossOrigin=""
                     />
                     <Typography className="select_option__text truncate text-right text-primary_normal">

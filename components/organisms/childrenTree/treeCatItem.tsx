@@ -85,7 +85,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
             containerProps={{ className: "!p-0" }}
             className="transition-all hover:scale-105 hover:before:opacity-0"
             ripple={false}
-            color="purple"
+            color="deep-purple"
             crossOrigin=""
             onChange={handleSelectDestinationCat}
             checked={getCategoryMoveDest?.id === catItem.id}

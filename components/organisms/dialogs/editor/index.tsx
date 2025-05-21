@@ -182,7 +182,7 @@ const Editor = ({ setOpen }: IProps) => {
     if (isLoading) {
       return (
         <div className="main flex h-full w-full items-center justify-center text-center">
-          <Spinner className="h-5 w-5 " color="purple" />
+          <Spinner className="h-5 w-5 " color="deep-purple" />
         </div>
       );
     }

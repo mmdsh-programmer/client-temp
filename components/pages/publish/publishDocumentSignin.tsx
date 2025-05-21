@@ -14,7 +14,7 @@ const PublishDocumentSignin = () => {
   return (
     <section className="w-full h-full grid place-content-center place-items-center">
       <div className="w-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="purple" />
+        <Spinner className="h-8 w-8" color="deep-purple" />
       </div>
       <p className="mt-4 text-xl">در حال دریافت اطلاعات کاربری</p>
     </section>

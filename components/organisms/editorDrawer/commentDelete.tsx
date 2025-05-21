@@ -24,7 +24,7 @@ const CommentDelete = ({ comment, version }: IProps) => {
   return (
     <Button className="bg-transparent p-0" onClick={handleDeletecomment}>
       {deleteComment.isPending ? (
-        <Spinner className="h-4 w-4" color="purple" />
+        <Spinner className="h-4 w-4" color="deep-purple" />
       ) : (
         <DeleteIcon className="h-4 w-4 fill-icon-hover" />
       )}

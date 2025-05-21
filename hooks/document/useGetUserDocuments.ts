@@ -23,6 +23,9 @@ const useGetUserDocuments = (
   if(reportType){
     queryKey.push("personal-documents");
   }
+  if (filters) {
+    queryKey.push(`filters=${JSON.stringify(filters)}`);
+  }
   return useInfiniteQuery({
     queryKey,
     queryFn: async ({ signal, pageParam }) => {

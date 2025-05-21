@@ -49,7 +49,7 @@ const SidebarCategoryItem = ({
     <>
       {isLoading ? (
         <div className="w-full flex justify-center py-2">
-          <Spinner className="h-5 w-5" color="purple" />
+          <Spinner className="h-5 w-5" color="deep-purple" />
         </div>
       ) : (
         categoryChildren?.pages.map((page) => {
@@ -117,7 +117,7 @@ const SidebarCategoryItem = ({
 
       {isFetchingNextPage && (
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="purple" />
+          <Spinner className="h-5 w-5" color="deep-purple" />
         </div>
       )}
     </>

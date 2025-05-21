@@ -12,6 +12,7 @@ import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
+import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,8 +21,7 @@ interface IProps {
 const AdvancedFilter = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const currentPath = usePathname();
-  const [getFilterChildren, setFilterChildren] =
-    useRecoilState(filterChildrenAtom);
+  const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
   const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
 
   const [searchType, setSearchType] = useState<IOption>({
@@ -50,11 +50,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
     repoId()!,
     currentPath === "/admin/sharedDocuments",
     30,
-    !!repoId()
+    !!repoId(),
   );
+  const { data: getDomainTags } = useGetDomainTags(30, !!userInfo?.domainConfig.useDomainTag);
+  const tagList = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
 
   const tagOptions =
-    getTags?.pages[0].list.map((tag) => {
+    tagList?.pages[0].list.map((tag) => {
       return { label: tag.name, value: tag.id };
     }) || [];
 
@@ -119,6 +121,10 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
       isTemplate: moreFilter.includes("template"),
       bookmarked: moreFilter.includes("bookmarked"),
       title: searchTitle,
+      type: {
+        document: type.includes("document"),
+        category: type.includes("category"),
+      },
     };
 
     if (searchType.value === "currentCategory") {
@@ -132,15 +138,15 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
   };
 
   return (
-    <div className="flex flex-wrap h-full xs:h-auto justify-between bg-primary xs:bg-gray-50">
-      <div className="flex flex-wrap w-full gap-5 py-4 px-5 items-start">
-        <div className="w-full flex pb-4 gap-2 h-[calc(100%-60px)]">
+    <div className="flex h-full flex-wrap justify-between bg-primary xs:h-auto xs:bg-gray-50">
+      <div className="flex w-full flex-wrap items-start gap-5 px-5 py-4">
+        <div className="flex h-[calc(100%-60px)] w-full gap-2 pb-4">
           <div className="flex w-full flex-col gap-4 xs:gap-2">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 items-end grid-rows-[min-content] flex-grow gap-x-2 gap-y-4 pb-2">
+            <div className="grid flex-grow grid-cols-1 grid-rows-[min-content] items-end gap-x-2 gap-y-4 pb-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7">
               <div className="flex flex-grow flex-col gap-2">
                 <Typography className="form_label">جستجو</Typography>
                 <InputAtom
-                  className="flex-grow rounded-md !h-12 xs:!h-10 placeholder:!font-iranYekan !text-[13px] !text-primary_normal bg-white !font-iranYekan !py-0 outline-none focus:outline-none !border-2 !border-normal focus:!border-normal focus:!border-t-normal"
+                  className="!h-12 flex-grow rounded-md !border-2 !border-normal bg-white !py-0 !font-iranYekan !text-[13px] !text-primary_normal outline-none placeholder:!font-iranYekan focus:!border-normal focus:!border-t-normal focus:outline-none xs:!h-10"
                   placeholder="جستجو در عنوان"
                   defaultValue={searchTitle}
                   onChange={(e) => {
@@ -152,7 +158,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 <Typography className="form_label">نوع جستجو</Typography>
                 <SelectAtom
                   options={searchTypeOptions}
-                  className="h-12 xs:!h-10 pl-1 pr-2 !w-full bg-white border-[2px] border-normal justify-between"
+                  className="h-12 !w-full justify-between border-[2px] border-normal bg-white pl-1 pr-2 xs:!h-10"
                   setSelectedOption={setSearchType}
                   defaultOption={searchTypeOptions[0]}
                   selectedOption={searchType}
@@ -165,14 +171,10 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                     { label: "سند", value: "document" },
                     { label: "دسته بندی", value: "category" },
                   ]}
-                  className="h-12 xs:!h-10 w-full"
+                  className="h-12 w-full xs:!h-10"
                   selectedOptions={type}
                   setSelectedOptions={setType}
                   defaultOption="نوع"
-                  disabled={
-                    typeof searchType.value === "string" &&
-                    searchType.value.includes("currentRepo")
-                  }
                 />
               </div>
               <div className="flex flex-grow flex-col gap-2">
@@ -184,13 +186,10 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                     { label: "فایل", value: "file" },
                   ]}
                   defaultOption="نوع محتوا"
-                  className="h-12 xs:!h-10 flex-grow"
+                  className="h-12 flex-grow xs:!h-10"
                   selectedOptions={documentType}
                   setSelectedOptions={setDocumentType}
-                  disabled={
-                    !type.includes("document") &&
-                    !(searchType.value as string).includes("currentRepo")
-                  }
+                  disabled={!type.includes("document")}
                 />
               </div>
               <div className="flex flex-grow flex-col gap-2">
@@ -199,7 +198,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 {!tagOptions.length && currentPath !== "/admin/sharedDocuments" ? (
                   <SelectAtom
                     options={[{ label: "تگی وجود ندارد", value: "none" }]}
-                    className="h-12 xs:!h-10 pl-1 pr-2 !w-full bg-white border-[2px] border-normal justify-between"
+                    className="h-12 !w-full justify-between border-[2px] border-normal bg-white pl-1 pr-2 xs:!h-10"
                     setSelectedOption={setSearchType}
                     defaultOption={{ label: "تگ‌ها", value: "none" }}
                     selectedOption={{ label: "تگی وجود ندارد", value: "none" }}
@@ -207,15 +206,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 ) : (
                   <SelectBox
                     options={tagOptions}
-                    className="h-12 xs:!h-10 flex-grow"
+                    className="h-12 flex-grow xs:!h-10"
                     selectedOptions={tags}
                     setSelectedOptions={setTags}
                     defaultOption="تگ‌ها"
                     disabled={
                       (!type.includes("document") &&
-                        !(searchType.value as string).includes(
-                          "currentRepo"
-                        )) ||
+                        !(searchType.value as string).includes("currentRepo")) ||
                       currentPath === "/admin/sharedDocuments"
                     }
                   />
@@ -228,7 +225,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                     { label: "نمونه سند", value: "template" },
                     { label: "نشان شده", value: "bookmark" },
                   ]}
-                  className="h-12 xs:!h-10 flex-grow"
+                  className="h-12 flex-grow xs:!h-10"
                   selectedOptions={moreFilter}
                   setSelectedOptions={setMoreFilter}
                   defaultOption="سایر فیلترها"
@@ -240,12 +237,10 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <LoadingButton
-                className="!h-10 !w-full col-span-1 sm:col-start-2 md:col-start-2 lg:col-start-3 xl:col-start-7 sm:!w-auto !px-4 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+                className="col-span-1 !h-10 !w-full bg-primary-normal !px-4 hover:bg-primary-normal active:bg-primary-normal sm:col-start-2 sm:!w-auto md:col-start-2 lg:col-start-3 xl:col-start-7"
                 onClick={handleFilter}
               >
-                <Typography className="text__label__button text-white">
-                  اعمال فیلتر
-                </Typography>
+                <Typography className="text__label__button text-white">اعمال فیلتر</Typography>
               </LoadingButton>
             </div>
           </div>

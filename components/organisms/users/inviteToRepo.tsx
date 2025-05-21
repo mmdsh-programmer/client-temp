@@ -78,7 +78,7 @@ const InviteToRepo = () => {
               register={{ ...register("username") }}
             />
             {isLoadingRoles ? (
-              <Spinner color="purple" />
+              <Spinner color="deep-purple" />
             ) : (
               <SelectAtom
                 className="repo-invite-form__select w-auto"

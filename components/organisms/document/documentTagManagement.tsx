@@ -112,7 +112,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   return isLoading || isLoadingTags || isLoadingDomainTags ? (
     <div className="mt-2 flex w-full justify-center">
-      <Spinner className="h-5 w-5" color="purple" />
+      <Spinner className="h-5 w-5" color="deep-purple" />
     </div>
   ) : (
     <div className="flex flex-col gap-2">

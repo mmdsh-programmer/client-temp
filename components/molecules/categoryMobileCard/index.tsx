@@ -49,7 +49,7 @@ const CategoryMobileCard = ({ category }: IProps) => {
         <div className="flex w-full items-center gap-2">
           {currentPath === "/admin/dashboard" ? null : (
             <Checkbox
-              color="purple"
+              color="deep-purple"
               containerProps={{
                 className: "p-[2px]",
               }}

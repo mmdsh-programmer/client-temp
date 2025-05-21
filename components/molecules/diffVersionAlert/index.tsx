@@ -12,7 +12,7 @@ const DiffVersionAlert = () => {
     <div className="fixed top-5 left-[10%] flex justify-center w-full z-[1000]">
       <Alert
         className=" shadow-lg w-auto "
-        color="purple"
+        color="deep-purple"
         open={!!compareVersion?.version}
         onClose={() => {
           return setCompareVersion(null);

@@ -32,7 +32,7 @@ const MobileView = ({
       </div>
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-8 w-8" color="purple" />
+          <Spinner className="h-8 w-8" color="deep-purple" />
         </div>
       ) : listLength ? (
         <div className="category-list flex flex-col gap-3">

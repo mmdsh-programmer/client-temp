@@ -18,6 +18,7 @@ const useUpdateDoamin = () => {
       needsAdminApprovalForComments?: boolean;
       needsAdminApprovalForQuestions?: boolean;
       allowQuestionReplies?: boolean;
+      accessToCreateRepo?: boolean;
       callBack?: () => void;
     }) => {
       const {
@@ -29,6 +30,7 @@ const useUpdateDoamin = () => {
         needsAdminApprovalForComments,
         needsAdminApprovalForQuestions,
         allowQuestionReplies,
+        accessToCreateRepo,
       } = values;
       const response = await updateCustomPostByDomainAction(
         content,
@@ -39,6 +41,7 @@ const useUpdateDoamin = () => {
         needsAdminApprovalForComments,
         needsAdminApprovalForQuestions,
         allowQuestionReplies,
+        accessToCreateRepo,
       );
       handleClientSideHookError(response as IActionError);
       return response;

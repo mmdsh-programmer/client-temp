@@ -110,7 +110,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="purple" />
+              <Spinner className="h-5 w-5" color="deep-purple" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">
