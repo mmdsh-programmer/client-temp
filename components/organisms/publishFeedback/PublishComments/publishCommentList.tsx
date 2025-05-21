@@ -26,7 +26,7 @@ const PublishCommentList = ({ postId }: IProps) => {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6" color="purple" />
+          <Spinner className="h-6 w-6" color="deep-purple" />
         </div>
       </div>
     );

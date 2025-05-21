@@ -48,7 +48,7 @@ const DocumentBlockList = () => {
       </Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6" color="purple" />
+          <Spinner className="h-6 w-6" color="deep-purple" />
         ) : (
           <div className="document-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
@@ -73,7 +73,7 @@ const DocumentBlockList = () => {
                       actionIcon={
                         blockDocument.isPending &&
                         selectedUser === blockItem.userInfo.userName ? (
-                          <Spinner className="h-4 w-4" color="purple" />
+                          <Spinner className="h-4 w-4" color="deep-purple" />
                         ) : (
                           <Button
                             className="delete-button bg-transparent p-0"

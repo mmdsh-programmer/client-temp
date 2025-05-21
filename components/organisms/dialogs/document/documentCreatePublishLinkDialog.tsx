@@ -81,7 +81,7 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
                 افزودن تاریخ انقضای لینک
               </Typography>
             }
-            color="purple"
+            color="deep-purple"
             checked={hasExpireTime}
             onChange={() => {
               setHasExpireTime(!hasExpireTime);

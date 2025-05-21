@@ -70,7 +70,7 @@ const DocumentType = ({
         <form className="document-type flex flex-col gap-5" onSubmit={handleSelectType}>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="purple" />
+              <Spinner className="h-5 w-5" color="deep-purple" />
             </div>
           ) : (
             <div className="flex flex-col gap-2">

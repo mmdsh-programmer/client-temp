@@ -26,7 +26,7 @@ const PrivateFeedList = ({ ssoId }: IProps) => {
     return (
       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6" color="purple" />
+          <Spinner className="h-6 w-6" color="deep-purple" />
         </div>
       </div>
     );

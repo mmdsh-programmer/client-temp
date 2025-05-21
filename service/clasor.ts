@@ -1453,8 +1453,20 @@ export const getUserDocument = async (
   reportType: "myDocuments" | "myAccessDocuments" | null,
   repoTypes: string[],
 ) => {
+  let finalType: string[] | null = null;
+
+  if (filters?.type.category && filters.type.document) {
+    finalType = ["category", "document"];
+  } else if (filters?.type.category && !filters.type.document) {
+    finalType = ["category"];
+  } else if (!filters?.type.category && filters?.type.document) {
+    finalType = ["document"];
+  }
+
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IDocumentMetadata>>>(
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
+    >(
       `report/myDocument?${[
         {
           field: "type",
@@ -1494,9 +1506,11 @@ export const getUserDocument = async (
           bookmarked: filters?.bookmarked,
           isTemplate: filters?.isTemplate,
           withTemplate: !filters?.isTemplate,
+          resourceTypes: finalType,
         },
         paramsSerializer: (params) => {
           return qs.stringify(params, {
+            arrayFormat: "brackets",
             indexes: false,
           });
         },
@@ -4398,6 +4412,7 @@ export const updateCustomPostByDomain = async (
   needsAdminApprovalForComments?: boolean,
   needsAdminApprovalForQuestions?: boolean,
   allowQuestionReplies?: boolean,
+  accessToCreateRepo?: boolean,
 ): Promise<any> => {
   try {
     if (domain === "") {
@@ -4420,6 +4435,7 @@ export const updateCustomPostByDomain = async (
         needsAdminApprovalForComments,
         needsAdminApprovalForQuestions,
         allowQuestionReplies,
+        accessToCreateRepo,
       },
       {
         headers: { domainUrl: domain, Authorization: `Bearer ${accessToken}` },

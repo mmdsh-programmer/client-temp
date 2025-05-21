@@ -92,7 +92,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 register={{ ...register("username") }}
               />
               {isFetchingRoles ? (
-                <Spinner className="h-3 w-3" color="purple" />
+                <Spinner className="h-3 w-3" color="deep-purple" />
               ) : (
                 <SelectAtom
                   className="direct-access-form__role w-auto"

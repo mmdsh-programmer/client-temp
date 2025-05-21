@@ -19,7 +19,7 @@ const renderFeedbackSection = (
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="purple" />
+        <Spinner className="h-8 w-8" color="deep-purple" />
       </div>
     );
   }

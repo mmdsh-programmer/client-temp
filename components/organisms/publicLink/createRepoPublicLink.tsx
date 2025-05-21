@@ -134,7 +134,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
                 افزودن رمز عبور
               </Typography>
             }
-            color="purple"
+            color="deep-purple"
             checked={hasPassword}
             onChange={() => {
               setHasPassword(!hasPassword);
@@ -164,7 +164,7 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
                 افزودن تاریخ انقضای لینک
               </Typography>
             }
-            color="purple"
+            color="deep-purple"
             checked={hasExpireTime}
             onChange={() => {
               setValue("hasExpireTime", !hasExpireTime);

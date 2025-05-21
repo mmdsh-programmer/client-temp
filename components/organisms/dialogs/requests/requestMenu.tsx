@@ -35,7 +35,7 @@ const RequestMenu = ({ request, setAcceptedRepo }: IProps) => {
   return (
     <div className="request-menu flex gap-3">
       {acceptRequest.isPending || rejectRequest.isPending ? (
-        <Spinner className="h-5 w-5" color="purple" />
+        <Spinner className="h-5 w-5" color="deep-purple" />
       ) : (
         <>
           <Button

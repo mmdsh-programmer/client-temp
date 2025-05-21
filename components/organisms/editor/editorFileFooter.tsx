@@ -168,7 +168,7 @@ const EditorFileFooter = () => {
           crossOrigin=""
           label={<Typography className="title_t3 truncate">ذخیره‌سازی خودکار</Typography>}
           className=""
-          color="purple"
+          color="deep-purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
           containerProps={{ className: "-mr-3 " }}

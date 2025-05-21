@@ -13,12 +13,23 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
       <Checkbox
         name="useDomainTag"
         checked={domain.useDomainTag}
-        onChange={onCheckboxChange}
+        readOnly
+        disabled
         color="deep-purple"
         crossOrigin=""
         containerProps={{ className: "p-1" }}
         labelProps={{ className: "mr-2" }}
         label={<Typography className="form_label">نمایش مدیریت تگ‌ها</Typography>}
+      />
+      <Checkbox
+        name="accessToCreateRepo"
+        checked={domain.accessToCreateRepo}
+        onChange={onCheckboxChange}
+        color="deep-purple"
+        crossOrigin=""
+        containerProps={{ className: "p-1" }}
+        labelProps={{ className: "mr-2" }}
+        label={<Typography className="form_label">دسترسی ایجاد مخزن</Typography>}
       />
       <Checkbox
         name="hasLikes"

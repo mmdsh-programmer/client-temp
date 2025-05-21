@@ -51,7 +51,7 @@ const EditPage = () => {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <Typography className="font-bold ml-2">لطفا صبر کنید</Typography>
-        <Spinner className="h-5 w-5 " color="purple" />
+        <Spinner className="h-5 w-5 " color="deep-purple" />
       </div>
     );
   }

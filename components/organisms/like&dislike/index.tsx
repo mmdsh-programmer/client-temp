@@ -99,7 +99,7 @@ const LikeAndDislike = ({
   if (isLoading) {
     return (
       <div className={`flex items-center w-fit ${wrapperClassName}`}>
-        <Spinner className="h-5 w-5" color="purple" />
+        <Spinner className="h-5 w-5" color="deep-purple" />
       </div>
     );
   }

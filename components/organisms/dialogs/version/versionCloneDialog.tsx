@@ -91,7 +91,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       className="version-clone-dialog"
     >
       {isLoading ? (
-        <Spinner className="h-4 w-4" color="purple" />
+        <Spinner className="h-4 w-4" color="deep-purple" />
       ) : (
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">

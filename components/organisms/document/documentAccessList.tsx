@@ -47,7 +47,7 @@ const DocumentAccessList = () => {
       <div className="flex flex-col w-full">
         {isLoading || isFetching ? (
           <div className="flex justify-center items-center w-full">
-            <Spinner className="h-6 w-6" color="purple" />
+            <Spinner className="h-6 w-6" color="deep-purple" />
           </div>
         ) : (
           <div className="docuemnt-direct-access-list flex flex-wrap gap-2">
@@ -74,7 +74,7 @@ const DocumentAccessList = () => {
                         actionIcon={
                           deleteAccess.isPending &&
                           selectedUser === accessItem.userName ? (
-                            <Spinner className="h-4 w-4" color="purple" />
+                            <Spinner className="h-4 w-4" color="deep-purple" />
                           ) : (
                             <Button
                               className="delete-button bg-transparent p-0"

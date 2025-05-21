@@ -130,7 +130,7 @@ const UserItem = ({ user }: IProps) => {
     if (editRole.isPending || deleteUser.isPending || transferOwnership.isPending) {
       return (
         <div className="w-5">
-          <Spinner className="h-4 w-4" color="purple" />
+          <Spinner className="h-4 w-4" color="deep-purple" />
         </div>
       );
     }

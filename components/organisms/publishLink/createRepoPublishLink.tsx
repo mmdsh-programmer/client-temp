@@ -97,7 +97,7 @@ const CreateRepoPublishLink = () => {
                   افزودن تاریخ انقضای لینک
                 </Typography>
               }
-              color="purple"
+              color="deep-purple"
               checked={hasExpireTime}
               onChange={() => {
                 setValue("hasExpireTime", !hasExpireTime);

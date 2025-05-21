@@ -91,7 +91,7 @@ const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label">انتخاب گروه </Typography>
           {isLoading ? (
-            <Spinner className="h-5 w-5" color="purple" />
+            <Spinner className="h-5 w-5" color="deep-purple" />
           ) : (
             <SelectAtom
               options={groupOptions}

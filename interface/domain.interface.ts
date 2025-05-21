@@ -86,6 +86,7 @@ export interface IDomainTheme {
   needsAdminApprovalForComments: boolean;
   needsAdminApprovalForQuestions: boolean;
   allowQuestionReplies: boolean;
+  accessToCreateRepo: boolean;
 }
 
 export interface ContentType {

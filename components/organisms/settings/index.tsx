@@ -63,9 +63,10 @@ const Settings = () => {
       hasLikes: false,
       hasComments: false,
       hasQuestions: false,
-    needsAdminApprovalForComments: false,
-    needsAdminApprovalForQuestions: false,
+      needsAdminApprovalForComments: false,
+      needsAdminApprovalForQuestions: false,
       allowQuestionReplies: false,
+      accessToCreateRepo: false,
     },
   });
 
@@ -145,6 +146,7 @@ const Settings = () => {
           needsAdminApprovalForComments: getDomainInfo?.needsAdminApprovalForComments,
           needsAdminApprovalForQuestions: getDomainInfo?.needsAdminApprovalForQuestions,
           allowQuestionReplies: getDomainInfo?.allowQuestionReplies,
+          accessToCreateRepo: getDomainInfo?.accessToCreateRepo,
         });
       } catch (error) {
         console.error("Error processing domain info:", error);
@@ -237,6 +239,7 @@ const Settings = () => {
         needsAdminApprovalForComments: data.needsAdminApprovalForComments,
         needsAdminApprovalForQuestions: data.needsAdminApprovalForQuestions,
         allowQuestionReplies: data.allowQuestionReplies,
+        accessToCreateRepo: data.accessToCreateRepo,
       });
     } catch (error) {
       console.error("Error in onSubmit:", error);

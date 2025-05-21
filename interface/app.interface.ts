@@ -195,6 +195,10 @@ export interface IReportFilter {
   isTemplate: boolean;
   bookmarked: boolean;
   slug?: string;
+  type: {
+    document: boolean;
+    category: boolean;
+  };
 }
 
 export interface IClasorError {
@@ -318,6 +322,7 @@ export interface IDomainMetadata {
   needsAdminApprovalForComments: boolean;
   needsAdminApprovalForQuestions: boolean;
   allowQuestionReplies: boolean;
+  accessToCreateRepo: boolean;
 }
 
 export interface ICustomPostData {

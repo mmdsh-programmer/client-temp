@@ -268,7 +268,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           crossOrigin=""
           label={<Typography className="title_t3 truncate">ذخیره‌سازی خودکار</Typography>}
           className="editor-footer__auto-save-checkbox"
-          color="purple"
+          color="deep-purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
           containerProps={{ className: "-mr-3 " }}

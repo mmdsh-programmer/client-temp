@@ -56,7 +56,7 @@ const PublishSearchResultItem = ({
     >
       {createDocumentLinkHook.isPending ? (
         <div className="w-fit flex-shrink-0 flex justify-center items-center">
-          <Spinner className="h-4 w-4" color="purple" />
+          <Spinner className="h-4 w-4" color="deep-purple" />
         </div>
       ) : null}
       <div className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">

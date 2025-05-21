@@ -53,7 +53,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
       <div className="absolute z-[99999] -mt-2 min-w-max w-full bg-gray-50 rounded-b-lg shadow-lg">
         {isFetching || isFetchingReport ? (
           <div className="w-full h-12 flex justify-center items-center">
-            <Spinner className="h-4 w-4" color="purple" />
+            <Spinner className="h-4 w-4" color="deep-purple" />
           </div>
         ) : (
           <div className="flex p-4 items-center justify-between w-full">
