@@ -37,11 +37,6 @@ const HeaderListTemplate = ({
           onClick={() => {
             setActiveTour(header === "مخزن‌ها" ? ETourSection.DASHBOARD : ETourSection.VERSION);
           }}
-          disabled={
-            userInfo?.domainRole !== "owner" &&
-            !userInfo?.domainConfig?.accessToCreateRepo &&
-            header === "مخزن‌ها"
-          }
         >
           <InfoIcon className="h-5 w-5 stroke-primary-normal" />
         </Button>
@@ -66,6 +61,11 @@ const HeaderListTemplate = ({
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
+              disabled={
+                userInfo?.domainRole !== "owner" &&
+                !userInfo?.domainConfig?.accessToCreateRepo &&
+                header === "مخزن‌ها"
+              }
             >
               <AddIcon className="h-5 w-5 stroke-white" />
             </Button>
