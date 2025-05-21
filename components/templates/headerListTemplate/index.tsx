@@ -5,6 +5,7 @@ import React, { useState } from "react";
 
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import { useSetRecoilState } from "recoil";
+import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
   header: string;
@@ -25,24 +26,24 @@ const HeaderListTemplate = ({
 }: IProps) => {
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
   const setActiveTour = useSetRecoilState(activeTourAtom);
+  const { data: userInfo } = useGetUser();
 
   return (
-    <header className={`flex justify-between items-center ${className}`}>
+    <header className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-1">
-        <Typography className="title_t1 text-primary_normal version-list">
-          {header}
-        </Typography>
+        <Typography className="title_t1 version-list text-primary_normal">{header}</Typography>
         <Button
-          className="rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
+          className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
           onClick={() => {
-            setActiveTour(
-              header === "مخزن‌ها"
-                ? ETourSection.DASHBOARD
-                : ETourSection.VERSION
-            );
+            setActiveTour(header === "مخزن‌ها" ? ETourSection.DASHBOARD : ETourSection.VERSION);
           }}
+          disabled={
+            userInfo?.domainRole !== "owner" &&
+            !userInfo?.domainConfig?.accessToCreateRepo &&
+            header === "مخزن‌ها"
+          }
         >
-          <InfoIcon className="w-5 h-5 stroke-primary-normal" />
+          <InfoIcon className="h-5 w-5 stroke-primary-normal" />
         </Button>
       </div>
       <div className="flex items-center gap-2">
@@ -59,9 +60,9 @@ const HeaderListTemplate = ({
               }}
             />
           </div>
-          <div className="hidden xs:flex md:!hidden">
+          <div className="hidden md:!hidden xs:flex">
             <Button
-              className="rounded-lg h-9 w-9 p-0 bg-primary-normal "
+              className="h-9 w-9 rounded-lg bg-primary-normal p-0 "
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
@@ -69,9 +70,9 @@ const HeaderListTemplate = ({
               <AddIcon className="h-5 w-5 stroke-white" />
             </Button>
           </div>
-          <div className="absolute z-[999] bottom-20 left-6 xs:hidden">
+          <div className="absolute bottom-20 left-6 z-[999] xs:hidden">
             <Button
-              className=" h-[54px] w-[54px] z-[99] p-0 bg-primary-normal rounded-full "
+              className=" z-[99] h-[54px] w-[54px] rounded-full bg-primary-normal p-0 "
               onClick={() => {
                 setOpenCreateRepo(true);
               }}

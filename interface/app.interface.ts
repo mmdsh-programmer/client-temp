@@ -34,6 +34,13 @@ export interface IUserInfo {
   };
   domainConfig: {
     useDomainTag: boolean;
+    hasLikes: boolean;
+    hasComments: boolean;
+    hasQuestions: boolean;
+    needsAdminApprovalForComments: boolean;
+    needsAdminApprovalForQuestions: boolean;
+    allowQuestionReplies: boolean;
+    accessToCreateRepo: boolean;
   };
   domainRole: string | null;
   metadata: string | null;
