@@ -1455,7 +1455,10 @@ export const getUserDocument = async (
 ) => {
   let finalType: string[] | null = null;
 
-  if (filters?.type.category && filters.type.document) {
+  if (
+    (filters?.type.category && filters.type.document) ||
+    (!filters?.type.category && !filters?.type.document)
+  ) {
     finalType = ["category", "document"];
   } else if (filters?.type.category && !filters.type.document) {
     finalType = ["category"];
