@@ -38,7 +38,7 @@ const nextConfig = {
       {
         source: "/blog/:path*",
         destination:
-          `${process.env.BLOG_BOX_ADDRESS}/blog/vukwckXC_MPm28GUid63GRFXe40Ui_O_2tGlcK0vmU8_/:path*`,
+          `${process.env.BLOG_BOX_URL}/blog/vukwckXC_MPm28GUid63GRFXe40Ui_O_2tGlcK0vmU8_/:path*`,
       },
     ];
   },
