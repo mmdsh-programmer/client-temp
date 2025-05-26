@@ -120,19 +120,21 @@ const Editor = ({ setOpen }: IProps) => {
   };
 
   useEffect(() => {
-    if (data && getLastVersion?.state === "version" && editorMode === "edit") {
-      const item = {
-        ...data,
-        id: data?.draftId ?? data?.id,
-        state: "draft",
-      } as IVersion;
-      setEditorData(item);
-      setSelectedVersion(item);
-      refetch();
-    } else {
-      setEditorData(data || null);
-      setSelectedVersion(data || null);
-      refetch();
+    if (data) {
+      if (getLastVersion?.state === "version" && editorMode === "edit") {
+        const item = {
+          ...data,
+          id: data?.draftId ?? data?.id,
+          state: "draft",
+        } as IVersion;
+        setEditorData(item);
+        setSelectedVersion(item);
+        refetch();
+      } else {
+        setEditorData(data);
+        setSelectedVersion(data);
+        refetch();
+      }
     }
   }, [data]);
 
