@@ -8,6 +8,7 @@ interface IProps {
   icon: JSX.Element | React.ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: () => any;
+  disabled?: boolean;
 }
 
 const IconTextButton = ({
@@ -16,11 +17,13 @@ const IconTextButton = ({
   text,
   icon,
   onClick,
+  disabled,
 }: IProps) => {
   return (
     <Button
       className={`${classNameButton || ""} flex justify-center items-center rounded-lg `}
       onClick={onClick}
+      disabled={disabled}
     >
       <>
         {icon}

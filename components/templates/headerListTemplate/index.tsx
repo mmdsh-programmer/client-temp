@@ -53,6 +53,12 @@ const HeaderListTemplate = ({
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
+              disabled={
+                !userInfo?.isClasorAdmin ||
+                (userInfo?.domainRole !== "owner" &&
+                  !userInfo?.domainConfig?.accessToCreateRepo &&
+                  header === "مخزن‌ها")
+              }
             />
           </div>
           <div className="hidden md:!hidden xs:flex">
@@ -62,9 +68,10 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                userInfo?.domainRole !== "owner" &&
-                !userInfo?.domainConfig?.accessToCreateRepo &&
-                header === "مخزن‌ها"
+                !userInfo?.isClasorAdmin ||
+                (userInfo?.domainRole !== "owner" &&
+                  !userInfo?.domainConfig?.accessToCreateRepo &&
+                  header === "مخزن‌ها")
               }
             >
               <AddIcon className="h-5 w-5 stroke-white" />
@@ -83,8 +90,8 @@ const HeaderListTemplate = ({
           {renderList?.()}
           {openCreateRepo
             ? renderDialog?.(() => {
-                return setOpenCreateRepo(false);
-              })
+              return setOpenCreateRepo(false);
+            })
             : null}
         </div>
       </div>

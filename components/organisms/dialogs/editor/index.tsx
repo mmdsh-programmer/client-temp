@@ -27,6 +27,7 @@ import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import { IVersion } from "@interface/version.interface";
 import useGetUser from "@hooks/auth/useGetUser";
+import { clearConfig } from "dompurify";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -67,8 +68,8 @@ const Editor = ({ setOpen }: IProps) => {
     repoId!,
     getSelectedDocument!.id,
     currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" &&
-        userInfo?.repository.id !== getSelectedDocument?.repoId),
+    (currentPath === "/admin/dashboard" &&
+      userInfo?.repository.id !== getSelectedDocument?.repoId),
     !getSelectedVersion,
   );
 
@@ -80,7 +81,7 @@ const Editor = ({ setOpen }: IProps) => {
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
     currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getSelectedDocument?.repoId),
+    (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getSelectedDocument?.repoId),
     true,
   );
 
@@ -127,6 +128,10 @@ const Editor = ({ setOpen }: IProps) => {
       } as IVersion;
       setEditorData(item);
       setSelectedVersion(item);
+      refetch();
+    } else {
+      setEditorData(data || null);
+      setSelectedVersion(data || null);
       refetch();
     }
   }, [data]);

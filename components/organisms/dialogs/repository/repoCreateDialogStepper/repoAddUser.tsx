@@ -32,9 +32,7 @@ const RepoAddUser = ({ handleClose }: IProps) => {
         <LoadingButton
           className="repo-add-user__dialog-next-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={() => {
-            if ((userInfo?.domainConfig.useDomainTag &&
-              (userInfo?.domainRole === "owner" ||
-                userInfo.domainRole === "participant")) || !userInfo?.domainConfig.useDomainTag) {
+            if (!userInfo?.domainConfig.useDomainTag) {
               setActiveStep(2);
             } else {
               setActiveStep(3);
