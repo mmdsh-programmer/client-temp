@@ -54,10 +54,8 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                !userInfo?.isClasorAdmin ||
-                (userInfo?.domainRole !== "owner" &&
-                  !userInfo?.domainConfig?.accessToCreateRepo &&
-                  header === "مخزن‌ها")
+                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") && !userInfo?.domainConfig?.accessToCreateRepo &&
+                header === "مخزن‌ها"
               }
             />
           </div>
