@@ -26,6 +26,7 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import useRepoId from "@hooks/custom/useRepoId";
 import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
 import EditorFileFooter from "../editor/editorFileFooter";
+import { IVersion } from "@interface/version.interface";
 
 const EditorTab = () => {
   const repoId = useRepoId();
@@ -64,7 +65,7 @@ const EditorTab = () => {
     ? getSelectedVersion.state
     : versionState || getLastVersion?.state;
 
-  const { data, isFetching, error, isSuccess } = useGetVersion(
+  const { data, isFetching, error, isSuccess, refetch } = useGetVersion(
     repoId!,
     getSelectedDocument!.id,
     +vId!,
@@ -105,9 +106,23 @@ const EditorTab = () => {
     }
   }, [getLastVersion]);
 
+
   useEffect(() => {
-    if (data && isSuccess) {
-      setVersionData(data);
+    if (data) {
+      if (getLastVersion?.state === "version" && editorMode === "edit") {
+        const item = {
+          ...data,
+          id: data?.draftId ?? data?.id,
+          state: "draft",
+        } as IVersion;
+        setVersionData(item);
+        setSelectedVersion(item);
+        refetch();
+      } else {
+        setVersionData(data);
+        setSelectedVersion(data);
+        refetch();
+      }
     }
   }, [data]);
 

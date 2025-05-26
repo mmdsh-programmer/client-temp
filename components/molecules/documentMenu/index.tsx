@@ -52,7 +52,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
   return (
     <>
       {showDrawer ? (
-        <div className="xs:hidden flex">
+        <div className="document-menu xs:hidden flex">
           <DrawerTemplate
             openDrawer={openDocumentActionDrawer}
             setOpenDrawer={setOpenDocumentActionDrawer}
@@ -60,7 +60,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
           />
         </div>
       ) : (
-        <div className="flex items-center justify-end gap-1">
+        <div className="document-menu flex items-center justify-end gap-1">
           {document?.isHidden ? (
             <InvisibleIcon className="w-4 h-4 flex-none" />
           ) : null}
@@ -79,6 +79,7 @@ const DocumentMenu = ({ document, showDrawer }: IProps) => {
                 <MoreDotIcon className="w-4 h-4" />
               </div>
             }
+            className="document-menu"
           />
         </div>
       )}

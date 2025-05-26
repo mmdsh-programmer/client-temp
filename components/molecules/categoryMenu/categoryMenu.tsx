@@ -60,7 +60,7 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
           />
         </div>
       ) : (
-        <div className="flex items-center justify-end gap-1">
+        <div className="category-menu flex items-center justify-end gap-1">
           {categoryProp?.isHidden ? (
             <InvisibleIcon className="w-4 h-4 flex-none" />
           ): null}

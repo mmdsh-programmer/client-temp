@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getVersionAction } from "@actions/version";
 import { IVersion } from "@interface/version.interface";
 import { IActionError } from "@interface/app.interface";
@@ -14,9 +14,10 @@ const useGetVersion = (
   isDirectAccess?: boolean,
   enabled?: boolean
 ) => {
+
   return useQuery({
     queryKey: [
-      `document-${documentId}-version-${versionId}-state-${state}-innerDocument-${!!innerDocument}-innerOutline-${!!innerOutline}`,
+      `document-${documentId}-version-${versionId}-state-${state}-innerDocument-${innerDocument}-innerOutline-${innerOutline}`,
     ],
     queryFn: async ({ signal }) => {
       const response = await getVersionAction(
@@ -35,6 +36,7 @@ const useGetVersion = (
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 0,
+    gcTime: 0,
   });
 };
 
