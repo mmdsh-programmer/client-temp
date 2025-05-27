@@ -50,6 +50,7 @@ const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
               subMenuList={menuItem.subMenu}
               key={`sub-menu-${index}`}
               icon={menuItem.icon}
+              className={menuItem.className}
             />
           ) : (
             <MenuItem
