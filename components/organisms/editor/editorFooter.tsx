@@ -181,7 +181,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     } else {
       setIsLoading(false);
     }
-  }, 1000);
+  }, 100);
 
   const startWorker = (time?: number) => {
     if (!autoSaveRef.current) {

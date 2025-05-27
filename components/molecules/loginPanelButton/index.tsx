@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelIcon, UserFillIcon } from "@components/atoms/icons";
+import { PanelIcon } from "@components/atoms/icons";
 import { IconButton } from "@material-tailwind/react";
 import Link from "next/link";
 import React from "react";

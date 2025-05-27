@@ -50,7 +50,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon, className }: IProps)
         </MenuItem>
       </MenuHandler>
       <MenuList
-        className="!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary_normal overflow-hidden p-[2px]"
+        className={`${className}!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
         placeholder="menu-list"
       >
         {subMenuList.map((menuItem, index) => {
