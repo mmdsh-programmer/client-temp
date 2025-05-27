@@ -65,8 +65,8 @@ const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }:
 
   return (
     <>
-      {renderLoginButton || null}
       {renderSearchButton || null}
+      {renderLoginButton || null}
       <MenuComponent
         variant="medium"
         menuList={[
