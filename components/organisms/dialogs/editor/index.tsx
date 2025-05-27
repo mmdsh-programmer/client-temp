@@ -27,7 +27,6 @@ import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import { IVersion } from "@interface/version.interface";
 import useGetUser from "@hooks/auth/useGetUser";
-import { clearConfig } from "dompurify";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
