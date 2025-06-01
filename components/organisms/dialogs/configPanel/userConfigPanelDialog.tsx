@@ -90,7 +90,7 @@ const UserConfigPanelDialog = () => {
     >
       {isLoading ? (
         <div className="flex w-full justify-center">
-          <Spinner className="" color="deep-purple" />
+          <Spinner className="text-primary" />
         </div>
       ) : (
         <div className="flex flex-col gap-4">

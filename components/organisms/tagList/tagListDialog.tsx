@@ -1,8 +1,8 @@
-import { Button, DialogBody, Spinner, Typography } from "@material-tailwind/react";
+import { Button, DialogBody, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { deleteTagAtom, editTagAtom, tagDrawerAtom } from "@atom/tag";
 import { useRecoilState, useRecoilValue } from "recoil";
-
+import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
@@ -65,7 +65,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
         <div className="h-full px-5 py-3 xs:p-6">
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
-              <Spinner color="deep-purple" className="" />
+              <Spinner className="text-primary" />
             </div>
           ) : (
             <>

@@ -1,4 +1,5 @@
-import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
+import { DialogBody, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 
@@ -92,7 +93,7 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 register={{ ...register("username") }}
               />
               {isFetchingRoles ? (
-                <Spinner className="h-3 w-3" color="deep-purple" />
+                <Spinner className="h-3 w-3 text-primary" />
               ) : (
                 <SelectAtom
                   className="direct-access-form__role w-auto"

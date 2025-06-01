@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
-
+import { Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 
 export interface IOption {
@@ -110,7 +110,7 @@ const SelectAtom = ({
           </ul>
           {isLoading && (
             <div className="flex justify-center p-2">
-              <Spinner className="h-4 w-4" color="deep-purple" />
+              <Spinner className="h-4 w-4 text-primary" />
             </div>
           )}
         </div>

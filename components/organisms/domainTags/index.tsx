@@ -1,6 +1,5 @@
 import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
-import { Spinner } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
@@ -8,6 +7,7 @@ import TagDelete from "../dialogs/tag/tagDeleteDialog";
 import TagEdit from "../dialogs/tag/tagEditDialog";
 import ChipMolecule from "@components/molecules/chip";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
+import { Spinner } from "@components/atoms/spinner";
 
 const DomainTags = () => {
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
@@ -32,7 +32,7 @@ const DomainTags = () => {
     <div className="p-5">
       {isLoading ? (
         <div className="flex w-full items-center justify-center">
-          <Spinner color="deep-purple" className="" />
+          <Spinner className="text-primary" />
         </div>
       ) : (
         <div className="tag-list flex flex-wrap gap-2">

@@ -5,7 +5,7 @@ import FeedItem from "./feedItem";
 import LoadMore from "@components/molecules/loadMore";
 import PrivateFeedFilter from "./privateFeedFilter";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import useGetPrivateFeeds from "@hooks/feeds/useGetPrivateFeeds";
 
 interface IProps {
@@ -26,7 +26,7 @@ const PrivateFeedList = ({ ssoId }: IProps) => {
     return (
       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6 text-primary" />
         </div>
       </div>
     );

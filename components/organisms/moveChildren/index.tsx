@@ -1,15 +1,14 @@
 import React, { Fragment } from "react";
 import {
- Spinner,
- Typography
+  Typography
 } from "@material-tailwind/react";
 import {
- categoryMoveDestAtom,
- categoryQueryParamsAtom
+  categoryMoveDestAtom,
+  categoryQueryParamsAtom
 } from "atom/category";
 import {
- useRecoilState,
- useRecoilValue
+  useRecoilState,
+  useRecoilValue
 } from "recoil";
 
 import { FolderIcon } from "@components/atoms/icons";
@@ -19,6 +18,7 @@ import RenderIf from "@components/atoms/renderIf";
 import { bulkItemsAtom } from "@atom/bulk";
 import { sortAtom } from "atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   target: "category" | "document";
@@ -26,7 +26,7 @@ interface IProps {
 }
 
 const MoveChildren = ({
- target, repoId 
+  target, repoId
 }: IProps) => {
   const [getCategoryMoveDest, setCategoryMoveDest] =
     useRecoilState(categoryMoveDestAtom);
@@ -59,7 +59,7 @@ const MoveChildren = ({
     <div className={`move-${target}-list`}>
       {isLoading ? (
         <div className="px-2 py-1">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4 text-primary" />
         </div>
       ) : (
         moveChildren?.pages.map((page) => {

@@ -1,8 +1,7 @@
 import {
- Spinner,
  Typography
 } from "@material-tailwind/react";
-
+import { Spinner } from "@components/atoms/spinner";
 import { ERoles } from "@interface/enums";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import ImageComponent from "@components/atoms/image";
@@ -48,7 +47,7 @@ const InviteRequestByOwner = ({ user }: IProps) => {
     } if (deleteInviteRequest.isPending) {
       return (
         <div className="w-5">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4 text-primary" />
         </div>
       );
     } 

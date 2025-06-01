@@ -1,6 +1,6 @@
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { Spinner, Typography } from "@material-tailwind/react";
-
+import { Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import DomainSubscriptionMenu from "@components/molecules/domainSubscriptionMenu";
 import LoadMore from "@components/molecules/loadMore";
 import React from "react";
@@ -62,7 +62,7 @@ const DomainSubscription = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }

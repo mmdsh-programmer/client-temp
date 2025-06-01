@@ -1,4 +1,4 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import CreateDialog from "@components/templates/dialog/createDialog";
@@ -11,6 +11,7 @@ import useCreatePublicFeed from "@hooks/publicFeed/useCreatePublicFeed";
 import { useForm } from "react-hook-form";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IForm {
   name: string;
@@ -106,7 +107,7 @@ const PublicFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5 text-primary" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">

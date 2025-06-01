@@ -8,7 +8,6 @@ import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
 import RequestTableView from "../versionRequestsView/requestTableView";
-import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import VersionRequestMenu from "@components/molecules/versionRequestMenu";
 import { repoAtom } from "@atom/repository";
@@ -17,6 +16,7 @@ import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetPendingVersion from "@hooks/release/useGetPendingVersion";
+import { Spinner } from "@components/atoms/spinner";
 
 const VersionRequests = () => {
   const getRepo = useRecoilValue(repoAtom);
@@ -62,7 +62,7 @@ const VersionRequests = () => {
     if (isLoading) {
       return (
         <div className="flex h-full w-full items-center justify-center ">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8 text-primary" />
         </div>
       );
     }

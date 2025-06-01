@@ -13,8 +13,8 @@ import Link from "next/link";
 import SidebarCategoryItem from "./sidebarCategoryItem";
 import SidebarCollapse from "./sidebarCollapse";
 import SidebarDocumentItem from "./sidebarDocumentItem";
-import { Spinner } from "@material-tailwind/react";
 import { toPersianDigit } from "@utils/index";
+import { Spinner } from "@components/atoms/spinner";
 import useDebounce from "@hooks/custom/useDebounce";
 import useGetAllPublishChildren from "@hooks/publish/useGetAllPublishChildren";
 import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
@@ -191,7 +191,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
       <div className="h-[calc(100vh-220px)] overflow-y-auto pl-2">
         {overalLoading ? (
           <div className="w-full flex justify-center pt-4">
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5 text-primary" />
           </div>
         ) : (
           renderTree?.pages.map((page, pageIndex) => {
@@ -227,7 +227,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
 
         {fetchingNextPage && (
           <div className="w-full flex justify-center pt-4">
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5 text-primary" />
           </div>
         )}
       </div>
@@ -255,7 +255,7 @@ const SidebarTreeViewWrapper = ({
     return (
       <div className="h-[calc(100vh-200px)]">
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5 text-primary" />
         </div>
       </div>
     );

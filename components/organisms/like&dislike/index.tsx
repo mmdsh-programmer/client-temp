@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
+import { Spinner } from "@components/atoms/spinner";
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
-import { Spinner } from "@material-tailwind/react";
 import useDislike from "@hooks/core/useDislike";
 import useGetDislikeList from "@hooks/core/useGetDislikeList";
 import useGetLikeList from "@hooks/core/useGetLikeList";
@@ -99,7 +98,7 @@ const LikeAndDislike = ({
   if (isLoading) {
     return (
       <div className={`flex items-center w-fit ${wrapperClassName}`}>
-        <Spinner className="h-5 w-5" color="deep-purple" />
+        <Spinner className="h-5 w-5 text-primary" />
       </div>
     );
   }

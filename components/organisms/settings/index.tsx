@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Spinner } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import useUpdateDomain from "@hooks/domain/useUpdateDomain";
@@ -9,6 +9,7 @@ import ColorsSettings from "./colorsSettings";
 import LogoUploader from "./logoUploader";
 import BasicInfo from "./basicInfo";
 import LoadingButton from "@components/molecules/loadingButton";
+import { Spinner } from "@components/atoms/spinner";
 
 const Settings = () => {
   const { data: getDomainInfo, isLoading } = useGetDomainInfo();
@@ -249,7 +250,7 @@ const Settings = () => {
   if (isLoading || uploadLoading) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8 text-primary"/>
         {uploadLoading && (
           <Typography className="mt-2">در حال آپلود لوگو... {uploadProgress}%</Typography>
         )}

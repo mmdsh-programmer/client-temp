@@ -1,14 +1,13 @@
 import React, { useEffect, useRef } from "react";
-
 import { IRepo } from "@interface/repo.interface";
 import ImageComponent from "@components/atoms/image";
 import ProgressBar from "@components/molecules/progressBar";
-import { Spinner } from "@material-tailwind/react";
 import { UserIcon } from "@components/atoms/icons";
 import { repoInfoAtom } from "@atom/repository";
 import useGetReport from "@hooks/report/useGetReport";
 import useGetUsers from "@hooks/user/useGetRepoUsers";
 import { useSetRecoilState } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   repo: IRepo;
@@ -53,7 +52,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
       <div className="absolute z-[99999] -mt-2 min-w-max w-full bg-gray-50 rounded-b-lg shadow-lg">
         {isFetching || isFetchingReport ? (
           <div className="w-full h-12 flex justify-center items-center">
-            <Spinner className="h-4 w-4" color="deep-purple" />
+            <Spinner className="h-4 w-4 text-primary" />
           </div>
         ) : (
           <div className="flex p-4 items-center justify-between w-full">

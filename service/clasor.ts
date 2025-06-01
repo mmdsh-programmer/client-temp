@@ -176,6 +176,8 @@ export const getToken = async (code: string, redirectUrl: string) => {
   }
 };
 
+const memoryCache: Record<string, { value: any; expiresAt: number }> = {};
+
 export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
   const redisClient = await getRedisClient();
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
@@ -2380,8 +2382,7 @@ export const deleteVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
-        state === "draft" ? "/draft" : ""
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : ""
       }`,
       {
         headers: {

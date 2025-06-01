@@ -1,6 +1,8 @@
 /* eslint-disable no-nested-ternary */
 
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import React, { useState } from "react";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
@@ -195,7 +197,7 @@ const TableView = ({
       ) : null}
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8 text-primary" />
         </div>
       ) : (
         renderContent()

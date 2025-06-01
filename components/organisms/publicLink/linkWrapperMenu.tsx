@@ -1,4 +1,4 @@
-import { Button, Spinner } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 
 import { DeleteIcon } from "@components/atoms/icons";
 import { IRepo } from "@interface/repo.interface";
@@ -8,6 +8,7 @@ import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useDeletePublicLink from "@hooks/public/useDeletePublicLink";
 import { useRecoilState } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   role: IRoles;
@@ -35,7 +36,7 @@ const LinkWrapperMenu = ({ role }: IProps) => {
       onClick={handleRemovePublicLink}
     >
       {deletePublicLinkHook.isPending ? (
-        <Spinner color="deep-purple" />
+        <Spinner className="text-primary" />
       ) : (
         <DeleteIcon className="h-5 w-5" />
       )}

@@ -10,7 +10,7 @@ import FileEditor from "./fileEditor";
 import FloatingButtons from "./floatingButtons";
 import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
 import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
@@ -137,7 +137,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   if (isLoading) {
     return (
       <div className="main flex h-full w-full items-center justify-center text-center">
-        <Spinner className="h-5 w-5 " color="deep-purple" />
+        <Spinner className="h-5 w-5 text-primary" />
       </div>
     );
   }
