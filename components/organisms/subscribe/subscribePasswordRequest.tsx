@@ -1,4 +1,4 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Checkbox from "@components/atoms/checkbox";
 
 interface IDataForm {
   password: string;
@@ -74,18 +75,11 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
       <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
           <Checkbox
-            crossOrigin="anonymous"
-            label={
-              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
-                نمایش رمز عبور
-              </Typography>
-            }
-            color="deep-purple"
+            label="نمایش رمز عبور"
             checked={showPassword}
             onChange={() => {
               setShowPassword(!showPassword);
             }}
-            containerProps={{ className: "-mr-3" }}
           />
           <Typography className="label">رمز عبور</Typography>
           <FormInput

@@ -1,4 +1,4 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
+import Checkbox from "@components/atoms/checkbox";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -80,11 +81,6 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
         {errorMessage === "ریسورس دارای زیرمجموعه است" ? (
           <div className="flex items-center gap-1">
             <Checkbox
-              color="deep-purple"
-              containerProps={{
-                className: "p-[2px]",
-              }}
-              crossOrigin=""
               onChange={() => {
                 return setForceDelete(!forceDelete);
               }}

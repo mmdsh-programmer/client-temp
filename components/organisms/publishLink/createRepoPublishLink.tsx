@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
+import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import { useRecoilState } from "recoil";
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import { onDatePickerChangePayload } from "zaman/dist/types";
 import { toast } from "react-toastify";
 import useCreatePublishLink from "@hooks/publish/useCreatePublishLink";
 import { useForm } from "react-hook-form";
+import Checkbox from "@components/atoms/checkbox";
 
 interface IData {
   expireTime?: number;
@@ -91,18 +92,11 @@ const CreateRepoPublishLink = () => {
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Checkbox
-              crossOrigin="anonymous"
-              label={
-                <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal ">
-                  افزودن تاریخ انقضای لینک
-                </Typography>
-              }
-              color="deep-purple"
+              label="افزودن تاریخ انقضای لینک"
               checked={hasExpireTime}
               onChange={() => {
                 setValue("hasExpireTime", !hasExpireTime);
               }}
-              containerProps={{ className: "-mr-3" }}
               className="repo-create-publish-link__checkbox"
             />
             {hasExpireTime ? (

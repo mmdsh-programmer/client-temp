@@ -1,4 +1,4 @@
-import { Button, Checkbox, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
@@ -16,6 +16,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
 import useGetUser from "@hooks/auth/useGetUser";
+import Checkbox from "@components/atoms/checkbox";
 
 const EditorFileFooter = () => {
   const repoId = useRepoId();
@@ -45,9 +46,8 @@ const EditorFileFooter = () => {
     }
     if (editorMode === "preview") {
       return `${getEditorData.versionNumber}
-      ${` (${
-        translateVersionStatus(getEditorData.status, getEditorData.state).translated
-      } ${getEditorData.status === "accepted" ? "-عمومی" : ""})`}`;
+      ${` (${translateVersionStatus(getEditorData.status, getEditorData.state).translated
+        } ${getEditorData.status === "accepted" ? "-عمومی" : ""})`}`;
     }
 
     return `${getEditorData.versionNumber} (پیش نویس)`;
@@ -84,12 +84,12 @@ const EditorFileFooter = () => {
           versionNumber: getEditorData.versionNumber,
           isDirectAccess:
             currentPath === "/admin/sharedDocuments" ||
-            (currentPath === "/admin/dashboard" &&
-              userInfo?.repository.id !== selectedDocument?.repoId) ||
-            sharedDocuments === "true"
+              (currentPath === "/admin/dashboard" &&
+                userInfo?.repository.id !== selectedDocument?.repoId) ||
+              sharedDocuments === "true"
               ? true
               : undefined,
-          callBack: () => {},
+          callBack: () => { },
         });
       } else {
         toast.error("تغییری در فایل وجود ندارد.");
@@ -165,13 +165,10 @@ const EditorFileFooter = () => {
         </Button>
         <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
         <Checkbox
-          crossOrigin=""
-          label={<Typography className="title_t3 truncate">ذخیره‌سازی خودکار</Typography>}
+          label="ذخیره‌سازی خودکار"
           className=""
-          color="deep-purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
-          containerProps={{ className: "-mr-3 " }}
         />
       </div>
       <div className="flex w-full gap-2 md:w-auto xs:gap-3">

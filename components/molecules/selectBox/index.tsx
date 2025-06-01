@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Checkbox, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
-
+import { Typography } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
+import Checkbox from "@components/atoms/checkbox";
 
 interface IProps {
   options: any[];
@@ -54,8 +54,8 @@ const SelectBox = ({
       setSelectedOptions(
         selectedOptions.includes(option)
           ? selectedOptions.filter((selected) => {
-              return selected !== option;
-            })
+            return selected !== option;
+          })
           : [...selectedOptions, option]
       );
     }
@@ -76,23 +76,22 @@ const SelectBox = ({
         <span className="max-w-min truncate">
           {selectedOptions.length > 0
             ? selectedOptions
-                .map((selected) => {
-                  return options.find((option) => {
-                    return option.value === selected;
-                  })?.label;
-                })
-                .join(", ")
+              .map((selected) => {
+                return options.find((option) => {
+                  return option.value === selected;
+                })?.label;
+              })
+              .join(", ")
             : defaultOption}
         </span>
         {selectedOptions
           ? options?.find((option) => {
-              return option.value === selectedOptions;
-            })?.label
+            return option.value === selectedOptions;
+          })?.label
           : defaultOption}
         <ChevronLeftIcon
-          className={`w-2 h-2 stroke-icon-active transform transition-transform ${
-            isOpen ? "rotate-90" : "-rotate-90"
-          }`}
+          className={`w-2 h-2 stroke-icon-active transform transition-transform ${isOpen ? "rotate-90" : "-rotate-90"
+            }`}
         />
       </button>
       {isOpen && (
@@ -113,17 +112,12 @@ const SelectBox = ({
                 >
                   <div className="flex items-center">
                     <Checkbox
-                      containerProps={{
-                        className: "p-1",
-                      }}
-                      placeholder="checkbox"
+                      name="checkbox"
                       className="p-0"
                       checked={selectedOptions.includes(option.value)}
                       onChange={() => {
                         return handleOptionChange(option.value);
                       }}
-                      color="deep-purple"
-                      crossOrigin=""
                     />
                     <Typography className="select_option__text truncate text-right text-primary_normal">
                       {option.label}

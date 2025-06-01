@@ -28,6 +28,9 @@ const HeaderListTemplate = ({
   const setActiveTour = useSetRecoilState(activeTourAtom);
   const { data: userInfo } = useGetUser();
 
+  console.log("------------------------uuuuuuuuuuuuuu------------------", (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") && !userInfo?.domainConfig?.accessToCreateRepo &&
+  header.toString() === "مخزن‌ها")
+
   return (
     <header className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-1">
@@ -66,10 +69,10 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                !userInfo?.isClasorAdmin ||
-                (userInfo?.domainRole !== "owner" &&
+                !(!userInfo?.isClasorAdmin ||
+                userInfo?.domainRole !== "owner") &&
                   !userInfo?.domainConfig?.accessToCreateRepo &&
-                  header === "مخزن‌ها")
+                  header === "مخزن‌ها"
               }
             >
               <AddIcon className="h-5 w-5 stroke-white" />
