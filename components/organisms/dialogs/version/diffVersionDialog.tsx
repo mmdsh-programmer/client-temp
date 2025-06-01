@@ -2,7 +2,7 @@ import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import DiffViewerTable from "@components/organisms/version/diffViewerTable";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { compareVersionAtom } from "@atom/version";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { useRecoilValue } from "recoil";
@@ -58,7 +58,7 @@ const DiffVersionDialog = ({ setOpen }: IProps) => {
     >
       {getVersionHook.isFetching || getCompareHook.isFetching ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-10 w-10" color="deep-purple" />
+          <Spinner className="h-10 w-10 text-primary" />
         </div>
       ) : (
         <DiffViewerTable

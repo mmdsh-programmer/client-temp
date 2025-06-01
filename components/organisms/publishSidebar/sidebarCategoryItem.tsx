@@ -3,10 +3,10 @@ import React, { Fragment } from "react";
 import { ICategoryMetadata } from "@interface/category.interface";
 import SidebarCollapse from "./sidebarCollapse";
 import SidebarDocumentItem from "./sidebarDocumentItem";
-import { Spinner } from "@material-tailwind/react";
 import { toPersianDigit } from "@utils/index";
 import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
 import { useSearchParams } from "next/navigation";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   repoId: number;
@@ -49,7 +49,7 @@ const SidebarCategoryItem = ({
     <>
       {isLoading ? (
         <div className="w-full flex justify-center py-2">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5 text-primary" />
         </div>
       ) : (
         categoryChildren?.pages.map((page) => {
@@ -117,7 +117,7 @@ const SidebarCategoryItem = ({
 
       {isFetchingNextPage && (
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5 text-primary" />
         </div>
       )}
     </>

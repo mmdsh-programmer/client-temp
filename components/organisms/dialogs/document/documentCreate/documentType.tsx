@@ -1,7 +1,7 @@
 import {
- DialogBody,
- Spinner,
- Typography
+  DialogBody,
+  Spinner,
+  Typography
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
@@ -19,13 +19,13 @@ interface IProps {
 }
 
 const DocumentType = ({
- isTemplate, setOpen 
+  isTemplate, setOpen
 }: IProps) => {
   const [getDocumentType, setDocumentType] = useRecoilState(documentTypeAtom);
   const { handleNextStep } = useStepperNavigate();
   const {
- data: getDocumentTypes, isLoading 
-} = useGetClasorField();
+    data: getDocumentTypes, isLoading
+  } = useGetClasorField();
   const [type, setType] = useState<IOption>({
     label: "clasor",
     value: EDocumentTypes.classic,
@@ -39,27 +39,27 @@ const DocumentType = ({
   const typeOptions =
     getDocumentTypes?.length && isTemplate
       ? getDocumentTypes
-          ?.filter((x) => {
-            return x.name === "clasor";
-          })
-          .map((item) => {
-            return {
-              label: item.name,
-              value: item.uniqueId,
-            };
-          })
-      : getDocumentTypes?.map((item) => {
+        ?.filter((x) => {
+          return x.name === "clasor";
+        })
+        .map((item) => {
           return {
             label: item.name,
             value: item.uniqueId,
           };
-        });
+        })
+      : getDocumentTypes?.map((item) => {
+        return {
+          label: item.name,
+          value: item.uniqueId,
+        };
+      });
 
   const defaultOption = getDocumentType
     ? {
-        label: getDocumentType,
-        value: getDocumentType,
-      }
+      label: getDocumentType,
+      value: getDocumentType,
+    }
     : typeOptions?.[0];
   return (
     <>
@@ -70,7 +70,7 @@ const DocumentType = ({
         <form className="document-type flex flex-col gap-5" onSubmit={handleSelectType}>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5 text-primary" />
             </div>
           ) : (
             <div className="flex flex-col gap-2">

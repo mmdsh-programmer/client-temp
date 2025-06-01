@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-import { Spinner, Typography } from "@material-tailwind/react";
-
+import { Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { ERoles } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -78,7 +78,7 @@ const InviteToRepo = () => {
               register={{ ...register("username") }}
             />
             {isLoadingRoles ? (
-              <Spinner color="deep-purple" />
+              <Spinner className="text-primary" />
             ) : (
               <SelectAtom
                 className="repo-invite-form__select w-auto"

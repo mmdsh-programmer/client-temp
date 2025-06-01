@@ -4,7 +4,7 @@ import { IChildrenFilter } from "@interface/app.interface";
 import LoadMore from "@components/molecules/loadMore";
 import React, { useEffect } from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import TreeCatItem from "./treeCatItem";
 import { categoryQueryParamsAtom } from "@atom/category";
 import { repoAtom } from "@atom/repository";
@@ -75,7 +75,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="flex h-[50px] w-full items-center justify-center">
-            <Spinner color="deep-purple" />
+            <Spinner className="text-primary" />
           </div>
         ) : categoryChildren?.pages[0].list.length ? (
           categoryChildren?.pages.map((page) => {

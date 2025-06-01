@@ -4,8 +4,8 @@ import LoadMore from "@components/molecules/loadMore";
 import QuestionAnswerItem from "./questionAnswerItem";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
 import useGetQuestionAnswerList from "@hooks/questionAnswer/useGetQuestionAnswerList";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   postId: number;
@@ -25,7 +25,7 @@ const QuestionAnswerList = ({ postId, isAnswerList }: IProps) => {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6 text-primary" />
         </div>
       </div>
     );

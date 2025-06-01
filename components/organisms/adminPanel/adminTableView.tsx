@@ -6,7 +6,7 @@ import { IFeedbackView } from "./adminPanelFeedback";
 import { IOffer } from "@interface/offer.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 
@@ -28,7 +28,7 @@ const AdminTableView = ({
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading || isFetching ? (
           <div className="w-full h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="deep-purple" />
+            <Spinner className="h-8 w-8 text-primary" />
           </div>
         ) : listLength ? (
           <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">

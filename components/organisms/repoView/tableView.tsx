@@ -6,9 +6,9 @@ import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoMenu from "@components/molecules/repoMenu";
-import { Spinner } from "@material-tailwind/react";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
+import { Spinner } from "@components/atoms/spinner";
 
 const TableView = ({
   isLoading,
@@ -24,7 +24,7 @@ const TableView = ({
   if (isLoading || isFetching) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }

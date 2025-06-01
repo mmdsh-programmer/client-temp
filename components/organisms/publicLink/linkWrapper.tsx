@@ -1,4 +1,4 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { CopyIcon, SettingIcon } from "@components/atoms/icons";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import React, { useState } from "react";
@@ -12,6 +12,7 @@ import copy from "copy-to-clipboard";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateTinyLink from "@hooks/tinyLink/useCreateTinyLink";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   role: IRoles;
@@ -128,7 +129,7 @@ const LinkWrapper = ({ role }: IProps) => {
               }}
             >
               {isPending ? (
-                <Spinner className="h-4 w-4" color="blue" />
+                <Spinner className="h-4 w-4 text-info" />
               ) : (
                 <Typography className="text__label__button !text-[10px] text-link">
                   کپی لینک کوتاه

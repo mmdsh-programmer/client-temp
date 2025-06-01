@@ -122,7 +122,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">مخزن</Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5 text-primary" />
             </div>
           ) : (
             <SelectAtom
@@ -149,7 +149,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {ImagesIsLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5 text-primary" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">

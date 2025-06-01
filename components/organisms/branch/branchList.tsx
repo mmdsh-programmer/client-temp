@@ -1,5 +1,4 @@
-import { Spinner, Typography } from "@material-tailwind/react";
-
+import { Typography } from "@material-tailwind/react";
 import BranchCollapse from "../../molecules/branchCollapse";
 import Error from "../error";
 import LoadMore from "@components/molecules/loadMore";
@@ -9,6 +8,7 @@ import { branchIdAtom } from "@atom/branch";
 import useGetBranchList from "@hooks/branch/useGetBranchList";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   branchId: number | null;
@@ -46,7 +46,7 @@ const BranchList = ({ branchId }: IProps) => {
     <>
       {isLoading ? (
         <div className="w-full flex justify-center h-3 my-3">
-          <Spinner className="w-4 h-4" color="deep-purple" />
+          <Spinner className="w-4 h-4 text-primary" />
         </div>
       ) : (
         branchList?.pages.map((page) => {

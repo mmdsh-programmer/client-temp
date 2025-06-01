@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-import { Spinner, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -91,7 +92,7 @@ const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label">انتخاب گروه </Typography>
           {isLoading ? (
-            <Spinner className="h-5 w-5" color="deep-purple" />
+            <Spinner className="h-5 w-5 text-primary" />
           ) : (
             <SelectAtom
               options={groupOptions}

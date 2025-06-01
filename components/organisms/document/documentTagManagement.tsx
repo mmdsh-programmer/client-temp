@@ -4,13 +4,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue } from "recoil";
 import DocumentTagList from "@components/organisms/document/documentTagList";
 import SearchableDropdown from "../../molecules/searchableDropdown";
-import { Spinner } from "@material-tailwind/react";
 import { repoAtom } from "@atom/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -67,8 +67,8 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     repoId!,
     getDocument!.id,
     sharedDocuments === "true" ||
-      currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id),
+    currentPath === "/admin/sharedDocuments" ||
+    (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id),
     true,
     true,
     `document-${getDocument!.id}-info-tags`,
@@ -112,7 +112,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   return isLoading || isLoadingTags || isLoadingDomainTags ? (
     <div className="mt-2 flex w-full justify-center">
-      <Spinner className="h-5 w-5" color="deep-purple" />
+      <Spinner className="h-5 w-5 text-primary" />
     </div>
   ) : (
     <div className="flex flex-col gap-2">

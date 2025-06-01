@@ -6,7 +6,6 @@ import {
   MenuHandler,
   MenuItem,
   MenuList,
-  Spinner,
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -18,6 +17,7 @@ import { toPersianDigit } from "@utils/index";
 import useGetDocumentPublishLink from "@hooks/document/useGetDocumentPublishLink";
 import useGetPublishDocumentVersions from "@hooks/publish/useGetPublishDocumentVersions";
 import { useRecoilValue } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   repoId: number;
@@ -68,7 +68,7 @@ const PublishChangeVersion = ({
   if (isLoading || isLoadingPublishedDocumentVersions) {
     return (
       <div className="flex items-center w-fit">
-        <Spinner className="h-5 w-5" color="deep-purple" />
+        <Spinner className="h-5 w-5 text-primary" />
       </div>
     );
   }

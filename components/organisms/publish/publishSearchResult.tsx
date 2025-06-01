@@ -1,10 +1,11 @@
-import { List, ListItem, Spinner } from "@material-tailwind/react";
+import { List, ListItem } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import Error from "@components/organisms/error";
 import LoadMore from "@components/molecules/loadMore";
 import PublishSearchResultItem from "./publishSearchResultItem";
 import useSearchPublishContent from "@hooks/publish/useSearchPublishContent";
+import { Spinner } from "@components/atoms/spinner";
 
 export interface ISearchResultItem {
   versionId: number;
@@ -49,7 +50,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
   if (isLoading) {
     return (
       <div className="w-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }

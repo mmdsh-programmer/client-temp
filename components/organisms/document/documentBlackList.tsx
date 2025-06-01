@@ -1,8 +1,8 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
-
+import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import FormInput from "@components/atoms/input/formInput";
 import { IUserList } from "../dialogs/document/documentAccessPublishingDialog";
@@ -82,7 +82,7 @@ const DocumentBlackList = ({
       </Typography>
       {isLoading ? (
         <div className="flex justify-center mt-4">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4 text-primary" />
         </div>
       ) : (
         <div className="flex flex-col gap-4">

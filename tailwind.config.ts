@@ -74,13 +74,14 @@ module.exports = withMT({
         hover: "var(--icon-hover)",
       },
       textColor: {
-        primary: "var(--text-primary)",
+        primary: "var(--primary-normal)",
         secondary: "var(--text-secondary)",
         hint: "var(--text-hint)",
         placeholder: "var(--text-placeholder)",
         primary_normal: "var(--text-primary-normal)",
         link: "var(--text-link)",
         success: "var(--success-normal)",
+        error: "var(--error)",
       },
       fontFamily: { iranYekan: ["var(--font-iran-yekan)", ...fontFamily.sans] },
       screens: {

@@ -2,12 +2,12 @@ import InviteRequestByOwner from "./inviteRequestByOwner";
 import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
 import UserItem from "./userItem";
 import { repoAtom } from "@atom/repository";
 import useGetInviteRequestsByOwner from "@hooks/user/useGetInviteRequestsByOwner";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
 import { useRecoilValue } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   createRepoDialog?: boolean;
@@ -36,7 +36,7 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
     <div className="repo-users overflow-y-auto">
       {isLoadingInviteToRepoRequests || isLoadingRepoUsers ? (
         <div className="flex h-full w-full justify-center overflow-hidden">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8 text-primary" />
         </div>
       ) : (
         <div

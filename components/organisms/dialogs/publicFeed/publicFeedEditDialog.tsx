@@ -1,5 +1,6 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import { Spinner } from "@components/atoms/spinner";
 
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -110,7 +111,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           <Typography className="form_label">عکس خبرنامه </Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5 text-primary" />
             </div>
           ) : (
             <div className="flex gap-2 flex-wrap">
