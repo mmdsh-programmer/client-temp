@@ -54,7 +54,7 @@ const RepoInvite = () => {
   };
 
   return isFetchingRoles ? (
-    <Spinner className="text-primary" />
+    <Spinner className="text-primary h-6 w-6" />
   ) : (
     <form className="repo-invite-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">

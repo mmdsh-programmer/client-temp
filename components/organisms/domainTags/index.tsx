@@ -32,7 +32,7 @@ const DomainTags = () => {
     <div className="p-5">
       {isLoading ? (
         <div className="flex w-full items-center justify-center">
-          <Spinner className="text-primary" />
+          <Spinner className="text-primary h-6 w-6" />
         </div>
       ) : (
         <div className="tag-list flex flex-wrap gap-2">

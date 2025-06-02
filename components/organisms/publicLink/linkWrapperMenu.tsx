@@ -36,7 +36,7 @@ const LinkWrapperMenu = ({ role }: IProps) => {
       onClick={handleRemovePublicLink}
     >
       {deletePublicLinkHook.isPending ? (
-        <Spinner className="text-primary" />
+        <Spinner className="text-primary h-6 w-6" />
       ) : (
         <DeleteIcon className="h-5 w-5" />
       )}

@@ -17,7 +17,7 @@ const PublicLink = () => {
         <div className="border-b-[1px] bg-gray-200 w-full" />
         {isLoading ? (
           <div className="flex justify-center mt-4 items-center  w-full">
-            <Spinner className="text-primary" />
+            <Spinner className="text-primary h-6 w-6" />
           </div>
         ) : (
           <div className="repo-public-link__list flex flex-col pt-5 gap-y-5">
