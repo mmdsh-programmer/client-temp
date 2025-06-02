@@ -65,11 +65,8 @@ export const updateCustomPostByDomainAction = async (
       allowQuestionReplies,
       accessToCreateRepo,
     );
-    console.log("-------------------- updateCustomPostByDomainAction success -----------------", response);
-
     return response;
   } catch (error) {
-    console.log("-------------------- updateCustomPostByDomainAction error -----------------", error);
     return normalizeError(error as IActionError);
   }
 };
