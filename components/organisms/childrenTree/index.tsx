@@ -75,7 +75,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="flex h-[50px] w-full items-center justify-center">
-            <Spinner className="text-primary" />
+            <Spinner className="text-primary h-6 w-6" />
           </div>
         ) : categoryChildren?.pages[0].list.length ? (
           categoryChildren?.pages.map((page) => {

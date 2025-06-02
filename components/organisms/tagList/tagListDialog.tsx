@@ -65,7 +65,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
         <div className="h-full px-5 py-3 xs:p-6">
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
-              <Spinner className="text-primary" />
+              <Spinner className="text-primary h-6 w-6" />
             </div>
           ) : (
             <>

@@ -1,4 +1,4 @@
-import { Radio, Spinner } from "@material-tailwind/react";
+import { Spinner } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
@@ -12,6 +12,7 @@ import useAddBlackList from "@hooks/document/useAddBlackList";
 import useAddWhiteList from "@hooks/document/useAddWhiteList";
 import useGetWhiteBlackList from "@hooks/document/useGetWhiteBlackList";
 import { useRecoilValue } from "recoil";
+import Radio from "@components/atoms/radio";
 
 export interface IUserList {
   username: string;
@@ -30,18 +31,13 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
   const [alert, setAlert] = useState(false);
   const [selectedUserList, setSelectedUserList] = useState<IUserList[]>([]);
 
-  const { data: userList, isLoading } = useGetWhiteBlackList(
-    getRepo!.id,
-    document!.id
-  );
+  const { data: userList, isLoading } = useGetWhiteBlackList(getRepo!.id, document!.id);
 
   const whiteListHook = useAddWhiteList();
   const blackListHook = useAddBlackList();
 
   const listHook = type === "black-list" ? blackListHook : whiteListHook;
-  const users = userList?.blackList.length
-    ? userList.blackList
-    : userList?.whiteList;
+  const users = userList?.blackList.length ? userList.blackList : userList?.whiteList;
 
   const handleClose = () => {
     setOpen(false);
@@ -128,43 +124,23 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
       <div className="flex flex-col gap-5">
         <div className="flex gap-5">
           <Radio
-            labelProps={{
-              className: "text-[13px]",
-            }}
-            containerProps={{
-              className: "p-0 ml-2",
-            }}
             className="document-white-list__radio-button radio !hover:shadow-none"
-            color="deep-purple"
             name="type"
             label="لیست سفید"
-            crossOrigin=""
             onChange={handleTypeChange}
             checked={type === "white-list"}
             value="white-list"
           />
           <Radio
-            labelProps={{
-              className: "text-[13px] ",
-            }}
-            containerProps={{
-              className: "p-0 ml-2",
-            }}
             className="document-black-list__radio-button !hover:shadow-none"
-            color="deep-purple"
             name="type"
             label="لیست سیاه"
-            crossOrigin=""
             checked={type === "black-list"}
             onChange={handleTypeChange}
             value="black-list"
           />
         </div>
-        {isLoading ? (
-          <Spinner className="w-6 h-6" color="deep-purple" />
-        ) : (
-          renderList()
-        )}
+        {isLoading ? <Spinner className="h-6 w-6" color="deep-purple" /> : renderList()}
       </div>
     </ConfirmFullHeightDialog>
   );

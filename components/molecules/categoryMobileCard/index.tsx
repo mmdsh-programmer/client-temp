@@ -1,6 +1,5 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-
 import CategoryMenu from "../categoryMenu/categoryMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { FolderIcon } from "@components/atoms/icons";
@@ -11,6 +10,7 @@ import { bulkItemsAtom } from "@atom/bulk";
 import { categoryShowAtom } from "@atom/category";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
+import Checkbox from "@components/atoms/checkbox";
 
 interface IProps {
   category: ICategoryMetadata;
@@ -37,8 +37,8 @@ const CategoryMobileCard = ({ category }: IProps) => {
       return isChecked
         ? [...oldValue, category]
         : [...oldValue].filter((item) => {
-            return item.id !== category.id;
-          }) || [];
+          return item.id !== category.id;
+        }) || [];
     });
   };
 
@@ -49,14 +49,9 @@ const CategoryMobileCard = ({ category }: IProps) => {
         <div className="flex w-full items-center gap-2">
           {currentPath === "/admin/dashboard" ? null : (
             <Checkbox
-              color="deep-purple"
-              containerProps={{
-                className: "p-[2px]",
-              }}
               onClick={(e) => {
                 return e.stopPropagation();
               }}
-              crossOrigin=""
               onChange={(e) => {
                 handleCheckItem(e);
               }}

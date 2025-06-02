@@ -1,6 +1,7 @@
 import React from "react";
-import { Checkbox, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { IDomainTheme } from "@interface/domain.interface";
+import Checkbox from "@components/atoms/checkbox";
 
 interface AdvancedSettingsProps {
   domain: IDomainTheme;
@@ -13,55 +14,37 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
       <Checkbox
         name="useDomainTag"
         checked={domain.useDomainTag}
-        readOnly
         disabled
-        color="deep-purple"
-        crossOrigin=""
-        containerProps={{ className: "p-1" }}
-        labelProps={{ className: "mr-2" }}
-        label={<Typography className="form_label">نمایش مدیریت تگ‌ها</Typography>}
+        readOnly={true}
+        label="نمایش مدیریت تگ‌ها"
       />
       <Checkbox
         name="accessToCreateRepo"
         checked={domain.accessToCreateRepo}
         onChange={onCheckboxChange}
-        color="deep-purple"
-        crossOrigin=""
-        containerProps={{ className: "p-1" }}
-        labelProps={{ className: "mr-2" }}
-        label={<Typography className="form_label">دسترسی ایجاد مخزن</Typography>}
+        label="دسترسی ایجاد مخزن"
       />
       <Checkbox
         name="hasLikes"
         checked={domain.hasLikes}
         onChange={onCheckboxChange}
-        color="deep-purple"
-        crossOrigin=""
-        containerProps={{ className: "p-1" }}
-        labelProps={{ className: "mr-2" }}
-        label={<Typography className="form_label">قابلیت نمایش لایک / دیسلایک</Typography>}
+        label="قابلیت نمایش لایک / دیسلایک"
       />
       <div className="flex flex-col gap-4">
         <Checkbox
           name="hasComments"
           checked={domain.hasComments}
           onChange={onCheckboxChange}
-          color="deep-purple"
-          crossOrigin=""
-          containerProps={{ className: "p-1" }}
-          labelProps={{ className: "mr-2" }}
-          label={<Typography className="form_label">نمایش قسمت نظرات</Typography>}
+
+          label="نمایش قسمت نظرات"
         />
         <div className="mr-8">
           <Checkbox
             name="needsAdminApprovalForComments"
             checked={domain.needsAdminApprovalForComments}
             onChange={onCheckboxChange}
-            color="deep-purple"
-            crossOrigin=""
-            containerProps={{ className: "p-1" }}
-            labelProps={{ className: "mr-2" }}
-            label={<Typography className="form_label">آیا نیاز به تایید ادمین دارد؟</Typography>}
+
+            label="آیا نیاز به تایید ادمین دارد؟"
           />
         </div>
       </div>
@@ -70,34 +53,23 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           name="hasQuestions"
           checked={domain.hasQuestions}
           onChange={onCheckboxChange}
-          color="deep-purple"
-          crossOrigin=""
-          containerProps={{ className: "p-1" }}
-          labelProps={{ className: "mr-2" }}
-          label={<Typography className="form_label">نمایش قسمت سوالات</Typography>}
+
+          label="نمایش قسمت سوالات"
         />
         <div className="mr-8 flex flex-col gap-4">
           <Checkbox
             name="needsAdminApprovalForQuestions"
             checked={domain.needsAdminApprovalForQuestions}
             onChange={onCheckboxChange}
-            color="deep-purple"
-            crossOrigin=""
-            containerProps={{ className: "p-1" }}
-            labelProps={{ className: "mr-2" }}
-            label={<Typography className="form_label">آیا نیاز به تایید ادمین دارد؟</Typography>}
+
+            label="آیا نیاز به تایید ادمین دارد؟"
           />
           <Checkbox
             name="allowQuestionReplies"
             checked={domain.allowQuestionReplies}
             onChange={onCheckboxChange}
-            color="deep-purple"
-            crossOrigin=""
-            containerProps={{ className: "p-1" }}
-            labelProps={{ className: "mr-2" }}
-            label={
-              <Typography className="form_label">آیا امکان پاسخ به سوال وجود دارد؟</Typography>
-            }
+
+            label="آیا امکان پاسخ به سوال وجود دارد؟"
           />
         </div>
       </div>

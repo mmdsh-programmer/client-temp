@@ -9,7 +9,7 @@ export const Spinner = (props: IProps) => {
     const { className } = props;
     return (
         <svg
-            className={`animate-spin ${className || "h-6 w-6"}`}
+            className={`animate-spin ${className || ""}`}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"

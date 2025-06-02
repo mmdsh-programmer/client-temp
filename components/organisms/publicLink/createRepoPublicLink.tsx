@@ -1,7 +1,6 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
@@ -14,6 +13,7 @@ import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Checkbox from "@components/atoms/checkbox";
 
 const validationSchema = yup.object().shape({
   hasExpireTime: yup.boolean().required(),
@@ -128,18 +128,11 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
       >
         <div className="flex flex-col gap-2">
           <Checkbox
-            crossOrigin="anonymous"
-            label={
-              <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal ">
-                افزودن رمز عبور
-              </Typography>
-            }
-            color="deep-purple"
+            label="افزودن رمز عبور"
             checked={hasPassword}
             onChange={() => {
               setHasPassword(!hasPassword);
             }}
-            containerProps={{ className: "-mr-3" }}
             className="repo-create-public-link-form__add-password-checkbox"
           />
           {hasPassword && (
@@ -158,18 +151,11 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <Checkbox
-            crossOrigin="anonymous"
-            label={
-              <Typography className="text-primary_normal_normal text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] ">
-                افزودن تاریخ انقضای لینک
-              </Typography>
-            }
-            color="deep-purple"
+            label="افزودن تاریخ انقضای لینک"
             checked={hasExpireTime}
             onChange={() => {
               setValue("hasExpireTime", !hasExpireTime);
             }}
-            containerProps={{ className: "-mr-3" }}
             className="repo-create-public-link-form__add-expire-time-checkbox"
           />
           {hasExpireTime ? (

@@ -1,9 +1,9 @@
-import { Button, Radio, Typography } from "@material-tailwind/react";
-
+import { Button, Typography } from "@material-tailwind/react";
 import { AddImageIcon } from "@components/atoms/icons";
 import React from "react";
 import RepoAttachDefaultImage from "@components/molecules/repoAttachImage/repoAttachDefaultImage";
 import RepoDefaultImage from "../repoDefaultImage";
+import Radio from "@components/atoms/radio";
 
 interface IProps {
   imageType: "default" | "custom" | undefined;
@@ -24,23 +24,18 @@ const RepoAttachCustomImage = ({
     <div className="repo-attach-image flex flex-col gap-6">
       <div className="flex flex-col gap-4">
         <Radio
-          crossOrigin="anonymous"
           name="default_image"
-          color="deep-purple"
           className="repo-attach-default-image__radio"
           label={
             <div>
-              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
                 تصویر پیش‌فرض
               </Typography>
-              <Typography className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
+              <Typography className="text-[12px] font-normal leading-[20px] -tracking-[0.12px] text-hint">
                 انتخاب تصویر پیش‌فرض برای مخزن
               </Typography>
             </div>
           }
-          containerProps={{
-            className: "-mt-5",
-          }}
           checked={imageType === "default"}
           value={imageType}
           onChange={() => {
@@ -58,22 +53,17 @@ const RepoAttachCustomImage = ({
       </div>
       <div className="flex flex-col gap-4">
         <Radio
-          crossOrigin="anonymous"
           name="custom_image"
-          color="deep-purple"
           label={
             <div>
-              <Typography className="text-primary_normal font-medium text-[13px] leading-[19.5px] -tracking-[0.13px] ">
+              <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
                 تصویر سفارشی
               </Typography>
-              <Typography className="text-hint text-[12px] leading-[20px] -tracking-[0.12px] font-normal">
+              <Typography className="text-[12px] font-normal leading-[20px] -tracking-[0.12px] text-hint">
                 انتخاب تصویر دلخواه برای مخزن
               </Typography>
             </div>
           }
-          containerProps={{
-            className: "-mt-5",
-          }}
           checked={imageType === "custom"}
           value={imageType}
           onChange={() => {
@@ -85,7 +75,7 @@ const RepoAttachCustomImage = ({
           onClick={() => {
             setOpenFileManagement(true);
           }}
-          className="repo-attach-custom-image-button p-0 flex justify-center items-center rounded-lg border-[1px] border-dashed border-normal bg-secondary w-[82px] h-[82px]"
+          className="repo-attach-custom-image-button flex h-[82px] w-[82px] items-center justify-center rounded-lg border-[1px] border-dashed border-normal bg-secondary p-0"
           placeholder=""
           disabled={imageType !== "custom"}
         >

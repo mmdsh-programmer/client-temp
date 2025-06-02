@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
-import { Collapse, Radio, Typography } from "@material-tailwind/react";
+import { Collapse, Typography } from "@material-tailwind/react";
 import {
   ICategoryTreeItem,
   IDocumentTreeItem,
@@ -21,6 +21,7 @@ import { sortAtom } from "atom/sortParam";
 import useGetChildren from "@hooks/category/useGetChildren";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
+import Radio from "@components/atoms/radio";
 
 interface IProps {
   catItem: ICategoryTreeItem | IDocumentTreeItem;
@@ -82,11 +83,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
       <div className="flex">
         {move && (
           <Radio
-            containerProps={{ className: "!p-0" }}
             className="transition-all hover:scale-105 hover:before:opacity-0"
-            ripple={false}
-            color="deep-purple"
-            crossOrigin=""
             onChange={handleSelectDestinationCat}
             checked={getCategoryMoveDest?.id === catItem.id}
           />
