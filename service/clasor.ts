@@ -4426,7 +4426,7 @@ export const updateCustomPostByDomain = async (
     const redisClient = await getRedisClient();
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
-      await redisClient?.remove(`domain:${domain}`);
+      await redisClient?.del(`domain:${domain}`);
     }
     const response = await axiosClasorInstance.put<IClasorResult<any>>(
       "domain",
@@ -4446,11 +4446,8 @@ export const updateCustomPostByDomain = async (
       },
     );
 
-    console.log("-------------------- updateCustomPostByDomain success -----------------", response);
-
     return response.data.data;
   } catch (error) {
-    console.log("-------------------- updateCustomPostByDomain error -----------------", error);
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
