@@ -28,9 +28,6 @@ const HeaderListTemplate = ({
   const setActiveTour = useSetRecoilState(activeTourAtom);
   const { data: userInfo } = useGetUser();
 
-  console.log("------------------------uuuuuuuuuuuuuu------------------", (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") && !userInfo?.domainConfig?.accessToCreateRepo &&
-  header.toString() === "مخزن‌ها")
-
   return (
     <header className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-1">
@@ -57,22 +54,22 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") && !userInfo?.domainConfig?.accessToCreateRepo &&
+                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
+                !userInfo?.domainConfig?.accessToCreateRepo &&
                 header === "مخزن‌ها"
               }
             />
           </div>
           <div className="hidden md:!hidden xs:flex">
             <Button
-              className="h-9 w-9 rounded-lg bg-primary-normal p-0 "
+              className="h-9 w-9 rounded-lg bg-primary-normal p-0"
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
               disabled={
-                !(!userInfo?.isClasorAdmin ||
-                userInfo?.domainRole !== "owner") &&
-                  !userInfo?.domainConfig?.accessToCreateRepo &&
-                  header === "مخزن‌ها"
+                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
+                !userInfo?.domainConfig?.accessToCreateRepo &&
+                header === "مخزن‌ها"
               }
             >
               <AddIcon className="h-5 w-5 stroke-white" />
@@ -80,10 +77,15 @@ const HeaderListTemplate = ({
           </div>
           <div className="absolute bottom-20 left-6 z-[999] xs:hidden">
             <Button
-              className=" z-[99] h-[54px] w-[54px] rounded-full bg-primary-normal p-0 "
+              className="z-[99] h-[54px] w-[54px] rounded-full bg-primary-normal p-0"
               onClick={() => {
                 setOpenCreateRepo(true);
               }}
+              disabled={
+                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
+                !userInfo?.domainConfig?.accessToCreateRepo &&
+                header === "مخزن‌ها"
+              }
             >
               <AddIcon className="h-6 w-6 stroke-white" />
             </Button>
@@ -91,8 +93,8 @@ const HeaderListTemplate = ({
           {renderList?.()}
           {openCreateRepo
             ? renderDialog?.(() => {
-              return setOpenCreateRepo(false);
-            })
+                return setOpenCreateRepo(false);
+              })
             : null}
         </div>
       </div>

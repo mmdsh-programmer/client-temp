@@ -289,6 +289,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         <LoadingButton
           className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
+            editorRef.current?.on("getData", handleSave)
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}

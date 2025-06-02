@@ -51,10 +51,12 @@ const useUpdateDoamin = () => {
       queryClient.invalidateQueries({
         queryKey: ["getDomainInfo"],
       });
+      console.log("-------------------- useUpdateDoamin success -----------------", response);
       callBack?.();
       toast.success(" دامنه با موفقیت ویرایش شد");
     },
     onError: (error) => {
+      console.log("-------------------- useUpdateDoamin success -----------------", error);
       toast.error(error.message || "خطا در ویرایش دامنه");
     },
   });

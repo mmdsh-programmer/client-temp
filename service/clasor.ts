@@ -159,7 +159,7 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
         throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
     }
   } else {
-    throw new ServerError(["حطای نامشخصی رخ داد"]);
+    throw new ServerError(["خطای نامشخصی رخ داد"]);
   }
 };
 
@@ -4446,8 +4446,11 @@ export const updateCustomPostByDomain = async (
       },
     );
 
+    console.log("-------------------- updateCustomPostByDomain success -----------------", response);
+
     return response.data.data;
   } catch (error) {
+    console.log("-------------------- updateCustomPostByDomain error -----------------", error);
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
