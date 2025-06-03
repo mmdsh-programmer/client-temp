@@ -34,13 +34,16 @@ const nextConfig = {
     return newConfig;
   },
   async rewrites() {
-    return [
-      {
-        source: "/blog/:path*",
-        destination:
-          `${process.env.BLOG_BOX_URL}/blog/vukwckXC_MPm28GUid63GRFXe40Ui_O_2tGlcK0vmU8_/:path*`,
-      },
-    ];
+    if(process.env.BLOG_BOX_URL && process.env.BLOG_ID){ 
+      return [
+        {
+          source: "/blog/:path*",
+          destination:
+            `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_ID}/:path*`,
+        },
+      ];
+    }
+    return [];
   },
   cacheHandler:
     process.env.NODE_ENV === "production"
