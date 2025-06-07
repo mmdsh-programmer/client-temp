@@ -31,9 +31,9 @@ const BaseTemplate = ({ children, domainInfo }: IProps) => {
           <Sidebar>
             <SidebarHeader domainInfo={domainInfo} />
           </Sidebar>
-          <main className="bg-primary flex-grow h-screen overflow-hidden">
+          <main className="bg-primary flex-grow h-screen overflow-hidden flex flex-col">
             <Header />
-            <div className="overflow-auto h-[calc(100vh-195px)] xs:h-[calc(100vh-68px)] flex flex-col px-0 py-0 xs:px-8 xs:pt-6 xs:pb-8">
+            <div className="overflow-auto max-h-[calc(100vh-180px)] h-[calc(100vh-180px)] xs:h-[calc(100vh-68px)] xs:max-h-[calc(100vh-68px)] flex flex-col px-0 py-0 xs:px-8 xs:pt-6 xs:pb-8">
               {children}
             </div>
             <SidebarMobileView />

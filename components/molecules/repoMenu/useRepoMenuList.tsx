@@ -87,6 +87,7 @@ const useMenuList = (
             <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
+              setOpenRepoActionDrawer(false);
               if (repo) {
                 setRepo(repo);
               }
@@ -98,6 +99,7 @@ const useMenuList = (
             <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
+              setOpenRepoActionDrawer(false);
               if (repo) {
                 setRepo(repo);
               }
@@ -276,6 +278,7 @@ const useMenuList = (
             <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
             () => {
               setModalState("bookmark", true);
+              setOpenRepoActionDrawer(false);
               if (repo) {
                 setRepo(repo);
               }
@@ -287,6 +290,7 @@ const useMenuList = (
         <ShareIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
           setModalState("share", true);
+          setOpenRepoActionDrawer(false);
           if (repo) {
             setRepo(repo);
           }

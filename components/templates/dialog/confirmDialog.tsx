@@ -41,7 +41,7 @@ const ConfirmDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} bg-white rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0 `}
+      className={`${className} confirm-dialog bg-white rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0 `}
       dismiss={{
         enabled: false,
       }}

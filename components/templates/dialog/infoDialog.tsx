@@ -35,11 +35,11 @@ const InfoDialog = ({
       dismiss={{
         enabled: false,
       }}
-      className={`${className} flex h-full w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg `}
+      className={`${className} flex h-full w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header border-b-none flex items-center justify-between gap-[10px] border-normal py-[6px] pl-4 pr-1 xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
+        className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
