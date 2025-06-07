@@ -1,8 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
-import { Button } from "@material-tailwind/react";
-import { Typography } from "@material-tailwind/react";
-import { Spinner } from "@components/atoms/spinner";
+import { Button, Typography } from "@material-tailwind/react";
 import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import React, { useState } from "react";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
@@ -17,10 +15,11 @@ import { IDocumentMetadata } from "@interface/document.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import SearchFilter from "@components/molecules/searchFilter";
+import { Spinner } from "@components/atoms/spinner";
 import TableHead from "@components/molecules/tableHead";
+import { sortAtom } from "@atom/sortParam";
 import { usePathname } from "next/navigation";
 import { useRecoilState } from "recoil";
-import { sortAtom } from "@atom/sortParam";
 
 interface ITableHead {
   key: string;

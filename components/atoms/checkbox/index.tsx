@@ -1,5 +1,7 @@
-import { Typography } from "@material-tailwind/react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import React from "react";
+import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   checked?: boolean;
@@ -24,7 +26,7 @@ const CustomCheckbox = ({
 }: IProps) => {
   return (
     <label className="flex cursor-pointer select-none items-center gap-2">
-      <span className={`relative flex h-5 w-5 items-center justify-center`}>
+      <span className={`${className} relative flex h-5 w-5 items-center justify-center`}>
         <input
           type="checkbox"
           checked={checked}

@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
+import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModalAtom, editorModeAtom, editorPublicKeyAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import CancelButton from "@components/atoms/button/cancelButton";
+import Checkbox from "@components/atoms/checkbox";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { EDocumentTypes } from "@interface/enums";
 import { IRemoteEditorRef } from "clasor-remote-editor";
@@ -19,7 +21,6 @@ import { useDebouncedCallback } from "use-debounce";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
-import Checkbox from "@components/atoms/checkbox";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -289,7 +290,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         <LoadingButton
           className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
-            editorRef.current?.on("getData", handleSave)
+            editorRef.current?.on("getData", handleSave);
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}

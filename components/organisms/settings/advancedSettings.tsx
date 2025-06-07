@@ -1,7 +1,6 @@
-import React from "react";
-import { Typography } from "@material-tailwind/react";
-import { IDomainTheme } from "@interface/domain.interface";
 import Checkbox from "@components/atoms/checkbox";
+import { IDomainTheme } from "@interface/domain.interface";
+import React from "react";
 
 interface AdvancedSettingsProps {
   domain: IDomainTheme;
@@ -15,7 +14,7 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
         name="useDomainTag"
         checked={domain.useDomainTag}
         disabled
-        readOnly={true}
+        readOnly
         label="نمایش مدیریت تگ‌ها"
       />
       <Checkbox
