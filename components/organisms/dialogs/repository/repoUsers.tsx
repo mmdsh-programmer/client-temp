@@ -1,8 +1,7 @@
 import {
- Spinner,
  Typography
 } from "@material-tailwind/react";
-
+import { Spinner } from "@components/atoms/spinner";
 import { IRoles } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
@@ -45,7 +44,7 @@ const RepoUsers = () => {
       <div className="h-2 border-b-2 border-gray-300" />
       {isFetchingInviteRequests || isFetchingUsers ? (
         <div className="h-full w-full flex justify-center items-center">
-          <Spinner color="deep-purple" className="" />
+          <Spinner className="text-primary h-6 w-6" />
         </div>
       ) : (
         <div className="repo-users__list">

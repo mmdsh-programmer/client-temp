@@ -6,8 +6,8 @@ import FeedItem from "./feedItem";
 import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
 import useGetPublicFeeds from "@hooks/feeds/useGetPublicFeeds";
+import { Spinner } from "@components/atoms/spinner";
 
 const PublicFeedList = () => {
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -21,7 +21,7 @@ const PublicFeedList = () => {
     return (
       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6 text-primary" />
         </div>
       </div>
     );

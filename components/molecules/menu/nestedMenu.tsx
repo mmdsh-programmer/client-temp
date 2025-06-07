@@ -23,9 +23,10 @@ interface IProps {
       React.MouseEventHandler<HTMLButtonElement>;
     className?: string;
   }[];
+  className?: string;
 }
 
-const NestedMenu = ({ variant, menuName, subMenuList, icon }: IProps) => {
+const NestedMenu = ({ variant, menuName, subMenuList, icon, className }: IProps) => {
   const [openMenu, setOpenMenu] = useState(false);
   return (
     <Menu
@@ -49,7 +50,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon }: IProps) => {
         </MenuItem>
       </MenuHandler>
       <MenuList
-        className="!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary_normal overflow-hidden p-[2px]"
+        className={`${className}!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
         placeholder="menu-list"
       >
         {subMenuList.map((menuItem, index) => {
@@ -58,7 +59,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon }: IProps) => {
               // eslint-disable-next-line react/no-array-index-key
               key={`sub-menu-${index}`}
               placeholder="menu-item"
-              className={`p-2 ${menuItem.className}`}
+              className={`p-2 ${menuItem.className || ""}`}
               onClick={menuItem.onClick}
               disabled={menuItem.disabled}
             >

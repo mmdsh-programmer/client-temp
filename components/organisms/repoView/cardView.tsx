@@ -4,7 +4,7 @@ import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import RepoCardMode from "@components/molecules/repoCardMode";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 
 const CardView = ({
   isLoading,
@@ -20,7 +20,7 @@ const CardView = ({
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="w-full min-h-[calc(100vh-340px)] h-full flex justify-center items-center">
-            <Spinner className="h-8 w-8" color="deep-purple" />
+            <Spinner className="h-8 w-8 text-primary" />
           </div>
         ) : listLength ? (
           <>

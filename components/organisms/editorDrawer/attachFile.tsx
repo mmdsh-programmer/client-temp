@@ -15,7 +15,7 @@ import useRepoId from "@hooks/custom/useRepoId";
 import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 import { selectedDocumentAtom } from "@atom/document";
 import { useRecoilValue } from "recoil";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 
 const fileTablePageSize = 20;
 
@@ -134,7 +134,7 @@ const AttachFile = ({
     <div className="h-full flex flex-col gap-6 justify-between px-6 py-4">
         {isLoadingFiles ? (
           <div className="h-full flex justify-center">
-            <Spinner className="h-5 w-5" />
+            <Spinner className="h-5 w-5 text-primary" />
           </div>
         ) : userInfo ? (
           <FileList

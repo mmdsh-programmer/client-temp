@@ -1,5 +1,5 @@
-import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
-
+import { DialogBody, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { DocIcon } from "@components/atoms/icons";
 import { IOffer } from "@interface/offer.interface";
 import InfoDialog from "@components/templates/dialog/infoDialog";
@@ -17,7 +17,7 @@ const AdminFeedbackDialog = ({ setOpen, feedback }: IProps) => {
   if (isFetching) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-4 w-4" color="deep-purple" />
+        <Spinner className="h-4 w-4 text-primary" />
       </div>
     );
   }

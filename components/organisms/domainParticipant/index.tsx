@@ -1,8 +1,8 @@
 import { AddIcon, DeleteIcon } from "@components/atoms/icons";
-import { Button, Spinner } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useState } from "react";
-
+import { Spinner } from "@components/atoms/spinner";
 import AddDomainParticipantDialog from "../dialogs/domainParticipant/addDomainParticipantDialog";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import RemoveDomainParticipantDialog from "../dialogs/domainParticipant/removeDomainParticipantDialog";
@@ -60,7 +60,7 @@ const DomainParticipant = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }

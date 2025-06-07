@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import useGetRepo from "@hooks/repository/useGetRepo";
 import useHandleRepoChange from "@hooks/repository/useHandleRepoChange";
 
@@ -66,7 +66,7 @@ const CheckRepoInfo = ({ children }: IProps) => {
   if (loading || isFetching) {
     return (
       <div className="w-full h-full flex-col flex justify-center items-center">
-        <Spinner className="h-10 w-10" color="deep-purple" />
+        <Spinner className="h-10 w-10 text-primary" />
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import { IRoles } from "@interface/users.interface";
 import React from "react";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
@@ -54,7 +54,7 @@ const RepoInvite = () => {
   };
 
   return isFetchingRoles ? (
-    <Spinner color="deep-purple" />
+    <Spinner className="text-primary h-6 w-6" />
   ) : (
     <form className="repo-invite-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-2">
@@ -89,8 +89,8 @@ const RepoInvite = () => {
             })}
           </select>
           {isPending ? (
-            <Spinner className="h-5 w-5" color="deep-purple" />
-          ) : (
+            <Spinner className="h-5 w-5 text-primary" />
+          ) : ( 
             <button
               disabled={isPending}
               className="repo-invite-form__button font-iranYekan mr-2 bg-white py-0 px-3 rounded-lg"

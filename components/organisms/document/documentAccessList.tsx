@@ -1,4 +1,4 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
@@ -12,6 +12,7 @@ import { translateRoles } from "@utils/index";
 import useDeleteAccessOfResource from "@hooks/accessManagement/useDeleteAccessOfResource";
 import useGetResourceUsers from "@hooks/accessManagement/useGetResourceUsers";
 import { useRecoilValue } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 const DocumentAccessList = () => {
   const [selectedUser, setSelectedUser] = useState("");
@@ -47,7 +48,7 @@ const DocumentAccessList = () => {
       <div className="flex flex-col w-full">
         {isLoading || isFetching ? (
           <div className="flex justify-center items-center w-full">
-            <Spinner className="h-6 w-6" color="deep-purple" />
+            <Spinner className="h-6 w-6 text-primary" />
           </div>
         ) : (
           <div className="docuemnt-direct-access-list flex flex-wrap gap-2">
@@ -74,7 +75,7 @@ const DocumentAccessList = () => {
                         actionIcon={
                           deleteAccess.isPending &&
                           selectedUser === accessItem.userName ? (
-                            <Spinner className="h-4 w-4" color="deep-purple" />
+                            <Spinner className="h-4 w-4 text-primary" />
                           ) : (
                             <Button
                               className="delete-button bg-transparent p-0"

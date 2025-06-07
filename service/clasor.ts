@@ -159,7 +159,7 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
         throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
     }
   } else {
-    throw new ServerError(["حطای نامشخصی رخ داد"]);
+    throw new ServerError(["خطای نامشخصی رخ داد"]);
   }
 };
 
@@ -175,6 +175,8 @@ export const getToken = async (code: string, redirectUrl: string) => {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+const memoryCache: Record<string, { value: any; expiresAt: number }> = {};
 
 export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
   const redisClient = await getRedisClient();
@@ -2380,8 +2382,7 @@ export const deleteVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
-        state === "draft" ? "/draft" : ""
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : ""
       }`,
       {
         headers: {
@@ -4425,7 +4426,7 @@ export const updateCustomPostByDomain = async (
     const redisClient = await getRedisClient();
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
-      await redisClient?.remove(`domain:${domain}`);
+      await redisClient?.del(`domain:${domain}`);
     }
     const response = await axiosClasorInstance.put<IClasorResult<any>>(
       "domain",

@@ -2,7 +2,7 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 import BranchGroupMenu from "@components/molecules/branchGroupMenu";
 import React from "react";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 import { branchIdAtom } from "@atom/branch";
@@ -41,7 +41,7 @@ const BranchGroupList = () => {
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
-        <Spinner className="h-8 w-8" color="deep-purple" />
+        <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }

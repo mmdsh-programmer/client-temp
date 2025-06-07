@@ -8,7 +8,7 @@ import { ICategoryView } from "@interface/category.interface";
 import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { usePathname } from "next/navigation";
 
 const MobileView = ({
@@ -32,7 +32,7 @@ const MobileView = ({
       </div>
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-8 w-8" color="deep-purple" />
+          <Spinner className="h-8 w-8 text-primary" />
         </div>
       ) : listLength ? (
         <div className="category-list flex flex-col gap-3">

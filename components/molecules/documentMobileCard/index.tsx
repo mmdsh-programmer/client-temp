@@ -1,4 +1,4 @@
-import { Checkbox, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import DocumentIcon from "../documentIcon";
 import DocumentMenu from "../documentMenu";
@@ -13,6 +13,7 @@ import { repoAtom } from "@atom/repository";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
+import Checkbox from "@components/atoms/checkbox";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -33,18 +34,13 @@ const DocumentMobileCard = ({ document }: IProps) => {
       return;
     }
     const path = selectedCat
-      ? `edit?repoId=${document.repoId}&categoryId=${
-          selectedCat.id
-        }&documentId=${document.id}&repoGroupHash=${
-          getRepo?.userGroupHash
-        }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${
-          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }`
-      : `edit?repoId=${document.repoId}&documentId=${
-          document.id
-        }&repoGroupHash=${getRepo?.userGroupHash}&type=${document?.contentType}${
-          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }`;
+      ? `edit?repoId=${document.repoId}&categoryId=${selectedCat.id
+      }&documentId=${document.id}&repoGroupHash=${getRepo?.userGroupHash
+      }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+      }`
+      : `edit?repoId=${document.repoId}&documentId=${document.id
+      }&repoGroupHash=${getRepo?.userGroupHash}&type=${document?.contentType}${document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+      }`;
 
     window.open(path, "_blank");
   };
@@ -60,8 +56,8 @@ const DocumentMobileCard = ({ document }: IProps) => {
       return isChecked
         ? [...oldValue, document]
         : [...oldValue].filter((item) => {
-            return item.id !== document.id;
-          }) || [];
+          return item.id !== document.id;
+        }) || [];
     });
   };
 
@@ -71,16 +67,11 @@ const DocumentMobileCard = ({ document }: IProps) => {
       name={
         <div className="flex w-full items-center gap-2">
           {currentPath === "/admin/dashboard" ||
-          currentPath === "/admin/sharedDocuments" ? null : (
+            currentPath === "/admin/sharedDocuments" ? null : (
             <Checkbox
-              color="deep-purple"
-              containerProps={{
-                className: "p-[2px]",
-              }}
               onClick={(e) => {
                 return e.stopPropagation();
               }}
-              crossOrigin=""
               onChange={(e) => {
                 handleCheckItem(e);
               }}

@@ -4,11 +4,10 @@ import {
   RepoRedIcon,
   RepoYellowIcon,
 } from "@components/atoms/icons";
-
 import ImageComponent from "@components/atoms/image";
 import React from "react";
-import { Spinner } from "@material-tailwind/react";
 import useGetUser from "@hooks/auth/useGetUser";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   imageHash?: string;
@@ -19,7 +18,7 @@ const RepoDefaultImage = ({ imageHash, className }: IProps) => {
   const { data: getUserInfo, isFetching } = useGetUser();
 
   if (isFetching) {
-    return <Spinner className="h-5 w-5" color="deep-purple" />;
+    return <Spinner className="h-5 w-5 text-primary" />;
   }
 
   if (!imageHash) {

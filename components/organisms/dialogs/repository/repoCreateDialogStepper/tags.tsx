@@ -1,11 +1,10 @@
 import {
   DialogBody,
   DialogFooter,
-  Spinner,
   Typography,
 } from "@material-tailwind/react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
+import { Spinner } from "@components/atoms/spinner";
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
@@ -81,7 +80,7 @@ const Tags = ({ handleClose }: IProps) => {
         </form>
         {isLoading ? (
           <div className="mt-4 w-full justify-center">
-            <Spinner color="deep-purple" className="w-5 h-5" />
+            <Spinner className="w-5 h-5 text-primary" />
           </div>
         ) : (
           <div className="repo-tags__list flex flex-wrap gap-2 py-4">

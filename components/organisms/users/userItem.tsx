@@ -1,6 +1,6 @@
 import React from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-import { Spinner, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { useRecoilState } from "recoil";
 import { ERoles } from "@interface/enums";
 import { IUser } from "@interface/users.interface";
@@ -15,6 +15,7 @@ import useGetRoles from "@hooks/user/useGetRoles";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
 import { selectedUserAtom } from "@atom/user";
 import useGetUser from "@hooks/auth/useGetUser";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   user: IUser;
@@ -130,7 +131,7 @@ const UserItem = ({ user }: IProps) => {
     if (editRole.isPending || deleteUser.isPending || transferOwnership.isPending) {
       return (
         <div className="w-5">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4 text-primary" />
         </div>
       );
     }

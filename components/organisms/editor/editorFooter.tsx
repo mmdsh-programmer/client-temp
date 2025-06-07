@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Checkbox, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import { editorDataAtom, editorModalAtom, editorModeAtom, editorPublicKeyAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -19,6 +19,7 @@ import { useDebouncedCallback } from "use-debounce";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
+import Checkbox from "@components/atoms/checkbox";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -181,7 +182,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     } else {
       setIsLoading(false);
     }
-  }, 1000);
+  }, 100);
 
   const startWorker = (time?: number) => {
     if (!autoSaveRef.current) {
@@ -265,13 +266,10 @@ const EditorFooter = ({ editorRef }: IProps) => {
         </Button>
         <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
         <Checkbox
-          crossOrigin=""
-          label={<Typography className="title_t3 truncate">ذخیره‌سازی خودکار</Typography>}
+          label="ذخیره‌سازی خودکار"
           className="editor-footer__auto-save-checkbox"
-          color="deep-purple"
           checked={checked}
           onChange={handleAutoSaveCheckbox}
-          containerProps={{ className: "-mr-3 " }}
         />
       </div>
       <div className="flex w-full gap-2 md:w-auto xs:gap-3">
@@ -291,6 +289,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         <LoadingButton
           className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
+            editorRef.current?.on("getData", handleSave)
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}

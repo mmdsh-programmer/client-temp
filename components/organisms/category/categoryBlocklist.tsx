@@ -1,7 +1,7 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { UserIcon, XIcon } from "@components/atoms/icons";
-
+import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
@@ -44,7 +44,7 @@ const CategoryBlockList = () => {
       </Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6" color="deep-purple" />
+          <Spinner className="h-6 w-6 text-primary" />
         ) : (
           <div className="category-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
@@ -68,7 +68,7 @@ const CategoryBlockList = () => {
                       }
                       actionIcon={
                         blockDocument.isPending ? (
-                          <Spinner className="h-4 w-4" color="deep-purple" />
+                          <Spinner className="h-4 w-4 text-primary" />
                         ) : (
                           <Button
                             className="delete-button bg-transparent p-0"

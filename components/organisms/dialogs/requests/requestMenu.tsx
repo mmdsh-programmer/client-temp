@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import { toast } from "react-toastify";
 import useAcceptJoinToRepoRequest from "@hooks/requests/useAcceptJoinToRepoRequest";
@@ -35,7 +36,7 @@ const RequestMenu = ({ request, setAcceptedRepo }: IProps) => {
   return (
     <div className="request-menu flex gap-3">
       {acceptRequest.isPending || rejectRequest.isPending ? (
-        <Spinner className="h-5 w-5" color="deep-purple" />
+        <Spinner className="h-5 w-5 text-primary" />
       ) : (
         <>
           <Button

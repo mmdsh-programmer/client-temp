@@ -1,4 +1,5 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import React, { useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
 
@@ -223,7 +224,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
         </div>
         <div className="flex flex-wrap gap-2 group-edit-form__members-list">
           {isLoading || isFetching ? (
-            <Spinner className="h-4 w-4" color="deep-purple" />
+            <Spinner className="h-4 w-4 text-primary" />
           ) : (
             updatedUsers?.map((item) => {
               return (

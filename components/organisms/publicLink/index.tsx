@@ -1,8 +1,8 @@
 import { ERoles } from "@interface/enums";
 import LinkWrapper from "./linkWrapper";
 import React from "react";
-import { Spinner } from "@material-tailwind/react";
 import useGetRoles from "@hooks/user/useGetRoles";
+import { Spinner } from "@components/atoms/spinner";
 
 const PublicLink = () => {
   const { data: getRoles, isLoading } = useGetRoles();
@@ -17,7 +17,7 @@ const PublicLink = () => {
         <div className="border-b-[1px] bg-gray-200 w-full" />
         {isLoading ? (
           <div className="flex justify-center mt-4 items-center  w-full">
-            <Spinner color="deep-purple" />
+            <Spinner className="text-primary h-6 w-6" />
           </div>
         ) : (
           <div className="repo-public-link__list flex flex-col pt-5 gap-y-5">

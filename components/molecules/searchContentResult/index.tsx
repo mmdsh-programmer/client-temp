@@ -1,7 +1,7 @@
 import EmptyList, { EEmptyList } from "../emptyList";
 import React, { Fragment, useRef, useState } from "react";
-import { Spinner, Typography } from "@material-tailwind/react";
-
+import { Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import RenderIf from "@components/atoms/renderIf";
 import { ResultItem } from "../searchContentItem";
 import { categorySearchContentParamAtom } from "atom/category";
@@ -43,7 +43,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
       </RenderIf>
       {isLoading ? (
         <div className="w-full flex justify-center pt-4">
-          <Spinner className="h-5 w-5" color="deep-purple" />
+          <Spinner className="h-5 w-5 text-primary" />
         </div>
       ) : (
         <ul className="flex flex-col gap-2" role="menu">
@@ -70,7 +70,7 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
           })}
           {isFetchingNextPage && (
             <div className="w-full flex justify-center pt-4">
-              <Spinner className="h-5 w-5" color="deep-purple" />
+              <Spinner className="h-5 w-5 text-primary" />
             </div>
           )}
         </ul>

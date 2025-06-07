@@ -1,4 +1,5 @@
-import { Button, Spinner } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
+import { Button } from "@material-tailwind/react";
 
 import React from "react";
 
@@ -20,7 +21,7 @@ const LoadingButton = ({
   isPrimary,
 }: IProps) => {
   const loadingColor =
-    !!isPrimary || isPrimary === undefined ? "deep-purple" : "red";
+    !!isPrimary || isPrimary === undefined ? "text-primary" : "text-error";
 
   return (
     <Button
@@ -34,8 +35,7 @@ const LoadingButton = ({
         {children}
         {loading ? (
           <Spinner
-            className={`w-5 h-5 ${isPrimary || isPrimary === undefined ? "text-white" : "text-white"}`}
-            color={loadingColor}
+            className={`w-5 h-5 ${loadingColor} ${isPrimary || isPrimary === undefined ? "text-white" : "text-white"}`}
           />
         ) : null}
       </>

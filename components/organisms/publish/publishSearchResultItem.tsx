@@ -1,4 +1,4 @@
-import { ListItem, Spinner } from "@material-tailwind/react";
+import { ListItem } from "@material-tailwind/react";
 
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import React from "react";
@@ -7,6 +7,7 @@ import { toPersianDigit } from "@utils/index";
 import useCreateDocumentLink from "@hooks/document/useCreateDocumentLink";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   resultItem: IContentSearchListItem;
@@ -56,7 +57,7 @@ const PublishSearchResultItem = ({
     >
       {createDocumentLinkHook.isPending ? (
         <div className="w-fit flex-shrink-0 flex justify-center items-center">
-          <Spinner className="h-4 w-4" color="deep-purple" />
+          <Spinner className="h-4 w-4 text-primary" />
         </div>
       ) : null}
       <div className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">

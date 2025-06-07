@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { DialogBody, Spinner, Typography } from "@material-tailwind/react";
+import { DialogBody, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import ChipMolecule from "@components/molecules/chip";
 import InfoDialog from "@components/templates/dialog/infoDialog";
@@ -39,7 +40,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
       >
         {isLoading ? (
           <div className="flex w-full items-center justify-center">
-            <Spinner className="h-6 w-6" color="deep-purple" />
+            <Spinner className="h-6 w-6 text-primary" />
           </div>
         ) : (
           <div className="join-to-repo-request-list flex flex-col gap-3">

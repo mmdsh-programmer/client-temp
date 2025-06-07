@@ -1,4 +1,4 @@
-import { Button, Spinner } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -12,6 +12,7 @@ import { repoAtom } from "@atom/repository";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
+import { Spinner } from "@components/atoms/spinner";
 
 const TagList = ({ repoId }: { repoId: number }) => {
   const [openTagsModal, setOpenTagsModal] = useState(false);
@@ -61,7 +62,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
   return (
     <div className="">
       {isLoading ? (
-        <Spinner color="deep-purple" className="" />
+        <Spinner className="h-5 w-5 text-primary" />
       ) : (
         <div className="tag-list flex flex-wrap gap-2">
           {tags?.pages.map((page) => {
