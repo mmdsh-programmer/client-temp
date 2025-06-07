@@ -131,7 +131,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       dialogHeader="ویرایش مخزن"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="repo-edit-dialog !h-screen xs:!h-[600px] max-w-full w-full m-0"
+      className="repo-edit-dialog !h-[calc(100%-160px)] xs:!h-[600px] max-w-full w-full m-0"
     >
       <form className="repo-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">

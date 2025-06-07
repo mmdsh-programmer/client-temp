@@ -34,7 +34,7 @@ const EditDialog = ({
   className,
   backToMain,
   customSize,
-  disabled
+  disabled,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -46,14 +46,14 @@ const EditDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
-      className={`${className} flex flex-col shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-white rounded-none xs:rounded-lg `}
+      className={`${className} flex !h-full w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
       dismiss={{
         enabled: false,
       }}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
@@ -62,7 +62,7 @@ const EditDialog = ({
           {backToMain ? (
             <div className="hidden xs:block">
               <BackButton
-                className="!pl-2 !pr-0 !py-0"
+                className="!py-0 !pl-2 !pr-0"
                 onClick={handleClose}
                 disabled={isPending}
               />
@@ -74,16 +74,16 @@ const EditDialog = ({
           <CloseButton onClose={handleClose} disabled={isPending} />
         </div>
       </DialogHeader>
-      <div className="block xs:hidden h-2 w-full bg-secondary" />
+      <div className="block h-2 w-full bg-secondary xs:hidden" />
       <DialogBody
         placeholder="dialog body"
-        className="dialog-body flex-grow px-5 py-3 xs:p-6 overflow-auto"
+        className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6 h-[calc(100%-160px)]"
       >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
@@ -94,9 +94,7 @@ const EditDialog = ({
           loading={isPending}
           disabled={disabled}
         >
-          <Typography className="text__label__button text-white">
-            ویرایش
-          </Typography>
+          <Typography className="text__label__button text-white">ویرایش</Typography>
         </LoadingButton>
       </DialogFooter>
     </Dialog>
