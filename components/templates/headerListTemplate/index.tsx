@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import { useSetRecoilState } from "recoil";
 import useGetUser from "@hooks/auth/useGetUser";
+import { ERepoGrouping } from "@interface/enums";
 
 export interface IProps {
   header: string;
@@ -35,7 +36,7 @@ const HeaderListTemplate = ({
         <Button
           className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
           onClick={() => {
-            setActiveTour(header === "مخزن‌ها" ? ETourSection.DASHBOARD : ETourSection.VERSION);
+            setActiveTour(header === "نسخه‌ها" ? ETourSection.VERSION : ETourSection.DASHBOARD);
           }}
         >
           <InfoIcon className="h-5 w-5 stroke-primary-normal" />
@@ -56,7 +57,7 @@ const HeaderListTemplate = ({
               disabled={
                 (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                header === "مخزن‌ها"
+                Object.values(ERepoGrouping).includes(header as ERepoGrouping)
               }
             />
           </div>
@@ -69,7 +70,7 @@ const HeaderListTemplate = ({
               disabled={
                 (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                header === "مخزن‌ها"
+                Object.values(ERepoGrouping).includes(header as ERepoGrouping)
               }
             >
               <AddIcon className="h-5 w-5 stroke-white" />
@@ -84,7 +85,7 @@ const HeaderListTemplate = ({
               disabled={
                 (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                header === "مخزن‌ها"
+                Object.values(ERepoGrouping).includes(header as ERepoGrouping)
               }
             >
               <AddIcon className="h-6 w-6 stroke-white" />

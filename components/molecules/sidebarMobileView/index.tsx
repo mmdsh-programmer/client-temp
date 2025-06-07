@@ -314,7 +314,7 @@ const SidebarMobileView = () => {
     <>
       {activeTab === "documents" && showList && renderDocumentsContent()}
       {activeTab === "repos" && showList && renderReposContent()}
-      <div className="sidebar-mobile-view absolute bottom-0 z-50 h-16 min-h-16 w-full border-normal bg-primary px-4 xs:hidden">
+      <div className="sidebar-mobile-view z-50 h-16 min-h-16 w-full border-normal bg-primary px-4 xs:hidden">
         {renderBottomNavigation()}
       </div>
     </>

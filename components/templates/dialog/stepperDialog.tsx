@@ -45,11 +45,11 @@ const StepperDialog = ({
           <CloseButton onClose={handleClose} />
         </div>
       </DialogHeader>
-      <div className="flex flex-col gap-4 h-full">
+      <div className="flex flex-col gap-4">
         <div className="w-full px-8 py-4">
           <StepperComponent getActiveStep={activeStep} stepList={stepList} />
         </div>
-        <div className="flex-grow flex flex-col justify-between">
+        <div className="flex-grow flex flex-col justify-between !h-[calc(100vh-60px)] !max-!h-[calc(100vh-60px)] overflow-auto">
           {children}
         </div>
       </div>

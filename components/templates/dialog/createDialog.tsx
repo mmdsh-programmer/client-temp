@@ -85,7 +85,7 @@ const CreateDialog = ({
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <DialogBody
         placeholder="dialog body"
-        className="dialog-body flex-grow px-5 py-3 xs:p-6 overflow-auto"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6 !h-[calc(100vh-160px)] !max-h-[calc(100vh-160px)] overflow-auto"
       >
         {children}
       </DialogBody>

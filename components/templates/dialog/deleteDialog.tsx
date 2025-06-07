@@ -39,7 +39,7 @@ const DeleteDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} rounded-lg flex flex-col bg-white w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0`}
+      className={`${className} delete-dialog rounded-lg flex flex-col bg-white w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] xs:mb-0`}
       dismiss={{
         enabled: false,
       }}

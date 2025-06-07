@@ -17,7 +17,7 @@ import {
   PublishedLimitationIcon,
   VisibleIcon,
 } from "@components/atoms/icons";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { documentDrawerAtom, documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import { editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
@@ -62,6 +62,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
   const setShowVersionList = useSetRecoilState(versionModalListAtom);
   const setEditorMode = useSetRecoilState(editorModeAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
+  const setOpenDocumentActionDrawer = useSetRecoilState(documentDrawerAtom);
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -120,6 +121,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal(document?.isHidden ? "visible" : "hide", true);
+        setOpenDocumentActionDrawer(false);
         if (document) setDocument(document);
       },
       className: `${document?.isHidden ? "document-visible" : "document-hide"}`,
@@ -222,6 +224,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
         getRepo?.roleName === ERoles.editor,
       onClick: () => {
         toggleModal("deletePublishLink", true);
+        setOpenDocumentActionDrawer(false);
         if (document) setDocument(document);
       },
       className: "document-delete-publish-link",
@@ -244,6 +247,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
         currentPath === "/admin/sharedDocuments",
       onClick: () => {
         toggleModal("bookmarkDocument", true);
+        setOpenDocumentActionDrawer(false);
         if (document) setDocument(document);
       },
       className: `${document?.isBookmarked ? "document-delete-bookmark" : "document-bookmark"}`,
@@ -284,6 +288,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("documentPublicVersion", true);
+        setOpenDocumentActionDrawer(false);
         if (document) setDocument(document);
       },
       className: "document-public-version",
@@ -365,6 +370,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("deleteDocument", true);
+        setOpenDocumentActionDrawer(false);
         if (document) setDocument(document);
       },
       className: "document-delete",

@@ -77,7 +77,7 @@ const EditDialog = ({
       <div className="block h-2 w-full bg-secondary xs:hidden" />
       <DialogBody
         placeholder="dialog body"
-        className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6 h-[calc(100%-160px)]"
+        className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6 !h-[calc(100%-160px)] !max-!h-[calc(100vh-160px)]"
       >
         {children}
       </DialogBody>
