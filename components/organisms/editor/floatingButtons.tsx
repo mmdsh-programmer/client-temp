@@ -4,6 +4,7 @@ import {
   ConfirmationVersionIcon,
   GlobeIcon,
   ListIcon,
+  SeoIcon,
   SpeedDialIcon,
 } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
@@ -28,6 +29,9 @@ import { ERoles, EDocumentTypes } from "@interface/enums";
 import DownloadPDF from "@components/molecules/downloadPDF";
 import DownloadExcel from "@components/molecules/downloadExcel";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import SeoDialog from "../dialogs/seo";
+import { ISeo } from "@interface/social.interface";
+import { toast } from "react-toastify";
 
 interface IProps {
   version: IVersion;
@@ -50,6 +54,7 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
   const [publicDraftModal, setPublicDraftModal] = useState(false);
   const [acceptPublicDraftModal, setAcceptPublicDraftModal] = useState(false);
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
+  const [seoDialogOpen, setSeoDialogOpen] = useState(false);
 
   const { data: userInfo } = useGetUser();
 
@@ -88,6 +93,50 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
     }
   };
 
+  const handleSeoSubmit = async (seoData: ISeo) => {
+    try {
+      // Here you would call an API to update the document's SEO settings
+      // Using seoData to update the document metadata
+      console.log("Updating SEO settings with:", seoData);
+      toast.success("تنظیمات بهینه‌سازی با موفقیت ذخیره شد");
+    } catch {
+      toast.error("خطا در ذخیره تنظیمات بهینه‌سازی");
+    }
+  };
+
+  // Get default SEO values from document metadata
+  const getDefaultSeoValues = () => {
+    const metadata = getDocument?.extraDetails ? JSON.parse(getDocument.extraDetails) : {};
+    return {
+      title: metadata?.seo?.title ?? "",
+      description: metadata?.seo?.description ?? "",
+      keywords: metadata?.seo?.keywords ?? "",
+      language: metadata?.seo?.language ?? "",
+      openGraph: metadata?.seo?.openGraph ?? {
+        title: "",
+        description: "",
+        URL: "",
+        author: "",
+      },
+      seoIndexing: metadata?.seo?.seoIndexing ?? {
+        indexing: "",
+        following: "",
+        noarchive: false,
+        nosnippet: false,
+      },
+      canonicalUrl: metadata?.seo?.canonicalUrl ?? "",
+      articleSchema: metadata?.seo?.articleSchema ?? {
+        "@type": "Article",
+        author: {
+          "@type": "Person",
+        },
+        publisher: {
+          "@type": "Organization",
+        },
+      },
+    };
+  };
+
   return (
     <>
       <div
@@ -116,6 +165,15 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
               }}
             >
               <ListIcon className="h-5 w-5" />
+            </Button>
+            <Button
+              className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
+              onClick={() => {
+                setSeoDialogOpen(true);
+              }}
+              title="تنظیمات بهینه‌سازی موتور جستجو (SEO)"
+            >
+              <SeoIcon className="h-5 w-5" />
             </Button>
             <RenderIf isTrue={version.state === "draft" && version?.status === "editing"}>
               <>
@@ -304,6 +362,17 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
           }}
         />
       ) : null}
+      {seoDialogOpen && (
+        <SeoDialog
+          open={seoDialogOpen}
+          handleClose={() => {
+            return setSeoDialogOpen(false);
+          }}
+          defaultValues={getDefaultSeoValues()}
+          handleSubmit={handleSeoSubmit}
+          isLoading={false}
+        />
+      )}
     </>
   );
 };

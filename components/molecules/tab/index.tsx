@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   Tab,
   TabPanel,
@@ -5,8 +7,6 @@ import {
   TabsBody,
   TabsHeader,
 } from "@material-tailwind/react";
-
-import React from "react";
 
 interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
@@ -16,6 +16,7 @@ interface IProps {
   tabClassName?: string;
   activeTabClassName?: string;
   tabContentClassName?: string;
+  tabPanelClassName?: string;
 }
 
 const TabComponent = ({
@@ -26,7 +27,9 @@ const TabComponent = ({
   tabClassName,
   activeTabClassName,
   tabContentClassName,
+  tabPanelClassName,
 }: IProps) => {
+
   return (
     <Tabs value={activeTab} className="h-full">
       <TabsHeader
@@ -61,7 +64,7 @@ const TabComponent = ({
             <TabPanel
               key={tab.tabTitle}
               value={tab.tabTitle}
-              className="p-0 h-full"
+              className={`p-0 h-full ${tabPanelClassName || ""}`}
             >
               {tab.tabContent}
             </TabPanel>
