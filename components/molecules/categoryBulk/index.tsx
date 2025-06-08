@@ -57,7 +57,7 @@ const CategoryBulk = () => {
           </Button>
         </div>
       </div>
-      <div className="category-bulk absolute w-full bottom-0 mt-4 p-4 flex gap-x-2 justify-between items-center xs:hidden bg-white">
+      <div className="category-bulk absolute z-[9999] w-full bottom-0 mt-4 p-4 flex gap-x-2 justify-between items-center xs:hidden bg-white">
         <div
           className="move flex flex-col items-center cursor-pointer"
           onClick={() => {
