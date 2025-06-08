@@ -20,9 +20,9 @@ const Settings = () => {
 
   const { register, handleSubmit, setValue, watch, reset } = useForm<IDomainTheme>({
     defaultValues: {
-    name: "",
-    description: "",
-    logo: null,
+      name: "",
+      description: "",
+      logo: null,
       // colors
       mainColor: "",
       primaryLight: "",
@@ -250,7 +250,7 @@ const Settings = () => {
   if (isLoading || uploadLoading) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <Spinner className="h-8 w-8 text-primary"/>
+        <Spinner className="h-8 w-8 text-primary" />
         {uploadLoading && (
           <Typography className="mt-2">در حال آپلود لوگو... {uploadProgress}%</Typography>
         )}
@@ -273,11 +273,11 @@ const Settings = () => {
             <ColorsSettings domain={formValues} onColorChange={handleColorChange} />
           </div>
         </div>
-        <div className="flex flex-col justify-between">
-        <div className="flex flex-col gap-5">
-          <Typography className="title_t2">تنظیمات پیشرفته</Typography>
+        <div className="flex flex-col gap-5 justify-between">
+          <div className="flex flex-col gap-5">
+            <Typography className="title_t2">تنظیمات پیشرفته</Typography>
             <AdvancedSettings domain={formValues} onCheckboxChange={handleCheckboxChange} />
-              </div>
+          </div>
           <div className="flex w-full justify-end">
             <LoadingButton
               className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"

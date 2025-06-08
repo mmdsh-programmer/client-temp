@@ -10,7 +10,12 @@ import {
   LastVersionIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import { compareVersionAtom, selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import {
+  compareVersionAtom,
+  selectedVersionAtom,
+  versionDrawerAtom,
+  versionModalListAtom,
+} from "@atom/version";
 import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IVersion } from "@interface/version.interface";
@@ -61,6 +66,7 @@ const useVersionMenuList = (
   const setEditorModal = useSetRecoilState(editorModalAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setVersionData = useSetRecoilState(editorDataAtom);
+  const setOpenVersionActionDrawer = useSetRecoilState(versionDrawerAtom);
   const currentPath = usePathname();
 
   const repoId = useRepoId();
@@ -194,6 +200,7 @@ const useVersionMenuList = (
         disabled: viewerRole(),
         onClick: () => {
           toggleModal("delete", true);
+          setOpenVersionActionDrawer(false);
           if (version) {
             setVersion(version);
           }
@@ -210,6 +217,7 @@ const useVersionMenuList = (
       disabled: viewerRole(),
       onClick: () => {
         toggleModal("publicDraft", true);
+        setOpenVersionActionDrawer(false);
         if (version) {
           setVersion(version);
         }
@@ -230,6 +238,7 @@ const useVersionMenuList = (
           <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
         ),
       onClick: () => {
+        setOpenVersionActionDrawer(false);
         if (version?.status === "editing" && version) {
           setVersion(version);
           toggleModal("confirm", true);
@@ -248,6 +257,7 @@ const useVersionMenuList = (
           icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
             toggleModal("acceptConfirmDraft", true);
+            setOpenVersionActionDrawer(false);
             if (version) {
               setVersion(version);
             }
@@ -265,12 +275,14 @@ const useVersionMenuList = (
             }
             if (version?.status === "pending") return "لغو درخواست عمومی شدن نسخه";
           })(),
-          icon: version?.status === "private" ? (
-            <GlobeIcon className="h-4 w-4 fill-icon-active" />
-          ) : (
-            <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
-          ),
+          icon:
+            version?.status === "private" ? (
+              <GlobeIcon className="h-4 w-4 fill-icon-active" />
+            ) : (
+              <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
+            ),
           onClick: () => {
+            setOpenVersionActionDrawer(false);
             if (version?.status === "private" && adminOrOwnerRole()) {
               toggleModal("public", true);
               if (version) {
@@ -294,6 +306,7 @@ const useVersionMenuList = (
           icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
             toggleModal("lastVersion", true);
+            setOpenVersionActionDrawer(false);
             if (version) {
               setVersion(version);
             }
@@ -310,6 +323,7 @@ const useVersionMenuList = (
           icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
             toggleModal("acceptPublicVersion", true);
+            setOpenVersionActionDrawer(false);
             if (version) {
               setVersion(version);
             }
@@ -325,6 +339,7 @@ const useVersionMenuList = (
           icon: <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
           onClick: () => {
             toggleModal("lastVersion", true);
+            setOpenVersionActionDrawer(false);
             if (version) {
               setVersion(version);
             }
@@ -341,6 +356,7 @@ const useVersionMenuList = (
             icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
             onClick: () => {
               toggleModal("acceptPublicDraft", true);
+              setOpenVersionActionDrawer(false);
               if (version) {
                 setVersion(version);
               }
@@ -351,6 +367,7 @@ const useVersionMenuList = (
             icon: <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />,
             onClick: () => {
               toggleModal("rejectPublicDraft", true);
+              setOpenVersionActionDrawer(false);
               if (version) {
                 setVersion(version);
               }

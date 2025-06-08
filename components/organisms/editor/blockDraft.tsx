@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IVersion } from "@interface/version.interface";
 import { selectedDocumentAtom } from "atom/document";
 import { toast } from "react-toastify";
@@ -18,7 +18,7 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   const repoId = useRepoId();
   const selectedDocument = useRecoilValue(selectedDocumentAtom);
   const setEditorData = useSetRecoilState(editorDataAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
+  const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
   const currentPath = usePathname();
 
   const searchParams = useSearchParams();
@@ -38,8 +38,10 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
           currentPath === "/admin/sharedDocuments" ||
           (currentPath === "/admin/dashboard" &&
             userInfo?.repository.id !== selectedDocument?.repoId),
-        handleError: () => {
-          setEditorData(null);
+        handleError: (error) => {
+          console.log("--------------------- error ----------------", error);
+          // setEditorData(null);
+          setEditorMode("preview");
         },
       });
     } else if (!version || JSON.stringify(version) === "{}") {

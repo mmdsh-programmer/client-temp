@@ -38,7 +38,7 @@ const DomainPrivateFeed = () => {
       <Tabs value={activeTab} className="h-full">
         <div className="h-[76px] min-h-[76px] flex justify-between items-center">
           <TabsHeader
-            className="flex items-center p-[2px] rounded-lg bg-secondary text-secondary "
+            className="flex overflow-x-auto items-center p-[2px] rounded-lg bg-secondary text-secondary "
             indicatorProps={{
               className: "p-2 rounded-lg shadow-small !text-purple-normal",
             }}
