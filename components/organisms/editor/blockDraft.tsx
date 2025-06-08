@@ -40,7 +40,6 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
             userInfo?.repository.id !== selectedDocument?.repoId),
         handleError: (error) => {
           console.log("--------------------- error ----------------", error);
-          // setEditorData(null);
           setEditorMode("preview");
         },
       });

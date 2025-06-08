@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Collapse, Drawer, Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { ChevronLeftIcon } from "@components/atoms/icons";
 
@@ -25,6 +25,18 @@ export interface IProps {
 const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
   const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
 
+  useEffect(() => {
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    window.addEventListener("resize", setVh);
+    setVh();
+    return () => {
+      return window.removeEventListener("resize", setVh);
+    };
+  }, []);
+
   const toggleOpen = (menuText: string) => {
     setOpenStates((prev) => {
       return {
@@ -41,7 +53,7 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
       onClose={() => {
         setOpenDrawer(null);
       }}
-      className="!h-auto overflow-y-auto overflow-x-hidden p-4"
+      className="!h-[calc(var(--vh,1vh)_*_100)] overflow-y-auto overflow-x-hidden p-4"
       placeholder="action-drawer"
     >
       <ul className="ml-4 w-full overflow-hidden p-[2px] font-iranYekan text-primary_normal">
