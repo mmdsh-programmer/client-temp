@@ -2380,7 +2380,8 @@ export const deleteVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : ""
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
+        state === "draft" ? "/draft" : ""
       }`,
       {
         headers: {
@@ -4736,6 +4737,50 @@ export const updateUserConfigPanel = async (
         notificationServices,
         allowedServices,
         blockedServices,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDocumentCustomPost = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<{content: string}>>(
+      `repositories/${repoId}/documents/${documentId}/socialContent`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateDocumentCustomPost = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  content: string,
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/socialContent`,
+      {
+        content,
       },
       {
         headers: {

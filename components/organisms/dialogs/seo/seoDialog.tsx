@@ -10,6 +10,12 @@ import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 import { EArticleSchemaImageType } from "@interface/enums";
+import useGetDocumentCustomPost from "@hooks/document/useGetDocumentCustomPost";
+import { useRecoilValue } from "recoil";
+import { selectedDocumentAtom } from "@atom/document";
+import useUpdateDocumentCustomPost from "@hooks/document/useUpdateDocumentCustomPost";
+import { toast } from "react-toastify";
+import { repoAtom } from "@atom/repository";
 
 export enum ETabs {
   SEO = "SEO METADATA",
@@ -21,15 +27,22 @@ export enum ETabs {
 interface IProps {
   open: boolean;
   handleClose: () => void;
-  defaultValues?: ISeo;
-  handleSubmit: (seo: ISeo) => Promise<void>;
-  isLoading: boolean;
 }
 
-const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }: IProps) => {
+const SeoDialog = ({ open, handleClose }: IProps) => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.SEO);
   const [tabWithError, setTabWithError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<ISeo>(defaultValues || {
+
+  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRecoilValue(repoAtom);
+  const updateCustomPostHook = useUpdateDocumentCustomPost();
+
+  const repoId = getRepo!.id;
+  const documentId = getDocument!.id;
+
+  const { data: seoData, isLoading: isLoadingSeo } = useGetDocumentCustomPost(repoId, documentId);
+
+  const [formData, setFormData] = useState<ISeo>({
     title: "",
     description: "",
     keywords: "",
@@ -42,52 +55,36 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
       nosnippet: false
     }
   });
-  // Flag to track if the dialog has just opened
+
   const [isInitialRender, setIsInitialRender] = useState(true);
-  
+
   const seoFormRef = useRef<SeoFormRef>(null);
   const socialSharingFormRef = useRef<SocialSharingFormRef>(null);
   const indexingFormRef = useRef<IndexingFormRef>(null);
   const articleSchemaFormRef = useRef<ArticleSchemaFormRef>(null);
 
-  // Reset to initial tab when dialog opens
   useEffect(() => {
     if (open) {
       setActiveTab(ETabs.SEO);
       setIsInitialRender(true);
-      
-      // Reset form data to default values when dialog opens
-      if (defaultValues) {
-        setFormData(defaultValues);
-      } else {
-        setFormData({
-          title: "",
-          description: "",
-          keywords: "",
-          language: "",
-          canonicalUrl: "",
-          seoIndexing: {
-            indexing: "",
-            following: "",
-            noarchive: false,
-            nosnippet: false
-          }
-        });
-      }
     }
-  }, [open, defaultValues]);
+  }, [open]);
 
-  // Effect to switch tab when an error is found
+  useEffect(() => {
+    if (seoData) {
+      const seoDataJson = JSON.parse(seoData as unknown as string);
+      setFormData(seoDataJson as unknown as ISeo);
+    }
+  }, [seoData]);
+
   useEffect(() => {
     if (tabWithError) {
-      // No longer in initial render state when showing errors
       setIsInitialRender(false);
-      
+
       setTimeout(() => {
         setActiveTab(tabWithError);
         setTabWithError(null);
-        
-        // Trigger validation on the tab with error
+
         setTimeout(async () => {
           if (tabWithError === ETabs.SEO && seoFormRef.current) {
             await seoFormRef.current.validateForm();
@@ -103,37 +100,32 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
     }
   }, [tabWithError]);
 
-  // Store form data when changing tabs to prevent data loss
   const handleTabChange = async (newTab: string) => {
-    // If this is the first tab change after opening the dialog, don't validate
     if (isInitialRender) {
       setIsInitialRender(false);
       setActiveTab(newTab);
       return;
     }
 
-    // Save current tab data before switching
     if (activeTab === ETabs.SEO && seoFormRef.current) {
-      const seoData = seoFormRef.current.getFormValues();
+      const seoFormValues = seoFormRef.current.getFormValues();
       setFormData((prev) => {
-        return { ...prev, ...seoData };
+        return { ...prev, ...seoFormValues };
       });
-      
-      // Trigger validation on the current form to show errors
+
       await seoFormRef.current.validateForm();
     } else if (activeTab === ETabs.SOCIAL_SHARING && socialSharingFormRef.current) {
       const socialData = socialSharingFormRef.current.getFormValues();
       setFormData((prev) => {
         return { ...prev, openGraph: socialData?.openGraph };
       });
-      
-      // Trigger validation on the current form to show errors
+
       await socialSharingFormRef.current.validateForm();
     } else if (activeTab === ETabs.SEO_INDEXING && indexingFormRef.current) {
       const indexingData = indexingFormRef.current.getFormValues();
       setFormData((prev) => {
-        return { 
-          ...prev, 
+        return {
+          ...prev,
           seoIndexing: {
             indexing: indexingData?.indexing || "",
             following: indexingData?.following || "",
@@ -142,9 +134,79 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
           }
         };
       });
-      
-      // Trigger validation on the current form to show errors
+
       await indexingFormRef.current.validateForm();
+    } else if (activeTab === ETabs.ARTICLE_SCHEMA && articleSchemaFormRef.current) {
+      const schemaData = articleSchemaFormRef.current.getFormValues();
+      if (schemaData) {
+        setFormData((prev) => {
+          return {
+            ...prev,
+            articleSchema: {
+              "@context": "https://schema.org",
+              "@type": schemaData["@type"],
+              headline: schemaData.headline,
+              description: schemaData.description,
+              image: {
+                "@type": EArticleSchemaImageType.IMAGE_OBJECT,
+                url: schemaData.image.url,
+                width: schemaData.image.width,
+                height: schemaData.image.height,
+              },
+              author: {
+                "@type": schemaData.author["@type"],
+                name: schemaData.author.name,
+              },
+              publisher: {
+                "@type": schemaData.publisher["@type"],
+                name: schemaData.publisher.name,
+                logo: {
+                  "@type": EArticleSchemaImageType.IMAGE_OBJECT,
+                  url: schemaData.publisher.logo.url,
+                  width: schemaData.publisher.logo.width,
+                  height: schemaData.publisher.logo.height,
+                },
+              },
+              datePublished: schemaData.datePublished,
+              dateModified: schemaData.dateModified,
+            }
+          };
+        });
+
+        await articleSchemaFormRef.current.validateForm();
+      }
+    }
+
+    setActiveTab(newTab);
+  };
+
+  const onSubmitAll = async () => {
+    setIsInitialRender(false);
+
+    // First, save the current tab's data
+    if (activeTab === ETabs.SEO && seoFormRef.current) {
+      const seoFormValues = seoFormRef.current.getFormValues();
+      setFormData((prev) => {
+        return { ...prev, ...seoFormValues };
+      });
+    } else if (activeTab === ETabs.SOCIAL_SHARING && socialSharingFormRef.current) {
+      const socialData = socialSharingFormRef.current.getFormValues();
+      setFormData((prev) => {
+        return { ...prev, openGraph: socialData?.openGraph };
+      });
+    } else if (activeTab === ETabs.SEO_INDEXING && indexingFormRef.current) {
+      const indexingData = indexingFormRef.current.getFormValues();
+      setFormData((prev) => {
+        return {
+          ...prev,
+          seoIndexing: {
+            indexing: indexingData?.indexing || "",
+            following: indexingData?.following || "",
+            noarchive: indexingData?.noarchive || false,
+            nosnippet: indexingData?.nosnippet || false,
+          }
+        };
+      });
     } else if (activeTab === ETabs.ARTICLE_SCHEMA && articleSchemaFormRef.current) {
       const schemaData = articleSchemaFormRef.current.getFormValues();
       if (schemaData) {
@@ -181,44 +243,78 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
             }
           };
         });
-        
-        // Trigger validation on the current form to show errors
-        await articleSchemaFormRef.current.validateForm();
       }
     }
-    
-    // Switch to new tab
-    setActiveTab(newTab);
-  };
 
-  const onSubmitAll = async () => {
-    // No longer in initial render state when submitting
-    setIsInitialRender(false);
-    
-    // Save current tab data before validation
-    if (activeTab === ETabs.SEO && seoFormRef.current) {
-      const seoData = seoFormRef.current.getFormValues();
-      setFormData((prev) => {
-        return { ...prev, ...seoData };
-      });
-    } else if (activeTab === ETabs.SOCIAL_SHARING && socialSharingFormRef.current) {
+    // Collect all data from all forms regardless of which tab is active
+    let updatedFormData = { ...formData };
+
+    // Collect SEO form data
+    if (seoFormRef.current) {
+      const seoFormValues = seoFormRef.current.getFormValues();
+      updatedFormData = { ...updatedFormData, ...seoFormValues };
+    }
+
+    // Collect Social Sharing form data
+    if (socialSharingFormRef.current) {
       const socialData = socialSharingFormRef.current.getFormValues();
-      setFormData((prev) => {
-        return { ...prev, openGraph: socialData?.openGraph };
-      });
-    } else if (activeTab === ETabs.SEO_INDEXING && indexingFormRef.current) {
+      if (socialData?.openGraph) {
+        updatedFormData = { ...updatedFormData, openGraph: socialData.openGraph };
+      }
+    }
+
+    // Collect SEO Indexing form data
+    if (indexingFormRef.current) {
       const indexingData = indexingFormRef.current.getFormValues();
-      setFormData((prev) => {
-        return {
-          ...prev,
+      if (indexingData) {
+        updatedFormData = {
+          ...updatedFormData,
           seoIndexing: {
-            indexing: indexingData?.indexing || "",
-            following: indexingData?.following || "",
-            noarchive: indexingData?.noarchive || false,
-            nosnippet: indexingData?.nosnippet || false,
+            indexing: indexingData.indexing || "",
+            following: indexingData.following || "",
+            noarchive: indexingData.noarchive || false,
+            nosnippet: indexingData.nosnippet || false,
           }
         };
-      });
+      }
+    }
+
+    // Collect Article Schema form data
+    if (articleSchemaFormRef.current) {
+      const schemaData = articleSchemaFormRef.current.getFormValues();
+      if (schemaData) {
+        updatedFormData = {
+          ...updatedFormData,
+          articleSchema: {
+            "@context": "https://schema.org",
+            "@type": schemaData["@type"],
+            headline: schemaData.headline,
+            description: schemaData.description,
+            image: {
+              "@type": EArticleSchemaImageType.IMAGE_OBJECT,
+              url: schemaData.image.url,
+              width: schemaData.image.width,
+              height: schemaData.image.height,
+            },
+            author: {
+              "@type": schemaData.author["@type"],
+              name: schemaData.author.name,
+            },
+            publisher: {
+              "@type": schemaData.publisher["@type"],
+              name: schemaData.publisher.name,
+              logo: {
+                "@type": EArticleSchemaImageType.IMAGE_OBJECT,
+                url: schemaData.publisher.logo.url,
+                width: schemaData.publisher.logo.width,
+                height: schemaData.publisher.logo.height,
+              },
+            },
+            datePublished: schemaData.datePublished,
+            dateModified: schemaData.dateModified,
+          }
+        };
+      }
     }
     
     const validationResults = {
@@ -227,11 +323,11 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
       [ETabs.SEO_INDEXING]: await indexingFormRef.current?.validateForm() || false,
       [ETabs.ARTICLE_SCHEMA]: await articleSchemaFormRef.current?.validateForm() || false,
     };
-    
+
     const hasErrors = Object.values(validationResults).some((isValid) => {
       return !isValid;
     });
-    
+
     if (hasErrors) {
       const tabsInOrder = [ETabs.SEO, ETabs.SOCIAL_SHARING, ETabs.SEO_INDEXING, ETabs.ARTICLE_SCHEMA];
       for (const tab of tabsInOrder) {
@@ -242,8 +338,17 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
       }
       return;
     }
-    
-    await handleSubmit(formData);
+
+    updateCustomPostHook.mutate({
+      repoId,
+      documentId,
+      content: updatedFormData,
+    }, {
+      onSuccess: () => {
+        toast.success("تنظیمات با موفقیت ثبت شد");
+        handleClose();
+      }
+    });
   };
 
   const tabList = [
@@ -298,33 +403,39 @@ const SeoDialog = ({ open, handleClose, defaultValues, handleSubmit, isLoading }
       </DialogHeader>
       <div className="block xs:hidden h-2 w-full bg-secondary" />
       <DialogBody className="dialog-body h-[70vh] overflow-y-auto">
-        <TabComponent
-          tabList={tabList}
-          activeTab={activeTab}
-          setActiveTab={(value: React.SetStateAction<string>) => {
-            if (typeof value === "function") {
-              const newTab = value(activeTab);
-              handleTabChange(newTab);
-            } else {
-              handleTabChange(value);
-            }
-          }}
-          tabPanelClassName="overflow-y-auto"
-          key={`tab-component-${activeTab}`}
-        />
+        {isLoadingSeo ? (
+          <div className="flex items-center justify-center h-full">
+            <Typography className="text-lg">در حال بارگذاری...</Typography>
+          </div>
+        ) : (
+          <TabComponent
+            tabList={tabList}
+            activeTab={activeTab}
+            setActiveTab={(value: React.SetStateAction<string>) => {
+              if (typeof value === "function") {
+                const newTab = value(activeTab);
+                handleTabChange(newTab);
+              } else {
+                handleTabChange(value);
+              }
+            }}
+            tabPanelClassName="overflow-y-auto"
+            key={`tab-component-${activeTab}`}
+          />
+        )}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
         className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
-        <CancelButton onClick={handleClose} disabled={isLoading}>
+        <CancelButton onClick={handleClose} disabled={updateCustomPostHook.isPending || isLoadingSeo}>
           انصراف
         </CancelButton>
         <LoadingButton
           className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={onSubmitAll}
-          loading={isLoading}
-          disabled={isLoading}
+          loading={updateCustomPostHook.isPending}
+          disabled={updateCustomPostHook.isPending || isLoadingSeo}
         >
           <Typography className="text__label__button text-white">
             تایید
