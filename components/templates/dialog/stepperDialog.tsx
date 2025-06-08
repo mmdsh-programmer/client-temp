@@ -28,14 +28,14 @@ const StepperDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`bg-white flex flex-col shrink-0 !h-full w-full max-w-full xs:!h-[630px] xs:min-w-[400px] xs:max-w-[400px] rounded-none xs:rounded-lg ${className || ""}`}
+      className={`flex !h-full w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:!h-[630px] xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg ${className || ""}`}
       dismiss={{
         enabled: false,
       }}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
@@ -45,11 +45,12 @@ const StepperDialog = ({
           <CloseButton onClose={handleClose} />
         </div>
       </DialogHeader>
+      <div className="block h-2 w-full bg-secondary xs:hidden" />
       <div className="flex flex-col gap-4">
         <div className="w-full px-8 py-4">
           <StepperComponent getActiveStep={activeStep} stepList={stepList} />
         </div>
-        <div className="flex-grow flex flex-col justify-between !h-[calc(100vh-60px)] !max-!h-[calc(100vh-60px)] overflow-auto">
+        <div className="flex flex-grow flex-col justify-between overflow-auto !h-[calc(100vh-150px)] xs:!h-[calc(100vh-220px)]">
           {children}
         </div>
       </div>

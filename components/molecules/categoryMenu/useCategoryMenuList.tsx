@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { categoryAtom } from "@atom/category";
+import { categoryAtom, categoryDrawerAtom } from "@atom/category";
 import { ICategoryMetadata } from "@interface/category.interface";
 import {
   AddRectangleIcon,
@@ -35,21 +35,17 @@ type Modals = {
   createTemplateModal: boolean;
 };
 
-const useCategoryMenuList = ({
-  category,
-  toggleModal,
-}: UseCategoryMenuListProps) => {
+const useCategoryMenuList = ({ category, toggleModal }: UseCategoryMenuListProps) => {
   const getRepo = useRecoilValue(repoAtom);
   const setCategory = useSetRecoilState(categoryAtom);
+  const setOpenCategoryActionDrawer = useSetRecoilState(categoryDrawerAtom);
   const currentPath = usePathname();
 
   const createOptions = [
     {
       text: "ساخت زیر دسته بندی",
-      icon: <CategoryAddIcon className="w-4 h-4" />,
-      disabled:
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
+      icon: <CategoryAddIcon className="h-4 w-4" />,
+      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("createCategoryModal", true);
         if (category) setCategory(category);
@@ -58,7 +54,7 @@ const useCategoryMenuList = ({
     },
     {
       text: "ساخت سند",
-      icon: <DocumentAddIcon className="w-4 h-4" />,
+      icon: <DocumentAddIcon className="h-4 w-4" />,
       disabled: getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("createDocumentModal", true);
@@ -68,7 +64,7 @@ const useCategoryMenuList = ({
     },
     {
       text: "ساخت نمونه سند",
-      icon: <TemplateAddIcon className="w-4 h-4" />,
+      icon: <TemplateAddIcon className="h-4 w-4" />,
       disabled:
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer ||
@@ -86,14 +82,12 @@ const useCategoryMenuList = ({
       text: "ایجاد",
       subMenu: createOptions,
       onClick: () => {},
-      icon: <AddRectangleIcon className="w-4 h-4 fill-icon-active" />,
+      icon: <AddRectangleIcon className="h-4 w-4 fill-icon-active" />,
     },
     {
       text: "ویرایش دسته بندی",
-      icon: <EditIcon className="w-4 h-4" />,
-      disabled:
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
+      icon: <EditIcon className="h-4 w-4" />,
+      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("editCategoryModal", true);
         if (category) setCategory(category);
@@ -102,10 +96,8 @@ const useCategoryMenuList = ({
     },
     {
       text: "انتقال",
-      icon: <ArrowLeftRectangleIcon className="w-4 h-4 fill-icon-active" />,
-      disabled:
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
+      icon: <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
+      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("moveModal", true);
         if (category) setCategory(category);
@@ -115,9 +107,9 @@ const useCategoryMenuList = ({
     {
       text: category?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
       icon: category?.isHidden ? (
-        <VisibleIcon className="w-4 h-4" />
+        <VisibleIcon className="h-4 w-4" />
       ) : (
-        <HiddenIcon className="w-4 h-4" />
+        <HiddenIcon className="h-4 w-4" />
       ),
       disabled:
         currentPath === "/admin/myDocuments" ||
@@ -125,15 +117,16 @@ const useCategoryMenuList = ({
         getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal(category?.isHidden ? "visibleModal" : "hideModal", true);
+        setOpenCategoryActionDrawer(false);
         if (category) setCategory(category);
       },
       className: `${category?.isHidden ? "hide-category" : "visible-category"}`,
     },
     {
       text: "محدودیت دسترسی روی پنل",
-      icon: <LockIcon className="w-4 h-4" />,
+      icon: <LockIcon className="h-4 w-4" />,
       disabled:
-      currentPath === "/admin/myDocuments" ||
+        currentPath === "/admin/myDocuments" ||
         getRepo?.roleName === ERoles.writer ||
         getRepo?.roleName === ERoles.viewer ||
         getRepo?.roleName === ERoles.editor,
@@ -145,12 +138,11 @@ const useCategoryMenuList = ({
     },
     {
       text: "حذف دسته بندی",
-      icon: <DeleteIcon className="w-4 h-4" />,
-      disabled:
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
+      icon: <DeleteIcon className="h-4 w-4" />,
+      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
       onClick: () => {
         toggleModal("deleteCategoryModal", true);
+        setOpenCategoryActionDrawer(false);
         if (category) setCategory(category);
       },
       className: "delete-category",

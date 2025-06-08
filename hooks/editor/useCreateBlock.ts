@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createBlockVersionAction } from "@actions/editor";
 import { IBLockDocument } from "@interface/editor.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +16,7 @@ const useCreateBlock = () => {
       versionId: number;
       isDirectAccess?: boolean;
       callBack?: (result: IBLockDocument) => void;
-      handleError?: () => void;
+      handleError?: (error?: any) => void;
     }) => {
       const { repoId, documentId, versionId, isDirectAccess} =
         values;
@@ -34,7 +35,7 @@ const useCreateBlock = () => {
     },
     onError: (error, values) => {
       const { handleError } = values;
-      handleError?.();
+      handleError?.(error);
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

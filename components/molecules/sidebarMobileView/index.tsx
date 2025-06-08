@@ -75,18 +75,12 @@ const SidebarMobileView = () => {
 
   const handleRepoSelection = (repoGrouping: ERepoGrouping) => {
     setRepoGroup(repoGrouping);
-    setSidebarSection(ESidebarSection.REPOSITORY_MANAGEMENT);
-    setRepo(null);
     setShowList(false);
-    router.push("/admin/dashboard");
   };
 
   const handleDocumentNavigation = (path: string, section: ESidebarSection) => {
     setSidebarSection(section);
     setRepoGroup(null);
-    setRepo(null);
-    setCategory(null);
-    setDocument(null);
     setShowList(false);
     router.push(path);
   };
@@ -132,7 +126,7 @@ const SidebarMobileView = () => {
   const renderReposContent = () => {
     return (
       <div className="fixed bottom-16 left-0 right-0 top-[108px] z-40 overflow-auto bg-white pb-4 xs:hidden">
-        <div className="flex flex-col ">
+        <div className="flex flex-col">
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
               getRepoGroup === ERepoGrouping.MY_REPO
@@ -140,13 +134,14 @@ const SidebarMobileView = () => {
                 : "stroke-gray-400 text-gray-400"
             }`}
             onClick={() => {
-              return handleRepoSelection(ERepoGrouping.MY_REPO);
+              handleRepoSelection(ERepoGrouping.MY_REPO);
+              setSidebarSection(ESidebarSection.MY_REPOS);
+              router.push("/admin/myRepoList");
             }}
           >
             <MyFolderIcon className="ml-3 h-6 w-6" />
             <Typography className="title_t3">مخزن‌های من</Typography>
           </Button>
-
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
               getRepoGroup === ERepoGrouping.ACCESS_REPO
@@ -154,7 +149,9 @@ const SidebarMobileView = () => {
                 : "text-gray-400"
             }`}
             onClick={() => {
-              return handleRepoSelection(ERepoGrouping.ACCESS_REPO);
+              handleRepoSelection(ERepoGrouping.ACCESS_REPO);
+              setSidebarSection(ESidebarSection.SHARED_REPOS);
+              router.push("/admin/accessRepoList");
             }}
           >
             <FolderShareIcon
@@ -162,7 +159,7 @@ const SidebarMobileView = () => {
                 getRepoGroup === ERepoGrouping.ACCESS_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">اشتراکی</Typography>
+            <Typography className="title_t3">مخزن‌های اشتراکی</Typography>
           </Button>
 
           <Button
@@ -172,7 +169,9 @@ const SidebarMobileView = () => {
                 : "text-gray-400"
             }`}
             onClick={() => {
-              return handleRepoSelection(ERepoGrouping.BOOKMARK_REPO);
+              handleRepoSelection(ERepoGrouping.BOOKMARK_REPO);
+              setSidebarSection(ESidebarSection.BOOKMARK_REPOS);
+              router.push("/admin/bookmarkRepoList");
             }}
           >
             <BookmarkRepoIcon
@@ -180,7 +179,7 @@ const SidebarMobileView = () => {
                 getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">نشان شده</Typography>
+            <Typography className="title_t3">مخزن‌های نشان شده </Typography>
           </Button>
 
           <Button
@@ -190,7 +189,9 @@ const SidebarMobileView = () => {
                 : "text-gray-400"
             }`}
             onClick={() => {
-              return handleRepoSelection(ERepoGrouping.ARCHIVE_REPO);
+              handleRepoSelection(ERepoGrouping.ARCHIVE_REPO);
+              setSidebarSection(ESidebarSection.ARCHIVE_REPOS);
+              router.push("/admin/archiveRepoList");
             }}
           >
             <ArchiveIcon
@@ -198,9 +199,8 @@ const SidebarMobileView = () => {
                 getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">بایگانی</Typography>
+            <Typography className="title_t3">مخزن‌های بایگانی </Typography>
           </Button>
-
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
               getRepoGroup === ERepoGrouping.PUBLISHED_REPO
@@ -208,7 +208,9 @@ const SidebarMobileView = () => {
                 : "text-gray-400"
             }`}
             onClick={() => {
-              return handleRepoSelection(ERepoGrouping.PUBLISHED_REPO);
+              handleRepoSelection(ERepoGrouping.PUBLISHED_REPO);
+              setSidebarSection(ESidebarSection.PUBLISHED_REPOS);
+              router.push("/admin/publishedRepoList");
             }}
           >
             <PublishIcon
@@ -216,7 +218,7 @@ const SidebarMobileView = () => {
                 getRepoGroup === ERepoGrouping.PUBLISHED_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">منتشر شده</Typography>
+            <Typography className="title_t3"> مخزن‌های منتشرشده </Typography>
           </Button>
         </div>
       </div>
@@ -228,7 +230,7 @@ const SidebarMobileView = () => {
       <div className="flex h-full items-center justify-between">
         <div
           className={`flex cursor-pointer flex-col items-center ${
-            sidebarSection === ESidebarSection.DASHBOARD
+            sidebarSection === ESidebarSection.DASHBOARD && activeTab !== "repos"
               ? "stroke-icon-active text-primary_normal"
               : "stroke-gray-400 text-gray-400"
           }`}

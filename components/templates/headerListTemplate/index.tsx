@@ -36,7 +36,9 @@ const HeaderListTemplate = ({
         <Button
           className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
           onClick={() => {
-            setActiveTour(header === "نسخه‌ها" ? ETourSection.VERSION : ETourSection.DASHBOARD);
+            setActiveTour(
+              header === "لیست نسخه‌ها" ? ETourSection.VERSION : ETourSection.DASHBOARD,
+            );
           }}
         >
           <InfoIcon className="h-5 w-5 stroke-primary-normal" />

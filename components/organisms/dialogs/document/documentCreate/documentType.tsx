@@ -1,17 +1,16 @@
 import {
   DialogBody,
-  Spinner,
   Typography
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
 import { documentTypeAtom } from "@atom/document";
 import useGetClasorField from "@hooks/document/useGetClasorField";
 import { useRecoilState } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   isTemplate: boolean;

@@ -30,7 +30,7 @@ const TabComponent = ({
   return (
     <Tabs value={activeTab} className="h-full">
       <TabsHeader
-        className={`flex items-center p-[2px] bg-secondary rounded-lg bg text-secondary ${headerClassName || ""}`}
+        className={`flex overflow-x-auto items-center p-[2px] bg-secondary rounded-lg bg text-secondary ${headerClassName || ""}`}
         indicatorProps={{
           className: `p-2 rounded-lg shadow-small !text-purple-normal ${activeTabClassName || ""}`,
         }}

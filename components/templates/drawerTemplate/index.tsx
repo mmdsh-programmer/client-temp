@@ -41,39 +41,36 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
       onClose={() => {
         setOpenDrawer(null);
       }}
-      className="p-4 !h-auto overflow-x-hidden overflow-y-auto"
+      className="!h-auto overflow-y-auto overflow-x-hidden p-4"
       placeholder="action-drawer"
     >
-      <ul
-        className={`w-full
-               ml-4 font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
-      >
+      <ul className="ml-4 w-full overflow-hidden p-[2px] font-iranYekan text-primary_normal">
         {menuList.map((menuItem) => {
           return menuItem?.subMenu ? (
             <div key={`drawer-sub-menu-${menuItem.text}`}>
               <Button
-                className="w-full flex items-center justify-between bg-transparent px-0"
+                className="flex w-full items-center justify-between bg-transparent px-0"
                 onClick={() => {
                   return toggleOpen(menuItem.text);
                 }}
               >
-                <Typography className="select_option__text text-primary_normal font-normal ">
+                <Typography className="select_option__text font-normal text-primary_normal">
                   {menuItem.text}
                 </Typography>
                 <ChevronLeftIcon
-                  className={`h-2 w-2 transition-transform stroke-icon-active ${
+                  className={`h-2 w-2 stroke-icon-active transition-transform ${
                     openStates[menuItem.text] ? "" : "rotate-90"
                   }`}
                 />
               </Button>
               <Collapse open={openStates[menuItem.text]}>
-                <ul className="w-full ml-4 font-iranYekan text-primary_normal overflow-hidden p-[2px]">
+                <ul className="ml-4 w-full overflow-hidden p-[2px] font-iranYekan text-primary_normal">
                   {menuItem.subMenu.map((subItem) => {
                     return (
                       <li
                         key={`drawer-sub-menu-${subItem.text}`}
-                        className="cursor-pointer py-2 flex"
-                        onClick={subItem?.onClick}
+                        className={`flex cursor-pointer py-2 ${subItem.disabled ? "cursor-not-allowed opacity-50" : ""}`}
+                        onClick={subItem.disabled ? undefined : subItem?.onClick}
                       >
                         <div className="flex items-center gap-1">
                           {subItem?.icon}
@@ -90,14 +87,12 @@ const DrawerComponent = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
           ) : (
             <li
               key={`drawer-menu-${menuItem.text}`}
-              className="cursor-pointer py-2 flex"
-              onClick={menuItem?.onClick}
+              className={`flex cursor-pointer py-2 ${menuItem.disabled ? "cursor-not-allowed opacity-50" : ""}`}
+              onClick={menuItem.disabled ? undefined : menuItem?.onClick}
             >
               <div className="flex items-center gap-1">
                 {menuItem?.icon}
-                <Typography className="select_option__text font-normal">
-                  {menuItem.text}
-                </Typography>
+                <Typography className="select_option__text font-normal">{menuItem.text}</Typography>
               </div>
             </li>
           );
