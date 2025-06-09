@@ -5,6 +5,7 @@ import { normalizeError } from "@utils/normalizeActionError";
 import { getMe } from "./auth";
 import { getPublishDocumentCustomPost, updateDocumentCustomPost } from "@service/clasor";
 import { ISeo } from "@interface/social.interface";
+import { revalidateTag } from "next/cache";
 
 export const getPublishDocumentCustomPostAction = async (documentId: number) => {
   try {
@@ -30,6 +31,8 @@ export const updateDocumentCustomPostAction = async (
       documentId,
       contentString,
     );
+
+    revalidateTag(`rp-ph-${repoId}`);
 
     return response;
   } catch (error) {
