@@ -10,7 +10,7 @@ import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 import { EArticleSchemaImageType } from "@interface/enums";
-import useGetDocumentCustomPost from "@hooks/document/useGetDocumentCustomPost";
+import useGetPublishDocumentCustomPost from "@hooks/document/useGetPublishDocumentCustomPost";
 import { useRecoilValue } from "recoil";
 import { selectedDocumentAtom } from "@atom/document";
 import useUpdateDocumentCustomPost from "@hooks/document/useUpdateDocumentCustomPost";
@@ -40,7 +40,7 @@ const SeoDialog = ({ open, handleClose }: IProps) => {
   const repoId = getRepo!.id;
   const documentId = getDocument!.id;
 
-  const { data: seoData, isLoading: isLoadingSeo } = useGetDocumentCustomPost(repoId, documentId);
+  const { data: seoData, isLoading: isLoadingSeo } = useGetPublishDocumentCustomPost(documentId);
 
   const [formData, setFormData] = useState<ISeo>({
     title: "",
