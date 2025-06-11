@@ -10,27 +10,29 @@ import {
   SharedDocumentsIcon,
   UserGroupIcon,
 } from "@components/atoms/icons";
-import { repoAtom, repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { repoGroupingAtom } from "@atom/repository";
+import { useRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
 import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 import { Button, Typography } from "@material-tailwind/react";
-import { categoryAtom } from "@atom/category";
-import { selectedDocumentAtom } from "@atom/document";
 import { useRouter } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import Branch from "@components/organisms/branch";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 const SidebarMobileView = () => {
   const router = useRouter();
   const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
   const [sidebarSection, setSidebarSection] = useRecoilState(sidebarSectionAtom);
-  const setRepo = useSetRecoilState(repoAtom);
-  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-  const setCategory = useSetRecoilState(categoryAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const { data: userInfo } = useGetUser();
 
-  const [activeTab, setActiveTab] = useState<"main" | "documents" | "repos">("main");
+  const { data: userInfo } = useGetUser();
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+  const { enablePersonalDocs } = content;
+
+  const [activeTab, setActiveTab] = useState<
+    "main" | "documents" | "repos" | "domain" | "branchList"
+  >("main");
   const [showList, setShowList] = useState(false);
 
   useEffect(() => {
@@ -63,11 +65,6 @@ const SidebarMobileView = () => {
     ) {
       setRepoGroup(null);
     }
-
-    setRepo(null);
-    setCategory(null);
-    setDocument(null);
-    setSearchParam(null);
     setShowList(false);
 
     router.push(path);
@@ -225,6 +222,60 @@ const SidebarMobileView = () => {
     );
   };
 
+  const renderDomainContent = () => {
+    return (
+      <div className="fixed bottom-16 left-0 right-0 top-[108px] z-40 overflow-auto bg-white pb-4 xs:hidden">
+        <div className="flex flex-col">
+          {userInfo?.domainRole === "owner" || userInfo?.domainRole === "participant" ? (
+            <Button
+              className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
+                sidebarSection === ESidebarSection.DOMAIN_MANAGEMENT
+                  ? "bg-gray-100 stroke-icon-active text-primary_normal"
+                  : "stroke-gray-400 text-gray-400"
+              }`}
+              onClick={() => {
+                return handleNavigation(
+                  "/admin/domainManagement",
+                  ESidebarSection.DOMAIN_MANAGEMENT,
+                );
+              }}
+            >
+              <UserGroupIcon className="ml-3 h-6 w-6" />
+              <Typography className="title_t3">مدیریت دامنه</Typography>
+            </Button>
+          ) : null}
+          <Button
+            className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
+              sidebarSection === ESidebarSection.BRANCH_MANAGEMENT
+                ? "bg-gray-100 stroke-icon-active text-primary_normal"
+                : "stroke-gray-400 text-gray-400"
+            }`}
+            onClick={() => {
+              handleNavigation("/admin/branchManagement", ESidebarSection.BRANCH_MANAGEMENT);
+              if (activeTab === "branchList") {
+                setShowList(!showList);
+              } else {
+                setActiveTab("branchList");
+                setShowList(true);
+              }
+            }}
+          >
+            <UserGroupIcon className="ml-3 h-6 w-6" />
+            <Typography className="title_t3">مدیریت سازمانی</Typography>
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const renderBranchListContent = () => {
+    return (
+      <div className="fixed bottom-16 left-0 right-0 top-[108px] z-40 overflow-auto bg-white pb-4 xs:hidden">
+        <Branch />
+      </div>
+    );
+  };
+
   const renderBottomNavigation = () => {
     return (
       <div className="flex h-full items-center justify-between">
@@ -241,26 +292,26 @@ const SidebarMobileView = () => {
           <DashboardIcon className="h-6 w-6" />
           <Typography className="title_t4">داشبورد</Typography>
         </div>
-
-        <div
-          className={`flex cursor-pointer flex-col items-center ${
-            activeTab === "documents"
-              ? "stroke-icon-active text-primary_normal"
-              : "stroke-gray-400 text-gray-400"
-          }`}
-          onClick={() => {
-            if (activeTab === "documents") {
-              setShowList(!showList);
-            } else {
-              setActiveTab("documents");
-              setShowList(true);
-            }
-          }}
-        >
-          <MyDocumentsIcon className="h-6 w-6" />
-          <Typography className="title_t4">اسناد</Typography>
-        </div>
-
+        {(enablePersonalDocs ?? true) ? (
+          <div
+            className={`flex cursor-pointer flex-col items-center ${
+              activeTab === "documents"
+                ? "stroke-icon-active text-primary_normal"
+                : "stroke-gray-400 text-gray-400"
+            }`}
+            onClick={() => {
+              if (activeTab === "documents") {
+                setShowList(!showList);
+              } else {
+                setActiveTab("documents");
+                setShowList(true);
+              }
+            }}
+          >
+            <MyDocumentsIcon className="h-6 w-6" />
+            <Typography className="title_t4">اسناد</Typography>
+          </div>
+        ) : null}
         <div
           className={`flex cursor-pointer flex-col items-center ${
             activeTab === "repos"
@@ -279,34 +330,23 @@ const SidebarMobileView = () => {
           <MyFolderIcon className="h-6 w-6" />
           <Typography className="title_t4">مخزن‌ها</Typography>
         </div>
-        {userInfo?.domainRole === "owner" || userInfo?.domainRole === "participant" ? (
-          <div
-            className={`flex cursor-pointer flex-col items-center ${
-              sidebarSection === ESidebarSection.DOMAIN_MANAGEMENT
-                ? "stroke-icon-active text-primary_normal"
-                : "stroke-gray-400 text-gray-400"
-            }`}
-            onClick={() => {
-              return handleNavigation("/admin/domainManagement", ESidebarSection.DOMAIN_MANAGEMENT);
-            }}
-          >
-            <UserGroupIcon className="h-6 w-6" />
-            <Typography className="title_t4">دامنه</Typography>
-          </div>
-        ) : null}
-
         <div
           className={`flex cursor-pointer flex-col items-center ${
-            sidebarSection === ESidebarSection.BRANCH_MANAGEMENT
+            activeTab === "domain"
               ? "stroke-icon-active text-primary_normal"
               : "stroke-gray-400 text-gray-400"
           }`}
           onClick={() => {
-            return handleNavigation("/admin/branchManagement", ESidebarSection.BRANCH_MANAGEMENT);
+            if (activeTab === "domain") {
+              setShowList(!showList);
+            } else {
+              setActiveTab("domain");
+              setShowList(true);
+            }
           }}
         >
           <UserGroupIcon className="h-6 w-6" />
-          <Typography className="title_t4">سازمانی</Typography>
+          <Typography className="title_t4">مدیریت دامنه</Typography>
         </div>
       </div>
     );
@@ -314,8 +354,10 @@ const SidebarMobileView = () => {
 
   return (
     <>
-      {activeTab === "documents" && showList && renderDocumentsContent()}
-      {activeTab === "repos" && showList && renderReposContent()}
+      {activeTab === "documents" && showList ? renderDocumentsContent() : null}
+      {activeTab === "repos" && showList ? renderReposContent() : null}
+      {activeTab === "domain" && showList ? renderDomainContent() : null}
+      {activeTab === "branchList" && showList ? renderBranchListContent() : null}
       <div className="sidebar-mobile-view z-50 h-16 min-h-16 w-full border-normal bg-primary px-4 xs:hidden">
         {renderBottomNavigation()}
       </div>

@@ -35,7 +35,7 @@ const InfoDialog = ({
       dismiss={{
         enabled: false,
       }}
-      className={`${className} flex h-full w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
+      className={`${className} flex h-dvh m-0 w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
     >
       <DialogHeader
         placeholder="dialog header"

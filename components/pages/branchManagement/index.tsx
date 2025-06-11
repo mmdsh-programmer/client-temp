@@ -33,10 +33,10 @@ const BranchManagementPage = () => {
         <Typography className="title_t1 text-primary_normal">مدیریت شعبات</Typography>
       </div>
       <div className="flex h-[calc(100%-50px)] justify-evenly gap-2">
-        <div className="h-full w-[30%] max-w-[260px] basis-1/5">
+        <div className="h-full hidden xs:block w-[30%] max-w-[260px] basis-1/5">
           <Branch />
         </div>
-        <div className="basis-4/5 overflow-x-auto">
+        <div className="w-full xs:basis-4/5 overflow-x-auto">
           <BranchInfo />
         </div>
       </div>

@@ -53,7 +53,7 @@ const CreateDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
-      className={`${className} flex flex-col !rounded-none shrink-0 h-full w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-white xs:!rounded-lg `}
+      className={`${className} flex flex-col !rounded-none shrink-0 h-dvh m-0 w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-white xs:!rounded-lg `}
       onClick={handleBackdropClick}
       dismiss={{
         enabled: false,

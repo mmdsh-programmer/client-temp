@@ -55,7 +55,7 @@ const TabComponent = ({
           );
         })}
       </TabsHeader>
-      <TabsBody placeholder="tab-body" className={`h-[calc(100%-40px)] ${tabContentClassName || ""}`}>
+      <TabsBody placeholder="tab-body" className={`h-[calc(100%-45px)] ${tabContentClassName || ""}`}>
         {tabList.map((tab) => {
           return (
             <TabPanel

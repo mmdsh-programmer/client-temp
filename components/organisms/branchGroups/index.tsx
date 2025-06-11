@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-
 import { AddIcon } from "@components/atoms/icons";
 import BranchGroupList from "./branchGroupList";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import PositionCreateDialog from "../dialogs/position/positionCreateDialog";
 import SearchInput from "@components/molecules/searchInput";
+import BranchGroupsMobileView from "./branchGroupMobileView";
 
 const BranchGroups = () => {
-  const [openCreatePositionDialog, setOpenCreatePositionDialog] =
-    useState(false);
+  const [openCreatePositionDialog, setOpenCreatePositionDialog] = useState(false);
 
   return (
-    <div className="flex flex-col h-full pb-5 px-5">
-      <div className="h-[76px] min-h-[76px] flex justify-between items-center">
+    <div className="flex h-full flex-col px-5 pb-5">
+      <div className="flex h-[76px] min-h-[76px] items-center justify-between">
         <SearchInput />
         <IconTextButton
           text="ایجاد سمت جدید"
@@ -24,7 +23,12 @@ const BranchGroups = () => {
           }}
         />
       </div>
-      <BranchGroupList />
+      <div className="hidden h-full xs:block">
+        <BranchGroupList />
+      </div>
+      <div className="block h-full xs:hidden">
+        <BranchGroupsMobileView />
+      </div>
       {openCreatePositionDialog ? (
         <PositionCreateDialog setOpen={setOpenCreatePositionDialog} />
       ) : null}

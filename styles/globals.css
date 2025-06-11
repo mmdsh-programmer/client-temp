@@ -373,17 +373,3 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 
   }
 }
-
-@media (max-height: 670px) and (max-width: 480px) {
-  .delete-dialog, .confirm-dialog {
-    @apply -mb-[50vh]
-
-  }
-}
-
-@media (max-height: 900px) and (min-height: 670px) and (max-width: 480px) {
-  .delete-dialog, .confirm-dialog {
-    @apply !-mb-[20vh]
-
-  }
-}

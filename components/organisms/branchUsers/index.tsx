@@ -1,14 +1,20 @@
 import React from "react";
 import SearchInput from "@components/molecules/searchInput";
 import BranchUserList from "./branchUsersList";
+import BranchUsersMobileView from "./branchUserMobileView";
 
 const BranchUsers = () => {
   return (
-    <div className="flex flex-col h-full pb-5 px-5">
-      <div className="h-[76px] min-h-[76px] flex justify-between items-center">
+    <div className="flex h-full flex-col px-5 pb-5">
+      <div className="flex h-[76px] min-h-[76px] items-center justify-between">
         <SearchInput />
       </div>
-      <BranchUserList />
+      <div className="hidden h-full xs:block">
+        <BranchUserList />
+      </div>
+      <div className="block h-full xs:hidden">
+        <BranchUsersMobileView />
+      </div>
     </div>
   );
 };

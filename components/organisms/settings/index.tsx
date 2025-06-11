@@ -23,6 +23,7 @@ const Settings = () => {
       name: "",
       description: "",
       logo: null,
+      enablePersonalDocs: true,
       // colors
       mainColor: "",
       primaryLight: "",
@@ -85,7 +86,7 @@ const Settings = () => {
 
         setOriginalContent(content);
 
-        const { logo, projectDescription, projectName, theme = {} } = content;
+        const { logo, projectDescription, projectName, enablePersonalDocs, theme = {} } = content;
 
         let themeColors: ThemeColors = {};
         if (typeof theme === "string") {
@@ -102,7 +103,7 @@ const Settings = () => {
           name: projectName || "",
           description: projectDescription || "",
           logo: logo || null,
-
+          enablePersonalDocs,
           // colors
           mainColor: themeColors?.["--primary-normal"] || "#7F46BF",
           primaryLight: themeColors?.["--primary-light"] || "#EFE9F8",
@@ -187,6 +188,7 @@ const Settings = () => {
         projectName: data.name,
         projectDescription: data.description,
         logo: data.logo,
+        enablePersonalDocs: data.enablePersonalDocs,
         theme: {
           ...originalTheme,
           // colors

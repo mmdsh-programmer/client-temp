@@ -70,7 +70,7 @@ const VersionPublicDialog = ({ setOpen }: IProps) => {
       dialogHeader="عمومی شدن نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="version-public-dialog !-mb-[50vh] xs:!mb-0 "
+      className="version-public-dialog !-mb-[50dvh] xs:!mb-0 "
     >
       <div className="flex w-full flex-col gap-4">
         <div className="flex">

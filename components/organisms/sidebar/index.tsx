@@ -18,6 +18,7 @@ import SidebarDocuments from "@components/molecules/sidebarDocuments";
 import SidebarRepoList from "@components/molecules/sidebarRepoList";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRouter } from "next/navigation";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -35,6 +36,10 @@ const Sidebar = ({ children }: IProps) => {
   const [getSidebarSection, setSidebarSection] = useRecoilState(sidebarSectionAtom);
 
   const { data: userInfo } = useGetUser();
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+
+  const { enablePersonalDocs } = content;
 
   const handleOpen = (value) => {
     return setOpen(open === value ? 0 : value);
@@ -47,7 +52,7 @@ const Sidebar = ({ children }: IProps) => {
 
   return (
     <aside className="sidebar hidden h-screen w-[250px] max-w-fit flex-col border-l-2 border-l-gray-100 bg-white md:flex">
-      <div className="flex h-[80px] items-center justify-center px-2 py-4 ">{children}</div>
+      <div className="flex h-[80px] items-center justify-center px-2 py-4">{children}</div>
       <hr className="" />
       <ListItem
         key={ERepoGrouping.DASHBOARD}
@@ -56,11 +61,7 @@ const Sidebar = ({ children }: IProps) => {
       >
         <Button
           placeholder="sidebar-button"
-          className={` h-[44px] w-full justify-start 
-                     gap-1 bg-transparent px-3 text-link
-                     sidebar-button-${getSidebarSection === ESidebarSection.DASHBOARD ? "active" : ""}
-                   ${getSidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"}
-                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link sidebar-button-${getSidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} ${getSidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
             navigateTo("/admin/dashboard", () => {
               setRepoGroup(ERepoGrouping.DASHBOARD);
@@ -76,32 +77,34 @@ const Sidebar = ({ children }: IProps) => {
         </Button>
       </ListItem>
       <hr className="" />
-      <Accordion
-        className="personal-document-sidebar w-full max-w-full "
-        open={open === 1}
-        icon={
-          <ChevronLeftIcon
-            className={`h-2 w-2 stroke-icon-active ${open === 1 ? "rotate-90" : "-rotate-90"}`}
-          />
-        }
-        animate={CUSTOM_ANIMATION}
-      >
-        <AccordionHeader
-          className={`flex-row-reverse justify-end px-3 ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
-          onClick={() => {
-            return handleOpen(1);
-          }}
+      {(enablePersonalDocs ?? true) ? (
+        <Accordion
+          className="personal-document-sidebar w-full max-w-full"
+          open={open === 1}
+          icon={
+            <ChevronLeftIcon
+              className={`h-2 w-2 stroke-icon-active ${open === 1 ? "rotate-90" : "-rotate-90"}`}
+            />
+          }
+          animate={CUSTOM_ANIMATION}
         >
-          <Typography className="title_t4">اسناد شخصی</Typography>
-        </AccordionHeader>
-        <AccordionBody>
-          <div className="border-b-2 border-normal px-3 pb-3">
-            <SidebarDocuments />
-          </div>
-        </AccordionBody>
-      </Accordion>
+          <AccordionHeader
+            className={`flex-row-reverse justify-end px-3 ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
+            onClick={() => {
+              return handleOpen(1);
+            }}
+          >
+            <Typography className="title_t4">اسناد شخصی</Typography>
+          </AccordionHeader>
+          <AccordionBody>
+            <div className="border-b-2 border-normal px-3 pb-3">
+              <SidebarDocuments />
+            </div>
+          </AccordionBody>
+        </Accordion>
+      ) : null}
       <Accordion
-        className="repo-list-sidebar w-full max-w-full "
+        className="repo-list-sidebar w-full max-w-full"
         open={open === 2}
         icon={
           <ChevronLeftIcon
@@ -132,10 +135,7 @@ const Sidebar = ({ children }: IProps) => {
           >
             <Button
               placeholder="sidebar-button"
-              className={` h-[44px] w-full justify-start 
-                     gap-1 bg-transparent px-3 text-link
-                     ${getSidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""}
-                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+              className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${getSidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
               onClick={() => {
                 navigateTo("/admin/domainManagement", () => {
                   setSidebarSection(ESidebarSection.DOMAIN_MANAGEMENT);
@@ -159,10 +159,7 @@ const Sidebar = ({ children }: IProps) => {
       >
         <Button
           placeholder="sidebar-button"
-          className={` h-[44px] w-full justify-start 
-                     gap-1 bg-transparent px-3 text-link
-                     ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""}
-                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
             navigateTo("/admin/branchManagement", () => {
               setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);

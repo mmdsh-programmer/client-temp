@@ -66,10 +66,10 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       dialogHeader="حذف مخزن"
       setOpen={handleClose}
-      className="repo-delete-dialog xs:!mb-0"
+      className="repo-delete-dialog !-mb-[50dvh] xs:!mb-0"
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] ">
+        <div className="flex flex-wrap text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] ">
           آیا از حذف"
           <span
             title={getRepo?.name}

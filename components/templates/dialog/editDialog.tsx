@@ -46,7 +46,7 @@ const EditDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
-      className={`${className} flex h-full w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
+      className={`${className} flex h-dvh w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] m-0 xs:rounded-lg`}
       dismiss={{
         enabled: false,
       }}
@@ -77,7 +77,7 @@ const EditDialog = ({
       <div className="block h-2 w-full bg-secondary xs:hidden" />
       <DialogBody
         placeholder="dialog body"
-        className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6 !h-[calc(100vh-180px)] xs:!h-max xs:!max-h-max"
+        className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6 !h-[calc(100dvh-180px)] xs:!h-max xs:!max-h-max"
       >
         {children}
       </DialogBody>

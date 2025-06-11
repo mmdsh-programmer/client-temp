@@ -37,7 +37,7 @@ const fileManagementDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`file-management-dialog bg-white ${dialogClassName || ""}`}
+      className={`file-management-dialog m-0 bg-white ${dialogClassName || ""}`}
       dismiss={{
         enabled: false,
       }}

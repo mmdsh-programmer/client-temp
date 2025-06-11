@@ -37,7 +37,7 @@ const RepoKeyDialog = ({ setOpen }: IProps) => {
     <RepoKeyDeleteDialog repoId={getRepo.id} setOpen={setDeleteRepoKey} />
   ) : (
     <InfoDialog dialogHeader="لیست کلید های مخزن" setOpen={handleClose}>
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-grow ">
         {getRepo?.roleName === ERoles.owner ? (
           <Button
             placeholder="create repo key"
@@ -52,7 +52,7 @@ const RepoKeyDialog = ({ setOpen }: IProps) => {
             </Typography>
           </Button>
         ) : null}
-        <div className="w-full overflow-auto max-h-[calc(100dvh-200px)] border-[0.5px] border-normal rounded-lg mt-4">
+        <div className="w-full flex-grow overflow-auto max-h-[calc(100dvh-200px)] border-[0.5px] border-normal rounded-lg mt-4">
           {getRepo && <RepoKeyList repoId={getRepo.id} hasAction />}
         </div>
       </div>

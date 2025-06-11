@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { AddIcon } from "@components/atoms/icons";
 import BranchCreateDialog from "../dialogs/branch/branchCreateDialog";
 import BranchList from "./branchList";

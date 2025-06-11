@@ -54,7 +54,7 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
       dialogHeader="تایید و عمومی سازی پیش نویس"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="version-confirm-public-dialog !w-[450px] !min-w-[450px]"
+      className="version-confirm-public-dialog"
     >
       آیا از تایید و عمومی سازی پیش نویس"
       <Typography

@@ -66,12 +66,12 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={confirmVersion.isPending}
-      dialogHeader="تایید نسخه"
+      dialogHeader="تایید پیش‌نویس"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="version-confirm-dialog"
     >
-      آیا از تایید نسخه "
+      آیا از تایید پیش‌نویس "
       <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {(getVersion || editorData)?.versionNumber}
       </span>

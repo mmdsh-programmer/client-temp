@@ -41,7 +41,7 @@ const ConfirmDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} confirm-dialog bg-white rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60vh] xs:mb-0 `}
+      className={`${className} bg-white rounded-lg flex flex-col bg-primary w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60dvh] xs:mb-0 `}
       dismiss={{
         enabled: false,
       }}
@@ -70,7 +70,7 @@ const ConfirmDialog = ({
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
       >
-        <div className="dialog-body__content body_b3 flex text-primary_normal">
+        <div className="dialog-body__content body_b3 flex flex-wrap text-primary_normal">
           {children}
         </div>
       </DialogBody>

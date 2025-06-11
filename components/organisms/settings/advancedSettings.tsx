@@ -34,7 +34,6 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           name="hasComments"
           checked={domain.hasComments}
           onChange={onCheckboxChange}
-
           label="نمایش قسمت نظرات"
         />
         <div className="mr-8">
@@ -42,7 +41,6 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
             name="needsAdminApprovalForComments"
             checked={domain.needsAdminApprovalForComments}
             onChange={onCheckboxChange}
-
             label="آیا نیاز به تایید ادمین دارد؟"
           />
         </div>
@@ -52,7 +50,6 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           name="hasQuestions"
           checked={domain.hasQuestions}
           onChange={onCheckboxChange}
-
           label="نمایش قسمت سوالات"
         />
         <div className="mr-8 flex flex-col gap-4">
@@ -60,17 +57,21 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
             name="needsAdminApprovalForQuestions"
             checked={domain.needsAdminApprovalForQuestions}
             onChange={onCheckboxChange}
-
             label="آیا نیاز به تایید ادمین دارد؟"
           />
           <Checkbox
             name="allowQuestionReplies"
             checked={domain.allowQuestionReplies}
             onChange={onCheckboxChange}
-
             label="آیا امکان پاسخ به سوال وجود دارد؟"
           />
         </div>
+        <Checkbox
+          name="enablePersonalDocs"
+          checked={domain.enablePersonalDocs}
+          onChange={onCheckboxChange}
+          label="فعال سازی مستندات شخصی"
+        />
       </div>
     </div>
   );

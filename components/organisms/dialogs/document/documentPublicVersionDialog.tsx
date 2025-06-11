@@ -50,7 +50,7 @@ const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
       dialogHeader="عمومی سازی آخرین نسخه سند"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="document-public-dialog !w-[450px] !min-w-[450px]"
+      className="document-public-dialog"
     >
       آیا از عمومی سازی آخرین نسخه سند "
       <Typography

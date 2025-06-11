@@ -195,8 +195,8 @@ const Files = ({
 
   return (
     <FileManagementDialog
-      dialogClassName="flex flex-col !rounded-none shrink-0 !h-full w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
-      dialogBodyClassName="bg-white h-[calc(100vh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
+      dialogClassName="flex flex-col !rounded-none shrink-0 !h-dvh w-full max-w-full md:!h-[80%] md:min-h-[80%] md:!w-[700px] md:!min-w-[700px] md:!max-w-[700px] lg:!w-[800px] lg:!min-w-[800px] lg:!max-w-[800px] bg-primary md:!rounded-lg"
+      dialogBodyClassName="bg-white h-[calc(100dvh-200px)] md:h-auto overflow-auto md:overflow-hidden p-5 flex-grow"
       dialogHeader={`${dialogHeader || "افزودن عکس"}`}
       setOpen={() => {
         return handleClose?.();

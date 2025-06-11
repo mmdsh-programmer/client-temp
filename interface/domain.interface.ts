@@ -45,6 +45,7 @@ export interface IDomainTheme {
   name: string;
   description?: string;
   logo?: string | null;
+  enablePersonalDocs: boolean;
   mainColor: string;
   primaryLight: string;
   bgPrimaryColor: string;
@@ -93,6 +94,7 @@ export interface ContentType {
   projectName?: string;
   projectDescription?: string;
   logo?: string | null;
+  enablePersonalDocs?: boolean;
   theme?: string;
   settings?: {
     hasLikes?: boolean;
