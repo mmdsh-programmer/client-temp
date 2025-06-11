@@ -4,6 +4,7 @@ import {
   ConfirmationVersionIcon,
   GlobeIcon,
   ListIcon,
+  SeoIcon,
   SpeedDialIcon,
 } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
@@ -28,6 +29,7 @@ import { ERoles, EDocumentTypes } from "@interface/enums";
 import DownloadPDF from "@components/molecules/downloadPDF";
 import DownloadExcel from "@components/molecules/downloadExcel";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import SeoDialog from "../dialogs/seo";
 
 interface IProps {
   version: IVersion;
@@ -50,6 +52,7 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
   const [publicDraftModal, setPublicDraftModal] = useState(false);
   const [acceptPublicDraftModal, setAcceptPublicDraftModal] = useState(false);
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
+  const [seoDialogOpen, setSeoDialogOpen] = useState(false);
 
   const { data: userInfo } = useGetUser();
 
@@ -116,6 +119,15 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
               }}
             >
               <ListIcon className="h-5 w-5" />
+            </Button>
+            <Button
+              className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
+              onClick={() => {
+                setSeoDialogOpen(true);
+              }}
+              title="تنظیمات بهینه‌سازی موتور جستجو (SEO)"
+            >
+              <SeoIcon className="h-5 w-5" />
             </Button>
             <RenderIf isTrue={version.state === "draft" && version?.status === "editing"}>
               <>
@@ -304,6 +316,14 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
           }}
         />
       ) : null}
+      {seoDialogOpen && (
+        <SeoDialog
+          open={seoDialogOpen}
+          handleClose={() => {
+            return setSeoDialogOpen(false);
+          }}
+        />
+      )}
     </>
   );
 };

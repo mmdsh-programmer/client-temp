@@ -6,7 +6,6 @@ import {
   getPublishRepositoryInfo,
 } from "@service/clasor";
 import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
-
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError } from "@interface/app.interface";
 import LoginRequiredButton from "@components/molecules/loginRequiredButton";
@@ -17,11 +16,25 @@ import RedirectPage from "@components/pages/redirectPage";
 import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
+import ArticleSchema from "@components/organisms/articleSchema";
+import { getSeoConfig, getDocumentMetadata } from "@utils/seo";
 
 type PageParams = {
+  domain: string;
   name: string;
   id: string;
   slug?: string[];
+};
+
+export const generateMetadata = async ({ params }: { params: PageParams }) => {
+  try {
+    return await getDocumentMetadata(params);
+  } catch (error) {
+    console.log("Error in generateMetadata:", error);
+    return {
+      title: "بلاگ باکس",
+    };
+  }
 };
 
 async function fetchDocumentVersion(
@@ -182,8 +195,18 @@ export default async function PublishContentPage({
         return notFound();
       }
 
+      const pageSeoConfig = await getSeoConfig(documentId);
+
       return (
-        <PublishVersionContent document={documentInfo} version={version} />
+        <>
+          {pageSeoConfig?.articleSchema && 
+            <ArticleSchema
+              schema={pageSeoConfig.articleSchema} 
+              documentId={documentId} 
+            />
+          }
+          <PublishVersionContent document={documentInfo} version={version} />
+        </>
       );
     } catch (error) {
       if (error instanceof BasicError && error.errorCode === 400) {

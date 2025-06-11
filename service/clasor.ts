@@ -2380,7 +2380,8 @@ export const deleteVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : ""
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
+        state === "draft" ? "/draft" : ""
       }`,
       {
         headers: {
@@ -4744,6 +4745,68 @@ export const updateUserConfigPanel = async (
       },
     );
     return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentCustomPost = async (
+  documentId: number,
+) => {
+  try {
+    const redisClient = await getRedisClient();
+    const cacheKey = `document-social-content:${documentId}`;
+    
+    if (redisClient?.isReady) {
+      const cachedData = await redisClient.get(cacheKey);
+      if (cachedData) {
+        return JSON.parse(cachedData);
+      }
+    }
+
+    const response = await axiosClasorInstance.get<IServerResult<{content: string | null}>>(
+      `publish/document/${documentId}/socialContent`,
+    );
+    
+    if (redisClient?.isReady) {
+      await redisClient.set(
+        cacheKey, 
+        JSON.stringify(response.data.data), 
+        { EX: 86400 } // 24 hours
+      );
+    }
+    
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateDocumentCustomPost = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  content: string,
+) => {
+  try {
+    const response = await axiosClasorInstance.put<IServerResult<{content: string}>>(
+      `repositories/${repoId}/documents/${documentId}/socialContent`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    const redisClient = await getRedisClient();
+    const cacheKey = `document-social-content:${documentId}`;
+    
+    if (redisClient?.isReady) {
+      await redisClient.del(cacheKey);
+    }
+    
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

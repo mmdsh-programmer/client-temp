@@ -143,3 +143,23 @@ export enum ERepoSubscriptionStatus {
   REJECTED = "rejected",
   NOT_FOLLOWED = "notFollowed",
 }
+
+export enum EArticleSchemaType {
+  ARTICLE = "Article",
+  NEWS_ARTICLE = "NewsArticle",
+  BLOG_POSTING = "BlogPosting",
+}
+
+export enum EArticleSchemaAuthorType {
+  PERSON = "Person",
+  ORGANIZATION = "Organization",
+}
+
+export enum EArticleSchemaPublisherType {
+  PERSON = "Person",
+  ORGANIZATION = "Organization",
+}
+
+export enum EArticleSchemaImageType {
+  IMAGE_OBJECT = "ImageObject",
+}
