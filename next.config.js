@@ -47,7 +47,7 @@ const nextConfig = {
   },
   cacheHandler:
     process.env.NODE_ENV === "production"
-      ? require.resolve("./cacheHandler.develop.mjs")
+      ? require.resolve("./cacheHandler.mjs")
       : undefined,
   cacheMaxMemorySize: 0, // disable default in-memory caching
 };
