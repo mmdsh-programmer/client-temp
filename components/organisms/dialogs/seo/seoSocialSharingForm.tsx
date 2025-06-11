@@ -92,10 +92,9 @@ const SeoSocialSharingForm = forwardRef<SocialSharingFormRef, IProps>(({ default
       </div>
       <div className="flex flex-col gap-2">
         <Typography className="form_label">URL</Typography>
-        <InputAtom
+        <TextareaAtom
           className="!bg-white"
           placeholder="URL"
-          type="url"
           register={{ ...register("openGraph.URL") }}
         />
         {errors.openGraph?.URL && (
