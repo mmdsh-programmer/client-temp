@@ -4750,32 +4750,20 @@ export const updateUserConfigPanel = async (
   }
 };
 
-export const getPublishDocumentCustomPost = async (
+export const getDocumentCustomPost = async (
+  accessToken: string,
+  repoId: number,
   documentId: number,
 ) => {
   try {
-    const redisClient = await getRedisClient();
-    const cacheKey = `document-social-content:${documentId}`;
-    
-    if (redisClient?.isReady) {
-      const cachedData = await redisClient.get(cacheKey);
-      if (cachedData) {
-        return JSON.parse(cachedData);
-      }
-    }
-
-    const response = await axiosClasorInstance.get<IServerResult<{content: string | null}>>(
-      `publish/document/${documentId}/socialContent`,
+    const response = await axiosClasorInstance.get<IServerResult<{content: string}>>(
+      `repositories/${repoId}/documents/${documentId}/socialContent`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
     );
-    
-    if (redisClient?.isReady) {
-      await redisClient.set(
-        cacheKey, 
-        JSON.stringify(response.data.data), 
-        { EX: 86400 } // 24 hours
-      );
-    }
-    
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -4789,24 +4777,18 @@ export const updateDocumentCustomPost = async (
   content: string,
 ) => {
   try {
-    const response = await axiosClasorInstance.put<IServerResult<{content: string}>>(
+    const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/socialContent`,
-      { content },
+      {
+        content,
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       },
     );
-
-    const redisClient = await getRedisClient();
-    const cacheKey = `document-social-content:${documentId}`;
-    
-    if (redisClient?.isReady) {
-      await redisClient.del(cacheKey);
-    }
-    
-    return response.data.data;
+    return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }

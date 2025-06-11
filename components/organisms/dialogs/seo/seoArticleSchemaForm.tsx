@@ -36,8 +36,8 @@ const SeoArticleSchemaForm = forwardRef<ArticleSchemaFormRef, IProps>(({ default
         return "";
       }
       
-      // Return in ISO 8601 format with timezone
-      return date.toISOString();
+      // Return in YYYY-MM-DD format
+      return date.toISOString().split("T")[0];
     } catch {
       return "";
     }
@@ -145,8 +145,7 @@ const SeoArticleSchemaForm = forwardRef<ArticleSchemaFormRef, IProps>(({ default
           const date = new Date(selectedTime.value);
           // Check if date is valid
           if (!Number.isNaN(date.getTime())) {
-            // Store in ISO 8601 format with timezone
-            const formattedDate = date.toISOString();
+            const formattedDate = date.toISOString().split("T")[0];
             setValue(field, formattedDate, { shouldValidate: true });
           } else {
             setValue(field, "", { shouldValidate: true });

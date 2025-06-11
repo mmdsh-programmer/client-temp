@@ -3,12 +3,13 @@
 import { IActionError } from "@interface/app.interface";
 import { normalizeError } from "@utils/normalizeActionError";
 import { getMe } from "./auth";
-import { getPublishDocumentCustomPost, updateDocumentCustomPost } from "@service/clasor";
+import { getDocumentCustomPost, updateDocumentCustomPost } from "@service/clasor";
 import { ISeo } from "@interface/social.interface";
 
-export const getPublishDocumentCustomPostAction = async (documentId: number) => {
+export const getDocumentCustomPostAction = async (repoId: number, documentId: number) => {
+  const userInfo = await getMe();
   try {
-    const response = await getPublishDocumentCustomPost(documentId);
+    const response = await getDocumentCustomPost(userInfo.access_token, repoId, documentId);
 
     return response;
   } catch (error) {

@@ -5,6 +5,7 @@ import {
   getPublishRepositoryInfo,
 } from "@service/clasor";
 import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
+
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import PublishVersionContent from "@components/pages/publish";
@@ -14,8 +15,6 @@ import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { ServerError } from "@utils/error";
 import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
-import ArticleSchema from "@components/organisms/articleSchema";
-import { getSeoConfig, getDocumentMetadata } from "@utils/seo";
 
 export const generateStaticParams = async () => {
   return [];
@@ -26,17 +25,6 @@ type PageParams = {
   name: string;
   id: string;
   slug?: string[];
-};
-
-export const generateMetadata = async ({ params }: { params: PageParams }) => {
-  try {
-    return await getDocumentMetadata(params);
-  } catch (error) {
-    console.log("Error in generateMetadata:", error);
-    return {
-      title: "بلاگ باکس",
-    };
-  }
 };
 
 export default async function PublishContentPage({
@@ -87,6 +75,7 @@ export default async function PublishContentPage({
     const lastSlug = enSlug[enSlug.length - 1];
     const hasVersion = lastSlug.startsWith("v-");
     const documentId = parseInt(hasVersion ? enSlug[1] : lastSlug, 10);
+    const documentName = enSlug[0];
 
     const versionId = hasVersion
       ? parseInt(lastSlug.replace("v-", ""), 10)
@@ -105,7 +94,7 @@ export default async function PublishContentPage({
     const documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
-    if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== enSlug[0]) {
+    if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
       await generateCachePageTag([
         `dc-${documentId}`,
         `rp-ph-${repository.id}`,
@@ -165,31 +154,17 @@ export default async function PublishContentPage({
       hasVersion &&
       versionData &&
       toEnglishDigit(versionData.versionNumber).replaceAll(/\s+/g, "-") !==
-      versionNumber
+        versionNumber
     ) {
       return notFound();
     }
 
-    if (!versionData) {
-      return notFound();
-    }
-
-    const pageSeoConfig = await getSeoConfig(documentId);
-
     return (
-      <>
-        {pageSeoConfig?.articleSchema && 
-          <ArticleSchema
-            schema={pageSeoConfig.articleSchema} 
-            documentId={documentId} 
-          />
-        }
-        <PublishVersionContent document={documentInfo} version={versionData} />
-      </>
+      <PublishVersionContent document={documentInfo} version={versionData} />
     );
   } catch (error) {
 
-    const { errorList, errorCode } = error as unknown as {
+    const { errorList, errorCode } = error as unknown as   {
       errorList: string[];
       errorCode: number;
     };
@@ -199,7 +174,7 @@ export default async function PublishContentPage({
       error: true,
       referenceNumber: "NOT_DEFINED",
     }, null, 0));
-
+    
     const message =
       error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if (message === "NEXT_NOT_FOUND") {
