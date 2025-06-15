@@ -8,9 +8,9 @@ import RenderIf from "@components/atoms/renderIf";
 import { selectedDocumentAtom } from "@atom/document";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
+import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
-import useGetUser from "@hooks/auth/useGetUser";
 
 const timeout = 5 * 60; // seconds
 
@@ -54,7 +54,6 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const handleFreeDraft = () => {
     if (editorData && repoId && selectedDocument) {
       editorRef.current?.on("getData", (value) => {
-        console.log("------------------ value -----------------", value);
         editorContent.current = value;
       });
 
@@ -114,13 +113,6 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   };
 
   useEffect(() => {
-    handleBlockDraft();
-    return () => {
-      stopWorker();
-    };
-  }, [editorMode, editorData?.id]);
-
-  useEffect(() => {
     if (editorMode === "edit") {
       workerRef.current?.addEventListener("message", ({ data: workerData }) => {
         if (workerData < timeout) {
@@ -130,6 +122,9 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
         }
       });
     }
+    return () => {
+      stopWorker();
+    };
   }, [workerRef.current, editorMode]);
 
   return (

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createBlockVersionAction } from "@actions/editor";
-import { IBLockDocument } from "@interface/editor.interface";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
+import { IBLockDocument } from "@interface/editor.interface";
+import { createBlockVersionAction } from "@actions/editor";
 import { handleClientSideHookError } from "@utils/error";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 const useCreateBlock = () => {
-  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["create-block"],
     mutationFn: async (values: {

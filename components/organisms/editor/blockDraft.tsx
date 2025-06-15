@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import { IVersion } from "@interface/version.interface";
 import { selectedDocumentAtom } from "atom/document";
 import { toast } from "react-toastify";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
-import useRepoId from "@hooks/custom/useRepoId";
+import { useDebouncedCallback } from "use-debounce";
 import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   children: JSX.Element;
@@ -27,7 +29,7 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
   const { data: userInfo } = useGetUser();
   const createBlockHook = useCreateBlock();
 
-  useEffect(() => {
+  const handleBlock = useDebouncedCallback(() => {
     if (repoId && selectedDocument && version && editorMode === "edit") {
       createBlockHook.mutate({
         repoId,
@@ -38,11 +40,16 @@ const BlockDraft = React.memo(({ children, version }: IProps) => {
           currentPath === "/admin/sharedDocuments" ||
           (currentPath === "/admin/dashboard" &&
             userInfo?.repository.id !== selectedDocument?.repoId),
-        handleError: (error) => {
-          console.log("--------------------- error ----------------", error);
+        handleError: () => {
           setEditorMode("preview");
         },
       });
+    }
+  }, 1000);
+
+  useEffect(() => {
+    if (repoId && selectedDocument && version && editorMode === "edit") {
+      handleBlock();
     } else if (!version || JSON.stringify(version) === "{}") {
       setEditorData(null);
       toast.error("نسخه ای برای این سند پیدا نشد!");
