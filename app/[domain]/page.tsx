@@ -28,7 +28,7 @@ const MainPage = async ({ params }: MainPageProps) => {
         <>
           <PublishHeader projectName={projectName} logo={logo} domain={domain} />
           <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
-            <div className="w-full mt-8 bg-primary px-4 py-8 rounded-md bg-secondary">
+            <div className="w-full mb-16 mt-8 px-4 py-8 rounded-md bg-secondary">
               <div
                 className="flex w-full py-4 relative justify-center"
               >
