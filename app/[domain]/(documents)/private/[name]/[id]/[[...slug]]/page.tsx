@@ -5,7 +5,7 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError } from "@interface/app.interface";
@@ -90,15 +90,15 @@ export default async function PublishContentPage({
 
     const repository = await getPublishRepositoryInfo(repoId);
 
-    const decodeName = decodeURIComponent(name);
-    const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
+    const decodeName = removeSpecialCharacters(toPersianDigit(decodeURIComponent(name)));
+    const repoName = removeSpecialCharacters(toPersianDigit(repository.name));
     if(decodeName !== repoName){
       return notFound();
     }
 
     if (!enSlug?.length) {
       return <RedirectPage
-        redirectUrl={`/publish/${toPersianDigit(repoName)}/${toPersianDigit(id)}`}
+        redirectUrl={`/publish/${repoName}/${toPersianDigit(id)}`}
       />;
     }
 
@@ -108,7 +108,7 @@ export default async function PublishContentPage({
       hasVersion ? enSlug[1] : lastSlug,
       10
     );
-    const documentName = enSlug[0];
+    const documentName = removeSpecialCharacters(toPersianDigit(enSlug[0]));
 
     const versionId = hasVersion
       ? parseInt(lastSlug.replace("v-", ""), 10)
@@ -124,8 +124,8 @@ export default async function PublishContentPage({
       true
     );
 
-    const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
-    if(documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName){
+    const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
+    if(documentInfo.isHidden || documentInfoName !== documentName){
       return notFound();
     }
 
@@ -138,7 +138,7 @@ export default async function PublishContentPage({
       const publicSlug = slug?.join("/").replace("/private", "");
       return (
         <RedirectPage
-          redirectUrl={`/publish/${name}/${id}/${publicSlug}`}
+          redirectUrl={`/publish/${decodeName}/${id}/${publicSlug}`}
         />
       );
     }
@@ -173,8 +173,8 @@ export default async function PublishContentPage({
         accessToken
       );
 
-      const versionNumber = enSlug[enSlug.length - 2];
-      if(hasVersion && version && toEnglishDigit(version.versionNumber).replaceAll(/\s+/g, "-") !== versionNumber){
+      const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
+      if(hasVersion && version && removeSpecialCharacters(toPersianDigit(version.versionNumber)) !== versionNumber){
         return notFound();
       }
 

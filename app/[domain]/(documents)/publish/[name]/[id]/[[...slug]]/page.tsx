@@ -4,7 +4,7 @@ import {
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { hasEnglishDigits, toEnglishDigit, toPersianDigit } from "@utils/index";
+import { hasEnglishDigits, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
@@ -61,8 +61,8 @@ export default async function PublishContentPage({
 
     const repository = await getPublishRepositoryInfo(repoId);
 
-    const decodeName = decodeURIComponent(name);
-    const repoName = toPersianDigit(repository.name).replaceAll(/\s+/g, "-");
+    const decodeName = removeSpecialCharacters(toPersianDigit(decodeURIComponent(name)));
+    const repoName = removeSpecialCharacters(toPersianDigit(repository.name));
     if (decodeName !== repoName) {
       return notFound();
     }
@@ -75,7 +75,7 @@ export default async function PublishContentPage({
     const lastSlug = enSlug[enSlug.length - 1];
     const hasVersion = lastSlug.startsWith("v-");
     const documentId = parseInt(hasVersion ? enSlug[1] : lastSlug, 10);
-    const documentName = enSlug[0];
+    const documentName = removeSpecialCharacters(toPersianDigit(enSlug[0]));
 
     const versionId = hasVersion
       ? parseInt(lastSlug.replace("v-", ""), 10)
@@ -93,8 +93,8 @@ export default async function PublishContentPage({
 
     const documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
-    const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
-    if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
+    const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
+    if (documentInfo.isHidden || documentInfoName !== documentName) {
       await generateCachePageTag([
         `dc-${documentId}`,
         `rp-ph-${repository.id}`,
@@ -109,7 +109,7 @@ export default async function PublishContentPage({
       documentInfo?.hasBlackList
     ) {
       // CHECK THE CACHE
-      const privatePath = `/private/${name}/${id}/${slug?.join("/")}`;
+      const privatePath = `/private/${removeSpecialCharacters(toPersianDigit(decodeName))}/${id}/${slug?.join("/")}`;
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
@@ -141,7 +141,7 @@ export default async function PublishContentPage({
       );
     }
 
-    const versionNumber = enSlug[enSlug.length - 2];
+    const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
 
     await generateCachePageTag([
       `vr-${versionData.id}`,
@@ -153,7 +153,7 @@ export default async function PublishContentPage({
     if (
       hasVersion &&
       versionData &&
-      toEnglishDigit(versionData.versionNumber).replaceAll(/\s+/g, "-") !==
+      removeSpecialCharacters(toEnglishDigit(versionData.versionNumber)) !==
         versionNumber
     ) {
       return notFound();

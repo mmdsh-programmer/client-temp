@@ -60,16 +60,14 @@ export const translateVersionStatus = (status: string, state: string) => {
       if (state === "draft") {
         translated = "در انتظار تایید مدیر مخزن";
         className = "label !text-hint !bg-gray-100";
-        break;
       } else if (state === "version") {
         translated = "در انتظار عمومی شدن";
         className = "label !text-secondary !bg-gray-100";
-        break;
       }
+      break;
     case "waitForDirectPublic":
       translated = "در انتظار تایید و عمومی شدن";
       className = "label !bg-gray-100 !text-primary";
-
       break;
     case "rejected":
       translated = "رد شده";
@@ -329,4 +327,21 @@ export const formatTimeAgo = (date: Date): string => {
     return `${diffMin} دقیقه پیش`;
   }
   return "لحظاتی پیش";
+};
+
+export const removeSpecialCharacters = (value: string) => {
+ // replace all space and half-space with "-"
+ const str = value.split("");
+ str.forEach((item, index) => {
+  const charCode = item.charCodeAt(0);
+  if (
+    charCode === 32 || // space
+    charCode === 8204 || // zero-width space (half-space)
+    charCode === 47 || // slash
+    charCode === 92 // backslash
+  ) {
+    str[index] = "-";
+  }
+ });
+ return str.join("");
 };
