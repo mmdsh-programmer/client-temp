@@ -1,12 +1,14 @@
+import { decodeKey, hasEnglishDigits, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
 import {
+  getCustomPostByDomain,
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { hasEnglishDigits, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
+import { ICustomPostData } from "@interface/app.interface";
 import { IVersion } from "@interface/version.interface";
 import PublishVersionContent from "@components/pages/publish";
 import React from "react";
@@ -157,6 +159,16 @@ export default async function PublishContentPage({
         versionNumber
     ) {
       return notFound();
+    }
+
+
+
+    const decodedDomain = decodeKey(domain);
+    const { content } = await getCustomPostByDomain(decodedDomain);
+    const { enableFont } = JSON.parse(content) as ICustomPostData;
+    // remove all inline font from html
+    if(versionData.content && enableFont){
+      versionData.content = versionData.content.replace(/font-family\s*:\s*[^;"]+;?\s*/gi, "");
     }
 
     return (
