@@ -1,8 +1,9 @@
-import { saveVersionAction } from "@actions/editor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { saveVersionAction } from "@actions/editor";
+import { toast } from "react-toastify";
 
 const useSaveEditor = () => {
   const queryClient = useQueryClient();
@@ -18,7 +19,7 @@ const useSaveEditor = () => {
       outline: string;
       versionState: string;
       isDirectAccess?: boolean;
-      callBack?: () => void;
+      successCallBack?: () => void;
       errorCallback?: () => void;
     }) => {
       const {
@@ -43,7 +44,7 @@ const useSaveEditor = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { documentId, versionId, versionState, callBack } = values;
+      const { documentId, versionId, versionState, successCallBack } = values;
       queryClient.refetchQueries({
         queryKey: [
           `document-${documentId}-version-${versionId}-state-${versionState}-innerDocument-true-innerOutline-true`,
@@ -56,7 +57,7 @@ const useSaveEditor = () => {
         ],
       });
 
-      callBack?.();
+      successCallBack?.();
     },
     onError: (error, values) => {
       const { errorCallback } = values;

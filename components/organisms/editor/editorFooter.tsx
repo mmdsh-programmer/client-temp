@@ -172,7 +172,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           currentPath === "/admin/sharedDocuments" ||
           (currentPath === "/admin/dashboard" &&
             userInfo?.repository.id !== selectedDocument?.repoId),
-        callBack: () => {
+        successCallBack: () => {
           toast.success("تغییرات با موفقیت ذخیره شد.");
           setIsLoading(false);
         },
