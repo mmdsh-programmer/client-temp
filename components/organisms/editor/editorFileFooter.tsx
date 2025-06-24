@@ -2,9 +2,11 @@ import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModeAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import CancelButton from "@components/atoms/button/cancelButton";
+import Checkbox from "@components/atoms/checkbox";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
@@ -12,11 +14,9 @@ import { selectedDocumentAtom } from "@atom/document";
 import { selectedFileAtom } from "@atom/file";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
-import { usePathname, useSearchParams } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
-import useGetUser from "@hooks/auth/useGetUser";
-import Checkbox from "@components/atoms/checkbox";
 
 const EditorFileFooter = () => {
   const repoId = useRepoId();
@@ -89,7 +89,9 @@ const EditorFileFooter = () => {
               sharedDocuments === "true"
               ? true
               : undefined,
-          callBack: () => { },
+          onSuccessHandler: () => { 
+              toast.success("نسخه مورد نظر با موفقیت به روزرسانی شد.");
+          },
         });
       } else {
         toast.error("تغییری در فایل وجود ندارد.");

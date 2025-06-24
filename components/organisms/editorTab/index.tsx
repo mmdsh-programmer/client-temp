@@ -8,25 +8,26 @@ import {
   editorPublicKeyAtom,
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
 import EditorComponent from "@components/organisms/editor";
+import EditorFileFooter from "../editor/editorFileFooter";
 import EditorFooter from "../editor/editorFooter";
 import EditorHeader from "../editor/editorHeader";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import { IVersion } from "@interface/version.interface";
+import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import useRepoId from "@hooks/custom/useRepoId";
-import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
-import EditorFileFooter from "../editor/editorFileFooter";
-import { IVersion } from "@interface/version.interface";
+import { useSearchParams } from "next/navigation";
 
 const EditorTab = () => {
   const repoId = useRepoId();

@@ -26,7 +26,7 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
         prefetch={false}
       >
         <div className="flex flex-col items-center justify-between w-full h-full rounded-md">
-          <div className="w-full flex-1 bg-primary-normal relative flex items-center justify-center rounded-t-md">
+          <div className="default-repo-image h-40 w-full flex-1 bg-primary-normal relative flex items-center justify-center rounded-t-md">
             <RepoDefaultImage className="w-40 h-40" imageHash={repo.imageFileHash} />
           </div>
           <Typography className="title_t2 w-full pb-8 pt-4 text-center sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]">

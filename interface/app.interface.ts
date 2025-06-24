@@ -339,6 +339,7 @@ export interface ICustomPostData {
   heroImage?: string;
   theme?: IThemeInfo;
   enablePublishPage?: boolean;
+  enableFont?: boolean;
 }
 export interface IThemeInfo {
   primaryColor?: string;

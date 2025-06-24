@@ -18,15 +18,15 @@ import EditorComponent from "@components/organisms/editor";
 import EditorDialog from "@components/templates/dialog/editorDialog";
 import EditorKey from "@components/organisms/dialogs/editor/editorKey";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import { IVersion } from "@interface/version.interface";
 import PublicKeyInfo from "./publicKeyInfo";
 import { Spinner } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import useGetUser from "@hooks/auth/useGetUser";
 import useGetVersion from "@hooks/version/useGetVersion";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
-import { IVersion } from "@interface/version.interface";
-import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

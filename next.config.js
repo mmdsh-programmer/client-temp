@@ -16,7 +16,7 @@ const nextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: "5mb",
+      bodySizeLimit: "10mb",
     },
   },
   webpack: (config, { isServer }) => {
@@ -26,10 +26,6 @@ const nextConfig = {
       newConfig.resolve.fallback = {
         fs: false,
       };
-      newConfig.externals.push({
-        "utf-8-validate": "commonjs utf-8-validate",
-        "bufferutil": "commonjs bufferutil",
-      });
     }
     return newConfig;
   },

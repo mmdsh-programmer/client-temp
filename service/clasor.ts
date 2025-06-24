@@ -4351,7 +4351,7 @@ export const acceptSubscription = async (
 export const getCustomPostByDomain = async (domain: string): Promise<IDomainMetadata> => {
   try {
     if (domain === "") {
-      throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
+      throw new NotFoundError(["دامنه ارسال شده خالی می باشد."]);
     }
 
     const redisClient = await getRedisClient();
