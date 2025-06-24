@@ -1,15 +1,13 @@
 import React from "react";
-import {
-  Accordion,
-  AccordionBody,
-  AccordionHeader,
-  Typography,
-} from "@material-tailwind/react";
+import { Accordion, AccordionBody, AccordionHeader, Typography } from "@material-tailwind/react";
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import BranchMenu from "@components/molecules/branchMenu";
 import { IBranch } from "@interface/branch.interface";
 import { branchIdAtom } from "@atom/branch";
 import { useSetRecoilState } from "recoil";
+import { ESidebarSection, sidebarSectionAtom, sidebarTabAtom } from "@atom/sidebar";
+import { usePathname, useRouter } from "next/navigation";
+import { repoGroupingAtom } from "@atom/repository";
 
 interface IProps {
   children: React.JSX.Element;
@@ -18,53 +16,61 @@ interface IProps {
   childItem: IBranch;
 }
 
-const BranchCollapse = ({
-  children,
-  className,
-  isActive,
-  childItem,
-}: IProps) => {
+const BranchCollapse = ({ children, className, isActive, childItem }: IProps) => {
+  const router = useRouter();
+  const currentPath = usePathname();
+
   const [open, setOpen] = React.useState(false);
   const setBranchId = useSetRecoilState(branchIdAtom);
+  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
+  const setSidebarSection = useSetRecoilState(sidebarSectionAtom);
+  const setActiveTab = useSetRecoilState(sidebarTabAtom);
 
   const handleOpen = () => {
     setOpen(!open);
-    setBranchId(childItem.id);
   };
 
   return (
     <Accordion open={open}>
       <AccordionHeader
-        onClick={handleOpen}
         placeholder="accordionHeader"
         className={`flex border-b-0 p-0 ${className}`}
       >
-        <div className="flex gap-2 min-w-full w-full justify-between items-center">
-          <div className="flex items-center flex-grow">
+        <div className="flex w-full min-w-full items-center justify-between gap-2">
+          <div className="flex flex-grow items-center">
             <div
-              className={`collapse-button flex items-center rounded-[5px] py-2 px-2 ${
+              className={`collapse-button flex items-center rounded-[5px] px-2 py-2 ${
                 open ? "active-collapse" : ""
               }`}
+              onClick={handleOpen}
             >
               <ChevronLeftIcon
-                className={`stroke-gray-600 w-3 h-3 transition-transform ${
+                className={`h-3 w-3 stroke-gray-600 transition-transform ${
                   open ? "-rotate-90" : ""
                 }`}
               />
             </div>
             <div
-              className={`w-auto flex-grow justify-start rounded pr-2 py-1 text-sm font-bold text-right ${
+              className={`w-auto flex-grow justify-start rounded py-1 pr-2 text-right text-sm font-bold ${
                 isActive ? "text-dashboard-primary" : ""
               }`}
+              onClick={() => {
+                if (window.innerWidth < 480 && currentPath !== "/admin/branchManagement") {
+                  router.push("/admin/branchManagement");
+                }
+                setRepoGroup(null);
+                setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
+                setActiveTab(null);
+                setBranchId(childItem.id);
+              }}
             >
               <div className="flex">
                 <FolderIcon
-                  className={`w-5 h-5 ${childItem.parentId ? "fill-[#79B8FF]" : "fill-[#FF9500]"}
-                     ml-2 flex-none self-start`}
+                  className={`h-5 w-5 ${childItem.parentId ? "fill-[#79B8FF]" : "fill-[#FF9500]"} ml-2 flex-none self-start`}
                 />
                 <Typography
                   title={childItem.title}
-                  className="max-w-[100px] w-[100px] truncate"
+                  className="w-[100px] max-w-[100px] truncate"
                   variant="small"
                 >
                   {childItem.title}
@@ -75,10 +81,8 @@ const BranchCollapse = ({
           <BranchMenu branchItem={childItem} />
         </div>
       </AccordionHeader>
-      <AccordionBody className="py-1 px-0">
-        <div className="pr-4 collapse-content flex flex-col gap-1">
-          {open ? children : null}
-        </div>
+      <AccordionBody className="px-0 py-1">
+        <div className="collapse-content flex flex-col gap-1 pr-4">{open ? children : null}</div>
       </AccordionBody>
     </Accordion>
   );

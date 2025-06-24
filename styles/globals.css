@@ -5,6 +5,7 @@
 @import "./outline.style.css";
 @import "./clasor-preview.style.css";
 @import "./landing.css";
+@import "./google-fonts.css";
 
 @layer base {
   html {

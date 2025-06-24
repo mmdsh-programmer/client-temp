@@ -13,7 +13,7 @@ import {
 import { repoGroupingAtom } from "@atom/repository";
 import { useRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
+import { ESidebarSection, ESidebarTab, sidebarSectionAtom, sidebarTabAtom } from "@atom/sidebar";
 import { Button, Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -30,9 +30,7 @@ const SidebarMobileView = () => {
   const content = JSON.parse(getDomainInfo?.content || "{}");
   const { enablePersonalDocs } = content;
 
-  const [activeTab, setActiveTab] = useState<
-    "main" | "documents" | "repos" | "domain" | "branchList"
-  >("main");
+  const [activeTab, setActiveTab] = useRecoilState(sidebarTabAtom);
   const [showList, setShowList] = useState(false);
 
   useEffect(() => {
@@ -40,17 +38,17 @@ const SidebarMobileView = () => {
       sidebarSection === ESidebarSection.MY_DOCUMENTS ||
       sidebarSection === ESidebarSection.SHARED_DOCUMENTS
     ) {
-      setActiveTab("documents");
+      setActiveTab(ESidebarTab.DOCUMENT);
       setShowList(false);
     } else if (sidebarSection === ESidebarSection.REPOSITORY_MANAGEMENT) {
-      setActiveTab("repos");
+      setActiveTab(ESidebarTab.REPOS);
       setShowList(false);
     } else if (
       sidebarSection === ESidebarSection.DASHBOARD ||
       sidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ||
       sidebarSection === ESidebarSection.BRANCH_MANAGEMENT
     ) {
-      setActiveTab("main");
+      setActiveTab(ESidebarTab.MAIN);
     }
   }, [sidebarSection]);
 
@@ -251,11 +249,10 @@ const SidebarMobileView = () => {
                 : "stroke-gray-400 text-gray-400"
             }`}
             onClick={() => {
-              handleNavigation("/admin/branchManagement", ESidebarSection.BRANCH_MANAGEMENT);
-              if (activeTab === "branchList") {
+              if (activeTab === ESidebarTab.BRANCH_LIST) {
                 setShowList(!showList);
               } else {
-                setActiveTab("branchList");
+                setActiveTab(ESidebarTab.BRANCH_LIST);
                 setShowList(true);
               }
             }}
@@ -295,15 +292,15 @@ const SidebarMobileView = () => {
         {(enablePersonalDocs ?? true) ? (
           <div
             className={`flex cursor-pointer flex-col items-center ${
-              activeTab === "documents"
+              activeTab === ESidebarTab.DOCUMENT
                 ? "stroke-icon-active text-primary_normal"
                 : "stroke-gray-400 text-gray-400"
             }`}
             onClick={() => {
-              if (activeTab === "documents") {
+              if (activeTab === ESidebarTab.DOCUMENT) {
                 setShowList(!showList);
               } else {
-                setActiveTab("documents");
+                setActiveTab(ESidebarTab.DOCUMENT);
                 setShowList(true);
               }
             }}
@@ -314,15 +311,15 @@ const SidebarMobileView = () => {
         ) : null}
         <div
           className={`flex cursor-pointer flex-col items-center ${
-            activeTab === "repos"
+            activeTab === ESidebarTab.REPOS
               ? "stroke-icon-active text-primary_normal"
               : "stroke-gray-400 text-gray-400"
           }`}
           onClick={() => {
-            if (activeTab === "repos") {
+            if (activeTab === ESidebarTab.REPOS) {
               setShowList(!showList);
             } else {
-              setActiveTab("repos");
+              setActiveTab(ESidebarTab.REPOS);
               setShowList(true);
             }
           }}
@@ -332,15 +329,15 @@ const SidebarMobileView = () => {
         </div>
         <div
           className={`flex cursor-pointer flex-col items-center ${
-            activeTab === "domain"
+            activeTab === ESidebarTab.DOMAIN
               ? "stroke-icon-active text-primary_normal"
               : "stroke-gray-400 text-gray-400"
           }`}
           onClick={() => {
-            if (activeTab === "domain") {
+            if (activeTab === ESidebarTab.DOMAIN) {
               setShowList(!showList);
             } else {
-              setActiveTab("domain");
+              setActiveTab(ESidebarTab.DOMAIN);
               setShowList(true);
             }
           }}

@@ -40,7 +40,7 @@ interface DocumentDialogsProps {
   toggleModal: (modalName: keyof DocumentDialogsProps["modalsState"], value: boolean) => void;
 }
 
-const DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleModal }) => {
+const  DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleModal }) => {
   return (
     <>
       {modalsState.deleteDocument ? (

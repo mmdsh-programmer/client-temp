@@ -6,10 +6,6 @@
   @apply !rounded-none px-5 xs:px-8;
 }
 
-.clasor-preview-content__render-server-content * {
-  direction: ltr;
-}
-
 .publish-file-preview .preview-wrapper {
   @apply !h-[calc(100vh-200px)];
 }
@@ -79,4 +75,31 @@
 
 .clasor-preview-content__render-server-content table {
   width: 100%;
+}
+
+.clasor-preview-content__render-server-content *:not([dir]):not(ul),
+.clasor-preview-content__render-server-content *:not([dir]):not(ol) {
+  direction: ltr;
+}
+
+li:has(p[dir="ltr"]) {
+  direction: ltr !important;
+}
+
+li:has(p[dir="rtl"]) {
+  direction: rtl !important;
+}
+
+li p[text-align="center"] {
+  list-style-position: inside;
+}
+
+ul li:has(p[dir="rtl"]),
+ol li:has(p[dir="rtl"]) {
+  direction: rtl !important;
+}
+
+ul li:has(p[dir="ltr"]),
+ol li:has(p[dir="ltr"]) {
+  direction: ltr !important;
 }

@@ -17,8 +17,22 @@ export enum ESidebarSection {
   BRANCH_LIST = "لیست شعبات",
 }
 
+export enum ESidebarTab {
+  MAIN = "main",
+  DOCUMENT = "documents",
+  REPOS = "repos",
+  DOMAIN = "domain",
+  BRANCH_LIST = "branchList",
+}
+
 export const sidebarSectionAtom = atom<ESidebarSection | null>({
   key: "sidebarSectionAtom",
   default: ESidebarSection.DASHBOARD,
   effects: [logEffect("sidebarSectionAtom")],
+});
+
+export const sidebarTabAtom = atom<ESidebarTab | null>({
+  key: "sidebarTabAtom",
+  default: null,
+  effects: [logEffect("sidebarTabAtom")],
 });
