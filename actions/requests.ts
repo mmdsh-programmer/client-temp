@@ -2,7 +2,7 @@
 
 import {
   acceptUserToRepoRequest,
-  getDomainInfo,
+  getCustomPostByDomain,
   getUserToRepoRequests,
   rejectUserToRepoRequest,
 } from "@service/clasor";
@@ -23,7 +23,7 @@ export const getUserToRepoRequestsAction = async (
       throw new Error("Domain is not found");
     }
         
-    const { types } = await getDomainInfo(domain);
+    const { types } = await getCustomPostByDomain(domain);
     const response = await getUserToRepoRequests(
       userInfo.access_token,
       offset,

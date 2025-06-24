@@ -2932,7 +2932,7 @@ export const deletePublishLink = async (accessToken: string, repoId: number) => 
 };
 
 /// ///////////////////// REQUESTS ///////////////////
-export const getUserToRepoRequests = async (accessToken: string, offset: number, size: number) => {
+export const getUserToRepoRequests = async (accessToken: string, offset: number, size: number, types: string[]) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IAccessRequestResponse>>(
       "acl/userRequests",
@@ -2943,6 +2943,7 @@ export const getUserToRepoRequests = async (accessToken: string, offset: number,
         params: {
           offset,
           size,
+          types,
         },
       },
     );
