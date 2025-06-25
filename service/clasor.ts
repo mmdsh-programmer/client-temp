@@ -3010,7 +3010,11 @@ export const saveVersion = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
-      { content, outline, versionNumber },
+      { 
+        content: decodeURIComponent(content), 
+        outline: decodeURIComponent(outline), 
+        versionNumber: decodeURIComponent(versionNumber)
+      },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
