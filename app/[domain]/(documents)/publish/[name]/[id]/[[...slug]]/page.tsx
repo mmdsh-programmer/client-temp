@@ -165,9 +165,9 @@ export default async function PublishContentPage({
 
     const decodedDomain = decodeKey(domain);
     const { content } = await getCustomPostByDomain(decodedDomain);
-    const { enableFont } = JSON.parse(content) as ICustomPostData;
+    const { enableDefaultFontFamily } = JSON.parse(content) as ICustomPostData;
     // remove all inline font from html
-    if(versionData.content && enableFont){
+    if(versionData.content && enableDefaultFontFamily){
       versionData.content = versionData.content.replace(/font-family\s*:\s*[^;"]+;?\s*/gi, "");
     }
 

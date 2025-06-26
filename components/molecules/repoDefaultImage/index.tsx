@@ -22,19 +22,19 @@ const RepoDefaultImage = ({ imageHash, className }: IProps) => {
   }
 
   if (!imageHash) {
-    return <RepoYellowIcon className="w-full h-full" />;
+    return <RepoYellowIcon className={`repo-yellow-icon w-full h-full ${className}`} />;
   }
 
   const generateImage = () => {
     switch (imageHash) {
       case "red":
-        return <RepoRedIcon className="repo-red-icon w-full h-full" />;
+        return <RepoRedIcon className={`repo-red-icon w-full h-full ${className}`} />;
       case "blue":
-        return <RepoBlueIcon className="repo-blue-icon w-full h-full" />;
+        return <RepoBlueIcon className={`repo-blue-icon w-full h-full ${className}`} />;
       case "purple":
-        return <RepoPurpleIcon className="repo-purple-icon w-full h-full" />;
+        return <RepoPurpleIcon className={`repo-purple-icon w-full h-full ${className}`} />;
       case "yellow":
-        return <RepoYellowIcon className="repo-yellow-icon w-full h-full" />;
+        return <RepoYellowIcon className={`repo-yellow-icon w-full h-full ${className}`} />;
       default:
         return (
           <ImageComponent

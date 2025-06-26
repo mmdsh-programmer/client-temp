@@ -24,6 +24,7 @@ const Settings = () => {
       description: "",
       logo: null,
       enablePersonalDocs: true,
+      enableDefaultFontFamily: true,
       // colors
       mainColor: "",
       primaryLight: "",
@@ -69,6 +70,7 @@ const Settings = () => {
       needsAdminApprovalForQuestions: false,
       allowQuestionReplies: false,
       accessToCreateRepo: false,
+      enablePublishPage: false,
     },
   });
 
@@ -86,7 +88,14 @@ const Settings = () => {
 
         setOriginalContent(content);
 
-        const { logo, projectDescription, projectName, enablePersonalDocs, theme = {} } = content;
+        const {
+          logo,
+          projectDescription,
+          projectName,
+          enablePersonalDocs,
+          enableDefaultFontFamily,
+          theme = {},
+        } = content;
 
         let themeColors: ThemeColors = {};
         if (typeof theme === "string") {
@@ -104,6 +113,7 @@ const Settings = () => {
           description: projectDescription || "",
           logo: logo || null,
           enablePersonalDocs,
+          enableDefaultFontFamily,
           // colors
           mainColor: themeColors?.["--primary-normal"] || "#7F46BF",
           primaryLight: themeColors?.["--primary-light"] || "#EFE9F8",
@@ -149,6 +159,7 @@ const Settings = () => {
           needsAdminApprovalForQuestions: getDomainInfo?.needsAdminApprovalForQuestions,
           allowQuestionReplies: getDomainInfo?.allowQuestionReplies,
           accessToCreateRepo: getDomainInfo?.accessToCreateRepo,
+          enablePublishPage: getDomainInfo?.enablePublishPage,
         });
       } catch (error) {
         console.error("Error processing domain info:", error);
@@ -189,6 +200,7 @@ const Settings = () => {
         projectDescription: data.description,
         logo: data.logo,
         enablePersonalDocs: data.enablePersonalDocs,
+        enableDefaultFontFamily: data.enableDefaultFontFamily,
         theme: {
           ...originalTheme,
           // colors
@@ -243,6 +255,7 @@ const Settings = () => {
         needsAdminApprovalForQuestions: data.needsAdminApprovalForQuestions,
         allowQuestionReplies: data.allowQuestionReplies,
         accessToCreateRepo: data.accessToCreateRepo,
+        enablePublishPage: data.enablePublishPage,
       });
     } catch (error) {
       console.error("Error in onSubmit:", error);
@@ -262,33 +275,37 @@ const Settings = () => {
 
   return (
     <div className="w-full p-5">
-      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        <div className="flex flex-col gap-5">
-          <Typography className="title_t2">تنظیمات پایه</Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex flex-col gap-5">
-            <BasicInfo domain={formValues} onInputChange={handleInputChange} register={register} />
-            <LogoUploader
-              onInputChange={handleInputChange}
-              register={register}
-              logoHash={formValues.logo}
-            />
-            <ColorsSettings domain={formValues} onColorChange={handleColorChange} />
+            <Typography className="title_t2">تنظیمات پایه</Typography>
+            <div className="flex flex-col gap-5">
+              <BasicInfo
+                domain={formValues}
+                onInputChange={handleInputChange}
+                register={register}
+              />
+              <LogoUploader
+                onInputChange={handleInputChange}
+                register={register}
+                logoHash={formValues.logo}
+              />
+              <ColorsSettings domain={formValues} onColorChange={handleColorChange} />
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-5 justify-between">
           <div className="flex flex-col gap-5">
             <Typography className="title_t2">تنظیمات پیشرفته</Typography>
             <AdvancedSettings domain={formValues} onCheckboxChange={handleCheckboxChange} />
           </div>
-          <div className="flex w-full justify-end">
-            <LoadingButton
-              className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
-              onClick={handleSubmit(onSubmit)}
-              loading={updateDomain.isPending || uploadLoading}
-            >
-              <Typography className="text__label__button text-white">ذخیره</Typography>
-            </LoadingButton>
-          </div>
+        </div>
+        <div className="sticky bottom-0 z-10 mt-8 flex justify-end p-4">
+          <LoadingButton
+            className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+            onClick={handleSubmit(onSubmit)}
+            loading={updateDomain.isPending || uploadLoading}
+          >
+            <Typography className="text__label__button text-white">ذخیره</Typography>
+          </LoadingButton>
         </div>
       </form>
     </div>

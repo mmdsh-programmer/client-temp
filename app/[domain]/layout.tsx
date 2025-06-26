@@ -5,6 +5,8 @@ import MainProvider from "provider/mainProvider";
 import type { Metadata } from "next";
 import React from "react";
 import ThemeLoaderProvider from "provider/themeLoaderProvider";
+import { decodeKey } from "@utils/index";
+import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
@@ -13,27 +15,39 @@ interface IProps {
   };
 }
 
-export const metadata: Metadata = {
-  title: "کلاسور",
-  description: "کلاسور",
-};
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const domain = decodeKey(params.domain);
+  try {
+    const { content } = await getCustomPostByDomain(domain);
+    const domainInfo = JSON.parse(content ?? "{}");
+    return {
+      title: domainInfo.projectName,
+      description: domainInfo.projectDescription,
+    };
+  } catch {
+    return {
+      title: "کلاسور",
+      description: "کلاسور",
+    };
+  }
+}
 
 const DomainLayout = ({ children, params }: IProps) => {
   return (
-      <ThemeLoaderProvider domain={params.domain}>
-        <>
-          <MainProvider>
-            <LayoutTransitionProvider
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              {children}
-            </LayoutTransitionProvider>
-          </MainProvider>
-          <p className="hidden absolute -z-50">3.19.9.14-v3</p>
-        </>
-      </ThemeLoaderProvider>
+    <ThemeLoaderProvider domain={params.domain}>
+      <>
+        <MainProvider>
+          <LayoutTransitionProvider
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {children}
+          </LayoutTransitionProvider>
+        </MainProvider>
+        <p className="absolute -z-50 hidden">3.19.9.14-v3</p>
+      </>
+    </ThemeLoaderProvider>
   );
 };
 

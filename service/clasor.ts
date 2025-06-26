@@ -4416,6 +4416,7 @@ export const updateCustomPostByDomain = async (
   needsAdminApprovalForQuestions?: boolean,
   allowQuestionReplies?: boolean,
   accessToCreateRepo?: boolean,
+  enablePublishPage?: boolean,
 ): Promise<any> => {
   try {
     if (domain === "") {
@@ -4439,6 +4440,7 @@ export const updateCustomPostByDomain = async (
         needsAdminApprovalForQuestions,
         allowQuestionReplies,
         accessToCreateRepo,
+        enablePublishPage
       },
       {
         headers: { domainUrl: domain, Authorization: `Bearer ${accessToken}` },
