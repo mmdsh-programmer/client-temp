@@ -154,8 +154,6 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
     if (selectedDocument?.publicKeyId) {
       encryptedContent = encryptData(content) as string;
-      console.log("-------------------- save data -------------------", data);
-      console.log("----------------- encrypted -----------------", encryptedContent);
     }
 
     if (getVersionData && selectedDocument && repoId) {

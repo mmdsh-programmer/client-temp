@@ -35,9 +35,9 @@ const useSaveEditor = () => {
         repoId,
         documentId,
         versionId,
-        versionNumber,
-        content,
-        outline,
+        encodeURIComponent(versionNumber),
+        encodeURIComponent(content),
+        encodeURIComponent(outline),
         isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
