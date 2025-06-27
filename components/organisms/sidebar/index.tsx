@@ -39,7 +39,7 @@ const Sidebar = ({ children }: IProps) => {
   const { data: getDomainInfo } = useGetDomainInfo();
   const content = JSON.parse(getDomainInfo?.content || "{}");
 
-  const { enablePersonalDocs } = content;
+  const { enablePersonalDocs, enableBranch } = content;
 
   const handleOpen = (value) => {
     return setOpen(open === value ? 0 : value);
@@ -153,27 +153,29 @@ const Sidebar = ({ children }: IProps) => {
           <div className="border-b-2 border-normal" />
         </>
       ) : null}
-      <ListItem
-        placeholder="sidebar-item"
-        className="branch-management-sidebar dashboard p-2 hover:!bg-transparent"
-      >
-        <Button
-          placeholder="sidebar-button"
-          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
-          onClick={() => {
-            navigateTo("/admin/branchManagement", () => {
-              setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
-              setRepoGroup(null);
-              setSearchParam(null);
-            });
-          }}
+      {(enableBranch ?? true) ? (
+        <ListItem
+          placeholder="sidebar-item"
+          className="branch-management-sidebar dashboard p-2 hover:!bg-transparent"
         >
-          <UserGroupIcon className="h-6 w-6" />
-          <Typography placeholder="sidebar-text" className="title_t3">
-            مدیریت سازمانی
-          </Typography>
-        </Button>
-      </ListItem>
+          <Button
+            placeholder="sidebar-button"
+            className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+            onClick={() => {
+              navigateTo("/admin/branchManagement", () => {
+                setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
+                setRepoGroup(null);
+                setSearchParam(null);
+              });
+            }}
+          >
+            <UserGroupIcon className="h-6 w-6" />
+            <Typography placeholder="sidebar-text" className="title_t3">
+              مدیریت سازمانی
+            </Typography>
+          </Button>
+        </ListItem>
+      ) : null}
     </aside>
   );
 };

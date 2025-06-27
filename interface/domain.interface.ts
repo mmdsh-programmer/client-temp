@@ -47,6 +47,7 @@ export interface IDomainTheme {
   logo?: string | null;
   enablePersonalDocs: boolean;
   enablePublishPage: boolean;
+  enableBranch: boolean;
   mainColor: string;
   primaryLight: string;
   bgPrimaryColor: string;
@@ -98,6 +99,7 @@ export interface ContentType {
   logo?: string | null;
   enablePersonalDocs?: boolean;
   enableDefaultFontFamily?: boolean;
+  enableBranch?: boolean;
   theme?: string;
   settings?: {
     hasLikes?: boolean;

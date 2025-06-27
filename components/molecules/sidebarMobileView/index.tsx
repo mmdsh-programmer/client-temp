@@ -28,7 +28,7 @@ const SidebarMobileView = () => {
   const { data: userInfo } = useGetUser();
   const { data: getDomainInfo } = useGetDomainInfo();
   const content = JSON.parse(getDomainInfo?.content || "{}");
-  const { enablePersonalDocs } = content;
+  const { enablePersonalDocs, enableBranch } = content;
 
   const [activeTab, setActiveTab] = useRecoilState(sidebarTabAtom);
   const [showList, setShowList] = useState(false);
@@ -242,24 +242,26 @@ const SidebarMobileView = () => {
               <Typography className="title_t3">مدیریت دامنه</Typography>
             </Button>
           ) : null}
-          <Button
-            className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
-              sidebarSection === ESidebarSection.BRANCH_MANAGEMENT
-                ? "bg-gray-100 stroke-icon-active text-primary_normal"
-                : "stroke-gray-400 text-gray-400"
-            }`}
-            onClick={() => {
-              if (activeTab === ESidebarTab.BRANCH_LIST) {
-                setShowList(!showList);
-              } else {
-                setActiveTab(ESidebarTab.BRANCH_LIST);
-                setShowList(true);
-              }
-            }}
-          >
-            <UserGroupIcon className="ml-3 h-6 w-6" />
-            <Typography className="title_t3">مدیریت سازمانی</Typography>
-          </Button>
+          {(enableBranch ?? true) ? (
+            <Button
+              className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
+                sidebarSection === ESidebarSection.BRANCH_MANAGEMENT
+                  ? "bg-gray-100 stroke-icon-active text-primary_normal"
+                  : "stroke-gray-400 text-gray-400"
+              }`}
+              onClick={() => {
+                if (activeTab === ESidebarTab.BRANCH_LIST) {
+                  setShowList(!showList);
+                } else {
+                  setActiveTab(ESidebarTab.BRANCH_LIST);
+                  setShowList(true);
+                }
+              }}
+            >
+              <UserGroupIcon className="ml-3 h-6 w-6" />
+              <Typography className="title_t3">مدیریت سازمانی</Typography>
+            </Button>
+          ) : null}
         </div>
       </div>
     );

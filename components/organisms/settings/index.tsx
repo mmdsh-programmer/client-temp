@@ -24,6 +24,7 @@ const Settings = () => {
       description: "",
       logo: null,
       enablePersonalDocs: true,
+      enableBranch: true,
       enableDefaultFontFamily: true,
       // colors
       mainColor: "",
@@ -94,6 +95,7 @@ const Settings = () => {
           projectName,
           enablePersonalDocs,
           enableDefaultFontFamily,
+          enableBranch,
           theme = {},
         } = content;
 
@@ -114,6 +116,7 @@ const Settings = () => {
           logo: logo || null,
           enablePersonalDocs,
           enableDefaultFontFamily,
+          enableBranch,
           // colors
           mainColor: themeColors?.["--primary-normal"] || "#7F46BF",
           primaryLight: themeColors?.["--primary-light"] || "#EFE9F8",
@@ -201,6 +204,7 @@ const Settings = () => {
         logo: data.logo,
         enablePersonalDocs: data.enablePersonalDocs,
         enableDefaultFontFamily: data.enableDefaultFontFamily,
+        enableBranch: data.enableBranch,
         theme: {
           ...originalTheme,
           // colors

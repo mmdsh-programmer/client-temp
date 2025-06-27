@@ -84,6 +84,12 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           onChange={onCheckboxChange}
           label="استفاده از فونت پیش‌فرض"
         />
+        <Checkbox
+          name="enableBranch"
+          checked={domain.enableBranch}
+          onChange={onCheckboxChange}
+          label="فعال سازی شعبات"
+        />
       </div>
     </div>
   );
