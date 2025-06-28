@@ -35,7 +35,7 @@ const DomainConfig = () => {
           tabContent: activeTab === ETabs.SETTING ? <Settings /> : null,
         }
       : null,
-    userInfo?.domainRole === "owner"
+    userInfo?.domainRole === "owner" || userInfo?.isClasorAdmin
       ? {
           tabTitle: ETabs.PARTICIPANT,
           tabContent: activeTab === ETabs.PARTICIPANT ? <DomainParticipant /> : null,

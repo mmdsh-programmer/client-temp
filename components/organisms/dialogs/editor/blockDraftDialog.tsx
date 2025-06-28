@@ -12,7 +12,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 
-const timeout = 5 * 60; // seconds
+const timeout = 15 * 60; // seconds
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;

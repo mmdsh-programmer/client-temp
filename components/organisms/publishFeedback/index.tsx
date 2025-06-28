@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PublishTab from "@components/molecules/publishTab";
 import PublishQuestionAnswer from "./PublishQuestionAnswer";
 import PublishComments from "./PublishComments";
@@ -16,8 +16,18 @@ enum ETabs {
 }
 
 const PublishFeeback = ({ postId }: IProps) => {
-  const [activeTab, setActiveTab] = useState<string>(ETabs.QUESTION_ANSWER);
   const { data: getDomainInfo } = useGetDomainInfo();
+  const [activeTab, setActiveTab] = useState<string>(ETabs.QUESTION_ANSWER);
+
+  useEffect(() => {
+    if (getDomainInfo) {
+      if (getDomainInfo.hasComments && !getDomainInfo.hasQuestions) {
+        setActiveTab(ETabs.COMMENTS);
+      } else {
+        setActiveTab(ETabs.QUESTION_ANSWER);
+      }
+    }
+  }, [getDomainInfo]);
 
   const tabList = [
     getDomainInfo?.hasQuestions
@@ -32,7 +42,7 @@ const PublishFeeback = ({ postId }: IProps) => {
           tabContent: <PublishComments postId={postId} />,
         }
       : null,
-  ] as {
+  ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;
   }[];
