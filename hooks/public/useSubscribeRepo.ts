@@ -38,8 +38,10 @@ const useSubscribeRepo = () => {
     },
     onError: (error, values) => {
       const { errorCallBack } = values;
-      const { message, repoId } = (error.message as unknown) as CustomError;
+
+      const { message, repoId } = (error as unknown) as CustomError;
       errorCallBack?.(repoId);
+      console.log("------------------ error subscribe ---------------------", message, repoId);
       toast.error(message || "خطای نامشخصی رخ داد");
     },
   });
