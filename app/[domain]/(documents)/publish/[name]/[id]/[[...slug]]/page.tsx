@@ -35,7 +35,7 @@ export default async function PublishContentPage({
   params: PageParams;
 }) {
   try {
-    const { id, name, slug, domain } = params;
+    const {  id, name, slug, domain } = params;
 
     const decodeId = decodeURIComponent(id);
     if (hasEnglishDigits(decodeId)) {
@@ -144,6 +144,7 @@ export default async function PublishContentPage({
     }
 
     const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
+    const originalVersionNumber = removeSpecialCharacters(toPersianDigit(versionData.versionNumber));
 
     await generateCachePageTag([
       `vr-${versionData.id}`,
@@ -155,8 +156,7 @@ export default async function PublishContentPage({
     if (
       hasVersion &&
       versionData &&
-      removeSpecialCharacters(toEnglishDigit(versionData.versionNumber)) !==
-        versionNumber
+      originalVersionNumber !==  versionNumber
     ) {
       return notFound();
     }

@@ -174,7 +174,13 @@ export default async function PublishContentPage({
       );
 
       const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
-      if(hasVersion && version && removeSpecialCharacters(toPersianDigit(version.versionNumber)) !== versionNumber){
+      const originalVersionNumber = removeSpecialCharacters(toPersianDigit(version.versionNumber));
+
+      if(
+        hasVersion && 
+        version && 
+        originalVersionNumber !== versionNumber
+      ){
         return notFound();
       }
 
