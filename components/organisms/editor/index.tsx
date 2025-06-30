@@ -148,7 +148,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         <DocumentEnableUserGroup />
       ) : null}
       {listDrawer && getEditorConfig().ref ? (
-        <div className="w-full xs:w-[300px]">
+        <div className="w-full xs:w-[300px] editor-sidebar-wrapper">
           <EditorDrawer version={versionData} />
         </div>
       ) : null}

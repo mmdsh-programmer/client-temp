@@ -19,16 +19,16 @@ const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
       ["purple", "red", "blue", "yellow"].includes(repository.imageFileHash)
     ) {
       const component = {
-        purple: <RepoPurpleIcon className="h-64 w-64 mx-auto" />,
-        red: <RepoRedIcon className="h-64 w-64 mx-auto" />,
-        blue: <RepoBlueIcon className="h-64 w-64 mx-auto" />,
-        yellow: <RepoYellowIcon className="h-64 w-64 mx-auto" />,
+        purple: <RepoPurpleIcon className="h-48 w-48 mx-auto" />,
+        red: <RepoRedIcon className="h-48 w-48 mx-auto" />,
+        blue: <RepoBlueIcon className="h-48 w-48 mx-auto" />,
+        yellow: <RepoYellowIcon className="h-48 w-48 mx-auto" />,
       };
       return component[repository.imageFileHash];
     }
     return (
       <ImageComponent
-        className="h-64 w-64 rounded-md border-[3px] border-gray-200 mx-auto shadow-md bg-primary-normal"
+        className="h-48 w-48 rounded-md border-[3px] border-gray-200 mx-auto shadow-md bg-primary-normal"
         src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${repository.imageFileHash}`}
         alt={repository.name}
       />

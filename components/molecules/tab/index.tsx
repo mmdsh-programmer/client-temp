@@ -28,9 +28,9 @@ const TabComponent = ({
   tabContentClassName,
 }: IProps) => {
   return (
-    <Tabs value={activeTab} className="h-full">
+    <Tabs value={activeTab} className="h-full px-1">
       <TabsHeader
-        className={`flex overflow-x-auto items-center p-[2px] bg-secondary rounded-lg bg text-secondary ${headerClassName || ""}`}
+        className={`flex overflow-x-auto items-center p-[2px] bg-gray-200 rounded-lg ${headerClassName || ""}`}
         indicatorProps={{
           className: `p-2 rounded-lg shadow-small !text-purple-normal ${activeTabClassName || ""}`,
         }}
