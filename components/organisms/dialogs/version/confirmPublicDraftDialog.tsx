@@ -3,7 +3,7 @@ import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import usePublicLastVersion from "@hooks/document/usePublicLastVersion";
 import { Typography } from "@material-tailwind/react";
 import { usePathname } from "next/navigation";
@@ -18,7 +18,7 @@ interface IProps {
 const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
   const document = useRecoilValue(selectedDocumentAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
@@ -30,8 +30,7 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
     clearErrors();
     reset();
     setOpen(false);
-    setSelectedVersion(null);
-  };
+   };
 
   const onSubmit = async () => {
     if (!repoId || !document) return;
