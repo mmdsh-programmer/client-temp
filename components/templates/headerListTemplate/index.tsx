@@ -5,7 +5,6 @@ import { ETourSection, activeTourAtom } from "@atom/tour";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import { useSetRecoilState } from "recoil";
 import useGetUser from "@hooks/auth/useGetUser";
-import { ERepoGrouping } from "@interface/enums";
 
 export interface IProps {
   header: string;
@@ -56,10 +55,10 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                (!userInfo?.isClasorAdmin &&
+                !userInfo?.isClasorAdmin &&
                 userInfo?.domainRole !== "owner" &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                Object.values(ERepoGrouping).includes(header as ERepoGrouping))
+                header !== "لیست نسخه‌ها"
               }
             />
           </div>
@@ -73,7 +72,7 @@ const HeaderListTemplate = ({
                 !userInfo?.isClasorAdmin &&
                 userInfo?.domainRole !== "owner" &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                Object.values(ERepoGrouping).includes(header as ERepoGrouping)
+                header !== "لیست نسخه‌ها"
               }
             >
               <AddIcon className="h-5 w-5 stroke-white" />
@@ -89,7 +88,7 @@ const HeaderListTemplate = ({
                 !userInfo?.isClasorAdmin &&
                 userInfo?.domainRole !== "owner" &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                Object.values(ERepoGrouping).includes(header as ERepoGrouping)
+                header !== "لیست نسخه‌ها"
               }
             >
               <AddIcon className="h-6 w-6 stroke-white" />

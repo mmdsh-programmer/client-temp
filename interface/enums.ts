@@ -134,7 +134,7 @@ export enum ERepoGrouping {
   ACCESS_REPO = "مخزن‌های اشتراکی",
   BOOKMARK_REPO = "مخزن‌های نشان‌شده",
   ARCHIVE_REPO = "‌‌مخزن‌های بایگانی‌شده",
-  PUBLISHED_REPO = "مخزن های منتشر شده",
+  PUBLISHED_REPO = "مخزن‌های منتشر شده",
 }
 
 export enum ERepoSubscriptionStatus {
