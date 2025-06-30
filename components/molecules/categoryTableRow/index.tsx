@@ -61,7 +61,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
                   })}
                 />
               ),
-              className: "!px-0",
+              className: "!pl-0 !pr-2",
               stopPropagation: true,
             },
           currentPath === "/admin/dashboard"

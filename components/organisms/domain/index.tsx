@@ -20,16 +20,22 @@ export enum ETabs {
 }
 
 const DomainConfig = () => {
-  const [activeTab, setActiveTab] = useState<string>(ETabs.SETTING);
-
   const { data: userInfo } = useGetUser();
 
+  const [activeTab, setActiveTab] = useState<string>(
+    userInfo?.domainRole === "owner" || userInfo?.isClasorAdmin
+      ? ETabs.SETTING
+      : ETabs.PUBLIC_FEEDS,
+  );
+
   const tabList = [
-    {
-      tabTitle: ETabs.SETTING,
-      tabContent: activeTab === ETabs.SETTING ? <Settings /> : null,
-    },
-    userInfo?.domainRole === "owner"
+    userInfo?.domainRole === "owner" || userInfo?.isClasorAdmin
+      ? {
+          tabTitle: ETabs.SETTING,
+          tabContent: activeTab === ETabs.SETTING ? <Settings /> : null,
+        }
+      : null,
+    userInfo?.domainRole === "owner" || userInfo?.isClasorAdmin
       ? {
           tabTitle: ETabs.PARTICIPANT,
           tabContent: activeTab === ETabs.PARTICIPANT ? <DomainParticipant /> : null,

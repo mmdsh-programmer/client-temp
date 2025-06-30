@@ -21,7 +21,7 @@ export interface IDomainSubscriptionList {
   total: number;
 }
 
-export interface IDomainTag{
+export interface IDomainTag {
   id: number;
   name: string;
   description: string;
@@ -46,6 +46,8 @@ export interface IDomainTheme {
   description?: string;
   logo?: string | null;
   enablePersonalDocs: boolean;
+  enablePublishPage: boolean;
+  enableBranch: boolean;
   mainColor: string;
   primaryLight: string;
   bgPrimaryColor: string;
@@ -88,6 +90,7 @@ export interface IDomainTheme {
   needsAdminApprovalForQuestions: boolean;
   allowQuestionReplies: boolean;
   accessToCreateRepo: boolean;
+  enableDefaultFontFamily: boolean;
 }
 
 export interface ContentType {
@@ -95,6 +98,8 @@ export interface ContentType {
   projectDescription?: string;
   logo?: string | null;
   enablePersonalDocs?: boolean;
+  enableDefaultFontFamily?: boolean;
+  enableBranch?: boolean;
   theme?: string;
   settings?: {
     hasLikes?: boolean;
@@ -110,4 +115,4 @@ export interface ContentType {
 
 export interface ThemeColors {
   [key: string]: string;
-} 
+}

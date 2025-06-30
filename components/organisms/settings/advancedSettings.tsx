@@ -15,13 +15,19 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
         checked={domain.useDomainTag}
         disabled
         readOnly
-        label="نمایش مدیریت تگ‌ها"
+        label="استفاده از مدیریت تگ دامنه در مخزن‌ها"
       />
       <Checkbox
         name="accessToCreateRepo"
         checked={domain.accessToCreateRepo}
         onChange={onCheckboxChange}
         label="دسترسی ایجاد مخزن"
+      />
+      <Checkbox
+        name="enablePublishPage"
+        checked={domain.enablePublishPage}
+        onChange={onCheckboxChange}
+        label="نمایش مخزن‌های منتشرشده در صفحه landing"
       />
       <Checkbox
         name="hasLikes"
@@ -71,6 +77,18 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
           checked={domain.enablePersonalDocs}
           onChange={onCheckboxChange}
           label="فعال سازی مستندات شخصی"
+        />
+        <Checkbox
+          name="enableDefaultFontFamily"
+          checked={domain.enableDefaultFontFamily}
+          onChange={onCheckboxChange}
+          label="استفاده از فونت پیش‌فرض"
+        />
+        <Checkbox
+          name="enableBranch"
+          checked={domain.enableBranch}
+          onChange={onCheckboxChange}
+          label="فعال سازی شعبات"
         />
       </div>
     </div>

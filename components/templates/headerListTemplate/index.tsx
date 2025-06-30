@@ -1,8 +1,7 @@
+import React, { useState } from "react";
 import { AddIcon, InfoIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
 import { ETourSection, activeTourAtom } from "@atom/tour";
-import React, { useState } from "react";
-
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import { useSetRecoilState } from "recoil";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -57,9 +56,10 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
+                (!userInfo?.isClasorAdmin &&
+                userInfo?.domainRole !== "owner" &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
-                Object.values(ERepoGrouping).includes(header as ERepoGrouping)
+                Object.values(ERepoGrouping).includes(header as ERepoGrouping))
               }
             />
           </div>
@@ -70,7 +70,8 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
+                !userInfo?.isClasorAdmin &&
+                userInfo?.domainRole !== "owner" &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
                 Object.values(ERepoGrouping).includes(header as ERepoGrouping)
               }
@@ -85,7 +86,8 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                (!userInfo?.isClasorAdmin || userInfo?.domainRole !== "owner") &&
+                !userInfo?.isClasorAdmin &&
+                userInfo?.domainRole !== "owner" &&
                 !userInfo?.domainConfig?.accessToCreateRepo &&
                 Object.values(ERepoGrouping).includes(header as ERepoGrouping)
               }

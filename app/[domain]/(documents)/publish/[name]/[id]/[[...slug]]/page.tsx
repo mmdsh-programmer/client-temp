@@ -1,4 +1,10 @@
-import { decodeKey, hasEnglishDigits, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
+import {
+  decodeKey,
+  hasEnglishDigits,
+  removeSpecialCharacters,
+  toEnglishDigit,
+  toPersianDigit,
+} from "@utils/index";
 import {
   getCustomPostByDomain,
   getPublishDocumentInfo,
@@ -29,11 +35,7 @@ type PageParams = {
   slug?: string[];
 };
 
-export default async function PublishContentPage({
-  params,
-}: {
-  params: PageParams;
-}) {
+export default async function PublishContentPage({ params }: { params: PageParams }) {
   try {
     const {  id, name, slug, domain } = params;
 
@@ -79,17 +81,11 @@ export default async function PublishContentPage({
     const documentId = parseInt(hasVersion ? enSlug[1] : lastSlug, 10);
     const documentName = removeSpecialCharacters(toPersianDigit(enSlug[0]));
 
-    const versionId = hasVersion
-      ? parseInt(lastSlug.replace("v-", ""), 10)
-      : undefined;
+    const versionId = hasVersion ? parseInt(lastSlug.replace("v-", ""), 10) : undefined;
 
     let versionData: IVersion;
     if (!documentId || Number.isNaN(documentId)) {
-      await generateCachePageTag([
-        `dc-${documentId}`,
-        `rp-ph-${repository.id}`,
-        `i-${domain}`,
-      ]);
+      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`]);
       return notFound();
     }
 
@@ -97,50 +93,27 @@ export default async function PublishContentPage({
 
     const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
     if (documentInfo.isHidden || documentInfoName !== documentName) {
-      await generateCachePageTag([
-        `dc-${documentId}`,
-        `rp-ph-${repository.id}`,
-        `i-${domain}`,
-      ]);
+      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`]);
       return notFound();
     }
 
-    if (
-      documentInfo?.hasPassword ||
-      documentInfo?.hasWhiteList ||
-      documentInfo?.hasBlackList
-    ) {
+    if (documentInfo?.hasPassword || documentInfo?.hasWhiteList || documentInfo?.hasBlackList) {
       // CHECK THE CACHE
       const privatePath = `/private/${removeSpecialCharacters(toPersianDigit(decodeName))}/${id}/${slug?.join("/")}`;
       return <RedirectPage redirectUrl={privatePath} />;
     }
 
     if (hasVersion && versionId && !Number.isNaN(versionId)) {
-      versionData = await getPublishDocumentVersion(
-        repository.id,
-        documentId,
-        versionId
-      );
+      versionData = await getPublishDocumentVersion(repository.id, documentId, versionId);
     } else {
-      const lastVersionInfo = await getPublishDocumentLastVersion(
-        repository.id,
-        documentId
-      );
+      const lastVersionInfo = await getPublishDocumentLastVersion(repository.id, documentId);
 
       if (!lastVersionInfo) {
-        await generateCachePageTag([
-          `dc-${documentId}`,
-          `rp-ph-${repository.id}`,
-          `i-${domain}`,
-        ]);
+        await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`]);
         throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
       }
 
-      versionData = await getPublishDocumentVersion(
-        repository.id,
-        documentId,
-        lastVersionInfo.id
-      );
+      versionData = await getPublishDocumentVersion(repository.id, documentId, lastVersionInfo.id);
     }
 
     const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
@@ -161,40 +134,47 @@ export default async function PublishContentPage({
       return notFound();
     }
 
-
-
     const decodedDomain = decodeKey(domain);
     const { content } = await getCustomPostByDomain(decodedDomain);
-    const { enableFont } = JSON.parse(content) as ICustomPostData;
+    const { enableDefaultFontFamily } = JSON.parse(content) as ICustomPostData;
+
     // remove all inline font from html
-    if(versionData.content && enableFont){
-      versionData.content = versionData.content.replace(/font-family\s*:\s*[^;"]+;?\s*/gi, "");
+    if (versionData.content && enableDefaultFontFamily) {
+      const placeholder = "##QUOTE##";
+      let tempString = versionData.content.replaceAll("&quot;", placeholder);
+      const regex = /font-family:.*?;/g;
+      tempString = tempString.replaceAll(regex, "");
+      const finalString = tempString.replaceAll(placeholder, "&quot;");
+
+      versionData.content = finalString;
     }
 
-    return (
-      <PublishVersionContent document={documentInfo} version={versionData} />
-    );
+    return <PublishVersionContent document={documentInfo} version={versionData} />;
   } catch (error) {
-
-    const { errorList, errorCode } = error as unknown as   {
+    const { errorList, errorCode } = error as unknown as {
       errorList: string[];
       errorCode: number;
     };
-    console.log(JSON.stringify({
-      errorList,
-      errorCode,
-      error: true,
-      referenceNumber: "NOT_DEFINED",
-    }, null, 0));
-    
-    const message =
-      error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    console.log(
+      JSON.stringify(
+        {
+          errorList,
+          errorCode,
+          error: true,
+          referenceNumber: "NOT_DEFINED",
+        },
+        null,
+        0,
+      ),
+    );
+
+    const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     if (message === "NEXT_NOT_FOUND") {
       return notFound();
     }
     return (
-      <section className="main w-full h-[calc(100vh-81px)] text-center bg-slate-50 grid justify-items-center place-items-center">
-        <div className="flex flex-col justify-center items-center">
+      <section className="main bg-slate-50 grid h-[calc(100vh-81px)] w-full place-items-center justify-items-center text-center">
+        <div className="flex flex-col items-center justify-center">
           <FolderEmptyIcon />
           <p>{message}</p>
         </div>

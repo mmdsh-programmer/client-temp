@@ -42,6 +42,7 @@ export const updateCustomPostByDomainAction = async (
   needsAdminApprovalForQuestions?: boolean,
   allowQuestionReplies?: boolean,
   accessToCreateRepo?: boolean,
+  enablePublishPage?: boolean,
 ) => {
   try {
     const userInfo = await getMe();
@@ -64,6 +65,7 @@ export const updateCustomPostByDomainAction = async (
       needsAdminApprovalForQuestions,
       allowQuestionReplies,
       accessToCreateRepo,
+      enablePublishPage,
     );
     return response;
   } catch (error) {

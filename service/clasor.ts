@@ -1710,6 +1710,9 @@ export const searchPublishContent = async (
   offset: number,
   size: number,
 ) => {
+
+  console.log(">>>>>>>>>>>>>>>>>>>>> search publish content >>>>>>>>>>>>>>>>>>>>>");
+  console.log(encodeURIComponent(searchText));
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IContentSearchListItem>>
@@ -4420,6 +4423,7 @@ export const updateCustomPostByDomain = async (
   needsAdminApprovalForQuestions?: boolean,
   allowQuestionReplies?: boolean,
   accessToCreateRepo?: boolean,
+  enablePublishPage?: boolean,
 ): Promise<any> => {
   try {
     if (domain === "") {
@@ -4443,6 +4447,7 @@ export const updateCustomPostByDomain = async (
         needsAdminApprovalForQuestions,
         allowQuestionReplies,
         accessToCreateRepo,
+        enablePublishPage
       },
       {
         headers: { domainUrl: domain, Authorization: `Bearer ${accessToken}` },
