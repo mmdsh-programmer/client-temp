@@ -9,18 +9,12 @@ import Error from "@components/organisms/error";
 import BasicError from "@utils/error";
 import { Spinner } from "@components/atoms/spinner";
 
-interface IProps {
-  projectName: string;
-  logo: string;
-  projectDescription: string;
-}
-const SignInComponent = ({ projectName, logo, projectDescription }: IProps) => {
+ 
+const SignInComponent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-
-  console.log(projectName, logo, projectDescription);
 
   const sendCode = async (code: string) => {
     const redirect_uri = `${window.location.origin}/signin`;
