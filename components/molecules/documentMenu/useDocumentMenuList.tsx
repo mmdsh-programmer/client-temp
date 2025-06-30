@@ -29,6 +29,7 @@ import { toPersianDigit } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import { versionModalListAtom } from "@atom/version";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 interface UseDocumentMenuListProps {
   document?: IDocumentMetadata;
@@ -66,6 +67,9 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+  const { enablePersonalDocs } = content;
 
   const editOptions = [
     {
@@ -297,6 +301,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       text: "دسترسی مستقیم به سند",
       icon: <LockIcon className="h-4 w-4" />,
       disabled:
+        !enablePersonalDocs ||
         (currentPath === "/admin/dashboard" &&
           document?.repoId !== userInfo?.repository.id &&
           document?.accesses?.[0] !== ERoles.admin) ||
