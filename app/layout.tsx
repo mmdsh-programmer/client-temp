@@ -1,6 +1,5 @@
 import { decodeKey } from "@utils/index";
 import "../styles/globals.css";
-
 import type { Metadata } from "next";
 import React from "react";
 import { getCustomPostByDomain } from "@service/clasor";
@@ -11,15 +10,13 @@ interface IProps {
 export async function generateMetadata({ params }): Promise<Metadata> {
   const domain = decodeKey(params.domain);
   try {
-    const { content, types } = await getCustomPostByDomain(domain);
+    const { content } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(content ?? "{}");
     return {
       title: domainInfo.projectName,
       description: domainInfo.projectDescription,
       icons: {
-        icon: types.includes("clasor")
-          ? "/favicon.ico"
-          : `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${domainInfo.logo}?time=${Date.now()}`,
+        icon: `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${domainInfo.logo}?time=${Date.now()}`,
       },
     };
   } catch {

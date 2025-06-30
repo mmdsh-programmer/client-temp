@@ -1710,6 +1710,9 @@ export const searchPublishContent = async (
   offset: number,
   size: number,
 ) => {
+
+  console.log(">>>>>>>>>>>>>>>>>>>>> search publish content >>>>>>>>>>>>>>>>>>>>>");
+  console.log(encodeURIComponent(searchText));
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IContentSearchListItem>>

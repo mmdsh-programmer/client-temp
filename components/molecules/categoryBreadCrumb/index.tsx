@@ -1,6 +1,6 @@
-import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
+import { BackIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { categoryAtom, categoryShowAtom } from "atom/category";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
@@ -15,7 +15,7 @@ const CategoryBreadCrumb = () => {
 
   const breadCrumb = useMemo(() => {
     if (!getCategoryShow) return [];
-    
+
     const existInBreadCrumb = breadCrumbRef.current.filter((breadItem) => {
       return breadItem.id === getCategoryShow.id;
     });
@@ -32,7 +32,7 @@ const CategoryBreadCrumb = () => {
     const breadCrumbTemp = [...breadCrumbRef.current];
     breadCrumbTemp.splice(
       selectedCategoryIndex + 1,
-      breadCrumbRef.current.length - selectedCategoryIndex + 1
+      breadCrumbRef.current.length - selectedCategoryIndex + 1,
     );
     breadCrumbRef.current = breadCrumbTemp;
     return breadCrumbTemp;
@@ -45,46 +45,48 @@ const CategoryBreadCrumb = () => {
     setBulkItems([]);
   };
 
-  useEffect(() => {
-    return () => {
+  const handleBack = () => {
+    if (breadCrumbRef.current.length > 1) {
+      breadCrumbRef.current = breadCrumbRef.current.slice(0, -1);
+      const prevCategory = breadCrumbRef.current[breadCrumbRef.current.length - 1];
+      setCategoryShow(prevCategory);
+      setCategory(prevCategory);
+      setBulkItems([]);
+    } else {
       clearBreadCrumb();
-    };
-  }, []);
+    }
+  };
 
   return (
-    <div className="category-breadcrumb flex text-sm cursor-pointer pl-5 sticky top-0 bg-secondary xs:bg-white z-20">
+    <div className="category-breadcrumb sticky top-0 z-20 flex cursor-pointer bg-secondary pl-5 text-sm xs:bg-white">
       <div className="flex items-center">
         {breadCrumb.length > 0 ? (
-          <Button
-            placeholder="button"
-            className="bg-transparent h-5 w-5 p-0"
-            onClick={clearBreadCrumb}
-          >
-            <BreadcrumbIcon className="h-4 w-4 fill-icon-hover" />
+          <Button placeholder="button" className="h-5 w-5 bg-transparent p-0" onClick={handleBack}>
+            <BackIcon className="h-4 w-4 fill-icon-hover" />
           </Button>
         ) : null}
         {breadCrumb.length === 1 && getCategoryShow?.parentId ? (
           <div className="flex">
             <Button
               placeholder="button"
-              className="block cursor-pointer text-secondary bg-transparent h-5 w-5 p-0"
+              className="block h-5 w-5 cursor-pointer bg-transparent p-0 text-secondary"
               onClick={clearBreadCrumb}
             >
               ...
             </Button>
-            <div className="w-[14px] h-6 flex justify-center items-center">
-              <ChevronLeftIcon className="w-[5px] h-4 stroke-icon-hover" />
+            <div className="flex h-6 w-[14px] items-center justify-center">
+              <ChevronLeftIcon className="h-4 w-[5px] stroke-icon-hover" />
             </div>
           </div>
         ) : null}
         {breadCrumb.length > 0 ? (
-          <div className="flex w-full justify-center items-center flex-wrap ">
+          <div className="flex w-full flex-wrap items-center justify-center">
             {breadCrumb.map((breadItem, index) => {
               return (
                 <div className="flex items-center" key={breadItem.id}>
                   <Button
                     placeholder="button"
-                    className="block !px-2 !py-[2px] bg-transparent cursor-pointer"
+                    className="block cursor-pointer bg-transparent !px-2 !py-[2px]"
                     onClick={() => {
                       setCategoryShow(breadItem);
                       setCategory(breadItem);
@@ -100,8 +102,8 @@ const CategoryBreadCrumb = () => {
                     </Typography>
                   </Button>
                   {index + 1 < breadCrumb.length && (
-                    <div className="w-[14px] h-6 flex justify-center items-center">
-                      <ChevronLeftIcon className="w-[5px] h-4 stroke-icon-hover" />
+                    <div className="flex h-6 w-[14px] items-center justify-center">
+                      <ChevronLeftIcon className="h-4 w-[5px] stroke-icon-hover" />
                     </div>
                   )}
                 </div>

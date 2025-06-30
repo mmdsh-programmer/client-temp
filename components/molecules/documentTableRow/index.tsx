@@ -84,7 +84,7 @@ const DocumentTableRow = ({ document }: IProps) => {
                 />
               ),
               stopPropagation: true,
-              className: "!px-0",
+              className: "!pl-0 !pr-2",
             },
           currentPath === "/admin/dashboard"
             ? null
