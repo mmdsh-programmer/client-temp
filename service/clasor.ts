@@ -2946,7 +2946,7 @@ export const getUserToRepoRequests = async (accessToken: string, offset: number,
         params: {
           offset,
           size,
-          repoTypes: types[0],
+          repoTypes: types,
         },
       },
     );
