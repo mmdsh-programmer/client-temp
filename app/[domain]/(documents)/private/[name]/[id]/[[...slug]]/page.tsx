@@ -1,24 +1,31 @@
+import React from "react";
 import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import {
+  getCustomPostByDomain,
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
-import { hasEnglishDigits, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
-
+import {
+  decodeKey,
+  hasEnglishDigits,
+  removeSpecialCharacters,
+  toEnglishDigit,
+  toPersianDigit,
+} from "@utils/index";
 import { FolderEmptyIcon } from "@components/atoms/icons";
-import { IActionError } from "@interface/app.interface";
+import { IActionError, ICustomPostData } from "@interface/app.interface";
 import LoginRequiredButton from "@components/molecules/loginRequiredButton";
 import PublishDocumentPassword from "@components/pages/publish/publishDocumentPassword";
 import PublishVersionContent from "@components/pages/publish";
-import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
 import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
 
 type PageParams = {
+  domain: string;
   name: string;
   id: string;
   slug?: string[];
@@ -29,7 +36,7 @@ async function fetchDocumentVersion(
   documentId: number,
   versionId: number | undefined,
   documentPassword?: string,
-  accessToken?: string
+  accessToken?: string,
 ) {
   if (versionId) {
     return getPublishDocumentVersion(
@@ -37,7 +44,7 @@ async function fetchDocumentVersion(
       documentId,
       versionId,
       documentPassword,
-      accessToken
+      accessToken,
     );
   }
 
@@ -45,7 +52,7 @@ async function fetchDocumentVersion(
     repositoryId,
     documentId,
     documentPassword,
-    accessToken
+    accessToken,
   );
 
   if (!lastVersion?.id) {
@@ -57,21 +64,17 @@ async function fetchDocumentVersion(
     documentId,
     lastVersion.id,
     documentPassword,
-    accessToken
+    accessToken,
   );
 }
 
-export default async function PublishContentPage({
-  params,
-}: {
-  params: PageParams;
-}) {
+export default async function PublishContentPage({ params }: { params: PageParams }) {
   try {
-    const { id, name, slug } = params;
-    
+    const { id, name, slug, domain } = params;
+
     const decodeId = decodeURIComponent(id);
-     // Check for English digits in slug before converting 
-    if(hasEnglishDigits(decodeId)){
+    // Check for English digits in slug before converting
+    if (hasEnglishDigits(decodeId)) {
       throw new ServerError(["آدرس وارد شده نامعتبر است"]);
     }
 
@@ -81,83 +84,66 @@ export default async function PublishContentPage({
       throw new ServerError(["آیدی مخزن صحیح نیست"]);
     }
 
-    // Check for English digits in slug before converting 
-    if (slug?.some(s => {return hasEnglishDigits(decodeURIComponent(s));})) {
+    // Check for English digits in slug before converting
+    if (
+      slug?.some((s) => {
+        return hasEnglishDigits(decodeURIComponent(s));
+      })
+    ) {
       throw new ServerError(["آدرس وارد شده نامعتبر است"]);
     }
-    
-    const enSlug = slug?.map(s => {return toEnglishDigit(decodeURIComponent(s));});
+
+    const enSlug = slug?.map((s) => {
+      return toEnglishDigit(decodeURIComponent(s));
+    });
 
     const repository = await getPublishRepositoryInfo(repoId);
 
     const decodeName = removeSpecialCharacters(toPersianDigit(decodeURIComponent(name)));
     const repoName = removeSpecialCharacters(toPersianDigit(repository.name));
-    if(decodeName !== repoName){
+    if (decodeName !== repoName) {
       return notFound();
     }
 
     if (!enSlug?.length) {
-      return <RedirectPage
-        redirectUrl={`/publish/${repoName}/${toPersianDigit(id)}`}
-      />;
+      return <RedirectPage redirectUrl={`/publish/${repoName}/${toPersianDigit(id)}`} />;
     }
 
     const lastSlug = enSlug[enSlug.length - 1];
     const hasVersion = lastSlug.startsWith("v-");
-    const documentId = parseInt(
-      hasVersion ? enSlug[1] : lastSlug,
-      10
-    );
+    const documentId = parseInt(hasVersion ? enSlug[1] : lastSlug, 10);
     const documentName = removeSpecialCharacters(toPersianDigit(enSlug[0]));
 
-    const versionId = hasVersion
-      ? parseInt(lastSlug.replace("v-", ""), 10)
-      : undefined;
+    const versionId = hasVersion ? parseInt(lastSlug.replace("v-", ""), 10) : undefined;
 
     if (!documentId || Number.isNaN(documentId)) {
       return notFound();
     }
 
-    const documentInfo = await getPublishDocumentInfo(
-      repoId,
-      documentId,
-      true
-    );
+    const documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
     const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
-    if(documentInfo.isHidden || documentInfoName !== documentName){
+    if (documentInfo.isHidden || documentInfoName !== documentName) {
       return notFound();
     }
 
-    
-    if (
-      !documentInfo?.hasPassword &&
-      !documentInfo?.hasWhiteList &&
-      !documentInfo?.hasBlackList
-    ) {
+    if (!documentInfo?.hasPassword && !documentInfo?.hasWhiteList && !documentInfo?.hasBlackList) {
       const publicSlug = slug?.join("/").replace("/private", "");
-      return (
-        <RedirectPage
-          redirectUrl={`/publish/${decodeName}/${id}/${publicSlug}`}
-        />
-      );
+      return <RedirectPage redirectUrl={`/publish/${decodeName}/${id}/${publicSlug}`} />;
     }
 
-
-
-    // check password cookie 
+    // check password cookie
     // caution: reading cookies will cause server side rendering
     const documentPassword = cookies().get(`document-${documentId}-password`)?.value;
 
     const encodedToken = cookies().get("token")?.value;
     let accessToken: string | undefined;
-    
+
     if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && !encodedToken) {
       throw new AuthorizationError();
-    } else if((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken){
+    } else if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken) {
       const userInfo = await getMe();
-      accessToken =
-        userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+      accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
     }
 
     if (documentInfo?.hasPassword && !documentPassword) {
@@ -170,7 +156,7 @@ export default async function PublishContentPage({
         documentId,
         hasVersion ? versionId : undefined,
         documentPassword || undefined,
-        accessToken
+        accessToken,
       );
 
       const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
@@ -188,9 +174,22 @@ export default async function PublishContentPage({
         return notFound();
       }
 
-      return (
-        <PublishVersionContent document={documentInfo} version={version} />
-      );
+      const decodedDomain = decodeKey(domain);
+      const { content } = await getCustomPostByDomain(decodedDomain);
+      const { enableDefaultFontFamily } = JSON.parse(content) as ICustomPostData;
+
+      // remove all inline font from html
+      if (version.content && enableDefaultFontFamily) {
+        const placeholder = "##QUOTE##";
+        let tempString = version.content.replaceAll("&quot;", placeholder);
+        const regex = /font-family:.*?;/g;
+        tempString = tempString.replaceAll(regex, "");
+        const finalString = tempString.replaceAll(placeholder, "&quot;");
+
+        version.content = finalString;
+      }
+
+      return <PublishVersionContent document={documentInfo} version={version} />;
     } catch (error) {
       if (error instanceof BasicError && error.errorCode === 400) {
         return (
@@ -204,28 +203,38 @@ export default async function PublishContentPage({
       throw error;
     }
   } catch (error) {
-
-    const { errorList, errorCode } = error as unknown as   {
+    const { errorList, errorCode } = error as unknown as {
       errorList: string[];
       errorCode: number;
     };
-    console.log(JSON.stringify({
-      errorList,
-      errorCode,
-      error: true,
-      referenceNumber: "NOT_DEFINED",
-    }, null, 0));
+    console.log(
+      JSON.stringify(
+        {
+          errorList,
+          errorCode,
+          error: true,
+          referenceNumber: "NOT_DEFINED",
+        },
+        null,
+        0,
+      ),
+    );
 
     const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
-    if((error as unknown as IActionError).errorCode === 401){
-      return <LoginRequiredButton message="ورود" description="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید." />;
+    if ((error as unknown as IActionError).errorCode === 401) {
+      return (
+        <LoginRequiredButton
+          message="ورود"
+          description="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید."
+        />
+      );
     }
-    if(message === "NEXT_NOT_FOUND"){
-        return notFound();
+    if (message === "NEXT_NOT_FOUND") {
+      return notFound();
     }
     return (
-      <section className="main w-full h-[calc(100vh-156px)] text-center bg-slate-50 grid justify-items-center place-items-center">
-        <div className="flex flex-col justify-center items-center">
+      <section className="main bg-slate-50 grid h-[calc(100vh-156px)] w-full place-items-center justify-items-center text-center">
+        <div className="flex flex-col items-center justify-center">
           <FolderEmptyIcon />
           <p>{message}</p>
         </div>
