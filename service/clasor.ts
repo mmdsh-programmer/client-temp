@@ -60,7 +60,7 @@ import { IPositionList } from "@interface/position.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import { decryptKey } from "@utils/crypto";
-import { getRedisClient } from "@utils/redis";
+import { generateCachePageTag, getRedisClient } from "@utils/redis";
 import qs from "qs";
 
 const axiosClasorInstance = axios.create({
@@ -1710,7 +1710,6 @@ export const searchPublishContent = async (
   offset: number,
   size: number,
 ) => {
-
   console.log(">>>>>>>>>>>>>>>>>>>>> search publish content >>>>>>>>>>>>>>>>>>>>>");
   console.log(encodeURIComponent(searchText));
   try {
@@ -2383,7 +2382,8 @@ export const deleteVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : ""
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
+        state === "draft" ? "/draft" : ""
       }`,
       {
         headers: {
@@ -2935,7 +2935,12 @@ export const deletePublishLink = async (accessToken: string, repoId: number) => 
 };
 
 /// ///////////////////// REQUESTS ///////////////////
-export const getUserToRepoRequests = async (accessToken: string, offset: number, size: number, types: string[]) => {
+export const getUserToRepoRequests = async (
+  accessToken: string,
+  offset: number,
+  size: number,
+  types: string[],
+) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IAccessRequestResponse>>(
       "acl/userRequests",
@@ -3013,10 +3018,10 @@ export const saveVersion = async (
   try {
     const response = await axiosClasorInstance.put<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}`,
-      { 
-        content: decodeURIComponent(content), 
-        outline: decodeURIComponent(outline), 
-        versionNumber: decodeURIComponent(versionNumber)
+      {
+        content: decodeURIComponent(content),
+        outline: decodeURIComponent(outline),
+        versionNumber: decodeURIComponent(versionNumber),
       },
       {
         headers: {
@@ -4432,9 +4437,18 @@ export const updateCustomPostByDomain = async (
 
     const redisClient = await getRedisClient();
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
+    const cachedUser = await redisClient?.get(`user:${accessToken}`);
+
     if (cachedDomain) {
       await redisClient?.del(`domain:${domain}`);
+
+      await generateCachePageTag([`i-${domain}`]);
     }
+
+    if (cachedUser) {
+      await redisClient?.del(`user:${accessToken}`);
+    }
+
     const response = await axiosClasorInstance.put<IClasorResult<any>>(
       "domain",
       {
@@ -4447,7 +4461,7 @@ export const updateCustomPostByDomain = async (
         needsAdminApprovalForQuestions,
         allowQuestionReplies,
         accessToCreateRepo,
-        enablePublishPage
+        enablePublishPage,
       },
       {
         headers: { domainUrl: domain, Authorization: `Bearer ${accessToken}` },
