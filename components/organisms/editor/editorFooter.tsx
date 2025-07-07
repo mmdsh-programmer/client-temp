@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
 import { editorDataAtom, editorModalAtom, editorModeAtom, editorPublicKeyAtom } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import CancelButton from "@components/atoms/button/cancelButton";
 import Checkbox from "@components/atoms/checkbox";
 import { ChevronLeftIcon } from "@components/atoms/icons";
@@ -21,6 +21,9 @@ import { useDebouncedCallback } from "use-debounce";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveEditor from "@hooks/editor/useSaveEditor";
+import { getMe } from "@actions/auth";
+import axios from "axios";
+import { IServerResult } from "@interface/app.interface";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -144,10 +147,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSave = useDebouncedCallback((data: any) => {
     setIsLoading(true);
-
     let encryptedContent: string | null = null;
     const content: string =
       selectedDocument?.contentType === EDocumentTypes.classic ? data?.content : data;
@@ -178,6 +179,60 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setIsLoading(false);
         },
       });
+    } else {
+      setIsLoading(false);
+    }
+  }, 100);
+
+  const handleSaveData = useDebouncedCallback(async (data: any) => {
+    setIsLoading(true);
+    const userData = await getMe();
+
+    let encryptedContent: string | null = null;
+    const content: string =
+      selectedDocument?.contentType === EDocumentTypes.classic ? data?.content : data;
+
+    if (selectedDocument?.publicKeyId) {
+      encryptedContent = encryptData(content) as string;
+    }
+
+    if (getVersionData && selectedDocument && repoId && userData) {
+      try {
+        const response = await axios.put<IServerResult<any>>(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${selectedDocument.id}/versions/${getVersionData.id}`,
+          {
+            content: decodeURIComponent(
+              selectedDocument?.publicKeyId ? (encryptedContent as string) : content,
+            ),
+            outline: decodeURIComponent(
+              selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
+            ),
+            versionNumber: decodeURIComponent(getVersionData.versionNumber),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${userData.access_token}`,
+              "Content-Type": "application/json",
+            },
+            params: {
+              isDirectAccess:
+                sharedDocuments === "true" ||
+                currentPath === "/admin/sharedDocuments" ||
+                (currentPath === "/admin/dashboard" &&
+                  userInfo?.repository.id !== selectedDocument?.repoId),
+            },
+            maxContentLength: Infinity,
+            maxBodyLength: Infinity,
+          },
+        );
+        setIsLoading(false);
+        toast.success("تغییرات با موفقیت ذخیره شد.");
+
+        return response.data;
+      } catch (error: any) {
+        setIsLoading(false);
+        toast.error(error.message || "خطای نامشخصی رخ داد");
+      }
     } else {
       setIsLoading(false);
     }
@@ -216,7 +271,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   useEffect(() => {
-    editorRef.current?.on("getData", handleSave);
+    editorRef.current?.on("getData", handleSaveData);
 
     return () => {
       stopWorker();
@@ -286,9 +341,20 @@ const EditorFooter = ({ editorRef }: IProps) => {
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}
         </CancelButton>
         <LoadingButton
-          className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
+          className="editor-footer__save-button !hidden !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
             editorRef.current?.on("getData", handleSave);
+            editorRef.current?.getData();
+          }}
+          disabled={saveEditorHook.isPending || isLoading}
+          loading={isLoading || saveEditorHook.isPending}
+        >
+          <Typography className="text__label__button text-white">ذخیره</Typography>
+        </LoadingButton>
+        <LoadingButton
+          className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
+          onClick={() => {
+            editorRef.current?.on("getData", handleSaveData);
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}
