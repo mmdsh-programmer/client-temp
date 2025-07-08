@@ -272,6 +272,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
 
   useEffect(() => {
     editorRef.current?.on("getData", handleSaveData);
+    editorRef.current?.on("getData", handleSave);
 
     return () => {
       stopWorker();
