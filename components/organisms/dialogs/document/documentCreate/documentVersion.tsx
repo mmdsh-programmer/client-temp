@@ -53,12 +53,9 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
-  const onSubmit = (dataForm: IForm) => {
-    const repoId =
-      currentPath === "/admin/myDocuments"
-        ? userInfo!.repository.id
-        : getRepo!.id;
+  const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
 
+  const onSubmit = (dataForm: IForm) => {
     if (!getDocumentType || !getDocumentInfo) {
       toast.error("نام و اطلاعات سند را وارد کنید");
       return;
@@ -146,11 +143,11 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
 
   return (
     <>
-      <DialogBody
-        placeholder="dialog body"
-        className="dialog-body flex-grow px-5 py-3 xs:p-6"
-      >
-        <form className="document-version-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+      <DialogBody placeholder="dialog body" className="dialog-body flex-grow px-5 py-3 xs:p-6">
+        <form
+          className="document-version-form flex flex-col gap-5"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex flex-col gap-2">
             <Typography className="form_label">نام نسخه</Typography>
             <FormInput
@@ -161,9 +158,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               }}
             />
             {errors.versionNumber && (
-              <Typography className="warning_text">
-                {errors.versionNumber?.message}
-              </Typography>
+              <Typography className="warning_text">{errors.versionNumber?.message}</Typography>
             )}
           </div>
         </form>

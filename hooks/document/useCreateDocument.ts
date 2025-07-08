@@ -44,14 +44,14 @@ const useCreateDocument = () => {
         description,
         order,
         imageUrl,
-        publicKeyId
+        publicKeyId,
       );
       handleClientSideHookError(response as IActionError);
       return response as IDocument;
     },
     onSuccess: async (response, values) => {
-      const { successCallBack, categoryId } = values;
-      const queryKey = [`category-${categoryId || "root"}-children`];
+      const { successCallBack, repoId, categoryId } = values;
+      const queryKey = [`repo-${repoId}-category-${categoryId || "root"}-children`];
 
       const cachedData = await queryClient.getQueriesData({ queryKey });
       const cachePages = cachedData?.[0]?.[1] as {

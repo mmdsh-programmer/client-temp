@@ -20,7 +20,7 @@ const useGetCategoryChildren = (
   enabled = true,
   customQueryKey: string = "",
 ) => {
-  const queryKey = [`category-${categoryId || "root"}-children`];
+  const queryKey = [`repo-${repoId}-category-${categoryId || "root"}-children`];
   if (customQueryKey) {
     queryKey.push(customQueryKey);
   }
