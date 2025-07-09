@@ -1,3 +1,5 @@
+"use client";
+
 import { Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
 
@@ -16,6 +18,7 @@ import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@components/atoms/spinner";
+import { getMe } from "@actions/auth";
 
 interface IForm {
   name: string;
@@ -64,8 +67,11 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    
     if (!repoId) return;
+    const info = await getMe();
     createVersion.mutate({
+      accessToken: info.access_token,
       repoId,
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
@@ -83,6 +89,8 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       },
     });
   };
+
+  
   return (
     <CreateDialog
       isPending={createVersion.isPending}
@@ -92,7 +100,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       className="version-clone-dialog"
     >
       {isLoading ? (
-        <Spinner className="h-4 w-4 text-primary" />
+        <Spinner className="h-8 w-8 text-primary mx-auto" />
       ) : (
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
