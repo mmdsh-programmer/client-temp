@@ -1,6 +1,8 @@
-import { IServerResult } from "@interface/app.interface";
+import { createVersionAction } from "@actions/version";
+import { IActionError, IServerResult } from "@interface/app.interface";
 import { IAddVersion, IVersionMetadata } from "@interface/version.interface";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { handleClientSideHookError } from "@utils/error";
 import axios from "axios";
 
 // import { IActionError } from "@interface/app.interface";
@@ -15,7 +17,7 @@ const useCreateVersion = () => {
   return useMutation({
     mutationKey: ["createVersion"],
     mutationFn: async (values: {
-      accessToken: string;
+      accessToken?: string;
       repoId: number;
       documentId: number;
       versionNumber: string;
@@ -33,14 +35,21 @@ const useCreateVersion = () => {
         outline,
         isDirectAccess,
       } = values;
-      // const response = await createVersionAction(
-      //   repoId,
-      //   documentId,
-      //   versionNumber,
-      //   content,
-      //   outline,
-      //   isDirectAccess
-      // );
+      if(!accessToken){
+        const response = await createVersionAction(
+          repoId,
+          documentId,
+          versionNumber,
+          content,
+          outline,
+          isDirectAccess
+        );
+  
+        handleClientSideHookError(response as IActionError);
+        return response as IAddVersion;
+      }
+
+
       const response = await axios.post<IServerResult<IAddVersion>>(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${documentId}/versions`,
             { versionNumber, content, outline },
@@ -55,15 +64,6 @@ const useCreateVersion = () => {
       );
       
       return response.data.data;
-          
-      // handleClientSideHookError(response as IActionError);
-      return {
-  content: "string",
-  hash: "string",
-  id: 234,
-  outline: "string",
-  versionNumber: "string",
-} as IAddVersion;
     },
     onSuccess: async (response, values) => {
       const { onSuccessHandler, repoId, documentId } = values;
