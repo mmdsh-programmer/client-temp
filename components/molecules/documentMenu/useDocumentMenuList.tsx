@@ -314,7 +314,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     {
       text: "دسترسی مستقیم به سند",
       icon: <LockIcon className="h-4 w-4" />,
-      disabled: !enablePersonalDocs || !adminOrOwnerRole(),
+      disabled: !enablePersonalDocs && !adminOrOwnerRole(),
       onClick: () => {
         toggleModal("documentDirectAccess", true);
         if (document) setDocument(document);

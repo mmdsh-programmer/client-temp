@@ -9,7 +9,6 @@ import {
 } from "@atom/editor";
 import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
@@ -28,6 +27,7 @@ import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
 import useRepoId from "@hooks/custom/useRepoId";
 import { useSearchParams } from "next/navigation";
+import Error from "@components/organisms/error";
 
 const EditorTab = () => {
   const repoId = useRepoId();
@@ -54,7 +54,11 @@ const EditorTab = () => {
     latex: useRef<IRemoteEditorRef>(null),
   };
 
-  const { data: getLastVersion, isSuccess: lastVersionIsSuccess } = useGetLastVersion(
+  const {
+    data: getLastVersion,
+    isSuccess: lastVersionIsSuccess,
+    error: lastVersionError,
+  } = useGetLastVersion(
     repoId!,
     getSelectedDocument!.id,
     sharedDocuments === "true",
@@ -107,7 +111,6 @@ const EditorTab = () => {
     }
   }, [getLastVersion]);
 
-
   useEffect(() => {
     if (data) {
       if (getLastVersion?.state === "version" && editorMode === "edit") {
@@ -140,15 +143,13 @@ const EditorTab = () => {
     window.close();
   };
 
-  if (error) {
-    toast.warn("باز کردن سند با خطا مواجه شد.");
-    handleClose();
-    return null;
+  if (error || lastVersionError) {
+    const errorMessage = error?.message || lastVersionError?.message || "خطای نامشخص";
+    return <Error error={{ message: errorMessage }} retry={refetch} />;
   }
 
   if (lastVersionIsSuccess && !getLastVersion) {
     toast.warn("آخرین نسخه یافت نشد.");
-    handleClose();
     return null;
   }
 

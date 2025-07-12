@@ -144,7 +144,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="relative flex h-full bg-white">
-      {currentPath === "/admin/sharedDocuments" || sharedDocuments === "true" ? (
+      {(currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") ?  (
         <DocumentEnableUserGroup />
       ) : null}
       {listDrawer && getEditorConfig().ref ? (

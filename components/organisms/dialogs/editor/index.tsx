@@ -67,8 +67,8 @@ const Editor = ({ setOpen }: IProps) => {
     repoId!,
     getSelectedDocument!.id,
     currentPath === "/admin/sharedDocuments" ||
-    (currentPath === "/admin/dashboard" &&
-      userInfo?.repository.id !== getSelectedDocument?.repoId),
+      (currentPath === "/admin/dashboard" &&
+        userInfo?.repository.id !== getSelectedDocument?.repoId),
     !getSelectedVersion,
   );
 
@@ -80,7 +80,8 @@ const Editor = ({ setOpen }: IProps) => {
     editorMode === "preview", // innerDocument
     editorMode === "preview", // innerDocument,
     currentPath === "/admin/sharedDocuments" ||
-    (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getSelectedDocument?.repoId),
+      (currentPath === "/admin/dashboard" &&
+        userInfo?.repository.id !== getSelectedDocument?.repoId),
     true,
   );
 
@@ -155,7 +156,8 @@ const Editor = ({ setOpen }: IProps) => {
 
   useEffect(() => {
     if (error || lastVersionError) {
-      toast.error("باز کردن سند با خطا مواجه شد.");
+      const errorMessage = error?.message || lastVersionError?.message || "خطای نامشخص";
+      toast.error(errorMessage);
       handleClose();
     }
   }, [error, lastVersionError]);
@@ -164,10 +166,6 @@ const Editor = ({ setOpen }: IProps) => {
     setDecryptedContent(content);
     setShowKey(false);
   }, []);
-
-  if (error || lastVersionError) {
-    return null;
-  }
 
   if (lastVersionIsSuccess && !getLastVersion) {
     toast.warn("آخرین نسخه یافت نشد.");
@@ -188,10 +186,11 @@ const Editor = ({ setOpen }: IProps) => {
     if (isLoading) {
       return (
         <div className="main flex h-full w-full items-center justify-center text-center">
-          <Spinner className="h-5 w-5 " color="deep-purple" />
+          <Spinner className="h-5 w-5" color="deep-purple" />
         </div>
       );
     }
+
     if (data && isSuccess) {
       return (
         <BlockDraft version={data}>
