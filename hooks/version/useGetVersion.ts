@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getVersionAction } from "@actions/version";
 import { IVersion } from "@interface/version.interface";
 import { IActionError } from "@interface/app.interface";
@@ -12,14 +12,13 @@ const useGetVersion = (
   innerDocument?: boolean,
   innerOutline?: boolean,
   isDirectAccess?: boolean,
-  enabled?: boolean
+  enabled?: boolean,
 ) => {
-
   return useQuery({
     queryKey: [
       `document-${documentId}-version-${versionId}-state-${state}-innerDocument-${innerDocument}-innerOutline-${innerOutline}`,
     ],
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
       const response = await getVersionAction(
         repoId,
         documentId,
@@ -27,7 +26,7 @@ const useGetVersion = (
         state,
         innerDocument,
         innerOutline,
-        isDirectAccess
+        isDirectAccess,
       );
       handleClientSideHookError(response as IActionError);
       return response as IVersion;
