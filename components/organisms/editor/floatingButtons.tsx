@@ -77,9 +77,6 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
   };
 
   const viewerRole = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return true;
-    }
     if (currentPath === "/admin/sharedDocuments") {
       return getDocument?.accesses?.[0] === "viewer" || getDocument?.accesses?.[0] === "writer";
     }

@@ -47,7 +47,7 @@ export default class BasicError extends Error {
     public message: string,
     public errorList?: string[],
     public referenceNumber?: string,
-    public originalError?: IOriginalError
+    public originalError?: IOriginalError,
   ) {
     super(errorCode in ERRORS ? ERRORS[errorCode]?.MSG : "");
     Error.captureStackTrace?.(this, this.constructor);
@@ -119,9 +119,8 @@ export class UnprocessableError extends BasicError {
 }
 
 export const handleActionError = (errorObject: IActionError) => {
-  const messages = [
-    ...(errorObject?.errorList ?? "خطای ناشناخته ای رخ داده است"),
-  ];
+  const messages = [...(errorObject?.errorList ?? "خطای ناشناخته ای رخ داده است")];
+
   switch (errorObject?.errorCode) {
     case 401:
       throw new AuthorizationError(messages, errorObject?.originalError?.response);
@@ -152,6 +151,6 @@ export const handleRouteError = (error: IActionError) => {
     type: "Route Error",
     error: JSON.stringify(error),
   });
-  const message = error. errorList?.[0] ?? "خطای ناشناخته ای رخ داده است";
+  const message = error.errorList?.[0] ?? "خطای ناشناخته ای رخ داده است";
   return NextResponse.json({ message }, { status: error.errorCode ?? 500 });
 };

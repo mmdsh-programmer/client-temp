@@ -1,9 +1,8 @@
+import React, { useState } from "react";
 import { Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
@@ -16,6 +15,10 @@ import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@components/atoms/spinner";
+import axios from "axios";
+import { IAddVersion } from "@interface/version.interface";
+import { IServerResult } from "@interface/app.interface";
+import { getMe } from "@actions/auth";
 
 interface IForm {
   name: string;
@@ -26,6 +29,7 @@ interface IProps {
 }
 
 const VersionCloneDialog = ({ setOpen }: IProps) => {
+  const [loading, setLoading] = useState(false);
   const repoId = useRepoId();
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const getVersion = useRecoilValue(selectedVersionAtom);
@@ -65,27 +69,69 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = async (dataForm: IForm) => {
     if (!repoId) return;
-    createVersion.mutate({
-      repoId,
-      documentId: getDocument!.id,
-      versionNumber: dataForm.name,
-      content: getVersionInfo?.content || "",
-      outline: getVersionInfo?.outline || "",
-      isDirectAccess:
-        sharedDocuments === "true" ||
-        currentPath === "/admin/sharedDocuments" ||
-        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
-          ? true
-          : undefined,
-      onSuccessHandler: () => {
-        toast.success(" نسخه با موفقیت ایجاد شد.");
-        handleClose();
-      },
-    });
+    // createVersion.mutate({
+    //   repoId,
+    //   documentId: getDocument!.id,
+    //   versionNumber: dataForm.name,
+    //   content: getVersionInfo?.content || "",
+    //   outline: getVersionInfo?.outline || "",
+    //   isDirectAccess:
+    //     sharedDocuments === "true" ||
+    //     currentPath === "/admin/sharedDocuments" ||
+    //     (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+    //       ? true
+    //       : undefined,
+    //   onSuccessHandler: () => {
+    //     toast.success(" نسخه با موفقیت ایجاد شد.");
+    //     handleClose();
+    //   },
+    // });
+    setLoading(true);
+    const userData = await getMe();
+
+    try {
+      const response = await axios.post<IServerResult<IAddVersion>>(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${getDocument!.id}/versions`,
+        {
+          versionNumber: dataForm.name,
+          content: getVersionInfo?.content || "",
+          outline: getVersionInfo?.outline || "",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userData.access_token}`,
+          },
+          params: {
+            isDirectAccess:
+              sharedDocuments === "true" ||
+              currentPath === "/admin/sharedDocuments" ||
+              (currentPath === "/admin/dashboard" &&
+                userInfo?.repository.id !== getDocument?.repoId)
+                ? true
+                : undefined,
+          },
+        },
+      );
+
+      toast.success(" نسخه با موفقیت ایجاد شد.");
+      setLoading(false);
+
+      return response.data.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setLoading(false);
+      const errorCode = error?.status;
+      if (errorCode === 409) {
+        toast.error("این شماره نسخه موجود است");
+      } else if (errorCode === 500) {
+        toast.error("خطایی در ایجاد نسخه پیش آمد.");
+      }
+    }
   };
+
   return (
     <CreateDialog
-      isPending={createVersion.isPending}
+      isPending={createVersion.isPending || loading}
       dialogHeader="ایجاد نسخه جدید از این نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
