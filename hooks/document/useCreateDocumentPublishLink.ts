@@ -21,9 +21,9 @@ const useCreateDocumentPublishLink = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { categoryId, callBack } = values;
+      const { repoId, categoryId, callBack } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],
       });
       toast.success("لینک انتشار سند با موفقیت ایجاد شد");
       callBack?.();

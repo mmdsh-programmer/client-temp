@@ -52,9 +52,9 @@ const useCreateDocumentTemplate = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
-      const { callBack, categoryId } = values;
+      const { callBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],
       });
       callBack?.();
     },

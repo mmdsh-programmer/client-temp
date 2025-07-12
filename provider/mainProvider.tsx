@@ -33,7 +33,7 @@ const MainProvider = ({ children }: IProps) => {
       <ToastContainer
         position="bottom-left"
         autoClose={2000}
-        hideProgressBar
+        hideProgressBar={false}
         newestOnTop
         closeOnClick
         rtl
@@ -50,28 +50,8 @@ const MainProvider = ({ children }: IProps) => {
           fontWeight: 400,
           lineHeight: "19.6px",
           letterSpacing: "-0.14px",
-          padding: "12px",
-          display: "flex",
-          alignItems: "center",
-          color: "white",
-          border: "0.5px solid rgba(0, 0, 0, 0.12)",
-          marginBottom: "16px",
         }}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        toastClassName={({ type }: any) => {
-          switch (type) {
-            case "success":
-              return "toast-success";
-            case "error":
-              return "toast-error";
-            case "warning":
-              return "toast-warning";
-            case "dark":
-              return "toast-dark";
-            default:
-              return "toast-success";
-          }
-        }}
+        theme="colored"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();

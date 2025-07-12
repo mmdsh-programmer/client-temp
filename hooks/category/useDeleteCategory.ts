@@ -34,9 +34,9 @@ const useDeleteCategory = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, parentId } = values;
+      const { callBack, parentId, repoId } = values;
       queryClient.refetchQueries({
-        queryKey: [`category-${parentId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${parentId || "root"}-children`],
       });
       callBack?.();
     },

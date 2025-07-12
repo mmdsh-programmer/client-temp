@@ -42,6 +42,12 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    // eslint-disable-next-line no-useless-escape
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    if (forbiddenRegex.test(dataForm.name)) {
+      toast.error("نام مخزن شامل کاراکتر غیرمجاز است.");
+      return;
+    }
     mutate({
       name: dataForm.name,
       description: dataForm.description,
@@ -62,10 +68,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
 
   return (
     <>
-      <DialogBody
-        placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
-      >
+      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6">
         <form className="repo-create-dialog__form flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Typography className="label">عنوان مخزن</Typography>
@@ -76,9 +79,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
               className="repo-create-dialog__input"
             />
             {errors.name && (
-              <Typography className="warning_text">
-                {errors.name?.message}
-              </Typography>
+              <Typography className="warning_text">{errors.name?.message}</Typography>
             )}
           </div>
           <div className="flex flex-col gap-2">
@@ -89,16 +90,14 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
               className="repo-create-dialog__textarea"
             />
             {errors.description && (
-              <Typography className="warning_text">
-                {errors.description?.message}
-              </Typography>
+              <Typography className="warning_text">{errors.description?.message}</Typography>
             )}
           </div>
         </form>
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog__footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog__footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
@@ -108,9 +107,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          <Typography className="text__label__button text-white font-iranYekan">
-            ادامه
-          </Typography>
+          <Typography className="text__label__button font-iranYekan text-white">ادامه</Typography>
         </LoadingButton>
       </DialogFooter>
     </>

@@ -7,7 +7,7 @@ import { IDocumentMetadata } from "@interface/document.interface";
 
 const useGetDocumentPublishLink = (
   documentId: number,
-  getVersions:boolean,
+  getVersions: boolean,
   size: number,
   enabled?: boolean,
 ) => {
@@ -28,19 +28,19 @@ const useGetDocumentPublishLink = (
     refetchOnWindowFocus: false,
     enabled,
     getNextPageParam: (
-        lastPage:
-          | {
-              list: IVersion[];
-              total: number;
-              offset: number;
-              size: number;
-            }
-          | undefined,
-        pages
-      ) => {
-        if (pages.length < Math.ceil(lastPage!.total / size)) {
-          return pages.length + 1;
-        }
+      lastPage:
+        | {
+            list: IVersion[];
+            total: number;
+            offset: number;
+            size: number;
+          }
+        | undefined,
+      pages,
+    ) => {
+      if (pages.length < Math.ceil(lastPage!.total / size)) {
+        return pages.length + 1;
+      }
     },
   });
 };

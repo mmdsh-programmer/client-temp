@@ -57,13 +57,13 @@ const useEditDocument = () => {
       const { callBack, repoId, categoryId, currentParentId, documentId } = values;
       
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "root"}-children-for-move`],
+        queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children-for-move`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],
       });
       queryClient.invalidateQueries({
         queryKey: [`document-${documentId}-info`],

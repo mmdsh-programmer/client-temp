@@ -52,11 +52,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const handleSpaceClick = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (
-      event.code === "Space" ||
-      event.code === "Enter" ||
-      event.code === "NumpadEnter"
-    ) {
+    if (event.code === "Space" || event.code === "Enter" || event.code === "NumpadEnter") {
       event.preventDefault();
       if (inputValue.length) {
         setSelectedUserList((oldValue) => {
@@ -79,6 +75,12 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    // eslint-disable-next-line no-useless-escape
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    if (forbiddenRegex.test(dataForm.title)) {
+      toast.error("نام سمت شامل کاراکتر غیرمجاز است.");
+      return;
+    }
     if (!getBranchId) return;
     if (!selectedUserList.length) {
       return toast.error("اعضای سمت نمی تواند خالی باشد.");
@@ -111,14 +113,9 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نام سمت</Typography>
-          <FormInput
-            placeholder="نام سمت"
-            register={{ ...register("title") }}
-          />
+          <FormInput placeholder="نام سمت" register={{ ...register("title") }} />
           {errors.title && (
-            <Typography className="warning_text">
-              {errors.title?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.title?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -135,22 +132,21 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
                 <ChipMolecule
                   key={item.username}
                   value={item.name || item.username}
-                  className={`${item.name ? "bg-white !text-primary_normal" : "bg-gray-50 !text-hint"} 
-                         w-auto pl-2 border-[1px] border-normal`}
+                  className={`${item.name ? "bg-white !text-primary_normal" : "bg-gray-50 !text-hint"} w-auto border-[1px] border-normal pl-2`}
                   icon={
                     item.picture ? (
                       <ImageComponent
-                        className="w-full h-full rounded-full overflow-hidden"
+                        className="h-full w-full overflow-hidden rounded-full"
                         src={item.picture}
                         alt={item.picture}
                       />
                     ) : (
-                      <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                      <UserIcon className="h-full w-full overflow-hidden rounded-full border-[1px] border-normal fill-icon-hover p-1" />
                     )
                   }
                   actionIcon={
                     <Button
-                      className="bg-white p-1 rounded-full"
+                      className="rounded-full bg-white p-1"
                       onClick={() => {
                         removeUser(item.username);
                       }}
@@ -165,9 +161,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
             })}
           </div>
           {errors.members && (
-            <Typography className="warning_text">
-              {errors.members?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.members?.message}</Typography>
           )}
         </div>
       </form>

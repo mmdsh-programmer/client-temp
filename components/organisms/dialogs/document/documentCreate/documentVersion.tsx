@@ -66,6 +66,13 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
       return;
     }
 
+    // eslint-disable-next-line no-useless-escape
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    if (forbiddenRegex.test(getDocumentInfo.title)) {
+      toast.error("نام سند شامل کاراکتر غیرمجاز است.");
+      return;
+    }
+
     if (getDocumentTemplate) {
       if (getDocumentType !== EDocumentTypes.classic) {
         toast.error("ساخت سند از روی نمونه سند فقط برای محتوای کلاسور امکان‌پذیر است.");
@@ -101,6 +108,12 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         successCallBack: (result: IDocument) => {
           close();
           setOpen(false);
+          // eslint-disable-next-line no-useless-escape
+          const invalidChar = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+          if (invalidChar.test(dataForm.versionNumber)) {
+            toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
+            return;
+          }
           if (getDocumentType !== EDocumentTypes.file) {
             createVersionHook.mutate({
               repoId,

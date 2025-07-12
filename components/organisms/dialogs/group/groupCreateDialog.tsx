@@ -37,8 +37,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
   const { isPending, mutate } = useCreateGroup();
   const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
 
-  const { register, handleSubmit, formState, reset, clearErrors, setValue } =
-    form;
+  const { register, handleSubmit, formState, reset, clearErrors, setValue } = form;
   const { errors } = formState;
 
   const filteredUsers = getUsers?.pages
@@ -81,6 +80,12 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    // eslint-disable-next-line no-useless-escape
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    if (forbiddenRegex.test(dataForm.title)) {
+      toast.error("نام گروه شامل کاراکتر غیرمجاز است.");
+      return;
+    }
     if (!getRepo) return;
     if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
     mutate({
@@ -115,9 +120,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
             className="repo-group-create-form__input"
           />
           {errors.title && (
-            <Typography className="warning_text">
-              {errors.title?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.title?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -128,9 +131,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
             className="repo-group-create-form__textarea"
           />
           {errors.description && (
-            <Typography className="warning_text">
-              {errors.description?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.description?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -153,18 +154,16 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                   "members",
                   updatedUsers.map((user) => {
                     return user.username;
-                  })
+                  }),
                 );
               }
             }}
           />
           {errors.members && (
-            <Typography className="warning_text">
-              {errors.members?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.members?.message}</Typography>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 group-create-form__members-list">
+        <div className="group-create-form__members-list flex flex-wrap gap-2">
           {updatedUsers.map((item) => {
             return (
               <ChipMolecule
@@ -174,12 +173,12 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                 icon={
                   item?.picture ? (
                     <ImageComponent
-                      className="w-full h-full rounded-full overflow-hidden"
+                      className="h-full w-full overflow-hidden rounded-full"
                       src={item.picture.toString()}
                       alt={item.picture.toString()}
                     />
                   ) : (
-                    <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                    <UserIcon className="h-full w-full overflow-hidden rounded-full border-[1px] border-normal fill-icon-hover p-1" />
                   )
                 }
                 actionIcon={
