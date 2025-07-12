@@ -24,7 +24,7 @@ const useBookmarkDocument = () => {
     onSuccess: (response, values) => {
       const { callBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],
       });
       queryClient.invalidateQueries({
         queryKey: [

@@ -56,6 +56,12 @@ const VersionCreateDialog = ({ close }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    // eslint-disable-next-line no-useless-escape
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    if (forbiddenRegex.test(dataForm.name)) {
+      toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
+      return;
+    }
     if (!repoId()) return;
     createVersion.mutate({
       repoId: repoId(),
@@ -63,8 +69,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
       versionNumber: dataForm.name,
       content: "",
       outline: "",
-      isDirectAccess:
-        sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+      isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();
@@ -82,15 +87,8 @@ const VersionCreateDialog = ({ close }: IProps) => {
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نام نسخه</Typography>
-          <FormInput
-            placeholder="نام نسخه"
-            register={{ ...register("name") }}
-          />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
       </form>
     </CreateDialog>

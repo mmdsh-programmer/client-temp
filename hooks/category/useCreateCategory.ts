@@ -18,23 +18,18 @@ const useCreateCategory = () => {
       order: number | null;
       onSuccessHandler?: () => void;
     }) => {
-      const { repoId, parentId, order, description, name } =
-        values;
-      const response = await createCategoryAction(
-        repoId,
-        parentId,
-        name,
-        description,
-        order
-      );
+      const { repoId, parentId, order, description, name } = values;
+      const response = await createCategoryAction(repoId, parentId, name, description, order);
       handleClientSideHookError(response as IActionError);
       return response as ICategory;
     },
-    onSuccess: async(response, values) => {
-      const { onSuccessHandler, parentId, order } = values;
-      const queryKey = [`category-${parentId || "root"}-children`];
+    onSuccess: async (response, values) => {
+      const { onSuccessHandler, parentId, order, repoId } = values;
+      const queryKey = [`repo-${repoId}-category-${parentId || "root"}-children`];
       const cachedData = await queryClient.getQueriesData({ queryKey });
-      const cachePages = cachedData?.[0]?.[1] as { pages: { list: ICategory[]; offset: number; size: number; total: number }[] };
+      const cachePages = cachedData?.[0]?.[1] as {
+        pages: { list: ICategory[]; offset: number; size: number; total: number }[];
+      };
 
       if (cachePages) {
         const newCategory = {
@@ -44,16 +39,16 @@ const useCreateCategory = () => {
           type: "category",
           newOne: true,
           repoId: values.repoId,
-          order
+          order,
         };
 
         const newData = {
           ...cachePages,
-          pages: cachePages.pages.map((page, index) => 
-            {return index === 0 
-              ? { ...{ ...page, total: page.total + 1}, list: [newCategory, ...page.list] } 
-              : page;}
-          )
+          pages: cachePages.pages.map((page, index) => {
+            return index === 0
+              ? { ...{ ...page, total: page.total + 1 }, list: [newCategory, ...page.list] }
+              : page;
+          }),
         };
 
         queryClient.setQueriesData({ queryKey }, newData);

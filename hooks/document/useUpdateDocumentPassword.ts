@@ -30,9 +30,9 @@ const useUpdateDocumentPassword = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
-      const { successCallBack, categoryId } = values;
+      const { successCallBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],
       });
       successCallBack?.(response);
     },

@@ -17,7 +17,7 @@ const useGetChildren = (
   type?: "category" | "document",
   filters?: IChildrenFilter | null,
 ) => {
-  const queryKey = [`category-${categoryId || "root"}-children`];
+  const queryKey = [`repo-${repoId}-category-${categoryId || "root"}-children`];
   if (filters) {
     queryKey.push(`filters=${JSON.stringify(filters)}`);
   }

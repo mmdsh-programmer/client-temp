@@ -21,9 +21,9 @@ const useDeleteDocument = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, parentId } = values;
+      const { callBack, repoId, parentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${parentId || "root"}-children`],
       });
       callBack?.();
     },

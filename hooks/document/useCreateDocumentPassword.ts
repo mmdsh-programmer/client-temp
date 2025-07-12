@@ -30,7 +30,7 @@ const useCreateDocumentPassword = () => {
     onSuccess: (response, values) => {
       const { successCallBack, categoryId, documentId, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${categoryId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],
       });
       queryClient.invalidateQueries({
         queryKey: [

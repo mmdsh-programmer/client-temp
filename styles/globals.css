@@ -7,6 +7,7 @@
 @import "./landing.css";
 @import "./google-fonts.css";
 
+
 @layer base {
   html {
     @apply h-full !scroll-smooth;
@@ -325,6 +326,10 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
 
 .Toastify__toast-icon + div {
   @apply text-white
+}
+
+.Toastify__toast > div div {
+  @apply !font-iranYekan
 }
 
 .file-editor__preview .react-pdf__Document {

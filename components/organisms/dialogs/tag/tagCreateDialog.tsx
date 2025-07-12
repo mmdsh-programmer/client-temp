@@ -66,8 +66,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
     createTag.mutate({
       repoId,
       name: dataForm.name,
-      isDirectAccess:
-        currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
+      isDirectAccess: currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
       callBack: () => {
         toast.success("تگ با موفقیت ایجاد شد.");
         handleClose();
@@ -81,9 +80,9 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
       dialogHeader="ساخت تگ"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="tag-create-dialog h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4 "
+      className="tag-create-dialog xs:max-w-auto h-full w-full max-w-full !rounded-lg xs:mb-4 xs:h-auto xs:w-auto"
     >
-      <form className="flex flex-col gap-6 ">
+      <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography className="label">نام تگ</Typography>
           <FormInput
@@ -91,11 +90,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
             register={{ ...register("name", { value: name?.toString() }) }}
             className="tag-create-dialog__name"
           />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
         {userInfo?.domainConfig.useDomainTag ? (
           <>
@@ -111,9 +106,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
                 className="tag-create-dialog__priority"
               />
               {errors.order && (
-                <Typography className="warning_text">
-                  {errors.order?.message}
-                </Typography>
+                <Typography className="warning_text">{errors.order?.message}</Typography>
               )}
             </div>
             <div className="flex flex-col gap-2">
@@ -126,9 +119,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
                 className="tag-create-dialog__description"
               />
               {errors.description && (
-                <Typography className="warning_text">
-                  {errors.description?.message}
-                </Typography>
+                <Typography className="warning_text">{errors.description?.message}</Typography>
               )}
             </div>
           </>

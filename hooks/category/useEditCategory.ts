@@ -44,17 +44,17 @@ const useEditCategory = () => {
       return response as ICategory;
     },
     onSuccess: (response, values) => {
-      const { callBack, parentId, currentParentId } = values;
+      const { callBack, parentId, currentParentId, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children`],
       });
 
       queryClient.invalidateQueries({
-        queryKey: [`category-${parentId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${parentId || "root"}-children`],
       });
 
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "root"}-children-for-move`],
+        queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children-for-move`],
       });
 
       callBack?.();

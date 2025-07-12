@@ -55,6 +55,12 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    // eslint-disable-next-line no-useless-escape
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    if (forbiddenRegex.test(dataForm.name)) {
+      toast.error("نام دسته‌بندی شامل کاراکتر غیرمجاز است.");
+      return;
+    }
     const repoId =
       currentPath === "/admin/myDocuments"
         ? userInfo!.repository.id
