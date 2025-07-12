@@ -71,11 +71,32 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
   const content = JSON.parse(getDomainInfo?.content || "{}");
   const { enablePersonalDocs } = content;
 
+  const adminOrOwnerRole = () => {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === document?.repoId)
+    ) {
+      return true;
+    }
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
+    ) {
+      return document?.accesses?.[0] === "admin";
+    }
+    if (currentPath === "/admin/dashboard" && document?.accesses?.[0] === "admin") {
+      return true;
+    }
+    if (getRepo) {
+      return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
+    }
+  };
+
   const editOptions = [
     {
       text: "ویرایش محتوا",
       icon: <EditContentIcon className="h-4 w-4" />,
-      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
+      disabled: !adminOrOwnerRole(),
       onClick: () => {
         setEditorMode("edit");
         setEditorModal(true);
@@ -89,7 +110,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     {
       text: "ویرایش سند",
       icon: <EditDocumentIcon className="h-4 w-4" />,
-      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
+      disabled: !adminOrOwnerRole(),
       onClick: () => {
         toggleModal("editDocument", true);
         if (document) setDocument(document);
@@ -222,10 +243,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
         currentPath === "/admin/sharedDocuments" ||
         currentPath === "/admin/myDocuments" ||
         currentPath === "/admin/dashboard" ||
-        getRepo?.roleName === ERoles.admin ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
+        getRepo?.roleName !== ERoles.owner,
       onClick: () => {
         toggleModal("deletePublishLink", true);
         setOpenDocumentActionDrawer(false);
@@ -285,11 +303,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     {
       text: "عمومی سازی آخرین نسخه",
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
-      disabled:
-        (currentPath === "/admin/dashboard" &&
-          document?.repoId !== userInfo?.repository.id &&
-          document?.accesses?.[0] === ERoles.viewer) ||
-        getRepo?.roleName === ERoles.viewer,
+      disabled: !adminOrOwnerRole(),
       onClick: () => {
         toggleModal("documentPublicVersion", true);
         setOpenDocumentActionDrawer(false);
@@ -300,14 +314,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     {
       text: "دسترسی مستقیم به سند",
       icon: <LockIcon className="h-4 w-4" />,
-      disabled:
-        !enablePersonalDocs ||
-        (currentPath === "/admin/dashboard" &&
-          document?.repoId !== userInfo?.repository.id &&
-          document?.accesses?.[0] !== ERoles.admin) ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
+      disabled: !enablePersonalDocs || !adminOrOwnerRole(),
       onClick: () => {
         toggleModal("documentDirectAccess", true);
         if (document) setDocument(document);

@@ -1,11 +1,10 @@
 "use client";
 
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { selectedDocumentAtom } from "@atom/document";
 import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";

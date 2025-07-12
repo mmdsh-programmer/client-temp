@@ -93,24 +93,12 @@ const useVersionMenuList = (
     }
   };
 
-  const viewerRole = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return true;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument?.accesses?.[0] === "viewer" || getDocument?.accesses?.[0] === "writer";
-    }
-    if (getRepo) {
-      return getRepo?.roleName === "viewer" || getRepo?.roleName === "writer";
-    }
-  };
-
   const defaultOptions = (otherOption: MenuItem[]) => {
     return [
       {
         text: "ایجاد نسخه جدید از نسخه",
         icon: <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
-        disabled: viewerRole(),
+        disabled: !adminOrOwnerRole(),
         onClick: () => {
           toggleModal("clone", true);
           if (version) {
@@ -122,7 +110,7 @@ const useVersionMenuList = (
       {
         text: "ویرایش",
         icon: <EditIcon className="h-4 w-4" />,
-        disabled: viewerRole() && version?.creator?.userName !== userInfo?.username,
+        disabled: !adminOrOwnerRole() && version?.creator?.userName !== userInfo?.username,
         onClick: () => {
           setVersion(version);
           setEditorMode("edit");
@@ -197,7 +185,7 @@ const useVersionMenuList = (
       {
         text: version?.state === "draft" ? "حذف پیش نویس" : "حذف نسخه",
         icon: <DeleteIcon className="h-4 w-4" />,
-        disabled: viewerRole(),
+        disabled: !adminOrOwnerRole(),
         onClick: () => {
           toggleModal("delete", true);
           setOpenVersionActionDrawer(false);
@@ -214,7 +202,7 @@ const useVersionMenuList = (
     {
       text: "تایید و عمومی‌سازی پیش‌نویس",
       icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
-      disabled: viewerRole(),
+      disabled: !adminOrOwnerRole(),
       onClick: () => {
         toggleModal("publicDraft", true);
         setOpenVersionActionDrawer(false);
