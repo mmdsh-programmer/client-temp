@@ -184,7 +184,11 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
   }, 100);
 
-  const handleSaveData = useDebouncedCallback(async (data: any) => {
+  const handleSaveData = useDebouncedCallback(async (data: any, serverAction = false) => {
+    if(serverAction){
+      handleSave(data);
+      return;
+    }
     setIsLoading(true);
     const userData = await getMe();
 
@@ -201,13 +205,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
         const response = await axios.put<IServerResult<any>>(
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${selectedDocument.id}/versions/${getVersionData.id}`,
           {
-            content: decodeURIComponent(
-              selectedDocument?.publicKeyId ? (encryptedContent as string) : content,
-            ),
-            outline: decodeURIComponent(
-              selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
-            ),
-            versionNumber: decodeURIComponent(getVersionData.versionNumber),
+            content: selectedDocument?.publicKeyId ? (encryptedContent as string) : content,
+            outline: selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
+            versionNumber: getVersionData.versionNumber,
           },
           {
             headers: {
@@ -271,9 +271,6 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   useEffect(() => {
-    editorRef.current?.on("getData", handleSaveData);
-    editorRef.current?.on("getData", handleSave);
-
     return () => {
       stopWorker();
     };
@@ -344,7 +341,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         <LoadingButton
           className="editor-footer__save-button !hidden !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
-            editorRef.current?.on("getData", handleSave);
+            editorRef.current?.on("getData", (data: string) => {return handleSaveData(data, true);});
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}
