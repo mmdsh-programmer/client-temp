@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import type { Metadata } from "next";
 import React from "react";
 import { getCustomPostByDomain } from "@service/clasor";
-import Script from "next/script";
+// import Script from "next/script";
 
 interface IProps {
   children: React.ReactNode;
@@ -33,12 +33,12 @@ const RootLayout = ({ children }: IProps) => {
   return (
     <html lang="fa">
       <head>
-        <Script
+        {/* <Script
           src="https://podlytics.sandpod.ir/tracker.js"
           data-website-id="5e6e98d5-9bf2-4147-9457-b5c7168f02ce"
           strategy="afterInteractive"
           defer
-        />
+        /> */}
       </head>
       <body>{children}</body>
     </html>
