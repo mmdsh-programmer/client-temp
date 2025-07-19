@@ -23,22 +23,17 @@ export const getDomainPublicFeedsAction = async (
 };
 
 export const getDomainPrivateFeedsAction = async (
+  repoId: number,
   offset: number,
   size: number,
-  repoId?: number,
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
   try {
     const result = await getDomainPrivateFeeds(
-      domain,
       userInfo.access_token,
+      repoId,
       offset,
       size,
-      repoId
     );
     return result;
   } catch (error) {

@@ -3600,19 +3600,17 @@ export const getDomainPublicFeeds = async (domain: string, offset: number, size:
 };
 
 export const getDomainPrivateFeeds = async (
-  domain: string,
   accessToken: string,
+  repoId: number,
   offset: number,
   size: number,
-  repoId?: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IFeedItem>>>(
-      "report/social/userPosts",
+      `repositories/${repoId}/feeds`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl: domain,
         },
         params: {
           offset,
@@ -4322,7 +4320,7 @@ export const rejectSubscription = async (
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `domain/subscription/request/${requestId}/reject`,
+      `domain/subscription/requests/${requestId}/reject`,
       {},
       {
         headers: {
@@ -4345,7 +4343,7 @@ export const acceptSubscription = async (
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `domain/subscription/request/${requestId}/accept`,
+      `domain/subscription/requests/${requestId}/accept`,
       {},
       {
         headers: {

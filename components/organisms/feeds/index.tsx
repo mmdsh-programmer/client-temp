@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import PublicFeedList from "./publicFeedList";
-// import PrivateFeedList from "./privateFeedList";
 import PublishTab from "@components/molecules/publishTab";
-// import useGetUser from "@hooks/auth/useGetUser";
+import useGetUser from "@hooks/auth/useGetUser";
+import PrivateFeedList from "./privateFeedList";
 
 enum ETabs {
   PUBLIC_FEEDS = "خبرنامه های عمومی",
@@ -12,7 +12,7 @@ enum ETabs {
 }
 
 const Feeds = () => {
-  // const {data: userInfo} = useGetUser();
+  const {data: userInfo} = useGetUser();
   const [activeTab, setActiveTab] = useState<string>(ETabs.PUBLIC_FEEDS);
 
   const tabList = [
@@ -20,10 +20,10 @@ const Feeds = () => {
       tabTitle: ETabs.PUBLIC_FEEDS,
       tabContent: <PublicFeedList />,
     },
-    // ...(userInfo ? [{
-    //   tabTitle: ETabs.PRIVATE_FEEDS,
-    //   tabContent: <PrivateFeedList ssoId={+userInfo.ssoId} />,
-    // }] : []),
+    ...(userInfo ? [{
+      tabTitle: ETabs.PRIVATE_FEEDS,
+      tabContent: <PrivateFeedList ssoId={+userInfo.ssoId} />,
+    }] : []),
   ];
 
   return (

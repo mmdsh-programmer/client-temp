@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import DomainParticipant from "../domainParticipant";
-import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
-import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import useGetUser from "@hooks/auth/useGetUser";
 import DomainTags from "../domainTags";
 import Settings from "../settings";
+import PublicFeed from "../domainPublicFeed";
+import PrivateFeed from "../domainPrivateFeed";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -43,11 +43,11 @@ const DomainConfig = () => {
       : null,
     {
       tabTitle: ETabs.PUBLIC_FEEDS,
-      tabContent: activeTab === ETabs.PUBLIC_FEEDS ? <DomainPublicFeed /> : null,
+      tabContent: activeTab === ETabs.PUBLIC_FEEDS ? <PublicFeed /> : null,
     },
     {
       tabTitle: ETabs.PRIVATE_FEEDS,
-      tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <DomainPrivateFeed /> : null,
+      tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <PrivateFeed /> : null,
     },
     {
       tabTitle: ETabs.COMMENTS,

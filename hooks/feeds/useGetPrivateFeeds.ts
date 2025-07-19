@@ -7,17 +7,17 @@ import { handleClientSideHookError } from "@utils/error";
 
 const useGetPrivateFeeds = (
   ssoId: number,
+  repoId: number,
   size: number,
-  repoId?: number,
   enabled?: boolean
 ) => {
   return useInfiniteQuery({
     queryKey: [`user-${ssoId}${repoId ? `-repo-${repoId}`: ""}-private-feeds`],
     queryFn: async ({ pageParam }) => {
       const response = await getDomainPrivateFeedsAction(
+        repoId,
         (pageParam - 1) * size,
         size,
-        repoId,
       );
       handleClientSideHookError(response as IActionError);
       return response as IListResponse<IFeedItem>;

@@ -1,6 +1,5 @@
-import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { Button, Typography } from "@material-tailwind/react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IFeedItem } from "@interface/feeds.interface";
@@ -9,8 +8,10 @@ import TextareaAtom from "@components/atoms/textarea/textarea";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
-import useUpdatePublicFeed from "@hooks/publicFeed/useUpdatePublicFeed";
 import { Spinner } from "@components/atoms/spinner";
+import { useRecoilValue } from "recoil";
+import { repoFeedAtom } from "@atom/feed";
+import useUpdatePrivateFeed from "@hooks/privateFeed/useUpdatePrivateFeed";
 
 interface IForm {
   name: string;
@@ -26,9 +27,10 @@ interface IProps {
 const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
   const { link, image } = JSON.parse(feed.metadata);
   const [imageHash, setImageHash] = useState<string | undefined>();
+  const getRepoFeed = useRecoilValue(repoFeedAtom);
 
   const { data: feedImages, isLoading } = useGetFeedImages(30);
-  const updatePublicFeed = useUpdatePublicFeed();
+  const updatePrivateFeed = useUpdatePrivateFeed();
 
   const form = useForm<IForm>();
   const {
@@ -50,7 +52,10 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    updatePublicFeed.mutate({
+    if (!getRepoFeed) return;
+
+    updatePrivateFeed.mutate({
+      repoId: getRepoFeed.value,
       feedId: feed.id,
       name: dataForm.name,
       content: dataForm.content,
@@ -65,7 +70,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
 
   return (
     <CreateDialog
-      isPending={updatePublicFeed.isPending}
+      isPending={updatePrivateFeed.isPending}
       dialogHeader="ویرایش خبرنامه خصوصی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
@@ -85,7 +90,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> </Typography>
+          <Typography className="form_label">متن </Typography>
           <TextareaAtom
             placeholder="متن"
             register={{ ...register("content", { value: feed.content }) }}
