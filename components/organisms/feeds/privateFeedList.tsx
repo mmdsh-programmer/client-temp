@@ -1,22 +1,30 @@
+import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import React, { useState } from "react";
-
 import FeedItem from "./feedItem";
 import LoadMore from "@components/molecules/loadMore";
-import PrivateFeedFilter from "./privateFeedFilter";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
 import useGetPrivateFeeds from "@hooks/feeds/useGetPrivateFeeds";
+import { Button, Typography } from "@material-tailwind/react";
+import { BackIcon } from "@components/atoms/icons";
 
 interface IProps {
   ssoId: number;
+  repo: { label: string; value: number };
+  setRepo: React.Dispatch<
+    React.SetStateAction<{
+      label: string;
+      value: number;
+    } | null>
+  >;
 }
 
-const PrivateFeedList = ({ ssoId }: IProps) => {
-  const [getFilterPrivateFeeds, setFilterPrivateFeeds] = useState<number[]>([]);
-  const repoId = getFilterPrivateFeeds[0] ?? undefined;
-  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useGetPrivateFeeds(ssoId, 10, repoId);
+const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetPrivateFeeds(
+    ssoId,
+    repo.value,
+    30,
+  );
 
   const feedList = data?.pages.flatMap((page) => {
     return page.list;
@@ -25,54 +33,51 @@ const PrivateFeedList = ({ ssoId }: IProps) => {
   if (isLoading) {
     return (
       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
-        <div className="w-full flex justify-center">
+        <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
         </div>
       </div>
     );
   }
 
-  if (!feedList?.length) {
-    return (
-      <div className="p-4">
-        <div className="grid grid-cols-3 justify-end px-7">
-          <div className="col-span-1 col-start-3">
-            <PrivateFeedFilter
-              selectedOptions={getFilterPrivateFeeds}
-              setSelectedOptions={setFilterPrivateFeeds}
-            />
-          </div>
-        </div>
-        <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
-          <EmptyList type={EEmptyList.FEED_LIST} />
-        </div>
-      </div>
-    );
-  }
+  // if (!feedList?.length) {
+  //   return (
+  //     <div className="p-4">
+  //       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
+  //         <EmptyList type={EEmptyList.FEED_LIST} />
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <div className="py-4">
-      <div className="grid grid-cols-3 justify-end px-7">
-        <div className="col-span-1 col-start-3">
-          <PrivateFeedFilter
-            selectedOptions={getFilterPrivateFeeds}
-            setSelectedOptions={setFilterPrivateFeeds}
-          />
+    <div className="flex flex-col gap-4 px-4 py-4">
+      <div className="flex gap-2">
+        <Button
+          placeholder="button"
+          className="h-5 w-5 bg-transparent p-0"
+          onClick={() => {
+            return setRepo(null);
+          }}
+        >
+          <BackIcon className="h-4 w-4 fill-icon-hover" />
+        </Button>
+        <Typography className="caption_c1 lowercase text-primary_normal">{repo?.label}</Typography>
+      </div>
+      {feedList?.length ? (
+        <div className="mt-5 flex h-[calc(100vh-360px)] flex-col gap-2 overflow-y-auto px-5">
+          {feedList.map((feed) => {
+            return <FeedItem key={feed.id} feed={feed} />;
+          })}
+          <RenderIf isTrue={!!hasNextPage}>
+            <div className="mx-auto">
+              <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
+            </div>
+          </RenderIf>
         </div>
-      </div>
-      <div className="flex flex-col gap-2 h-[calc(100vh-360px)] overflow-y-auto px-5 mt-5">
-        {feedList.map((feed) => {
-          return <FeedItem key={feed.id} feed={feed} />;
-        })}
-        <RenderIf isTrue={!!hasNextPage}>
-          <div className="mx-auto">
-            <LoadMore
-              isFetchingNextPage={isFetchingNextPage}
-              fetchNextPage={fetchNextPage}
-            />
-          </div>
-        </RenderIf>
-      </div>
+      ) : (
+            <EmptyList type={EEmptyList.FEED_LIST} />
+      )}
     </div>
   );
 };

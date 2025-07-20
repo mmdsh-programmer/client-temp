@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import DomainParticipant from "../domainParticipant";
-import DomainPrivateFeed from "../domainFeeds/domainPrivateFeed";
-import DomainPublicFeed from "../domainFeeds/domainPublicFeed";
 import TabComponent from "@components/molecules/tab";
 import { Typography } from "@material-tailwind/react";
 import useGetUser from "@hooks/auth/useGetUser";
 import DomainTags from "../domainTags";
 import Settings from "../settings";
+import PublicFeed from "../domainPublicFeed";
+import PrivateFeed from "../domainPrivateFeed";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -21,6 +22,9 @@ export enum ETabs {
 
 const DomainConfig = () => {
   const { data: userInfo } = useGetUser();
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+  const { enablePrivateFeed } = content;
 
   const [activeTab, setActiveTab] = useState<string>(
     userInfo?.domainRole === "owner" || userInfo?.isClasorAdmin
@@ -43,12 +47,14 @@ const DomainConfig = () => {
       : null,
     {
       tabTitle: ETabs.PUBLIC_FEEDS,
-      tabContent: activeTab === ETabs.PUBLIC_FEEDS ? <DomainPublicFeed /> : null,
+      tabContent: activeTab === ETabs.PUBLIC_FEEDS ? <PublicFeed /> : null,
     },
-    {
-      tabTitle: ETabs.PRIVATE_FEEDS,
-      tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <DomainPrivateFeed /> : null,
-    },
+    enablePrivateFeed
+      ? {
+          tabTitle: ETabs.PRIVATE_FEEDS,
+          tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <PrivateFeed /> : null,
+        }
+      : null,
     {
       tabTitle: ETabs.COMMENTS,
       tabContent:

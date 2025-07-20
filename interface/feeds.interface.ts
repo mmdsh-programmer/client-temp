@@ -58,3 +58,26 @@ export interface IUserSrv {
   ssoId: string;
   ssoIssuerCode: number;
 }
+
+export interface IFollowingRepo {
+  id: number;
+  repoId: number;
+  title: string;
+  updateDate: number;
+  description: string;
+  createDate: number;
+  metadata: any;
+  contentType: string;
+  chatThreadId: number | null;
+  isPublished: boolean;
+  publishExpireTime: number | null;
+  tags: any[];
+  repoTypeId: number;
+  creator: {
+    ssoId: number;
+    userName: string;
+    name: string;
+    img: string;
+    contactId: number | null;
+  };
+}

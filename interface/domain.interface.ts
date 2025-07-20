@@ -91,6 +91,7 @@ export interface IDomainTheme {
   allowQuestionReplies: boolean;
   accessToCreateRepo: boolean;
   enableDefaultFontFamily: boolean;
+  enablePrivateFeed: boolean;
 }
 
 export interface ContentType {
@@ -100,6 +101,7 @@ export interface ContentType {
   enablePersonalDocs?: boolean;
   enableDefaultFontFamily?: boolean;
   enableBranch?: boolean;
+  enablePrivateFeed?: boolean;
   theme?: string;
   settings?: {
     hasLikes?: boolean;

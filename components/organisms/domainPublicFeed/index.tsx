@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-
 import { AddIcon } from "@components/atoms/icons";
 import DomainPublicFeedList from "./domainPublicFeedList";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
 import PublicFeedCreateDialog from "../dialogs/publicFeed/publicFeedCreateDialog";
 
-const DomainPublicFeed = () => {
+const PublicFeed = () => {
   const [openCreateFeedDialog, setOpenCreateFeedDialog] =
     useState(false);
 
@@ -30,4 +29,4 @@ const DomainPublicFeed = () => {
   );
 };
 
-export default DomainPublicFeed;
+export default PublicFeed;

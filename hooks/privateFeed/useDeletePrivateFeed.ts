@@ -8,20 +8,16 @@ const useDeletePrivateFeed = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["delete-private-feed"],
-    mutationFn: async (values: {
-      repoId: number;
-      feedId: number;
-      callBack?: () => void;
-    }) => {
+    mutationFn: async (values: { repoId: number; feedId: number; callBack?: () => void }) => {
       const { repoId, feedId } = values;
       const response = await deletePrivateFeedAction(repoId, feedId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack } = values;
+      const { callBack, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: ["getPrivateFeeds"],
+        queryKey: [`private-feeds-repoId-${repoId}`],
       });
       callBack?.();
     },
