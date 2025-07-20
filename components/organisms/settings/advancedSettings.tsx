@@ -23,12 +23,22 @@ const AdvancedSettings = ({ domain, onCheckboxChange }: AdvancedSettingsProps) =
         onChange={onCheckboxChange}
         label="دسترسی ایجاد مخزن"
       />
-      <Checkbox
-        name="enablePublishPage"
-        checked={domain.enablePublishPage}
-        onChange={onCheckboxChange}
-        label="نمایش مخزن‌های منتشرشده در صفحه landing"
-      />
+      <div className="flex flex-col gap-4">
+        <Checkbox
+          name="enablePublishPage"
+          checked={domain.enablePublishPage}
+          onChange={onCheckboxChange}
+          label="نمایش مخزن‌های منتشرشده در صفحه landing"
+        />
+        <div className="mr-8">
+          <Checkbox
+            name="enablePrivateFeed"
+            checked={domain.enablePrivateFeed}
+            onChange={onCheckboxChange}
+            label=" نمایش خبرنامه خصوصی"
+          />
+        </div>
+      </div>
       <Checkbox
         name="hasLikes"
         checked={domain.hasLikes}

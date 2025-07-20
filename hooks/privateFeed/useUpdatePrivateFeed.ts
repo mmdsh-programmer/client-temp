@@ -19,21 +19,14 @@ const useUpdatePrivateFeed = () => {
       callBack?: () => void;
     }) => {
       const { repoId, feedId, name, content, link, image } = values;
-      const response = await updatePrivateFeedAction(
-        repoId,
-        feedId,
-        name,
-        content,
-        link,
-        image
-      );
+      const response = await updatePrivateFeedAction(repoId, feedId, name, content, link, image);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack } = values;
+      const { callBack, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: ["getPrivateFeeds"],
+        queryKey: [`private-feeds-repoId-${repoId}`],
       });
       callBack?.();
     },

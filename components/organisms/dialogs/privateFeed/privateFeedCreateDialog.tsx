@@ -1,7 +1,6 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import { Button, Typography } from "@material-tailwind/react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import ImageComponent from "@components/atoms/image";
@@ -11,11 +10,15 @@ import useCreatePrivateFeed from "@hooks/privateFeed/useCreatePrivateFeed";
 import { useForm } from "react-hook-form";
 import useGetDomainPublishRepoList from "@hooks/domain/useGetDomainPublishRepoList";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
+import { useRecoilValue } from "recoil";
+import { repoFeedAtom } from "@atom/feed";
+import { Spinner } from "@components/atoms/spinner";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { privateFeedSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
   content: string;
-  repoId: number;
   link?: string;
 }
 
@@ -26,6 +29,7 @@ interface IProps {
 const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
   const [imageHash, setImageHash] = useState<string | undefined>();
   const [repoInfo, setRepoInfo] = useState<IOption>();
+  const getRepoFeed = useRecoilValue(repoFeedAtom);
 
   const {
     data: publishRepoList,
@@ -33,11 +37,11 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useGetDomainPublishRepoList(30);
+  } = useGetDomainPublishRepoList(30, !repoInfo);
   const { data: feedImages, isLoading: ImagesIsLoading } = useGetFeedImages(30);
   const createPrivateFeed = useCreatePrivateFeed();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(privateFeedSchema) });
   const {
     register,
     handleSubmit,
@@ -63,14 +67,15 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
   const handleClose = () => {
     handleReset();
     setOpen(false);
+    setRepoInfo(undefined);
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    if (!repoInfo) {
+    if (!repoInfo && !getRepoFeed) {
       return;
     }
     createPrivateFeed.mutate({
-      repoId: +repoInfo.value,
+      repoId: getRepoFeed ? getRepoFeed!.value : +repoInfo!.value,
       name: dataForm.name,
       content: dataForm.content,
       image: imageHash,
@@ -84,13 +89,33 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-    if (
-      scrollHeight - scrollTop === clientHeight &&
-      hasNextPage &&
-      !isFetchingNextPage
-    ) {
+    if (scrollHeight - scrollTop === clientHeight && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
+  };
+
+  const renderRepo = () => {
+    if (getRepoFeed) {
+      return <FormInput placeholder={getRepoFeed.label} readOnly />;
+    }
+    if (isLoading) {
+      return (
+        <div className="flex h-[50px] w-full items-center justify-center">
+          <Spinner className="h-5 w-5 text-primary" />
+        </div>
+      );
+    }
+    return (
+      <SelectAtom
+        className="flex h-[46px] w-full items-center justify-between rounded-lg border-[1px] border-normal !bg-gray-50 pl-2 pr-3"
+        defaultOption={repoOptions?.[0]?.[0]}
+        options={repoOptions?.flat()}
+        selectedOption={repoInfo}
+        setSelectedOption={setRepoInfo}
+        onMenuScroll={handleScroll}
+        isLoading={isFetchingNextPage}
+      />
+    );
   };
 
   return (
@@ -99,73 +124,51 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
       dialogHeader="ایجاد خبرنامه خصوصی"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="!h-screen xs:!h-[600px] overflow-y-auto"
+      className="!h-screen overflow-y-auto xs:!h-[600px]"
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
+          <Typography className="form_label">انتخاب مخزن</Typography>
+          {renderRepo()}
+        </div>
+        <div className="flex flex-col gap-2">
           <Typography className="form_label"> عنوان</Typography>
           <FormInput placeholder="عنوان " register={{ ...register("name") }} />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">متن </Typography>
-          <TextareaAtom
-            placeholder="متن"
-            register={{ ...register("content") }}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Typography className="form_label">مخزن</Typography>
-          {isLoading ? (
-            <div className="w-full justify-center items-center flex h-[50px]">
-              <Spinner className="h-5 w-5 text-primary" />
-            </div>
-          ) : (
-            <SelectAtom
-              className="w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
-              defaultOption={repoOptions?.[0]?.[0]}
-              options={repoOptions?.flat()}
-              selectedOption={repoInfo}
-              setSelectedOption={setRepoInfo}
-              onMenuScroll={handleScroll}
-              isLoading={isFetchingNextPage}
-            />
+          <TextareaAtom placeholder="متن" register={{ ...register("content") }} />
+          {errors.content && (
+            <Typography className="warning_text">{errors.content?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> لینک</Typography>
           <FormInput placeholder="لینک " register={{ ...register("link") }} />
-          {errors.link && (
-            <Typography className="warning_text">
-              {errors.link?.message}
-            </Typography>
-          )}
+          {errors.link && <Typography className="warning_text">{errors.link?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">عکس خبرنامه </Typography>
           {ImagesIsLoading ? (
-            <div className="w-full justify-center items-center flex h-[50px]">
+            <div className="flex h-[50px] w-full items-center justify-center">
               <Spinner className="h-5 w-5 text-primary" />
             </div>
           ) : (
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {feedImages?.pages.map((page) => {
                 return page.list.map((hash) => {
                   return (
                     <Button
                       placeholder="button"
                       key={hash}
-                      className="flex flex-grow focus:bg-secondary focus:outline-2 focus:outline-gray-200 justify-center items-center rounded-lg border-[1px] border-normal bg-primary w-[70px] h-[70px]"
+                      className="flex h-[70px] w-[70px] flex-grow items-center justify-center rounded-lg border-[1px] border-normal bg-primary focus:bg-secondary focus:outline-2 focus:outline-gray-200"
                       onClick={() => {
                         return setImageHash(hash);
                       }}
                     >
                       <ImageComponent
-                        className="object-cover max-h-full"
+                        className="max-h-full object-cover"
                         alt="repo-image"
                         src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${hash}?&checkUserGroupAccess=true&time=${Date.now()})`}
                       />

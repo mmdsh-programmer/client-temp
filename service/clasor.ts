@@ -53,7 +53,7 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
-import { IFeedItem } from "@interface/feeds.interface";
+import { IFeedItem, IFollowingRepo } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { IPositionList } from "@interface/position.interface";
@@ -3600,19 +3600,17 @@ export const getDomainPublicFeeds = async (domain: string, offset: number, size:
 };
 
 export const getDomainPrivateFeeds = async (
-  domain: string,
   accessToken: string,
+  repoId: number,
   offset: number,
   size: number,
-  repoId?: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IFeedItem>>>(
-      "report/social/userPosts",
+      `repositories/${repoId}/feeds`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl: domain,
         },
         params: {
           offset,
@@ -3627,6 +3625,34 @@ export const getDomainPrivateFeeds = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const getFollowingRepos = async (
+  domainUrl: string,
+  accessToken: string,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IFollowingRepo>>>(
+      "report/social/followingList",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 
 /// /////////////////////////////// BRANCH SERVICES //////////////////////
 
@@ -4286,6 +4312,8 @@ export const deletePrivateFeed = async (accessToken: string, repoId: number, fee
   }
 };
 
+
+
 /// /////////////////////////////// DOMAIN SUBSCRIPTION //////////////////////
 
 export const getDomainSubscription = async (
@@ -4345,7 +4373,7 @@ export const acceptSubscription = async (
 ) => {
   try {
     const response = await axiosClasorInstance.patch<IServerResult<any>>(
-      `domain/subscription/request/${requestId}/accept`,
+      `domain/subscription/requests/${requestId}/accept`,
       {},
       {
         headers: {

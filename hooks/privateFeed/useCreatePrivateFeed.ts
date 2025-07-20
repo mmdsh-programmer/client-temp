@@ -17,20 +17,14 @@ const useCreatePrivateFeed = () => {
       callBack?: () => void;
     }) => {
       const { repoId, name, content, link, image } = values;
-      const response = await createPrivateFeedAction(
-        repoId,
-        name,
-        content,
-        link,
-        image
-      );
+      const response = await createPrivateFeedAction(repoId, name, content, link, image);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack } = values;
+      const { callBack, repoId } = values;
       queryClient.invalidateQueries({
-        queryKey: ["getPrivateFeeds"],
+        queryKey: [`private-feeds-repoId-${repoId}`],
       });
       callBack?.();
     },

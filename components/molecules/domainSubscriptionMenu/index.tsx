@@ -1,8 +1,7 @@
+import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-
 import { IDomainSubscription } from "@interface/domain.interface";
 import LoadingButton from "../loadingButton";
-import React from "react";
 import { toast } from "react-toastify";
 import useAcceptSubscription from "@hooks/domainSubscription/useAcceptSubscription";
 import useRejectSubscription from "@hooks/domainSubscription/useRejectSubscription";
@@ -19,7 +18,7 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
     rejectRequest.mutate({
       requestId: request.id,
       callBack: () => {
-        toast.error("درخواست رد شد");
+        toast.success("درخواست رد شد");
       },
     });
   };
@@ -39,12 +38,10 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
         <Button
           placeholder=""
           variant="text"
-          className="bg-green-900 hover:bg-green-900 flex justify-center items-center gap-2 w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg"
+          className="flex h-12 w-[50%] items-center justify-center gap-2 rounded-lg bg-primary-normal px-3 hover:bg-primary-normal xs:h-8 xs:w-[100px] xs:px-1"
           disabled
         >
-          <Typography className="text__label__button text-white">
-            تاییدشده
-          </Typography>
+          <Typography className="text__label__button text-white">تاییدشده</Typography>
         </Button>
       );
     }
@@ -52,35 +49,29 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
       <Button
         placeholder=""
         variant="text"
-        className="bg-red-300 hover:bg-red-300 flex justify-center items-center gap-2 w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg"
+        className="flex h-12 w-[50%] items-center justify-center gap-2 rounded-lg bg-red-300 px-3 hover:bg-red-300 xs:h-8 xs:w-[100px] xs:px-1"
         disabled
       >
-        <Typography className="text__label__button text-error">
-          ردشده
-        </Typography>
+        <Typography className="text__label__button text-error">ردشده</Typography>
       </Button>
     );
   };
 
   return request.status === "pending" ? (
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-2">
       <LoadingButton
-        className="bg-error opacity-40 hover:bg-error hover:opacity-40 active:opacity-40 active:bg-error"
+        className="bg-gray-50 hover:bg-gray-50"
         onClick={handleReject}
         loading={rejectRequest.isPending}
       >
-        <Typography className="text__label__button text-error">
-          رد درخواست
-        </Typography>
+        <Typography className="text__label__button text-primary_normal">ردکردن</Typography>
       </LoadingButton>
       <LoadingButton
-        className="bg-secondary hover:bg-secondary active:bg-secondary"
+        className="bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
         onClick={handleAccept}
         loading={acceptRequest.isPending}
       >
-        <Typography className="text__label__button text-white">
-          تایید
-        </Typography>
+        <Typography className="text__label__button text-white">تایید</Typography>
       </LoadingButton>
     </div>
   ) : (

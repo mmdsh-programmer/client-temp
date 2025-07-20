@@ -1,31 +1,22 @@
-import { getDomainPrivateFeedsAction } from "@actions/feeds";
+import { getFollowingReposAction } from "@actions/feeds";
 import { IActionError } from "@interface/app.interface";
-import { IFeedItem } from "@interface/feeds.interface";
+import { IFollowingRepo } from "@interface/feeds.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { handleClientSideHookError } from "@utils/error";
 
-const useGetPrivateFeeds = (
-  ssoId: number,
-  repoId: number,
-  size: number,
-  enabled?: boolean
-) => {
+const useGetFollowingRepos = (ssoId: number, size: number) => {
   return useInfiniteQuery({
-    queryKey: [`user-${ssoId}${repoId ? `-repo-${repoId}`: ""}-private-feeds`],
+    queryKey: [`user-${ssoId}-following-repos`],
     queryFn: async ({ pageParam }) => {
-      const response = await getDomainPrivateFeedsAction(
-        repoId,
-        (pageParam - 1) * size,
-        size,
-      );
+      const response = await getFollowingReposAction((pageParam - 1) * size, size);
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<IFeedItem>;
+      return response as IListResponse<IFollowingRepo>;
     },
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId && !!ssoId,
+    // enabled: !!ssoId,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;
@@ -34,4 +25,4 @@ const useGetPrivateFeeds = (
   });
 };
 
-export default useGetPrivateFeeds;
+export default useGetFollowingRepos;

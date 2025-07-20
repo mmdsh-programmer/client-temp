@@ -30,7 +30,7 @@ const DomainSubscription = () => {
                   {
                     data: (
                       <Typography
-                        className="title_t3 max-w-[200px] truncate flex gap-2 mr-2 w-12 sm:w-20 md:w-auto"
+                        className="title_t3 mr-2 flex w-12 max-w-[200px] gap-2 truncate sm:w-20 md:w-auto"
                         title={request.repoName}
                       >
                         {request.repoName}
@@ -40,7 +40,7 @@ const DomainSubscription = () => {
                   {
                     data: <DomainSubscriptionMenu request={request} />,
                     stopPropagation: true,
-                    className: "flex justify-end"
+                    className: "flex justify-end",
                   },
                 ]}
               />
@@ -49,10 +49,7 @@ const DomainSubscription = () => {
         })}
         <RenderIf isTrue={!!hasNextPage}>
           <div className="mx-auto">
-            <LoadMore
-              isFetchingNextPage={isFetchingNextPage}
-              fetchNextPage={fetchNextPage}
-            />
+            <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
           </div>
         </RenderIf>
       </>
@@ -61,23 +58,23 @@ const DomainSubscription = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="flex h-full w-full items-center justify-center">
         <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }
 
   return listLength ? (
-    <div className="w-full !overflow-auto border-[0.5px] border-normal rounded-lg">
-      <table className="w-full overflow-hidden min-w-max">
+    <div className="w-full !overflow-auto rounded-lg border-[0.5px] border-normal">
+      <table className="w-full min-w-max overflow-hidden">
         <TableHead
           tableHead={[
-            { key: "name", value: "عنوان ", isSorted: true },
-            { key: "repoName", value: "نام مخزن ", isSorted: true },
+            { key: "name", value: "درخواست دهنده " },
+            { key: "repoName", value: "نام مخزن " },
             {
               key: "action",
               value: "عملیات",
-              className: "justify-end",
+              className: "justify-end pl-10",
             },
           ]}
         />

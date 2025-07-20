@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import PublicFeedList from "./publicFeedList";
-// import PrivateFeedList from "./privateFeedList";
 import PublishTab from "@components/molecules/publishTab";
-// import useGetUser from "@hooks/auth/useGetUser";
+import useGetUser from "@hooks/auth/useGetUser";
+import UserFollowingRepos from "./userFollowingRepos";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 enum ETabs {
   PUBLIC_FEEDS = "خبرنامه های عمومی",
@@ -12,22 +13,30 @@ enum ETabs {
 }
 
 const Feeds = () => {
-  // const {data: userInfo} = useGetUser();
+  const { data: userInfo } = useGetUser();
   const [activeTab, setActiveTab] = useState<string>(ETabs.PUBLIC_FEEDS);
+
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+  const { enablePrivateFeed } = content;
 
   const tabList = [
     {
       tabTitle: ETabs.PUBLIC_FEEDS,
       tabContent: <PublicFeedList />,
     },
-    // ...(userInfo ? [{
-    //   tabTitle: ETabs.PRIVATE_FEEDS,
-    //   tabContent: <PrivateFeedList ssoId={+userInfo.ssoId} />,
-    // }] : []),
+    ...(userInfo && enablePrivateFeed
+      ? [
+          {
+            tabTitle: ETabs.PRIVATE_FEEDS,
+            tabContent: <UserFollowingRepos ssoId={+userInfo.ssoId} />,
+          },
+        ]
+      : []),
   ];
 
   return (
-    <section className="w-full min-h- flex items-center gap-4 bg-white">
+    <section className="min-h- flex w-full items-center gap-4 bg-white">
       <PublishTab
         tabList={tabList}
         activeTab={activeTab}
