@@ -31,13 +31,13 @@
 
 /* Direction control rules */
 /* All elements outside clasor-editor-content and without inline text-align get RTL */
-.clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
+/* .clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
   text-align: right;
 }
 
 .clasor-preview-content .clasor-editor-content *:not([style*="text-align"]) {
   text-align: left;
-}
+} */
 
 .clasor-preview-content .clasor-editor-content :is(video, audio) {
   margin: 0 auto !important;
@@ -102,4 +102,13 @@ ol li:has(p[dir="rtl"]) {
 ul li:has(p[dir="ltr"]),
 ol li:has(p[dir="ltr"]) {
   direction: ltr !important;
+}
+
+.clasor-preview-content table td {
+  padding: 5px;
+}
+
+.clasor-preview-content table :where(th,td) {
+  white-space: nowrap;
+  vertical-align: middle;
 }
