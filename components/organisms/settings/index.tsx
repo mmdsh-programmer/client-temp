@@ -72,6 +72,7 @@ const Settings = () => {
       allowQuestionReplies: false,
       accessToCreateRepo: false,
       enablePublishPage: false,
+      enablePrivateFeed: false,
     },
   });
 
@@ -96,6 +97,7 @@ const Settings = () => {
           enablePersonalDocs,
           enableDefaultFontFamily,
           enableBranch,
+          enablePrivateFeed,
           theme = {},
         } = content;
 
@@ -117,6 +119,7 @@ const Settings = () => {
           enablePersonalDocs,
           enableDefaultFontFamily,
           enableBranch,
+          enablePrivateFeed,
           // colors
           mainColor: themeColors?.["--primary-normal"] || "#7F46BF",
           primaryLight: themeColors?.["--primary-light"] || "#EFE9F8",
@@ -205,6 +208,7 @@ const Settings = () => {
         enablePersonalDocs: data.enablePersonalDocs,
         enableDefaultFontFamily: data.enableDefaultFontFamily,
         enableBranch: data.enableBranch,
+        enablePrivateFeed: data.enablePrivateFeed,
         theme: {
           ...originalTheme,
           // colors
