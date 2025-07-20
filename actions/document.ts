@@ -531,6 +531,12 @@ export const publicLastVersionAction = async (
       draftId
     );
 
+    // revalidate page of version if exists
+    revalidateTag(`vr-${draftId}`);
+
+    // revalidate empty page of document if exists
+    revalidateTag(`dc-${documentId}`);
+
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
