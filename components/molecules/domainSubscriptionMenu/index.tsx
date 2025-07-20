@@ -18,7 +18,7 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
     rejectRequest.mutate({
       requestId: request.id,
       callBack: () => {
-        toast.error("درخواست رد شد");
+        toast.success("درخواست رد شد");
       },
     });
   };

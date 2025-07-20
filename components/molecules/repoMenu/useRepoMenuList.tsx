@@ -3,6 +3,7 @@ import {
   BookmarkRepoIcon,
   DeleteIcon,
   EditIcon,
+  FeedIcon,
   FileManagementIcon,
   FolderInfoIcon,
   KeyIcon,
@@ -13,13 +14,14 @@ import {
   RestoreIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-
 import { ERoles } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import { repoActivityAtom, repoAtom } from "@atom/repository";
 import { toPersianDigit } from "@utils/index";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import { repoFeedAtom } from "@atom/feed";
 
 type ModalType =
   | "delete"
@@ -32,7 +34,8 @@ type ModalType =
   | "archive"
   | "fileManagement"
   | "versionRequests"
-  | "repoActivity";
+  | "repoActivity"
+  | "privateFeed";
 
 export interface MenuItem {
   text: string;
@@ -50,6 +53,11 @@ const useMenuList = (
 ): MenuItem[] => {
   const setRepo = useSetRecoilState(repoAtom);
   const [showRepoActivity, setShowRepoActivity] = useRecoilState(repoActivityAtom);
+  const setRepoFeed = useSetRecoilState(repoFeedAtom);
+
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+  const { enablePrivateFeed } = content;
 
   const createMenuItem = (
     menuText: string,
@@ -208,6 +216,21 @@ const useMenuList = (
 
     return [
       ...(ownerAdminActions() as MenuItem[]),
+      enablePrivateFeed && repo?.isPublish
+        ? createMenuItem(
+            "ایجاد خبرنامه خصوصی",
+            <FeedIcon className="h-4 w-4" />,
+            () => {
+              setModalState("privateFeed", true);
+              setOpenRepoActionDrawer(false);
+              if (repo) {
+                setRepoFeed({ label: repo.name, value: repo.id });
+                setRepo(repo);
+              }
+            },
+            "repo-menu__item--private-feed",
+          )
+        : null,
       createMenuItem(
         "بایگانی",
         <ArchiveActionIcon className="h-4 w-4 fill-icon-active" />,

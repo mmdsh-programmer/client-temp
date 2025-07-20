@@ -59,13 +59,13 @@ const PublishRepoSubscribeButton = ({
               درخواست دریافت اعلانات توسط مدیر دامنه تایید شده
             </Typography>
             <LoadingButton
-              className="flex !max-h-[unset] !w-fit items-center justify-center rounded-lg px-2 py-5 font-iranYekan leading-5 text-white sm:bg-secondary sm:!px-10 lg:mt-0"
+              className="flex !h-8 !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-primary-normal !px-10 py-5 font-iranYekan leading-5 text-white"
               onClick={handleUnsubscribeRepo}
               loading={loading}
               disabled={loading}
               isPrimary
             >
-              <Typography className="body_b3">لغو درخواست</Typography>
+              <Typography className="body_b3">لغو دریافت اعلان</Typography>
             </LoadingButton>
           </div>
         );
@@ -76,7 +76,7 @@ const PublishRepoSubscribeButton = ({
               درخواست دریافت اعلانات برای مدیر دامنه ارسال شده
             </Typography>
             <LoadingButton
-              className="flex !max-h-[unset] !w-fit !h-8 items-center justify-center rounded-lg bg-primary-normal !px-10 py-5 font-iranYekan leading-5 text-white"
+              className="flex !h-8 !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-primary-normal !px-10 py-5 font-iranYekan leading-5 text-white"
               onClick={handleUnsubscribeRepo}
               loading={loading}
               disabled={loading}

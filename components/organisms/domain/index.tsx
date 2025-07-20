@@ -7,6 +7,7 @@ import DomainTags from "../domainTags";
 import Settings from "../settings";
 import PublicFeed from "../domainPublicFeed";
 import PrivateFeed from "../domainPrivateFeed";
+import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -21,6 +22,9 @@ export enum ETabs {
 
 const DomainConfig = () => {
   const { data: userInfo } = useGetUser();
+  const { data: getDomainInfo } = useGetDomainInfo();
+  const content = JSON.parse(getDomainInfo?.content || "{}");
+  const { enablePrivateFeed } = content;
 
   const [activeTab, setActiveTab] = useState<string>(
     userInfo?.domainRole === "owner" || userInfo?.isClasorAdmin
@@ -45,10 +49,12 @@ const DomainConfig = () => {
       tabTitle: ETabs.PUBLIC_FEEDS,
       tabContent: activeTab === ETabs.PUBLIC_FEEDS ? <PublicFeed /> : null,
     },
-    {
-      tabTitle: ETabs.PRIVATE_FEEDS,
-      tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <PrivateFeed /> : null,
-    },
+    enablePrivateFeed
+      ? {
+          tabTitle: ETabs.PRIVATE_FEEDS,
+          tabContent: activeTab === ETabs.PRIVATE_FEEDS ? <PrivateFeed /> : null,
+        }
+      : null,
     {
       tabTitle: ETabs.COMMENTS,
       tabContent:

@@ -11,6 +11,7 @@ import { useRecoilState } from "recoil";
 import { repoAtom } from "@atom/repository";
 import Files from "@components/organisms/fileManagement";
 import RepoVersionRequestsDialog from "@components/organisms/dialogs/repository/repoVersionRequestsDialog";
+import PrivateFeedCreateDialog from "@components/organisms/dialogs/privateFeed/privateFeedCreateDialog";
 
 interface IRepoDialogsProps {
   modals: {
@@ -24,11 +25,9 @@ interface IRepoDialogsProps {
     leave: boolean;
     fileManagement: boolean;
     versionRequests: boolean;
+    privateFeed: boolean;
   };
-  setModalState: (
-    key: keyof IRepoDialogsProps["modals"],
-    state: boolean
-  ) => void;
+  setModalState: (key: keyof IRepoDialogsProps["modals"], state: boolean) => void;
 }
 
 const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
@@ -123,6 +122,14 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
         <RepoVersionRequestsDialog
           setOpen={() => {
             setModalState("versionRequests", false);
+            handleClose();
+          }}
+        />
+      ) : null}
+      {modals.privateFeed ? (
+        <PrivateFeedCreateDialog
+          setOpen={() => {
+            setModalState("privateFeed", false);
             handleClose();
           }}
         />

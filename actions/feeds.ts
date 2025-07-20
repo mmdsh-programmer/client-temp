@@ -1,15 +1,12 @@
 "use server";
 
-import { getDomainPrivateFeeds, getDomainPublicFeeds } from "@service/clasor";
+import { getDomainPrivateFeeds, getDomainPublicFeeds, getFollowingRepos } from "@service/clasor";
 import { IActionError } from "@interface/app.interface";
 import { normalizeError } from "@utils/normalizeActionError";
 import { getMe } from "./auth";
 import { headers } from "next/headers";
 
-export const getDomainPublicFeedsAction = async (
-  offset: number,
-  size: number
-) => {
+export const getDomainPublicFeedsAction = async (offset: number, size: number) => {
   const domain = headers().get("host");
   if (!domain) {
     throw new Error("Domain is not found");
@@ -22,19 +19,24 @@ export const getDomainPublicFeedsAction = async (
   }
 };
 
-export const getDomainPrivateFeedsAction = async (
-  repoId: number,
-  offset: number,
-  size: number,
-) => {
+export const getDomainPrivateFeedsAction = async (repoId: number, offset: number, size: number) => {
   const userInfo = await getMe();
   try {
-    const result = await getDomainPrivateFeeds(
-      userInfo.access_token,
-      repoId,
-      offset,
-      size,
-    );
+    const result = await getDomainPrivateFeeds(userInfo.access_token, repoId, offset, size);
+    return result;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getFollowingReposAction = async (offset: number, size: number) => {
+  const userInfo = await getMe();
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+  try {
+    const result = await getFollowingRepos(domain, userInfo.access_token, offset, size);
     return result;
   } catch (error) {
     return normalizeError(error as IActionError);

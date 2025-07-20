@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -12,11 +12,13 @@ import useGetDomainPublishRepoList from "@hooks/domain/useGetDomainPublishRepoLi
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import { useRecoilValue } from "recoil";
 import { repoFeedAtom } from "@atom/feed";
+import { Spinner } from "@components/atoms/spinner";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { privateFeedSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
   content: string;
-  repoId: number;
   link?: string;
 }
 
@@ -35,11 +37,11 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-  } = useGetDomainPublishRepoList(30);
+  } = useGetDomainPublishRepoList(30, !repoInfo);
   const { data: feedImages, isLoading: ImagesIsLoading } = useGetFeedImages(30);
   const createPrivateFeed = useCreatePrivateFeed();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({ resolver: yupResolver(privateFeedSchema) });
   const {
     register,
     handleSubmit,
@@ -137,6 +139,9 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label">متن </Typography>
           <TextareaAtom placeholder="متن" register={{ ...register("content") }} />
+          {errors.content && (
+            <Typography className="warning_text">{errors.content?.message}</Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> لینک</Typography>

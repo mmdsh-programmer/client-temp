@@ -40,6 +40,8 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
     fileManagement: false,
     versionRequests: false,
     repoActivity: false,
+    privateFeed: false,
+
   });
 
   const setModalState = (key: keyof typeof modals, state: boolean) => {
