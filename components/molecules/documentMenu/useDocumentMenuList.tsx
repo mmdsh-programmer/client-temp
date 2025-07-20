@@ -92,11 +92,23 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     }
   };
 
+  const writerOrViewerRole = () => {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
+    ) {
+      return document?.accesses?.[0] === "viewer" || document?.accesses?.[0] === "writer";
+    }
+    if (getRepo) {
+      return getRepo?.roleName === "viewer" || getRepo?.roleName === "writer";
+    }
+  };
+
   const editOptions = [
     {
       text: "ویرایش محتوا",
       icon: <EditContentIcon className="h-4 w-4" />,
-      disabled: !adminOrOwnerRole(),
+      disabled: writerOrViewerRole(),
       onClick: () => {
         setEditorMode("edit");
         setEditorModal(true);
@@ -110,7 +122,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     {
       text: "ویرایش سند",
       icon: <EditDocumentIcon className="h-4 w-4" />,
-      disabled: !adminOrOwnerRole(),
+      disabled: writerOrViewerRole(),
       onClick: () => {
         toggleModal("editDocument", true);
         if (document) setDocument(document);
