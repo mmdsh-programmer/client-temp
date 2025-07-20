@@ -30,12 +30,12 @@ const nextConfig = {
     return newConfig;
   },
   async rewrites() {
-    if(process.env.BLOG_BOX_URL && process.env.BLOG_ID){ 
+    if(process.env.BLOG_BOX_URL && process.env.BLOG_BOX_ID){ 
       return [
         {
           source: "/blog/:path*",
           destination:
-            `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_ID}/:path*`,
+            `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_BOX_ID}/:path*`,
         },
       ];
     }
