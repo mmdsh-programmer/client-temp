@@ -12,6 +12,7 @@ import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IForm {
   name: string;
@@ -29,6 +30,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const { data: userInfo } = useGetUser();
+  const repoId = useRepoId();
   const createVersion = useCreateVersion();
 
   const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
@@ -45,16 +47,6 @@ const VersionCreateDialog = ({ close }: IProps) => {
     close(false);
   };
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return getDocument!.repoId;
-    }
-    return getRepo!.id;
-  };
-
   const onSubmit = async (dataForm: IForm) => {
     // eslint-disable-next-line no-useless-escape
     const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
@@ -62,14 +54,19 @@ const VersionCreateDialog = ({ close }: IProps) => {
       toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
       return;
     }
-    if (!repoId()) return;
+    if (!repoId) return;
     createVersion.mutate({
-      repoId: repoId(),
+      repoId,
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
       content: "",
       outline: "",
-      isDirectAccess: sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
+      isDirectAccess:
+        sharedDocuments === "true" ||
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+          ? true
+          : undefined,
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
         handleClose();
