@@ -40,18 +40,8 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
     );
   }
 
-  // if (!feedList?.length) {
-  //   return (
-  //     <div className="p-4">
-  //       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
-  //         <EmptyList type={EEmptyList.FEED_LIST} />
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
   return (
-    <div className="flex flex-col gap-4 px-4 py-4">
+    <div className="flex flex-col gap-4">
       <div className="flex gap-2">
         <Button
           placeholder="button"

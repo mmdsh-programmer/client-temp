@@ -13,9 +13,7 @@ const DomainSubscription = () => {
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useGetSubscriptionList(30);
 
-  const listLength = data?.pages.flatMap((page) => {
-    return page.list;
-  });
+  const listLength = data?.pages[0].total;
 
   const renderTableRows = () => {
     return (

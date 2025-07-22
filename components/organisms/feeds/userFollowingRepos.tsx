@@ -42,16 +42,16 @@ const UserFollowingRepos = ({ ssoId }: IProps) => {
             {followingRepos?.pages.map((page) => {
               return page.list.map((repo) => {
                 return (
-                  <div key={repo.id} className="aspect-square">
+                  <div key={repo.repoId} className="aspect-square">
                     <Card
                       placeholder="card"
-                      key={`repo-card-item-${repo.id}`}
+                      key={`repo-card-item-${repo.repoId}`}
                       className="repo-publish-card h-full flex-col rounded-lg border-[1px] border-normal bg-white shadow-small last:flex"
                     >
                       <div
                         className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-md"
                         onClick={() => {
-                          return setRepoFeed({ label: repo.title, value: repo.id });
+                          return setRepoFeed({ label: repo.repoName, value: repo.repoId });
                         }}
                       >
                         <div className="default-repo-image relative flex h-44 w-full flex-1 items-center justify-center rounded-t-md bg-primary-normal">
@@ -59,9 +59,9 @@ const UserFollowingRepos = ({ ssoId }: IProps) => {
                         </div>
                         <Typography
                           className="title_t2 w-full truncate px-2 pb-8 pt-4 text-center font-[450]"
-                          title={repo.title}
+                          title={repo.repoName}
                         >
-                          {repo.title}
+                          {repo.repoName}
                         </Typography>
                       </div>
                     </Card>
@@ -81,7 +81,7 @@ const UserFollowingRepos = ({ ssoId }: IProps) => {
     return <EmptyList type={EEmptyList.FOLLOWING_REPO} />;
   };
 
-  return <div className="py-8 h-full px-6">{renderContent()}</div>;
+  return <div className="h-full px-6 py-8">{renderContent()}</div>;
 };
 
 export default UserFollowingRepos;
