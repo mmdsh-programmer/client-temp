@@ -75,7 +75,7 @@ const TableView = ({
                         });
                       },
                       className:
-                        "categoryOrder whitespace-nowrap hidden !px-1 xl:table-cell !max-w-[70px] !w-[70px]",
+                        "categoryOrder hidden xl:!flex whitespace-nowrap !px-2 !max-w-[70px] !w-[70px]",
                     },
                     {
                       key: "name",

@@ -60,24 +60,10 @@ export interface IUserSrv {
 }
 
 export interface IFollowingRepo {
-  id: number;
   repoId: number;
-  title: string;
-  updateDate: number;
-  description: string;
-  createDate: number;
-  metadata: any;
-  contentType: string;
-  chatThreadId: number | null;
-  isPublished: boolean;
-  publishExpireTime: number | null;
-  tags: any[];
+  repoName: string;
+  repoTypeName: string;
   repoTypeId: number;
-  creator: {
-    ssoId: number;
-    userName: string;
-    name: string;
-    img: string;
-    contactId: number | null;
-  };
+  status: string;
+  domainUrl: string;
 }
