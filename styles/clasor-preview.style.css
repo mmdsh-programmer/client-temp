@@ -29,16 +29,6 @@
   width: 100%;
 }
 
-/* Direction control rules */
-/* All elements outside clasor-editor-content and without inline text-align get RTL */
-/* .clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
-  text-align: right;
-}
-
-.clasor-preview-content .clasor-editor-content *:not([style*="text-align"]) {
-  text-align: left;
-} */
-
 .clasor-preview-content .clasor-editor-content :is(video, audio) {
   margin: 0 auto !important;
 }
@@ -49,6 +39,10 @@
 
 .clasor-preview-content *:not(.clasor-editor-content *) .table:not([dir]) {
   direction: ltr;
+}
+
+.clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
+  text-align: right;
 }
 
 /* Force RTL direction for table figures with dir="rtl" attribute */
@@ -81,6 +75,11 @@
 .clasor-preview-content__render-server-content *:not([dir]):not(ol){
   direction: ltr;
 }
+
+.clasor-preview-content__render-server-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(table *) {
+  text-align: left;
+}
+
 
 .clasor-preview-content figure.table[dir="rtl"] * {
   direction: rtl !important;
