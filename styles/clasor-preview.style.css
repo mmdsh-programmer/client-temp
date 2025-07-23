@@ -78,8 +78,16 @@
 }
 
 .clasor-preview-content__render-server-content *:not([dir]):not(ul),
-.clasor-preview-content__render-server-content *:not([dir]):not(ol) {
+.clasor-preview-content__render-server-content *:not([dir]):not(ol){
   direction: ltr;
+}
+
+.clasor-preview-content figure.table[dir="rtl"] * {
+  direction: rtl !important;
+}
+
+.clasor-preview-content figure.table[dir="rtl"] table *{
+  direction: rtl !important;
 }
 
 li:has(p[dir="ltr"]) {
