@@ -33,16 +33,8 @@
   margin: 0 auto !important;
 }
 
-.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet *) {
-  direction: rtl;
-}
-
 .clasor-preview-content *:not(.clasor-editor-content *) .table:not([dir]) {
   direction: ltr;
-}
-
-.clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
-  text-align: right;
 }
 
 /* Force RTL direction for table figures with dir="rtl" attribute */
