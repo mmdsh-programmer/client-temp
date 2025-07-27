@@ -7,7 +7,6 @@ import {
   SpeedDialIcon,
 } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
-import { IVersion } from "@interface/version.interface";
 import LikeAndDislike from "../like&dislike";
 import RenderIf from "@components/atoms/renderIf";
 import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
@@ -28,16 +27,17 @@ import { ERoles, EDocumentTypes } from "@interface/enums";
 import DownloadPDF from "@components/molecules/downloadPDF";
 import DownloadExcel from "@components/molecules/downloadExcel";
 import { IRemoteEditorRef } from "clasor-remote-editor";
+import { selectedVersionAtom } from "@atom/version";
 
 interface IProps {
-  version: IVersion;
   editorRef: React.RefObject<IRemoteEditorRef>;
 }
 
-const FloatingButtons = ({ version, editorRef }: IProps) => {
+const FloatingButtons = ({ editorRef }: IProps) => {
   const currentPath = usePathname();
   const getRepo = useRecoilValue(repoAtom);
   const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getVersion = useRecoilValue(selectedVersionAtom);
   const [getListDrawer, setListDrawer] = useRecoilState(editorListDrawerAtom);
   const editorMode = useRecoilValue(editorModeAtom);
 
@@ -53,7 +53,7 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
 
   const { data: userInfo } = useGetUser();
 
-  const renderLike = version?.state !== "draft" && version?.status === "accepted";
+  const renderLike = getVersion?.state !== "draft" && getVersion?.status === "accepted";
 
   const adminOrOwnerRole = () => {
     if (
@@ -101,8 +101,8 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
         {openSpeedDial ? (
           <>
             {(editorMode === "preview" || editorMode === "temporaryPreview") &&
-              (getDocument?.contentType === EDocumentTypes.excel ? (
-                <DownloadExcel editorRef={editorRef} version={version} />
+              (getDocument?.contentType === EDocumentTypes.excel && getVersion ? (
+                <DownloadExcel editorRef={editorRef} version={getVersion} />
               ) : (
                 <DownloadPDF />
               ))}
@@ -114,7 +114,7 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
             >
               <ListIcon className="h-5 w-5" />
             </Button>
-            <RenderIf isTrue={version.state === "draft" && version?.status === "editing"}>
+            <RenderIf isTrue={getVersion?.state === "draft" && getVersion?.status === "editing"}>
               <>
                 <Button
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
@@ -138,7 +138,7 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
                 </Button>
               </>
             </RenderIf>
-            <RenderIf isTrue={version.state === "draft" && version?.status === "pending"}>
+            <RenderIf isTrue={getVersion?.state === "draft" && getVersion?.status === "pending"}>
               <>
                 <Button
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
@@ -166,8 +166,8 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
             </RenderIf>
             <RenderIf
               isTrue={
-                version.state === "version" &&
-                version?.status === "private" &&
+                getVersion?.state === "version" &&
+                getVersion?.status === "private" &&
                 Boolean(adminOrOwnerRole())
               }
             >
@@ -183,8 +183,8 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
             </RenderIf>
             <RenderIf
               isTrue={
-                version.state === "version" &&
-                version?.status === "pending" &&
+                getVersion?.state === "version" &&
+                getVersion?.status === "pending" &&
                 Boolean(adminOrOwnerRole())
               }
             >
@@ -211,7 +211,7 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
             </RenderIf>
             <RenderIf
               isTrue={
-                version?.status === "waitForDirectPublic" &&
+                getVersion?.status === "waitForDirectPublic" &&
                 (getRepo?.roleName === ERoles.owner ||
                   currentPath === "/admin/myDocuments" ||
                   (currentPath === "/admin/dashboard" &&
@@ -240,61 +240,61 @@ const FloatingButtons = ({ version, editorRef }: IProps) => {
               </>
             </RenderIf>
             <RenderIf isTrue={renderLike}>
-              <LikeAndDislike postId={version!.postId} />
+              <LikeAndDislike postId={getVersion!.postId} />
             </RenderIf>
           </>
         ) : null}
       </div>
-      {draftConfirmModal && version ? (
+      {draftConfirmModal && getVersion ? (
         <VersionConfirmDialog
           setOpen={() => {
             return setDraftConfirmModal(false);
           }}
         />
       ) : null}
-      {draftAcceptConfirmModal && version ? (
+      {draftAcceptConfirmModal && getVersion ? (
         <AcceptDraftDialog
           setOpen={() => {
             return setDraftAcceptConfirmModal(false);
           }}
         />
       ) : null}
-      {draftRejectConfirmModal && version ? (
+      {draftRejectConfirmModal && getVersion ? (
         <VersionCancelConfirmDialog
           setOpen={() => {
             return setDraftRejectConfirmModal(false);
           }}
         />
       ) : null}
-      {versionPublicModal && version ? (
+      {versionPublicModal && getVersion ? (
         <VersionPublicDialog
           setOpen={() => {
             return setVersionPublicModal(false);
           }}
         />
       ) : null}
-      {versionRejectPublicModal && version ? (
+      {versionRejectPublicModal && getVersion ? (
         <VersionCancelPublicDialog
           setOpen={() => {
             return setVersionRejectPublicModal(false);
           }}
         />
       ) : null}
-      {versionAcceptPublicModal && version ? (
+      {versionAcceptPublicModal && getVersion ? (
         <AcceptVersionDialog
           setOpen={() => {
             return setVersionAcceptPublicModal(false);
           }}
         />
       ) : null}
-      {acceptPublicDraftModal && version ? (
+      {acceptPublicDraftModal && getVersion ? (
         <AcceptPublicDraftDialog
           setOpen={() => {
             return setAcceptPublicDraftModal(false);
           }}
         />
       ) : null}
-      {publicDraftModal && version ? (
+      {publicDraftModal && getVersion ? (
         <ConfirmPublicDraftDialog
           setOpen={() => {
             return setPublicDraftModal(false);

@@ -41,8 +41,8 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     getDocument!.id,
     getVersion?.id,
     getVersion?.state,
-    true,
-    true,
+    false,
+    false,
     sharedDocuments === "true" ||
       currentPath === "/admin/sharedDocuments" ||
       (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),

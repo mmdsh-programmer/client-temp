@@ -3653,6 +3653,32 @@ export const getFollowingRepos = async (
   }
 };
 
+export const getFollowingRepoFeeds = async (
+  accessToken: string,
+  repoId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<any>>>(
+      `repositories/${repoId}/feeds/followingRepo`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 
 /// /////////////////////////////// BRANCH SERVICES //////////////////////
 

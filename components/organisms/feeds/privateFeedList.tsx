@@ -4,9 +4,9 @@ import FeedItem from "./feedItem";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
-import useGetPrivateFeeds from "@hooks/feeds/useGetPrivateFeeds";
 import { Button, Typography } from "@material-tailwind/react";
 import { BackIcon } from "@components/atoms/icons";
+import useGetFollowinfRepoFeeds from "@hooks/feeds/useGetFollowinfRepoFeeds";
 
 interface IProps {
   ssoId: number;
@@ -20,15 +20,15 @@ interface IProps {
 }
 
 const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
-  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetPrivateFeeds(
+  const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetFollowinfRepoFeeds(
     ssoId,
     repo.value,
     30,
   );
 
-  const feedList = data?.pages.flatMap((page) => {
-    return page.list;
-  });
+  console.log("-------------------- data ----------------", data);;
+
+  const feedList = data?.pages[0].list;
 
   if (isLoading) {
     return (
