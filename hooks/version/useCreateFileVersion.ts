@@ -16,15 +16,15 @@ const useCreateFileVersion = () => {
       fileHash?: IFileVersion;
       isDirectAccess?: boolean;
       callBack?: () => void;
+      onErrorHandler?: () => void;
     }) => {
-      const { repoId, documentId, versionNumber, fileHash, isDirectAccess } =
-        values;
+      const { repoId, documentId, versionNumber, fileHash, isDirectAccess } = values;
       const response = await createFileVersionAction(
         repoId,
         documentId,
         versionNumber,
         fileHash,
-        isDirectAccess
+        isDirectAccess,
       );
       handleClientSideHookError(response as IActionError);
       return response;
@@ -36,8 +36,11 @@ const useCreateFileVersion = () => {
       });
       callBack?.();
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      const { onErrorHandler } = values;
+
       toast.error(error.message || "خطای نامشخصی رخ داد");
+      onErrorHandler?.();
     },
   });
 };

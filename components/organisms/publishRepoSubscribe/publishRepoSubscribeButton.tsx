@@ -59,7 +59,7 @@ const PublishRepoSubscribeButton = ({
               درخواست دریافت اعلانات توسط مدیر دامنه تایید شده
             </Typography>
             <LoadingButton
-              className="flex !h-8 !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-primary-normal !px-10 py-5 font-iranYekan leading-5 text-white"
+              className="flex !h-8 !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-error !px-10 py-5 font-iranYekan leading-5 text-white"
               onClick={handleUnsubscribeRepo}
               loading={loading}
               disabled={loading}
@@ -76,7 +76,7 @@ const PublishRepoSubscribeButton = ({
               درخواست دریافت اعلانات برای مدیر دامنه ارسال شده
             </Typography>
             <LoadingButton
-              className="flex !h-8 !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-primary-normal !px-10 py-5 font-iranYekan leading-5 text-white"
+              className="flex !h-8 !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-error !px-10 py-5 font-iranYekan leading-5 text-white"
               onClick={handleUnsubscribeRepo}
               loading={loading}
               disabled={loading}
@@ -88,7 +88,7 @@ const PublishRepoSubscribeButton = ({
       case ERepoSubscriptionStatus.REJECTED:
         return (
           <div className="flex flex-col items-center gap-2">
-            <Typography className="body_b3">
+            <Typography className="body_b3 text-warning">
               درخواست دریافت اعلانات توسط مدیر دامنه رد شده
             </Typography>
             <LoadingButton

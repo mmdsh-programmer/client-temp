@@ -1,25 +1,16 @@
-import { getDomainPrivateFeedsAction } from "@actions/feeds";
+import { getFollowingRepoFeedsAction } from "@actions/feeds";
 import { IActionError } from "@interface/app.interface";
-import { IFeedItem } from "@interface/feeds.interface";
 import { IListResponse } from "@interface/repo.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { handleClientSideHookError } from "@utils/error";
 
-const useGetPrivateFeeds = (
-  ssoId: number,
-  repoId: number,
-  size: number,
-) => {
+const useGetFollowinfRepoFeeds = (ssoId: number, repoId: number, size: number) => {
   return useInfiniteQuery({
-    queryKey: [`user-${ssoId}${repoId ? `-repo-${repoId}`: ""}-private-feeds`],
+    queryKey: [`user-${ssoId}-following-${repoId ? `-repo-${repoId}` : ""}-private-feeds`],
     queryFn: async ({ pageParam }) => {
-      const response = await getDomainPrivateFeedsAction(
-        repoId,
-        (pageParam - 1) * size,
-        size,
-      );
+      const response = await getFollowingRepoFeedsAction(repoId, (pageParam - 1) * size, size);
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<IFeedItem>;
+      return response as IListResponse<any>;
     },
     initialPageParam: 1,
     retry: false,
@@ -33,4 +24,4 @@ const useGetPrivateFeeds = (
   });
 };
 
-export default useGetPrivateFeeds;
+export default useGetFollowinfRepoFeeds;

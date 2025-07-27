@@ -106,8 +106,6 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         order,
         publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         successCallBack: (result: IDocument) => {
-          close();
-          setOpen(false);
           // eslint-disable-next-line no-useless-escape
           const invalidChar = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
           if (invalidChar.test(dataForm.versionNumber)) {
@@ -125,6 +123,10 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
                 close();
                 setOpen(false);
                 toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
+              },
+              onErrorHandler:() => {
+                close();
+                setOpen(false);
               },
             });
           } else {

@@ -153,6 +153,10 @@ const EditorTab = () => {
     return null;
   }
 
+  if (getSelectedDocument?.versions?.total === 0) {
+    // return 
+  }
+
   if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
     return (
       <EditorKey

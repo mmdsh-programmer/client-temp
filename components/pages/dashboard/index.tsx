@@ -12,6 +12,7 @@ import { ERepoGrouping } from "@interface/enums";
 import RepoList from "@components/organisms/repoList";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { Spinner } from "@components/atoms/spinner";
+import { bulkItemsAtom } from "@atom/bulk";
 
 const DashboardPage = () => {
   const resetRepo = useResetRecoilState(repoAtom);
@@ -20,6 +21,7 @@ const DashboardPage = () => {
   const resetDocument = useResetRecoilState(selectedDocumentAtom);
   const resetDocumentShow = useResetRecoilState(documentShowAtom);
   const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+  const resetBulkItems = useResetRecoilState(bulkItemsAtom);
   const getRepoGroup = useRecoilValue(repoGroupingAtom);
 
   const { data: getDomainInfo, isLoading } = useGetDomainInfo();
@@ -34,6 +36,7 @@ const DashboardPage = () => {
     resetDocument();
     resetDocumentShow();
     resetShowVersionList();
+    resetBulkItems();
   }, []);
 
   const renderContent = () => {
