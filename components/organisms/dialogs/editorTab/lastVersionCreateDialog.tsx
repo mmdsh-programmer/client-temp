@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import { useRecoilValue } from "recoil";
-import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
+import { versionSchema } from "../version/validation.yup";
 
 interface IForm {
   name: string;
@@ -21,7 +21,7 @@ interface IProps {
   close: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const VersionCreateDialog = ({ close }: IProps) => {
+const LastVersionCreateDialog = ({ close }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
@@ -79,7 +79,12 @@ const VersionCreateDialog = ({ close }: IProps) => {
       setOpen={handleClose}
       className="version-create-dialog"
     >
-      <form className="flex flex-col gap-6">
+      <form className="flex flex-col gap-8">
+        <div>
+          <Typography className="caption_c1 !warning_text">
+            در حال حاضر این سند هیچ نسخه‌ای ندارد. آیا مایلید یک نسخه جدید ایجاد کنید؟
+          </Typography>
+        </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">نام نسخه</Typography>
           <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
@@ -90,4 +95,4 @@ const VersionCreateDialog = ({ close }: IProps) => {
   );
 };
 
-export default VersionCreateDialog;
+export default LastVersionCreateDialog;

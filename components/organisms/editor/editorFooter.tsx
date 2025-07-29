@@ -227,7 +227,15 @@ const EditorFooter = ({ editorRef }: IProps) => {
         );
         setIsLoading(false);
         toast.success("تغییرات با موفقیت ذخیره شد.");
-
+        if (getVersionData?.id) {
+          const item = {
+            ...getVersionData,
+            state: "draft",
+            status: "editing"
+          } as IVersion;
+          setVersionData(item);
+          setVersion(item);
+        }
         return response.data;
       } catch (error: any) {
         setIsLoading(false);

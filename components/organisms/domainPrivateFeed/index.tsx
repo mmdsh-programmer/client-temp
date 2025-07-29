@@ -67,7 +67,7 @@ const PrivateFeed = () => {
         <TabsBody placeholder="tab-body" className="h-[calc(100%-80px)]">
           {tabList.map((tab) => {
             return (
-              <TabPanel key={tab.tabTitle} value={tab.tabTitle} className="h-full p-0">
+              <TabPanel key={tab.tabTitle} value={tab.tabTitle} className="h-full p-0 overflow-auto">
                 {tab.tabContent}
               </TabPanel>
             );

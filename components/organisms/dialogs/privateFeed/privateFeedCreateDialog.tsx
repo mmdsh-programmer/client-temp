@@ -108,7 +108,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
     return (
       <SelectAtom
         className="flex h-[46px] w-full items-center justify-between rounded-lg border-[1px] border-normal !bg-gray-50 pl-2 pr-3"
-        defaultOption={repoOptions?.[0]?.[0]}
+        defaultOption={{ value: "انتخاب کنید", label: "انتخاب کنید" }}
         options={repoOptions?.flat()}
         selectedOption={repoInfo}
         setSelectedOption={setRepoInfo}
@@ -130,6 +130,9 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
         <div className="flex flex-col gap-2">
           <Typography className="form_label">انتخاب مخزن</Typography>
           {renderRepo()}
+          {!repoInfo?.value && (
+            <Typography className="warning_text">لطفا یک مخزن را انتخاب کنید.</Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label"> عنوان</Typography>
