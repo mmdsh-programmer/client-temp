@@ -1,8 +1,7 @@
+import React, { useState } from "react";
 import { DialogBody, Typography } from "@material-tailwind/react";
 import { Spinner } from "@components/atoms/spinner";
-import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
-
 import DocumentAccessList from "@components/organisms/document/documentAccessList";
 import { ERoles } from "@interface/enums";
 import InfoDialog from "@components/templates/dialog/infoDialog";

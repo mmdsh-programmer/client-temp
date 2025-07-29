@@ -41,6 +41,8 @@ const useSaveEditor = () => {
         isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
+      console.log("----------------------- response333333 ----------------------", response);
+
       return response;
     },
     onSuccess: (response, values) => {
@@ -56,6 +58,8 @@ const useSaveEditor = () => {
           `document-${documentId}-version-${versionId}-state-${versionState}-innerDocument-false-innerOutline-false`,
         ],
       });
+
+      console.log("----------------------- response ----------------------", response);
 
       successCallBack?.();
     },

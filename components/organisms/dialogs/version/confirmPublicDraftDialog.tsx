@@ -3,13 +3,14 @@ import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import usePublicLastVersion from "@hooks/document/usePublicLastVersion";
 import { Typography } from "@material-tailwind/react";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
-import { selectedVersionAtom } from "@atom/version";
+import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+import { editorDataAtom, editorModalAtom } from "@atom/editor";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -18,7 +19,10 @@ interface IProps {
 const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
   const document = useRecoilValue(selectedDocumentAtom);
-  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
+  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const [getEditorData, setEditorData] = useRecoilState(editorDataAtom);
+  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const setVersionModalList = useSetRecoilState(versionModalListAtom);
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
@@ -30,7 +34,7 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
     clearErrors();
     reset();
     setOpen(false);
-   };
+  };
 
   const onSubmit = async () => {
     if (!repoId || !document) return;
@@ -43,6 +47,15 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
       callBack: () => {
         toast.success(" نسخه باموفقیت تایید و عمومی شد.");
         handleClose();
+        if (getEditorData) {
+          setEditorData(null);
+          setSelectedVersion(null);
+          setEditorModal(false);
+          setVersionModalList(true);
+        }
+        if (currentPath.includes("/admin/edit")) {
+          window.close();
+        }
       },
     });
   };
@@ -63,6 +76,11 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
         {getSelectedVersion?.versionNumber}
       </Typography>
       " اطمینان دارید؟
+      {getEditorData ? (
+        <Typography className="warning_text mt-6">
+          لطفاً قبل از تایید، تغییرات خود را ذخیره کنید. پس از تایید، صفحه ویرایشگر بسته خواهد شد.
+        </Typography>
+      ) : null}
     </ConfirmDialog>
   );
 };

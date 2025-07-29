@@ -35,7 +35,7 @@ const DomainPublishedRepositories = () => {
     }
     if (listLength) {
       return (
-        <div className="h-full overflow-auto">
+        <div className="h-full">
           <div className="mx-auto grid max-w-[1200px] auto-rows-[min-content] grid-cols-[repeat(auto-fill,minmax(110px,1fr))] gap-4">
             {publishRepoList?.pages.map((page) => {
               return page.list.map((repo) => {

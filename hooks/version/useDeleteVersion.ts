@@ -22,9 +22,24 @@ const useDeleteVersion = () => {
         documentId,
         versionId,
         state,
-        isDirectAccess
+        isDirectAccess,
       );
-      handleClientSideHookError(response as IActionError);
+
+      if (response.error) {
+        const { error, errorCode, errorList, referenceNumber } = response;
+        const errorResponse = {
+          error,
+          errorCode,
+          errorList: errorList[0].messages,
+          originalError: {
+            response: {
+              data: { error: errorList[0].error, message: errorList[0].messages, referenceNumber },
+            },
+          },
+          referenceNumber,
+        };
+        handleClientSideHookError(errorResponse as IActionError);
+      }
       return response;
     },
     onSuccess: (response, values) => {

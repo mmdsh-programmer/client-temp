@@ -28,6 +28,7 @@ import useGetVersion from "@hooks/version/useGetVersion";
 import useRepoId from "@hooks/custom/useRepoId";
 import { useSearchParams } from "next/navigation";
 import Error from "@components/organisms/error";
+import LastVersionCreateDialog from "../dialogs/editorTab/lastVersionCreateDialog";
 
 const EditorTab = () => {
   const repoId = useRepoId();
@@ -150,11 +151,7 @@ const EditorTab = () => {
 
   if (lastVersionIsSuccess && !getLastVersion) {
     toast.warn("آخرین نسخه یافت نشد.");
-    return null;
-  }
-
-  if (getSelectedDocument?.versions?.total === 0) {
-    // return 
+    return <LastVersionCreateDialog close={handleClose} />;
   }
 
   if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
