@@ -26,8 +26,6 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
     30,
   );
 
-  console.log("-------------------- data ----------------", data);;
-
   const feedList = data?.pages[0].list;
 
   if (isLoading) {
