@@ -79,40 +79,24 @@
   direction: rtl !important;
 }
 
-li *[dir="ltr"],
-ul li *[dir="ltr"],
-ol li *[dir="ltr"] {
-  direction: ltr !important;
+li {
+  direction: ltr;
 }
 
-li[dir="ltr"],
-ul li[dir="ltr"],
-ol li[dir="ltr"] {
-  direction: ltr !important;
+li:has(*[dir="rtl"]) {
+  direction: rtl;
 }
 
-li *:not([dir]),
-ul li *:not([dir]),
-ol li *:not([dir]) {
-  direction: ltr !important;
+li:has(*[dir="ltr"]) {
+  direction: ltr;
 }
 
-li:not([dir]),
-ul li:not([dir]),
-ol li:not([dir]) {
-  direction: ltr !important;
+*[dir="rtl"] {
+  direction: rtl;
 }
 
-li *[dir="rtl"],
-ul li *[dir="rtl"],
-ol li *[dir="rtl"] {
-  direction: rtl !important;
-}
-
-li[dir="rtl"],
-ul li[dir="rtl"],
-ol li[dir="rtl"] {
-  direction: rtl !important;
+*[dir="ltr"] {
+  direction: ltr;
 }
 
 li p[text-align="center"] {
