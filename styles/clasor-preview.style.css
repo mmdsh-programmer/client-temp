@@ -33,17 +33,16 @@
   margin: 0 auto !important;
 }
 
+.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet *) {
+  direction: rtl;
+}
+
 .clasor-preview-content *:not(.clasor-editor-content *) .table:not([dir]) {
   direction: ltr;
 }
 
-/* Force RTL direction for table figures with dir="rtl" attribute */
-.clasor-preview-content figure.table[dir="rtl"] {
-  direction: rtl !important;
-}
-
-.clasor-preview-content figure.table[dir="rtl"] table {
-  direction: rtl !important;
+.clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
+  text-align: right;
 }
 
 /* Elements with inline text-align maintain their own alignment */
@@ -63,29 +62,35 @@
   width: 100%;
 }
 
-.clasor-preview-content__render-server-content *:not([dir]):not(ul),
-.clasor-preview-content__render-server-content *:not([dir]):not(ol){
-  direction: ltr;
+.clasor-preview-content :is(ol, ul) {
+  list-style-type: revert !important;
 }
 
 .clasor-preview-content__render-server-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(table *) {
   text-align: left;
 }
 
-
-.clasor-preview-content figure.table[dir="rtl"] * {
+.clasor-preview-content figure.table[dir="rtl"]  {
   direction: rtl !important;
 }
 
-.clasor-preview-content figure.table[dir="rtl"] table *{
+.clasor-preview-content figure.table[dir="rtl"] table {
   direction: rtl !important;
-}
+} 
 
-li:has(p[dir="ltr"]) {
+li:has(*[dir="ltr"]) {
   direction: ltr !important;
 }
 
-li:has(p[dir="rtl"]) {
+li:has(*[dir="rtl"]) {
+  direction: rtl !important;
+}
+
+li:has([dir="ltr"]) {
+  direction: ltr !important;
+}
+
+li:has([dir="rtl"]) {
   direction: rtl !important;
 }
 
@@ -93,14 +98,38 @@ li p[text-align="center"] {
   list-style-position: inside;
 }
 
-ul li:has(p[dir="rtl"]),
-ol li:has(p[dir="rtl"]) {
+ul li:has(*[dir="rtl"]),
+ol li:has(*[dir="rtl"]) {
   direction: rtl !important;
 }
 
-ul li:has(p[dir="ltr"]),
-ol li:has(p[dir="ltr"]) {
+ul li:has(*[dir="ltr"]),
+ol li:has(*[dir="ltr"]) {
   direction: ltr !important;
+}
+
+ul li:has(*:not([dir])),
+ol li:has(*:not([dir])) {
+  direction: ltr !important;
+}
+
+ul li:has([dir="rtl"]),
+ol li:has([dir="rtl"]) {
+  direction: rtl !important;
+}
+
+ul li:has([dir="ltr"]),
+ol li:has([dir="ltr"]) {
+  direction: ltr !important;
+}
+
+ul li:has(:not([dir])),
+ol li:has(:not([dir])) {
+  direction: ltr !important;
+}
+
+.clasor-preview-content figure.table {
+  margin: 0 auto !important;
 }
 
 .clasor-preview-content table td {
