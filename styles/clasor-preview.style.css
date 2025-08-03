@@ -70,27 +70,47 @@
   text-align: left;
 }
 
-.clasor-preview-content figure.table[dir="rtl"]  {
+.clasor-preview-content figure.table[dir="rtl"] {
   direction: rtl !important;
 }
 
 .clasor-preview-content figure.table[dir="rtl"] table {
   direction: rtl !important;
-} 
+}
 
-li:has(*[dir="ltr"]) {
+li *[dir="ltr"],
+ul li *[dir="ltr"],
+ol li *[dir="ltr"] {
   direction: ltr !important;
 }
 
-li:has(*[dir="rtl"]) {
+li[dir="ltr"],
+ul li[dir="ltr"],
+ol li[dir="ltr"] {
+  direction: ltr !important;
+}
+
+li *:not([dir]),
+ul li *:not([dir]),
+ol li *:not([dir]) {
+  direction: ltr !important;
+}
+
+li:not([dir]),
+ul li:not([dir]),
+ol li:not([dir]) {
+  direction: ltr !important;
+}
+
+li *[dir="rtl"],
+ul li *[dir="rtl"],
+ol li *[dir="rtl"] {
   direction: rtl !important;
 }
 
-li:has([dir="ltr"]) {
-  direction: ltr !important;
-}
-
-li:has([dir="rtl"]) {
+li[dir="rtl"],
+ul li[dir="rtl"],
+ol li[dir="rtl"] {
   direction: rtl !important;
 }
 
@@ -98,35 +118,10 @@ li p[text-align="center"] {
   list-style-position: inside;
 }
 
-ul li:has(*[dir="rtl"]),
-ol li:has(*[dir="rtl"]) {
-  direction: rtl !important;
+.clasor-preview-content__render-server-content .clasor-code-snippet * {
+  direction: ltr;
 }
 
-ul li:has(*[dir="ltr"]),
-ol li:has(*[dir="ltr"]) {
-  direction: ltr !important;
-}
-
-ul li:has(*:not([dir])),
-ol li:has(*:not([dir])) {
-  direction: ltr !important;
-}
-
-ul li:has([dir="rtl"]),
-ol li:has([dir="rtl"]) {
-  direction: rtl !important;
-}
-
-ul li:has([dir="ltr"]),
-ol li:has([dir="ltr"]) {
-  direction: ltr !important;
-}
-
-ul li:has(:not([dir])),
-ol li:has(:not([dir])) {
-  direction: ltr !important;
-}
 
 .clasor-preview-content figure.table {
   margin: 0 auto !important;
@@ -136,7 +131,7 @@ ol li:has(:not([dir])) {
   padding: 5px;
 }
 
-.clasor-preview-content table :where(th,td) {
+.clasor-preview-content table :where(th, td) {
   white-space: nowrap;
   vertical-align: middle;
 }
