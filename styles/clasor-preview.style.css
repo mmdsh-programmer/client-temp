@@ -33,10 +33,10 @@
   margin: 0 auto !important;
 }
 
-.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet):not(.clasor-code-snippet *)
+/* .clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet):not(.clasor-code-snippet *)
  {
   direction: rtl;
-}
+} */
 
 .clasor-preview-content *:not(.clasor-editor-content *) .table:not([dir]) {
   direction: ltr;
@@ -99,6 +99,7 @@ li:has(*[dir="ltr"]) {
   direction: ltr;
 }
 
+
 li p[text-align="center"] {
   list-style-position: inside;
 }
@@ -106,6 +107,7 @@ li p[text-align="center"] {
 .clasor-preview-content__render-server-content .clasor-code-snippet,
 .clasor-preview-content__render-server-content .clasor-code-snippet * {
   direction: ltr !important;
+  text-align: left !important;
 }
 
 
