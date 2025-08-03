@@ -33,7 +33,8 @@
   margin: 0 auto !important;
 }
 
-.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet *) {
+.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet):not(.clasor-code-snippet *)
+ {
   direction: rtl;
 }
 
@@ -118,8 +119,9 @@ li p[text-align="center"] {
   list-style-position: inside;
 }
 
+.clasor-preview-content__render-server-content .clasor-code-snippet,
 .clasor-preview-content__render-server-content .clasor-code-snippet * {
-  direction: ltr;
+  direction: ltr !important;
 }
 
 
