@@ -33,19 +33,6 @@
   margin: 0 auto !important;
 }
 
-.clasor-preview-content *:not(.clasor-editor-content *):not([dir]):not(.clasor-code-snippet):not(.clasor-code-snippet *)
- {
-  direction: rtl;
-}
-
-.clasor-preview-content *:not(.clasor-editor-content *) .table:not([dir]) {
-  direction: ltr;
-}
-
-.clasor-preview-content *:not(.clasor-editor-content *):not([style*="text-align"]):not(.clasor-code-snippet *) {
-  text-align: right;
-}
-
 /* Elements with inline text-align maintain their own alignment */
 .clasor-preview-content [style*="text-align"] {
   text-align: inherit;
@@ -63,48 +50,71 @@
   width: 100%;
 }
 
-.clasor-preview-content :is(ol, ul) {
+.clasor-preview-content ul:not([style*="list-style-type"]) ,
+.clasor-preview-content ol:not([style*="list-style-type"]) {
   list-style-type: revert !important;
 }
 
-.clasor-preview-content__render-server-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(table *) {
+.clasor-preview-content :is(ul, ol) {
+  padding: 15px !important;
+}
+
+li,
+li * {
+  direction: ltr;
   text-align: left;
 }
 
-.clasor-preview-content figure.table[dir="rtl"] {
-  direction: rtl !important;
-}
-
-.clasor-preview-content figure.table[dir="rtl"] table {
-  direction: rtl !important;
-}
-
-li {
-  direction: ltr;
-}
-
 li:has(*[dir="rtl"]) {
-  direction: rtl;
+  direction: rtl !important;
 }
 
 li:has(*[dir="ltr"]) {
-  direction: ltr;
+  direction: ltr !important;
 }
 
 *[dir="rtl"] {
-  direction: rtl;
+  direction: rtl !important;
 }
 
 *[dir="ltr"] {
-  direction: ltr;
+  direction: ltr !important;
 }
+
 
 li p[text-align="center"] {
   list-style-position: inside;
 }
 
+/* ------------------------ clasor-editor-content article -------------------------- */
+
+.clasor-preview-content__render-server-content .clasor-editor-content *:not(dir):not(.clasor-code-snippet *){
+  direction: ltr;
+}
+
+.clasor-preview-content__render-server-content .clasor-editor-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(figure.table):not(figure.table *) {
+  text-align: left;
+}
+
+/*------------------------ code snippet------------------------*/
+
+/* code-snippet is the same in the old & new content */
 .clasor-preview-content__render-server-content .clasor-code-snippet,
 .clasor-preview-content__render-server-content .clasor-code-snippet * {
+  direction: ltr !important;
+}
+
+.clasor-preview-content__render-server-content .clasor-code-snippet .clasor-code-content {
+  text-align: left !important;
+}
+
+/*--------------------------  table   --------------------------------*/
+
+.clasor-preview-content__render-server-content figure.table *:has([style*="text-align"]) {
+  text-align: inherit !important;
+}
+
+.clasor-preview-content__render-server-content figure.table:not([dir]) {
   direction: ltr !important;
 }
 
