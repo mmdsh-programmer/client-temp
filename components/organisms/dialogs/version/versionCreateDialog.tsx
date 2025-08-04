@@ -57,7 +57,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
       repoId,
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
-      content: "",
+      content: "<article class='clasor-editor-content'></article>",
       outline: "",
       isDirectAccess:
         sharedDocuments === "true" ||
