@@ -88,10 +88,9 @@ li p[text-align="center"] {
 
 /* ------------------------ clasor-editor-content article -------------------------- */
 
-.clasor-preview-content__render-server-content .clasor-editor-content *:not(dir):not(.clasor-code-snippet *){
+.clasor-preview-content__render-server-content .clasor-editor-content *:not(dir):not(.clasor-code-snippet *):not(figure.table):not(figure.table *){
   direction: ltr;
 }
-
 .clasor-preview-content__render-server-content .clasor-editor-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(figure.table):not(figure.table *) {
   text-align: left;
 }
