@@ -154,10 +154,6 @@ table td:has(*[style*="text-align:center"]) {
   text-align: inherit;
 }
 
- table p {
-  display: inline;
-}
-
 .clasor-preview-content figure.table {
   margin: 0 auto !important;
 }
