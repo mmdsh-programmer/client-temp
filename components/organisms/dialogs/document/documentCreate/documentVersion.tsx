@@ -116,7 +116,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
             createVersionHook.mutate({
               repoId,
               documentId: result.id,
-              content: "<article class='clasor-editor-content'></article>",
+              content: "",
               outline: "",
               versionNumber: dataForm.versionNumber,
               onSuccessHandler: () => {
