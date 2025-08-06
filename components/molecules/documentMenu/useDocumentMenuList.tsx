@@ -276,8 +276,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
       icon: <DocumentBookmarkIcon className="h-4 w-4" />,
       disabled:
-        currentPath === "/admin/myDocuments" ||
-        currentPath === "/admin/dashboard" ||
+        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
         currentPath === "/admin/sharedDocuments",
       onClick: () => {
         toggleModal("bookmarkDocument", true);

@@ -20,9 +20,9 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
   const document = useRecoilValue(selectedDocumentAtom);
   const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
-  const [getEditorData, setEditorData] = useRecoilState(editorDataAtom);
+  const setEditorData = useSetRecoilState(editorDataAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
+  const [getVersionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();
@@ -47,14 +47,14 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
       callBack: () => {
         toast.success(" نسخه باموفقیت تایید و عمومی شد.");
         handleClose();
-        if (getEditorData) {
+        if (!getVersionModalList && currentPath.includes("/admin/edit")) {
+          window.close();
+        }
+        if (!getVersionModalList) {
           setEditorData(null);
           setSelectedVersion(null);
           setEditorModal(false);
           setVersionModalList(true);
-        }
-        if (currentPath.includes("/admin/edit")) {
-          window.close();
         }
       },
     });
@@ -76,7 +76,7 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
         {getSelectedVersion?.versionNumber}
       </Typography>
       " اطمینان دارید؟
-      {getEditorData ? (
+      {!getVersionModalList ? (
         <Typography className="warning_text mt-6">
           لطفاً قبل از تایید، تغییرات خود را ذخیره کنید. پس از تایید، صفحه ویرایشگر بسته خواهد شد.
         </Typography>

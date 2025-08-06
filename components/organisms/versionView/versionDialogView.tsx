@@ -6,19 +6,24 @@ import { DialogBody } from "@material-tailwind/react";
 import VersionList from "../version/versionList";
 import { versionModalListAtom } from "@atom/version";
 import VersionMenu from "@components/molecules/versionMenu";
+import { usePathname } from "next/navigation";
 
 const VersionDialogView = () => {
   const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
 
+  const currentPath = usePathname();
+
   return (
     <InfoDialog
       dialogHeader={getSelectedDocument?.name}
       setOpen={() => {
         setVersionModalList(false);
-        setDocumentShow(null);
-        setSelectedDocument(null);
+        if (!currentPath.includes("/admin/edit")) {
+          setDocumentShow(null);
+          setSelectedDocument(null);
+        }
       }}
       className="version-list__container !h-full !min-h-[95%] !min-w-[95%] xs:!h-[95%]"
     >

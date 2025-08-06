@@ -24,9 +24,9 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const getDocument = useRecoilValue(selectedDocumentAtom);
   const editorData = useRecoilValue(editorDataAtom);
   const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
-  const [getEditorData, setEditorData] = useRecoilState(editorDataAtom);
+  const setEditorData = useSetRecoilState(editorDataAtom);
   const setEditorModal = useSetRecoilState(editorModalAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
+  const [getVersionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
@@ -65,14 +65,14 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
           toast.success("درخواست تایید نسخه برای مدیر ارسال شد.");
         }
         handleClose();
-        if (getEditorData) {
+        if (!getVersionModalList && currentPath.includes("/admin/edit")) {
+          window.close();
+        }
+        if (!getVersionModalList) {
           setEditorData(null);
           setSelectedVersion(null);
           setEditorModal(false);
           setVersionModalList(true);
-        }
-        if (currentPath.includes("/admin/edit")) {
-          window.close();
         }
       },
     });
@@ -90,7 +90,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
         {(getSelectedVersion || editorData)?.versionNumber}
       </span>
       " اطمینان دارید؟
-      {getEditorData ? (
+      {!getVersionModalList ? (
         <Typography className="warning_text mt-6">
           لطفاً قبل از تایید، تغییرات خود را ذخیره کنید. پس از تایید، صفحه ویرایشگر بسته خواهد شد.
         </Typography>
