@@ -50,7 +50,7 @@ const DomainLayout = ({ children, params }: IProps) => {
             {children}
           </LayoutTransitionProvider>
         </MainProvider>
-        <p className="absolute -z-50 hidden">3.19.14.34-v3</p>
+        <p className="absolute -z-50 hidden">3.20.0.2-v3</p>
       </>
     </ThemeLoaderProvider>
   );
