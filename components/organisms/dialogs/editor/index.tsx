@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
 import {
   editorDataAtom,
@@ -50,6 +50,23 @@ const Editor = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
+
+  const isEncryptedContent = useMemo(() => {
+    const content = getVersionData?.content;
+    if (!content) return false;
+    try {
+      const parsed = JSON.parse(content as unknown as string);
+      return Boolean(
+        parsed &&
+          typeof parsed === "object" &&
+          "key" in (parsed as Record<string, unknown>) &&
+          "iv" in (parsed as Record<string, unknown>) &&
+          "content" in (parsed as Record<string, unknown>),
+      );
+    } catch {
+      return false;
+    }
+  }, [getVersionData?.content]);
 
   const editorRefs = {
     clasor: useRef<IRemoteEditorRef>(null),
@@ -162,6 +179,12 @@ const Editor = ({ setOpen }: IProps) => {
     }
   }, [error, lastVersionError]);
 
+  useEffect(() => {
+    if (getVersionData && !isEncryptedContent) {
+      setShowKey(false);
+    }
+  }, [getVersionData, isEncryptedContent]);
+
   const handleDecryption = useCallback((content: string) => {
     setDecryptedContent(content);
     setShowKey(false);
@@ -171,7 +194,13 @@ const Editor = ({ setOpen }: IProps) => {
     toast.warn("آخرین نسخه یافت نشد.");
   }
 
-  if (showKey && !decryptedContent && getVersionData && getVersionData.content?.length) {
+  if (
+    showKey &&
+    !decryptedContent &&
+    getVersionData &&
+    getVersionData.content?.length &&
+    isEncryptedContent
+  ) {
     return (
       <EditorKey
         isPending={isLoading}

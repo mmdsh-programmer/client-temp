@@ -67,10 +67,15 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
           : undefined,
       onSuccessHandler: () => {
         toast.success(" نسخه با موفقیت ایجاد شد.");
-        handleClose();
+        setTimeout(() => {
+          if (typeof window !== "undefined") {
+            window.location.reload();
+          }
+        }, 200);
       },
     });
   };
+
   return (
     <CreateDialog
       isPending={createVersion.isPending}

@@ -22,6 +22,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
+import forge from "node-forge";
 
 interface IProps {
   isTemplate: boolean;
@@ -113,10 +114,39 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
             return;
           }
           if (getDocumentType !== EDocumentTypes.file) {
+            const defaultContent = "<article class='clasor-editor-content'></article>";
+            const encryptWithPublicKey = (content: string, publicKeyPem?: string) => {
+              if (!publicKeyPem) return content;
+              try {
+                const aesKey = forge.random.getBytesSync(32);
+                const cipher = forge.cipher.createCipher("AES-CBC", aesKey);
+                const iv = forge.random.getBytesSync(16);
+                cipher.start({ iv });
+                cipher.update(forge.util.createBuffer(content, "utf8"));
+                cipher.finish();
+                const encryptedContent = cipher.output.getBytes();
+
+                const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+                const encryptedKey = publicKey.encrypt(aesKey, "RSA-OAEP", {
+                  md: forge.md.sha256.create(),
+                });
+
+                return JSON.stringify({
+                  iv: forge.util.encode64(iv),
+                  key: forge.util.encode64(encryptedKey),
+                  content: forge.util.encode64(encryptedContent),
+                });
+              } catch (e) {
+                console.error("Encrypt default content error:", e);
+                return content;
+              }
+            };
+
+            const initialContent = encryptWithPublicKey(defaultContent, getDocumentKey?.key);
             createVersionHook.mutate({
               repoId,
               documentId: result.id,
-              content: "",
+              content: initialContent,
               outline: "",
               versionNumber: dataForm.versionNumber,
               onSuccessHandler: () => {

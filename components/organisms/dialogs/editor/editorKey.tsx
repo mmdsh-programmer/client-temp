@@ -40,7 +40,27 @@ const EditorKey = ({
 
     try {
       const privateKey = forge.pki.privateKeyFromPem(key);
-      const encrypted = JSON.parse(encryptedContent);
+
+      // Ensure content is in expected JSON shape; otherwise return raw content
+      let encrypted: { key: string; iv: string; content: string } | null = null;
+      try {
+        const parsed = JSON.parse(encryptedContent);
+        if (
+          parsed &&
+          typeof parsed === "object" &&
+          "key" in parsed &&
+          "iv" in parsed &&
+          "content" in parsed
+        ) {
+          encrypted = parsed as { key: string; iv: string; content: string };
+        }
+      } catch {
+        // not JSON → treat as plain content
+      }
+
+      if (!encrypted) {
+        return encryptedContent;
+      }
 
       // Decrypt the AES key using RSA private key
       const aesKey = privateKey.decrypt(forge.util.decode64(encrypted.key), "RSA-OAEP", {

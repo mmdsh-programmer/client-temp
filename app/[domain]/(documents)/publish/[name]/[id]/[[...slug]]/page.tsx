@@ -149,7 +149,11 @@ export default async function PublishContentPage({ params }: { params: PageParam
       versionData.content = finalString;
     }
 
-    return <PublishVersionContent document={documentInfo} version={versionData} />;
+    return (
+      <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
+        <PublishVersionContent document={documentInfo} version={versionData} />
+      </div>
+    );
   } catch (error) {
     const { errorList, errorCode } = error as unknown as {
       errorList: string[];

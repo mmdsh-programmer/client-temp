@@ -33,6 +33,8 @@
     @apply !font-iranYekan;
   }
 
+  .default-font-family .clasor-preview-content { font-family: inherit !important; }
+
   .prevent-toast-click {
     pointer-events: all !important;
   }

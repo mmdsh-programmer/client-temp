@@ -2,6 +2,11 @@
   @apply !p-0;
 }
 
+/* When default font family is enabled via domain settings, force content to inherit font */
+.default-font-family .clasor-preview-content {
+  font-family: inherit !important;
+}
+
 .clasor-preview-content .clasor-preview-content__render-server-content {
   @apply !rounded-none px-5 xs:px-8;
 }
@@ -94,10 +99,11 @@ li p[text-align="center"] {
 
 /* ------------------------ clasor-editor-content article -------------------------- */
 
-.clasor-preview-content__render-server-content .clasor-editor-content *:not(dir):not(.clasor-code-snippet *):not(figure.table):not(figure.table *){
+.clasor-preview-content__render-server-content .clasor-editor-content *:not(dir):not(.clasor-code-snippet *):not(.curl *):not(figure.table):not(figure.table *):not(.clasor-swagger *) {
   direction: ltr;
 }
-.clasor-preview-content__render-server-content .clasor-editor-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(figure.table):not(figure.table *) {
+
+.clasor-preview-content__render-server-content .clasor-editor-content *:not([style*="text-align"]):not(.clasor-code-snippet *):not(.curl *):not(figure.table):not(figure.table *):not(.clasor-swagger *) {
   text-align: left;
 }
 
@@ -105,15 +111,16 @@ li p[text-align="center"] {
 
 /* code-snippet is the same in the old & new content */
 .clasor-preview-content__render-server-content .clasor-code-snippet,
-.clasor-preview-content__render-server-content .clasor-code-snippet * {
+.clasor-preview-content__render-server-content .curl,
+.clasor-preview-content__render-server-content .clasor-code-snippet *,
+.clasor-preview-content__render-server-content .curl * {
   direction: ltr !important;
-  text-align: left !important;
 }
 
-.clasor-preview-content__render-server-content .clasor-code-snippet .clasor-code-content {
+.clasor-preview-content__render-server-content .clasor-code-snippet .clasor-code-content,
+.clasor-preview-content__render-server-content .curl .clasor-code-content {
   text-align: left !important;
 }
-
 /*--------------------------  table   --------------------------------*/
 
 .clasor-preview-content__render-server-content figure.table:not([dir]) {
