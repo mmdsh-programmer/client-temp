@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { FilterIcon, SearchIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
 import SearchContent from "@components/molecules/searchContent";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { searchContentLinkAtom } from "@atom/category";
 
 interface IProps {
   open: boolean;
@@ -13,20 +14,31 @@ interface IProps {
 
 const SearchFilter = ({ open, setOpen }: IProps) => {
   const currentPath = usePathname();
-  const [getFilterChildren, setFilterChildren] =
-    useRecoilState(filterChildrenAtom);
+  const router = useRouter();
+
+  const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
   const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
   const [openSearchModal, setOpenSearchModal] = useState(false);
+  const getContentSearchLink = useRecoilValue(searchContentLinkAtom);
+
+  const renderContent = () => {
+    if (getContentSearchLink) {
+      router.push(getContentSearchLink);
+      return null;
+    }
+    if (openSearchModal) {
+      return <SearchContent setOpen={setOpenSearchModal} />;
+    }
+  };
 
   return (
     <div className="flex gap-x-2">
-      {currentPath === "/admin/sharedDocuments" ||
-      currentPath === "/admin/myDocuments" ? null : (
+      {currentPath === "/admin/sharedDocuments" || currentPath === "/admin/myDocuments" ? null : (
         <Button
           onClick={() => {
             setOpenSearchModal(true);
           }}
-          className="searchContent bg-white shadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+          className="searchContent flex items-center justify-center rounded-lg border-2 border-gray-100 bg-white p-1 shadow-none"
         >
           <SearchIcon className="h-5 w-5 stroke-gray-500" />
         </Button>
@@ -42,11 +54,11 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
           }
         }}
         placeholder=""
-        className="advancedFilter bg-whiteShadow-none border-2 border-gray-100 rounded-lg flex justify-center items-center p-1"
+        className="advancedFilter bg-whiteShadow-none flex items-center justify-center rounded-lg border-2 border-gray-100 p-1"
       >
         <FilterIcon className="h-5 w-5 stroke-gray-500" />
       </Button>
-      {openSearchModal && <SearchContent setOpen={setOpenSearchModal} />}
+      {renderContent()}
     </div>
   );
 };

@@ -1705,21 +1705,21 @@ export const getPublishDocumentInfo = async (
 };
 
 export const searchPublishContent = async (
-  repoId: number,
+  domainUrl: string,
+  repoId: number | undefined,
   searchText: string,
   offset: number,
   size: number,
 ) => {
-  console.log(">>>>>>>>>>>>>>>>>>>>> search publish content >>>>>>>>>>>>>>>>>>>>>");
-  console.log(encodeURIComponent(searchText));
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<IContentSearchListItem>>
-    >(`publicContent/repository/${repoId}/search/${encodeURIComponent(searchText)}`, {
+    >(`publicContent/search/${encodeURIComponent(searchText)}`, {
       headers: {
-        Authorization: `Bearer ${process.env.API_TOKEN}`,
+        domainUrl,
       },
       params: {
+        repoId,
         offset,
         size,
       },
@@ -3638,7 +3638,7 @@ export const getFollowingRepos = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          domainUrl
+          domainUrl,
         },
         params: {
           offset,
@@ -3678,7 +3678,6 @@ export const getFollowingRepoFeeds = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
 
 /// /////////////////////////////// BRANCH SERVICES //////////////////////
 
@@ -4337,8 +4336,6 @@ export const deletePrivateFeed = async (accessToken: string, repoId: number, fee
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
-
 
 /// /////////////////////////////// DOMAIN SUBSCRIPTION //////////////////////
 

@@ -53,15 +53,15 @@ export const categoryMoveDestAtom = atom<ICategoryMetadata | null>({
   effects: [logEffect("categoryMoveDestAtom")],
 });
 
-export const categorySearchContentAtom = atom<boolean>({
-  key: "categorySearchContentAtom",
-  default: false,
-  effects: [logEffect("categorySearchContentAtom")],
+export const searchContentLinkAtom = atom<string | null>({
+  key: "searchContentLinkAtom",
+  default: null,
+  effects: [logEffect("searchContentLinkAtom")],
 });
 
-export const categorySearchContentParamAtom = atom<string>({
+export const categorySearchContentParamAtom = atom<string | null>({
   key: "categorySearchContentParamAtom",
-  default: "",
+  default: null,
   effects: [logEffect("categorySearchContentParamAtom")],
 });
 

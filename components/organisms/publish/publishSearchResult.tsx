@@ -19,7 +19,7 @@ export interface ISearchResultItem {
 
 interface IProps {
   searchText: string;
-  id: number;
+  id?: number;
 }
 
 const PublishSearchResult = ({ searchText, id }: IProps) => {
@@ -33,7 +33,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
     isError,
     error,
     refetch,
-  } = useSearchPublishContent(id, searchText, 10);
+  } = useSearchPublishContent(id, searchText, 20);
 
   const onResultItemClick = (value: boolean) => {
     setDisableItems(value);

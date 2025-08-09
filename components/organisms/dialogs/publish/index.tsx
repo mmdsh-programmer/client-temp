@@ -67,7 +67,7 @@ const PublishSearchContent = () => {
             ) : null}
           </form>
 
-          {showResult && params?.id ? (
+          {showResult ? (
             <PublishSearchResult searchText={searchText} id={+decodeId} />
           ) : null}
         </div>

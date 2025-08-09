@@ -1,7 +1,6 @@
-import { ListItem } from "@material-tailwind/react";
-
-import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import React from "react";
+import { ListItem } from "@material-tailwind/react";
+import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import { openPublishPageSearchContent } from "@atom/publish";
 import { toPersianDigit } from "@utils/index";
 import useCreateDocumentLink from "@hooks/document/useCreateDocumentLink";
@@ -34,9 +33,8 @@ const PublishSearchResultItem = ({
       repoId: resultItem.repoId,
       documentId: resultItem.documentId,
       callBack: (data) => {
-        const redirectLink = `${window.location.origin}/publish/${data.repoId}/${toPersianDigit(
-          `${data.repoName.replaceAll(/\s+/g, "-")}`
-        )}/${data.id}/${toPersianDigit(
+        const redirectLink = `${window.location.origin}/publish/${toPersianDigit(`${data.repoName.replaceAll(/\s+/g, "-")}`)}/${data.repoId}
+        /${data.id}/${toPersianDigit(
           `${data.name.replaceAll(/\s+/g, "-")}`
         )}/v-${resultItem.versionId}`;
 

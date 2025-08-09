@@ -3,8 +3,8 @@ import { DocIcon } from "@components/atoms/icons";
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import useGetDocument from "@hooks/document/useGetDocument";
 import { useSetRecoilState } from "recoil";
-import { categorySearchContentAtom } from "@atom/category";
-import { useRouter } from "next/navigation";
+import { searchContentLinkAtom } from "@atom/category";
+import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   data: IContentSearchListItem;
@@ -12,39 +12,42 @@ interface IProps {
 }
 
 export const ResultItem = ({ data, onClick }: IProps) => {
-  const router = useRouter();
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  const setOpen = useSetRecoilState(categorySearchContentAtom);
+  const setLink = useSetRecoilState(searchContentLinkAtom);
   const {
     data: documentInfo,
-    isSuccess,
     isError,
+    isLoading,
+    isSuccess,
   } = useGetDocument(data.repoId, data.documentId, isEnabled);
 
   const handleDocumentSelect = () => {
     setEnabled(true);
+    const redirectLink = `${window.location.origin}${window.location.pathname}?repoId=${data.repoId}${documentInfo?.categoryId ? `&categoryId=${documentInfo?.categoryId}` : ""}&documentId=${data.documentId}`;
+    setEnabled(false);
     onClick?.();
+    setLink(redirectLink);
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      setOpen(false);
-      const redirectLink = `${window.location.origin}${window.location.pathname}?repoId=${data.repoId}&categoryId=${documentInfo?.categoryId}&documentId=${data.documentId}`;
-      router.push(redirectLink);
+    if (isError) {
+      setLink(null);
       setEnabled(false);
     }
-    if (isError) {
-      setOpen(false);
-    }
-  });
+  }, [isError]);
 
   return (
     <div
       title={`${data.repoName} > ${data.documentName}`}
-      className="flex bg-gray-50 border-[1px] border-normal p-3 rounded-lg text-right cursor-pointer"
+      className="flex cursor-pointer rounded-lg border-[1px] border-normal bg-gray-50 p-3 text-right"
       onClick={handleDocumentSelect}
     >
-      <DocIcon className="flex-none w-6 h-6 fill-info ml-2" />
+      {isLoading ? (
+        <div className="flex w-fit flex-shrink-0 items-center justify-center">
+          <Spinner className="h-4 w-4 text-primary" />
+        </div>
+      ) : null}
+      <DocIcon className="fill-info ml-2 h-6 w-6 flex-none" />
       <span className="overflow-hidden text-ellipsis whitespace-nowrap">
         {data.repoName}
         {" > "}

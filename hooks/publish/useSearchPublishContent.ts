@@ -6,12 +6,12 @@ import { searchPublishContentAction } from "@actions/publish";
 import { IListResponse } from "@interface/repo.interface";
 
 const useSearchPublishContent = (
-  repoId: number,
+  repoId: number | undefined,
   searchText: string,
   size: number
 ) => {
   return useInfiniteQuery({
-    queryKey: [`repoId-${repoId}-searchContent-${searchText}`],
+    queryKey: [`${repoId ? `repoId-${repoId}-` : ""}searchContent-${searchText}`],
     queryFn: async ({ signal, pageParam }) => {
       const response = await searchPublishContentAction(
         repoId,
@@ -26,7 +26,7 @@ const useSearchPublishContent = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId && !!searchText,
+    enabled: !!searchText,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

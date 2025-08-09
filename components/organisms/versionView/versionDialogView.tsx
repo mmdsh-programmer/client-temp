@@ -7,11 +7,13 @@ import VersionList from "../version/versionList";
 import { versionModalListAtom } from "@atom/version";
 import VersionMenu from "@components/molecules/versionMenu";
 import { usePathname } from "next/navigation";
+import { searchContentLinkAtom } from "@atom/category";
 
 const VersionDialogView = () => {
   const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
   const setVersionModalList = useSetRecoilState(versionModalListAtom);
   const setDocumentShow = useSetRecoilState(documentShowAtom);
+  const setLink = useSetRecoilState(searchContentLinkAtom);
 
   const currentPath = usePathname();
 
@@ -20,6 +22,7 @@ const VersionDialogView = () => {
       dialogHeader={getSelectedDocument?.name}
       setOpen={() => {
         setVersionModalList(false);
+        setLink(null);
         if (!currentPath.includes("/admin/edit")) {
           setDocumentShow(null);
           setSelectedDocument(null);

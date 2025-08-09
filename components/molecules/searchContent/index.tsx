@@ -15,11 +15,9 @@ interface IProps {
 
 const SearchContent = ({ setOpen }: IProps) => {
   const getRepo = useRecoilValue(repoAtom);
+  const [getSearchParam, setSearchParam] = useRecoilState(categorySearchContentParamAtom);
 
-  const [search, setSearch] = useState<string>("");
-  const [getSearchParam, setSearchParam] = useRecoilState(
-    categorySearchContentParamAtom
-  );
+  const [search, setSearch] = useState<string>(getSearchParam || "");
   const debouncedValue = useDebounce<string>(search, 1000);
 
   useEffect(() => {
@@ -32,20 +30,18 @@ const SearchContent = ({ setOpen }: IProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setSearchParam(null);
   };
 
   return (
     <InfoDialog dialogHeader="جست و جو در محتوا" setOpen={handleClose}>
-      <DialogBody
-        placeholder="dialog body"
-        className="flex-grow px-5 py-3 xs:p-6"
-      >
-        <div className="flex flex-grow gap-2 w-full max-w-full ml-2 items-center h-10 px-3 border-[1px] border-normal bg-gray-50 rounded-lg ">
-          <SearchIcon className="w-5 h-5 stroke-icon-hover" />
+      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6">
+        <div className="ml-2 flex h-10 w-full max-w-full flex-grow items-center gap-2 rounded-lg border-[1px] border-normal bg-gray-50 px-3">
+          <SearchIcon className="h-5 w-5 stroke-icon-hover" />
           <InputAtom
             type="text"
-            className=" outline-none overflow-hidden !border-none !focus:border-none !w-auto"
-            placeholder="جست و جو در محتوا "
+            className="!focus:border-none !w-auto overflow-hidden !border-none outline-none"
+            placeholder={getSearchParam || "جست و جو در محتوا "}
             autoComplete="off"
             onKeyDown={(event) => {
               if (!search && event.code === "Space") {
@@ -55,7 +51,7 @@ const SearchContent = ({ setOpen }: IProps) => {
             onChange={(e) => {
               setSearch(e.target.value);
             }}
-            defaultValue={getSearchParam}
+            defaultValue={getSearchParam || ""}
           />
         </div>
         {getRepo ? <SearchContentResult repoId={getRepo.id} /> : null}

@@ -139,13 +139,18 @@ export const getPublishDocumentVersionsAction = async (
 };
 
 export const searchPublishContentAction = async (
-  repoId: number,
+  repoId: number | undefined,
   searchText: string,
   offset: number,
   size: number
 ) => {
+  const domain = headers().get("host");
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
   try {
     const response = await searchPublishContent(
+      domain,
       repoId,
       searchText,
       offset,
