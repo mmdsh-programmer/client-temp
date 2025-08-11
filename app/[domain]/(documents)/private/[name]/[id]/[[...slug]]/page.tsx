@@ -162,11 +162,7 @@ export default async function PublishContentPage({ params }: { params: PageParam
       const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
       const originalVersionNumber = removeSpecialCharacters(toPersianDigit(version.versionNumber));
 
-      if(
-        hasVersion && 
-        version && 
-        originalVersionNumber !== versionNumber
-      ){
+      if (hasVersion && version && originalVersionNumber !== versionNumber) {
         return notFound();
       }
 
@@ -189,7 +185,11 @@ export default async function PublishContentPage({ params }: { params: PageParam
         version.content = finalString;
       }
 
-      return <PublishVersionContent document={documentInfo} version={version} />;
+      return (
+        <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
+          <PublishVersionContent document={documentInfo} version={version} />
+        </div>
+      );
     } catch (error) {
       if (error instanceof BasicError && error.errorCode === 400) {
         return (

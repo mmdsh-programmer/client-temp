@@ -69,6 +69,7 @@ const VersionRequestMenu = ({ showDrawer, request }: IProps) => {
           <MoreDotIcon className="w-4 h-4" />
         </div>
       }
+      className="repo-version-request-menu"
     />
   );
 };

@@ -1,6 +1,6 @@
 import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import {
-    getCustomPostByDomain,
+  getCustomPostByDomain,
   getDocumentPublishLink,
   getPublishedDocumentLastVersion,
   getPublishedDocumentVersion,
@@ -157,7 +157,11 @@ export default async function PrivateSharePage({ params }: { params: PageParams 
         version.content = finalString;
       }
 
-      return <PublishVersionContent document={documentInfo} version={version} />;
+      return (
+        <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
+          <PublishVersionContent document={documentInfo} version={version} />
+        </div>
+      );
     } catch (error) {
       if (error instanceof BasicError && error.errorCode === 400) {
         return (
