@@ -35,7 +35,7 @@ const RootLayout = ({ children }: IProps) => {
       <head>
         <Script
           src="https://podlytics.sandpod.ir/tracker.js"
-          data-website-id="f537283b-e9ca-4a20-b089-4ccf15e42b10"
+          data-website-id={process.env.PODLYTICS_ID}
           strategy="afterInteractive"
           defer
         />
