@@ -23,6 +23,7 @@ import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { ServerError } from "@utils/error";
 import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
+import { unstable_cache as unstableCache } from "next/cache";
 
 export const generateStaticParams = async () => {
   return [];
@@ -149,9 +150,33 @@ export default async function PublishContentPage({ params }: { params: PageParam
       versionData.content = finalString;
     }
 
+    const cacheTags = [
+      `vr-${versionData.id}`,
+      `dc-${documentId}`,
+      `rp-ph-${repository.id}`,
+      `i-${domain}`,
+    ];
+
+    const getRevalidateTimestamp = unstableCache(
+      async () => {
+        return Date.now();
+      },
+      [
+        "publish:revalidate-timestamp",
+        `vr-${versionData.id}`,
+        `dc-${documentId}`,
+        `rp-ph-${repository.id}`,
+        `i-${domain}`,
+      ],
+      { tags: cacheTags, revalidate: 24 * 3600 }
+    );
+
+    const revalidateTimestamp = await getRevalidateTimestamp();
+
     return (
       <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
         <PublishVersionContent document={documentInfo} version={versionData} />
+        <input type="hidden" data-testid="revalidate-timestamp" value={String(revalidateTimestamp)} />
       </div>
     );
   } catch (error) {
