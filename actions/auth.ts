@@ -12,7 +12,6 @@ import {
   refreshPodAccessToken,
   revokePodToken,
 } from "@service/account";
-
 import { IActionError } from "@interface/app.interface";
 import { getRedisClient } from "@utils/redis";
 import jwt from "jsonwebtoken";
@@ -27,7 +26,7 @@ const refreshCookieHeader = async (
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
   const { access_token, refresh_token, expires_in } = response;
   // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -47,7 +46,7 @@ const refreshCookieHeader = async (
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
  
-  cookies().set("token", token, {
+  (await cookies()).set("token", token, {
     httpOnly: true,
     secure: process.env.SECURE === "TRUE",
     path: "/",
@@ -66,7 +65,7 @@ const refreshCookieHeader = async (
 };
 
 export const getMe = async () => {
-  const encodedToken = cookies().get("token")?.value;
+  const encodedToken = (await cookies()).get("token")?.value;
   if (!encodedToken) {
     return redirect("/");
   }
@@ -77,7 +76,7 @@ export const getMe = async () => {
   ) as string;
 
   // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -130,7 +129,7 @@ export const getMe = async () => {
 
 export const userInfoAction = async () => {
   try {
-    const encodedToken = cookies().get("token")?.value;
+    const encodedToken = (await cookies()).get("token")?.value;
     if (!encodedToken) {
       return null;
     }
@@ -142,7 +141,7 @@ export const userInfoAction = async () => {
 
 export const login = async () => {
   // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -156,7 +155,7 @@ export const login = async () => {
 };
 
 export const getUserToken = async (code: string, redirectUrl: string) => {
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -185,7 +184,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
-  cookies().set("token", token, {
+  (await cookies()).set("token", token, {
     httpOnly: true,
     secure: process.env.SECURE === "TRUE",
     path: "/",
@@ -197,7 +196,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
 };
 
 export const logoutAction = async () => {
-  const encodedToken = cookies().get("token")?.value;
+  const encodedToken = (await cookies()).get("token")?.value;
   if (!encodedToken) {
     return;
   }
@@ -208,7 +207,7 @@ export const logoutAction = async () => {
     ) as string;
 
     // get domain and find proper custom post base on domain
-    const domain = headers().get("host");
+    const domain = (await headers()).get("host");
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -231,7 +230,7 @@ export const logoutAction = async () => {
       "refresh_token"
     );
 
-    cookies().delete("token");
+    (await cookies()).delete("token");
     
     const redisClient = await getRedisClient();
     if(redisClient && redisClient.isReady){
@@ -242,7 +241,7 @@ export const logoutAction = async () => {
       }, null, 0));
     }
   } catch (error) {
-    cookies().delete("token");
+    (await cookies()).delete("token");
     return normalizeError(error as IActionError);
   }
 };

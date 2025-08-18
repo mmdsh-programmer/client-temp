@@ -14,7 +14,7 @@ import { headers } from "next/headers";
 export const getPrivateFeedsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
 
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }

@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,45 +21,20 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@styles/*": [
-        "./styles/*"
-      ],
-      "@assets/*": [
-        "./assets/*"
-      ],
-      "@themes/*": [
-        "./themes/*"
-      ],
-      "@utils/*": [
-        "./utils/*"
-      ],
-      "@atom/*": [
-        "./atom/*"
-      ],
-      "@hooks/*": [
-        "./hooks/*"
-      ],
-      "@components/*": [
-        "./components/*"
-      ],
-      "@interface/*": [
-        "./interface/*"
-      ],
-      "@service/*": [
-        "./service/*"
-      ],
-      "@actions/*": [
-        "./actions/*"
-      ],
-      "@app/*": [
-        "./app/*"
-      ],
-      "@mock/*": [
-        "./mock/*"
-      ],
-      "@dataJson/*": [
-        "./dataJson/*"
-      ]
+      "@styles/*": ["./styles/*"],
+      "@assets/*": ["./assets/*"],
+      "@themes/*": ["./themes/*"],
+      "@utils/*": ["./utils/*"],
+      "@atom/*": ["./atom/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@components/*": ["./components/*"],
+      "@interface/*": ["./interface/*"],
+      "@service/*": ["./service/*"],
+      "@actions/*": ["./actions/*"],
+      "@app/*": ["./app/*"],
+      "@mock/*": ["./mock/*"],
+      "@dataJson/*": ["./dataJson/*"],
+      "@store/*": ["./store/*"]
     },
     "forceConsistentCasingInFileNames": true
   },
@@ -71,9 +42,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "components/molecules/repoMenu/repoMenuList.tsط"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ".next/types/**/*.ts",
+    "components/molecules/repoMenu/repoMenuList.tsط"
+  ],
+  "exclude": ["node_modules"]
 }

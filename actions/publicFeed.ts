@@ -14,7 +14,7 @@ import { headers } from "next/headers";
 
 export const getPublicFeedsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -39,7 +39,7 @@ export const createPublicFeedAction = async (
   image?: string
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -67,7 +67,7 @@ export const updatePublicFeedAction = async (
   image?: string
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -91,7 +91,7 @@ export const updatePublicFeedAction = async (
 
 export const deletePublicFeedAction = async (feedId: number) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }

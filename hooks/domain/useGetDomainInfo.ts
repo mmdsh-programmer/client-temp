@@ -11,7 +11,9 @@ const useGetDomainInfo = () => {
       handleClientSideHookError(response as IActionError);
       return response as IDomainMetadata;
     },
+    retry: false,
     refetchOnWindowFocus: false,
+    staleTime: Number.POSITIVE_INFINITY,
   });
 };
 

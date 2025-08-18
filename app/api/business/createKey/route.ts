@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST() {
     try {
-        const headersList = headers();
+        const headersList = await headers();
         const Authorization = headersList.get("Authorization");
         if(!Authorization || Authorization.replace("Bearer ", "") !== process.env.API_TOKEN){
             return NextResponse.json({ error: "Client is not authorized" }, { status: 401 });

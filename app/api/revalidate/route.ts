@@ -46,7 +46,7 @@ function buildTags(input: BuildTagsInput): string[] {
 }
 
 async function authorize() {
-  const headersList = headers();
+  const headersList = await headers();
   const authorization = headersList.get("Authorization");
   if (!authorization || authorization.replace("Bearer ", "") !== process.env.API_TOKEN) {
     return NextResponse.json({ message: "Client is not authorized" }, { status: 401 });

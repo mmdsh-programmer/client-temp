@@ -1,10 +1,6 @@
 "use server";
 
-import {
-  confirmComment,
-  createComment,
-  getPublishCommentList,
-} from "@service/social";
+import { confirmComment, createComment, getPublishCommentList } from "@service/social";
 import {
   createRepoPublishLink,
   deletePublishLink,
@@ -16,16 +12,16 @@ import {
 import { getMe, userInfoAction } from "./auth";
 
 import { IActionError } from "@interface/app.interface";
-import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
+import { headers } from "next/headers";
 
 const { API_TOKEN } = process.env;
 
 export const createRepoPublishLinkAction = async (
   repoId: number,
   expireTime?: number,
-  password?: string
+  password?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -33,7 +29,7 @@ export const createRepoPublishLinkAction = async (
       userInfo.access_token,
       repoId,
       expireTime,
-      password
+      password,
     );
 
     return response;
@@ -45,10 +41,7 @@ export const createRepoPublishLinkAction = async (
 export const deletePublishLinkAction = async (repoId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await deletePublishLink(
-      userInfo.access_token,
-      repoId
-    );
+    const response = await deletePublishLink(userInfo.access_token, repoId);
 
     // revalidate all links related to repository publish cache if exists
     revalidateTag(`rp-ph-${repoId}`);
@@ -63,19 +56,12 @@ export const getPublishChildrenAction = async (
   repoId: number,
   offset: number,
   size: number,
-  categoryId?: number
+  categoryId?: number,
 ) => {
   const userInfo = await userInfoAction();
   try {
-    const ssoId =
-      userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-    const response = await getPublishChildren(
-      repoId,
-      offset,
-      size,
-      categoryId,
-      ssoId
-    );
+    const ssoId = userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const response = await getPublishChildren(repoId, offset, size, categoryId, ssoId);
 
     return response;
   } catch (error) {
@@ -88,20 +74,12 @@ export const getAllPublishChildrenAction = async (
   offset: number,
   size: number,
   categoryId?: number,
-  title?: string
+  title?: string,
 ) => {
   const userInfo = await userInfoAction();
   try {
-    const ssoId =
-      userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-    const response = await getAllPublishChildren(
-      repoId,
-      offset,
-      size,
-      title,
-      categoryId,
-      ssoId
-    );
+    const ssoId = userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const response = await getAllPublishChildren(repoId, offset, size, title, categoryId, ssoId);
 
     return response;
   } catch (error) {
@@ -113,24 +91,18 @@ export const getPublishDocumentVersionsAction = async (
   repoId: number,
   documentId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await userInfoAction();
   try {
-    const ssoId =
-      userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-    const domain = headers().get("host");
+    const ssoId = userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const domain = (await headers()).get("host");
+
     if (!domain) {
       throw new Error("Domain is not found");
     }
 
-    const response = await getPublishDocumentVersions(
-      repoId,
-      documentId,
-      offset,
-      size,
-      ssoId
-    );
+    const response = await getPublishDocumentVersions(repoId, documentId, offset, size, ssoId);
 
     return response;
   } catch (error) {
@@ -142,20 +114,15 @@ export const searchPublishContentAction = async (
   repoId: number | undefined,
   searchText: string,
   offset: number,
-  size: number
+  size: number,
 ) => {
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
+
   if (!domain) {
     throw new Error("Domain is not found");
   }
   try {
-    const response = await searchPublishContent(
-      domain,
-      repoId,
-      searchText,
-      offset,
-      size
-    );
+    const response = await searchPublishContent(domain, repoId, searchText, offset, size);
 
     return response;
   } catch (error) {
@@ -163,24 +130,13 @@ export const searchPublishContentAction = async (
   }
 };
 
-export const getPublishCommentListAction = async (
-  postId: number,
-  offset: number,
-  size: number
-) => {
+export const getPublishCommentListAction = async (postId: number, offset: number, size: number) => {
   const userInfo = await userInfoAction();
   try {
     const accessToken =
-      userInfo && !("error" in userInfo)
-        ? userInfo.access_token
-        : (API_TOKEN as string);
+      userInfo && !("error" in userInfo) ? userInfo.access_token : (API_TOKEN as string);
 
-    const response = await getPublishCommentList(
-      accessToken,
-      postId,
-      offset,
-      size
-    );
+    const response = await getPublishCommentList(accessToken, postId, offset, size);
 
     return response;
   } catch (error) {
@@ -191,7 +147,7 @@ export const getPublishCommentListAction = async (
 export const createPublishCommentAction = async (
   postId: number,
   text: string,
-  shouldConfirm = true
+  shouldConfirm = true,
 ) => {
   const userInfo = await getMe();
   try {
@@ -205,5 +161,3 @@ export const createPublishCommentAction = async (
     return normalizeError(error as IActionError);
   }
 };
-
-

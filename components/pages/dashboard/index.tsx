@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { repoAtom, repoGroupingAtom } from "@atom/repository";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
+import { useResetRecoilState } from "recoil";
 import DashboardDocuments from "@components/organisms/dashboradDocuments";
 import DashboardRepositories from "@components/organisms/dashboardRepositories";
 import { ERepoGrouping } from "@interface/enums";
@@ -13,16 +9,17 @@ import RepoList from "@components/organisms/repoList";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { Spinner } from "@components/atoms/spinner";
 import { bulkItemsAtom } from "@atom/bulk";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 
 const DashboardPage = () => {
-  const resetRepo = useResetRecoilState(repoAtom);
-  const resetCategory = useResetRecoilState(categoryAtom);
-  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
-  const resetDocument = useResetRecoilState(selectedDocumentAtom);
-  const resetDocumentShow = useResetRecoilState(documentShowAtom);
-  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+  const { setRepo, repoGrouping } = useRepositoryStore();
+  const { setCategory, setCategoryShow } = useCategoryStore();
+  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { setVersionModalList } = useVersionStore();
   const resetBulkItems = useResetRecoilState(bulkItemsAtom);
-  const getRepoGroup = useRecoilValue(repoGroupingAtom);
 
   const { data: getDomainInfo, isLoading } = useGetDomainInfo();
   const content = JSON.parse(getDomainInfo?.content || "{}");
@@ -30,17 +27,17 @@ const DashboardPage = () => {
   const { enablePersonalDocs } = content;
 
   useEffect(() => {
-    resetRepo();
-    resetCategory();
-    resetCategoryShow();
-    resetDocument();
-    resetDocumentShow();
-    resetShowVersionList();
+    setRepo(null);
+    setCategory(null);
+    setCategoryShow(null);
+    setSelectedDocument(null);
+    setDocumentShow(null);
+    setVersionModalList(false);
     resetBulkItems();
   }, []);
 
   const renderContent = () => {
-    if (getRepoGroup === ERepoGrouping.DASHBOARD && (enablePersonalDocs ?? true)) {
+    if (repoGrouping === ERepoGrouping.DASHBOARD && (enablePersonalDocs ?? true)) {
       return (
         <div className="flex flex-col gap-4 xl:flex-row xs:gap-6">
           <div className="xl:!max-w-1/2 w-full max-w-full xl:w-1/2">
@@ -52,7 +49,7 @@ const DashboardPage = () => {
         </div>
       );
     }
-    if (getRepoGroup === ERepoGrouping.DASHBOARD && !enablePersonalDocs) {
+    if (repoGrouping === ERepoGrouping.DASHBOARD && !enablePersonalDocs) {
       return (
         <div className="flex flex-col gap-4 xl:flex-row xs:gap-6">
           <div className="w-full max-w-full">

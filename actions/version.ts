@@ -12,13 +12,12 @@ import {
   publicVersion,
   setLastVersion,
 } from "@service/clasor";
-
 import { IActionError } from "@interface/app.interface";
 import { IFileVersion } from "@interface/version.interface";
 import { getMe } from "./auth";
-import { headers } from "next/dist/client/components/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
+import { headers } from "next/headers";
 
 export const getVersionAction = async (
   repoId: number,
@@ -27,7 +26,7 @@ export const getVersionAction = async (
   state?: "draft" | "version" | "public",
   innerDocument?: boolean,
   innerOutline?: boolean,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -39,7 +38,7 @@ export const getVersionAction = async (
       state,
       innerDocument,
       innerOutline,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -65,7 +64,7 @@ export const createVersionAction = async (
       versionNumber,
       content,
       outline,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -79,7 +78,7 @@ export const createFileVersionAction = async (
   documentId: number,
   versionNumber: string,
   fileHash?: IFileVersion,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -89,7 +88,7 @@ export const createFileVersionAction = async (
       documentId,
       versionNumber,
       fileHash,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -103,7 +102,7 @@ export const deleteVersionAction = async (
   documentId: number,
   versionId: number,
   state: string,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -113,7 +112,7 @@ export const deleteVersionAction = async (
       documentId,
       versionId,
       state,
-      isDirectAccess
+      isDirectAccess,
     );
     // revalidate page of version if exists
     revalidateTag(`vr-${versionId}`);
@@ -135,7 +134,7 @@ export const getLastVersionAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -148,7 +147,7 @@ export const setLastVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -157,7 +156,7 @@ export const setLastVersionAction = async (
       repoId,
       documentId,
       versionId,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -170,10 +169,10 @@ export const publicVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = (await headers()).get("host");
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -184,7 +183,7 @@ export const publicVersionAction = async (
       repoId,
       documentId,
       versionId,
-      isDirectAccess
+      isDirectAccess,
     );
 
     // revalidate page of version if exists
@@ -203,7 +202,7 @@ export const cancelPublicVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -212,7 +211,7 @@ export const cancelPublicVersionAction = async (
       repoId,
       documentId,
       versionId,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -225,7 +224,7 @@ export const confirmVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -234,7 +233,7 @@ export const confirmVersionAction = async (
       repoId,
       documentId,
       versionId,
-      isDirectAccess
+      isDirectAccess,
     );
     // revalidate page of version if exists
     revalidateTag(`vr-${response.id}`);
@@ -252,7 +251,7 @@ export const cancelConfirmVersionAction = async (
   repoId: number,
   documentId: number,
   versionId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -261,7 +260,7 @@ export const cancelConfirmVersionAction = async (
       repoId,
       documentId,
       versionId,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;

@@ -7,7 +7,7 @@ export const saveDocumentPasswordInCookieAction = async (
   password: string
 ) => {
   const { SECURE } = process.env;
-  cookies().set(`document-${documentId}-password`, password, {
+  (await cookies()).set(`document-${documentId}-password`, password, {
     httpOnly: true,
     secure: SECURE === "true",
     path: "/",
@@ -17,7 +17,7 @@ export const saveDocumentPasswordInCookieAction = async (
 };
 
 export const removeAllCookiesAction = async () => {
-  for (const cookie of cookies().getAll()) {
-    cookies().delete(cookie.name);
+  for (const cookie of (await cookies()).getAll()) {
+    (await cookies()).delete(cookie.name);
   }
 };

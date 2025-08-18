@@ -12,24 +12,16 @@ import { getMe } from "./auth";
 import { headers } from "next/headers";
 import { normalizeError } from "@utils/normalizeActionError";
 
-export const getUserToRepoRequestsAction = async (
-  offset: number,
-  size: number
-) => {
+export const getUserToRepoRequestsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = (await headers()).get("host");
     if (!domain) {
       throw new Error("Domain is not found");
     }
-        
+
     const { types } = await getCustomPostByDomain(domain);
-    const response = await getUserToRepoRequests(
-      userInfo.access_token,
-      offset,
-      size,
-      types
-    );
+    const response = await getUserToRepoRequests(userInfo.access_token, offset, size, types);
 
     return response;
   } catch (error) {
@@ -40,10 +32,7 @@ export const getUserToRepoRequestsAction = async (
 export const acceptUserToRepoRequestAction = async (requestId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await acceptUserToRepoRequest(
-      userInfo.access_token,
-      requestId
-    );
+    const response = await acceptUserToRepoRequest(userInfo.access_token, requestId);
 
     return response;
   } catch (error) {
@@ -54,10 +43,7 @@ export const acceptUserToRepoRequestAction = async (requestId: number) => {
 export const rejectUserToRepoRequestAction = async (requestId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await rejectUserToRepoRequest(
-      userInfo.access_token,
-      requestId
-    );
+    const response = await rejectUserToRepoRequest(userInfo.access_token, requestId);
 
     return response;
   } catch (error) {
