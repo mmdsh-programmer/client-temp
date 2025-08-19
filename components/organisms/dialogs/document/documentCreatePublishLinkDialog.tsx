@@ -2,19 +2,18 @@ import React, { useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { DatePicker } from "zaman";
-import { categoryAtom } from "@atom/category";
 import { onDatePickerChangePayload } from "zaman/dist/types";
-import { selectedDocumentAtom } from "@atom/document";
 import useCreateDocumentPublishLink from "@hooks/document/useCreateDocumentPublishLink";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import { toPersianDigit } from "@utils/index";
-import { repoAtom } from "@atom/repository";
 import { CopyIcon } from "@components/atoms/icons";
 import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
 import Checkbox from "@components/atoms/checkbox";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -28,11 +27,16 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
   const [hasExpireTime, setHasExpireTime] = useState(false);
   const [isCreateLink, setIsCreateLink] = useState(false);
 
-  const getRepo = useRecoilValue(repoAtom);
-
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
   const repoId = useRepoId();
-  const getCategory = useRecoilValue(categoryAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getCategory = useCategoryStore((state) => {
+    return state.category;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const createPublishLink = useCreateDocumentPublishLink();
 

@@ -3,13 +3,12 @@ import { AddIcon } from "@components/atoms/icons";
 import BranchCreateDialog from "../dialogs/branch/branchCreateDialog";
 import BranchList from "./branchList";
 import { IconButton } from "@material-tailwind/react";
-import { branchIdAtom } from "@atom/branch";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useSetRecoilState } from "recoil";
+import { useBranchStore } from "@store/branch";
 
 const Branch = () => {
   const [open, setOpen] = useState(false);
-  const setBranch = useSetRecoilState(branchIdAtom);
+  const { setBranchId } = useBranchStore();
 
   const { data: userInfo } = useGetUser();
 
@@ -22,7 +21,7 @@ const Branch = () => {
             className="bg-primary-normal w-6 h-6 flex justify-center"
             onClick={() => {
               setOpen(true);
-              setBranch(null);
+              setBranchId(null);
             }}
           >
             <AddIcon className="w-4 h-4 stroke-white" />

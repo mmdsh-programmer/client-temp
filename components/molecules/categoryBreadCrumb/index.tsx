@@ -1,16 +1,25 @@
+import React, { useMemo, useRef } from "react";
 import { BackIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import React, { useMemo, useRef } from "react";
-import { categoryAtom, categoryShowAtom } from "atom/category";
-import { useRecoilState, useSetRecoilState } from "recoil";
-
 import { ICategoryMetadata } from "@interface/category.interface";
-import { bulkItemsAtom } from "atom/bulk";
+import { useCategoryStore } from "@store/category";
+import { useBulkStore } from "@store/bulk";
 
 const CategoryBreadCrumb = () => {
-  const setCategory = useSetRecoilState(categoryAtom);
-  const [getCategoryShow, setCategoryShow] = useRecoilState(categoryShowAtom);
-  const setBulkItems = useSetRecoilState(bulkItemsAtom);
+  const setCategory = useCategoryStore((state) => {
+    return state.setCategory;
+  });
+  const [getCategoryShow, setCategoryShow] = [
+    useCategoryStore((state) => {
+      return state.category;
+    }),
+    useCategoryStore((state) => {
+      return state.setCategoryShow;
+    }),
+  ];
+  const setBulkItems = useBulkStore((state) => {
+    return state.setBulkItems;
+  });
   const breadCrumbRef = useRef<ICategoryMetadata[]>([]);
 
   const breadCrumb = useMemo(() => {

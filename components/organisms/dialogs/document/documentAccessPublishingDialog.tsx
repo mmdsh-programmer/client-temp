@@ -5,14 +5,13 @@ import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHei
 import DocumentBlackList from "@components/organisms/document/documentBlackList";
 import DocumentWhiteList from "@components/organisms/document/documentWhiteList";
 import WhiteBlackAlertDialog from "./whiteBlackAlertDialog";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useAddBlackList from "@hooks/document/useAddBlackList";
 import useAddWhiteList from "@hooks/document/useAddWhiteList";
 import useGetWhiteBlackList from "@hooks/document/useGetWhiteBlackList";
-import { useRecoilValue } from "recoil";
 import Radio from "@components/atoms/radio";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 export interface IUserList {
   username: string;
@@ -25,8 +24,12 @@ interface IProps {
 }
 
 const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
   const [type, setType] = useState<string>("white-list");
   const [alert, setAlert] = useState(false);
   const [selectedUserList, setSelectedUserList] = useState<IUserList[]>([]);

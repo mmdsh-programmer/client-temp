@@ -1,18 +1,16 @@
 import Shepherd, { StepOptions } from "shepherd.js";
 
-import { activeTourAtom } from "atom/tour";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useTourStore } from "@store/tour";
 
 const VersionTour = () => {
-  const setActiveTour = useSetRecoilState(activeTourAtom);
+  const setActiveTour = useTourStore((state) => {
+    return state.setActiveTour;
+  });
 
   useEffect(() => {
+    const versonListContainer = document.querySelector(".version-list__container");
 
-    const versonListContainer = document.querySelector(
-      ".version-list__container"
-    );
-  
     const versionOverlay = document.createElement("div");
     versonListContainer?.append(versionOverlay);
     versionOverlay.classList.add("version-overlay");
@@ -54,7 +52,7 @@ const VersionTour = () => {
       content: string,
       element: string,
       where: string,
-      disabled?: string
+      disabled?: string,
     ) => {
       return {
         id,
@@ -114,7 +112,7 @@ const VersionTour = () => {
             `,
         ".version-list",
         "top-end",
-        "back"
+        "back",
       ),
       createStep(
         "step2",
@@ -139,7 +137,7 @@ const VersionTour = () => {
 </ul>
             </div>`,
         ".version-status",
-        "left"
+        "left",
       ),
 
       createStep(
@@ -153,7 +151,7 @@ const VersionTour = () => {
             </p>
           </div>`,
         ".version-create",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step-last",
@@ -166,7 +164,7 @@ const VersionTour = () => {
         </div>
         `,
         ".version-action",
-        "bottom"
+        "bottom",
       ),
     ];
 

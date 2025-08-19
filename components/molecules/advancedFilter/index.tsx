@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import SelectAtom, { IOption } from "../select";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { useRecoilState, useRecoilValue } from "recoil";
-
+import { useFilterStore } from "@store/filter";
+import { useRepositoryStore } from "@store/repository";
 import { EDocumentTypes } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "../loadingButton";
 import SelectBox from "../selectBox";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
@@ -19,10 +17,26 @@ interface IProps {
 }
 
 const AdvancedFilter = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
   const currentPath = usePathname();
-  const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
-  const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
+  const [getFilterChildren, setFilterChildren] = [
+    useFilterStore((state) => {
+      return state.filterChildren;
+    }),
+    useFilterStore((state) => {
+      return state.setFilterChildren;
+    }),
+  ];
+  const [getFilterReport, setFilterReport] = [
+    useFilterStore((state) => {
+      return state.filterReport;
+    }),
+    useFilterStore((state) => {
+      return state.setFilterReport;
+    }),
+  ];
 
   const [searchType, setSearchType] = useState<IOption>({
     value: getFilterChildren ? "currentCategory" : "currentRepo",

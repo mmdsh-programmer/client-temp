@@ -1,56 +1,53 @@
+import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import React, { useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
 import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
-import useBlockDocument from "@hooks/document/useBlockDocument";
-import useGetDocumentBlocklist from "@hooks/document/useGetDocumentBlocklist";
-import { useRecoilValue } from "recoil";
+import useBlockCategory from "@hooks/category/useBlockCategory";
+import useGetCategoryBlocklist from "@hooks/category/useGetCategoryBlocklist";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
 
-const DocumentBlockList = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
-
-  const [selectedUser, setSelectedUser] = useState("");
+const CategoryBlockList = () => {
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const category = useCategoryStore((state) => {
+    return state.category;
+  });
 
   const {
     data: getDocumentBlockList,
     isFetching,
     isLoading,
-  } = useGetDocumentBlocklist(getRepo!.id, document!.id, 20);
-  const blockDocument = useBlockDocument();
+  } = useGetCategoryBlocklist(getRepo!.id, category!.id, 20);
+  const blockDocument = useBlockCategory();
 
   const handleDelete = (username: string) => {
-    if (!getRepo || !document) return;
+    if (!getRepo || !category) return;
     if (!username) return;
     blockDocument.mutate({
       repoId: getRepo.id,
-      documentId: document.id,
+      categoryId: category.id,
       username,
       type: "unblock",
       callBack: () => {
-        toast.success(
-          `کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`
-        );
+        toast.success(`کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`);
       },
     });
   };
 
   return (
     <>
-      <Typography className="title_t4 text-secondary ">
-        لیست کاربران مسدودشده
-      </Typography>
+      <Typography className="title_t4 text-secondary">لیست کاربران مسدودشده</Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
           <Spinner className="h-6 w-6 text-primary" />
         ) : (
-          <div className="document-block-list flex flex-wrap gap-2">
+          <div className="category-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
               return page.list.length ? (
                 page.list.map((blockItem) => {
@@ -58,27 +55,25 @@ const DocumentBlockList = () => {
                     <ChipMolecule
                       key={blockItem.userInfo.userName}
                       value={blockItem.userInfo.name}
-                      className="document-block-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
+                      className="block-item w-auto border-[1px] border-normal pl-2 text-primary_normal"
                       icon={
                         blockItem.userInfo.img ? (
                           <ImageComponent
-                            className="w-full h-full rounded-full overflow-hidden"
+                            className="h-full w-full overflow-hidden rounded-full"
                             src={blockItem.userInfo.img}
                             alt={blockItem.userInfo.userName}
                           />
                         ) : (
-                          <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                          <UserIcon className="h-full w-full overflow-hidden rounded-full border-[1px] border-normal fill-icon-hover p-1" />
                         )
                       }
                       actionIcon={
-                        blockDocument.isPending &&
-                        selectedUser === blockItem.userInfo.userName ? (
+                        blockDocument.isPending ? (
                           <Spinner className="h-4 w-4 text-primary" />
                         ) : (
                           <Button
                             className="delete-button bg-transparent p-0"
                             onClick={() => {
-                              setSelectedUser(blockItem.userInfo.userName);
                               handleDelete(blockItem.userInfo.userName);
                             }}
                           >
@@ -100,4 +95,4 @@ const DocumentBlockList = () => {
   );
 };
 
-export default DocumentBlockList;
+export default CategoryBlockList;

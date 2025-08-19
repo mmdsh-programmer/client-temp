@@ -4,18 +4,17 @@ import Error from "../error";
 import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import { branchIdAtom } from "@atom/branch";
 import useGetBranchList from "@hooks/branch/useGetBranchList";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
+import { useBranchStore } from "@store/branch";
 
 interface IProps {
   branchId: number | null;
 }
 
 const BranchList = ({ branchId }: IProps) => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const { branchId: getBranchId } = useBranchStore();
   const { data: userInfo } = useGetUser();
 
   const {

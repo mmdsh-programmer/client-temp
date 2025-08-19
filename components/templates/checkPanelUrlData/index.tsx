@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 import useGetCategory from "@hooks/category/useGetCategory";
 import useGetDocument from "@hooks/document/useGetDocument";
 import { useSearchParams } from "next/navigation";
@@ -12,30 +11,21 @@ import { useSearchParams } from "next/navigation";
 const CheckPanelUrlData = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const setCategory = useSetRecoilState(categoryAtom);
-  const setCategoryShow = useSetRecoilState(categoryShowAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setDocumentShow = useSetRecoilState(documentShowAtom);
-  const getSelectedVersion = useRecoilValue(selectedVersionAtom);
-  const setShowVersionList = useSetRecoilState(versionModalListAtom);
+  const setCategory = useCategoryStore((state) => state.setCategory);
+  const setCategoryShow = useCategoryStore((state) => state.setCategoryShow);
+  const setDocument = useDocumentStore((state) => state.setSelectedDocument);
+  const setDocumentShow = useDocumentStore((state) => state.setDocumentShow);
+  const getSelectedVersion = useVersionStore((state) => state.selectedVersion);
+  const setShowVersionList = useVersionStore((state) => state.setVersionModalList);
 
   const searchParams = useSearchParams();
   const repoId = searchParams?.get("repoId");
   const categoryId = searchParams?.get("categoryId");
   const documentId = searchParams?.get("documentId");
 
-  const { data: getCategory } = useGetCategory(
-    +repoId!,
-    +categoryId!,
-    !!categoryId
-  );
+  const { data: getCategory } = useGetCategory(+repoId!, +categoryId!, !!categoryId);
 
-  const { data: getDocument } = useGetDocument(
-    +repoId!,
-    +documentId!,
-    !!documentId,
-    true
-  );
+  const { data: getDocument } = useGetDocument(+repoId!, +documentId!, !!documentId, true);
 
   useEffect(() => {
     if (isInitialized || !categoryId || !getCategory) return;

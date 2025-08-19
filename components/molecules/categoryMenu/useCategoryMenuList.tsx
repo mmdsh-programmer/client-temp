@@ -1,6 +1,5 @@
 import React from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { categoryAtom, categoryDrawerAtom } from "@atom/category";
+import { useCategoryDrawerStore, useCategoryStore } from "@store/category";
 import { ICategoryMetadata } from "@interface/category.interface";
 import {
   AddRectangleIcon,
@@ -14,9 +13,9 @@ import {
   TemplateAddIcon,
   VisibleIcon,
 } from "@components/atoms/icons";
-import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
 import { usePathname } from "next/navigation";
+import { useRepositoryStore } from "@store/repository";
 
 interface UseCategoryMenuListProps {
   category?: ICategoryMetadata;
@@ -36,9 +35,15 @@ type Modals = {
 };
 
 const useCategoryMenuList = ({ category, toggleModal }: UseCategoryMenuListProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const setCategory = useSetRecoilState(categoryAtom);
-  const setOpenCategoryActionDrawer = useSetRecoilState(categoryDrawerAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const setCategory = useCategoryStore((state) => {
+    return state.setCategory;
+  });
+  const setOpenCategoryActionDrawer = useCategoryDrawerStore((state) => {
+    return state.setCategoryDrawer;
+  });
   const currentPath = usePathname();
 
   const createOptions = [

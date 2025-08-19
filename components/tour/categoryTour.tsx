@@ -1,15 +1,14 @@
 import Shepherd, { StepOptions } from "shepherd.js";
-import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useTourStore } from "@store/tour";
 
 const CategoryTour = () => {
-    const setActiveTour = useSetRecoilState(activeTourAtom);
+  const setActiveTour = useTourStore((state) => {
+    return state.setActiveTour;
+  });
 
   useEffect(() => {
-    const tourOverlay = document.querySelectorAll(
-      ".tour-overlay",
-    )[0] as HTMLElement;
+    const tourOverlay = document.querySelectorAll(".tour-overlay")[0] as HTMLElement;
 
     const categoryTour = new Shepherd.Tour({
       useModalOverlay: false,
@@ -101,7 +100,7 @@ const CategoryTour = () => {
           </div>`,
         ".categoryCreateMenu",
         "bottom",
-        "back"
+        "back",
       ),
       createStep(
         "step2",
@@ -114,7 +113,7 @@ const CategoryTour = () => {
             </p>
           </div>`,
         ".searchContent",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step3",
@@ -126,7 +125,7 @@ const CategoryTour = () => {
             </p>
           </div>`,
         ".advancedFilter",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step4",
@@ -139,7 +138,7 @@ const CategoryTour = () => {
             </p>
           </div>`,
         ".categoryBulk",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step5",
@@ -152,7 +151,7 @@ const CategoryTour = () => {
             </p>
           </div>`,
         ".categoryOrder",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step-last",
@@ -166,7 +165,7 @@ const CategoryTour = () => {
               </p>
           </div>`,
         ".category-action",
-        "bottom"
+        "bottom",
       ),
     ].filter(Boolean) as StepOptions[];
 

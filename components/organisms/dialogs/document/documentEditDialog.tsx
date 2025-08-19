@@ -1,12 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import EditDialog from "@components/templates/dialog/editDialog";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import useEditDocument from "@hooks/document/useEditDocument";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,8 +26,12 @@ interface IProps {
 }
 
 const DocumentEditDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -137,7 +140,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
                 value: document?.order,
               }),
             }}
-            className="document-edit__form-order "
+            className="document-edit__form-order"
           />
           {errors.order && (
             <Typography className="warning_text">{errors.order?.message}</Typography>
@@ -150,7 +153,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             register={{
               ...register("description", { value: document?.description }),
             }}
-            className="document-edit__form-description "
+            className="document-edit__form-description"
           />
           {errors.description && (
             <Typography className="warning_text">{errors.description?.message}</Typography>

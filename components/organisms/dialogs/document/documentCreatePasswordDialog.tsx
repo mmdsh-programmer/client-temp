@@ -2,15 +2,14 @@ import React from "react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
-import { categoryAtom } from "@atom/category";
 import { documentSetPasswordSchema } from "./validation.yup";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useCreateDocumentPassword from "@hooks/document/useCreateDocumentPassword";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -22,17 +21,22 @@ interface IDataForm {
 }
 
 const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const getCategory = useCategoryStore((state) => {
+    return state.category;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const createPassword = useCreateDocumentPassword();
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentSetPasswordSchema),
   });
-  const { register, handleSubmit, formState, reset, clearErrors, setError } =
-    form;
+  const { register, handleSubmit, formState, reset, clearErrors, setError } = form;
   const { errors } = formState;
 
   const handleClose = () => {
@@ -46,10 +50,8 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
       setError("confirmPassword", {
         message: "تکرار رمز عبور با رمز عبور یکسان نیست",
       });
-
       return;
     }
-
     createPassword.mutate({
       repoId: getRepo!.id,
       documentId: document!.id,
@@ -82,9 +84,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             className="create-password-form__password"
           />
           {errors.password && (
-            <Typography className="warning_text">
-              {errors.password?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.password?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -98,9 +98,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             className="create-password-form__confirm-password"
           />
           {errors.confirmPassword && (
-            <Typography className="warning_text">
-              {errors.confirmPassword?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.confirmPassword?.message}</Typography>
           )}
         </div>
       </form>

@@ -1,32 +1,31 @@
 import React, { useRef, useState } from "react";
-
 import { Button } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import MoveBreadCrumb from "../moveBreadCrumb";
 import MoveChildren from "@components/organisms/moveChildren";
-import { categoryMoveDestAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { useRecoilValue } from "recoil";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   target: "category" | "document";
 }
 
 const MoveSelection = ({ target }: IProps) => {
-  const getCategoryMoveDest = useRecoilValue(categoryMoveDestAtom);
-  const getRepo = useRecoilValue(repoAtom);
+  const getCategoryMoveDest = useCategoryStore((state) => {
+    return state.categoryMoveDest;
+  });
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
 
-  const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
+  const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -35,27 +34,24 @@ const MoveSelection = ({ target }: IProps) => {
   return (
     <div
       ref={dropdownRef}
-      className="w-full relative inline-block"
+      className="relative inline-block w-full"
       onClick={(e) => {
         e.stopPropagation();
       }}
     >
       <Button
         onClick={toggleDropdown}
-        className={`move-${target}__select w-full justify-between pr-3 pl-2 h-12 border-[1px] border-normal
-    flex items-center leading-[18.2px] -tracking-[0.13px]
-     truncate text-[13px] text-primary_normal font-iranYekan font-normal gap-x-2
-    bg-transparent rounded-md focus:outline-none lowercase`}
+        className={`move-${target}__select flex h-12 w-full items-center justify-between gap-x-2 truncate rounded-md border-[1px] border-normal bg-transparent pl-2 pr-3 font-iranYekan text-[13px] font-normal lowercase leading-[18.2px] -tracking-[0.13px] text-primary_normal focus:outline-none`}
       >
         {getCategoryMoveDest ? getCategoryMoveDest.name : " انتخاب کنید"}
         <ChevronLeftIcon
-          className={`w-2 h-2 stroke-icon-active transform transition-transform ${
+          className={`h-2 w-2 transform stroke-icon-active transition-transform ${
             isOpen ? "rotate-90" : "-rotate-90"
           }`}
         />
       </Button>
       {isOpen && (
-        <div className="absolute z-[99999] mt-2 min-w-max w-full p-[1px] rounded-md bg-white ring-1 ring-black ring-opacity-5">
+        <div className="absolute z-[99999] mt-2 w-full min-w-max rounded-md bg-white p-[1px] ring-1 ring-black ring-opacity-5">
           <MoveBreadCrumb />
           {repoId ? <MoveChildren target={target} repoId={repoId} /> : null}
         </div>

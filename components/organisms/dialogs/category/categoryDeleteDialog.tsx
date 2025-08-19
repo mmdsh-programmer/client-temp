@@ -1,16 +1,14 @@
 import { Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-
+import { useCategoryStore } from "@store/category";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { ICategoryMetadata } from "@interface/category.interface";
-import { categoryAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -18,8 +16,17 @@ interface IProps {
 }
 
 const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(categoryAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const [getCategory, setCategory] = [
+    useCategoryStore((state) => {
+      return state.category;
+    }),
+    useCategoryStore((state) => {
+      return state.setCategory;
+    }),
+  ];
 
   const [errorMessage, setErrorMessage] = useState("");
   const [forceDelete, setForceDelete] = useState(false);
@@ -36,10 +43,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
 
   const handleDelete = async () => {
     const selectedCat = category || getCategory;
-    const repoId =
-      currentPath === "/admin/myDocuments"
-        ? userInfo!.repository.id
-        : getRepo!.id;
+    const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
     if (!repoId || !selectedCat) {
       return;
     }
@@ -68,11 +72,11 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
       className="category-delete-dialog"
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
           آیا از حذف"
           <span
             title={(category || getCategory)?.name}
-            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
           >
             {(category || getCategory)?.name}
           </span>
@@ -88,8 +92,8 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
               className="category-delete-dialog__checkbox"
             />
             <Typography className="warning_text">
-              دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه
-              می‌باشد، آیا می‌خواهید این دسته‌بندی را حذف کنید؟
+              دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه می‌باشد، آیا می‌خواهید این
+              دسته‌بندی را حذف کنید؟
             </Typography>
           </div>
         ) : null}

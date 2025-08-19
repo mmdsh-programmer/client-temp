@@ -2,27 +2,23 @@ import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
-
 import ChipMolecule from "@components/molecules/chip";
 import { IResourceUser } from "@interface/access.interface";
 import ImageComponent from "@components/atoms/image";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
 import useDeleteAccessOfResource from "@hooks/accessManagement/useDeleteAccessOfResource";
 import useGetResourceUsers from "@hooks/accessManagement/useGetResourceUsers";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
 
 const DocumentAccessList = () => {
   const [selectedUser, setSelectedUser] = useState("");
-  const document = useRecoilValue(selectedDocumentAtom);
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
-  const {
-    data: getAccessList,
-    isFetching,
-    isLoading,
-  } = useGetResourceUsers(document!.id, 30);
+  const { data: getAccessList, isFetching, isLoading } = useGetResourceUsers(document!.id, 30);
 
   const deleteAccess = useDeleteAccessOfResource();
 
@@ -42,12 +38,10 @@ const DocumentAccessList = () => {
 
   return (
     <>
-      <Typography className="title_t4 text-secondary ">
-        لیست کاربران مجاز در سند
-      </Typography>
-      <div className="flex flex-col w-full">
+      <Typography className="title_t4 text-secondary">لیست کاربران مجاز در سند</Typography>
+      <div className="flex w-full flex-col">
         {isLoading || isFetching ? (
-          <div className="flex justify-center items-center w-full">
+          <div className="flex w-full items-center justify-center">
             <Spinner className="h-6 w-6 text-primary" />
           </div>
         ) : (
@@ -64,17 +58,16 @@ const DocumentAccessList = () => {
                         icon={
                           accessItem.img ? (
                             <ImageComponent
-                              className="w-full h-full rounded-full overflow-hidden"
+                              className="h-full w-full overflow-hidden rounded-full"
                               src={accessItem.img}
                               alt={accessItem.userName}
                             />
                           ) : (
-                            <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                            <UserIcon className="h-full w-full overflow-hidden rounded-full border-[1px] border-normal fill-icon-hover p-1" />
                           )
                         }
                         actionIcon={
-                          deleteAccess.isPending &&
-                          selectedUser === accessItem.userName ? (
+                          deleteAccess.isPending && selectedUser === accessItem.userName ? (
                             <Spinner className="h-4 w-4 text-primary" />
                           ) : (
                             <Button

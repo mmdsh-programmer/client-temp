@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
-import { sortAtom } from "@atom/sortParam";
+import { useCategoryStore } from "@store/category";
+import { useSortStore } from "@store/sortParam";
 import { EEmptyList } from "@components/molecules/emptyList";
 import TabComponent from "@components/molecules/tab";
 import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { ICategoryView } from "@interface/category.interface";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useVersionStore } from "@store/version";
+import { useEditorStore } from "@store/editor";
 import TableView from "../categoryView/categoryTableView";
 import MobileView from "../categoryView/categoryMobileView";
 import VersionDialogView from "../versionView/versionDialogView";
@@ -25,12 +26,26 @@ export enum ETabs {
 
 const DashboardDocuments = () => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.MY_DOCUMENTS);
-  const getShowVersionList = useRecoilValue(versionModalListAtom);
-  const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
-
-  const getSortParams = useRecoilValue(sortAtom);
-  const queryParams = useRecoilValue(categoryQueryParamsAtom);
+  const getShowVersionList = useVersionStore((state) => {
+    return state.versionModalList;
+  });
+  const [getEditorModal, setEditorModal] = [
+    useEditorStore((state) => {
+      return state.editorModal;
+    }),
+    useEditorStore((state) => {
+      return state.setEditorModal;
+    }),
+  ];
+  const getCategoryShow = useCategoryStore((state) => {
+    return state.categoryShow;
+  });
+  const getSortParams = useSortStore((state) => {
+    return state.sort;
+  });
+  const queryParams = useCategoryStore((state) => {
+    return state.categoryQueryParams;
+  });
 
   const { data: userInfo } = useGetUser();
 
@@ -96,7 +111,7 @@ const DashboardDocuments = () => {
         <div className="category-children hidden xs:block">
           <TableView {...commonProps} />
         </div>
-        <div className="block xs:hidden min-h-[150px]">
+        <div className="block min-h-[150px] xs:hidden">
           <MobileView {...commonProps} />
         </div>
       </>
@@ -115,14 +130,14 @@ const DashboardDocuments = () => {
   ];
   return (
     <>
-      {getShowVersionList ? <VersionDialogView /> : null}
-      {getEditorModal ? (
+      {/* {getShowVersionList ? <VersionDialogView /> : null} */}
+      {/* {getEditorModal ? (
         <Editor
           setOpen={() => {
             return setEditorModal(false);
           }}
         />
-      ) : null}
+      ) : null} */}
       <div className="flex flex-col gap-0 xs:gap-4">
         <Typography className="title_t1 p-4 font-medium text-primary_normal xs:p-0">
           سندها

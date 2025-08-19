@@ -1,22 +1,20 @@
+import React, { useEffect, useState } from "react";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
 import { MyDocumentsIcon, SharedDocumentsIcon } from "@components/atoms/icons";
-import React, { useEffect, useState } from "react";
-import { repoAtom, repoGroupingAtom } from "@atom/repository";
 import { usePathname, useRouter } from "next/navigation";
-
-import { categoryAtom } from "@atom/category";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
-import { selectedDocumentAtom } from "@atom/document";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { ESidebarSection, useSidebarStore } from "@store/sidebar";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
 
 const SidebarDocuments = () => {
   const router = useRouter();
   const currentPath = usePathname();
-  const setRepo = useSetRecoilState(repoAtom);
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
-  const setCategory = useSetRecoilState(categoryAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const [sidebarSection, setSidebarSection] = useRecoilState(sidebarSectionAtom);
+  const { setRepo } = useRepositoryStore();
+  const { setRepoGrouping } = useRepositoryStore();
+  const { setCategory } = useCategoryStore();
+  const { setSelectedDocument } = useDocumentStore();
+  const { sidebarSection, setSidebarSection } = useSidebarStore();
   const [isNavigating, setIsNavigating] = useState(false);
 
   const handleNavigation = async (path: string, section: ESidebarSection) => {
@@ -30,31 +28,22 @@ const SidebarDocuments = () => {
   useEffect(() => {
     if (
       isNavigating &&
-      (currentPath === "/admin/myDocuments" ||
-        currentPath === "/admin/sharedDocuments")
+      (currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments")
     ) {
       setRepo(null);
-      setRepoGroup(null);
+      setRepoGrouping(null);
       setCategory(null);
-      setDocument(null);
+      setSelectedDocument(null);
       setIsNavigating(false);
     }
-  }, [currentPath, isNavigating, setRepo, setRepoGroup, setCategory, setDocument]);
+  }, [currentPath, isNavigating, setRepo, setRepoGrouping, setCategory, setSelectedDocument]);
 
   return (
-    <List placeholder="sidebar-list" className="min-w-[200px] p-0 gap-1">
-      <ListItem
-        key="سندهای من"
-        placeholder="sidebar-item"
-        className="p-0 myDocuments"
-      >
+    <List placeholder="sidebar-list" className="min-w-[200px] gap-1 p-0">
+      <ListItem key="سندهای من" placeholder="sidebar-item" className="myDocuments p-0">
         <Button
           placeholder="sidebar-button"
-          className={`bg-transparent justify-start w-full 
-            text-link gap-1 px-3 h-[44px]
-             ${sidebarSection === ESidebarSection.MY_DOCUMENTS ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
-            active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal !stroke-icon-hover
-            hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.MY_DOCUMENTS ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} !stroke-icon-hover hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal`}
           onClick={() => {
             return handleNavigation("/admin/myDocuments", ESidebarSection.MY_DOCUMENTS);
           }}
@@ -65,18 +54,10 @@ const SidebarDocuments = () => {
           </Typography>
         </Button>
       </ListItem>
-      <ListItem
-        key="سندهای اشتراکی"
-        placeholder="sidebar-item"
-        className="p-0 sharedDocuments"
-      >
+      <ListItem key="سندهای اشتراکی" placeholder="sidebar-item" className="sharedDocuments p-0">
         <Button
           placeholder="sidebar-button"
-          className={`bg-transparent justify-start w-full 
-            text-link gap-1 px-3 h-[44px]
-             ${sidebarSection === ESidebarSection.SHARED_DOCUMENTS ? "bg-gray-100 !stroke-icon-active hover:!fill-icon-active text-primary_normal" : "!stroke-icon-hover"}
-            active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal !stroke-icon-hover
-            hover:bg-gray-100 hover:text-primary_normal hover:!stroke-icon-active hover:!fill-icon-active`}
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.SHARED_DOCUMENTS ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} !stroke-icon-hover hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal`}
           onClick={() => {
             return handleNavigation("/admin/sharedDocuments", ESidebarSection.SHARED_DOCUMENTS);
           }}

@@ -1,14 +1,13 @@
+import React, { useEffect, useState } from "react";
 import { BackIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
-
 import { ICategoryMetadata } from "@interface/category.interface";
-import { categoryMoveDestAtom } from "atom/category";
-import { useRecoilState } from "recoil";
+import { useCategoryStore } from "@store/category";
 
 const MoveBreadCrumb = () => {
-  const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDestAtom);
+  const [getCategoryMoveDest, setCategoryMoveDest] = useCategoryStore((state) => {
+    return [state.categoryMoveDest, state.setCategoryMoveDest];
+  });
   const [breadCrumb, setBreadCrumb] = useState<ICategoryMetadata[]>([]);
 
   useEffect(() => {
@@ -24,19 +23,19 @@ const MoveBreadCrumb = () => {
       const breadCrumbTemp = [...breadCrumb];
       breadCrumbTemp.splice(
         selectedCategoryIndex + 1,
-        breadCrumb.length - selectedCategoryIndex + 1
+        breadCrumb.length - selectedCategoryIndex + 1,
       );
       setBreadCrumb(breadCrumbTemp);
     }
   }, [getCategoryMoveDest]);
 
   return (
-    <div className="move-breadcrumb text-sm cursor-pointer px-2 py-2 sticky top-0 bg-white z-50">
+    <div className="move-breadcrumb sticky top-0 z-50 cursor-pointer bg-white px-2 py-2 text-sm">
       {breadCrumb.length > 0 ? (
-        <div className="flex w-full items-center flex-wrap ">
+        <div className="flex w-full flex-wrap items-center">
           <Button
             placeholder="button"
-            className="bg-transparent h-5 w-5 p-0"
+            className="h-5 w-5 bg-transparent p-0"
             onClick={() => {
               setCategoryMoveDest(null);
               setBreadCrumb([]);
@@ -49,12 +48,12 @@ const MoveBreadCrumb = () => {
               <div className="flex items-center" key={breadItem.id}>
                 <Button
                   placeholder="button"
-                  className="block !px-2 !py-[2px] bg-transparent cursor-pointer lowercase"
+                  className="block cursor-pointer bg-transparent !px-2 !py-[2px] lowercase"
                   onClick={() => {
                     setCategoryMoveDest(breadItem);
                   }}
                 >
-                   {/* eslint-disable-next-line no-nested-ternary */}
+                  {/* eslint-disable-next-line no-nested-ternary */}
                   {breadCrumb.length > 2 ? (
                     index === 0 || index === breadCrumb.length - 1 ? (
                       <Typography className="caption_c1 text-primary_normal">
@@ -62,9 +61,7 @@ const MoveBreadCrumb = () => {
                       </Typography>
                     ) : (
                       (index !== 0 || index !== breadCrumb.length - 1) && (
-                        <Typography className="caption_c1 text-primary_normal">
-                          ...
-                        </Typography>
+                        <Typography className="caption_c1 text-primary_normal">...</Typography>
                       )
                     )
                   ) : (
@@ -74,8 +71,8 @@ const MoveBreadCrumb = () => {
                   )}
                 </Button>
                 {index + 1 < breadCrumb.length && (
-                  <div className="w-[14px] h-6 flex justify-center items-center">
-                    <ChevronLeftIcon className="w-[5px] h-4 stroke-icon-hover" />
+                  <div className="flex h-6 w-[14px] items-center justify-center">
+                    <ChevronLeftIcon className="h-4 w-[5px] stroke-icon-hover" />
                   </div>
                 )}
               </div>

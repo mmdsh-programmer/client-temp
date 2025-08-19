@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { repoAtom, repositoryIdAtom } from "atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Error from "@components/organisms/error";
@@ -19,19 +18,18 @@ const CheckRepoInfo = ({ children }: IProps) => {
   useHandleRepoChange();
 
   const [loading, setLoading] = useState(true);
-  const [repositoryAtomId, setRepositoryAtomId] =
-    useRecoilState(repositoryIdAtom);
+  const repositoryId = useRepositoryStore((state) => state.repositoryId);
+  const setRepositoryId = useRepositoryStore((state) => state.setRepositoryId);
+  const setRepository = useRepositoryStore((state) => state.setRepo);
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const repoId = searchParams?.get("repoId");
 
-  const setRepository = useSetRecoilState(repoAtom);
-
   const { error, refetch, isFetching } = useGetRepo(
-    repositoryAtomId ? +repositoryAtomId : null,
+    repositoryId ? +repositoryId : null,
     setRepository,
-    setRepositoryAtomId,
+    setRepositoryId,
     true
   );
 
@@ -46,10 +44,10 @@ const CheckRepoInfo = ({ children }: IProps) => {
     }
 
     if (repoId) {
-      setRepositoryAtomId(+repoId);
+      setRepositoryId(+repoId);
     } else if (lastRepo) {
       const repository = JSON.parse(lastRepo) as IRepo;
-      setRepositoryAtomId(repository.id);
+      setRepositoryId(repository.id);
     }
     setLoading(false);
   }, []);

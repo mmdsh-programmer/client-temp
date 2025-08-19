@@ -7,16 +7,16 @@ import {
   PublishIcon,
 } from "@components/atoms/icons";
 import { Button, List, ListItem, Typography } from "@material-tailwind/react";
-import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
+import { ESidebarSection, useSidebarStore } from "@store/sidebar";
 import Link from "next/link";
+import { useRepositoryStore } from "@store/repository";
+import { useRepoSearchParamStore } from "@store/repoSearchParam";
 
 const SidebarRepoList = () => {
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
-  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-  const setSidebarSection = useSetRecoilState(sidebarSectionAtom);
+  const { repoGrouping, setRepoGrouping } = useRepositoryStore();
+  const { setSidebarSection } = useSidebarStore();
+  const { setRepoSearchParam } = useRepoSearchParamStore();
 
   const sidebarList = [
     {
@@ -25,8 +25,9 @@ const SidebarRepoList = () => {
       className: "myRepoList",
       path: "/admin/myRepoList",
       onClick: () => {
-        setRepoGroup(ERepoGrouping.MY_REPO);
+        setRepoGrouping(ERepoGrouping.MY_REPO);
         setSidebarSection(ESidebarSection.MY_REPOS);
+        setRepoSearchParam(null);
       },
     },
     {
@@ -35,8 +36,9 @@ const SidebarRepoList = () => {
       className: "myAccessList",
       path: "/admin/accessRepoList",
       onClick: () => {
-        setRepoGroup(ERepoGrouping.ACCESS_REPO);
+        setRepoGrouping(ERepoGrouping.ACCESS_REPO);
         setSidebarSection(ESidebarSection.SHARED_REPOS);
+        setRepoSearchParam(null);
       },
     },
     {
@@ -45,8 +47,9 @@ const SidebarRepoList = () => {
       className: "myBookmarkList",
       path: "/admin/bookmarkRepoList",
       onClick: () => {
-        setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
+        setRepoGrouping(ERepoGrouping.BOOKMARK_REPO);
         setSidebarSection(ESidebarSection.BOOKMARK_REPOS);
+        setRepoSearchParam(null);
       },
     },
     {
@@ -55,8 +58,9 @@ const SidebarRepoList = () => {
       className: "myArchiveList",
       path: "/admin/archiveRepoList",
       onClick: () => {
-        setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
+        setRepoGrouping(ERepoGrouping.ARCHIVE_REPO);
         setSidebarSection(ESidebarSection.ARCHIVE_REPOS);
+        setRepoSearchParam(null);
       },
     },
     {
@@ -65,8 +69,9 @@ const SidebarRepoList = () => {
       className: "myPublishedRepoList",
       path: "/admin/publishedRepoList",
       onClick: () => {
-        setRepoGroup(ERepoGrouping.PUBLISHED_REPO);
+        setRepoGrouping(ERepoGrouping.PUBLISHED_REPO);
         setSidebarSection(ESidebarSection.PUBLISHED_REPOS);
+        setRepoSearchParam(null);
       },
     },
   ];
@@ -86,15 +91,12 @@ const SidebarRepoList = () => {
                 className={`h-[44px] w-full justify-start 
                      gap-1 bg-transparent px-3 text-link
                 ${
-                  getRepoGroup === item.text
+                  repoGrouping === item.text
                     ? "bg-gray-100 !stroke-icon-active text-primary_normal"
                     : ""
                 }
                   hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
-                onClick={() => {
-                  item.onClick();
-                  setSearchParam(null);
-                }}
+                onClick={item.onClick}
               >
                 {item.icon}
                 <Typography placeholder="sidebar-text" className="title_t3">

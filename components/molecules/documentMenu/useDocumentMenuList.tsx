@@ -17,19 +17,17 @@ import {
   PublishedLimitationIcon,
   VisibleIcon,
 } from "@components/atoms/icons";
-import { documentDrawerAtom, documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import { ERoles } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
 import React from "react";
-import { repoAtom } from "@atom/repository";
 import { toPersianDigit } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { versionModalListAtom } from "@atom/version";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore, useDocumentDrawerStore } from "@store/document";
+import { useVersionStore } from "@store/version";
+import { useEditorStore } from "@store/editor";
 
 interface UseDocumentMenuListProps {
   document?: IDocumentMetadata;
@@ -57,13 +55,27 @@ type Modals = {
 };
 
 const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setDocumentShow = useSetRecoilState(documentShowAtom);
-  const setShowVersionList = useSetRecoilState(versionModalListAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const setOpenDocumentActionDrawer = useSetRecoilState(documentDrawerAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const setDocument = useDocumentStore((state) => {
+    return state.setSelectedDocument;
+  });
+  const setDocumentShow = useDocumentStore((state) => {
+    return state.setDocumentShow;
+  });
+  const setShowVersionList = useVersionStore((state) => {
+    return state.setVersionModalList;
+  });
+  const setEditorMode = useEditorStore((state) => {
+    return state.setEditorMode;
+  });
+  const setEditorModal = useEditorStore((state) => {
+    return state.setEditorModal;
+  });
+  const setOpenDocumentActionDrawer = useDocumentDrawerStore((state) => {
+    return state.setDocumentDrawer;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -92,23 +104,11 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     }
   };
 
-  const writerOrViewerRole = () => {
-    if (
-      currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
-    ) {
-      return document?.accesses?.[0] === "viewer" || document?.accesses?.[0] === "writer";
-    }
-    if (getRepo) {
-      return getRepo?.roleName === "viewer" || getRepo?.roleName === "writer";
-    }
-  };
-
   const editOptions = [
     {
       text: "ویرایش محتوا",
       icon: <EditContentIcon className="h-4 w-4" />,
-      disabled: writerOrViewerRole(),
+      disabled: !adminOrOwnerRole(),
       onClick: () => {
         setEditorMode("edit");
         setEditorModal(true);
@@ -122,7 +122,7 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
     {
       text: "ویرایش سند",
       icon: <EditDocumentIcon className="h-4 w-4" />,
-      disabled: writerOrViewerRole(),
+      disabled: !adminOrOwnerRole(),
       onClick: () => {
         toggleModal("editDocument", true);
         if (document) setDocument(document);
@@ -276,8 +276,8 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
       icon: <DocumentBookmarkIcon className="h-4 w-4" />,
       disabled:
-        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
-        currentPath === "/admin/sharedDocuments",
+      (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
+      currentPath === "/admin/sharedDocuments",
       onClick: () => {
         toggleModal("bookmarkDocument", true);
         setOpenDocumentActionDrawer(false);

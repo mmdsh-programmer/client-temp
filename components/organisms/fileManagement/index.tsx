@@ -2,18 +2,16 @@
 
 import { ClasorFileManagement, IFile } from "cls-file-management";
 import React, { useCallback, useState } from "react";
-
 import FileManagementDialog from "@components/templates/dialog/fileManagementDialog";
 import axios from "axios";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRecoilValue } from "recoil";
 import useRenameFile from "@hooks/files/useRenameFile";
+import { useRepositoryStore } from "@store/repository";
 
 const fileTablePageSize = 20;
 
@@ -44,7 +42,7 @@ const Files = ({
   const [selectedImage, setSelectedImage] = useState<IFile | null>(null);
 
   const queryClient = useQueryClient();
-  const getRepo = useRecoilValue(repoAtom);
+  const getRepo = useRepositoryStore((state) => state.repo);
   const { data: userInfo, refetch: refetchUser } = useGetUser();
 
   const {

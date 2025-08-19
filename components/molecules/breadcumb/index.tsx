@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { BreadcrumbIcon, ChevronLeftIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import { repoAtom, repoGroupingAtom } from "@atom/repository";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { ESidebarSection, useSidebarStore } from "@store/sidebar";
 import { useRouter } from "next/navigation";
 
 const Breadcrumb = () => {
-  const getRepoGroup = useRecoilValue(repoGroupingAtom);
-  const getRepo = useRecoilValue(repoAtom);
-  const getSidebarSection = useRecoilValue(sidebarSectionAtom);
+  const { repoGrouping, repo } = useRepositoryStore();
+  const { sidebarSection } = useSidebarStore();
 
   const router = useRouter();
 
@@ -30,21 +28,21 @@ const Breadcrumb = () => {
     return () => {
       return window.removeEventListener("resize", checkOverflow);
     };
-  }, [getRepo, getRepoGroup, getSidebarSection]);
+  }, [repo, repoGrouping, sidebarSection]);
 
   const breadcrumbList = () => {
     const baseBreadcrumb = ["کلاسور"];
     const personalDocuments = "اسناد شخصی";
 
-    if (getRepo) {
-      return [...baseBreadcrumb, getRepoGroup, getRepo.name];
+    if (repo) {
+      return [...baseBreadcrumb, repoGrouping, repo.name];
     }
 
-    if (getRepoGroup) {
-      return [...baseBreadcrumb, getRepoGroup];
+    if (repoGrouping) {
+      return [...baseBreadcrumb, repoGrouping];
     }
 
-    switch (getSidebarSection) {
+    switch (sidebarSection) {
       case ESidebarSection.DASHBOARD:
         return [...baseBreadcrumb, ESidebarSection.DASHBOARD];
       case ESidebarSection.MY_DOCUMENTS:

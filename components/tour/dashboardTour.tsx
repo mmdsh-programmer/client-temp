@@ -1,16 +1,14 @@
 import Shepherd, { StepOptions } from "shepherd.js";
-
-import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useTourStore } from "@store/tour";
 
 const DashboardTour = () => {
-  const setActiveTour = useSetRecoilState(activeTourAtom);
+  const setActiveTour = useTourStore((state) => {
+    return state.setActiveTour;
+  });
 
   useEffect(() => {
-    const tourOverlay = document.querySelectorAll(
-      ".tour-overlay"
-    )[0] as HTMLElement;
+    const tourOverlay = document.querySelectorAll(".tour-overlay")[0] as HTMLElement;
 
     const dashboardTour = new Shepherd.Tour({
       useModalOverlay: false,
@@ -49,7 +47,7 @@ const DashboardTour = () => {
       content: string,
       element: string,
       where: string,
-      disabled?: string
+      disabled?: string,
     ) => {
       return {
         id,
@@ -97,7 +95,7 @@ const DashboardTour = () => {
         </div>`,
         ".myRepoList",
         "bottom",
-        "back"
+        "back",
       ),
       createStep(
         "step2",
@@ -111,7 +109,7 @@ const DashboardTour = () => {
   </div>
             `,
         ".myAccessList",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step3",
@@ -124,7 +122,7 @@ const DashboardTour = () => {
           </div>`,
 
         ".myBookmarkList",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step4",
@@ -138,7 +136,7 @@ const DashboardTour = () => {
           </div>`,
 
         ".myArchiveList",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step5",
@@ -151,7 +149,7 @@ const DashboardTour = () => {
             </p>
         </div>`,
         ".notice",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step5",
@@ -163,7 +161,7 @@ const DashboardTour = () => {
         </p>
       </div>`,
         ".userProfile",
-        "bottom"
+        "bottom",
       ),
       // createStep(
       //   "step6",
@@ -202,7 +200,7 @@ const DashboardTour = () => {
         </p>
       </div>`,
         ".createNewRepo",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step9",
@@ -213,7 +211,7 @@ const DashboardTour = () => {
         امکان جست و جوی نام مخزن در لیست انتخابی .        </p>
       </div>`,
         ".searchRepo",
-        "bottom"
+        "bottom",
       ),
       createStep(
         "step-last",
@@ -225,7 +223,7 @@ const DashboardTour = () => {
         </p>
         </div>`,
         ".repoActions",
-        "right"
+        "right",
       ),
     ];
 

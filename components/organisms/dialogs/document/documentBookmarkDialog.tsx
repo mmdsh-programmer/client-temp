@@ -1,20 +1,23 @@
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useBookmarkDocument from "@hooks/document/useBookmarkDocument";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const bookmarkDocument = useBookmarkDocument();
 
@@ -54,24 +57,17 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
 
   return (
     <ConfirmDialog
-      isPending={bookmarkDocument.isPending}
-      dialogHeader={
-        document?.isBookmarked ? "حذف نشان سند" : "نشان‌دار کردن سند"
-      }
+      dialogHeader={document?.isBookmarked ? "حذف نشان‌گذاری" : "نشان‌گذاری سند"}
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className={document?.isBookmarked ? "document-remove-bookmark": "document-bookmark"}
+      className="document-bookmark-dialog"
+      isPending={bookmarkDocument.isPending}
     >
-      آیا از
-      {document?.isBookmarked ? " حذف نشان سند  " : " نشان‌دار کردن سند "}"
-      <Typography
-        title={document?.name}
-        placeholder="name"
-        className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
-      >
-        {document?.name}
+      <Typography className="text-center">
+        {document?.isBookmarked
+          ? "آیا از حذف نشان‌گذاری این سند اطمینان دارید؟"
+          : "آیا از نشان‌گذاری این سند اطمینان دارید؟"}
       </Typography>
-      " اطمینان دارید؟
     </ConfirmDialog>
   );
 };

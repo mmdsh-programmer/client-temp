@@ -1,14 +1,12 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
-
 import { CircleIcon } from "@components/atoms/icons";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import RepoCardMoreInfo from "./repoCardMoreInfo";
 import RepoDefaultImage from "../repoDefaultImage";
 import RepoMenu from "@components/molecules/repoMenu";
-import { repoInfoAtom } from "@atom/repository";
-import { useRecoilValue } from "recoil";
+import { useRepoInfoStore } from "@store/repository";
 import { useRouter } from "next/navigation";
 
 interface IProps {
@@ -17,14 +15,15 @@ interface IProps {
 
 const RepoCardMode = ({ repo }: IProps) => {
   const router = useRouter();
-  const getRepoInfo = useRecoilValue(repoInfoAtom);
+  const repoInfo = useRepoInfoStore((state) => {
+    return state.repoInfo;
+  });
 
   return (
     <Card
       placeholder="card"
       key={`repo-card-item-${repo.id}`}
-      className={`repo-card flex flex-col h-auto max-h-[85px] rounded-lg bg-white border-[1px] border-normal shadow-small cursor-pointer
-        ${getRepoInfo?.id === repo.id ? "mb-14" : ""}`}
+      className={`repo-card flex h-auto max-h-[85px] cursor-pointer flex-col rounded-lg border-[1px] border-normal bg-white shadow-small ${repoInfo?.id === repo.id ? "mb-14" : ""}`}
       onClick={(e) => {
         e.stopPropagation();
         if (!repo.isArchived) {
@@ -32,16 +31,16 @@ const RepoCardMode = ({ repo }: IProps) => {
         }
       }}
     >
-      <div className="flex p-4 justify-between items-center">
-        <div className="flex items-center gap-3 max-w-[70%]">
+      <div className="flex items-center justify-between p-4">
+        <div className="flex max-w-[70%] items-center gap-3">
           <div className="repo__image h-12 w-12">
             <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
-          <div className="repo__info flex flex-col max-w-[80%] flex-grow">
-            <Typography className="repo__name title_t1 !text-primary_normal max-w-full truncate font-[450]">
+          <div className="repo__info flex max-w-[80%] flex-grow flex-col">
+            <Typography className="repo__name title_t1 max-w-full truncate font-[450] !text-primary_normal">
               {repo.name}
             </Typography>
-            <div className="repo__info-details flex items-center gap-2 ">
+            <div className="repo__info-details flex items-center gap-2">
               <Typography className="repo__info-details-date caption_c2 text-hint">
                 {repo ? FaDateFromTimestamp(+new Date(repo.createDate)) : null}
               </Typography>
@@ -64,7 +63,7 @@ const RepoCardMode = ({ repo }: IProps) => {
           <RepoMenu repo={repo} />
         </div>
       </div>
-      {getRepoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
+      {repoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
     </Card>
   );
 };

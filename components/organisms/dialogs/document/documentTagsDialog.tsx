@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { useRecoilState, useRecoilValue } from "recoil";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
@@ -10,6 +8,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import useSetDocumentDomainTags from "@hooks/domainTags/useSetDocumentDomainTags";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -17,8 +16,17 @@ interface IProps {
 
 const DocumentTagsDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
-  const document = useRecoilValue(selectedDocumentAtom);
-  const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
+  const [tempDocTag, setTempDocTag] = [
+    useDocumentStore((state) => {
+      return state.tempDocTag;
+    }),
+    useDocumentStore((state) => {
+      return state.setTempDocTag;
+    }),
+  ];
 
   const [openCreateTagDialog, setOpenCreateTagDialog] = useState(false);
   const [tagName, setTagName] = useState<string | number>("");
@@ -37,8 +45,8 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
 
   const handleSubmit = async () => {
     if (!repoId || !document) return;
-    if (!getTempDocTag) return;
-    if (getTempDocTag.length > 10) {
+    if (!tempDocTag) return;
+    if (tempDocTag.length > 10) {
       toast.error("بیش از ده آیتم نمی‌توانید به سند منصوب کنید.");
       return;
     }
@@ -46,7 +54,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
       return setDocumentTags.mutate({
         repoId,
         documentId: document.id,
-        tagIds: getTempDocTag.map((tag) => {
+        tagIds: tempDocTag.map((tag) => {
           return tag.id;
         }),
         isDirectAccess:
@@ -61,7 +69,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
       categoryId: document.categoryId,
       title: document.name,
       contentType: document.contentType,
-      tagIds: getTempDocTag.map((tag) => {
+      tagIds: tempDocTag.map((tag) => {
         return tag.id;
       }),
       isDirectAccess:

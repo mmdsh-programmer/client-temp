@@ -1,31 +1,30 @@
-import {
- DialogBody,
- Typography
-} from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { DialogBody, Typography } from "@material-tailwind/react";
 import CategoryBlockList from "@components/organisms/category/categoryBlocklist";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import LoadingButton from "@components/molecules/loadingButton";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
-import { categoryAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
+import { useCategoryStore } from "@store/category";
 import { toast } from "react-toastify";
 import useBlockCategory from "@hooks/category/useBlockCategory";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const CategoryAccessDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const category = useRecoilValue(categoryAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const category = useCategoryStore((state) => {
+    return state.category;
+  });
 
   const [value, setValue] = useState("");
 
-  const {data: getRepoUsers} = useGetRepoUsers(getRepo!.id, 20, true);
+  const { data: getRepoUsers } = useGetRepoUsers(getRepo!.id, 20, true);
   const blockCatgory = useBlockCategory();
 
   const filteredUsers = getRepoUsers?.pages[0].list
@@ -58,7 +57,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="محدودیت دسترسی روی پنل"
       setOpen={handleClose}
-      className="category-access-dialog min-h-[350px] "
+      className="category-access-dialog min-h-[350px]"
     >
       <DialogBody>
         <form className="flex flex-col gap-6">
@@ -78,9 +77,7 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
               loading={blockCatgory.isPending}
               disabled={!value}
             >
-              <Typography className="text__label__button text-white">
-                افزودن
-              </Typography>
+              <Typography className="text__label__button text-white">افزودن</Typography>
             </LoadingButton>
           </div>
           <CategoryBlockList />

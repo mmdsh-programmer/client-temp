@@ -3,10 +3,9 @@ import { IRepo } from "@interface/repo.interface";
 import ImageComponent from "@components/atoms/image";
 import ProgressBar from "@components/molecules/progressBar";
 import { UserIcon } from "@components/atoms/icons";
-import { repoInfoAtom } from "@atom/repository";
+import { useRepoInfoStore } from "@store/repository";
 import useGetReport from "@hooks/report/useGetReport";
 import useGetUsers from "@hooks/user/useGetRepoUsers";
-import { useSetRecoilState } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
@@ -16,20 +15,17 @@ interface IProps {
 const RepoCardMoreInfo = ({ repo }: IProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const setRepoInfo = useSetRecoilState(repoInfoAtom);
+  const setRepoInfo = useRepoInfoStore((state) => {
+    return state.setRepoInfo;
+  });
 
   const accessRoles = repo.roleName === "admin" || repo.roleName === "owner";
   const { data: users, isFetching } = useGetUsers(repo.id, 3, accessRoles);
-  const { data: getReport, isFetching: isFetchingReport } = useGetReport(
-    repo.id
-  );
+  const { data: getReport, isFetching: isFetchingReport } = useGetReport(repo.id);
   const userCount = users?.pages[0]?.total;
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setRepoInfo(undefined);
     }
   };
@@ -49,13 +45,13 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
         e.stopPropagation();
       }}
     >
-      <div className="absolute z-[99999] -mt-2 min-w-max w-full bg-gray-50 rounded-b-lg shadow-lg">
+      <div className="absolute z-[99999] -mt-2 w-full min-w-max rounded-b-lg bg-gray-50 shadow-lg">
         {isFetching || isFetchingReport ? (
-          <div className="w-full h-12 flex justify-center items-center">
+          <div className="flex h-12 w-full items-center justify-center">
             <Spinner className="h-4 w-4 text-primary" />
           </div>
         ) : (
-          <div className="flex p-4 items-center justify-between w-full">
+          <div className="flex w-full items-center justify-between p-4">
             <div className="flex">
               {users?.pages.map((page) => {
                 return page.list.map((user, index) => {
@@ -63,8 +59,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
                     <div
                       key={user.userInfo.ssoId || index}
                       title={user.userInfo.userName || ""}
-                      className={`-!mr-${index * 4} relative w-8 h-8 cursor-pointer
-                    z-${index * 10} `}
+                      className={`-!mr-${index * 4} relative h-8 w-8 cursor-pointer z-${index * 10} `}
                     >
                       {user.userInfo.img ? (
                         <ImageComponent
@@ -73,7 +68,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
                           alt={user.userInfo.userName}
                         />
                       ) : (
-                        <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-full border-[3px] border-white">
+                        <div className="flex h-full w-full items-center justify-center rounded-full border-[3px] border-white bg-gray-50">
                           <UserIcon className="h-5 w-5 fill-gray-400" />
                         </div>
                       )}
@@ -82,8 +77,8 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
                 });
               })}
               {!!userCount && userCount > 3 ? (
-                <div className="relative w-8 h-8 cursor-pointer z-40 left-12">
-                  <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-full border-[3px] border-white text-sm text-primary_normal">
+                <div className="relative left-12 z-40 h-8 w-8 cursor-pointer">
+                  <div className="flex h-full w-full items-center justify-center rounded-full border-[3px] border-white bg-gray-50 text-sm text-primary_normal">
                     {userCount - 3}+
                   </div>
                 </div>

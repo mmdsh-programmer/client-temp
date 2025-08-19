@@ -9,10 +9,9 @@ import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import useEditRepo from "@hooks/repository/useEditRepo";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { repoCreateSchema } from "./validation.yup";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,11 +23,10 @@ interface IForm {
 }
 
 const RepoEditDialog = ({ setOpen }: IProps) => {
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const getRepo = useRepositoryStore((state) => state.repo);
+  const setRepo = useRepositoryStore((state) => state.setRepo);
   const [openFileManagement, setOpenFileManagement] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<string | undefined>(
-    getRepo?.imageFileHash
-  );
+  const [selectedFile, setSelectedFile] = useState<string | undefined>(getRepo?.imageFileHash);
   const [imageType, setImageType] = useState<"default" | "custom">();
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 
@@ -64,8 +62,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       dataForm.name === getRepo.name &&
       dataForm.description === getRepo.description &&
       (!imageType ||
-        (defualtImage === getRepo.imageFileHash &&
-          selectedFile === getRepo.imageFileHash))
+        (defualtImage === getRepo.imageFileHash && selectedFile === getRepo.imageFileHash))
     ) {
       toast.error("تغییری در مخزن وجود ندارد");
       return;
@@ -131,7 +128,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       dialogHeader="ویرایش مخزن"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="repo-edit-dialog h-full xs:!h-[600px] max-w-full w-full m-0"
+      className="repo-edit-dialog m-0 h-full w-full max-w-full xs:!h-[600px]"
     >
       <form className="repo-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -140,11 +137,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
             placeholder="عنوان"
             register={{ ...register("name", { value: getRepo?.name }) }}
           />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">توضیحات مخزن</Typography>
@@ -155,9 +148,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
             }}
           />
           {errors.name && (
-            <Typography className="warning_text">
-              {errors.description?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.description?.message}</Typography>
           )}
         </div>
         <RepoAttachCustomImage

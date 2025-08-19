@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { FilterIcon, SearchIcon } from "@components/atoms/icons";
 import { Button } from "@material-tailwind/react";
 import SearchContent from "@components/molecules/searchContent";
-import { usePathname, useRouter } from "next/navigation";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { searchContentLinkAtom } from "@atom/category";
+import { usePathname } from "next/navigation";
+import { useFilterStore } from "@store/filter";
 
 interface IProps {
   open: boolean;
@@ -14,22 +12,23 @@ interface IProps {
 
 const SearchFilter = ({ open, setOpen }: IProps) => {
   const currentPath = usePathname();
-  const router = useRouter();
-
-  const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
-  const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
+  const [getFilterChildren, setFilterChildren] = [
+    useFilterStore((state) => {
+      return state.filterChildren;
+    }),
+    useFilterStore((state) => {
+      return state.setFilterChildren;
+    }),
+  ];
+  const [getFilterReport, setFilterReport] = [
+    useFilterStore((state) => {
+      return state.filterReport;
+    }),
+    useFilterStore((state) => {
+      return state.setFilterReport;
+    }),
+  ];
   const [openSearchModal, setOpenSearchModal] = useState(false);
-  const getContentSearchLink = useRecoilValue(searchContentLinkAtom);
-
-  const renderContent = () => {
-    if (getContentSearchLink) {
-      router.push(getContentSearchLink);
-      return null;
-    }
-    if (openSearchModal) {
-      return <SearchContent setOpen={setOpenSearchModal} />;
-    }
-  };
 
   return (
     <div className="flex gap-x-2">
@@ -58,7 +57,7 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
       >
         <FilterIcon className="h-5 w-5 stroke-gray-500" />
       </Button>
-      {renderContent()}
+      {openSearchModal && <SearchContent setOpen={setOpenSearchModal} />}
     </div>
   );
 };

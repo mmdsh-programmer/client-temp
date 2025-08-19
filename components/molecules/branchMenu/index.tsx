@@ -5,8 +5,7 @@ import BranchCreateDialog from "@components/organisms/dialogs/branch/branchCreat
 import { IBranch } from "@interface/branch.interface";
 import BranchDeleteDialog from "@components/organisms/dialogs/branch/branchDeleteDialog";
 import BranchEditDialog from "@components/organisms/dialogs/branch/branchEditDialog";
-import { branchIdAtom } from "@atom/branch";
-import { useSetRecoilState } from "recoil";
+import { useBranchStore } from "@store/branch";
 
 interface IProps {
   branchItem: IBranch;
@@ -17,7 +16,7 @@ const BranchMenu = ({ branchItem }: IProps) => {
   const [deleteBranchModal, setDeleteBranchModal] = useState(false);
   const [createBranchModal, setCreateBranchModal] = useState(false);
 
-  const setBranch = useSetRecoilState(branchIdAtom);
+  const { setBranchId } = useBranchStore();
 
   const menuList: {
     text: string;
@@ -27,21 +26,21 @@ const BranchMenu = ({ branchItem }: IProps) => {
     {
       text: "ایجاد زیرشعبه",
       onClick: () => {
-        setBranch(branchItem.id);
+        setBranchId(branchItem.id);
         setCreateBranchModal(true);
       },
     },
     {
       text: "ویرایش شعبه",
       onClick: () => {
-        setBranch(branchItem.id);
+        setBranchId(branchItem.id);
         setEditBranchModal(true);
       },
     },
     {
       text: "حذف شعبه",
       onClick: () => {
-        setBranch(branchItem.id);
+        setBranchId(branchItem.id);
         setDeleteBranchModal(true);
       },
     },

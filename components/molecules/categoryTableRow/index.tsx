@@ -1,15 +1,14 @@
 import React from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import TableCell, { ITableCell } from "@components/molecules/tableCell";
-import { bulkItemsAtom } from "@atom/bulk";
-import { categoryShowAtom } from "@atom/category";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
+import { useCategoryStore } from "@store/category";
+import { useBulkStore } from "@store/bulk";
 
 interface IProps {
   category: ICategoryMetadata;
@@ -17,8 +16,15 @@ interface IProps {
 
 const CategoryTableRow = ({ category: categoryProp }: IProps) => {
   const currentPath = usePathname();
-  const setCategoryParent = useSetRecoilState(categoryShowAtom);
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
+  const setCategoryParent = useCategoryStore((state) => {
+    return state.setCategoryShow;
+  });
+  const getBulkItems = useBulkStore((state) => {
+    return state.bulkItems;
+  });
+  const setBulkItems = useBulkStore((state) => {
+    return state.setBulkItems;
+  });
 
   const handleRowClick = (selectedCategory: ICategoryMetadata) => {
     setCategoryParent(selectedCategory);
@@ -32,13 +38,13 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
       toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
       return;
     }
-    setBulkItems((oldValue) => {
-      return isChecked
-        ? [...(oldValue as ICategoryMetadata[]), categoryProp]
-        : [...(oldValue as ICategoryMetadata[])].filter((item) => {
-          return item.id !== categoryProp.id;
-        }) || [];
-    });
+    setBulkItems(
+      isChecked
+        ? [...getBulkItems, categoryProp]
+        : getBulkItems.filter((item) => {
+            return item.id !== categoryProp.id;
+          }),
+    );
   };
   return (
     <TableCell
@@ -53,24 +59,24 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
           currentPath === "/admin/dashboard"
             ? null
             : {
-              data: (
-                <Checkbox
-                  onChange={handleCheckItem}
-                  checked={getBulkItems.some((bulkItem) => {
-                    return bulkItem.id === categoryProp.id;
-                  })}
-                />
-              ),
-              className: "!pl-0 !pr-2",
-              stopPropagation: true,
-            },
+                data: (
+                  <Checkbox
+                    onChange={handleCheckItem}
+                    checked={getBulkItems.some((bulkItem) => {
+                      return bulkItem.id === categoryProp.id;
+                    })}
+                  />
+                ),
+                className: "!pl-0 !pr-2",
+                stopPropagation: true,
+              },
           currentPath === "/admin/dashboard"
             ? null
             : {
-              data: categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--",
-              title: String(categoryProp.order) || "--",
-              className: "hidden xl:table-cell text-center !px-0",
-            },
+                data: categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--",
+                title: String(categoryProp.order) || "--",
+                className: "hidden xl:table-cell text-center !px-0",
+              },
           {
             data: (
               <div className="flex">
@@ -89,17 +95,17 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
           currentPath === "/admin/dashboard"
             ? null
             : {
-              data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
-              title: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
-              className: "!px-3",
-            },
+                data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+                title: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+                className: "!px-3",
+              },
           currentPath === "/admin/dashboard"
             ? null
             : {
-              data: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
-              title: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
-              className: "hidden xl:table-cell !px-3",
-            },
+                data: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+                title: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+                className: "hidden xl:table-cell !px-3",
+              },
           {
             data: categoryProp.creator?.name || "--",
             title: categoryProp.creator?.name || "--",

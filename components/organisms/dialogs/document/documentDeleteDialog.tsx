@@ -1,13 +1,12 @@
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { IDocumentMetadata } from "@interface/document.interface";
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useDeleteDocument from "@hooks/document/useDeleteDocument";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -15,8 +14,12 @@ interface IProps {
 }
 
 const DocumentDeleteDialog = ({ document, setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const getDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();

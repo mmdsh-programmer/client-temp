@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { categoryAtom, categoryDrawerAtom } from "@atom/category";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useCategoryDrawerStore, useCategoryStore } from "@store/category";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { ICategoryMetadata } from "@interface/category.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
@@ -14,10 +13,15 @@ interface IProps {
 }
 
 const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
-  const setCategory = useSetRecoilState(categoryAtom);
-
-  const [openCategoryActionDrawer, setOpenCategoryActionDrawer] =
-    useRecoilState(categoryDrawerAtom);
+  const setCategory = useCategoryStore((state) => {
+    return state.setCategory;
+  });
+  const openCategoryActionDrawer = useCategoryDrawerStore((state) => {
+    return state.categoryDrawer;
+  });
+  const setOpenCategoryActionDrawer = useCategoryDrawerStore((state) => {
+    return state.setCategoryDrawer;
+  });
 
   const [modals, setModals] = useState<{
     editCategoryModal: boolean;
@@ -52,18 +56,18 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
   return (
     <>
       {showDrawer ? (
-        <div className="category-menu xs:hidden flex">
+        <div className="category-menu flex xs:hidden">
           <DrawerTemplate
             openDrawer={openCategoryActionDrawer}
-            setOpenDrawer={setOpenCategoryActionDrawer}
+            setOpenDrawer={(open) => {
+              return setOpenCategoryActionDrawer(!!open);
+            }}
             menuList={menuList}
           />
         </div>
       ) : (
         <div className="category-menu flex items-center justify-end gap-1">
-          {categoryProp?.isHidden ? (
-            <InvisibleIcon className="w-4 h-4 flex-none" />
-          ): null}
+          {categoryProp?.isHidden ? <InvisibleIcon className="h-4 w-4 flex-none" /> : null}
           <MenuTemplate
             setOpenDrawer={() => {
               setCategory(categoryProp || null);
@@ -71,8 +75,8 @@ const CategoryMenu = ({ category: categoryProp, showDrawer }: IProps) => {
             }}
             menuList={menuList}
             icon={
-              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                <MoreDotIcon className="w-4 h-4" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
+                <MoreDotIcon className="h-4 w-4" />
               </div>
             }
             className="category-menu"

@@ -1,22 +1,12 @@
 import React, { Fragment } from "react";
-import {
-  Typography
-} from "@material-tailwind/react";
-import {
-  categoryMoveDestAtom,
-  categoryQueryParamsAtom
-} from "atom/category";
-import {
-  useRecoilState,
-  useRecoilValue
-} from "recoil";
-
+import { Typography } from "@material-tailwind/react";
+import { useCategoryStore } from "@store/category";
+import { useSortStore } from "@store/sortParam";
+import { useBulkStore } from "@store/bulk";
 import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { bulkItemsAtom } from "@atom/bulk";
-import { sortAtom } from "atom/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import { Spinner } from "@components/atoms/spinner";
 
@@ -25,14 +15,24 @@ interface IProps {
   repoId: number;
 }
 
-const MoveChildren = ({
-  target, repoId
-}: IProps) => {
-  const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDestAtom);
-  const queryParams = useRecoilValue(categoryQueryParamsAtom);
-  const getSortParams = useRecoilValue(sortAtom);
-  const getBulkItems = useRecoilValue(bulkItemsAtom);
+const MoveChildren = ({ target, repoId }: IProps) => {
+  const [getCategoryMoveDest, setCategoryMoveDest] = [
+    useCategoryStore((state) => {
+      return state.categoryMoveDest;
+    }),
+    useCategoryStore((state) => {
+      return state.setCategoryMoveDest;
+    }),
+  ];
+  const queryParams = useCategoryStore((state) => {
+    return state.categoryQueryParams;
+  });
+  const getSortParams = useSortStore((state) => {
+    return state.sort;
+  });
+  const getBulkItems = useBulkStore((state) => {
+    return state.bulkItems;
+  });
 
   const {
     data: moveChildren,
@@ -48,7 +48,7 @@ const MoveChildren = ({
     undefined,
     "category",
     undefined,
-    true
+    true,
   );
 
   const bulkItemsCategories = getBulkItems.filter((item) => {
@@ -78,12 +78,12 @@ const MoveChildren = ({
                   return (
                     <div
                       key={`move-category-${subItem.id}`}
-                      className="move-category-item flex items-center gap-2 px-2 py-1 cursor-pointer"
+                      className="move-category-item flex cursor-pointer items-center gap-2 px-2 py-1"
                       onClick={() => {
                         setCategoryMoveDest(subItem as ICategoryMetadata);
                       }}
                     >
-                      <FolderIcon className="w-4 h-4 stroke-icon-active" />
+                      <FolderIcon className="h-4 w-4 stroke-icon-active" />
                       <Typography className="caption_c1 text-primary_normal">
                         {subItem.name}
                       </Typography>
@@ -91,7 +91,7 @@ const MoveChildren = ({
                   );
                 })
               ) : (
-                <Typography className="caption_c1 text-primary_normal p-2">
+                <Typography className="caption_c1 p-2 text-primary_normal">
                   موردی برای نمایش وجود ندارد
                 </Typography>
               )}
@@ -100,10 +100,7 @@ const MoveChildren = ({
         })
       )}
       <RenderIf isTrue={hasNextPage}>
-        <LoadMore
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
-        />
+        <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
       </RenderIf>
     </div>
   );

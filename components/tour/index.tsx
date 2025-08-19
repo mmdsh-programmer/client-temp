@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { activeTourAtom, ETourSection } from "@atom/tour";
+import { useTourStore } from "@store/tour";
+import { ETourSection } from "@atom/tour";
 import RepoTour from "./repoTour";
 import DashboardTour from "./dashboardTour";
 import CategoryTour from "./categoryTour";
 import VersionTour from "./versionTour";
 
 const Tour = () => {
-  const getActiveTour = useRecoilValue(activeTourAtom);
+  const activeTour = useTourStore((state) => {
+    return state.activeTour;
+  });
 
   useEffect(() => {
     const tourOverlay = document.createElement("div");
@@ -18,16 +20,14 @@ const Tour = () => {
   }, []);
 
   const tourContent = () => {
-    if (getActiveTour === ETourSection.REPO) return <RepoTour />;
-    if (getActiveTour === ETourSection.DOCUMENTS) return <CategoryTour />;
-    if (getActiveTour === ETourSection.VERSION) return <VersionTour />;
-    if (getActiveTour === ETourSection.DASHBOARD) return <DashboardTour />;
-    if (getActiveTour === null || getActiveTour === undefined) return null;
+    if (activeTour === ETourSection.REPO) return <RepoTour />;
+    if (activeTour === ETourSection.DOCUMENTS) return <CategoryTour />;
+    if (activeTour === ETourSection.VERSION) return <VersionTour />;
+    if (activeTour === ETourSection.DASHBOARD) return <DashboardTour />;
+    if (activeTour === null || activeTour === undefined) return null;
   };
 
-  return (
-    <div>{tourContent()}</div>
-  );
+  return <div>{tourContent()}</div>;
 };
 
 export default Tour;

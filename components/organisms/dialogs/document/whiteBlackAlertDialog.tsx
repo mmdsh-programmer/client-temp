@@ -1,10 +1,9 @@
 import React from "react";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { useRecoilValue } from "recoil";
 import useAddWhiteList from "@hooks/document/useAddWhiteList";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import useAddBlackList from "@hooks/document/useAddBlackList";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 
 interface IProps {
@@ -13,8 +12,12 @@ interface IProps {
 }
 
 const WhiteBlackAlertDialog = ({ type, onClose }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const whiteListHook = useAddWhiteList();
   const blackListHook = useAddBlackList();
@@ -41,9 +44,8 @@ const WhiteBlackAlertDialog = ({ type, onClose }: IProps) => {
       backToMain
       className="access-publishing-alert-dialog"
     >
-      سند مورد نظر از قبل دارای کاربرانی از لیست{" "}
-      {type === "black-list" ? "سیاه" : "سفید"} است. ابتدا باید این لیست خالی
-      شود. آیا از انجام این کار مطمئن هستید؟
+      سند مورد نظر از قبل دارای کاربرانی از لیست {type === "black-list" ? "سیاه" : "سفید"} است.
+      ابتدا باید این لیست خالی شود. آیا از انجام این کار مطمئن هستید؟
     </ConfirmDialog>
   );
 };

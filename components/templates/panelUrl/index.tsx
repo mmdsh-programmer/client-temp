@@ -1,40 +1,39 @@
 "use client";
 
-import { categoryShowAtom } from "atom/category";
-import { repoAtom } from "atom/repository";
-import { documentShowAtom } from "atom/document";
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
 
 const PanelUrl = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryShowAtom);
-  const getDocument = useRecoilValue(documentShowAtom);
+  const { repo } = useRepositoryStore();
+  const { categoryShow } = useCategoryStore();
+  const { documentShow } = useDocumentStore();
 
   useEffect(() => {
-    if (getDocument && getCategory && getRepo) {
+    if (documentShow && categoryShow && repo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&categoryId=${getCategory?.id}&documentId=${getDocument.id}`,
+        `${window.location.origin}${window.location.pathname}?repoId=${repo.id}&categoryId=${categoryShow?.id}&documentId=${documentShow.id}`,
       );
-    } else if (getCategory && getRepo) {
+    } else if (categoryShow && repo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&categoryId=${getCategory?.id}`,
+        `${window.location.origin}${window.location.pathname}?repoId=${repo.id}&categoryId=${categoryShow?.id}`,
       );
-    } else if (getDocument && getRepo) {
+    } else if (documentShow && repo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}&documentId=${getDocument.id}`,
+        `${window.location.origin}${window.location.pathname}?repoId=${repo.id}&documentId=${documentShow.id}`,
       );
-    } else if (getRepo) {
+    } else if (repo) {
       window.history.replaceState(
         null,
         "",
-        `${window.location.origin}${window.location.pathname}?repoId=${getRepo.id}`,
+        `${window.location.origin}${window.location.pathname}?repoId=${repo.id}`,
       );
     }
     if (window.location.pathname === "/admin/dashboard") {
@@ -44,7 +43,7 @@ const PanelUrl = () => {
         `${window.location.origin}${window.location.pathname}`,
       );
     }
-  }, [getDocument, getCategory, getRepo]);
+  }, [documentShow, categoryShow, repo]);
 
   return null;
 };

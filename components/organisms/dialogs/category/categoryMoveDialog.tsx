@@ -1,14 +1,8 @@
-import {
-  categoryAtom,
-  categoryMoveDestAtom,
-  categoryShowAtom,
-} from "@atom/category";
-import { useRecoilState, useRecoilValue } from "recoil";
-
+import React from "react";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import MoveSelection from "@components/molecules/moveSelection";
-import React from "react";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
@@ -20,12 +14,29 @@ interface IProps {
 }
 
 const CategoryMoveDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(categoryAtom);
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
-  const [getCategoryMoveDest, setCategoryMoveDest] =
-    useRecoilState(categoryMoveDestAtom);
-    const currentPath = usePathname();
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const [getCategory, setCategory] = [
+    useCategoryStore((state) => {
+      return state.category;
+    }),
+    useCategoryStore((state) => {
+      return state.setCategory;
+    }),
+  ];
+  const getCategoryShow = useCategoryStore((state) => {
+    return state.categoryShow;
+  });
+  const [getCategoryMoveDest, setCategoryMoveDest] = [
+    useCategoryStore((state) => {
+      return state.categoryMoveDest;
+    }),
+    useCategoryStore((state) => {
+      return state.setCategoryMoveDest;
+    }),
+  ];
+  const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
   const moveCategory = useEditCategory();
@@ -40,10 +51,7 @@ const CategoryMoveDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
+    const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
 
     if (
       getCategoryMoveDest?.id === getCategory?.parentId ||

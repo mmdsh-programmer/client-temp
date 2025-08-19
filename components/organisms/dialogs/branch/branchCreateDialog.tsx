@@ -6,10 +6,9 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useCreateRootBranch from "@hooks/branch/useCreateRootBranch";
 import useCreateSubBranch from "@hooks/branch/useCreateSubBranch";
-import { useRecoilValue } from "recoil";
-import { branchIdAtom } from "@atom/branch";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createBranchSchema } from "./validation.yup";
+import { useBranchStore } from "@store/branch";
 
 interface IForm {
   name: string;
@@ -22,7 +21,7 @@ interface IProps {
 }
 
 const BranchCreateDialog = ({ setOpen }: IProps) => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const { branchId: getBranchId } = useBranchStore();
 
   const createRootBranch = useCreateRootBranch();
   const createSubBranch = useCreateSubBranch();

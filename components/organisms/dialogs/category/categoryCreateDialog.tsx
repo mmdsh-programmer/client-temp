@@ -1,18 +1,17 @@
 import React from "react";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
+import { useCategoryStore } from "@store/category";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categorySchema } from "./validation.yup";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateCategory from "@hooks/category/useCreateCategory";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   name: string;
@@ -25,9 +24,15 @@ interface IProps {
 }
 
 const CategoryCreateDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getCategory = useRecoilValue(categoryAtom);
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const getCategory = useCategoryStore((state) => {
+    return state.category;
+  });
+  const getCategoryShow = useCategoryStore((state) => {
+    return state.categoryShow;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -61,10 +66,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       toast.error("نام دسته‌بندی شامل کاراکتر غیرمجاز است.");
       return;
     }
-    const repoId =
-      currentPath === "/admin/myDocuments"
-        ? userInfo!.repository.id
-        : getRepo!.id;
+    const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
 
     if (!repoId) return;
     createCategory.mutate({
@@ -96,11 +98,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             register={{ ...register("name") }}
             className="category-create-dialog__form-name"
           />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">اولویت دسته‌بندی</Typography>
@@ -112,9 +110,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             className="category-create-dialog__form-order"
           />
           {errors.order && (
-            <Typography className="warning_text">
-              {errors.order?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.order?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -125,9 +121,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             className="category-create-dialog__form-description"
           />
           {errors.description && (
-            <Typography className="warning_text">
-              {errors.description?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.description?.message}</Typography>
           )}
         </div>
       </form>

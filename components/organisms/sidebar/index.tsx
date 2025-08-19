@@ -10,15 +10,15 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ChevronLeftIcon, DashboardIcon, UserGroupIcon } from "@components/atoms/icons";
-import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
-import { ESidebarSection, sidebarSectionAtom } from "@atom/sidebar";
 import SidebarDocuments from "@components/molecules/sidebarDocuments";
 import SidebarRepoList from "@components/molecules/sidebarRepoList";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRouter } from "next/navigation";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import { useRepositoryStore } from "@store/repository";
+import { ESidebarSection, useSidebarStore } from "@store/sidebar";
+import { useRepoSearchParamStore } from "@store/repoSearchParam";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -31,9 +31,9 @@ interface IProps {
 const Sidebar = ({ children }: IProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(0);
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
-  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-  const [getSidebarSection, setSidebarSection] = useRecoilState(sidebarSectionAtom);
+  const { setRepoGrouping } = useRepositoryStore();
+  const { setSidebarSection, sidebarSection } = useSidebarStore();
+  const { setRepoSearchParam } = useRepoSearchParamStore();
 
   const { data: userInfo } = useGetUser();
   const { data: getDomainInfo } = useGetDomainInfo();
@@ -57,16 +57,16 @@ const Sidebar = ({ children }: IProps) => {
       <ListItem
         key={ERepoGrouping.DASHBOARD}
         placeholder="sidebar-item"
-        className={`sidebar-item-${getSidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} dashboard p-2 hover:!bg-transparent`}
+        className={`sidebar-item-${sidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} dashboard p-2 hover:!bg-transparent`}
       >
         <Button
           placeholder="sidebar-button"
-          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link sidebar-button-${getSidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} ${getSidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link sidebar-button-${sidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} ${sidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
             navigateTo("/admin/dashboard", () => {
-              setRepoGroup(ERepoGrouping.DASHBOARD);
+              setRepoGrouping(ERepoGrouping.DASHBOARD);
               setSidebarSection(ESidebarSection.DASHBOARD);
-              setSearchParam(null);
+              setRepoSearchParam(null);
             });
           }}
         >
@@ -135,12 +135,12 @@ const Sidebar = ({ children }: IProps) => {
           >
             <Button
               placeholder="sidebar-button"
-              className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${getSidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+              className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
               onClick={() => {
                 navigateTo("/admin/domainManagement", () => {
                   setSidebarSection(ESidebarSection.DOMAIN_MANAGEMENT);
-                  setRepoGroup(null);
-                  setSearchParam(null);
+                  setRepoGrouping(null);
+                  setRepoSearchParam(null);
                 });
               }}
             >
@@ -160,12 +160,12 @@ const Sidebar = ({ children }: IProps) => {
         >
           <Button
             placeholder="sidebar-button"
-            className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${getSidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+            className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
             onClick={() => {
               navigateTo("/admin/branchManagement", () => {
                 setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
-                setRepoGroup(null);
-                setSearchParam(null);
+                setRepoGrouping(null);
+                setRepoSearchParam(null);
               });
             }}
           >

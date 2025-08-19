@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import TabComponent from "@components/molecules/tab";
 import BranchUsers from "../branchUsers";
 import BranchGroups from "../branchGroups";
-import { useRecoilValue } from "recoil";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 export enum ETabs {
@@ -13,7 +12,7 @@ export enum ETabs {
 
 const BranchInfo = () => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.USERS);
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const { branchId: getBranchId } = useBranchStore();
 
   const tabList = [
     {

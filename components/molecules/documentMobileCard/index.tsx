@@ -1,19 +1,18 @@
 import { Typography } from "@material-tailwind/react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import DocumentIcon from "../documentIcon";
 import DocumentMenu from "../documentMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { IDocumentMetadata } from "@interface/document.interface";
 import MobileCard from "../mobileCard";
 import React from "react";
-import { bulkItemsAtom } from "@atom/bulk";
-import { categoryAtom } from "@atom/category";
-import { editorModeAtom } from "@atom/editor";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
+import { useBulkStore } from "@store/bulk";
+import { useCategoryStore } from "@store/category";
+import { useEditorStore } from "@store/editor";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -21,11 +20,24 @@ interface IProps {
 
 const DocumentMobileCard = ({ document }: IProps) => {
   const currentPath = usePathname();
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
-  const getRepo = useRecoilValue(repoAtom);
-  const selectedCat = useRecoilValue(categoryAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
+  const getBulkItems = useBulkStore((state) => {
+    return state.bulkItems;
+  });
+  const setBulkItems = useBulkStore((state) => {
+    return state.setBulkItems;
+  });
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const selectedCat = useCategoryStore((state) => {
+    return state.category;
+  });
+  const setDocument = useDocumentStore((state) => {
+    return state.setSelectedDocument;
+  });
+  const setEditorMode = useEditorStore((state) => {
+    return state.setEditorMode;
+  });
 
   const handleCardClick = () => {
     if (document.contentType === "file") {
@@ -34,13 +46,18 @@ const DocumentMobileCard = ({ document }: IProps) => {
       return;
     }
     const path = selectedCat
-      ? `edit?repoId=${document.repoId}&categoryId=${selectedCat.id
-      }&documentId=${document.id}&repoGroupHash=${getRepo?.userGroupHash
-      }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-      }`
-      : `edit?repoId=${document.repoId}&documentId=${document.id
-      }&repoGroupHash=${getRepo?.userGroupHash}&type=${document?.contentType}${document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-      }`;
+      ? `edit?repoId=${document.repoId}&categoryId=${
+          selectedCat.id
+        }&documentId=${document.id}&repoGroupHash=${
+          getRepo?.userGroupHash
+        }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${
+          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+        }`
+      : `edit?repoId=${document.repoId}&documentId=${
+          document.id
+        }&repoGroupHash=${getRepo?.userGroupHash}&type=${document?.contentType}${
+          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+        }`;
 
     window.open(path, "_blank");
   };
@@ -52,13 +69,15 @@ const DocumentMobileCard = ({ document }: IProps) => {
       toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
       return;
     }
-    setBulkItems((oldValue) => {
-      return isChecked
-        ? [...oldValue, document]
-        : [...oldValue].filter((item) => {
+    if (isChecked) {
+      setBulkItems([...getBulkItems, document]);
+    } else {
+      setBulkItems(
+        [...getBulkItems].filter((item) => {
           return item.id !== document.id;
-        }) || [];
-    });
+        }),
+      );
+    }
   };
 
   return (
@@ -66,8 +85,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
       className="document-mobile-card"
       name={
         <div className="flex w-full items-center gap-2">
-          {currentPath === "/admin/dashboard" ||
-            currentPath === "/admin/sharedDocuments" ? null : (
+          {currentPath === "/admin/dashboard" || currentPath === "/admin/sharedDocuments" ? null : (
             <Checkbox
               onClick={(e) => {
                 return e.stopPropagation();

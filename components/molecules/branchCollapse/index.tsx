@@ -3,11 +3,11 @@ import { Accordion, AccordionBody, AccordionHeader, Typography } from "@material
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import BranchMenu from "@components/molecules/branchMenu";
 import { IBranch } from "@interface/branch.interface";
-import { branchIdAtom } from "@atom/branch";
-import { useSetRecoilState } from "recoil";
-import { ESidebarSection, sidebarSectionAtom, sidebarTabAtom } from "@atom/sidebar";
 import { usePathname, useRouter } from "next/navigation";
-import { repoGroupingAtom } from "@atom/repository";
+import { useBranchStore } from "@store/branch";
+import { useRepositoryStore } from "@store/repository";
+import { ESidebarSection, useSidebarStore } from "@store/sidebar";
+import { useSidebarTabStore } from "@store/sidebarTab";
 
 interface IProps {
   children: React.JSX.Element;
@@ -21,10 +21,10 @@ const BranchCollapse = ({ children, className, isActive, childItem }: IProps) =>
   const currentPath = usePathname();
 
   const [open, setOpen] = React.useState(false);
-  const setBranchId = useSetRecoilState(branchIdAtom);
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
-  const setSidebarSection = useSetRecoilState(sidebarSectionAtom);
-  const setActiveTab = useSetRecoilState(sidebarTabAtom);
+  const { setBranchId } = useBranchStore();
+  const { setRepoGrouping } = useRepositoryStore();
+  const { setSidebarSection } = useSidebarStore();
+  const { setSidebarTab: setActiveTab } = useSidebarTabStore();
 
   const handleOpen = () => {
     setOpen(!open);
@@ -58,7 +58,7 @@ const BranchCollapse = ({ children, className, isActive, childItem }: IProps) =>
                 if (window.innerWidth < 480 && currentPath !== "/admin/branchManagement") {
                   router.push("/admin/branchManagement");
                 }
-                setRepoGroup(null);
+                setRepoGrouping(null);
                 setSidebarSection(ESidebarSection.BRANCH_MANAGEMENT);
                 setActiveTab(null);
                 setBranchId(childItem.id);

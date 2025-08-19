@@ -1,19 +1,22 @@
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentHideDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const hideDocument = useEditDocument();
 
@@ -52,7 +55,7 @@ const DocumentHideDialog = ({ setOpen }: IProps) => {
       className="document-hide-dialog"
     >
       آیا از مخفی سازی"
-      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {document?.name}
       </span>
       " اطمینان دارید؟

@@ -1,10 +1,11 @@
 import Shepherd, { StepOptions } from "shepherd.js";
-import { activeTourAtom } from "@atom/tour";
 import { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useTourStore } from "@store/tour";
 
 const RepoTour = () => {
-  const setActiveTour = useSetRecoilState(activeTourAtom);
+  const setActiveTour = useTourStore((state) => {
+    return state.setActiveTour;
+  });
 
   useEffect(() => {
     const tourOverlay = document.querySelectorAll(".tour-overlay")[0] as HTMLElement;
@@ -41,11 +42,11 @@ const RepoTour = () => {
     });
 
     const createStep = (
-      id:string,
-      content:string,
+      id: string,
+      content: string,
       element: string,
-      where:string,
-      disabled?:string,
+      where: string,
+      disabled?: string,
     ) => {
       return {
         id,
@@ -117,21 +118,21 @@ const RepoTour = () => {
         ".repoInformationTab",
         "left-end",
       ),
-    //   createStep(
-    //     "step3",
-    //     `
-    //         <div class="tour-step-container">
-    //         <h1 class="tour-step-header"> انتخاب عکس مخزن</h1>
-    //         <p class="tour-step-text">
-    //           فایل آپلود کن یا از میان فایل های موجود 
-    //           عکسی را برای مخزن انتخاب کنید.
-    //         </p>
-    //       </div>`,
+      //   createStep(
+      //     "step3",
+      //     `
+      //         <div class="tour-step-container">
+      //         <h1 class="tour-step-header"> انتخاب عکس مخزن</h1>
+      //         <p class="tour-step-text">
+      //           فایل آپلود کن یا از میان فایل های موجود
+      //           عکسی را برای مخزن انتخاب کنید.
+      //         </p>
+      //       </div>`,
 
-    //     ".repo-upload-image",
+      //     ".repo-upload-image",
 
-    //     "bottom",
-    //   ),
+      //     "bottom",
+      //   ),
       // createStep(
       //   "step3",
       //   `
@@ -145,79 +146,79 @@ const RepoTour = () => {
       //   ".repo-bookmark",
       //   "bottom",
       // ),
-    //   createStep(
-    //     "step5",
-    //     `
-    //     <div class="tour-step-container">
-    //     <h1 class="tour-step-header"> ویرایش </h1>
-    //     <p class="tour-step-text">
-    //     در صورت لزوم امکان ویرایش اسم و اطلاعات مخزن را دارید اسم یا توضیحات جدید
-    //     را وارد کنید.
-    //     </p>
-    //   </div>`,
-    //     ".repo-edit",
-    //     "bottom",
-    //   ),
-    //   createStep(
-    //     "step6",
-    //     `
-    //     <div class="tour-step-container">
-    //     <h1 class="tour-step-header"> حذف مخزن </h1>
-    //     <p class="tour-step-text">
-    //     امکان حذف یا ارشیو کردن مخزن در صورت حذف امکان بازیابی محتوا و فایل ها
-    //     موجود درون مخزن وجود ندارد.
-    //     </p>
-    //   </div>`,
-    //     ".repo-delete",
-    //     "bottom",
-    //   ),
-    //   createStep(
-    //     "step7",
-    //     `
-    //     <div class="tour-step-container">
-    //     <h1 class="tour-step-header"> انتقال مالکیت  </h1>
-    //     <p class="tour-step-text">
-    //     با وارد کرد نام کاربری پادی در کادر موجود، مالکیت مخزن به فرد مورد نظر
-    //     واگذار می گردد و فرد جدید می تواند مخزن را مدیریت کند (نقش شما در مخزن
-    //     به مدیر تغییر می کند).
-    //     </p>
-    //   </div>`,
-    //     ".repo-migrate-owner",
-    //     "bottom",
-    //   ),
-    //   createStep(
-    //     "step8",
-    //     `
-    //     <div class="tour-step-container">
-    //     <h1 class="tour-step-header"> جوین شدن با نقش </h1>
-    //     <p class="tour-step-text">
-    //     این ابزار امکان ایجاد و مدیریت لینک اضافه شدن افراد به مخزن با استفاده
-    //     از لینک‌های اختصاصی را فراهم می‌کند، افرادی که این لینک ها را در اختیار
-    //     دارند اجازه دارند فقط کارهایی را انجام دهند که برای نقش آن‌ها مجاز است.
-    //     و هر فرد در یک مخزن فقط می تواند یک نقش داشته باشد فقط کافی است برای نقش
-    //     مورد نظر لینک ایجاد کنید و اگر لینک موجود باشد می توانید آن را خلاصه تر
-    //     یا حذف کنید.
-    //     </p>
-    //   </div>`,
-    //     ".repo-publish",
-    //     "bottom",
-    //   ),
-    //   createStep(
-    //     "step9",
-    //     `
-    //     <div class="tour-step-container">
-    //     <h1 class="tour-step-header"> لینک عمومی کردن  </h1>
-    //     <p class="tour-step-text">
-    //     یا اگر می‌خواهید محتوای مخزنی را با مشتریان یا دیگران به اشتراک بگذارید،
-    //     می‌توانید یک لینک با انتخاب تاریخ انقضا لینک اشتراک گذاری عمومی مخزن
-    //     ایجاد می شود و تا پایان این تاریخ معتبر می ماند و محتوا هایی که تایید و
-    //     عمومی شده اند نمایش داده می شونددر صورتی که مخزن لینک داشته باشد با
-    //     انتخاب این بخش میتوانید لینک عمومی مخزن را لغو کنید.
-    //     </p>
-    //   </div>`,
-    //     ".repo-link",
-    //     "bottom",
-    //   ),
+      //   createStep(
+      //     "step5",
+      //     `
+      //     <div class="tour-step-container">
+      //     <h1 class="tour-step-header"> ویرایش </h1>
+      //     <p class="tour-step-text">
+      //     در صورت لزوم امکان ویرایش اسم و اطلاعات مخزن را دارید اسم یا توضیحات جدید
+      //     را وارد کنید.
+      //     </p>
+      //   </div>`,
+      //     ".repo-edit",
+      //     "bottom",
+      //   ),
+      //   createStep(
+      //     "step6",
+      //     `
+      //     <div class="tour-step-container">
+      //     <h1 class="tour-step-header"> حذف مخزن </h1>
+      //     <p class="tour-step-text">
+      //     امکان حذف یا ارشیو کردن مخزن در صورت حذف امکان بازیابی محتوا و فایل ها
+      //     موجود درون مخزن وجود ندارد.
+      //     </p>
+      //   </div>`,
+      //     ".repo-delete",
+      //     "bottom",
+      //   ),
+      //   createStep(
+      //     "step7",
+      //     `
+      //     <div class="tour-step-container">
+      //     <h1 class="tour-step-header"> انتقال مالکیت  </h1>
+      //     <p class="tour-step-text">
+      //     با وارد کرد نام کاربری پادی در کادر موجود، مالکیت مخزن به فرد مورد نظر
+      //     واگذار می گردد و فرد جدید می تواند مخزن را مدیریت کند (نقش شما در مخزن
+      //     به مدیر تغییر می کند).
+      //     </p>
+      //   </div>`,
+      //     ".repo-migrate-owner",
+      //     "bottom",
+      //   ),
+      //   createStep(
+      //     "step8",
+      //     `
+      //     <div class="tour-step-container">
+      //     <h1 class="tour-step-header"> جوین شدن با نقش </h1>
+      //     <p class="tour-step-text">
+      //     این ابزار امکان ایجاد و مدیریت لینک اضافه شدن افراد به مخزن با استفاده
+      //     از لینک‌های اختصاصی را فراهم می‌کند، افرادی که این لینک ها را در اختیار
+      //     دارند اجازه دارند فقط کارهایی را انجام دهند که برای نقش آن‌ها مجاز است.
+      //     و هر فرد در یک مخزن فقط می تواند یک نقش داشته باشد فقط کافی است برای نقش
+      //     مورد نظر لینک ایجاد کنید و اگر لینک موجود باشد می توانید آن را خلاصه تر
+      //     یا حذف کنید.
+      //     </p>
+      //   </div>`,
+      //     ".repo-publish",
+      //     "bottom",
+      //   ),
+      //   createStep(
+      //     "step9",
+      //     `
+      //     <div class="tour-step-container">
+      //     <h1 class="tour-step-header"> لینک عمومی کردن  </h1>
+      //     <p class="tour-step-text">
+      //     یا اگر می‌خواهید محتوای مخزنی را با مشتریان یا دیگران به اشتراک بگذارید،
+      //     می‌توانید یک لینک با انتخاب تاریخ انقضا لینک اشتراک گذاری عمومی مخزن
+      //     ایجاد می شود و تا پایان این تاریخ معتبر می ماند و محتوا هایی که تایید و
+      //     عمومی شده اند نمایش داده می شونددر صورتی که مخزن لینک داشته باشد با
+      //     انتخاب این بخش میتوانید لینک عمومی مخزن را لغو کنید.
+      //     </p>
+      //   </div>`,
+      //     ".repo-link",
+      //     "bottom",
+      //   ),
       createStep(
         "step-last",
         `
@@ -233,7 +234,9 @@ const RepoTour = () => {
       ),
     ];
 
-    tourSteps.forEach((step) => { return repoTour.addStep(step as StepOptions ); });
+    tourSteps.forEach((step) => {
+      return repoTour.addStep(step as StepOptions);
+    });
 
     repoTour.start();
     return () => {

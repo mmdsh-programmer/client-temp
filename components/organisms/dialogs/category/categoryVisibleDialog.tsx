@@ -1,20 +1,27 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-
-import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { categoryAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
+import { useCategoryStore } from "@store/category";
+import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const CategoryVisibleDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(categoryAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const [getCategory, setCategory] = [
+    useCategoryStore((state) => {
+      return state.category;
+    }),
+    useCategoryStore((state) => {
+      return state.setCategory;
+    }),
+  ];
 
   const editCategory = useEditCategory();
 

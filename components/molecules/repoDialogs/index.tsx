@@ -7,10 +7,9 @@ import RepoKeyDialog from "@components/organisms/dialogs/repository/repoKey";
 import RepoRestoreDialog from "@components/organisms/dialogs/repository/repoRestoreDialog";
 import RepoShareDialog from "@components/organisms/dialogs/repository/repoShareDialog";
 import RepoLeaveDialog from "@components/organisms/dialogs/repository/repoLeaveDialog";
-import { useRecoilState } from "recoil";
-import { repoAtom } from "@atom/repository";
 import Files from "@components/organisms/fileManagement";
 import RepoVersionRequestsDialog from "@components/organisms/dialogs/repository/repoVersionRequestsDialog";
+import { useRepositoryStore } from "@store/repository";
 import PrivateFeedCreateDialog from "@components/organisms/dialogs/privateFeed/privateFeedCreateDialog";
 
 interface IRepoDialogsProps {
@@ -31,10 +30,17 @@ interface IRepoDialogsProps {
 }
 
 const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const [getRepo, setRepo] = [
+    useRepositoryStore((state) => {
+      return state.repo;
+    }),
+    useRepositoryStore((state) => {
+      return state.setRepo;
+    }),
+  ];
 
   const handleClose = () => {
-    if (window.location.pathname === "/admin/dashboard") {
+    if (window.location.pathname === "/admin/dashboard" && getRepo) {
       setRepo(null);
     }
   };
@@ -49,7 +55,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
           }}
         />
       ) : null}
-      {modals.delete ? (
+      {/* {modals.delete ? (
         <RepoDeleteDialog
           setOpen={() => {
             setModalState("delete", false);
@@ -125,7 +131,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
             handleClose();
           }}
         />
-      ) : null}
+      ) : null} 
       {modals.privateFeed ? (
         <PrivateFeedCreateDialog
           setOpen={() => {
@@ -133,7 +139,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
             handleClose();
           }}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 };

@@ -16,8 +16,9 @@ interface IProps {
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const domain = decodeKey(params.domain);
-
+  const decodedDomain = await params;
+  const domain = decodeKey(decodedDomain);
+  
   try {
     const { content } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(content ?? "{}");
@@ -37,9 +38,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   }
 }
 
-const DomainLayout = ({ children, params }: IProps) => {
+const DomainLayout = async ({ children, params }: IProps) => {
+  const { domain } = await params;
+
   return (
-    <ThemeLoaderProvider domain={params.domain}>
+    <ThemeLoaderProvider domain={domain}>
       <>
         <MainProvider>
           <LayoutTransitionProvider

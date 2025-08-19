@@ -1,16 +1,17 @@
 import { BookmarkIcon, InfoIcon, MoreDotIcon } from "@components/atoms/icons";
-import { ETourSection, activeTourAtom } from "@atom/tour";
 import React, { useState } from "react";
 import { repoActionDrawerAtom, repoAtom, repoInfoAtom } from "@atom/repository";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
-
 import { Button } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { IRepo } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
 import RepoDialogs from "../repoDialogs";
 import { usePathname } from "next/navigation";
+import { useRepoInfoStore, useRepositoryStore, useRepoActionDrawerStore } from "@store/repository";
+import { useTourStore } from "@store/tour";
+import { ETourSection } from "@atom/tour";
 
 interface IProps {
   repo?: IRepo;
@@ -21,12 +22,22 @@ interface IProps {
 const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
   const currentPath = usePathname();
 
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
-  const setRepoInfo = useSetRecoilState(repoInfoAtom);
-  const setActiveTour = useSetRecoilState(activeTourAtom);
+  const repoState = useRepositoryStore();
+  const { setRepo } = repoState;
+  const getRepo = repoState.repo;
+  const setRepoInfo = useRepoInfoStore((state) => {
+    return state.setRepoInfo;
+  });
+  const setActiveTour = useTourStore((state) => {
+    return state.setActiveTour;
+  });
+  const openRepoActionDrawer = useRepoActionDrawerStore((state) => {
+    return state.openRepoActionDrawer;
+  });
+  const setOpenRepoActionDrawer = useRepoActionDrawerStore((state) => {
+    return state.setOpenRepoActionDrawer;
+  });
 
-  const [openRepoActionDrawer, setOpenRepoActionDrawer] =
-    useRecoilState(repoActionDrawerAtom);
 
   const [modals, setModals] = useState({
     edit: false,
@@ -110,7 +121,7 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
           />
         </div>
       )}
-      <RepoDialogs modals={modals} setModalState={setModalState} />
+      {/* <RepoDialogs modals={modals} setModalState={setModalState} /> */}
     </>
   );
 };

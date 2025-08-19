@@ -22,6 +22,8 @@ import { toPersianDigit } from "@utils/index";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { repoFeedAtom } from "@atom/feed";
+import { useRepositoryStore, useRepoActivityStore } from "@store/repository";
+
 
 type ModalType =
   | "delete"
@@ -51,8 +53,16 @@ const useMenuList = (
   setOpenRepoActionDrawer: React.Dispatch<React.SetStateAction<boolean | null>>,
   showLog?: boolean,
 ): MenuItem[] => {
-  const setRepo = useSetRecoilState(repoAtom);
-  const [showRepoActivity, setShowRepoActivity] = useRecoilState(repoActivityAtom);
+  const setRepo = useRepositoryStore((state) => {
+    return state.setRepo;
+  });
+  const showRepoActivity = useRepoActivityStore((state) => {
+    return state.showRepoActivity;
+  });
+  const setShowRepoActivity = useRepoActivityStore((state) => {
+    return state.setShowRepoActivity;
+  });
+  
   const setRepoFeed = useSetRecoilState(repoFeedAtom);
 
   const { data: getDomainInfo } = useGetDomainInfo();

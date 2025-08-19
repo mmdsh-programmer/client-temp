@@ -1,16 +1,15 @@
 import { Typography } from "@material-tailwind/react";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import CategoryMenu from "../categoryMenu/categoryMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import MobileCard from "../mobileCard";
 import React from "react";
-import { bulkItemsAtom } from "@atom/bulk";
-import { categoryShowAtom } from "@atom/category";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
+import { useCategoryStore } from "@store/category";
+import { useBulkStore } from "@store/bulk";
 
 interface IProps {
   category: ICategoryMetadata;
@@ -18,9 +17,15 @@ interface IProps {
 
 const CategoryMobileCard = ({ category }: IProps) => {
   const currentPath = usePathname();
-  const setCategoryParent = useSetRecoilState(categoryShowAtom);
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
-
+  const setCategoryParent = useCategoryStore((state) => {
+    return state.setCategoryShow;
+  });
+  const getBulkItems = useBulkStore((state) => {
+    return state.bulkItems;
+  });
+  const setBulkItems = useBulkStore((state) => {
+    return state.setBulkItems;
+  });
   const handleCardClick = (selectedCategory: ICategoryMetadata) => {
     setCategoryParent(selectedCategory);
     setBulkItems([]);
@@ -33,13 +38,13 @@ const CategoryMobileCard = ({ category }: IProps) => {
       toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
       return;
     }
-    setBulkItems((oldValue) => {
-      return isChecked
-        ? [...oldValue, category]
-        : [...oldValue].filter((item) => {
-          return item.id !== category.id;
-        }) || [];
-    });
+    setBulkItems(
+      isChecked
+        ? [...getBulkItems, category]
+        : getBulkItems.filter((item) => {
+            return item.id !== category.id;
+          }),
+    );
   };
 
   return (

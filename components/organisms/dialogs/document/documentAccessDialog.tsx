@@ -1,27 +1,26 @@
-import {
- DialogBody,
- Typography
-} from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { DialogBody, Typography } from "@material-tailwind/react";
 import DocumentBlockList from "@components/organisms/document/documentBlockList";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import LoadingButton from "@components/molecules/loadingButton";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useBlockDocument from "@hooks/document/useBlockDocument";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentAccessDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const [value, setValue] = useState("");
 
@@ -83,9 +82,7 @@ const DocumentAccessDialog = ({ setOpen }: IProps) => {
               loading={blockDocument.isPending}
               disabled={!value}
             >
-              <Typography className="text__label__button text-white">
-                افزودن
-              </Typography>
+              <Typography className="text__label__button text-white">افزودن</Typography>
             </LoadingButton>
           </div>
           <DocumentBlockList />

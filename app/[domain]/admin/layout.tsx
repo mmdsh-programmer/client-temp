@@ -13,7 +13,7 @@ interface IProps {
 }
 
 const AdminLayout = async ({ children, params }: IProps) => {
-  const { domain } = params;
+  const { domain } = await params;
   const { content } = await getCustomPostByDomain(decodeKey(domain));
   const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
   

@@ -3,8 +3,8 @@
 import { Button, Typography } from "@material-tailwind/react";
 import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import React, { useState } from "react";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
-
+import { useFilterStore } from "@store/filter";
+import { useSortStore } from "@store/sortParam";
 import AdvancedFilter from "@components/molecules/advancedFilter";
 import CategoryBreadCrumb from "@components/molecules/categoryBreadCrumb";
 import CategoryTableRow from "@components/molecules/categoryTableRow";
@@ -17,9 +17,7 @@ import RenderIf from "@components/atoms/renderIf";
 import SearchFilter from "@components/molecules/searchFilter";
 import { Spinner } from "@components/atoms/spinner";
 import TableHead from "@components/molecules/tableHead";
-import { sortAtom } from "@atom/sortParam";
 import { usePathname } from "next/navigation";
-import { useRecoilState } from "recoil";
 
 interface ITableHead {
   key: string;
@@ -38,9 +36,31 @@ const TableView = ({
 }: ICategoryView) => {
   const currentPath = usePathname();
   const [openFilter, setOpenFilter] = useState(false);
-  const [getFilterChildren, setFilterChildren] = useRecoilState(filterChildrenAtom);
-  const [getFilterReport, setFilterReport] = useRecoilState(filterReportAtom);
-  const [getSortParams, setSortParams] = useRecoilState(sortAtom);
+  const [getFilterChildren, setFilterChildren] = [
+    useFilterStore((state) => {
+      return state.filterChildren;
+    }),
+    useFilterStore((state) => {
+      return state.setFilterChildren;
+    }),
+  ];
+  
+  const [getFilterReport, setFilterReport] = [
+    useFilterStore((state) => {
+      return state.filterReport;
+    }),
+    useFilterStore((state) => {
+      return state.setFilterReport;
+    }),
+  ];
+  const [getSortParams, setSortParams] = [
+    useSortStore((state) => {
+      return state.sort;
+    }),
+    useSortStore((state) => {
+      return state.setSort;
+    }),
+  ];
 
   const listLength = getCategoryList?.pages[0].total;
 
@@ -67,26 +87,22 @@ const TableView = ({
                           value: "اولویت",
                           isSorted: true,
                           sortAction: () => {
-                        setSortParams((prevState) => {
-                          return {
-                            ...prevState,
-                            order: getSortParams.order === "asc" ? "desc" : "asc",
-                          };
-                        });
-                      },
-                      className:
-                        "categoryOrder hidden xl:!flex whitespace-nowrap !px-2 !max-w-[70px] !w-[70px]",
-                    },
+                            setSortParams({
+                              ...getSortParams,
+                              order: getSortParams.order === "asc" ? "desc" : "asc",
+                            });
+                          },
+                          className:
+                            "categoryOrder whitespace-nowrap hidden !px-1 xl:table-cell !max-w-[70px] !w-[70px]",
+                        },
                     {
                       key: "name",
                       value: "نام دسته",
                       isSorted: true,
                       sortAction: () => {
-                        setSortParams((prevState) => {
-                          return {
-                            ...prevState,
-                            name: getSortParams.name === "asc" ? "desc" : "asc",
-                          };
+                        setSortParams({
+                          ...getSortParams,
+                          order: getSortParams.name === "asc" ? "desc" : "asc",
                         });
                       },
                       className:
@@ -99,15 +115,13 @@ const TableView = ({
                           value: "تاریخ ایجاد",
                           isSorted: true,
                           sortAction: () => {
-                        setSortParams((prevState) => {
-                          return {
-                            ...prevState,
-                            createdAt: getSortParams.createdAt === "asc" ? "desc" : "asc",
-                          };
-                        });
-                      },
-                      className: "!px-2 whitespace-nowrap",
-                    },
+                            setSortParams({
+                              ...getSortParams,
+                              order: getSortParams.createdAt === "asc" ? "desc" : "asc",
+                            });
+                          },
+                          className: "!px-2 whitespace-nowrap",
+                        },
                     currentPath === "/admin/dashboard"
                       ? null
                       : {
@@ -168,10 +182,7 @@ const TableView = ({
 
   return (
     <div
-      className={`category-children-table flex flex-col bg-white
-         ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"}
-         ${currentPath === "/admin/dashboard" ? "!h-[calc(100vh-220px)] !min-h-[calc(100vh-220px)] overflow-auto" : "min-h-[calc(100vh-340px)]"}
-         h-full flex-shrink-0 flex-grow rounded-lg shadow-small`}
+      className={`category-children-table flex flex-col bg-white ${currentPath === "/admin/myDocuments" || currentPath === "/admin/sharedDocuments" ? "min-h-[calc(100vh-200px)]" : "min-h-[calc(100vh-340px)]"} ${currentPath === "/admin/dashboard" ? "!h-[calc(100vh-220px)] !min-h-[calc(100vh-220px)] overflow-auto" : "min-h-[calc(100vh-340px)]"} h-full flex-shrink-0 flex-grow rounded-lg shadow-small`}
     >
       <div className="flex items-center justify-between px-5 py-4">
         <CategoryBreadCrumb />

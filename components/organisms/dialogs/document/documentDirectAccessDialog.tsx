@@ -8,14 +8,13 @@ import InfoDialog from "@components/templates/dialog/infoDialog";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
 import { documentDirectAccessSchema } from "./validation.yup";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
 import useAddAccessToResource from "@hooks/accessManagement/useAddAccessToResource";
 import { useForm } from "react-hook-form";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDocumentStore } from "@store/document";
 
 interface IForm {
   username: string;
@@ -30,7 +29,9 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
     label: translateRoles(ERoles.admin),
     value: ERoles.admin,
   });
-  const document = useRecoilValue(selectedDocumentAtom);
+  const document = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
 
   const { data: getRoles, isFetching: isFetchingRoles } = useGetRoles();
   const directAccessDocument = useAddAccessToResource();
@@ -84,10 +85,10 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
       <DialogBody>
         <form className="direct-access-form flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
+            <div className="flex !h-12 items-center gap-2 rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2 pr-3">
               <InputAtom
                 id="username"
-                className="direct-access-form__username  !w-auto h-auto overflow-hidden !p-0 border-none"
+                className="direct-access-form__username h-auto !w-auto overflow-hidden border-none !p-0"
                 placeholder="شناسه پادی"
                 register={{ ...register("username") }}
               />
@@ -110,17 +111,15 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
               <LoadingButton
                 loading={directAccessDocument.isPending}
                 onClick={handleSubmit(onSubmit)}
-                className="direct-access-form__add !h-8 !bg-white px-3 !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+                className="direct-access-form__add !h-8 !rounded-sm !bg-white px-3 shadow-none hover:bg-white hover:shadow-none"
               >
-                <Typography className="text__label__button !text-primary_normal font-medium">
+                <Typography className="text__label__button font-medium !text-primary_normal">
                   افزودن
                 </Typography>
               </LoadingButton>
             </div>
             {errors.username ? (
-              <Typography className="warning_text">
-                {errors.username?.message}
-              </Typography>
+              <Typography className="warning_text">{errors.username?.message}</Typography>
             ) : null}
           </div>
           <DocumentAccessList />
