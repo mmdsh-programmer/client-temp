@@ -11,7 +11,7 @@ export const getRedisClient = async () => {
 };
 
 export const generateCachePageTag = async (tag: string[], revalidate = 24 * 3600) => {
-  await fetch(`${process.env.BACKEND_URL}/v1`, {
+  await fetch(`${process.env.BACKEND_URL}`, {
     next: {
       tags: tag,
       revalidate,
