@@ -10,11 +10,10 @@ import useCreatePrivateFeed from "@hooks/privateFeed/useCreatePrivateFeed";
 import { useForm } from "react-hook-form";
 import useGetDomainPublishRepoList from "@hooks/domain/useGetDomainPublishRepoList";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
-import { useRecoilValue } from "recoil";
-import { repoFeedAtom } from "@atom/feed";
 import { Spinner } from "@components/atoms/spinner";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { privateFeedSchema } from "./validation.yup";
+import { useFeedStore } from "@store/feed";
 
 interface IForm {
   name: string;
@@ -29,7 +28,7 @@ interface IProps {
 const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
   const [imageHash, setImageHash] = useState<string | undefined>();
   const [repoInfo, setRepoInfo] = useState<IOption>();
-  const getRepoFeed = useRecoilValue(repoFeedAtom);
+  const { repoFeed: getRepoFeed } = useFeedStore();
 
   const {
     data: publishRepoList,

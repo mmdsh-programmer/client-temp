@@ -6,11 +6,10 @@ import React, { useState } from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
-import { documentTypeAtom } from "@atom/document";
 import useGetClasorField from "@hooks/document/useGetClasorField";
-import { useRecoilState } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   isTemplate: boolean;
@@ -20,7 +19,7 @@ interface IProps {
 const DocumentType = ({
   isTemplate, setOpen
 }: IProps) => {
-  const [getDocumentType, setDocumentType] = useRecoilState(documentTypeAtom);
+  const { documentType: getDocumentType, setDocumentType } = useDocumentStore();
   const { handleNextStep } = useStepperNavigate();
   const {
     data: getDocumentTypes, isLoading

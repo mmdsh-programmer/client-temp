@@ -1,19 +1,29 @@
 import React from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody } from "@material-tailwind/react";
 import VersionList from "../version/versionList";
-import { versionModalListAtom } from "@atom/version";
+import { useVersionStore } from "@store/version";
 import VersionMenu from "@components/molecules/versionMenu";
 import { usePathname } from "next/navigation";
-import { searchContentLinkAtom } from "@atom/category";
+import { useCategoryStore } from "@store/category";
 
 const VersionDialogView = () => {
-  const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const setDocumentShow = useSetRecoilState(documentShowAtom);
-  const setLink = useSetRecoilState(searchContentLinkAtom);
+  const getSelectedDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const setSelectedDocument = useDocumentStore((s) => {
+    return s.setSelectedDocument;
+  });
+  const setDocumentShow = useDocumentStore((s) => {
+    return s.setDocumentShow;
+  });
+  const setVersionModalList = useVersionStore((s) => {
+    return s.setVersionModalList;
+  });
+  const setLink = useCategoryStore((s) => {
+    return s.setCategorySearchContentLink;
+  });
 
   const currentPath = usePathname();
 

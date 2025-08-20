@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   handleClose: () => void;
@@ -25,7 +24,7 @@ const RepoImage = ({
   setOpenFileManagement,
   selectedFile,
 }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const [imageType, setImageType] = useState<"default" | "custom">();
   const [defualtImage, setDefualtImage] = useState<string | null>(null);
 

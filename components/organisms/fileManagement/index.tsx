@@ -42,7 +42,9 @@ const Files = ({
   const [selectedImage, setSelectedImage] = useState<IFile | null>(null);
 
   const queryClient = useQueryClient();
-  const getRepo = useRepositoryStore((state) => state.repo);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
   const { data: userInfo, refetch: refetchUser } = useGetUser();
 
   const {
@@ -201,7 +203,7 @@ const Files = ({
       }}
       handleSelect={handleSelect}
     >
-      <ClasorFileManagement
+      {/* <ClasorFileManagement
         files={files}
         cropMode={false}
         isFetching={isFetching}
@@ -221,7 +223,9 @@ const Files = ({
         onSearchFile={(search?: string) => {
           setName(search);
         }}
-      />
+      /> */}
+
+      ااااااا
     </FileManagementDialog>
   );
 };

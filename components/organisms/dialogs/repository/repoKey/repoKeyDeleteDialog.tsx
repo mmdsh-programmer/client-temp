@@ -1,10 +1,9 @@
 import React from "react";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { IPublicKey } from "@interface/repo.interface";
-import { deleteRepoKeyAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useDeleteRepoPublicKey from "@hooks/repository/useDeleteRepoPublicKey";
-import { useRecoilValue } from "recoil";
+import { useDeleteRepoKeyStore } from "@store/repository";
 
 interface IProps {
   repoId: number;
@@ -14,7 +13,7 @@ interface IProps {
 const RepoKeyDeleteDialog = ({
  setOpen, repoId 
 }: IProps) => {
-  const getDeleteRepoKey = useRecoilValue(deleteRepoKeyAtom);
+  const { deleteRepoKey } = useDeleteRepoKeyStore();
 
   const deleteRepoKeyHook = useDeleteRepoPublicKey();
 
@@ -23,12 +22,12 @@ const RepoKeyDeleteDialog = ({
   };
 
   const handleDelete = async () => {
-    if (!getDeleteRepoKey)
+    if (!deleteRepoKey)
       return toast.error("مقادیر ورودی برای حذف کلید صحیح نیست");
 
     deleteRepoKeyHook.mutate({
       repoId,
-      keyId: getDeleteRepoKey.id,
+      keyId: deleteRepoKey.id,
       callBack: () => {
         toast.success("کلید با موفقیت حذف شد");
         handleClose();
@@ -44,7 +43,7 @@ const RepoKeyDeleteDialog = ({
       dialogHeader="حذف کلید"
       className="repo-key-delete-dialog"
     >
-      {getDeleteRepoKey?.name}
+      {deleteRepoKey?.name}
     </DeleteDialog>
   );
 };

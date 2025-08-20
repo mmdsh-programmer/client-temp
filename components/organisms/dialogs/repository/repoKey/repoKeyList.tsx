@@ -10,10 +10,9 @@ import RepoKeyMenu from "@components/molecules/repoKeyMenu";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 import { TickIcon } from "@components/atoms/icons";
-import { repoAtom } from "@atom/repository";
 import useGetRepoPublicKeys from "@hooks/repository/useGetRepoPublicKeys";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   repoId: number;
@@ -41,7 +40,7 @@ const RepoKeyList = ({
     refetch,
   } = useGetRepoPublicKeys(repoId, 10);
   
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
 
   const tableHead = hasAction && getRepo?.roleName === ERoles.owner
     ? [

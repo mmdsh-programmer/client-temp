@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { repoAtom, repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useRepoSearchParamStore } from "@store/repoSearchParam";
 import AccessRepoList from "./accessRepoList";
 import BookmarkRepoList from "./bookmarkList";
 import { ERepoGrouping } from "@interface/enums";
@@ -13,14 +13,13 @@ import RepoMenu from "@components/molecules/repoMenu";
 import RepoSearch from "@components/molecules/repoSearch";
 
 const RepoList = () => {
-  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
-  const getRepoGroup = useRecoilValue(repoGroupingAtom);
-  const setRepo = useSetRecoilState(repoAtom);
+  const { setRepoSearchParam } = useRepoSearchParamStore();
+  const { repoGrouping, setRepo } = useRepositoryStore();
 
   useEffect(() => {
-    setSearchParam(null);
+    setRepoSearchParam(null);
     setRepo(null);
-  }, []);
+  }, [setRepoSearchParam, setRepo]);
 
   return (
     <div className="flex flex-col gap-4 p-4 xs:gap-6 xs:p-0">
@@ -33,19 +32,19 @@ const RepoList = () => {
         renderSearch={<RepoSearch />}
         className="repo-list-header"
       />
-      <RenderIf isTrue={getRepoGroup === ERepoGrouping.MY_REPO}>
+      <RenderIf isTrue={repoGrouping === ERepoGrouping.MY_REPO}>
         <MyRepoList archived={false} />
       </RenderIf>
-      <RenderIf isTrue={getRepoGroup === ERepoGrouping.ARCHIVE_REPO}>
+      <RenderIf isTrue={repoGrouping === ERepoGrouping.ARCHIVE_REPO}>
         <MyRepoList archived />
       </RenderIf>
-      <RenderIf isTrue={getRepoGroup === ERepoGrouping.ACCESS_REPO}>
+      <RenderIf isTrue={repoGrouping === ERepoGrouping.ACCESS_REPO}>
         <AccessRepoList />
       </RenderIf>
-      <RenderIf isTrue={getRepoGroup === ERepoGrouping.BOOKMARK_REPO}>
+      <RenderIf isTrue={repoGrouping === ERepoGrouping.BOOKMARK_REPO}>
         <BookmarkRepoList />
       </RenderIf>
-      <RenderIf isTrue={getRepoGroup === ERepoGrouping.PUBLISHED_REPO}>
+      <RenderIf isTrue={repoGrouping === ERepoGrouping.PUBLISHED_REPO}>
         <PublishedRepoList />
       </RenderIf>
       <RepoMenu showDrawer />

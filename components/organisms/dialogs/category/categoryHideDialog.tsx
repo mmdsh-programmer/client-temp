@@ -1,9 +1,7 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { categoryAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
@@ -13,8 +11,15 @@ interface IProps {
 }
 
 const CategoryHideDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(categoryAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const getCategory = useCategoryStore((state) => {
+    return state.category;
+  });
+  const setCategory = useCategoryStore((state) => {
+    return state.setCategory;
+  });
 
   const editCategory = useEditCategory();
 
@@ -54,7 +59,7 @@ const CategoryHideDialog = ({ setOpen }: IProps) => {
       className="category-hide-dialog"
     >
       آیا از مخفی سازی"
-      <span className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]">
+      <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {getCategory?.name}
       </span>
       " اطمینان دارید؟

@@ -1,23 +1,51 @@
 import { create } from "zustand";
+import { IVersion } from "@interface/version.interface";
 
-export type EditorMode = "edit" | "preview" | "view" | null;
-
-interface EditorState {
+// Zustand store for editor management (replaces editor atoms)
+export const useEditorStore = create<{
   editorModal: boolean;
-  setEditorModal: (open: boolean) => void;
-  editorMode: EditorMode;
-  setEditorMode: (mode: EditorMode) => void;
-}
-
-export const useEditorStore = create<EditorState>((set) => {
+  setEditorModal: (modal: boolean) => void;
+  editorMode: "edit" | "preview" | "temporaryPreview";
+  setEditorMode: (mode: "edit" | "preview" | "temporaryPreview") => void;
+  editorData: IVersion | null;
+  setEditorData: (data: IVersion | null) => void;
+  editorListDrawer: boolean;
+  setEditorListDrawer: (drawer: boolean) => void;
+  editorDecryptedContent: string | null;
+  setEditorDecryptedContent: (content: string | null) => void;
+  editorPublicKey: string | null;
+  setEditorPublicKey: (key: string | null) => void;
+  postId: number | null;
+  setPostId: (id: number | null) => void;
+}>((set) => {
   return {
     editorModal: false,
-    setEditorModal: (open) => {
-      set({ editorModal: open });
+    setEditorModal: (modal) => {
+      return set({ editorModal: modal });
     },
-    editorMode: null,
+    editorMode: "preview",
     setEditorMode: (mode) => {
-      set({ editorMode: mode });
+      return set({ editorMode: mode });
+    },
+    editorData: null,
+    setEditorData: (data) => {
+      return set({ editorData: data });
+    },
+    editorListDrawer: false,
+    setEditorListDrawer: (drawer) => {
+      return set({ editorListDrawer: drawer });
+    },
+    editorDecryptedContent: null,
+    setEditorDecryptedContent: (content) => {
+      return set({ editorDecryptedContent: content });
+    },
+    editorPublicKey: null,
+    setEditorPublicKey: (key) => {
+      return set({ editorPublicKey: key });
+    },
+    postId: null,
+    setPostId: (id) => {
+      return set({ postId: id });
     },
   };
 });

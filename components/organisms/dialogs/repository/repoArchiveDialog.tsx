@@ -2,10 +2,9 @@ import { usePathname, useRouter } from "next/navigation";
 
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useArchiveRepo from "@hooks/repository/useArchiveRepo";
-import { useRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +15,7 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
 
   const { isPending, mutate } = useArchiveRepo();
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
 
   const handleClose = () => {
     setOpen(false);

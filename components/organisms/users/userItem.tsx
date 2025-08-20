@@ -1,19 +1,18 @@
 import React from "react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import { Typography } from "@material-tailwind/react";
-import { useRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 import { ERoles } from "@interface/enums";
 import { IUser } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
 import { UserIcon } from "@components/atoms/icons";
-import { repoAtom } from "@atom/repository";
+import { useUserStore } from "@store/user";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
 import useDeleteUser from "@hooks/user/useDeleteUser";
 import useEditUserRole from "@hooks/user/useEditUserRole";
 import useGetRoles from "@hooks/user/useGetRoles";
 import useTranferOwnershipRepository from "@hooks/repository/useTransferOwnershipRepository";
-import { selectedUserAtom } from "@atom/user";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@components/atoms/spinner";
 
@@ -27,8 +26,8 @@ interface IUserOption {
 }
 
 const UserItem = ({ user }: IProps) => {
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
-  const [getSelectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
+  const { selectedUser: getSelectedUser, setSelectedUser } = useUserStore();
 
   const { data: userInfo } = useGetUser();
   const { data: getRoles } = useGetRoles();

@@ -1,25 +1,26 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useResetRecoilState } from "recoil";
 import DashboardDocuments from "@components/organisms/dashboradDocuments";
 import DashboardRepositories from "@components/organisms/dashboardRepositories";
 import { ERepoGrouping } from "@interface/enums";
 import RepoList from "@components/organisms/repoList";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { Spinner } from "@components/atoms/spinner";
-import { bulkItemsAtom } from "@atom/bulk";
 import { useRepositoryStore } from "@store/repository";
 import { useCategoryStore } from "@store/category";
 import { useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
+import { useBulkStore } from "@store/bulk";
 
 const DashboardPage = () => {
   const { setRepo, repoGrouping } = useRepositoryStore();
   const { setCategory, setCategoryShow } = useCategoryStore();
   const { setSelectedDocument, setDocumentShow } = useDocumentStore();
   const { setVersionModalList } = useVersionStore();
-  const resetBulkItems = useResetRecoilState(bulkItemsAtom);
+  const setBulkItems = useBulkStore((s) => {
+    return s.setBulkItems;
+  });
 
   const { data: getDomainInfo, isLoading } = useGetDomainInfo();
   const content = JSON.parse(getDomainInfo?.content || "{}");
@@ -33,7 +34,7 @@ const DashboardPage = () => {
     setSelectedDocument(null);
     setDocumentShow(null);
     setVersionModalList(false);
-    resetBulkItems();
+    setBulkItems([]);
   }, []);
 
   const renderContent = () => {

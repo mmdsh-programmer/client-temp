@@ -5,17 +5,16 @@ import { DialogBody } from "@material-tailwind/react";
 import DraftRequests from "@components/organisms/versionRequests/draftRequests";
 import VersionRequests from "@components/organisms/versionRequests/versionRequests";
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { acceptVersionAtom, rejectVersionAtom, selectedRequestAtom } from "@atom/releaseDocs";
 import AcceptDraftDialog from "../draftRequest/acceptDraftDialog";
 import RejectDraftDialog from "../draftRequest/rejectDraftDialog";
 import AcceptVersionDialog from "../versionRequest/acceptVersionDialog";
 import RejectVersionDialog from "../versionRequest/rejectVersionDialog";
-import { repoAtom } from "@atom/repository";
-import { selectedVersionAtom } from "@atom/version";
-import { editorModalAtom } from "@atom/editor";
 import { EDraftStatus } from "@interface/enums";
 import AcceptPublicDraftDialog from "../draftRequest/acceptDraftPublicDialog";
+import { useRepositoryStore } from "@store/repository";
+import { useVersionStore } from "@store/version";
+import { useEditorStore } from "@store/editor";
+import { useReleaseDocsStore } from "@store/releaseDocs";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,14 +28,10 @@ export enum ETabs {
 const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.DRAFT_REQUESTS);
 
-  const getRepo = useRecoilValue(repoAtom);
-  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
-  const getEditorModal = useRecoilValue(editorModalAtom);
-
-  const getRequest = useRecoilValue(selectedRequestAtom);
-  const [openAcceptVersionDialog, setOpenAcceptVersionDialog] = useRecoilState(acceptVersionAtom);
-
-  const [openRejectVersionDialog, setOpenRejectVersionDialog] = useRecoilState(rejectVersionAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { setSelectedVersion } = useVersionStore();
+  const { editorModal } = useEditorStore();
+  const { selectedRequest, acceptVersion, setAcceptVersion, rejectVersion, setRejectVersion } = useReleaseDocsStore();
 
   const handleClose = () => {
     setOpen(false);
@@ -54,61 +49,61 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     },
   ];
 
-  if (getRequest?.state === "draft" && openAcceptVersionDialog) {
+  if (selectedRequest?.state === "draft" && acceptVersion) {
     return (
       <AcceptDraftDialog
         setOpen={() => {
-          return setOpenAcceptVersionDialog(false);
+          return setAcceptVersion(false);
         }}
       />
     );
   }
 
-  if (getRequest?.state === "draft" && openRejectVersionDialog) {
+  if (selectedRequest?.state === "draft" && rejectVersion) {
     return (
       <RejectDraftDialog
         setOpen={() => {
-          return setOpenRejectVersionDialog(false);
+          return setRejectVersion(false);
         }}
       />
     );
   }
 
-  if (getRequest?.state === "version" && openAcceptVersionDialog) {
+  if (selectedRequest?.state === "version" && acceptVersion) {
     return (
       <AcceptVersionDialog
         setOpen={() => {
-          return setOpenAcceptVersionDialog(false);
+          return setAcceptVersion(false);
         }}
       />
     );
   }
 
-  if (getRequest?.state === "version" && openRejectVersionDialog) {
+  if (selectedRequest?.state === "version" && rejectVersion) {
     return (
       <RejectVersionDialog
         setOpen={() => {
-          return setOpenRejectVersionDialog(false);
+          return setRejectVersion(false);
         }}
       />
     );
   }
 
   if (
-    getRequest?.state === "draft" &&
-    openAcceptVersionDialog &&
-    getRequest.status === EDraftStatus.waitForDirectPublic
+    selectedRequest?.state === "draft" &&
+    acceptVersion &&
+    selectedRequest.status === EDraftStatus.waitForDirectPublic
   ) {
     return (
       <AcceptPublicDraftDialog
         setOpen={() => {
-          return setOpenAcceptVersionDialog(false);
+          return setAcceptVersion(false);
         }}
       />
     );
   }
 
-  if (getEditorModal) {
+  if (editorModal) {
     return null;
   }
 

@@ -2,13 +2,12 @@ import React from "react";
 import { EEmptyList } from "@components/molecules/emptyList";
 import CardView from "../repoView/cardView";
 import { IRepoView } from "@interface/repo.interface";
-import { repoSearchParamAtom } from "@atom/repository";
+import { useRepoSearchParamStore } from "@store/repoSearchParam";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
-import { useRecoilValue } from "recoil";
 
 const PublishedRepoList = () => {
-  const getSearchParam = useRecoilValue(repoSearchParamAtom);
-  const search = getSearchParam?.search;
+  const { repoSearchParam } = useRepoSearchParamStore();
+  const search = repoSearchParam?.search;
 
   const {
     data: getMyPublishedRepo,

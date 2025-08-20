@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Spinner, Switch, Typography } from "@material-tailwind/react";
-import { useRecoilState, useRecoilValue } from "recoil";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUserConfigPanel from "@hooks/configPanel/useGetUserConfigPanel";
 import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
-import { selectedUserAtom } from "@atom/user";
 import { ERoles } from "@interface/enums";
 import UserItem from "@components/organisms/users/userItem";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRepositoryStore } from "@store/repository";
+import { useUserStore } from "@store/user";
 
 const UserConfigPanelDialog = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const { data: userInfo } = useGetUser();
-  const [getSelectedUser, setSelectedUser] = useRecoilState(selectedUserAtom);
+  const { selectedUser: getSelectedUser, setSelectedUser } = useUserStore();
 
   const [blockServices, setBlockServices] = useState<string[]>([]);
 

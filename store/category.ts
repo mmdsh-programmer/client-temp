@@ -15,6 +15,8 @@ interface CategoryState {
   setCategorySearchContentParam: (param: string) => void;
   categorySearchContentOpen: boolean;
   setCategorySearchContentOpen: (open: boolean) => void;
+  categorySearchContentLink: string | null;
+  setCategorySearchContentLink: (link: string | null) => void;
 }
 
 export const useCategoryStore = create<CategoryState>((set) => {
@@ -42,6 +44,10 @@ export const useCategoryStore = create<CategoryState>((set) => {
     categorySearchContentOpen: false,
     setCategorySearchContentOpen: (open) => {
       set({ categorySearchContentOpen: open });
+    },
+    categorySearchContentLink: null,
+    setCategorySearchContentLink: (link) => {
+      set({ categorySearchContentLink: link });
     },
   };
 });

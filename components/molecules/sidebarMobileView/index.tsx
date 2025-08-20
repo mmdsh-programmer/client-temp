@@ -10,27 +10,27 @@ import {
   SharedDocumentsIcon,
   UserGroupIcon,
 } from "@components/atoms/icons";
-import { repoGroupingAtom } from "@atom/repository";
-import { useRecoilState } from "recoil";
 import { ERepoGrouping } from "@interface/enums";
-import { ESidebarSection, ESidebarTab, sidebarSectionAtom, sidebarTabAtom } from "@atom/sidebar";
 import { Button, Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 import Branch from "@components/organisms/branch";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import { ESidebarSection, ESidebarTab, useSidebarStore } from "@store/sidebar";
+import { useRepositoryStore } from "@store/repository";
+import { useSidebarTabStore } from "@store/sidebarTab";
 
 const SidebarMobileView = () => {
   const router = useRouter();
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
-  const [sidebarSection, setSidebarSection] = useRecoilState(sidebarSectionAtom);
+  const { repoGrouping, setRepoGrouping } = useRepositoryStore();
+  const { sidebarSection, setSidebarSection } = useSidebarStore();
+  const { sidebarTab: activeTab, setSidebarTab: setActiveTab } = useSidebarTabStore();
 
   const { data: userInfo } = useGetUser();
   const { data: getDomainInfo } = useGetDomainInfo();
   const content = JSON.parse(getDomainInfo?.content || "{}");
   const { enablePersonalDocs, enableBranch } = content;
 
-  const [activeTab, setActiveTab] = useRecoilState(sidebarTabAtom);
   const [showList, setShowList] = useState(false);
 
   useEffect(() => {
@@ -50,18 +50,18 @@ const SidebarMobileView = () => {
     ) {
       setActiveTab(ESidebarTab.MAIN);
     }
-  }, [sidebarSection]);
+  }, [sidebarSection, setActiveTab]);
 
   const handleNavigation = (path: string, section: ESidebarSection) => {
     setSidebarSection(section);
 
     if (section === ESidebarSection.DASHBOARD) {
-      setRepoGroup(ERepoGrouping.DASHBOARD);
+      setRepoGrouping(ERepoGrouping.DASHBOARD);
     } else if (
       section === ESidebarSection.DOMAIN_MANAGEMENT ||
       section === ESidebarSection.BRANCH_MANAGEMENT
     ) {
-      setRepoGroup(null);
+      setRepoGrouping(null);
     }
     setShowList(false);
 
@@ -69,13 +69,13 @@ const SidebarMobileView = () => {
   };
 
   const handleRepoSelection = (repoGrouping: ERepoGrouping) => {
-    setRepoGroup(repoGrouping);
+    setRepoGrouping(repoGrouping);
     setShowList(false);
   };
 
   const handleDocumentNavigation = (path: string, section: ESidebarSection) => {
     setSidebarSection(section);
-    setRepoGroup(null);
+    setRepoGrouping(null);
     setShowList(false);
     router.push(path);
   };
@@ -124,7 +124,7 @@ const SidebarMobileView = () => {
         <div className="flex flex-col">
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
-              getRepoGroup === ERepoGrouping.MY_REPO
+              repoGrouping === ERepoGrouping.MY_REPO
                 ? "bg-gray-100 stroke-icon-active text-primary_normal"
                 : "stroke-gray-400 text-gray-400"
             }`}
@@ -139,7 +139,7 @@ const SidebarMobileView = () => {
           </Button>
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
-              getRepoGroup === ERepoGrouping.ACCESS_REPO
+              repoGrouping === ERepoGrouping.ACCESS_REPO
                 ? "bg-gray-100 text-primary_normal"
                 : "text-gray-400"
             }`}
@@ -151,7 +151,7 @@ const SidebarMobileView = () => {
           >
             <FolderShareIcon
               className={`ml-3 h-6 w-6 ${
-                getRepoGroup === ERepoGrouping.ACCESS_REPO ? "fill-icon-active" : "fill-gray-400"
+                repoGrouping === ERepoGrouping.ACCESS_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
             <Typography className="title_t3">مخزن‌های اشتراکی</Typography>
@@ -159,7 +159,7 @@ const SidebarMobileView = () => {
 
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
-              getRepoGroup === ERepoGrouping.BOOKMARK_REPO
+              repoGrouping === ERepoGrouping.BOOKMARK_REPO
                 ? "bg-gray-100 text-primary_normal"
                 : "text-gray-400"
             }`}
@@ -171,7 +171,7 @@ const SidebarMobileView = () => {
           >
             <BookmarkRepoIcon
               className={`ml-3 h-6 w-6 ${
-                getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "fill-icon-active" : "fill-gray-400"
+                repoGrouping === ERepoGrouping.BOOKMARK_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
             <Typography className="title_t3">مخزن‌های نشان شده </Typography>
@@ -179,7 +179,7 @@ const SidebarMobileView = () => {
 
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
-              getRepoGroup === ERepoGrouping.ARCHIVE_REPO
+              repoGrouping === ERepoGrouping.ARCHIVE_REPO
                 ? "bg-gray-100 text-primary_normal"
                 : "text-gray-400"
             }`}
@@ -191,14 +191,14 @@ const SidebarMobileView = () => {
           >
             <ArchiveIcon
               className={`ml-3 h-6 w-6 ${
-                getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "fill-icon-active" : "fill-gray-400"
+                repoGrouping === ERepoGrouping.ARCHIVE_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
             <Typography className="title_t3">مخزن‌های بایگانی </Typography>
           </Button>
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
-              getRepoGroup === ERepoGrouping.PUBLISHED_REPO
+              repoGrouping === ERepoGrouping.PUBLISHED_REPO
                 ? "bg-gray-100 text-primary_normal"
                 : "text-gray-400"
             }`}
@@ -210,7 +210,7 @@ const SidebarMobileView = () => {
           >
             <PublishIcon
               className={`ml-3 h-6 w-6 ${
-                getRepoGroup === ERepoGrouping.PUBLISHED_REPO ? "fill-icon-active" : "fill-gray-400"
+                repoGrouping === ERepoGrouping.PUBLISHED_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
             <Typography className="title_t3"> مخزن‌های منتشرشده </Typography>

@@ -3,21 +3,20 @@ import {
   DialogFooter,
   Typography,
 } from "@material-tailwind/react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
 import CancelButton from "@components/atoms/button/cancelButton";
 import ChipMolecule from "@components/molecules/chip";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
-import { repoActiveStepAtom } from "@atom/stepper";
-import { repoAtom } from "@atom/repository";
 import { repoTagSchema } from "../validation.yup";
 import { toast } from "react-toastify";
 import useCreateTag from "@hooks/tag/useCreateTag";
 import { useForm } from "react-hook-form";
 import useGetTags from "@hooks/tag/useGetTags";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRepoStepperStore } from "@store/stepper";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   name: string;
@@ -27,8 +26,8 @@ interface IProps {
 }
 
 const Tags = ({ handleClose }: IProps) => {
-  const setActiveStep = useSetRecoilState(repoActiveStepAtom);
-  const getRepo = useRecoilValue(repoAtom);
+  const { setRepoActiveStep } = useRepoStepperStore();
+  const { repo: getRepo } = useRepositoryStore();
   const repoId = getRepo!.id;
 
   const { isPending, mutate } = useCreateTag();
@@ -108,7 +107,7 @@ const Tags = ({ handleClose }: IProps) => {
         <LoadingButton
           className="repo-tags__dialog-next-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={() => {
-            return setActiveStep(3);
+            return setRepoActiveStep(3);
           }}
         >
           <Typography className="text__label__button text-white">

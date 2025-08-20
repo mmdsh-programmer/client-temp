@@ -2,12 +2,6 @@ import { createClient } from "redis";
 
 let client: any = null;
 
-export const getRedisClient = async () => {
-  if (process.env.NODE_ENV === "development") {
-    return await getDevelopmentClient();
-  }
-  return await getProductionClient();
-};
 
 const getDevelopmentClient = async () => {
   try {
@@ -95,7 +89,7 @@ const getProductionClient = async () => {
 
 export const generateCachePageTag = async (tag: string[], revalidate = 24 * 3600) => {
   try {
-    await fetch(`${process.env.BACKEND_URL}/v1`, {
+    await fetch(`${process.env.BACKEND_URL}`, {
       next: {
         tags: tag,
         revalidate,
@@ -105,3 +99,10 @@ export const generateCachePageTag = async (tag: string[], revalidate = 24 * 3600
     console.error("Error generating cache page tag:", error);
   }
 }; 
+
+export const getRedisClient = async () => {
+  if (process.env.NODE_ENV === "development") {
+    return await getDevelopmentClient();
+  }
+  return await getProductionClient();
+};

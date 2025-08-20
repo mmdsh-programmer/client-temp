@@ -1,25 +1,23 @@
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import MoveSelection from "@components/molecules/moveSelection";
-import { categoryMoveDestAtom, categoryShowAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { useForm } from "react-hook-form";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useCategoryStore } from "@store/category";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentMoveDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
-  const categoryShow = useRecoilValue(categoryShowAtom);
-  const [getCategoryMoveDest, setCategoryMoveDest] = useRecoilState(categoryMoveDestAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { selectedDocument: document } = useDocumentStore();
+  const { categoryShow, categoryMoveDest: getCategoryMoveDest, setCategoryMoveDest } = useCategoryStore();
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();

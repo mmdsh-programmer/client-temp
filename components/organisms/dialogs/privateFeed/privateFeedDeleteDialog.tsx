@@ -1,10 +1,9 @@
-import { repoFeedAtom } from "@atom/feed";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import useDeletePrivateFeed from "@hooks/privateFeed/useDeletePrivateFeed";
 import { IFeedItem } from "@interface/feeds.interface";
 import React from "react";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
+import { useFeedStore } from "@store/feed";
 
 interface IProps {
   feed: IFeedItem;
@@ -12,7 +11,7 @@ interface IProps {
 }
 
 const PublicFeedDeleteDialog = ({ setOpen, feed }: IProps) => {
-  const getRepoFeed = useRecoilValue(repoFeedAtom);
+  const { repoFeed: getRepoFeed } = useFeedStore();
   const deletePrivateFeed = useDeletePrivateFeed();
 
   const handleClose = () => {

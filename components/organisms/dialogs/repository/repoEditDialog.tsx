@@ -23,8 +23,12 @@ interface IForm {
 }
 
 const RepoEditDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRepositoryStore((state) => state.repo);
-  const setRepo = useRepositoryStore((state) => state.setRepo);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const setRepo = useRepositoryStore((state) => {
+    return state.setRepo;
+  });
   const [openFileManagement, setOpenFileManagement] = useState(false);
   const [selectedFile, setSelectedFile] = useState<string | undefined>(getRepo?.imageFileHash);
   const [imageType, setImageType] = useState<"default" | "custom">();

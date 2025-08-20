@@ -1,17 +1,15 @@
 import { BookmarkIcon, InfoIcon, MoreDotIcon } from "@components/atoms/icons";
 import React, { useState } from "react";
-import { repoActionDrawerAtom, repoAtom, repoInfoAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import useRepoMenuList, { MenuItem } from "./useRepoMenuList";
 import { Button } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { IRepo } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
-import RepoDialogs from "../repoDialogs";
 import { usePathname } from "next/navigation";
 import { useRepoInfoStore, useRepositoryStore, useRepoActionDrawerStore } from "@store/repository";
 import { useTourStore } from "@store/tour";
 import { ETourSection } from "@atom/tour";
+import RepoDialogs from "../repoDialogs";
 
 interface IProps {
   repo?: IRepo;
@@ -21,6 +19,20 @@ interface IProps {
 
 const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
   const currentPath = usePathname();
+
+  const [modals, setModals] = useState({
+    edit: false,
+    delete: false,
+    archive: false,
+    restore: false,
+    bookmark: false,
+    share: false,
+    key: false,
+    leave: false,
+    fileManagement: false,
+    versionRequests: false,
+    privateFeed: false,
+  });
 
   const repoState = useRepositoryStore();
   const { setRepo } = repoState;
@@ -38,31 +50,14 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
     return state.setOpenRepoActionDrawer;
   });
 
-
-  const [modals, setModals] = useState({
-    edit: false,
-    delete: false,
-    archive: false,
-    restore: false,
-    bookmark: false,
-    share: false,
-    key: false,
-    leave: false,
-    fileManagement: false,
-    versionRequests: false,
-    repoActivity: false,
-    privateFeed: false,
-
-  });
-
-  const setModalState = (key: keyof typeof modals, state: boolean) => {
+  const setModalState = (type: string, state: boolean) => {
     setModals((prev) => {
-      return { ...prev, [key]: state };
+      return { ...prev, [type]: state };
     });
   };
 
   const handleRepoInfo = () => {
-   setRepoInfo(repo);
+    setRepoInfo(repo);
   };
 
   const menuList = useRepoMenuList(
@@ -70,33 +65,32 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
     setModalState,
     handleRepoInfo,
     setOpenRepoActionDrawer,
-    showLog
+    showLog,
   ).filter(Boolean) as MenuItem[];
 
   return (
     <>
       {!showDrawer ? (
-        <div className="repo-menu flex items-center gap-1 justify-end">
+        <div className="repo-menu flex items-center justify-end gap-1">
           {currentPath === "/admin/repositories" ? (
             <Button
               placeholder="button"
-              className="rounded-lg border-2 border-gray-50 
-             bg-white p-1 shadow-none flex justify-center items-center h-8 w-8"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none"
               onClick={() => {
                 setActiveTour(ETourSection.REPO);
               }}
             >
-              <InfoIcon className="w-4 h-4 stroke-primary-normal" />
+              <InfoIcon className="h-4 w-4 stroke-primary-normal" />
             </Button>
           ) : null}
           <div
-            className="repoInformationTab repoActions flex items-center gap-1 justify-end"
+            className="repoInformationTab repoActions flex items-center justify-end gap-1"
             onClick={(e) => {
               e.stopPropagation();
             }}
           >
             {repo?.bookmark ? (
-              <BookmarkIcon className="w-4 h-4  fill-amber-600 stroke-amber-600" />
+              <BookmarkIcon className="h-4 w-4 fill-amber-600 stroke-amber-600" />
             ) : null}
             <MenuTemplate
               setOpenDrawer={() => {
@@ -105,15 +99,15 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
               }}
               menuList={menuList}
               icon={
-                <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                  <MoreDotIcon className="w-4 h-4" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
+                  <MoreDotIcon className="h-4 w-4" />
                 </div>
               }
             />
           </div>
         </div>
       ) : (
-        <div className="repo-menu xs:hidden flex">
+        <div className="repo-menu flex xs:hidden">
           <DrawerTemplate
             openDrawer={openRepoActionDrawer}
             setOpenDrawer={setOpenRepoActionDrawer}
@@ -121,7 +115,7 @@ const RepoMenu = ({ repo, showDrawer, showLog = false }: IProps) => {
           />
         </div>
       )}
-      {/* <RepoDialogs modals={modals} setModalState={setModalState} /> */}
+      <RepoDialogs modals={modals} setModalState={setModalState} />
     </>
   );
 };

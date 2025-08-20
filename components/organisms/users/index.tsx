@@ -1,8 +1,7 @@
 import React from "react";
 import InviteToRepo from "./inviteToRepo";
 import RepoUsers from "./repoUsers";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { ERoles } from "@interface/enums";
 
 interface IProps {
@@ -10,7 +9,7 @@ interface IProps {
 }
 
 const Users = ({ createRepoDialog }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
 
   return (
     <>

@@ -1,17 +1,9 @@
 import React from "react";
 import { DialogBody, Typography } from "@material-tailwind/react";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import {
-  documentInfoAtom,
-  documentKeyAtom,
-  documentTemplateAtom,
-  documentTypeAtom,
-} from "@atom/document";
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { EDocumentTypes } from "@interface/enums";
 import FormInput from "@components/atoms/input/formInput";
 import { IDocument } from "@interface/document.interface";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateDocument from "@hooks/document/useCreateDocument";
 import useCreateDocumentTemplate from "@hooks/document/useCreateDocumentTemplate";
@@ -20,9 +12,11 @@ import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { useRecoilValue } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import forge from "node-forge";
+import { useDocumentStore } from "@store/document";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   isTemplate: boolean;
@@ -35,13 +29,9 @@ interface IForm {
 
 const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const { handlePrevStep, close } = useStepperNavigate();
-  const getDocumentType = useRecoilValue(documentTypeAtom);
-  const getDocumentInfo = useRecoilValue(documentInfoAtom);
-  const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
-  const getDocumentKey = useRecoilValue(documentKeyAtom);
-  const getCategory = useRecoilValue(categoryAtom);
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
-  const getRepo = useRecoilValue(repoAtom);
+  const { documentType: getDocumentType, documentInfo: getDocumentInfo, documentTemplate: getDocumentTemplate, documentKey: getDocumentKey } = useDocumentStore();
+  const { category: getCategory, categoryShow: getCategoryShow } = useCategoryStore();
+  const { repo: getRepo } = useRepositoryStore();
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -68,7 +58,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     }
 
     // eslint-disable-next-line no-useless-escape
-    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<\>?/\{\|\}]).*$/;
     if (forbiddenRegex.test(getDocumentInfo.title)) {
       toast.error("نام سند شامل کاراکتر غیرمجاز است.");
       return;
@@ -108,7 +98,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         successCallBack: (result: IDocument) => {
           // eslint-disable-next-line no-useless-escape
-          const invalidChar = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
+          const invalidChar = /^.*?(?=[\^#%&$\*:<\>?/\{\|\}]).*$/;
           if (invalidChar.test(dataForm.versionNumber)) {
             toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
             return;

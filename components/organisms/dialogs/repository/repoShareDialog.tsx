@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { createGroupAtom, deleteGroupAtom, editGroupAtom } from "@atom/group";
-import { useRecoilState, useRecoilValue } from "recoil";
 import CreateRepoPublicLink from "@components/organisms/publicLink/createRepoPublicLink";
 import { DialogBody } from "@material-tailwind/react";
 import GroupCreateDialog from "@components/organisms/dialogs/group/groupCreateDialog";
@@ -13,10 +11,11 @@ import PublicLink from "@components/organisms/publicLink";
 import PublishLink from "@components/organisms/publishLink";
 import TabComponent from "@components/molecules/tab";
 import Users from "@components/organisms/users";
-import { openShareAccessAtom } from "@atom/public";
-import { repoAtom } from "@atom/repository";
 import UserConfigPanelDialog from "../configPanel/userConfigPanelDialog";
-import { selectedUserAtom } from "@atom/user";
+import { useRepositoryStore } from "@store/repository";
+import { useGroupStore } from "@store/group";
+import { usePublicStore } from "@store/public";
+import { useUserStore } from "@store/user";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,15 +31,12 @@ export enum ETabs {
 const RepoShareDialog = ({ setOpen }: IProps) => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.USERS);
 
-  const getRepo = useRecoilValue(repoAtom);
-  const [getCreateGroupModal, setCreateGroupModal] =
-    useRecoilState(createGroupAtom);
-  const [getEditGroupModal, setEditGroupModal] = useRecoilState(editGroupAtom);
-  const [getDeleteGroupModal, setDeleteGroupModal] =
-    useRecoilState(deleteGroupAtom);
-  const [getOpenShareAccess, setOpenShareAccess] =
-    useRecoilState(openShareAccessAtom);
-    const getSelectedUser = useRecoilValue(selectedUserAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { createGroup, setCreateGroup } = useGroupStore();
+  const { editGroup, setEditGroup } = useGroupStore();
+  const { deleteGroup, setDeleteGroup } = useGroupStore();
+  const { openShareAccess, setOpenShareAccess } = usePublicStore();
+  const { selectedUser } = useUserStore();
 
   const handleClose = () => {
     setOpen(false);
@@ -68,19 +64,19 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
     tabContent: React.JSX.Element;
   }[];
 
-  if (getOpenShareAccess) {
+  if (openShareAccess) {
     return <CreateRepoPublicLink setOpen={setOpenShareAccess} />;
   }
-  if (getCreateGroupModal) {
-    return <GroupCreateDialog setOpen={setCreateGroupModal} />;
+  if (createGroup) {
+    return <GroupCreateDialog setOpen={setCreateGroup} />;
   }
-  if (getEditGroupModal) {
-    return <GroupEditDialog setOpen={setEditGroupModal} />;
+  if (editGroup) {
+    return <GroupEditDialog setOpen={setEditGroup} />;
   }
-  if (getDeleteGroupModal) {
-    return <GroupDeleteDialog setOpen={setDeleteGroupModal} />;
+  if (deleteGroup) {
+    return <GroupDeleteDialog setOpen={setDeleteGroup} />;
   }
-  if (getSelectedUser?.userInfo) {
+  if (selectedUser?.userInfo) {
     return <UserConfigPanelDialog />;
   }
 

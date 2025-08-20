@@ -3,12 +3,11 @@ import { DialogBody, Typography } from "@material-tailwind/react";
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import FormInput from "@components/atoms/input/formInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import { documentInfoAtom } from "@atom/document";
 import { documentInfoSchema } from "../validation.yup";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDocumentStore } from "@store/document";
 
 interface IForm {
   title: string;
@@ -17,7 +16,7 @@ interface IForm {
 }
 
 const DocumentInfo = () => {
-  const [getDocumentInfo, setDocumentInfo] = useRecoilState(documentInfoAtom);
+  const { documentInfo: getDocumentInfo, setDocumentInfo } = useDocumentStore();
   const { handleNextStep, handlePrevStep } = useStepperNavigate();
 
   const form = useForm<IForm>({

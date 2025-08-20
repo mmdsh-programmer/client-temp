@@ -1,19 +1,17 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
 import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
-import { categoryAtom } from "@atom/category";
 import { categorySchema } from "./validation.yup";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
 
 interface IDataForm {
   id?: number;
@@ -28,8 +26,8 @@ interface IProps {
 }
 
 const CategoryEditDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getCategory, setCategory] = useRecoilState(categoryAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { category: getCategory, setCategory } = useCategoryStore();
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -59,9 +57,9 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = (dataForm: IDataForm) => {
     const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
+      currentPath === "/admin/myDocuments"
+        ? userInfo!.repository.id
+        : getRepo!.id;
 
     if (
       dataForm.description?.trim() === getCategory?.description &&

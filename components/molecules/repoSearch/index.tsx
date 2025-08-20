@@ -1,32 +1,32 @@
-import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { repoGroupingAtom, repoSearchParamAtom } from "@atom/repository";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-
+import { Button, Typography } from "@material-tailwind/react";
 import { ERepoGrouping } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import { SearchIcon } from "@components/atoms/icons";
+import { useRepositoryStore } from "@store/repository";
+import { useRepoSearchParamStore } from "@store/repoSearchParam";
 
 const RepoSearch = () => {
-  const getRepoGroup = useRecoilValue(repoGroupingAtom);
-  const setSearchParam = useSetRecoilState(repoSearchParamAtom);
+  const { repoGrouping } = useRepositoryStore();
+  const { setRepoSearchParam } = useRepoSearchParamStore();
+
   const [search, setSearch] = useState<string>("");
   const repoType =
-    getRepoGroup === ERepoGrouping.DASHBOARD
+    repoGrouping === ERepoGrouping.DASHBOARD
       ? ERepoGrouping.ALL_REPO
-      : (getRepoGroup ?? ERepoGrouping.ALL_REPO);
+      : (repoGrouping ?? ERepoGrouping.ALL_REPO);
 
   return (
-    <div className="searchRepo hidden w-full xs:flex justify-between">
+    <div className="searchRepo hidden w-full justify-between xs:flex">
       <div
-        className="flex flex-grow overflow-hidden gap-2 w-full items-center h-9 pr-3 pl-0 border-[1px] border-normal bg-white rounded-lg "
+        className="flex h-9 w-full flex-grow items-center gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-white pl-0 pr-3"
         onKeyDown={(event) => {
           if (event.code === "Enter" || event.code === "NumpadEnter") {
             event.preventDefault();
             if (search) {
-              setSearchParam({ repoType, search });
+              setRepoSearchParam({ repoType, search });
             } else {
-              setSearchParam({ repoType, search: undefined });
+              setRepoSearchParam({ repoType, search: undefined });
             }
           }
         }}
@@ -34,25 +34,23 @@ const RepoSearch = () => {
         <SearchIcon className="h-5 w-5 stroke-icon-hover" />
         <InputAtom
           placeholder="جستجو ..."
-          className="search-repo__input bg-white flex-grow !h-8 pr-0 outline-none !overflow-hidden border-none focus:border-none !w-full"
+          className="search-repo__input !h-8 !w-full flex-grow !overflow-hidden border-none bg-white pr-0 outline-none focus:border-none"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setSearch(event.target.value);
           }}
           value={search}
         />
         <Button
-          className="search-repo__button rounded-none h-[34px] px-4 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+          className="search-repo__button h-[34px] rounded-none bg-primary-normal px-4 hover:bg-primary-normal active:bg-primary-normal"
           onClick={() => {
             if (search.trim() !== "") {
-              setSearchParam({ repoType, search });
+              setRepoSearchParam({ repoType, search });
             } else {
-              setSearchParam({ repoType, search: undefined });
+              setRepoSearchParam({ repoType, search: undefined });
             }
           }}
         >
-          <Typography className="text__label__button !text-[11px] text-white">
-            اعمال
-          </Typography>
+          <Typography className="text__label__button !text-[11px] text-white">اعمال</Typography>
         </Button>
       </div>
     </div>

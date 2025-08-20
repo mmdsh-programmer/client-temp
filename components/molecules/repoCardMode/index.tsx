@@ -1,8 +1,8 @@
+import React from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import { CircleIcon } from "@components/atoms/icons";
 import { IRepo } from "@interface/repo.interface";
-import React from "react";
 import RepoCardMoreInfo from "./repoCardMoreInfo";
 import RepoDefaultImage from "../repoDefaultImage";
 import RepoMenu from "@components/molecules/repoMenu";

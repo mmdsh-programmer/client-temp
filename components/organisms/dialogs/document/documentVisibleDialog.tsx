@@ -1,19 +1,18 @@
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentVisibleDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { selectedDocument: document } = useDocumentStore();
 
   const visibleDocument = useEditDocument();
 

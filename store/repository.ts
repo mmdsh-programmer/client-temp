@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { IRepo } from "@interface/repo.interface";
+import { IRepo, IPublicKey } from "@interface/repo.interface";
 import { ERepoGrouping } from "@interface/enums";
 
 interface RepositoryState {
@@ -15,6 +15,11 @@ export const useRepositoryStore = create<RepositoryState>((set) => {
   return {
     repo: null,
     setRepo: (repo) => {
+      if (repo) {
+        localStorage.setItem("CLASOR:SELECTED_REPO", JSON.stringify(repo));
+      } else {
+        localStorage.removeItem("CLASOR:SELECTED_REPO");
+      }
       set({ repo });
     },
     repoGrouping: ERepoGrouping.DASHBOARD,
@@ -75,6 +80,32 @@ export const useRepoActivityStore = create<{
     showRepoActivity: false,
     setShowRepoActivity: (show) => {
       return set({ showRepoActivity: show });
+    },
+  };
+});
+
+// Zustand store for deleteRepoKey (replaces deleteRepoKeyAtom)
+export const useDeleteRepoKeyStore = create<{
+  deleteRepoKey: IPublicKey | null;
+  setDeleteRepoKey: (key: IPublicKey | null) => void;
+}>((set) => {
+  return {
+    deleteRepoKey: null,
+    setDeleteRepoKey: (key) => {
+      return set({ deleteRepoKey: key });
+    },
+  };
+});
+
+// Zustand store for createRepoKey (replaces createRepoKeyAtom)
+export const useCreateRepoKeyStore = create<{
+  createRepoKey: boolean;
+  setCreateRepoKey: (create: boolean) => void;
+}>((set) => {
+  return {
+    createRepoKey: false,
+    setCreateRepoKey: (createKey) => {
+      return set({ createRepoKey: createKey });
     },
   };
 });

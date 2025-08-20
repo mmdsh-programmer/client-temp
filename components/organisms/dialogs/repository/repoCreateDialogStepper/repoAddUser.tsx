@@ -4,16 +4,15 @@ import CancelButton from "@components/atoms/button/cancelButton";
 import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
 import RepoShare from "@components/organisms/users";
-import { repoActiveStepAtom } from "@atom/stepper";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useSetRecoilState } from "recoil";
+import { useRepoStepperStore } from "@store/stepper";
 
 interface IProps {
   handleClose: () => void;
 }
 
 const RepoAddUser = ({ handleClose }: IProps) => {
-  const setActiveStep = useSetRecoilState(repoActiveStepAtom);
+  const { setRepoActiveStep } = useRepoStepperStore();
   const { data: userInfo } = useGetUser();
 
   return (
@@ -33,9 +32,9 @@ const RepoAddUser = ({ handleClose }: IProps) => {
           className="repo-add-user__dialog-next-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={() => {
             if (!userInfo?.domainConfig.useDomainTag) {
-              setActiveStep(2);
+              setRepoActiveStep(2);
             } else {
-              setActiveStep(3);
+              setRepoActiveStep(3);
             }
           }}
         >

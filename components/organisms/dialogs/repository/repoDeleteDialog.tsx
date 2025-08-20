@@ -4,13 +4,12 @@ import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import FormInput from "@components/atoms/input/formInput";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
 import { repoDeleteSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useDeleteRepo from "@hooks/repository/useDeleteRepo";
 import { useForm } from "react-hook-form";
-import { useRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   name: string;
@@ -24,7 +23,7 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
   const router = useRouter();
   const currentPath = usePathname();
 
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
   const { isPending, mutate } = useDeleteRepo();
 
   const {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { AddIcon, InfoIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import { ETourSection, activeTourAtom } from "@atom/tour";
+import { ETourSection } from "@atom/tour";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
-import { useSetRecoilState } from "recoil";
+import { useTourStore } from "@store/tour";
 import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {
@@ -24,7 +24,7 @@ const HeaderListTemplate = ({
   className,
 }: IProps) => {
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
-  const setActiveTour = useSetRecoilState(activeTourAtom);
+  const { setActiveTour } = useTourStore();
   const { data: userInfo } = useGetUser();
 
   return (

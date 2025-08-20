@@ -5,16 +5,15 @@ import RepoCreate from "./repoCreate";
 import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
 import StepperDialog from "@components/templates/dialog/stepperDialog";
 import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/tags";
-import { repoActiveStepAtom } from "@atom/stepper";
-import { repoAtom } from "@atom/repository";
-import { useRecoilState } from "recoil";
+import { useRepoStepperStore } from "@store/stepper";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   close: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const RepoCreateDialogStepper = ({ close }: IProps) => {
-  const [getActiveStep, setActiveStep] = useRecoilState(repoActiveStepAtom);
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const { repoActiveStep, setRepoActiveStep } = useRepoStepperStore();
+  const { repo: getRepo, setRepo } = useRepositoryStore();
   const [selectedFile, setSelectedFile] = useState<string | undefined>();
 
   const [openFileManagement, setOpenFileManagement] = useState(false);
@@ -22,22 +21,22 @@ const RepoCreateDialogStepper = ({ close }: IProps) => {
   const steplist = ["عنوان مخزن", "اشتراک گذاری", "تگ", "افزودن تصویر"];
 
   const handleClose = () => {
-    setActiveStep(0);
+    setRepoActiveStep(0);
     close(false);
     setRepo(null);
   };
 
   const handleStepperContent = () => {
-    if (getActiveStep === 0) {
+    if (repoActiveStep === 0) {
       return <RepoCreate handleClose={handleClose} />;
     }
-    if (getActiveStep === 1 && getRepo) {
+    if (repoActiveStep === 1 && getRepo) {
       return <RepoAddUser handleClose={handleClose} />;
     }
-    if (getActiveStep === 2 && getRepo) {
+    if (repoActiveStep === 2 && getRepo) {
       return <Tags handleClose={handleClose} />;
     }
-    if (getActiveStep === 3 && getRepo) {
+    if (repoActiveStep === 3 && getRepo) {
       return (
         <RepoImage
           setOpenFileManagement={setOpenFileManagement}
@@ -65,7 +64,7 @@ const RepoCreateDialogStepper = ({ close }: IProps) => {
       dialogHeader="ایجاد مخزن"
       stepList={steplist}
       handleClose={handleClose}
-      activeStep={getActiveStep}
+      activeStep={repoActiveStep}
       className="repo-create-dialog"
     >
       {handleStepperContent()}

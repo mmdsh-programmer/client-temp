@@ -1,33 +1,38 @@
-import {
-  documentInfoAtom,
-  documentKeyAtom,
-  documentTemplateAtom,
-  documentTypeAtom,
-} from "@atom/document";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useDocumentStore } from "@store/document";
 
 import { EDocumentTypes } from "@interface/enums";
-import { documentActiveStepAtom } from "@atom/stepper";
+import { useDocumentStepperStore } from "@store/stepper";
 
 const useStepperNavigate = () => {
-  const setActiveStep = useSetRecoilState(documentActiveStepAtom);
-  const setDocumentInfo = useSetRecoilState(documentInfoAtom);
-  const setDocumentTemplate = useSetRecoilState(documentTemplateAtom);
-  const setDocumentKey = useSetRecoilState(documentKeyAtom);
-  const [getDocumentType, setDocumentType] = useRecoilState(documentTypeAtom);
+  const setActiveStep = useDocumentStepperStore((s) => {
+    return s.setDocumentActiveStep;
+  });
+  const setDocumentInfo = useDocumentStore((s) => {
+    return s.setDocumentInfo;
+  });
+  const setDocumentTemplate = useDocumentStore((s) => {
+    return s.setDocumentTemplate;
+  });
+  const setDocumentKey = useDocumentStore((s) => {
+    return s.setDocumentKey;
+  });
+  const getDocumentType = useDocumentStore((s) => {
+    return s.documentType;
+  });
+  const setDocumentType = useDocumentStore((s) => {
+    return s.setDocumentType;
+  });
 
   const handleNextStep = () => {
     return setActiveStep((cur) => {
-      if (cur === 1 && !getDocumentType?.includes(EDocumentTypes.classic))
-        return cur + 2;
+      if (cur === 1 && !getDocumentType?.includes(EDocumentTypes.classic)) return cur + 2;
       return cur + 1;
     });
   };
 
   const handlePrevStep = () => {
     return setActiveStep((cur) => {
-      if (cur === 3 && !getDocumentType?.includes(EDocumentTypes.classic))
-        return cur - 2;
+      if (cur === 3 && !getDocumentType?.includes(EDocumentTypes.classic)) return cur - 2;
       return cur - 1;
     });
   };

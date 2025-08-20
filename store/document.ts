@@ -1,74 +1,52 @@
 import { create } from "zustand";
-import { IDocumentMetadata } from "@interface/document.interface";
-import { ITag } from "@interface/tags.interface";
-import { IPublicKey } from "@interface/repo.interface";
 import { EDocumentTypes } from "@interface/enums";
+import { IDocumentMetadata } from "@interface/document.interface";
+import { IPublicKey } from "@interface/repo.interface";
 
-interface DocumentInfo {
+interface IDocInfo {
   title: string;
-  description?: string;
   order?: number;
+  description?: string;
 }
 
-interface DocumentTemplate {
-  id: number;
-  // ...other fields as needed
-}
-
-interface DocumentState {
+export const useDocumentStore = create<{
   selectedDocument: IDocumentMetadata | null;
   setSelectedDocument: (doc: IDocumentMetadata | null) => void;
   documentShow: IDocumentMetadata | null;
   setDocumentShow: (doc: IDocumentMetadata | null) => void;
-  tempDocTag: ITag[];
-  setTempDocTag: (tags: ITag[]) => void;
-  // Document creation wizard state
-  documentInfo: DocumentInfo | null;
-  setDocumentInfo: (info: DocumentInfo | null) => void;
   documentType: EDocumentTypes | null;
   setDocumentType: (type: EDocumentTypes | null) => void;
+  documentInfo: IDocInfo | null;
+  setDocumentInfo: (info: IDocInfo | null) => void;
   documentKey: IPublicKey | null;
   setDocumentKey: (key: IPublicKey | null) => void;
-  documentTemplate: DocumentTemplate | null;
-  setDocumentTemplate: (template: DocumentTemplate | null) => void;
-  documentActiveStep: number;
-  setDocumentActiveStep: (step: number) => void;
-}
-
-export const useDocumentStore = create<DocumentState>((set) => {
+  documentTemplate: IDocumentMetadata | null;
+  setDocumentTemplate: (doc: IDocumentMetadata | null) => void;
+}>((set) => {
   return {
     selectedDocument: null,
     setSelectedDocument: (doc) => {
-      set({ selectedDocument: doc });
+      return set({ selectedDocument: doc });
     },
     documentShow: null,
     setDocumentShow: (doc) => {
-      set({ documentShow: doc });
-    },
-    tempDocTag: [],
-    setTempDocTag: (tags) => {
-      set({ tempDocTag: tags });
-    },
-    // Document creation wizard state
-    documentInfo: null,
-    setDocumentInfo: (info) => {
-      set({ documentInfo: info });
+      return set({ documentShow: doc });
     },
     documentType: null,
     setDocumentType: (type) => {
-      set({ documentType: type });
+      return set({ documentType: type });
+    },
+    documentInfo: null,
+    setDocumentInfo: (info) => {
+      return set({ documentInfo: info });
     },
     documentKey: null,
     setDocumentKey: (key) => {
-      set({ documentKey: key });
+      return set({ documentKey: key });
     },
     documentTemplate: null,
-    setDocumentTemplate: (template) => {
-      set({ documentTemplate: template });
-    },
-    documentActiveStep: 0,
-    setDocumentActiveStep: (step) => {
-      set({ documentActiveStep: step });
+    setDocumentTemplate: (doc) => {
+      return set({ documentTemplate: doc });
     },
   };
 });

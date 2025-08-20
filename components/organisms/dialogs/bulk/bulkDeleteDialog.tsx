@@ -1,34 +1,32 @@
-import { useRecoilState, useRecoilValue } from "recoil";
-
 import CategoryDeleteDialog from "../category/categoryDeleteDialog";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import DocumentDeleteDialog from "../document/documentDeleteDialog";
 import React from "react";
-import { bulkItemsAtom } from "@atom/bulk";
-import { categoryShowAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
 import useDeleteBulk from "@hooks/bulk/useDeleteBulk";
 import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useBulkStore } from "@store/bulk";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const BulkDeleteDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
-  const [getBulkItems, setBulkItems] = useRecoilState(bulkItemsAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { categoryShow: getCategoryShow } = useCategoryStore();
+  const { bulkItems: getBulkItems, setBulkItems } = useBulkStore();
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
   const bulkDeleteHook = useDeleteBulk();
 
   const repoId =
-  currentPath === "/admin/myDocuments"
-    ? userInfo!.repository.id
-    : getRepo!.id;
+    currentPath === "/admin/myDocuments"
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const { handleSubmit, clearErrors, reset } = useForm();
 

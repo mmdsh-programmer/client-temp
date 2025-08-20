@@ -6,13 +6,12 @@ import { IRoles } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
 import { UserIcon } from "@components/atoms/icons";
-import { repoAtom } from "@atom/repository";
 import { translateRoles } from "@utils/index";
 import { useForm } from "react-hook-form";
 import useGetInviteRequests from "@hooks/user/useGetInviteRequestsByOwner";
 import useGetRoles from "@hooks/user/useGetRoles";
 import useGetUsers from "@hooks/user/useGetRepoUsers";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   userName: string;
@@ -20,7 +19,7 @@ interface IForm {
 }
 
 const RepoUsers = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const repoId = getRepo!.id;
   const {data: getRoles} = useGetRoles();
 

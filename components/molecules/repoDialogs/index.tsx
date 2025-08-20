@@ -55,7 +55,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
           }}
         />
       ) : null}
-      {/* {modals.delete ? (
+      {modals.delete ? (
         <RepoDeleteDialog
           setOpen={() => {
             setModalState("delete", false);
@@ -131,7 +131,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
             handleClose();
           }}
         />
-      ) : null} 
+      ) : null}
       {modals.privateFeed ? (
         <PrivateFeedCreateDialog
           setOpen={() => {
@@ -139,7 +139,7 @@ const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
             handleClose();
           }}
         />
-      ) : null} */}
+      ) : null}
     </>
   );
 };

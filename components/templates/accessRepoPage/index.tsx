@@ -4,29 +4,26 @@ import React, { useEffect } from "react";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import RepoSearch from "@components/molecules/repoSearch";
 import RepoMenu from "@components/molecules/repoMenu";
-import { repoAtom } from "@atom/repository";
-import { useResetRecoilState } from "recoil";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 import AccessRepoList from "@components/organisms/repoList/accessRepoList";
 import RepoCreateDialogStepper from "@components/organisms/dialogs/repository/repoCreateDialogStepper";
 
 const AccessRepoPage = () => {
-  const resetRepo = useResetRecoilState(repoAtom);
-  const resetCategory = useResetRecoilState(categoryAtom);
-  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
-  const resetDocument = useResetRecoilState(selectedDocumentAtom);
-  const resetDocumentShow = useResetRecoilState(documentShowAtom);
-  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+  const { setRepo } = useRepositoryStore();
+  const { setCategory, setCategoryShow } = useCategoryStore();
+  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { setVersionModalList } = useVersionStore();
 
   useEffect(() => {
-    resetRepo();
-    resetCategory();
-    resetCategoryShow();
-    resetDocument();
-    resetDocumentShow();
-    resetShowVersionList();
+    setRepo(null);
+    setCategory(null);
+    setCategoryShow(null);
+    setSelectedDocument(null);
+    setDocumentShow(null);
+    setVersionModalList(false);
   }, []);
 
   return (

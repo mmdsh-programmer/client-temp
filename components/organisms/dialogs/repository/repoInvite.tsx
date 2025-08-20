@@ -1,13 +1,12 @@
 import { IRoles } from "@interface/users.interface";
 import React from "react";
 import { Spinner } from "@components/atoms/spinner";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
 import useAddUser from "@hooks/user/useAddUser";
 import { useForm } from "react-hook-form";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   username: string;
@@ -15,7 +14,7 @@ interface IForm {
 }
 
 const RepoInvite = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const {
  isPending, mutate 
 } = useAddUser();

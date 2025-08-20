@@ -6,11 +6,10 @@ import { ERoles } from "@interface/enums";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
 import useDeleteInviteRequest from "@hooks/user/useDeleteInviteRequest";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   user: IAccessRequest;
@@ -19,7 +18,7 @@ interface IProps {
 
 
 const InviteRequestByOwner = ({ user }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const deleteInviteRequest = useDeleteInviteRequest();
 
   const name = `${user.user.given_name} ${user.user.family_name} `;

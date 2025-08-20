@@ -2,10 +2,9 @@ import { usePathname, useRouter } from "next/navigation";
 
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
 import { useForm } from "react-hook-form";
 import useLeaveRepo from "@hooks/repository/useLeaveRepo";
-import { useRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   name: string;
@@ -17,7 +16,7 @@ interface IProps {
 
 const RepoLeaveDialog = ({ setOpen }: IProps) => {
   const router = useRouter();
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
   const { isPending, mutate } = useLeaveRepo();
 
   const currentPath = usePathname();

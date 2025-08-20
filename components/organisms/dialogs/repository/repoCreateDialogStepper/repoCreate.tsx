@@ -5,14 +5,13 @@ import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import { repoActiveStepAtom } from "@atom/stepper";
-import { repoAtom } from "@atom/repository";
 import { repoCreateSchema } from "../validation.yup";
 import { toast } from "react-toastify";
 import useCreateRepo from "@hooks/repository/useCreateRepo";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRepoStepperStore } from "@store/stepper";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   name: string;
@@ -24,8 +23,8 @@ interface IProps {
 }
 
 const RepoCreateDialog = ({ handleClose }: IProps) => {
-  const setActiveStep = useSetRecoilState(repoActiveStepAtom);
-  const setRepo = useSetRecoilState(repoAtom);
+  const { setRepoActiveStep } = useRepoStepperStore();
+  const { setRepo } = useRepositoryStore();
 
   const { isPending, mutate } = useCreateRepo();
   const {
@@ -57,7 +56,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
           setRepo(result);
           setTimeout(() => {
             handleReset();
-            setActiveStep(1);
+            setRepoActiveStep(1);
           }, 100);
         } else {
           toast.error("ساخت مخزن با خطا مواجه شد.");

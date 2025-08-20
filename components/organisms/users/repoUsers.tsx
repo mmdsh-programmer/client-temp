@@ -3,10 +3,9 @@ import LoadMore from "@components/molecules/loadMore";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import UserItem from "./userItem";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import useGetInviteRequestsByOwner from "@hooks/user/useGetInviteRequestsByOwner";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
@@ -14,7 +13,7 @@ interface IProps {
 }
 
 const RepoUsers = ({ createRepoDialog }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const repoId = getRepo!.id;
   const {
     data: getRepoUsers,

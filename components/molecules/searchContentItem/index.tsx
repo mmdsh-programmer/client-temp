@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DocIcon } from "@components/atoms/icons";
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import useGetDocument from "@hooks/document/useGetDocument";
-import { useSetRecoilState } from "recoil";
-import { searchContentLinkAtom } from "@atom/category";
+import { useCategoryStore } from "@store/category";
 import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
@@ -13,7 +12,7 @@ interface IProps {
 
 export const ResultItem = ({ data, onClick }: IProps) => {
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  const setLink = useSetRecoilState(searchContentLinkAtom);
+  const setLink = useCategoryStore((s) => s.setCategorySearchContentLink);
   const {
     data: documentInfo,
     isError,

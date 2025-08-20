@@ -9,8 +9,7 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
 import { Spinner } from "@components/atoms/spinner";
-import { useRecoilValue } from "recoil";
-import { repoFeedAtom } from "@atom/feed";
+import { useFeedStore } from "@store/feed";
 import useUpdatePrivateFeed from "@hooks/privateFeed/useUpdatePrivateFeed";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { privateFeedSchema } from "./validation.yup";
@@ -29,7 +28,7 @@ interface IProps {
 const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
   const { link, image } = JSON.parse(feed.metadata);
   const [imageHash, setImageHash] = useState<string | undefined>();
-  const getRepoFeed = useRecoilValue(repoFeedAtom);
+  const { repoFeed: getRepoFeed } = useFeedStore();
 
   const { data: feedImages, isLoading } = useGetFeedImages(30);
   const updatePrivateFeed = useUpdatePrivateFeed();

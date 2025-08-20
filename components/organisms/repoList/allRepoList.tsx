@@ -2,18 +2,17 @@ import React, { useMemo } from "react";
 import { EEmptyList } from "@components/molecules/emptyList";
 import CardView from "../repoView/cardView";
 import { ERepoGrouping } from "@interface/enums";
-import { repoSearchParamAtom } from "@atom/repository";
+import { useRepoSearchParamStore } from "@store/repoSearchParam";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
 import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import useGetBookmarkList from "@hooks/repository/useGetBookmarkList";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
-import { useRecoilValue } from "recoil";
 
 const AllRepoList = () => {
-  // TODO REFACTOR REQUIRED - REMOVE repoSearchParamAtom - REMOVE DOUBLE USAGE OF useGetAllRepositories
-  const getSearchParam = useRecoilValue(repoSearchParamAtom);
-  const repoType = getSearchParam?.repoType;
-  const search = getSearchParam?.search;
+  // TODO REFACTOR REQUIRED - REMOVE DOUBLE USAGE OF useGetAllRepositories
+  const { repoSearchParam } = useRepoSearchParamStore();
+  const repoType = repoSearchParam?.repoType;
+  const search = repoSearchParam?.search;
 
   const allRepos = useGetAllRepositories(20, undefined, true);
   const searchAllRepos = useGetAllRepositories(20, search, true);

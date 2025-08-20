@@ -2,16 +2,15 @@ import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHei
 import FormInput from "@components/atoms/input/formInput";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { categoryAtom } from "@atom/category";
 import { documentResetPasswordSchema } from "./validation.yup";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import useUpdateDocumentPassword from "@hooks/document/useUpdateDocumentPassword";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ERoles } from "@interface/enums";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -24,10 +23,10 @@ interface IDataForm {
 }
 
 const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
 
-  const getCategory = useRecoilValue(categoryAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
+  const { category: getCategory } = useCategoryStore();
+  const { selectedDocument: document } = useDocumentStore();
 
   const updatePassword = useUpdateDocumentPassword();
 

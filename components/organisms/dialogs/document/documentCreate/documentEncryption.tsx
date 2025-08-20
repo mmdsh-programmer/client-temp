@@ -3,16 +3,15 @@ import { DialogBody } from "@material-tailwind/react";
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import { IPublicKey } from "@interface/repo.interface";
 import RepoKeyList from "../../repository/repoKey/repoKeyList";
-import { documentKeyAtom } from "@atom/document";
-import { useRecoilState } from "recoil";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   repoId: number;
 }
 
 const DocumentEncryption = ({ repoId }: IProps) => {
-  const [getDocumentKey, setDocumentKey] = useRecoilState(documentKeyAtom);
+  const { documentKey: getDocumentKey, setDocumentKey } = useDocumentStore();
   const { handleNextStep, handlePrevStep } = useStepperNavigate();
 
   const onSelectKey = (keyItem: IPublicKey) => {

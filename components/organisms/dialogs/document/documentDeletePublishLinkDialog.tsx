@@ -1,10 +1,9 @@
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { IDocumentMetadata } from "@interface/document.interface";
 import React from "react";
-import { selectedDocumentAtom } from "@atom/document";
 import useDeleteDocumentPublishLink from "@hooks/document/useDeleteDocumentPublishLink";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -13,7 +12,7 @@ interface IProps {
 
 const DocumentDeletePublishLinkDialog = ({ document, setOpen }: IProps) => {
   const repoId = useRepoId();
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const { selectedDocument: getDocument } = useDocumentStore();
 
   const deletePublishLink = useDeleteDocumentPublishLink();
 

@@ -1,8 +1,15 @@
 import { create } from "zustand";
+import { ERepoGrouping } from "@interface/enums";
 
 interface RepoSearchParamState {
-  repoSearchParam: string | null;
-  setRepoSearchParam: (param: string | null) => void;
+  repoSearchParam: {
+    repoType: ERepoGrouping;
+    search?: string;
+  } | null;
+  setRepoSearchParam: (param: {
+    repoType: ERepoGrouping;
+    search?: string;
+  } | null) => void;
 }
 
 export const useRepoSearchParamStore = create<RepoSearchParamState>((set) => {

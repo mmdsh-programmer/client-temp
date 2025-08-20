@@ -9,6 +9,8 @@ import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import useSetDocumentDomainTags from "@hooks/domainTags/useSetDocumentDomainTags";
 import { useDocumentStore } from "@store/document";
+import { useRecoilState } from "recoil";
+import { tempDocTagAtom } from "@atom/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -19,14 +21,7 @@ const DocumentTagsDialog = ({ setOpen }: IProps) => {
   const document = useDocumentStore((state) => {
     return state.selectedDocument;
   });
-  const [tempDocTag, setTempDocTag] = [
-    useDocumentStore((state) => {
-      return state.tempDocTag;
-    }),
-    useDocumentStore((state) => {
-      return state.setTempDocTag;
-    }),
-  ];
+  const [tempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
 
   const [openCreateTagDialog, setOpenCreateTagDialog] = useState(false);
   const [tagName, setTagName] = useState<string | number>("");

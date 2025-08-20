@@ -2,10 +2,9 @@ import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
-import { useSetRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   repo?: IRepo;
@@ -13,7 +12,7 @@ interface IProps {
 }
 
 const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
-  const setRepo = useSetRecoilState(repoAtom);
+  const { setRepo } = useRepositoryStore();
   const { isPending, mutate } = useBookmarkRepo();
 
   const handleClose = () => {

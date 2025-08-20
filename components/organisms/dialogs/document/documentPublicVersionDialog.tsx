@@ -1,14 +1,13 @@
 import React from "react";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import usePublicLastVersion from "@hooks/document/usePublicLastVersion";
 import { Typography } from "@material-tailwind/react";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -16,7 +15,7 @@ interface IProps {
 
 const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
-  const document = useRecoilValue(selectedDocumentAtom);
+  const { selectedDocument: document } = useDocumentStore();
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();

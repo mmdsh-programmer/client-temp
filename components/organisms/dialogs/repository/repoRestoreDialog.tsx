@@ -1,17 +1,16 @@
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import { useRecoilValue } from "recoil";
 import useRestoreRepo from "@hooks/repository/useRestoreRepo";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RepoRestoreDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
 
   const { isPending, mutate } = useRestoreRepo();
 

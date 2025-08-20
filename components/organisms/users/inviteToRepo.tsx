@@ -5,13 +5,12 @@ import { Spinner } from "@components/atoms/spinner";
 import { ERoles } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "@components/molecules/loadingButton";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import { translateRoles } from "@utils/index";
 import useAddUser from "@hooks/user/useAddUser";
 import { useForm } from "react-hook-form";
 import useGetRoles from "@hooks/user/useGetRoles";
-import { useRecoilValue } from "recoil";
 import { userSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -20,7 +19,7 @@ interface IForm {
 }
 
 const InviteToRepo = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const [role, setRole] = useState<IOption>({
     label: translateRoles(ERoles.admin),
     value: ERoles.admin,
