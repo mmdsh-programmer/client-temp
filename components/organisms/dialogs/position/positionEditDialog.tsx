@@ -8,12 +8,11 @@ import FormInput from "@components/atoms/input/formInput";
 import { IPosition } from "@interface/position.interface";
 import { IUserList } from "../document/documentAccessPublishingDialog";
 import ImageComponent from "@components/atoms/image";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import { positionSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetPositionInfo from "@hooks/position/useGetPositionInfo";
-import { useRecoilValue } from "recoil";
 import useUpdatePosition from "@hooks/position/useUpdatePosition";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -31,7 +30,9 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedUserList, setSelectedUserList] = useState<IUserList[]>([]);
 
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
   const { data: groupInfo } = useGetPositionInfo(
     getBranchId!,

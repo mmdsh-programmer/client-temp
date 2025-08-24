@@ -4,11 +4,12 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { Spinner } from "@components/atoms/spinner";
 import BranchGroupMenu from "@components/molecules/branchGroupMenu";
 import useGetPositions from "@hooks/position/useGetPositions";
-import { useRecoilValue } from "recoil";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 
 const BranchGroupsMobileView = () => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
   const { data: getGroupOfBranch, isLoading } = useGetPositions(getBranchId!, 20);
 

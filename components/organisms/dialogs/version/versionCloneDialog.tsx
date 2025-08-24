@@ -5,13 +5,12 @@ import { Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 import { toast } from "react-toastify";
 import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -29,8 +28,12 @@ interface IProps {
 
 const VersionCloneDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
@@ -66,7 +69,6 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    
     if (!repoId) return;
     const info = await getMe();
     createVersion.mutate({
@@ -89,7 +91,6 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     });
   };
 
-  
   return (
     <CreateDialog
       isPending={createVersion.isPending}
@@ -99,7 +100,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       className="version-clone-dialog"
     >
       {isLoading ? (
-        <Spinner className="h-8 w-8 text-primary mx-auto" />
+        <Spinner className="mx-auto h-8 w-8 text-primary" />
       ) : (
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">

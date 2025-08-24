@@ -1,14 +1,10 @@
+import React, { useState } from "react";
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import { Collapse, Typography } from "@material-tailwind/react";
-import {
-  ICategoryTreeItem,
-  IDocumentTreeItem,
-  categoryMoveDestAtom,
-  categoryQueryParamsAtom,
-} from "atom/category";
-import React, { useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-
+import type { ICategoryTreeItem, IDocumentTreeItem } from "@atom/category";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
+import { useSortStore } from "@store/sortParam";
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
@@ -16,8 +12,6 @@ import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import TreeDocItem from "@components/molecules/treeDocItem/treeDocItem";
 import { docTemplateFilter } from ".";
-import { repoAtom } from "@atom/repository";
-import { sortAtom } from "atom/sortParam";
 import useGetChildren from "@hooks/category/useGetChildren";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
@@ -30,10 +24,21 @@ interface IProps {
 }
 
 const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const queryParams = useRecoilValue(categoryQueryParamsAtom);
-  const getSortParams = useRecoilValue(sortAtom);
-  const [getCategoryMoveDest, setCategoryMoveDest] = useRecoilState(categoryMoveDestAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const queryParams = useCategoryStore((s) => {
+    return s.categoryQueryParams;
+  });
+  const getSortParams = useSortStore((s) => {
+    return s.sort;
+  });
+  const getCategoryMoveDest = useCategoryStore((s) => {
+    return s.categoryMoveDest;
+  });
+  const setCategoryMoveDest = useCategoryStore((s) => {
+    return s.setCategoryMoveDest;
+  });
 
   const [categoryId, setCategoryId] = useState<number>(0);
   const [openCategory, setOpenCategory] = useState<null | number>(null);
@@ -88,7 +93,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
             checked={getCategoryMoveDest?.id === catItem.id}
           />
         )}
-        <div className="flex items-center bg-transparent p-2 ">
+        <div className="flex items-center bg-transparent p-2">
           <div className="flex items-center">
             <div
               className={`flex h-6 w-6 cursor-pointer items-center justify-center ${

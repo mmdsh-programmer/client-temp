@@ -1,19 +1,18 @@
 import { Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import { DatePicker } from "zaman";
 import FormInput from "@components/atoms/input/formInput";
 import { IRepo } from "@interface/repo.interface";
 import { onDatePickerChangePayload } from "zaman/dist/types";
-import { publicRoleAtom } from "@atom/public";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreatePublicLink from "@hooks/public/useCreatePublicLink";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Checkbox from "@components/atoms/checkbox";
+import { useRepositoryStore } from "@store/repository";
+import { usePublicStore } from "@store/public";
 
 const validationSchema = yup.object().shape({
   hasExpireTime: yup.boolean().required(),
@@ -51,8 +50,10 @@ interface IProps {
 
 const CreateRepoPublicLink = ({ setOpen }: IProps) => {
   const [hasPassword, setHasPassword] = useState(false);
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
-  const getSelectedRoleId = useRecoilValue(publicRoleAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
+  const getSelectedRoleId = usePublicStore((state) => {
+    return state.publicRole;
+  });
   const createPublicLink = useCreatePublicLink();
 
   const form = useForm<IData>({

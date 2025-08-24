@@ -1,11 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 import { toast } from "react-toastify";
-import { selectedDocumentAtom } from "@atom/document";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import useSetLastVersion from "@hooks/version/useSetLastVersion";
-import { selectedVersionAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -16,8 +15,12 @@ interface IProps {
 
 const LastVersionDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");

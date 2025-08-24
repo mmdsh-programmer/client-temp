@@ -3,13 +3,13 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React from "react";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import useGetBranchUsers from "@hooks/branch/useGetBranchUsers";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
 
 const BranchUserList = () => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => 
+{return s.branchId;});
 
   const { data: getBranchUsers, isLoading } = useGetBranchUsers(
     getBranchId!,

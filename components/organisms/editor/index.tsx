@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
-import { editorDecryptedContentAtom, editorListDrawerAtom, editorModeAtom } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
@@ -12,10 +11,10 @@ import { IClassicData } from "clasor-remote-editor/dist/interface";
 import { IVersion } from "@interface/version.interface";
 import { Spinner } from "@components/atoms/spinner";
 import TemplateContentDialog from "../dialogs/templateContent/templateContentDialog";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useEditorStore } from "@store/editor";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 
@@ -36,11 +35,9 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const getRepo = useRecoilValue(repoAtom);
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
-  const decryptedContent = useRecoilValue(editorDecryptedContentAtom);
-  const listDrawer = useRecoilValue(editorListDrawerAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { selectedDocument } = useDocumentStore();
+  const { editorMode, editorDecryptedContent: decryptedContent, editorListDrawer: listDrawer } = useEditorStore();
 
   const repoId = useRepoId();
   const { data: userInfo, isLoading } = useGetUser();

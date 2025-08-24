@@ -13,9 +13,8 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
 import useRepoId from "@hooks/custom/useRepoId";
 import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
-import { selectedDocumentAtom } from "@atom/document";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
 
 const fileTablePageSize = 20;
 
@@ -25,7 +24,7 @@ const AttachFile = ({
   attachmentUserGroup: string;
 }) => {
   const repoId = useRepoId();
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const { selectedDocument: getDocument } = useDocumentStore();
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 

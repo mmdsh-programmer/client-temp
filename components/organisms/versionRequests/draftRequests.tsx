@@ -1,7 +1,5 @@
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useEffect } from "react";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import DraftRequestMenu from "@components/molecules/draftRequestMenu";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
@@ -9,20 +7,24 @@ import RenderIf from "@components/atoms/renderIf";
 import RequestMobileView from "../versionRequestsView/requestMobileView";
 import RequestTableView from "../versionRequestsView/requestTableView";
 import TableCell from "@components/molecules/tableCell";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetPendingDraft from "@hooks/release/useGetPendingDraft";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
+import { useRepositoryStore } from "@store/repository";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 
 const DraftRequests = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const setDocument = useDocumentStore((state) => {
+    return state.setSelectedDocument;
+  });
+  const { setEditorMode, setEditorModal } = useEditorStore();
+  const { selectedVersion: getSelectedVersion, setSelectedVersion } = useVersionStore();
 
   const {
     data: getDraftRequest,

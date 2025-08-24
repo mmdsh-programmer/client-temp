@@ -9,14 +9,13 @@ import FormInput from "@components/atoms/input/formInput";
 import ImageComponent from "@components/atoms/image";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import { repoAtom } from "@atom/repository";
-import { selectedGroupAtom } from "@atom/group";
+import { useRepositoryStore } from "@store/repository";
+import { useGroupStore } from "@store/group";
 import { toast } from "react-toastify";
 import useEditGroup from "@hooks/group/useEditGroup";
 import { useForm } from "react-hook-form";
 import useGetGroupInfo from "@hooks/group/useGetGroupInfo";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import { useRecoilValue } from "recoil";
 import { userGroupSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ERoles } from "@interface/enums";
@@ -32,8 +31,12 @@ interface IProps {
 }
 
 const GroupEditDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const group = useRecoilValue(selectedGroupAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const group = useGroupStore((s) => {
+    return s.selectedGroup;
+  });
 
   const [updatedUsers, setUpdatedUsers] = useState<
     { username: string; picture: string | number | undefined }[]

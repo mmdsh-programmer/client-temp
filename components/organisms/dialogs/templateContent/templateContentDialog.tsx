@@ -6,8 +6,7 @@ import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHei
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import LoadHtml from "./loadHtml";
 import { Typography } from "@material-tailwind/react";
-import { documentTemplateAtom } from "@atom/document";
-import { useRecoilState } from "recoil";
+import { useDocumentStore } from "@store/document";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -19,7 +18,12 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
   // TODO CODE REVIEW REQUIRED
 
   const [loading, setLoading] = useState(false);
-  const [getDocumentTemplate, setDocumentTemplate] = useRecoilState(documentTemplateAtom);
+  const getDocumentTemplate = useDocumentStore((s) => {
+    return s.documentTemplate;
+  });
+  const setDocumentTemplate = useDocumentStore((s) => {
+    return s.setDocumentTemplate;
+  });
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();

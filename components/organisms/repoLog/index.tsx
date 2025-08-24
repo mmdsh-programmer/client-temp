@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { repoAtom, repoActivityAtom } from "@atom/repository";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { Author, ChatBubbleProps, ChatFeed, Message } from "react-bell-chat";
 import Chat from "@utils/chatAgent";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -11,7 +9,14 @@ import useWindowSize from "@hooks/useWindowSize";
 import ChatMobileRepoLog from "./chatMobile";
 import ChatDesktopRepoLog from "./chatDesktop";
 import { IRepo } from "@interface/repo.interface";
-import { IHistoryResult, IMessageType, IThreadParams, IParticipantResult, ChatState } from "@interface/chat.interface";
+import {
+  IHistoryResult,
+  IMessageType,
+  IThreadParams,
+  IParticipantResult,
+  ChatState,
+} from "@interface/chat.interface";
+import { useRepoActivityStore, useRepositoryStore } from "@store/repository";
 
 // Define breakpoint for mobile/tablet
 const MOBILE_BREAKPOINT = 768;
@@ -60,7 +65,7 @@ export interface RepoLogProps {
   showRepoActivity: boolean;
   setShowRepoActivity: (show: boolean) => void;
   selectedRepo: IRepo | null;
-  setRepo: React.Dispatch<React.SetStateAction<IRepo | null>>;
+  setRepo: (repo: IRepo | null) => void;
   userInfo: { access_token?: string; userId?: number; username?: string } | undefined;
   chatState: ChatState;
   setChatState: React.Dispatch<React.SetStateAction<ChatState>>;
@@ -81,9 +86,13 @@ export interface RepoLogProps {
 }
 
 const RepoLog = () => {
-  const [showRepoActivity, setShowRepoActivity] = useRecoilState(repoActivityAtom);
-  const selectedRepo = useRecoilValue(repoAtom);
-  const setRepo = useSetRecoilState(repoAtom);
+  const { showRepoActivity, setShowRepoActivity } = useRepoActivityStore();
+  const selectedRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const setRepo = useRepositoryStore((state) => {
+    return state.setRepo;
+  });
   const { data: userInfo } = useGetUser();
   const chat = useRef<ChatFeed<string>>(null);
   const chatAgentRef = useRef<ChatAgentType | null>(null);
@@ -170,26 +179,29 @@ const RepoLog = () => {
               return {
                 ...previousState,
                 messages: [
-                  ...history
-                    .map((messageInfo) => {
-                      return {
-                        id: messageInfo.id,
-                        createdOn: new Date(messageInfo.timeMiliSeconds),
-                        message: messageInfo.message,
-                        authorId: messageInfo.ownerId,
-                        isSend: true,
-                        participant: messageInfo.participant,
-                        editable: false, // Disable editing in log view
-                        deletable: false, // Disable deletion in log view
-                        replyInfo: messageInfo.replyInfo || null,
-                      } as IMessageType;
-                    }),
+                  ...history.map((messageInfo) => {
+                    return {
+                      id: messageInfo.id,
+                      createdOn: new Date(messageInfo.timeMiliSeconds),
+                      message: messageInfo.message,
+                      authorId: messageInfo.ownerId,
+                      isSend: true,
+                      participant: messageInfo.participant,
+                      editable: false, // Disable editing in log view
+                      deletable: false, // Disable deletion in log view
+                      replyInfo: messageInfo.replyInfo || null,
+                    } as IMessageType;
+                  }),
                 ],
                 hasOldMessages: history.length >= historyCount, // If we got a full page, there might be more
               };
             });
             setMessageOffset(history.length);
-            if (history.length > 0 && history[0].ownerId !== currentAuthorId && chatAgentRef.current?.seen) {
+            if (
+              history.length > 0 &&
+              history[0].ownerId !== currentAuthorId &&
+              chatAgentRef.current?.seen
+            ) {
               // Mark message as seen if it's not from current user
               chatAgentRef.current.seen({
                 messageId: history[0].id,
@@ -227,20 +239,19 @@ const RepoLog = () => {
                 ...previousState,
                 messages: [
                   ...previousState.messages,
-                  ...history
-                    .map((messageInfo) => {
-                      return {
-                        id: messageInfo.id,
-                        createdOn: new Date(messageInfo.timeMiliSeconds),
-                        message: messageInfo.message,
-                        authorId: messageInfo.ownerId,
-                        isSend: true,
-                        participant: messageInfo.participant,
-                        editable: false, // Disable editing in log view
-                        deletable: false, // Disable deletion in log view
-                        replyInfo: messageInfo.replyInfo || null,
-                      } as IMessageType;
-                    }),
+                  ...history.map((messageInfo) => {
+                    return {
+                      id: messageInfo.id,
+                      createdOn: new Date(messageInfo.timeMiliSeconds),
+                      message: messageInfo.message,
+                      authorId: messageInfo.ownerId,
+                      isSend: true,
+                      participant: messageInfo.participant,
+                      editable: false, // Disable editing in log view
+                      deletable: false, // Disable deletion in log view
+                      replyInfo: messageInfo.replyInfo || null,
+                    } as IMessageType;
+                  }),
                 ],
                 hasOldMessages: history.length >= historyCount, // There are more messages if we filled the page
               };
@@ -265,7 +276,11 @@ const RepoLog = () => {
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     // If we're at the bottom of the scroll and have more messages to load
-    if (scrollHeight - scrollTop - clientHeight < 100 && chatState.hasOldMessages && !isLoadingMore) {
+    if (
+      scrollHeight - scrollTop - clientHeight < 100 &&
+      chatState.hasOldMessages &&
+      !isLoadingMore
+    ) {
       loadMoreMessages();
     }
   };
@@ -276,7 +291,7 @@ const RepoLog = () => {
     try {
       chatAgentRef.current.on("messageEvents", (res: MessageEvent) => {
         if (!res || !res.type || !res.result || !res.result.message) return;
-        
+
         switch (res.type) {
           case "MESSAGE_NEW":
             if (selectedRepo?.chatThreadId === res.result.message.threadId) {
@@ -304,7 +319,7 @@ const RepoLog = () => {
                       ],
                 };
               });
-              
+
               // Mark message as seen if it's not from current user
               if (
                 res.result.message.ownerId !== currentAuthorId &&

@@ -4,11 +4,10 @@ import FormInput from "@components/atoms/input/formInput";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import PublishSearchResult from "@components/organisms/publish/publishSearchResult";
 import { SearchIcon } from "@components/atoms/icons";
-import { openPublishPageSearchContent } from "@atom/publish";
+import { usePublishStore } from "@store/publish";
 import { publishSearchContentSchema } from "./validation.yup";
 import { useForm } from "react-hook-form";
 import { useParams } from "next/navigation";
-import { useSetRecoilState } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toEnglishDigit } from "@utils/index";
 
@@ -17,7 +16,9 @@ interface IForm {
 }
 
 const PublishSearchContent = () => {
-  const setOpen = useSetRecoilState(openPublishPageSearchContent);
+  const setOpen = usePublishStore((s) => {
+    return s.setOpenPublishPageSearchContent;
+  });
   const [showResult, setShowResult] = useState(false);
   const [searchText, setSearchText] = useState("");
   const params = useParams();

@@ -1,18 +1,16 @@
+import React, { useEffect } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
 import { IChildrenFilter } from "@interface/app.interface";
 import LoadMore from "@components/molecules/loadMore";
-import React, { useEffect } from "react";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
 import TreeCatItem from "./treeCatItem";
-import { categoryQueryParamsAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
-import { sortAtom } from "@atom/sortParam";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
+import { useSortStore } from "@store/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   move?: boolean;
@@ -31,15 +29,20 @@ export const docTemplateFilter: IChildrenFilter = {
 };
 
 const ChildrenTree = ({ move, enableAction }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const queryParams = useRecoilValue(categoryQueryParamsAtom);
-  const getSortParams = useRecoilValue(sortAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const queryParams = useCategoryStore((s) => {
+    return s.categoryQueryParams;
+  });
+  const getSortParams = useSortStore((s) => {
+    return s.sort;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
   const repoId =
-    currentPath === "/admin/myDocuments" ||
-    currentPath === "/admin/dashboard" 
+    currentPath === "/admin/myDocuments" || currentPath === "/admin/dashboard"
       ? userInfo!.repository.id
       : getRepo!.id;
 
@@ -60,7 +63,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
     move || enableAction ? undefined : docTemplateFilter,
     enableAction ? undefined : !!move,
   );
-  
+
   useEffect(() => {
     refetch();
   }, [getSortParams, refetch]);
@@ -75,7 +78,7 @@ const ChildrenTree = ({ move, enableAction }: IProps) => {
         {/* eslint-disable-next-line no-nested-ternary */}
         {isLoading ? (
           <div className="flex h-[50px] w-full items-center justify-center">
-            <Spinner className="text-primary h-6 w-6" />
+            <Spinner className="h-6 w-6 text-primary" />
           </div>
         ) : categoryChildren?.pages[0].list.length ? (
           categoryChildren?.pages.map((page) => {

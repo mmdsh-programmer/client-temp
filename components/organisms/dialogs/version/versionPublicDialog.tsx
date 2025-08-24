@@ -2,16 +2,15 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import usePublicVersion from "@hooks/version/usePublicVersion";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { ERoles } from "@interface/enums";
-import { editorDataAtom } from "@atom/editor";
-import { selectedVersionAtom } from "@atom/version";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -20,10 +19,18 @@ interface IProps {
 
 const VersionPublicDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
-  const editorData = useRecoilValue(editorDataAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
+  const editorData = useEditorStore((s) => {
+    return s.editorData;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
@@ -70,7 +77,7 @@ const VersionPublicDialog = ({ setOpen }: IProps) => {
       dialogHeader="عمومی شدن نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="version-public-dialog !-mb-[50dvh] xs:!mb-0 "
+      className="version-public-dialog !-mb-[50dvh] xs:!mb-0"
     >
       <div className="flex w-full flex-col gap-4">
         <div className="flex">

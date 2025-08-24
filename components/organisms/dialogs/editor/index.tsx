@@ -1,16 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import {
-  editorDataAtom,
-  editorDecryptedContentAtom,
-  editorListDrawerAtom,
-  editorModalAtom,
-  editorModeAtom,
-  editorPublicKeyAtom,
-} from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
+import { useDocumentStore } from "@store/document";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "./blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
@@ -36,17 +27,55 @@ const Editor = ({ setOpen }: IProps) => {
   // TODO: REFACTOR NEEDED (HIGH PRIORITY)
 
   const repoId = useRepoId();
-  const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getVersionData, setEditorData] = useRecoilState(editorDataAtom);
-  const [versionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const getSelectedDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const setSelectedDocument = useDocumentStore((s) => {
+    return s.setSelectedDocument;
+  });
+  const editorMode = useEditorStore((s) => {
+    return s.editorMode;
+  });
+  const setEditorModal = useEditorStore((s) => {
+    return s.setEditorModal;
+  });
+  const getVersionData = useEditorStore((s) => {
+    return s.editorData;
+  });
+  const setEditorData = useEditorStore((s) => {
+    return s.setEditorData;
+  });
+  const versionModalList = useVersionStore((s) => {
+    return s.versionModalList;
+  });
+  const setVersionModalList = useVersionStore((s) => {
+    return s.setVersionModalList;
+  });
+  const getSelectedVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
+  const setSelectedVersion = useVersionStore((s) => {
+    return s.setSelectedVersion;
+  });
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
-  const [decryptedContent, setDecryptedContent] = useRecoilState(editorDecryptedContentAtom);
-  const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
-  const setListDrawer = useSetRecoilState(editorListDrawerAtom);
-  const [getDocumentShow, setDocumentShow] = useRecoilState(documentShowAtom);
+  const decryptedContent = useEditorStore((s) => {
+    return s.editorDecryptedContent;
+  });
+  const setDecryptedContent = useEditorStore((s) => {
+    return s.setEditorDecryptedContent;
+  });
+  const setPublicKey = useEditorStore((s) => {
+    return s.setEditorPublicKey;
+  });
+  const setListDrawer = useEditorStore((s) => {
+    return s.setEditorListDrawer;
+  });
+  const getDocumentShow = useDocumentStore((s) => {
+    return s.documentShow;
+  });
+  const setDocumentShow = useDocumentStore((s) => {
+    return s.setDocumentShow;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();

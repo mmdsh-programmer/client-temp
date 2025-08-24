@@ -4,16 +4,14 @@ import React, { useEffect } from "react";
 import { Drawer, IconButton } from "@material-tailwind/react";
 import { XIcon } from "@components/atoms/icons";
 import { Outline } from "clasor-content-preview";
-import { useRecoilState } from "recoil";
-import { openPublishOutlineDrawer } from "@atom/publish";
+import { usePublishStore } from "@store/publish";
 
 interface IProps {
   outline: string;
 }
 
 const PublishOutlineDrawer = ({ outline }: IProps) => {
-  const [getOpenPublishOutlineDrawer, setOpenPublishOutlineDrawer] =
-    useRecoilState(openPublishOutlineDrawer);
+  const { openPublishOutlineDrawer, setOpenPublishOutlineDrawer } = usePublishStore();
   const outlineList = outline?.startsWith("{\"root\": {\"root\"") ? "[]" : outline;
 
   const closeDrawer = () => {
@@ -51,7 +49,7 @@ const PublishOutlineDrawer = ({ outline }: IProps) => {
 
   return (
     <Drawer
-      open={getOpenPublishOutlineDrawer}
+      open={openPublishOutlineDrawer}
       onClose={closeDrawer}
       className="p-4"
       placement="left"
@@ -62,7 +60,7 @@ const PublishOutlineDrawer = ({ outline }: IProps) => {
         className="!absolute right-3 top-4"
         size="sm"
       >
-        <XIcon className="w-4 h-4" />
+        <XIcon className="h-4 w-4" />
       </IconButton>
       <Outline outline={outlineList} />
     </Drawer>

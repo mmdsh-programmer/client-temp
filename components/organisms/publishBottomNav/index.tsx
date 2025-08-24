@@ -1,12 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  openPublishOutlineDrawer,
-  publishPageSelectedDocumentAtom,
-  publishVersionAtom,
-} from "@atom/publish";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import PublishChangeVersion from "./publishChangeVersion";
 import LikeAndDislike from "../like&dislike";
 import PublishNextAndPrev from "./publishNextAndPrev";
@@ -15,13 +9,15 @@ import { Button } from "@material-tailwind/react";
 import { MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
 import PublishTinyLink from "./publishTinyLink";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import { usePublishStore } from "@store/publish";
 
 const PublishBottomNav = () => {
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
-  const getPublishVersion = useRecoilValue(publishVersionAtom);
-  const getPublishPageSelectedDocument = useRecoilValue(publishPageSelectedDocumentAtom);
-  const setOpenPublishOutlineDrawer = useSetRecoilState(openPublishOutlineDrawer);
-
+  const {
+    publishVersion: getPublishVersion,
+    publishPageSelectedDocument: getPublishPageSelectedDocument,
+    setOpenPublishOutlineDrawer,
+  } = usePublishStore();
   const { data: userData } = useGetOptionalUser();
   const { data: getDomainInfo } = useGetDomainInfo();
 

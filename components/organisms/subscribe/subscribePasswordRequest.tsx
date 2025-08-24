@@ -1,18 +1,16 @@
-import { Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { Typography } from "@material-tailwind/react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { ERepoGrouping } from "@interface/enums";
 import FormInput from "@components/atoms/input/formInput";
-import { repoGroupingAtom } from "@atom/repository";
 import { subscribeScheme } from "../dialogs/repository/validation.yup";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useSetRecoilState } from "recoil";
 import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Checkbox from "@components/atoms/checkbox";
+import { useRepositoryStore } from "@store/repository";
 
 interface IDataForm {
   password: string;
@@ -27,7 +25,9 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
+  const setRepoGroup = useRepositoryStore((state) => {
+    return state.setRepoGrouping;
+  });
 
   const subscribeHook = useSubscribeRepo();
 
@@ -54,9 +54,7 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
         errorCallBack: (repoId?: number) => {
           localStorage.removeItem("CLASOR:LAST_PAGE");
           if (repoId) {
-            router.push(
-              `/admin/repositories?repoId=${repoId}`
-            );
+            router.push(`/admin/repositories?repoId=${repoId}`);
             setRepoGroup(ERepoGrouping.ACCESS_REPO);
           } else {
             router.push("/admin/dashboard");
@@ -87,9 +85,7 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
             register={{ ...register("password") }}
           />
           {errors.password && (
-            <Typography className="warning_text">
-              {errors.password?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.password?.message}</Typography>
           )}
         </div>
       </form>

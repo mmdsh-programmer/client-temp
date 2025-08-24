@@ -3,11 +3,12 @@ import MobileCard from "@components/molecules/mobileCard";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { Spinner } from "@components/atoms/spinner";
 import useGetBranchUsers from "@hooks/branch/useGetBranchUsers";
-import { useRecoilValue } from "recoil";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 
 const BranchUsersMobileView = () => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
   const { data: getBranchUsers, isLoading } = useGetBranchUsers(getBranchId!, 20);
 

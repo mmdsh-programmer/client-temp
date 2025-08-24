@@ -1,14 +1,6 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  editorDataAtom,
-  editorDecryptedContentAtom,
-  editorModeAtom,
-  editorPublicKeyAtom,
-} from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import BlockDraft from "@components/organisms/editor/blockDraft";
 import BlockDraftDialog from "../dialogs/editor/blockDraftDialog";
 import { EDocumentTypes } from "@interface/enums";
@@ -21,7 +13,9 @@ import { IRemoteEditorRef } from "clasor-remote-editor";
 import { IVersion } from "@interface/version.interface";
 import PublicKeyInfo from "../dialogs/editor/publicKeyInfo";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
-import { selectedDocumentAtom } from "@atom/document";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
@@ -32,14 +26,10 @@ import LastVersionCreateDialog from "../dialogs/editorTab/lastVersionCreateDialo
 
 const EditorTab = () => {
   const repoId = useRepoId();
-  const [getSelectedDocument, setSelectedDocument] = useRecoilState(selectedDocumentAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
-  const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
-  const [versionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const { selectedDocument: getSelectedDocument, setSelectedDocument } = useDocumentStore();
+  const { editorMode, editorData: getVersionData, setEditorData: setVersionData, editorDecryptedContent: decryptedContent, setEditorDecryptedContent: setDecryptedContent, setEditorPublicKey: setPublicKey } = useEditorStore();
+  const { versionModalList, setVersionModalList, selectedVersion: getSelectedVersion, setSelectedVersion } = useVersionStore();
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
-  const [decryptedContent, setDecryptedContent] = useRecoilState(editorDecryptedContentAtom);
-  const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
 
   const searchParams = useSearchParams();
   const versionId = searchParams?.get("versionId");

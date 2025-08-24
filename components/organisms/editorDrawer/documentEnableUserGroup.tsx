@@ -1,15 +1,14 @@
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
 import useEnableGroupHash from "@hooks/document/useEnableGroupHash";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import { EDocumentTypes } from "@interface/enums";
+import { useDocumentStore } from "@store/document";
 
 const DocumentEnableUserGroup = () => {
   const repoId = useRepoId();
-  const [getDocument, setDocument] = useRecoilState(selectedDocumentAtom);
+  const { selectedDocument: getDocument, setSelectedDocument: setDocument } = useDocumentStore();
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");

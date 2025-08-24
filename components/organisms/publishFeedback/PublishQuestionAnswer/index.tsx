@@ -1,18 +1,18 @@
 import CreateQuestion from "./createQuestion";
 import QuestionAnswerList from "./questionAnswerList";
 import React from "react";
-import { publishVersionAtom } from "@atom/publish";
-import { useRecoilValue } from "recoil";
+import { usePublishStore } from "@store/publish";
 
 const PublishQuestionAnswer = () => {
-  const getPublishVersion = useRecoilValue(publishVersionAtom);
-
+  const getPublishVersion = usePublishStore((state) => {
+    return state.publishVersion;
+  });
   return getPublishVersion ? (
     <>
-      <div className="px-5 xs:px-8 py-10">
+      <div className="px-5 py-10 xs:px-8">
         <CreateQuestion postId={getPublishVersion.postId} />
       </div>
-      <hr className="w-full h-[2px] bg-blue-gray-50" />
+      <hr className="h-[2px] w-full bg-blue-gray-50" />
       <QuestionAnswerList postId={getPublishVersion.postId} />
     </>
   ) : null;

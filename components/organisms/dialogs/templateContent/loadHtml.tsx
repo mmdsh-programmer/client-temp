@@ -1,11 +1,10 @@
 import { IRemoteEditorRef } from "clasor-remote-editor";
-import { documentTemplateAtom } from "@atom/document";
-import { repoAtom } from "@atom/repository";
+import { useDocumentStore } from "@store/document";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -13,8 +12,12 @@ interface IProps {
 }
 
 const LoadHtml = ({ editorRef, handleClose }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocumentTemplate = useRecoilValue(documentTemplateAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getDocumentTemplate = useDocumentStore((s) => {
+    return s.documentTemplate;
+  });
   
   const { data: getLastVersion, error: lastVersionError } = useGetLastVersion(
     getRepo!.id,
@@ -48,7 +51,7 @@ const LoadHtml = ({ editorRef, handleClose }: IProps) => {
       editorRef.current?.setHtml(data.content);
       handleClose();
     }
-  }, [getDocumentTemplate, getLastVersion, data]);
+  }, [getDocumentTemplate, getLastVersion, data, editorRef, handleClose, lastVersionError, error]);
 
   return null;
 };

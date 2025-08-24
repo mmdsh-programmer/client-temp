@@ -13,13 +13,12 @@ import Breadcrumb from "@components/molecules/breadcumb";
 import FeedbackDialog from "../dialogs/feedback";
 import ProfileMenu from "@components/molecules/profileMenu";
 import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
-import { repoAtom } from "@atom/repository";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useSetRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 const Header = () => {
   const router = useRouter();
-  const setRepo = useSetRecoilState(repoAtom);
+  const { setRepo } = useRepositoryStore();
   const [openRequestDialog, setOpenRequestDialog] = useState(false);
   const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);

@@ -7,14 +7,13 @@ import RenderIf from "@components/atoms/renderIf";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 import useGetPrivateFeeds from "@hooks/privateFeed/useGetPrivateFeeds";
-import { useRecoilState } from "recoil";
-import { repoFeedAtom } from "@atom/feed";
+import { useFeedStore } from "@store/feed";
 import { BackIcon } from "@components/atoms/icons";
 import PrivateFeedMenu from "@components/molecules/privateFeedMenu";
 import ImageComponent from "@components/atoms/image";
 
 const RepoFeedList = () => {
-  const [getRepoFeed, setRepoFeed] = useRecoilState(repoFeedAtom);
+  const { repoFeed: getRepoFeed, setRepoFeed } = useFeedStore();
 
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } = useGetPrivateFeeds(
     getRepoFeed!.value,

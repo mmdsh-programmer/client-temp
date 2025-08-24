@@ -11,13 +11,9 @@ import LikeAndDislike from "../like&dislike";
 import RenderIf from "@components/atoms/renderIf";
 import VersionConfirmDialog from "../dialogs/version/versionConfirmDialog";
 import VersionPublicDialog from "../dialogs/version/versionPublicDialog";
-import { editorListDrawerAtom, editorModeAtom } from "@atom/editor";
-import { useRecoilState, useRecoilValue } from "recoil";
 import VersionCancelConfirmDialog from "../dialogs/version/versionCancelConfirmDialog";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
-import { selectedDocumentAtom } from "@atom/document";
-import { repoAtom } from "@atom/repository";
 import AcceptDraftDialog from "../dialogs/draftRequest/acceptDraftDialog";
 import VersionCancelPublicDialog from "../dialogs/version/versionCancelPublicDialog";
 import AcceptVersionDialog from "../dialogs/versionRequest/acceptVersionDialog";
@@ -27,7 +23,10 @@ import { ERoles, EDocumentTypes } from "@interface/enums";
 import DownloadPDF from "@components/molecules/downloadPDF";
 import DownloadExcel from "@components/molecules/downloadExcel";
 import { IRemoteEditorRef } from "clasor-remote-editor";
-import { selectedVersionAtom } from "@atom/version";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
+import { useDocumentStore } from "@store/document";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -35,11 +34,11 @@ interface IProps {
 
 const FloatingButtons = ({ editorRef }: IProps) => {
   const currentPath = usePathname();
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
-  const [getListDrawer, setListDrawer] = useRecoilState(editorListDrawerAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { selectedDocument: getDocument } = useDocumentStore();
+  const { selectedVersion: getVersion } = useVersionStore();
+  const { editorListDrawer: getListDrawer, setEditorListDrawer: setListDrawer } = useEditorStore();
+  const { editorMode } = useEditorStore();
 
   const [draftConfirmModal, setDraftConfirmModal] = useState(false);
   const [draftAcceptConfirmModal, setDraftAcceptConfirmModal] = useState(false);

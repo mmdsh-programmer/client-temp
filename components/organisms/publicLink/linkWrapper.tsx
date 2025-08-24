@@ -1,27 +1,26 @@
+import React, { useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import { CopyIcon, SettingIcon } from "@components/atoms/icons";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
-import React, { useState } from "react";
-import { openShareAccessAtom, publicRoleAtom } from "@atom/public";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import { IPublicLink } from "@interface/repo.interface";
 import { IRoles } from "@interface/users.interface";
 import LinkWrapperMenu from "./linkWrapperMenu";
 import copy from "copy-to-clipboard";
-import { repoAtom } from "@atom/repository";
 import { toast } from "react-toastify";
 import useCreateTinyLink from "@hooks/tinyLink/useCreateTinyLink";
 import { Spinner } from "@components/atoms/spinner";
+import { usePublicStore } from "@store/public";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   role: IRoles;
 }
 
 const LinkWrapper = ({ role }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const setSelectedRole = useSetRecoilState(publicRoleAtom);
-  const setOpenShareAccess = useSetRecoilState(openShareAccessAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const { setPublicRole, setOpenShareAccess } = usePublicStore();
   const [tinyLink, setTinyLink] = useState<string | null>(null);
 
   const { mutate, isPending } = useCreateTinyLink();
@@ -30,7 +29,7 @@ const LinkWrapper = ({ role }: IProps) => {
 
   const handleOpenShareAccess = () => {
     setOpenShareAccess(true);
-    setSelectedRole(role.id);
+    setPublicRole(role.id);
   };
 
   const CopyTinyLink = (link: string) => {
@@ -63,15 +62,15 @@ const LinkWrapper = ({ role }: IProps) => {
     <div className="link-wrapper">
       <div className="flex flex-col gap-2">
         <Typography className="label">{translateRoles(role.name)}</Typography>
-        <div className="flex items-center justify-between gap-2 w-full">
+        <div className="flex w-full items-center justify-between gap-2">
           <div
-            className="flex justify-between overflow-hidden flex-grow rounded-lg pr-3 pl-2 gap-2 items-center h-10 border-[1px] border-normal bg-gray-50"
+            className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3"
             key={role.id}
           >
             <Typography
-              className={`truncate   ${
-                readLink() ? " text-primary_normal" : "text-placeholder w-full"
-              } text-sm font-300 cursor-pointer `}
+              className={`truncate ${
+                readLink() ? "text-primary_normal" : "w-full text-placeholder"
+              } font-300 cursor-pointer text-sm`}
               dir={readLink() ? "ltr" : "rtl"}
             >
               {readLink()
@@ -83,17 +82,17 @@ const LinkWrapper = ({ role }: IProps) => {
             <div className="flex items-center">
               {readLink() ? (
                 <Button
-                  className="repo-link-wrapper__copy-link-button bg-white p-0 h-7 w-8 rounded-none"
+                  className="repo-link-wrapper__copy-link-button h-7 w-8 rounded-none bg-white p-0"
                   onClick={() => {
                     copy(
                       `${subscribeLink}/${readLink()?.link}${
                         readLink()?.hasPassword ? "?hasPassword=true" : ""
-                      }`
+                      }`,
                     );
                     toast.success("لینک مخزن کپی شد");
                   }}
                 >
-                  <CopyIcon className="w-4 h-4 fill-icon-active" />
+                  <CopyIcon className="h-4 w-4 fill-icon-active" />
                 </Button>
               ) : null}
             </div>
@@ -103,9 +102,9 @@ const LinkWrapper = ({ role }: IProps) => {
           ) : (
             <Button
               onClick={handleOpenShareAccess}
-              className="repo-link-wrapper__create-link-button p-0 h-10 w-10 border-[1px] border-normal bg-white"
+              className="repo-link-wrapper__create-link-button h-10 w-10 border-[1px] border-normal bg-white p-0"
             >
-              <SettingIcon className="w-5 h-5 stroke-icon-active" />
+              <SettingIcon className="h-5 w-5 stroke-icon-active" />
             </Button>
           )}
         </div>
@@ -114,7 +113,7 @@ const LinkWrapper = ({ role }: IProps) => {
           {readLink() ? (
             <Button
               key={role.id}
-              className="repo-public-link__copy-link-button p-0 bg-transparent"
+              className="repo-public-link__copy-link-button bg-transparent p-0"
               onClick={() => {
                 if (tinyLink) {
                   copy(tinyLink);
@@ -123,13 +122,13 @@ const LinkWrapper = ({ role }: IProps) => {
                   CopyTinyLink(
                     `${subscribeLink}/${readLink()?.link}${
                       readLink()?.hasPassword ? "?hasPassword=true" : ""
-                    }` || ""
+                    }` || "",
                   );
                 }
               }}
             >
               {isPending ? (
-                <Spinner className="h-4 w-4 text-info" />
+                <Spinner className="text-info h-4 w-4" />
               ) : (
                 <Typography className="text__label__button !text-[10px] text-link">
                   کپی لینک کوتاه

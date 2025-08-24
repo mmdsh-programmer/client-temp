@@ -2,23 +2,28 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedTagAtom } from "@atom/tag";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useTagStore } from "@store/tag";
 import { toast } from "react-toastify";
 import useDeleteDomainTag from "@hooks/domainTags/useDeleteDomainTag";
 import useDeleteTag from "@hooks/tag/useDeleteTag";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const TagDeleteDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getTag = useRecoilValue(selectedTagAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getTag = useTagStore((s) => {
+    return s.selectedTag;
+  });
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
@@ -36,11 +41,7 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (
-      (currentPath === "/admin/sharedDocuments" ||
-        sharedDocuments === "true") &&
-      getDocument
-    ) {
+    if ((currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") && getDocument) {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -59,8 +60,7 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
     deleteTag.mutate({
       repoId: repoId(),
       tagId: getTag.id,
-      isDirectAccess:
-        currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
+      isDirectAccess: currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
       callBack: () => {
         toast.error("تگ حذف شد.");
         handleClose();
@@ -76,11 +76,11 @@ const TagDeleteDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="tag-delete-dialog"
     >
-      <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+      <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
         آیا از حذف"
         <span
           title={getTag?.name}
-          className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
+          className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
         >
           {getTag?.name}
         </span>

@@ -2,11 +2,10 @@ import React from "react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import useCreateVersion from "@hooks/version/useCreateVersion";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import { versionSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -22,7 +21,9 @@ interface IProps {
 }
 
 const VersionCreateDialog = ({ close }: IProps) => {
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");

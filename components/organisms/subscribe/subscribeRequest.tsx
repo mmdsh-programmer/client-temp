@@ -4,9 +4,8 @@ import SpinnerText from "@components/molecules/spinnerText";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import useSubscribeRepo from "@hooks/public/useSubscribeRepo";
-import { useSetRecoilState } from "recoil";
-import { repoGroupingAtom } from "@atom/repository";
 import { ERepoGrouping } from "@interface/enums";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   hash: string;
@@ -15,8 +14,9 @@ interface IProps {
 const SubscribeRequest = ({ hash }: IProps) => {
   const router = useRouter();
   const hasFetched = useRef(false);
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
-
+  const setRepoGroup = useRepositoryStore((state) => {
+    return state.setRepoGrouping;
+  });
   const subscribeHook = useSubscribeRepo();
 
   const fetchSubscribe = () => {
@@ -34,9 +34,7 @@ const SubscribeRequest = ({ hash }: IProps) => {
       errorCallBack: (repoId?: number) => {
         localStorage.removeItem("CLASOR:LAST_PAGE");
         if (repoId) {
-          router.push(
-            `/admin/repositories?repoId=${repoId}`
-          );
+          router.push(`/admin/repositories?repoId=${repoId}`);
           setRepoGroup(ERepoGrouping.ACCESS_REPO);
         } else {
           router.push("/admin/dashboard");
@@ -51,19 +49,14 @@ const SubscribeRequest = ({ hash }: IProps) => {
 
   if (subscribeHook.isPending) {
     return (
-      <div className="h-screen flex justify-center items-center">
+      <div className="flex h-screen items-center justify-center">
         <SpinnerText text="در حال بررسی اطلاعات" />;
       </div>
     );
   }
 
   if (subscribeHook.isError) {
-    return (
-      <Error
-        error={{ message: "مشکل در ارسال اطلاعات" }}
-        retry={fetchSubscribe}
-      />
-    );
+    return <Error error={{ message: "مشکل در ارسال اطلاعات" }} retry={fetchSubscribe} />;
   }
   return null;
 };

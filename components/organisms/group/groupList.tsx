@@ -1,14 +1,12 @@
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
 import GroupItem from "../../molecules/groupItem";
 import React from "react";
-import { repoAtom } from "@atom/repository";
 import useGetGroups from "@hooks/group/useGetGroups";
-import { useRecoilValue } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
+import { useRepositoryStore } from "@store/repository";
 
 const GroupList = () => {
-  const getRepo = useRecoilValue(repoAtom);
+  const { repo: getRepo } = useRepositoryStore();
   const repoId = getRepo!.id;
   const {
     data: getGroups, isFetching

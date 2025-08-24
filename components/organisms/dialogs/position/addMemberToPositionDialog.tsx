@@ -5,12 +5,11 @@ import { Spinner } from "@components/atoms/spinner";
 
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import { toast } from "react-toastify";
 import useAddMembers from "@hooks/position/useAddMembers";
 import { useForm } from "react-hook-form";
 import useGetPositions from "@hooks/position/useGetPositions";
-import { useRecoilValue } from "recoil";
 
 interface IForm {
   username: string;
@@ -22,7 +21,9 @@ interface IProps {
 
 const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
   const [group, setGroup] = useState<IOption>();
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
   const { data: getGroupOfBranch, isLoading } = useGetPositions(
     getBranchId!,

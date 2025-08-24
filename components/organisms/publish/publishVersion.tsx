@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { publishPageSelectedDocumentAtom, publishVersionAtom } from "@atom/publish";
-import { useSetRecoilState } from "recoil";
 import { IVersion } from "@interface/version.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
+import { usePublishStore } from "@store/publish";
 
 interface IProps {
   version: IVersion;
@@ -12,10 +11,12 @@ interface IProps {
 }
 
 const PublishVersion = ({ version, document }: IProps) => {
-  const setPublishVersion = useSetRecoilState(publishVersionAtom);
-  const setSelectedPublishDocument = useSetRecoilState(
-    publishPageSelectedDocumentAtom
-  );
+  const setPublishVersion = usePublishStore((state) => {
+    return state.setPublishVersion;
+  });
+  const setSelectedPublishDocument = usePublishStore((state) => {
+    return state.setPublishPageSelectedDocument;
+  });
 
   useEffect(() => {
     setPublishVersion(version);

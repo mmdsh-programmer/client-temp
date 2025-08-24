@@ -1,21 +1,18 @@
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
-import BranchGroupMenu from "@components/molecules/branchGroupMenu";
 import React from "react";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import BranchGroupMenu from "@components/molecules/branchGroupMenu";
 import { Spinner } from "@components/atoms/spinner";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import useGetPositions from "@hooks/position/useGetPositions";
-import { useRecoilValue } from "recoil";
 
 const BranchGroupList = () => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
-  const { data: getGroupOfBranch, isLoading } = useGetPositions(
-    getBranchId!,
-    20
-  );
+  const { data: getGroupOfBranch, isLoading } = useGetPositions(getBranchId!, 20);
 
   const listLength = getGroupOfBranch?.pages[0].total;
 
@@ -40,15 +37,15 @@ const BranchGroupList = () => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex justify-center items-center">
+      <div className="flex h-full w-full items-center justify-center">
         <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
   }
 
   return listLength ? (
-    <div className="w-full overflow-auto border-[0.5px] border-normal rounded-lg">
-      <table className="w-full overflow-hidden min-w-max">
+    <div className="w-full overflow-auto rounded-lg border-[0.5px] border-normal">
+      <table className="w-full min-w-max overflow-hidden">
         <TableHead
           tableHead={[
             { key: "name", value: "نام سمت" },

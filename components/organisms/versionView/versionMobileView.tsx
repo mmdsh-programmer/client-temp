@@ -1,10 +1,6 @@
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import { IVersion, IVersionView } from "@interface/version.interface";
 import { Typography } from "@material-tailwind/react";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
 import LoadMore from "@components/molecules/loadMore";
@@ -12,8 +8,10 @@ import MobileCard from "@components/molecules/mobileCard";
 import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import VersionMenu from "@components/molecules/versionMenu";
-import { selectedDocumentAtom } from "@atom/document";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 
 const VersionMobileView = ({
   isLoading,
@@ -24,13 +22,11 @@ const VersionMobileView = ({
   lastVersion,
   type,
 }: IVersionView) => {
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [versionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
-  const setEditorData = useSetRecoilState(editorDataAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const getSelectedDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
+  const { versionModalList, setVersionModalList, setSelectedVersion } = useVersionStore();
+  const { setEditorData, setEditorMode, setEditorModal } = useEditorStore();
 
   const listLength = getVersionList?.[0].length;
 
@@ -56,11 +52,11 @@ const VersionMobileView = ({
     <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner className="h-8 w-8 text-primary" />
         </div>
       ) : listLength ? (
-        <div className="version-list-mobile flex flex-col gap-3 rounded-lg overflow-auto h-[calc(100vh-140px)]">
+        <div className="version-list-mobile flex h-[calc(100vh-140px)] flex-col gap-3 overflow-auto rounded-lg">
           {getVersionList.map((list) => {
             return list.map((version) => {
               return (
@@ -69,15 +65,12 @@ const VersionMobileView = ({
                   name={
                     version.state === "version" &&
                     lastVersion?.id === version.id &&
-                    (version.status === "private" ||
-                      version.status === "accepted") ? (
+                    (version.status === "private" || version.status === "accepted") ? (
                       <div className="flex items-center gap-1">
-                        <Typography className="text-primary_normal title_t2">
+                        <Typography className="title_t2 text-primary_normal">
                           {version.versionNumber}
                         </Typography>
-                        <Typography className="label text-green-400">
-                          آخرین نسخه
-                        </Typography>
+                        <Typography className="label text-green-400">آخرین نسخه</Typography>
                       </div>
                     ) : (
                       version.versionNumber
@@ -94,28 +87,20 @@ const VersionMobileView = ({
                     },
                     {
                       title: "وضعیت",
-                      value: translateVersionStatus(
-                        version.status,
-                        version.state
-                      ).translated,
+                      value: translateVersionStatus(version.status, version.state).translated,
                       className: `${
-                        translateVersionStatus(version.status, version.state)
-                          .className
+                        translateVersionStatus(version.status, version.state).className
                       } version-status`,
                     },
                   ]}
                   onClick={() => {
-                    if (
-                      getSelectedDocument?.contentType !== EDocumentTypes.board
-                    ) {
+                    if (getSelectedDocument?.contentType !== EDocumentTypes.board) {
                       handleOpenEditor(version);
                     } else {
                       handleOpenBoardEditor(version);
                     }
                   }}
-                  cardAction={
-                    <VersionMenu version={version} lastVersion={lastVersion} />
-                  }
+                  cardAction={<VersionMenu version={version} lastVersion={lastVersion} />}
                   className={`version-mbile-item ${versionModalList ? "border-[1px] border-normal" : ""}`}
                 />
               );
@@ -123,7 +108,7 @@ const VersionMobileView = ({
           })}
           <RenderIf isTrue={!!hasNextPage}>
             <LoadMore
-              className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
+              className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none"
               isFetchingNextPage={isFetchingNextPage}
               fetchNextPage={fetchNextPage}
             />

@@ -1,31 +1,27 @@
 import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
-import { editorDataAtom, editorModeAtom } from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 import CancelButton from "@components/atoms/button/cancelButton";
 import Checkbox from "@components/atoms/checkbox";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedFileAtom } from "@atom/file";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSaveFileEditor from "@hooks/editor/useSaveFileEditor";
+import { useDocumentStore } from "@store/document";
+import { useFileStore } from "@store/file";
 
 const EditorFileFooter = () => {
   const repoId = useRepoId();
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
-  const [getEditorData, setEditorData] = useRecoilState(editorDataAtom);
-  const setVersion = useSetRecoilState(selectedVersionAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const getSelectedFile = useRecoilValue(selectedFileAtom);
+  const { selectedDocument } = useDocumentStore();
+  const { editorMode, setEditorMode, editorData: getEditorData, setEditorData } = useEditorStore();
+  const { setSelectedVersion: setVersion, setVersionModalList } = useVersionStore();
+  const { selectedFile: getSelectedFile } = useFileStore();
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();

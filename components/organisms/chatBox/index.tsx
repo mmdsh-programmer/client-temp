@@ -9,21 +9,21 @@ import {
   chatFeedStyle,
   lastSeenAvatarStyles,
 } from "./styles";
-
 import Chat from "@utils/chatAgent";
 import ChatBubble from "./chatBubble";
 import ChatInput from "./chatInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import { Typography } from "@material-tailwind/react";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import useEnableDocChat from "@hooks/chat/useEnableDocChat";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
 
 const ChatBox = () => {
   const chat = React.useRef<any>();
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
+  const selectedDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
   const [permissionError, setPermissionError] = useState(false);
   const [enabledThreadId, setEnabledThreadId] = useState(
     selectedDocument?.chatThreadId

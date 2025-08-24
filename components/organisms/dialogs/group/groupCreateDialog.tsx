@@ -8,12 +8,11 @@ import FormInput from "@components/atoms/input/formInput";
 import ImageComponent from "@components/atoms/image";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
 import TextareaAtom from "@components/atoms/textarea/textarea";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import useCreateGroup from "@hooks/group/useCreateGroup";
 import { useForm } from "react-hook-form";
 import useGetRepoUsers from "@hooks/user/useGetRepoUsers";
-import { useRecoilValue } from "recoil";
 import { userGroupSchema } from "./validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -28,7 +27,9 @@ interface IProps {
 }
 
 const GroupCreateDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
   const [updatedUsers, setUpdatedUsers] = useState<
     { username: string; picture: string | number | undefined }[]
   >([]);

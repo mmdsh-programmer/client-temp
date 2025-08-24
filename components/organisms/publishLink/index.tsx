@@ -1,6 +1,4 @@
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { useRecoilState } from "recoil";
 import CreateRepoPublishLink from "./createRepoPublishLink";
 import LoadingButton from "@components/molecules/loadingButton";
 import { Button, Typography } from "@material-tailwind/react";
@@ -9,9 +7,10 @@ import useDeletePublishLink from "@hooks/publish/useDeletePublishLink";
 import { CopyIcon } from "@components/atoms/icons";
 import { toPersianDigit } from "@utils/index";
 import copy from "copy-to-clipboard";
+import { useRepositoryStore } from "@store/repository";
 
 const PublishLink = () => {
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
   const deletePublishLink = useDeletePublishLink();
 
   const handleDelete = () => {
@@ -30,7 +29,7 @@ const PublishLink = () => {
 
   return (
     <div className="repo-publish-link mt-4 w-full bg-white">
-      <div className=" w-full bg-gray-200" />
+      <div className="w-full bg-gray-200" />
       <div className="px-2 pt-6">
         {getRepo?.isPublish ? (
           <div className="flex flex-col gap-6">

@@ -1,21 +1,19 @@
+import React from "react";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import { IVersion, IVersionView } from "@interface/version.interface";
 import { Typography } from "@material-tailwind/react";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-
 import { EDocumentTypes } from "@interface/enums";
 import EmptyList from "@components/molecules/emptyList";
 import { LastVersionIcon } from "@components/atoms/icons";
 import LoadMore from "@components/molecules/loadMore";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
 import TableCell from "@components/molecules/tableCell";
 import TableHead from "@components/molecules/tableHead";
 import VersionMenu from "@components/molecules/versionMenu";
-import { selectedDocumentAtom } from "@atom/document";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
+import { useEditorStore } from "@store/editor";
 
 const VersionTableView = ({
   isLoading,
@@ -26,12 +24,11 @@ const VersionTableView = ({
   lastVersion,
   type,
 }: IVersionView) => {
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const setEditorData = useSetRecoilState(editorDataAtom);
-  const setSelectedVersion = useSetRecoilState(selectedVersionAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const getSelectedDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
+  const { setVersionModalList, setSelectedVersion } = useVersionStore();
+  const { setEditorData, setEditorMode, setEditorModal } = useEditorStore();
 
   const listLength = getVersionList?.[0].length;
 
@@ -57,12 +54,12 @@ const VersionTableView = ({
     <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
-        <div className="w-full h-full flex justify-center items-center overflow-hidden">
+        <div className="flex h-full w-full items-center justify-center overflow-hidden">
           <Spinner className="h-8 w-8 text-primary" />
         </div>
       ) : listLength ? (
-        <div className="version-list-table w-full overflow-auto border-[0.5px] border-normal rounded-lg h-[calc(100vh-200px)]">
-          <table className="w-full overflow-hidden min-w-max ">
+        <div className="version-list-table h-[calc(100vh-200px)] w-full overflow-auto rounded-lg border-[0.5px] border-normal">
+          <table className="w-full min-w-max overflow-hidden">
             <TableHead
               tableHead={[
                 { key: "name", value: "نام نسخه" },
@@ -93,10 +90,7 @@ const VersionTableView = ({
                       key={`version-table-item-${version.id}`}
                       className="version-table-item"
                       onClick={() => {
-                        if (
-                          getSelectedDocument?.contentType !==
-                          EDocumentTypes.board
-                        ) {
+                        if (getSelectedDocument?.contentType !== EDocumentTypes.board) {
                           handleOpenEditor(version);
                         } else {
                           handleOpenBoardEditor(version);
@@ -112,9 +106,7 @@ const VersionTableView = ({
                           className: "hidden md:table-cell",
                         },
                         {
-                          data: FaDateFromTimestamp(
-                            +new Date(version.createDate)
-                          ),
+                          data: FaDateFromTimestamp(+new Date(version.createDate)),
                         },
                         {
                           data: version.updateDate
@@ -124,27 +116,17 @@ const VersionTableView = ({
                         },
                         {
                           data: (
-                            <div className="flex items-center flex-wrap gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
                               <div className="flex flex-wrap gap-1">
                                 <div
                                   className={`${
-                                    translateVersionStatus(
-                                      version.status,
-                                      version.state
-                                    ).className
+                                    translateVersionStatus(version.status, version.state).className
                                   }`}
                                 >
-                                  {
-                                    translateVersionStatus(
-                                      version.status,
-                                      version.state
-                                    ).translated
-                                  }
+                                  {translateVersionStatus(version.status, version.state).translated}
                                 </div>
-                                <RenderIf
-                                  isTrue={version.status === "accepted"}
-                                >
-                                  <Typography className="label text-info bg-blue-50 flex items-center justify-center h-6 !px-2 rounded-full">
+                                <RenderIf isTrue={version.status === "accepted"}>
+                                  <Typography className="label text-info flex h-6 items-center justify-center rounded-full bg-blue-50 !px-2">
                                     عمومی
                                   </Typography>
                                 </RenderIf>
@@ -153,8 +135,7 @@ const VersionTableView = ({
                                 isTrue={
                                   version.state === "version" &&
                                   lastVersion?.id === version.id &&
-                                  (version.status === "private" ||
-                                    version.status === "accepted")
+                                  (version.status === "private" || version.status === "accepted")
                                 }
                               >
                                 <>
@@ -168,12 +149,7 @@ const VersionTableView = ({
                           ),
                         },
                         {
-                          data: (
-                            <VersionMenu
-                              version={version}
-                              lastVersion={lastVersion}
-                            />
-                          ),
+                          data: <VersionMenu version={version} lastVersion={lastVersion} />,
                           stopPropagation: true,
                           className: "justify-end",
                         },
@@ -185,10 +161,10 @@ const VersionTableView = ({
               })}
               <RenderIf isTrue={!!hasNextPage}>
                 <tr>
-                  <td colSpan={6} className="!text-center py-4">
-                    <div className="flex justify-center items-center">
+                  <td colSpan={6} className="py-4 !text-center">
+                    <div className="flex items-center justify-center">
                       <LoadMore
-                        className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
+                        className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none"
                         isFetchingNextPage={isFetchingNextPage}
                         fetchNextPage={fetchNextPage}
                       />

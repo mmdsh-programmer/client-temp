@@ -1,16 +1,17 @@
 import React from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import useConfirmVersion from "@hooks/version/useConfirmVersion";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 import useRepoId from "@hooks/custom/useRepoId";
-import { repoAtom } from "@atom/repository";
+
 import { ERoles } from "@interface/enums";
-import { editorDataAtom, editorModalAtom } from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
+
 import useGetUser from "@hooks/auth/useGetUser";
 import { Typography } from "@material-tailwind/react";
 
@@ -20,13 +21,33 @@ interface IProps {
 
 const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const editorData = useRecoilValue(editorDataAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
-  const setEditorData = useSetRecoilState(editorDataAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getVersionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const editorData = useEditorStore((s) => {
+    return s.editorData;
+  });
+  const getSelectedVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
+  const setSelectedVersion = useVersionStore((s) => {
+    return s.setSelectedVersion;
+  });
+  const setEditorData = useEditorStore((s) => {
+    return s.setEditorData;
+  });
+  const setEditorModal = useEditorStore((s) => {
+    return s.setEditorModal;
+  });
+  const getVersionModalList = useVersionStore((s) => {
+    return s.versionModalList;
+  });
+  const setVersionModalList = useVersionStore((s) => {
+    return s.setVersionModalList;
+  });
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();

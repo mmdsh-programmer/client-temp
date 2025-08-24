@@ -1,8 +1,5 @@
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import React, { useEffect } from "react";
-import { editorModalAtom, editorModeAtom } from "@atom/editor";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { FaDateFromTimestamp, translateVersionStatus } from "@utils/index";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
@@ -10,20 +7,24 @@ import RequestMobileView from "../versionRequestsView/requestMobileView";
 import RequestTableView from "../versionRequestsView/requestTableView";
 import TableCell from "@components/molecules/tableCell";
 import VersionRequestMenu from "@components/molecules/versionRequestMenu";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
 import { toast } from "react-toastify";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetPendingVersion from "@hooks/release/useGetPendingVersion";
 import { Spinner } from "@components/atoms/spinner";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 
 const VersionRequests = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const setDocument = useSetRecoilState(selectedDocumentAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const setDocument = useDocumentStore((state) => {
+    return state.setSelectedDocument;
+  });
+  const { setEditorMode, setEditorModal } = useEditorStore();
+  const { selectedVersion: getSelectedVersion, setSelectedVersion } = useVersionStore();
 
   const {
     data: getVersionRequest,
@@ -61,7 +62,7 @@ const VersionRequests = () => {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="flex h-full w-full items-center justify-center ">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner className="h-8 w-8 text-primary" />
         </div>
       );
@@ -69,7 +70,7 @@ const VersionRequests = () => {
     if (listLength) {
       return (
         <>
-          <div className="repo-version-request-table hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block ">
+          <div className="repo-version-request-table hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
             <RequestTableView>
               {getVersionRequest?.pages.map((page) => {
                 return page.list.map((request) => {

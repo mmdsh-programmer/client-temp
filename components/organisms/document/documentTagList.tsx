@@ -1,11 +1,10 @@
 import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useDocumentStore } from "@store/document";
 import ChipMolecule from "@components/molecules/chip";
 import { XIcon } from "@components/atoms/icons";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -18,9 +17,18 @@ interface IProps {
 }
 
 const DocumentTagList = ({ tagList }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
-  const setTempDocTag = useSetRecoilState(tempDocTagAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const document = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const setTempDocTag = useDocumentStore((s) => {
+    return s.setTempDocTag;
+  });
+  const tempDocTag = useDocumentStore((s) => {
+    return s.tempDocTag;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
@@ -50,18 +58,16 @@ const DocumentTagList = ({ tagList }: IProps) => {
   const handleDelete = (tag: { name: string; id: number }) => {
     if (!repoId || !document) return;
     if (!tag) return;
-    setTempDocTag((oldValue) => {
-      return [
-        ...oldValue.filter((docTag) => {
-          return +tag.id !== docTag.id;
-        }),
-      ];
+    const currentTags = tagList ?? tempDocTag;
+    const nextTags = currentTags.filter((docTag) => {
+      return tag.id !== docTag.id;
     });
+    setTempDocTag(nextTags);
   };
 
   return (
     <>
-      <Typography className="title_t4 text-secondary ">تگ‌های انتخاب شده</Typography>
+      <Typography className="title_t4 text-secondary">تگ‌های انتخاب شده</Typography>
       <div className="document-tag-list flex flex-col">
         {tagList?.length ? (
           <div className="tag-list flex flex-wrap gap-2">
@@ -70,7 +76,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal "
+                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal"
                   actionIcon={
                     adminOrOwnerRole() ? (
                       <Button

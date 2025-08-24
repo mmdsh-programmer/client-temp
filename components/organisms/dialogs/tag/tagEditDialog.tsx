@@ -3,14 +3,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedTagAtom } from "@atom/tag";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useTagStore } from "@store/tag";
 import { toast } from "react-toastify";
 import useEditTag from "@hooks/tag/useEditTag";
 import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
 import useEditDomainTag from "@hooks/domainTags/useEditDomainTag";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { IDomainTag } from "@interface/domain.interface";
@@ -25,9 +24,15 @@ interface IProps {
 }
 
 const TagEditDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getTag = useRecoilValue(selectedTagAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getTag = useTagStore((s) => {
+    return s.selectedTag;
+  });
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();
@@ -59,11 +64,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
     if (currentPath === "/admin/myDocuments") {
       return userInfo!.repository.id;
     }
-    if (
-      (currentPath === "/admin/sharedDocuments" ||
-        sharedDocuments === "true") &&
-      getDocument
-    ) {
+    if ((currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") && getDocument) {
       return getDocument!.repoId;
     }
     return getRepo!.id;
@@ -87,8 +88,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       repoId: repoId(),
       name: dataForm.name,
       tagId: getTag.id,
-      isDirectAccess:
-        currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
+      isDirectAccess: currentPath === "/admin/sharedDocuments" || sharedDocuments === "true",
       callBack: () => {
         toast.success("تگ با موفقیت به روز رسانی شد.");
         handleClose();
@@ -116,11 +116,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
             }}
             className="tag-edit-dialog__name"
           />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
         {userInfo?.domainConfig.useDomainTag ? (
           <>
@@ -138,9 +134,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                 className="tag-edit-dialog__priority"
               />
               {errors.order && (
-                <Typography className="warning_text">
-                  {errors.order?.message}
-                </Typography>
+                <Typography className="warning_text">{errors.order?.message}</Typography>
               )}
             </div>
             <div className="flex flex-col gap-2">
@@ -155,9 +149,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                 className="tag-edit-dialog__description"
               />
               {errors.description && (
-                <Typography className="warning_text">
-                  {errors.description?.message}
-                </Typography>
+                <Typography className="warning_text">{errors.description?.message}</Typography>
               )}
             </div>
           </>

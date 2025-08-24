@@ -22,6 +22,12 @@ export const useDocumentStore = create<{
   setDocumentKey: (key: IPublicKey | null) => void;
   documentTemplate: IDocumentMetadata | null;
   setDocumentTemplate: (doc: IDocumentMetadata | null) => void;
+  tempDocTag: { name: string; id: number }[];
+  setTempDocTag: (
+    tags:
+      | { name: string; id: number }[]
+      | ((prev: { name: string; id: number }[]) => { name: string; id: number }[]),
+  ) => void;
 }>((set) => {
   return {
     selectedDocument: null,
@@ -47,6 +53,18 @@ export const useDocumentStore = create<{
     documentTemplate: null,
     setDocumentTemplate: (doc) => {
       return set({ documentTemplate: doc });
+    },
+    tempDocTag: [],
+    setTempDocTag: (tagsOrUpdater) => {
+      return set((state) => {
+        const nextTags =
+          typeof tagsOrUpdater === "function"
+            ? (tagsOrUpdater as (prev: { name: string; id: number }[]) => { name: string; id: number }[])(
+                state.tempDocTag,
+              )
+            : tagsOrUpdater;
+        return { tempDocTag: nextTags };
+      });
     },
   };
 });

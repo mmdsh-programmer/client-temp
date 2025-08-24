@@ -1,24 +1,31 @@
+import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { ETourSection, activeTourAtom } from "@atom/tour";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-
+import { ETourSection } from "@atom/tour";
 import { EEmptyList } from "@components/molecules/emptyList";
 import FilterMobileView from "@components/organisms/advancedFilterView/filterMobileView";
 import { ICategoryView } from "@interface/category.interface";
 import { InfoIcon } from "@components/atoms/icons";
 import MobileView from "@components/organisms/categoryView/categoryMobileView";
-import React from "react";
 import TableView from "@components/organisms/categoryView/categoryTableView";
-import { categoryQueryParamsAtom } from "@atom/category";
-import { filterReportAtom } from "@atom/filter";
-import { sortAtom } from "@atom/sortParam";
 import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
+import { useTourStore } from "@store/tour";
+import { useSortStore } from "@store/sortParam";
+import { useCategoryStore } from "@store/category";
+import { useFilterStore } from "@store/filter";
 
 const SharedDocumentList = () => {
-  const setActiveTour = useSetRecoilState(activeTourAtom);
-  const getSortParams = useRecoilValue(sortAtom);
-  const queryParams = useRecoilValue(categoryQueryParamsAtom);
-  const getFilterReport = useRecoilValue(filterReportAtom);
+  const setActiveTour = useTourStore((state) => {
+    return state.setActiveTour;
+  });
+  const getSortParams = useSortStore((state) => {
+    return state.sort;
+  });
+  const queryParams = useCategoryStore((state) => {
+    return state.categoryQueryParams;
+  });
+  const getFilterReport = useFilterStore((state) => {
+    return state.filterReport;
+  });
 
   const {
     data: reportData,
@@ -33,7 +40,7 @@ const SharedDocumentList = () => {
     queryParams.limit,
     getFilterReport,
     "myAccessDocuments",
-    true
+    true,
   );
 
   const commonProps: ICategoryView = {
@@ -48,16 +55,16 @@ const SharedDocumentList = () => {
 
   return (
     <div className="flex flex-col gap-4 xs:gap-6">
-      <div className="category-header flex justify-between items-center px-4 xs:px-0">
+      <div className="category-header flex items-center justify-between px-4 xs:px-0">
         <div className="flex items-center gap-1">
           <Typography className="title_t1 text-primary_normal">لیست اسناد</Typography>
           <Button
-            className="rounded-lg p-0 bg-transparent shadow-none flex justify-center items-center"
+            className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
             onClick={() => {
               setActiveTour(ETourSection.DOCUMENTS);
             }}
           >
-            <InfoIcon className="w-5 h-5 stroke-primary-normal" />
+            <InfoIcon className="h-5 w-5 stroke-primary-normal" />
           </Button>
         </div>
         <div className="flex xs:!hidden">

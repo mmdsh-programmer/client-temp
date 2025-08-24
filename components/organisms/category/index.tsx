@@ -1,7 +1,8 @@
 "use client";
 
 import { Button, Typography } from "@material-tailwind/react";
-import { ETourSection, activeTourAtom } from "@atom/tour";
+import { ETourSection } from "@atom/tour";
+import { useTourStore } from "@store/tour";
 
 import CategoryChildren from "./categoryChildren";
 import CategoryDocumentCreateMenu from "../../molecules/categoryDocumentCreateMenu";
@@ -11,10 +12,9 @@ import DocumentMenu from "@components/molecules/documentMenu";
 import FilterMobileView from "../advancedFilterView/filterMobileView";
 import { InfoIcon } from "@components/atoms/icons";
 import React from "react";
-import { useSetRecoilState } from "recoil";
 
 const CategoryList = () => {
-  const setActiveTour = useSetRecoilState(activeTourAtom);
+  const setActiveTour = useTourStore((s) => s.setActiveTour);
   return (
     <>
       <div className="flex flex-col gap-4 xs:gap-6">

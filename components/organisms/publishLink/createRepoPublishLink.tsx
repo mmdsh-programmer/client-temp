@@ -1,7 +1,5 @@
 import React from "react";
 import { DialogBody, DialogFooter, Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import { useRecoilState } from "recoil";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { DatePicker } from "zaman";
@@ -11,6 +9,7 @@ import { toast } from "react-toastify";
 import useCreatePublishLink from "@hooks/publish/useCreatePublishLink";
 import { useForm } from "react-hook-form";
 import Checkbox from "@components/atoms/checkbox";
+import { useRepositoryStore } from "@store/repository";
 
 interface IData {
   expireTime?: number;
@@ -41,7 +40,7 @@ const validationSchema = yup.object().shape({
 });
 
 const CreateRepoPublishLink = () => {
-  const [getRepo, setRepo] = useRecoilState(repoAtom);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
   const createPublishLink = useCreatePublishLink();
 
   const form = useForm<IData>({

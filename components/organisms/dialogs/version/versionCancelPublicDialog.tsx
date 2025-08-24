@@ -2,12 +2,11 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 import { toast } from "react-toastify";
 import useCancelPublicVersion from "@hooks/version/useCancelPublicVersion";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 
@@ -17,8 +16,12 @@ interface IProps {
 
 const VersionCancelPublicDialog = ({ setOpen }: IProps) => {
   const repoId = useRepoId();
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");

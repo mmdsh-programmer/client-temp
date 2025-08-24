@@ -19,9 +19,8 @@ import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import { repoActivityAtom, repoAtom } from "@atom/repository";
 import { toPersianDigit } from "@utils/index";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
-import { repoFeedAtom } from "@atom/feed";
+import { useFeedStore } from "@store/feed";
 import { useRepositoryStore, useRepoActivityStore } from "@store/repository";
 
 
@@ -63,7 +62,7 @@ const useMenuList = (
     return state.setShowRepoActivity;
   });
   
-  const setRepoFeed = useSetRecoilState(repoFeedAtom);
+  const { setRepoFeed } = useFeedStore();
 
   const { data: getDomainInfo } = useGetDomainInfo();
   const content = JSON.parse(getDomainInfo?.content || "{}");

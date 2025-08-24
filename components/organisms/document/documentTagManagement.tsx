@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
-import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue } from "recoil";
 import DocumentTagList from "@components/organisms/document/documentTagList";
 import SearchableDropdown from "../../molecules/searchableDropdown";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import useGetDocument from "@hooks/document/useGetDocument";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
@@ -18,9 +17,18 @@ interface IProps {
 }
 
 const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const [getTempDocTag, setTempDocTag] = useRecoilState(tempDocTagAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getTempDocTag = useDocumentStore((s) => {
+    return s.tempDocTag;
+  });
+  const setTempDocTag = useDocumentStore((s) => {
+    return s.setTempDocTag;
+  });
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
@@ -67,8 +75,8 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
     repoId!,
     getDocument!.id,
     sharedDocuments === "true" ||
-    currentPath === "/admin/sharedDocuments" ||
-    (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id),
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && getDocument?.repoId !== userInfo?.repository.id),
     true,
     true,
     `document-${getDocument!.id}-info-tags`,
@@ -91,9 +99,8 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
 
   const handleTagSelect = (val: { label: string; value: number | string }) => {
     setTagName(val.value);
-    setTempDocTag((oldValue) => {
-      return [...oldValue, { name: val.label, id: +val.value }];
-    });
+    const newTags = [...getTempDocTag, { name: val.label, id: Number(val.value) }];
+    setTempDocTag(newTags);
   };
 
   useEffect(() => {
@@ -108,7 +115,7 @@ const DocumentTagManagement = ({ setTagName, setOpen }: IProps) => {
         return tag;
       }),
     );
-  }, [documentInfo]);
+  }, [documentInfo, userInfo?.domainConfig.useDomainTag, setTempDocTag]);
 
   return isLoading || isLoadingTags || isLoadingDomainTags ? (
     <div className="mt-2 flex w-full justify-center">

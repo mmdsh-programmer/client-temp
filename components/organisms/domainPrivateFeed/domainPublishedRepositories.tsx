@@ -6,12 +6,11 @@ import RenderIf from "@components/atoms/renderIf";
 import useGetDomainPublishRepoList from "@hooks/domain/useGetDomainPublishRepoList";
 import RepoDefaultImage from "@components/molecules/repoDefaultImage";
 import { Card, Typography } from "@material-tailwind/react";
-import { useRecoilState } from "recoil";
-import { repoFeedAtom } from "@atom/feed";
+import { useFeedStore } from "@store/feed";
 import RepoFeedList from "./repoFeedList";
 
 const DomainPublishedRepositories = () => {
-  const [getRepoFeed, setRepoFeed] = useRecoilState(repoFeedAtom);
+  const { repoFeed: getRepoFeed, setRepoFeed } = useFeedStore();
   const {
     data: publishRepoList,
     isLoading,

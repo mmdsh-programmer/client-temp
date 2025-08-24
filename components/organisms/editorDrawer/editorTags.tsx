@@ -1,22 +1,27 @@
 import React, { useState } from "react";
-import { selectedDocumentAtom, tempDocTagAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { usePathname, useSearchParams } from "next/navigation";
 import DocumentTagManagement from "@components/organisms/document/documentTagManagement";
 import LoadingButton from "@components/molecules/loadingButton";
 import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import useEditDocument from "@hooks/document/useEditDocument";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import useSetDocumentDomainTags from "@hooks/domainTags/useSetDocumentDomainTags";
 
 const EditorTags = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const document = useRecoilValue(selectedDocumentAtom);
-  const getTempDocTag = useRecoilValue(tempDocTagAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const document = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getTempDocTag = useDocumentStore((s) => {
+    return s.tempDocTag;
+  });
   const [openCreateTagDialog, setOpenCreateTagDialog] = useState(false);
   const [tagName, setTagName] = useState<string | number>("");
 

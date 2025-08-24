@@ -1,18 +1,21 @@
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { selectedGroupAtom } from "@atom/group";
+import { useRepositoryStore } from "@store/repository";
+import { useGroupStore } from "@store/group";
 import { toast } from "react-toastify";
 import useDeleteGroup from "@hooks/group/useDeleteGroup";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const GroupDeleteDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const group = useRecoilValue(selectedGroupAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const group = useGroupStore((s) => {
+    return s.selectedGroup;
+  });
   const { isPending, mutate } = useDeleteGroup();
 
   const handleClose = () => {

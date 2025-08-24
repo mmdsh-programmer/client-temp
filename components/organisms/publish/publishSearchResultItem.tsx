@@ -1,12 +1,11 @@
 import React from "react";
 import { ListItem } from "@material-tailwind/react";
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
-import { openPublishPageSearchContent } from "@atom/publish";
 import { toPersianDigit } from "@utils/index";
 import useCreateDocumentLink from "@hooks/document/useCreateDocumentLink";
 import { useRouter } from "next/navigation";
-import { useSetRecoilState } from "recoil";
 import { Spinner } from "@components/atoms/spinner";
+import { usePublishStore } from "@store/publish";
 
 interface IProps {
   resultItem: IContentSearchListItem;
@@ -14,18 +13,12 @@ interface IProps {
   disabled?: boolean;
 }
 
-const PublishSearchResultItem = ({
-  resultItem,
-  disabled,
-  setDisableItems,
-}: IProps) => {
+const PublishSearchResultItem = ({ resultItem, disabled, setDisableItems }: IProps) => {
   const router = useRouter();
-  const setOpenSearch = useSetRecoilState(openPublishPageSearchContent);
-
-  const createDocumentLinkHook = useCreateDocumentLink(
-    resultItem.repoId,
-    resultItem.documentId
-  );
+  const setOpenSearch = usePublishStore((state) => {
+    return state.setOpenPublishPageSearchContent;
+  });
+  const createDocumentLinkHook = useCreateDocumentLink(resultItem.repoId, resultItem.documentId);
 
   const handleResultItemClick = () => {
     setDisableItems?.(true);
@@ -35,7 +28,7 @@ const PublishSearchResultItem = ({
       callBack: (data) => {
         const redirectLink = `${window.location.origin}/publish/${toPersianDigit(`${data.repoName.replaceAll(/\s+/g, "-")}`)}/${data.repoId}
         /${data.id}/${toPersianDigit(
-          `${data.name.replaceAll(/\s+/g, "-")}`
+          `${data.name.replaceAll(/\s+/g, "-")}`,
         )}/v-${resultItem.versionId}`;
 
         router.replace(redirectLink);
@@ -48,19 +41,15 @@ const PublishSearchResultItem = ({
   };
 
   return (
-    <ListItem
-      onClick={handleResultItemClick}
-      className="flex min-h-12 gap-2"
-      disabled={disabled}
-    >
+    <ListItem onClick={handleResultItemClick} className="flex min-h-12 gap-2" disabled={disabled}>
       {createDocumentLinkHook.isPending ? (
-        <div className="w-fit flex-shrink-0 flex justify-center items-center">
+        <div className="flex w-fit flex-shrink-0 items-center justify-center">
           <Spinner className="h-4 w-4 text-primary" />
         </div>
       ) : null}
       <div className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">
-        {resultItem.repoName} <span>{">"}</span> {resultItem.documentName}{" "}
-        <span>{">"}</span> {resultItem.versionName}
+        {resultItem.repoName} <span>{">"}</span> {resultItem.documentName} <span>{">"}</span>{" "}
+        {resultItem.versionName}
       </div>
     </ListItem>
   );

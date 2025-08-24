@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { Spinner } from "@components/atoms/spinner";
 import Error from "@components/organisms/error";
-import { editorPublicKeyAtom } from "@atom/editor";
+import { useEditorStore } from "@store/editor";
 import useGetKey from "@hooks/repository/useGetKey";
-import { useSetRecoilState } from "recoil";
 
 interface IProps {
   repoId: number;
@@ -13,7 +12,9 @@ interface IProps {
 }
 
 const PublicKeyInfo = ({ children, repoId, publicKeyId }: IProps) => {
-  const setPublicKey = useSetRecoilState(editorPublicKeyAtom);
+  const setPublicKey = useEditorStore((s) => {
+    return s.setEditorPublicKey;
+  });
 
   const {
     data: publicKeyInfo,

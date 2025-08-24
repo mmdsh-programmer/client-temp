@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { editorDataAtom, editorModeAtom } from "@atom/editor";
+import { useEditorStore } from "@store/editor";
 import { usePathname, useSearchParams } from "next/navigation";
 
 import FreeDraftDialog from "@components/templates/dialog/freeDraftDialog";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import RenderIf from "@components/atoms/renderIf";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import useGetUser from "@hooks/auth/useGetUser";
-import { useRecoilValue } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 
 const timeout = 15 * 60; // seconds
@@ -21,9 +20,15 @@ interface IProps {
 
 const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const repoId = useRepoId();
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const editorData = useRecoilValue(editorDataAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
+  const selectedDocument = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const editorData = useEditorStore((s) => {
+    return s.editorData;
+  });
+  const editorMode = useEditorStore((s) => {
+    return s.editorMode;
+  });
   const editorContent = useRef<unknown>(null);
 
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);

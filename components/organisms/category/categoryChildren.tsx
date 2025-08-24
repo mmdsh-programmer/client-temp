@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
-import { categoryQueryParamsAtom, categoryShowAtom } from "@atom/category";
-import { filterChildrenAtom, filterReportAtom } from "@atom/filter";
+import { useCategoryStore } from "@store/category";
+import { useFilterStore } from "@store/filter";
 
 import ChildrenTree from "../childrenTree";
 import { EEmptyList } from "@components/molecules/emptyList";
@@ -8,23 +8,36 @@ import { ICategoryView } from "@interface/category.interface";
 import MobileView from "../categoryView/categoryMobileView";
 import RenderIf from "@components/atoms/renderIf";
 import TableView from "../categoryView/categoryTableView";
-import { categoryListModeAtom } from "@atom/app";
-import { repoAtom } from "@atom/repository";
-import { sortAtom } from "@atom/sortParam";
+import { useAppStore } from "@store/app";
+import { useRepositoryStore } from "@store/repository";
+import { useSortStore } from "@store/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import useGetUser from "@hooks/auth/useGetUser";
 import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { usePathname } from "next/navigation";
-import { useRecoilValue } from "recoil";
 
 const CategoryChildren = () => {
-  const getListMode = useRecoilValue(categoryListModeAtom);
-  const getRepo = useRecoilValue(repoAtom);
-  const getSortParams = useRecoilValue(sortAtom);
-  const getCategoryShow = useRecoilValue(categoryShowAtom);
-  const queryParams = useRecoilValue(categoryQueryParamsAtom);
-  const getFilterChildren = useRecoilValue(filterChildrenAtom);
-  const getFilterReport = useRecoilValue(filterReportAtom);
+  const getListMode = useAppStore((s) => {
+    return s.categoryListMode;
+  });
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getSortParams = useSortStore((s) => {
+    return s.sort;
+  });
+  const getCategoryShow = useCategoryStore((s) => {
+    return s.categoryShow;
+  });
+  const queryParams = useCategoryStore((s) => {
+    return s.categoryQueryParams;
+  });
+  const getFilterChildren = useFilterStore((s) => {
+    return s.filterChildren;
+  });
+  const getFilterReport = useFilterStore((s) => {
+    return s.filterReport;
+  });
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
@@ -54,7 +67,7 @@ const CategoryChildren = () => {
     getFilterChildren,
     false,
     !!repoId && !getFilterReport,
-    currentPath
+    currentPath,
   );
 
   const {
@@ -71,7 +84,7 @@ const CategoryChildren = () => {
     queryParams.limit,
     getFilterReport,
     null,
-    !!repoId && !!getFilterReport && !getFilterChildren
+    !!repoId && !!getFilterReport && !getFilterChildren,
   );
 
   useEffect(() => {
@@ -86,17 +99,10 @@ const CategoryChildren = () => {
     isLoading: reportIsLoading || childrenIsLoading,
     getCategoryList: getFilterReport ? reportData : childrenData,
     hasNextPage: getFilterReport ? reportHasNextPage : childrenHasNextPage,
-    fetchNextPage: getFilterReport
-      ? reportFetchNextPage
-      : childrenFetchNextPage,
-    isFetchingNextPage: getFilterReport
-      ? reportIsFetchingNextPage
-      : childrenIsFetchingNextPage,
+    fetchNextPage: getFilterReport ? reportFetchNextPage : childrenFetchNextPage,
+    isFetchingNextPage: getFilterReport ? reportIsFetchingNextPage : childrenIsFetchingNextPage,
     isFetching: getFilterReport ? reportIsFetching : childrenIsFetching,
-    type:
-      getFilterChildren?.title || !!getFilterReport
-        ? EEmptyList.FILTER
-        : EEmptyList.CHILDREN,
+    type: getFilterChildren?.title || !!getFilterReport ? EEmptyList.FILTER : EEmptyList.CHILDREN,
   };
 
   return (
@@ -112,8 +118,8 @@ const CategoryChildren = () => {
         </>
       </RenderIf>
       <RenderIf isTrue={getListMode === "tree"}>
-        <div className="category-children__tree bg-white min-h-[calc(100vh-340px)] h-full">
-        <ChildrenTree move={false} enableAction />
+        <div className="category-children__tree h-full min-h-[calc(100vh-340px)] bg-white">
+          <ChildrenTree move={false} enableAction />
         </div>
       </RenderIf>
     </>

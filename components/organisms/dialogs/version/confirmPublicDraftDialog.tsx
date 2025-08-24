@@ -1,16 +1,15 @@
 import React from "react";
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { selectedDocumentAtom } from "@atom/document";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 import usePublicLastVersion from "@hooks/document/usePublicLastVersion";
 import { Typography } from "@material-tailwind/react";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
-import { editorDataAtom, editorModalAtom } from "@atom/editor";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -18,11 +17,27 @@ interface IProps {
 
 const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
-  const document = useRecoilValue(selectedDocumentAtom);
-  const [getSelectedVersion, setSelectedVersion] = useRecoilState(selectedVersionAtom);
-  const setEditorData = useSetRecoilState(editorDataAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const [getVersionModalList, setVersionModalList] = useRecoilState(versionModalListAtom);
+  const document = useDocumentStore((s) => {
+    return s.selectedDocument;
+  });
+  const getSelectedVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
+  const setSelectedVersion = useVersionStore((s) => {
+    return s.setSelectedVersion;
+  });
+  const setEditorData = useEditorStore((s) => {
+    return s.setEditorData;
+  });
+  const setEditorModal = useEditorStore((s) => {
+    return s.setEditorModal;
+  });
+  const getVersionModalList = useVersionStore((s) => {
+    return s.versionModalList;
+  });
+  const setVersionModalList = useVersionStore((s) => {
+    return s.setVersionModalList;
+  });
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();

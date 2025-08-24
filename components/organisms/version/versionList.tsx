@@ -5,17 +5,18 @@ import { IVersionView } from "@interface/version.interface";
 import VersionCreateDialog from "../dialogs/version/versionCreateDialog";
 import VersionMobileView from "../versionView/versionMobileView";
 import VersionTableView from "@components/organisms/versionView/versionTableView";
-import { selectedDocumentAtom } from "@atom/document";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useGetVersionList from "@hooks/version/useGetVersionList";
-import { useRecoilValue } from "recoil";
 import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useDocumentStore } from "@store/document";
 
 const VersionList = () => {
   const repoId = useRepoId();
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+  const getSelectedDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
   const currentPath = usePathname();
 
   const searchParams = useSearchParams();
@@ -49,7 +50,15 @@ const VersionList = () => {
     true,
   );
 
-  const order = ["accpted", "public", "private", "pending", "waitForDirectPublic", "rejected", "editing"];
+  const order = [
+    "accpted",
+    "public",
+    "private",
+    "pending",
+    "waitForDirectPublic",
+    "rejected",
+    "editing",
+  ];
 
   const sortedVersion = versionList?.pages.map((page) => {
     return page
@@ -91,7 +100,7 @@ const VersionList = () => {
       <div className="hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
         <VersionTableView {...commonProps} />
       </div>
-      <div className="flex h-full min-h-[calc(100vh-100px)] flex-col gap-y-4 xs:hidden ">
+      <div className="flex h-full min-h-[calc(100vh-100px)] flex-col gap-y-4 xs:hidden">
         <VersionMobileView {...commonProps} />
       </div>
     </div>

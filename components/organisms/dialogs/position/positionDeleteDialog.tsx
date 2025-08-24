@@ -1,10 +1,9 @@
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { IPosition } from "@interface/position.interface";
 import React from "react";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import { toast } from "react-toastify";
 import { useDeletePosition } from "@hooks/position/useDeletePosition";
-import { useRecoilValue } from "recoil";
 
 interface IProps {
   group: IPosition;
@@ -12,7 +11,9 @@ interface IProps {
 }
 
 const PositionDeleteDialog = ({ setOpen, group }: IProps) => {
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
   const deletePosittion = useDeletePosition();
 

@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Typography } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
-import { editorDataAtom, editorModalAtom, editorModeAtom, editorPublicKeyAtom } from "@atom/editor";
-import { selectedVersionAtom, versionModalListAtom } from "@atom/version";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import CancelButton from "@components/atoms/button/cancelButton";
 import Checkbox from "@components/atoms/checkbox";
 import { ChevronLeftIcon } from "@components/atoms/icons";
@@ -13,8 +10,10 @@ import { IRemoteEditorRef } from "clasor-remote-editor";
 import { IVersion } from "@interface/version.interface";
 import LoadingButton from "@components/molecules/loadingButton";
 import forge from "node-forge";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
+import { useRepositoryStore } from "@store/repository";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import { translateVersionStatus } from "@utils/index";
 import { useDebouncedCallback } from "use-debounce";
@@ -30,14 +29,10 @@ export interface IProps {
 }
 
 const EditorFooter = ({ editorRef }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
-  const [getVersionData, setVersionData] = useRecoilState(editorDataAtom);
-  const setVersion = useSetRecoilState(selectedVersionAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const key = useRecoilValue(editorPublicKeyAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { selectedDocument } = useDocumentStore();
+  const { editorMode, setEditorMode, editorData: getVersionData, setEditorData: setVersionData, editorPublicKey: key, setEditorModal } = useEditorStore();
+  const { setSelectedVersion: setVersion, setVersionModalList } = useVersionStore();
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();

@@ -7,10 +7,9 @@ import Comments from "./comments";
 import { EDocumentTypes } from "@interface/enums";
 import EditorTags from "./editorTags";
 import TabComponent from "@components/molecules/tab";
-import { editorModeAtom } from "@atom/editor";
-import { selectedDocumentAtom } from "@atom/document";
-import { useRecoilValue } from "recoil";
 import DocumentEnableUserGroup from "./documentEnableUserGroup";
+import { useEditorStore } from "@store/editor";
+import { useDocumentStore } from "@store/document";
 // import ChatBox from "../chatBox";
 
 export enum ETabs {
@@ -25,8 +24,8 @@ interface IProps {
 }
 
 const EditorDrawer = ({ version }: IProps) => {
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
+  const { selectedDocument: getDocument } = useDocumentStore();
+  const { editorMode } = useEditorStore();
   const [activeTab, setActiveTab] = useState<string>(ETabs.TAGS);
 
   const tabList = [

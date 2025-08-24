@@ -1,7 +1,6 @@
-import { deleteTagAtom, editTagAtom } from "@atom/tag";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import React, { useState } from "react";
-import { useRecoilState } from "recoil";
+import { useTagStore } from "@store/tag";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
 import TagDelete from "../dialogs/tag/tagDeleteDialog";
 import TagEdit from "../dialogs/tag/tagEditDialog";
@@ -11,16 +10,32 @@ import { Spinner } from "@components/atoms/spinner";
 
 const DomainTags = () => {
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
-  const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
-  const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
+  const {
+    editTag: getEditTagModal,
+    setEditTag,
+    deleteTag: getDeleteTagModal,
+    setDeleteTag,
+  } = useTagStore();
   const { data: getDomainTags, isLoading: isLoadingDomainTags } = useGetDomainTags(20, true);
 
   const renderDialogs = () => {
     if (getDeleteTagModal) {
-      return <TagDelete setOpen={setDeleteTagModal} />;
+      return (
+        <TagDelete
+          setOpen={() => {
+            return setDeleteTag(null);
+          }}
+        />
+      );
     }
     if (getEditTagModal) {
-      return <TagEdit setOpen={setEditTagModal} />;
+      return (
+        <TagEdit
+          setOpen={() => {
+            return setEditTag(null);
+          }}
+        />
+      );
     }
     return null;
   };
@@ -32,7 +47,7 @@ const DomainTags = () => {
     <div className="p-5">
       {isLoading ? (
         <div className="flex w-full items-center justify-center">
-          <Spinner className="text-primary h-6 w-6" />
+          <Spinner className="h-6 w-6 text-primary" />
         </div>
       ) : (
         <div className="tag-list flex flex-wrap gap-2">
@@ -42,7 +57,7 @@ const DomainTags = () => {
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal "
+                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal"
                   actionIcon={<TagMenu tag={tag} />}
                 />
               );

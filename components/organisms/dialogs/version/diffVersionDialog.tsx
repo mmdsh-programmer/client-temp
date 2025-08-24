@@ -3,9 +3,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import DiffViewerTable from "@components/organisms/version/diffViewerTable";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { Spinner } from "@components/atoms/spinner";
-import { compareVersionAtom } from "@atom/version";
+import { useVersionStore } from "@store/version";
 import useGetVersion from "@hooks/version/useGetVersion";
-import { useRecoilValue } from "recoil";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
@@ -14,7 +13,9 @@ interface IProps {
 
 const DiffVersionDialog = ({ setOpen }: IProps) => {
   const currentPath = usePathname();
-  const compareVersion = useRecoilValue(compareVersionAtom);
+  const compareVersion = useVersionStore((s) => {
+    return s.compareVersion;
+  });
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 

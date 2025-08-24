@@ -5,20 +5,25 @@ import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
 import React from "react";
-import { categoryAtom } from "@atom/category";
-import { repoAtom } from "@atom/repository";
+import { useCategoryStore } from "@store/category";
+import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import useBlockCategory from "@hooks/category/useBlockCategory";
 import useGetCategoryBlocklist from "@hooks/category/useGetCategoryBlocklist";
-import { useRecoilValue } from "recoil";
 
 const CategoryBlockList = () => {
-  const getRepo = useRecoilValue(repoAtom);
-  const category = useRecoilValue(categoryAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const category = useCategoryStore((s) => {
+    return s.category;
+  });
 
-  const {data: getDocumentBlockList,
+  const {
+    data: getDocumentBlockList,
     isFetching,
-    isLoading,} = useGetCategoryBlocklist(getRepo!.id, category!.id, 20);
+    isLoading,
+  } = useGetCategoryBlocklist(getRepo!.id, category!.id, 20);
   const blockDocument = useBlockCategory();
 
   const handleDelete = (username: string) => {
@@ -30,18 +35,14 @@ const CategoryBlockList = () => {
       username,
       type: "unblock",
       callBack: () => {
-        toast.success(
-          `کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`,
-        );
+        toast.success(`کاربر ${username}با موفقیت از لیست کاربران مسدود شده خارج شد.`);
       },
     });
   };
 
   return (
     <>
-      <Typography className="title_t4 text-secondary ">
-        لیست کاربران مسدودشده
-      </Typography>
+      <Typography className="title_t4 text-secondary">لیست کاربران مسدودشده</Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
           <Spinner className="h-6 w-6 text-primary" />
@@ -58,12 +59,12 @@ const CategoryBlockList = () => {
                       icon={
                         blockItem.userInfo.img ? (
                           <ImageComponent
-                            className="w-full h-full rounded-full overflow-hidden"
+                            className="h-full w-full overflow-hidden rounded-full"
                             src={blockItem.userInfo.img}
                             alt={blockItem.userInfo.userName}
                           />
                         ) : (
-                          <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                          <UserIcon className="h-full w-full overflow-hidden rounded-full border-[1px] border-normal fill-icon-hover p-1" />
                         )
                       }
                       actionIcon={

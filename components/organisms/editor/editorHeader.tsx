@@ -1,12 +1,11 @@
 import React from "react";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import { Typography } from "@material-tailwind/react";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedVersionAtom } from "@atom/version";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
+import { useDocumentStore } from "@store/document";
 import useFreeDraft from "@hooks/editor/useFreeDraft";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -19,11 +18,9 @@ export interface IProps {
 
 const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
   const repoId = useRepoId();
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-  const [editorData, setEditorData] = useRecoilState(editorDataAtom);
-  const setVersion = useSetRecoilState(selectedVersionAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
+  const { selectedDocument: getSelectedDocument } = useDocumentStore();
+  const { editorData, setEditorData, editorMode, setEditorModal } = useEditorStore();
+  const { setSelectedVersion: setVersion } = useVersionStore();
   const currentPath = usePathname();
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");

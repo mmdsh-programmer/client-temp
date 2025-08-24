@@ -7,12 +7,11 @@ import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IUserList } from "../document/documentAccessPublishingDialog";
 import ImageComponent from "next/image";
-import { branchIdAtom } from "@atom/branch";
+import { useBranchStore } from "@store/branch";
 import { positionSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useCreatePosition from "@hooks/position/useCreatePosition";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
@@ -28,7 +27,9 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
   const [inputValue, setInputValue] = useState("");
   const [selectedUserList, setSelectedUserList] = useState<IUserList[]>([]);
 
-  const getBranchId = useRecoilValue(branchIdAtom);
+  const getBranchId = useBranchStore((s) => {
+    return s.branchId;
+  });
 
   const setPositionForBranch = useCreatePosition();
 

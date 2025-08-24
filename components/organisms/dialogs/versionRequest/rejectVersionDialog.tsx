@@ -1,21 +1,26 @@
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
 import React from "react";
-import { repoAtom } from "@atom/repository";
-import { selectedRequestAtom } from "@atom/releaseDocs";
+import { useRepositoryStore } from "@store/repository";
+import { useReleaseDocsStore } from "@store/releaseDocs";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { useRecoilValue } from "recoil";
 import useRejectVersion from "@hooks/release/useRejectVersion";
-import { selectedVersionAtom } from "@atom/version";
+import { useVersionStore } from "@store/version";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const RejectVarionDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getRequest = useRecoilValue(selectedRequestAtom);
-  const getVersion = useRecoilValue(selectedVersionAtom);
+  const getRepo = useRepositoryStore((s) => {
+    return s.repo;
+  });
+  const getRequest = useReleaseDocsStore((s) => {
+    return s.selectedRequest;
+  });
+  const getVersion = useVersionStore((s) => {
+    return s.selectedVersion;
+  });
 
   const rejectRequest = useRejectVersion();
 

@@ -1,25 +1,26 @@
-import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { deleteTagAtom, editTagAtom } from "@atom/tag";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { Button } from "@material-tailwind/react";
 import ChipMolecule from "@components/molecules/chip";
 import TagCreate from "../dialogs/tag/tagCreateDialog";
 import TagDelete from "../dialogs/tag/tagDeleteDialog";
 import TagEdit from "../dialogs/tag/tagEditDialog";
 import TagListDialog from "./tagListDialog";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
-import { repoAtom } from "@atom/repository";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@components/atoms/spinner";
+import { useRepositoryStore } from "@store/repository";
+import { useTagStore } from "@store/tag";
 
 const TagList = ({ repoId }: { repoId: number }) => {
   const [openTagsModal, setOpenTagsModal] = useState(false);
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
-  const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
-  const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
-  const getRepo = useRecoilValue(repoAtom);
+  const { editTag: getEditTagModal, setEditTag: setEditTagModal } = useTagStore();
+  const { deleteTag: getDeleteTagModal, setDeleteTag: setDeleteTagModal } = useTagStore();
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
 
   const { data: userInfo } = useGetUser();
   const { data: getDomainTags, isLoading: isLoadingDomainTags } = useGetDomainTags(
@@ -48,10 +49,22 @@ const TagList = ({ repoId }: { repoId: number }) => {
       return <TagListDialog setOpen={setOpenTagsModal} repoId={getRepo.id} />;
     }
     if (getDeleteTagModal && !openTagsModal) {
-      return <TagDelete setOpen={setDeleteTagModal} />;
+      return (
+        <TagDelete
+          setOpen={() => {
+            return setDeleteTagModal(false);
+          }}
+        />
+      );
     }
     if (getEditTagModal && !openTagsModal) {
-      return <TagEdit setOpen={setEditTagModal} />;
+      return (
+        <TagEdit
+          setOpen={() => {
+            return setEditTagModal(false);
+          }}
+        />
+      );
     }
     return null;
   };
@@ -71,7 +84,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
                 <ChipMolecule
                   value={tag.name}
                   key={tag.id}
-                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal "
+                  className="tag-item h-6 max-w-[150px] bg-gray-50 px-2 text-primary_normal"
                   actionIcon={
                     !userInfo?.domainConfig.useDomainTag && adminRole ? <TagMenu tag={tag} /> : null
                   }

@@ -1,17 +1,16 @@
 import { Button, Typography } from "@material-tailwind/react";
 import { DownloadIcon, UploadIcon } from "@components/atoms/icons";
 import React, { useEffect, useState } from "react";
-import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue } from "recoil";
 
 import Files from "../fileManagement";
 import { IFile } from "@interface/file.interface";
 import PreviewFile from "./previewFile";
 import RenderIf from "@components/atoms/renderIf";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import { selectedFileAtom } from "@atom/file";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useFileStore } from "@store/file";
+import { useEditorStore } from "@store/editor";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 
@@ -27,11 +26,10 @@ const FileEditor = () => {
   const searchParams = useSearchParams();
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
-  const getRepo = useRecoilValue(repoAtom);
-  const editorData = useRecoilValue(editorDataAtom);
-  const editorMode = useRecoilValue(editorModeAtom);
-  const [getSelectedFile, setSelectedFile] = useRecoilState(selectedFileAtom);
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
+  const { repo: getRepo } = useRepositoryStore();
+  const { editorData, editorMode } = useEditorStore();
+  const { selectedFile: getSelectedFile, setSelectedFile } = useFileStore();
+  const { selectedDocument } = useDocumentStore();
 
   const repoId = useRepoId();
   const { data: userInfo } = useGetUser();

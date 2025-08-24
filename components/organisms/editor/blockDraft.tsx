@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-import { editorDataAtom, editorModeAtom } from "atom/editor";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-
 import { IVersion } from "@interface/version.interface";
-import { selectedDocumentAtom } from "atom/document";
+import { useEditorStore } from "@store/editor";
+import { useDocumentStore } from "@store/document";
 import { toast } from "react-toastify";
 import useCreateBlock from "@hooks/editor/useCreateBlock";
 import { useDebouncedCallback } from "use-debounce";
@@ -18,9 +16,8 @@ interface IProps {
 
 const BlockDraft = React.memo(({ children, version }: IProps) => {
   const repoId = useRepoId();
-  const selectedDocument = useRecoilValue(selectedDocumentAtom);
-  const setEditorData = useSetRecoilState(editorDataAtom);
-  const [editorMode, setEditorMode] = useRecoilState(editorModeAtom);
+  const { selectedDocument } = useDocumentStore();
+  const { setEditorData, editorMode, setEditorMode } = useEditorStore();
   const currentPath = usePathname();
 
   const searchParams = useSearchParams();

@@ -11,8 +11,6 @@ import TableView from "../categoryView/categoryTableView";
 import MobileView from "../categoryView/categoryMobileView";
 import VersionDialogView from "../versionView/versionDialogView";
 import Editor from "../dialogs/editor";
-import { versionModalListAtom } from "@atom/version";
-import { editorModalAtom } from "@atom/editor";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Typography } from "@material-tailwind/react";
@@ -130,14 +128,14 @@ const DashboardDocuments = () => {
   ];
   return (
     <>
-      {/* {getShowVersionList ? <VersionDialogView /> : null} */}
-      {/* {getEditorModal ? (
+      {getShowVersionList ? <VersionDialogView /> : null}
+      {getEditorModal ? (
         <Editor
           setOpen={() => {
             return setEditorModal(false);
           }}
         />
-      ) : null} */}
+      ) : null}
       <div className="flex flex-col gap-0 xs:gap-4">
         <Typography className="title_t1 p-4 font-medium text-primary_normal xs:p-0">
           سندها

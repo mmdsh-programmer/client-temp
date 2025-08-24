@@ -1,7 +1,5 @@
-import { Button, DialogBody, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-import { deleteTagAtom, editTagAtom, tagDrawerAtom } from "@atom/tag";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { Button, DialogBody, Typography } from "@material-tailwind/react";
 import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import InfoDialog from "@components/templates/dialog/infoDialog";
@@ -9,10 +7,11 @@ import TagCreateDialog from "../dialogs/tag/tagCreateDialog";
 import TagDeleteDialog from "../dialogs/tag/tagDeleteDialog";
 import TagEditDialog from "../dialogs/tag/tagEditDialog";
 import TagMenu from "@components/molecules/tagMenu/tagMenu";
-import { repoAtom } from "@atom/repository";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRepositoryStore } from "@store/repository";
+import { useTagStore } from "@store/tag";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,10 +19,14 @@ interface IProps {
 }
 
 const TagListDialog = ({ setOpen, repoId }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getEditTagModal, setEditTagModal] = useRecoilState(editTagAtom);
-  const [getDeleteTagModal, setDeleteTagModal] = useRecoilState(deleteTagAtom);
-  const openTagActionDrawer = useRecoilValue(tagDrawerAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const { editTag: getEditTagModal, setEditTag: setEditTagModal } = useTagStore();
+  const { deleteTag: getDeleteTagModal, setDeleteTag: setDeleteTagModal } = useTagStore();
+  const openTagActionDrawer = useTagStore((state) => {
+    return state.tagDrawer;
+  });
 
   const [openTagCreateModal, setOpenTagCreateModal] = useState(false);
 
@@ -53,10 +56,22 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
     return <TagCreateDialog setOpen={setOpenTagCreateModal} />;
   }
   if (getEditTagModal) {
-    return <TagEditDialog setOpen={setEditTagModal} />;
+    return (
+      <TagEditDialog
+        setOpen={() => {
+          return setEditTagModal(false);
+        }}
+      />
+    );
   }
   if (getDeleteTagModal) {
-    return <TagDeleteDialog setOpen={setDeleteTagModal} />;
+    return (
+      <TagDeleteDialog
+        setOpen={() => {
+          return setDeleteTagModal(false);
+        }}
+      />
+    );
   }
 
   return (
@@ -65,7 +80,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
         <div className="h-full px-5 py-3 xs:p-6">
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
-              <Spinner className="text-primary h-6 w-6" />
+              <Spinner className="h-6 w-6 text-primary" />
             </div>
           ) : (
             <>
@@ -108,7 +123,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                       return (
                         <li
                           key={tag.id}
-                          className="tag-item flex items-center justify-between rounded-lg px-2 py-1  hover:bg-gray-50"
+                          className="tag-item flex items-center justify-between rounded-lg px-2 py-1 hover:bg-gray-50"
                         >
                           <Typography className="label_l2 cursor-default lowercase text-primary_normal">
                             {tag.name}
