@@ -13,10 +13,18 @@ interface IProps {
 }
 
 const AdminLayout = async ({ children, params }: IProps) => {
-  const { domain } = params;
-  const { content } = await getCustomPostByDomain(decodeKey(domain));
+  const isDev = process.env.NODE_ENV === "development";
+  let domain: string = "";
+
+  if (isDev) {
+    domain = process.env.DOMAIN || "";
+  } else {
+    domain = decodeKey(params.domain);
+  }
+
+  const { content } = await getCustomPostByDomain(domain);
   const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
-  
+
   return (
     <ErrorBoundary>
       <BaseTemplate domainInfo={domainInfo}>{children}</BaseTemplate>

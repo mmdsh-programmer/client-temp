@@ -170,7 +170,14 @@ export default async function PublishContentPage({ params }: { params: PageParam
         return notFound();
       }
 
-      const decodedDomain = decodeKey(domain);
+      const isDev = process.env.NODE_ENV === "development";
+      let decodedDomain: string = "";
+
+      if (isDev) {
+        decodedDomain = process.env.DOMAIN || "";
+      } else {
+        decodedDomain = decodeKey(domain);
+      }
       const { content } = await getCustomPostByDomain(decodedDomain);
       const { enableDefaultFontFamily } = JSON.parse(content) as ICustomPostData;
 

@@ -16,7 +16,7 @@ import {
 import { getMe, userInfoAction } from "./auth";
 
 import { IActionError } from "@interface/app.interface";
-import { headers } from "next/dist/client/components/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
 
@@ -119,7 +119,7 @@ export const getPublishDocumentVersionsAction = async (
   try {
     const ssoId =
       userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -144,7 +144,7 @@ export const searchPublishContentAction = async (
   offset: number,
   size: number
 ) => {
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

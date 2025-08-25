@@ -18,7 +18,14 @@ interface MainPageProps {
 }
 const MainPage = async ({ params }: MainPageProps) => {
   try {
-    const domain = decodeKey(params.domain);
+    const isDev = process.env.NODE_ENV === "development";
+    let domain: string = "";
+
+    if (isDev) {
+      domain = process.env.DOMAIN || "";
+    } else {
+      domain = decodeKey(params.domain);
+    }
     const { content, enablePublishPage } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
     await generateCachePageTag([`i-${params.domain}`], 900);
@@ -27,11 +34,9 @@ const MainPage = async ({ params }: MainPageProps) => {
       return (
         <>
           <PublishHeader projectName={projectName} logo={logo} domain={domain} />
-          <main className="px-0 xs:px-8 h-[calc(100vh-156px)] overflow-y-auto relative w-full">
-            <div className="w-full mb- mt-8 px-4 py-8 rounded-md bg-primary-normal">
-              <div
-                className="flex w-full py-4 relative justify-center"
-              >
+          <main className="relative h-[calc(100vh-156px)] w-full overflow-y-auto px-0 xs:px-8">
+            <div className="mb- mt-8 w-full rounded-md bg-primary-normal px-4 py-8">
+              <div className="relative flex w-full justify-center py-4">
                 <ImageComponent
                   src={
                     heroImage
@@ -44,32 +49,26 @@ const MainPage = async ({ params }: MainPageProps) => {
                 />
               </div>
 
-              <h1 className="text-white text-[40px] text-center mt-8">
+              <h1 className="mt-8 text-center text-[40px] text-white">
                 {projectName ?? "نام پروژه"}
               </h1>
-              <p className="text-white text-lg text-center mt-4">
+              <p className="mt-4 text-center text-lg text-white">
                 {projectDescription ?? "توضیحات پروژه"}
               </p>
             </div>
             <PublishRepositories />
           </main>
-          <PublishFooter
-            projectDescription={projectDescription}
-            logo={logo}
-
-          />
+          <PublishFooter projectDescription={projectDescription} logo={logo} />
         </>
       );
     }
     return <LandingPage />;
   } catch (error) {
     return (
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
         <Error
           error={{
-            message:
-              (error as unknown as BasicError).message ??
-              "خطا در دریافت اطلاعات ",
+            message: (error as unknown as BasicError).message ?? "خطا در دریافت اطلاعات ",
           }}
         />
       </div>

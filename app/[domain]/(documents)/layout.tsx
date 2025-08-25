@@ -7,30 +7,32 @@ import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
-  params: { id: string; name: string; domain: string,  };
+  params: { id: string; name: string; domain: string };
 }
 
 const PublishSlugLayout = async ({ children, params }: IProps) => {
   try {
-    const domain = decodeKey(params.domain);
-    const { content } = await getCustomPostByDomain(domain);
+    const isDev = process.env.NODE_ENV === "development";
+    let domain: string = "";
 
+    if (isDev) {
+      domain = process.env.DOMAIN || "";
+    } else {
+      domain = decodeKey(params.domain);
+    }
+
+    const { content } = await getCustomPostByDomain(domain);
     const { projectName, logo } = JSON.parse(content) as ICustomPostData;
 
-
     return (
-      <PublishSlugTemplate
-        projectName={projectName}
-        logo={logo}
-        domain={domain}
-      >
+      <PublishSlugTemplate projectName={projectName} logo={logo} domain={domain}>
         {children}
       </PublishSlugTemplate>
     );
   } catch (error: unknown) {
     const errorMessage = (error as { message: string }).message ?? "خطای غیر منتظره رخ داده است";
     return (
-      <div className="w-screen h-screen grid place-content-center">
+      <div className="grid h-screen w-screen place-content-center">
         <Error error={{ message: errorMessage }} />
       </div>
     );

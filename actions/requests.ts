@@ -9,7 +9,7 @@ import {
 
 import { IActionError } from "@interface/app.interface";
 import { getMe } from "./auth";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 
 export const getUserToRepoRequestsAction = async (
@@ -18,7 +18,7 @@ export const getUserToRepoRequestsAction = async (
 ) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }

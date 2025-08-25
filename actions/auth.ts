@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies, headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { decryptKey, encryptKey } from "@utils/crypto";
 import {
   editSocialProfile,
@@ -12,7 +13,6 @@ import {
   refreshPodAccessToken,
   revokePodToken,
 } from "@service/account";
-
 import { IActionError } from "@interface/app.interface";
 import { getRedisClient } from "@utils/redis";
 import jwt from "jsonwebtoken";
@@ -27,7 +27,8 @@ const refreshCookieHeader = async (
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
   const { access_token, refresh_token, expires_in } = response;
   // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
+
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -77,7 +78,7 @@ export const getMe = async () => {
   ) as string;
 
   // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -142,21 +143,23 @@ export const userInfoAction = async () => {
 
 export const login = async () => {
   // get domain and find proper custom post base on domain
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
 
+  const domainUrl = headers().get("host");
+
   const { clientId } = await getCustomPostByDomain(domain);
   const url =
     `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-      `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}/signin`
+      `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domainUrl}/signin`
     )}&scope=profile`.replace("http:", "https:");
   redirect(url);
 };
 
 export const getUserToken = async (code: string, redirectUrl: string) => {
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -208,7 +211,7 @@ export const logoutAction = async () => {
     ) as string;
 
     // get domain and find proper custom post base on domain
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }

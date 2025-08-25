@@ -16,7 +16,7 @@ import {
 import { IActionError } from "@interface/app.interface";
 import { IFileVersion } from "@interface/version.interface";
 import { getMe } from "./auth";
-import { headers } from "next/dist/client/components/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
 
@@ -173,7 +173,7 @@ export const publicVersionAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

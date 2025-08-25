@@ -16,7 +16,15 @@ interface IProps {
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const domain = decodeKey(params.domain);
+  const isDev = process.env.NODE_ENV === "development";
+
+  let domain: string = "";
+
+  if (isDev) {
+    domain = process.env.DOMAIN || "";
+  } else {
+    domain = decodeKey(params.domain);
+  }
 
   try {
     const { content } = await getCustomPostByDomain(domain);

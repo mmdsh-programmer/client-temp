@@ -30,14 +30,14 @@ import {
 import { IActionError } from "@interface/app.interface";
 import { NotFoundError } from "@utils/error";
 import { getMe } from "./auth";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/dist/server/web/spec-extension/revalidate";
 
 export const getMyInfoAction = async () => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new NotFoundError(["دامنه مورد نظر پیدا نشد"]);
     }
@@ -57,7 +57,7 @@ export const getAllRepositoryList = async (
 ) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -85,7 +85,7 @@ export const getMyRepositoryList = async (
 ) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -125,7 +125,7 @@ export const getAccessRepositoryList = async (
 ) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -152,7 +152,7 @@ export const getBookmarkRepositoryList = async (
 ) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -178,7 +178,7 @@ export const editRepoAction = async (
   description: string
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -203,7 +203,7 @@ export const editRepoAction = async (
 export const createRepoAction = async (name: string, description?: string) => {
   const userInfo = await getMe();
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -223,7 +223,7 @@ export const createRepoAction = async (name: string, description?: string) => {
 
 export const deleteRepoAction = async (repoId: number) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -394,7 +394,7 @@ export const subscribeToRepoAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -417,7 +417,7 @@ export const unsubscribeFromRepoAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -452,7 +452,7 @@ export const getPublishRepositoriesAction = async (
   offset: number,
   size: number
 ) => {
-  const domain = headers().get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

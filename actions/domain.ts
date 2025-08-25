@@ -14,13 +14,13 @@ import {
   updateCustomPostByDomain,
 } from "@service/clasor";
 import { getMe } from "./auth";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
 
 export const getCustomPostByDomainAction = async () => {
   try {
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -47,7 +47,7 @@ export const updateCustomPostByDomainAction = async (
   try {
     const userInfo = await getMe();
 
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -77,7 +77,7 @@ export const getDomainPublishRepositoriesAction = async (offset: number, size: n
   try {
     const userInfo = await getMe();
 
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -91,7 +91,7 @@ export const getDomainPublishRepositoriesAction = async (offset: number, size: n
 export const createDomainTagAction = async (name: string, description: string, order: number) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -107,7 +107,7 @@ export const createDomainTagAction = async (name: string, description: string, o
 export const getAllDomainTagsAction = async (offset: number, size: number) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -124,7 +124,7 @@ export const getAllDomainTagsAction = async (offset: number, size: number) => {
 export const getDomainTagByIdAction = async (tagId: number) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -141,7 +141,7 @@ export const getDomainTagByIdAction = async (tagId: number) => {
 export const updateDomainTagAction = async (tagId: number, name?: string, description?: string) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -158,7 +158,7 @@ export const updateDomainTagAction = async (tagId: number, name?: string, descri
 export const deleteDomainTagAction = async (tagId: number) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -180,7 +180,7 @@ export const setDocumentDomainTagsAction = async (
 ) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -204,7 +204,7 @@ export const setDocumentDomainTagsAction = async (
 export const addPartyToDomainParticipantsAction = async (userNameList: string) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
+    const domain = await getDomainHost();
 
     if (!domain) {
       throw new Error("Domain is not found");
@@ -225,8 +225,8 @@ export const addPartyToDomainParticipantsAction = async (userNameList: string) =
 export const removePartyFromDomainParticipantsAction = async (userNameList: string[]) => {
   try {
     const userInfo = await getMe();
-    const domain = headers().get("host");
-
+    const domain = await getDomainHost();
+    
     if (!domain) {
       throw new Error("Domain is not found");
     }
