@@ -1,51 +1,41 @@
 "use server";
 
 import { cookies, headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { decryptKey, encryptKey } from "@utils/crypto";
-import {
-  editSocialProfile,
-  getMySocialProfile,
-} from "@service/social";
+import { editSocialProfile, getMySocialProfile } from "@service/social";
 import { getCustomPostByDomain, userInfo, userMetadata } from "@service/clasor";
-import {
-  getPodAccessToken,
-  refreshPodAccessToken,
-  revokePodToken,
-} from "@service/account";
+import { getPodAccessToken, refreshPodAccessToken, revokePodToken } from "@service/account";
 import { IActionError } from "@interface/app.interface";
 import { getRedisClient } from "@utils/redis";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
 
-const refreshCookieHeader = async (
-  rToken: string,
-  clientId: string,
-  clientSecret: string
-) => {
+const refreshCookieHeader = async (rToken: string, clientId: string, clientSecret: string) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
   const { access_token, refresh_token, expires_in } = response;
   // get domain and find proper custom post base on domain
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
+
   if (!domain) {
     throw new Error("Domain is not found");
   }
 
-  const { cryptoInitVectorKey, cryptoSecretKey } =
-    await getCustomPostByDomain(domain);
+  const { cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
 
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
       refresh_token,
-      expiresAt: +new Date() + ((expires_in - 60) * 1000),
+      expiresAt: +new Date() + (expires_in - 60) * 1000,
     }),
     cryptoSecretKey,
-    cryptoInitVectorKey
+    cryptoInitVectorKey,
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
- 
+
   (await cookies()).set("token", token, {
     httpOnly: true,
     secure: process.env.SECURE === "TRUE",
@@ -55,7 +45,7 @@ const refreshCookieHeader = async (
   });
 
   const userData = await userInfo(access_token, domain, expires_in - 60);
-  const mySocialProfile = await getMySocialProfile(access_token, expires_in - 60 );
+  const mySocialProfile = await getMySocialProfile(access_token, expires_in - 60);
   return {
     ...userData,
     private: mySocialProfile.result.private,
@@ -70,13 +60,10 @@ export const getMe = async () => {
     return redirect("/");
   }
 
-  const payload = jwt.verify(
-    encodedToken,
-    process.env.JWT_SECRET_KEY as string
-  ) as string;
+  const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
 
   // get domain and find proper custom post base on domain
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -84,21 +71,15 @@ export const getMe = async () => {
   const { cryptoSecretKey, cryptoInitVectorKey, clientId, clientSecret } =
     await getCustomPostByDomain(domain);
 
-  const tokenInfo = JSON.parse(
-    decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)
-  ) as {
+  const tokenInfo = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
     access_token: string;
     refresh_token: string;
     expiresAt: number;
   };
 
   try {
-    if(tokenInfo.expiresAt < +new Date()){
-      return refreshCookieHeader(
-        tokenInfo.refresh_token,
-        clientId,
-        clientSecret
-      );
+    if (tokenInfo.expiresAt < +new Date()) {
+      return refreshCookieHeader(tokenInfo.refresh_token, clientId, clientSecret);
     }
 
     const expiresAt = Math.floor((tokenInfo.expiresAt - +new Date()) / 1000);
@@ -114,11 +95,7 @@ export const getMe = async () => {
   } catch (error: unknown) {
     if ((error as IActionError)?.errorCode === 401) {
       try {
-        return refreshCookieHeader(
-          tokenInfo.refresh_token,
-          clientId,
-          clientSecret
-        );
+        return refreshCookieHeader(tokenInfo.refresh_token, clientId, clientSecret);
       } catch (refreshTokenError) {
         return normalizeError(refreshTokenError as IActionError);
       }
@@ -141,21 +118,24 @@ export const userInfoAction = async () => {
 
 export const login = async () => {
   // get domain and find proper custom post base on domain
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
 
+  const headerList = await headers();
+  const domainUrl = headerList?.get("host");
+
   const { clientId } = await getCustomPostByDomain(domain);
   const url =
     `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-      `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domain}/signin`
+      `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domainUrl}/signin`,
     )}&scope=profile`.replace("http:", "https:");
   redirect(url);
 };
 
 export const getUserToken = async (code: string, redirectUrl: string) => {
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -167,12 +147,10 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
     redirectUrl,
     clientId,
     clientSecret,
-    domain
+    domain,
   );
 
-  
-
-  const expiresAt = +new Date() + ((expires_in - 60) * 1000);
+  const expiresAt = +new Date() + (expires_in - 60) * 1000;
   const encryptedData = encryptKey(
     JSON.stringify({
       access_token,
@@ -180,7 +158,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
       expiresAt,
     }),
     cryptoSecretKey,
-    cryptoInitVectorKey
+    cryptoInitVectorKey,
   );
 
   const token = jwt.sign(encryptedData, process.env.JWT_SECRET_KEY as string);
@@ -201,13 +179,10 @@ export const logoutAction = async () => {
     return;
   }
   try {
-    const payload = jwt.verify(
-      encodedToken,
-      process.env.JWT_SECRET_KEY as string
-    ) as string;
+    const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
 
     // get domain and find proper custom post base on domain
-    const domain = (await headers()).get("host");
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -216,29 +191,30 @@ export const logoutAction = async () => {
       await getCustomPostByDomain(domain);
 
     const { access_token, refresh_token } = JSON.parse(
-      decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)
+      decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey),
     ) as {
       access_token: string;
       refresh_token: string;
     };
 
     await revokePodToken(clientId, clientSecret, access_token, "access_token");
-    await revokePodToken(
-      clientId,
-      clientSecret,
-      refresh_token,
-      "refresh_token"
-    );
+    await revokePodToken(clientId, clientSecret, refresh_token, "refresh_token");
 
     (await cookies()).delete("token");
-    
+
     const redisClient = await getRedisClient();
-    if(redisClient && redisClient.isReady){
+    if (redisClient && redisClient.isReady) {
       await redisClient.del(`user:${access_token}`);
-      console.log(JSON.stringify({ 
-        type: "Redis remove data",
-        data: `user:${access_token}`,
-      }, null, 0));
+      console.log(
+        JSON.stringify(
+          {
+            type: "Redis remove data",
+            data: `user:${access_token}`,
+          },
+          null,
+          0,
+        ),
+      );
     }
   } catch (error) {
     (await cookies()).delete("token");

@@ -1,9 +1,8 @@
+import React from "react";
 import "@styles/globals.css";
-
 import LayoutTransitionProvider from "provider/layoutTransition";
 import MainProvider from "provider/mainProvider";
 import type { Metadata } from "next";
-import React from "react";
 import ThemeLoaderProvider from "provider/themeLoaderProvider";
 import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
@@ -16,11 +15,20 @@ interface IProps {
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const decodedDomain = await params;
-  const domain = decodeKey(decodedDomain);
-  
+
+  const isDev = process.env.NODE_ENV === "development";
+
+  let domainUrl: string = "";
+
+  if (isDev) {
+    domainUrl = process.env.DOMAIN || "";
+  } else {
+    const domain = await params;
+    domainUrl = decodeKey(domain);
+     }
+
   try {
-    const { content } = await getCustomPostByDomain(domain);
+    const { content } = await getCustomPostByDomain(domainUrl);
     const domainInfo = JSON.parse(content ?? "{}");
     return {
       title: domainInfo.projectName,

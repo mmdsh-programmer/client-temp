@@ -29,7 +29,7 @@ import {
 import { EDocumentTypes } from "@interface/enums";
 import { ISortProps } from "@atom/sortParam";
 import { getMe, userInfoAction } from "./auth";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
 
@@ -149,7 +149,7 @@ export const editDocumentAction = async (
   isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -184,7 +184,7 @@ export const deleteDocumentAction = async (
   documentId: number
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -213,7 +213,7 @@ export const getUserDocumentAction = async (
   reportType: "myDocuments" | "myAccessDocuments" | null
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -517,7 +517,7 @@ export const publicLastVersionAction = async (
   draftId?: number
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

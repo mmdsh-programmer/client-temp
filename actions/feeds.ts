@@ -9,10 +9,10 @@ import {
 import { IActionError } from "@interface/app.interface";
 import { normalizeError } from "@utils/normalizeActionError";
 import { getMe } from "./auth";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 
 export const getDomainPublicFeedsAction = async (offset: number, size: number) => {
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -36,7 +36,7 @@ export const getDomainPrivateFeedsAction = async (repoId: number, offset: number
 
 export const getFollowingReposAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

@@ -38,7 +38,7 @@ type PageParams = {
 
 export default async function PublishContentPage({ params }: { params: PageParams }) {
   try {
-    const {  id, name, slug, domain } = params;
+    const { id, name, slug, domain } = params;
 
     const decodeId = decodeURIComponent(id);
     if (hasEnglishDigits(decodeId)) {
@@ -118,7 +118,9 @@ export default async function PublishContentPage({ params }: { params: PageParam
     }
 
     const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
-    const originalVersionNumber = removeSpecialCharacters(toPersianDigit(versionData.versionNumber));
+    const originalVersionNumber = removeSpecialCharacters(
+      toPersianDigit(versionData.versionNumber),
+    );
 
     await generateCachePageTag([
       `vr-${versionData.id}`,
@@ -127,15 +129,19 @@ export default async function PublishContentPage({ params }: { params: PageParam
       `i-${domain}`,
     ]);
 
-    if (
-      hasVersion &&
-      versionData &&
-      originalVersionNumber !==  versionNumber
-    ) {
+    if (hasVersion && versionData && originalVersionNumber !== versionNumber) {
       return notFound();
     }
 
-    const decodedDomain = decodeKey(domain);
+    const isDev = process.env.NODE_ENV === "development";
+    let decodedDomain: string = "";
+
+    if (isDev) {
+      decodedDomain = process.env.DOMAIN || "";
+    } else {
+      decodedDomain = decodeKey(domain);
+    }
+
     const { content } = await getCustomPostByDomain(decodedDomain);
     const { enableDefaultFontFamily } = JSON.parse(content) as ICustomPostData;
 
@@ -168,7 +174,7 @@ export default async function PublishContentPage({ params }: { params: PageParam
         `rp-ph-${repository.id}`,
         `i-${domain}`,
       ],
-      { tags: cacheTags, revalidate: 24 * 3600 }
+      { tags: cacheTags, revalidate: 24 * 3600 },
     );
 
     const revalidateTimestamp = await getRevalidateTimestamp();
@@ -176,7 +182,11 @@ export default async function PublishContentPage({ params }: { params: PageParam
     return (
       <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
         <PublishVersionContent document={documentInfo} version={versionData} />
-        <input type="hidden" data-testid="revalidate-timestamp" value={String(revalidateTimestamp)} />
+        <input
+          type="hidden"
+          data-testid="revalidate-timestamp"
+          value={String(revalidateTimestamp)}
+        />
       </div>
     );
   } catch (error) {

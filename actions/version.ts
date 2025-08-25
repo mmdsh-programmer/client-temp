@@ -15,9 +15,9 @@ import {
 import { IActionError } from "@interface/app.interface";
 import { IFileVersion } from "@interface/version.interface";
 import { getMe } from "./auth";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
-import { headers } from "next/headers";
 
 export const getVersionAction = async (
   repoId: number,
@@ -172,7 +172,7 @@ export const publicVersionAction = async (
   isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

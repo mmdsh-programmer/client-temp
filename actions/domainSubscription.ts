@@ -4,11 +4,11 @@ import { acceptSubscription, getDomainSubscription, rejectSubscription } from "@
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 
 export const getDomainSubscriptionAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -22,7 +22,7 @@ export const getDomainSubscriptionAction = async (offset: number, size: number) 
 
 export const rejectSubscriptionAction = async (requestId: number) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -36,7 +36,7 @@ export const rejectSubscriptionAction = async (requestId: number) => {
 
 export const acceptSubscriptionAction = async (requestId: number) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

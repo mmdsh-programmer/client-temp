@@ -12,9 +12,9 @@ import {
 import { getMe, userInfoAction } from "./auth";
 
 import { IActionError } from "@interface/app.interface";
+import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
-import { headers } from "next/headers";
 
 const { API_TOKEN } = process.env;
 
@@ -95,9 +95,9 @@ export const getPublishDocumentVersionsAction = async (
 ) => {
   const userInfo = await userInfoAction();
   try {
-    const ssoId = userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-    const domain = (await headers()).get("host");
-
+    const ssoId =
+      userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -116,8 +116,7 @@ export const searchPublishContentAction = async (
   offset: number,
   size: number,
 ) => {
-  const domain = (await headers()).get("host");
-
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }

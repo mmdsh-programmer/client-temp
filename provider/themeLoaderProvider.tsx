@@ -34,13 +34,20 @@ const iranYekanFont = localFont({
 });
 
 const ThemeLoaderProvider = async ({ children, domain }: IProps) => {
-  const domainHash = decodeKey(domain);
+  const isDev = process.env.NODE_ENV === "development";
+  let domainHash: string = "";
+
+  if (isDev) {
+    domainHash = process.env.DOMAIN || "";
+  } else {
+    domainHash = decodeKey(domain);
+  }
   const { content } = await getCustomPostByDomain(domainHash);
   const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
 
   return (
     <body
-      className={`${iranYekanFont.variable} bg-white !font-iranYekan h-full w-full`}
+      className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}
       style={theme as IThemeInfo}
     >
       {children}

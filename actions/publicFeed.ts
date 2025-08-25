@@ -10,11 +10,11 @@ import {
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
-import { headers } from "next/headers";
+import { getDomainHost } from "@utils/getDomain";
 
 export const getPublicFeedsAction = async (offset: number, size: number) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -39,7 +39,7 @@ export const createPublicFeedAction = async (
   image?: string
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -67,7 +67,7 @@ export const updatePublicFeedAction = async (
   image?: string
 ) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
@@ -91,7 +91,7 @@ export const updatePublicFeedAction = async (
 
 export const deletePublicFeedAction = async (feedId: number) => {
   const userInfo = await getMe();
-  const domain = (await headers()).get("host");
+  const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
