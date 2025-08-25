@@ -2,36 +2,36 @@
 
 import React, { useEffect } from "react";
 import CategoryList from "@components/organisms/category";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { bulkItemsAtom } from "@atom/bulk";
 import CategoryBulk from "@components/molecules/categoryBulk";
-import { editorModalAtom } from "@atom/editor";
 import Editor from "@components/organisms/dialogs/editor";
-import { versionModalListAtom } from "@atom/version";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
-import { repoAtom } from "@atom/repository";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
+import { useVersionStore } from "@store/version";
+import { useBulkStore } from "@store/bulk";
+import { useEditorStore } from "@store/editor";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
 
 const MyDocumentsPage = () => {
-  const getShowVersionList = useRecoilValue(versionModalListAtom);
-  const getBulkItems = useRecoilValue(bulkItemsAtom);
-  const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
-
-  const resetRepo = useResetRecoilState(repoAtom);
-  const resetCategory = useResetRecoilState(categoryAtom);
-  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
-  const resetDocument = useResetRecoilState(selectedDocumentAtom);
-  const resetDocumentShow = useResetRecoilState(documentShowAtom);
-  const resetBulkItems = useResetRecoilState(bulkItemsAtom);
+  const getShowVersionList = useVersionStore((state) => {
+    return state.versionModalList;
+  });
+  const getBulkItems = useBulkStore((state) => {
+    return state.bulkItems;
+  });
+  const { editorModal: getEditorModal, setEditorModal } = useEditorStore();
+  const { setRepo } = useRepositoryStore();
+  const { setCategory, setCategoryShow } = useCategoryStore();
+  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { setBulkItems } = useBulkStore();
 
   useEffect(() => {
-    resetRepo();
-    resetCategory();
-    resetCategoryShow();
-    resetDocument();
-    resetDocumentShow();
-    resetBulkItems();
+    setRepo(null);
+    setCategory(null);
+    setCategoryShow(null);
+    setSelectedDocument(null);
+    setDocumentShow(null);
+    setBulkItems([]);
   }, []);
 
   return (

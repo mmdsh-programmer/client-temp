@@ -8,12 +8,11 @@ import VersionCloneDialog from "@components/organisms/dialogs/version/versionClo
 import VersionConfirmDialog from "@components/organisms/dialogs/version/versionConfirmDialog";
 import VersionDeleteDialog from "@components/organisms/dialogs/version/versionDeleteDialog";
 import VersionPublicDialog from "@components/organisms/dialogs/version/versionPublicDialog";
-import { compareVersionAtom } from "@atom/version";
-import { useRecoilState } from "recoil";
 import ConfirmPublicDraftDialog from "@components/organisms/dialogs/version/confirmPublicDraftDialog";
 import AcceptDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftDialog";
 import AcceptVersionDialog from "@components/organisms/dialogs/versionRequest/acceptVersionDialog";
 import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftPublicDialog";
+import { useVersionStore } from "@store/version";
 
 interface IVersionDialogsProps {
   modals: {
@@ -36,7 +35,7 @@ interface IVersionDialogsProps {
 }
 
 const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
-  const [compareVersion, setCompareVersion] = useRecoilState(compareVersionAtom);
+  const { compareVersion, setCompareVersion } = useVersionStore();
 
   return (
     <>

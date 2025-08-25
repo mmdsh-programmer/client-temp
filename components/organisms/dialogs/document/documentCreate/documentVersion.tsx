@@ -29,7 +29,12 @@ interface IForm {
 
 const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const { handlePrevStep, close } = useStepperNavigate();
-  const { documentType: getDocumentType, documentInfo: getDocumentInfo, documentTemplate: getDocumentTemplate, documentKey: getDocumentKey } = useDocumentStore();
+  const {
+    documentType: getDocumentType,
+    documentInfo: getDocumentInfo,
+    documentTemplate: getDocumentTemplate,
+    documentKey: getDocumentKey,
+  } = useDocumentStore();
   const { category: getCategory, categoryShow: getCategoryShow } = useCategoryStore();
   const { repo: getRepo } = useRepositoryStore();
   const currentPath = usePathname();
@@ -44,7 +49,10 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
 
-  const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
+  const repoId =
+    currentPath === "/admin/myDocuments" || currentPath === "/admin/dashboard"
+      ? userInfo!.repository.id
+      : getRepo!.id;
 
   const onSubmit = (dataForm: IForm) => {
     if (!getDocumentType || !getDocumentInfo) {
@@ -144,7 +152,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
                 setOpen(false);
                 toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
               },
-              onErrorHandler:() => {
+              onErrorHandler: () => {
                 close();
                 setOpen(false);
               },

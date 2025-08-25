@@ -1,15 +1,9 @@
 import React from "react";
 import { IVersion } from "@interface/version.interface";
-import {
-  acceptVersionAtom,
-  rejectVersionAtom,
-  selectedRequestAtom,
-  versionRequestDrawerAtom,
-} from "@atom/releaseDocs";
-import { useRecoilState, useSetRecoilState } from "recoil";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import MenuTemplate from "@components/templates/menuTemplate";
 import { MoreDotIcon } from "@components/atoms/icons";
+import { useReleaseDocsStore } from "@store/releaseDocs";
 
 interface IProps {
   request?: IVersion;
@@ -17,12 +11,13 @@ interface IProps {
 }
 
 const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
-  const setAcceptRequestModal = useSetRecoilState(acceptVersionAtom);
-  const setRejectRequestModal = useSetRecoilState(rejectVersionAtom);
-  const [openRequestActionDrawer, setOpenRequestActionDrawer] = useRecoilState(
-    versionRequestDrawerAtom
-  );
-  const setRequest = useSetRecoilState(selectedRequestAtom);
+  const {
+    setAcceptVersion: setAcceptRequestModal,
+    setRejectVersion: setRejectRequestModal,
+    versionRequestDrawer: openRequestActionDrawer,
+    setVersionRequestDrawer: setOpenRequestActionDrawer,
+    setSelectedRequest: setRequest,
+  } = useReleaseDocsStore();
 
   const menuList = [
     {
@@ -50,10 +45,12 @@ const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
   ];
 
   return showDrawer ? (
-    <div className="repo-draft-request-menu xs:hidden flex">
+    <div className="repo-draft-request-menu flex xs:hidden">
       <DrawerTemplate
         openDrawer={openRequestActionDrawer}
-        setOpenDrawer={setOpenRequestActionDrawer}
+        setOpenDrawer={() => {
+          return setOpenRequestActionDrawer(false);
+        }}
         menuList={menuList}
       />
     </div>
@@ -65,8 +62,8 @@ const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
       }}
       menuList={menuList}
       icon={
-        <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-          <MoreDotIcon className="w-4 h-4" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
+          <MoreDotIcon className="h-4 w-4" />
         </div>
       }
       className="repo-draft-request-menu"

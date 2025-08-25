@@ -66,7 +66,10 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       toast.error("نام دسته‌بندی شامل کاراکتر غیرمجاز است.");
       return;
     }
-    const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
+    const repoId =
+      currentPath === "/admin/myDocuments" || currentPath === "/admin/dashboard"
+        ? userInfo!.repository.id
+        : getRepo!.id;
 
     if (!repoId) return;
     createCategory.mutate({

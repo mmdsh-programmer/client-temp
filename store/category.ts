@@ -11,8 +11,8 @@ interface CategoryState {
   setCategoryQueryParams: (params: CategoryChildrenQueryParams) => void;
   categoryMoveDest: ICategoryMetadata | null;
   setCategoryMoveDest: (cat: ICategoryMetadata | null) => void;
-  categorySearchContentParam: string;
-  setCategorySearchContentParam: (param: string) => void;
+  categorySearchContentParam: string | null;
+  setCategorySearchContentParam: (param: string | null) => void;
   categorySearchContentOpen: boolean;
   setCategorySearchContentOpen: (open: boolean) => void;
   categorySearchContentLink: string | null;

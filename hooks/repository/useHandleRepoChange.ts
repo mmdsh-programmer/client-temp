@@ -1,13 +1,14 @@
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { IRepo } from "@interface/repo.interface";
-import { repoAtom } from "@atom/repository";
 import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 let lastRepo: IRepo | null = null;
 const useHandleRepoChange = () => {
   const queryClient = useQueryClient();
-  const getRepo = useRecoilValue(repoAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
 
   useEffect(() => {
     if (lastRepo?.id !== getRepo?.id) {

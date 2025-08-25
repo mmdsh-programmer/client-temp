@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useRepositoryStore } from "@store/repository";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
 import { Spinner } from "@components/atoms/spinner";
@@ -18,9 +17,15 @@ const CheckRepoInfo = ({ children }: IProps) => {
   useHandleRepoChange();
 
   const [loading, setLoading] = useState(true);
-  const repositoryId = useRepositoryStore((state) => state.repositoryId);
-  const setRepositoryId = useRepositoryStore((state) => state.setRepositoryId);
-  const setRepository = useRepositoryStore((state) => state.setRepo);
+  const repositoryId = useRepositoryStore((state) => {
+    return state.repositoryId;
+  });
+  const setRepositoryId = useRepositoryStore((state) => {
+    return state.setRepositoryId;
+  });
+  const setRepository = useRepositoryStore((state) => {
+    return state.setRepo;
+  });
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -30,16 +35,12 @@ const CheckRepoInfo = ({ children }: IProps) => {
     repositoryId ? +repositoryId : null,
     setRepository,
     setRepositoryId,
-    true
+    true,
   );
 
   useEffect(() => {
     const lastRepo = window.localStorage.getItem("CLASOR:SELECTED_REPO");
-    if (
-      !lastRepo &&
-      !repoId &&
-      window.location.pathname !== "/panel-admin-clasor"
-    ) {
+    if (!lastRepo && !repoId && window.location.pathname !== "/panel-admin-clasor") {
       router.push("/admin/dashboard");
     }
 
@@ -53,23 +54,18 @@ const CheckRepoInfo = ({ children }: IProps) => {
   }, []);
 
   if (error) {
-    return (
-      <Error
-        error={{ message: "خطا در دریافت اطلاعات مخزن" }}
-        retry={refetch}
-      />
-    );
+    return <Error error={{ message: "خطا در دریافت اطلاعات مخزن" }} retry={refetch} />;
   }
 
   if (loading || isFetching) {
     return (
-      <div className="w-full h-full flex-col flex justify-center items-center">
+      <div className="flex h-full w-full flex-col items-center justify-center">
         <Spinner className="h-10 w-10 text-primary" />
       </div>
     );
   }
 
-  return <div className="check-repo-info h-[calc(100%-20px)] flex gap-3">{children}</div>;
+  return <div className="check-repo-info flex h-[calc(100%-20px)] gap-3">{children}</div>;
 };
 
 export default CheckRepoInfo;

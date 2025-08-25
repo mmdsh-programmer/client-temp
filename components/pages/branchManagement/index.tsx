@@ -4,27 +4,24 @@ import React, { useEffect } from "react";
 import Branch from "@components/organisms/branch";
 import BranchInfo from "@components/organisms/branch/branchInfo";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import { useResetRecoilState } from "recoil";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 
 const BranchManagementPage = () => {
-  const resetRepo = useResetRecoilState(repoAtom);
-  const resetCategory = useResetRecoilState(categoryAtom);
-  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
-  const resetDocument = useResetRecoilState(selectedDocumentAtom);
-  const resetDocumentShow = useResetRecoilState(documentShowAtom);
-  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+  const { setRepo } = useRepositoryStore();
+  const { setCategory, setCategoryShow } = useCategoryStore();
+  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { setVersionModalList } = useVersionStore();
 
   useEffect(() => {
-    resetRepo();
-    resetCategory();
-    resetCategoryShow();
-    resetDocument();
-    resetDocumentShow();
-    resetShowVersionList();
+    setRepo(null);
+    setCategory(null);
+    setCategoryShow(null);
+    setSelectedDocument(null);
+    setDocumentShow(null);
+    setVersionModalList(false);
   }, []);
 
   return (
@@ -33,10 +30,10 @@ const BranchManagementPage = () => {
         <Typography className="title_t1 text-primary_normal">مدیریت شعبات</Typography>
       </div>
       <div className="flex h-[calc(100%-50px)] justify-evenly gap-2">
-        <div className="h-full hidden xs:block w-[30%] max-w-[260px] basis-1/5">
+        <div className="hidden h-full w-[30%] max-w-[260px] basis-1/5 xs:block">
           <Branch />
         </div>
-        <div className="w-full xs:basis-4/5 overflow-x-auto">
+        <div className="w-full overflow-x-auto xs:basis-4/5">
           <BranchInfo />
         </div>
       </div>

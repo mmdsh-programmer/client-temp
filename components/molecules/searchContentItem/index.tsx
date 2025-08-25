@@ -12,12 +12,12 @@ interface IProps {
 
 export const ResultItem = ({ data, onClick }: IProps) => {
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  const setLink = useCategoryStore((s) => s.setCategorySearchContentLink);
+  const setLink = useCategoryStore((s) => 
+{return s.setCategorySearchContentLink;});
   const {
     data: documentInfo,
     isError,
     isLoading,
-    isSuccess,
   } = useGetDocument(data.repoId, data.documentId, isEnabled);
 
   const handleDocumentSelect = () => {

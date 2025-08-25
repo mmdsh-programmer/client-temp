@@ -4,9 +4,8 @@ import EditorFooter from "@components/organisms/editor/editorFooter";
 import EditorHeader from "@components/organisms/editor/editorHeader";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { EDocumentTypes } from "@interface/enums";
-import { useRecoilValue } from "recoil";
-import { selectedDocumentAtom } from "@atom/document";
 import EditorFileFooter from "@components/organisms/editor/editorFileFooter";
+import { useDocumentStore } from "@store/document";
 
 export interface IProps {
   children: React.ReactNode;
@@ -25,8 +24,9 @@ const EditorDialog = ({
   editorRef,
   isEditorReady,
 }: IProps) => {
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
-
+  const getSelectedDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
   const handleClose = () => {
     setOpen(false);
   };
@@ -47,7 +47,7 @@ const EditorDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} flex !h-full w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] xs:rounded-lg `}
+      className={`${className} flex !h-full w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:!h-[95%] xs:min-w-[95%] xs:max-w-[95%] xs:rounded-lg`}
       dismiss={{
         enabled: false,
       }}
@@ -64,7 +64,7 @@ const EditorDialog = ({
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog-footer flex gap-2 border-t-[0.5px] border-t-gray-200 p-5 xs:gap-3 xs:px-6 xs:py-4 "
+        className="dialog-footer flex gap-2 border-t-[0.5px] border-t-gray-200 p-5 xs:gap-3 xs:px-6 xs:py-4"
       >
         {renderFooter()}
       </DialogFooter>

@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { DialogBody } from "@material-tailwind/react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import InputAtom from "@components/atoms/input";
 import SearchContentResult from "../searchContentResult";
 import { SearchIcon } from "@components/atoms/icons";
-import { categorySearchContentParamAtom } from "atom/category";
-import { repoAtom } from "@atom/repository";
 import useDebounce from "@hooks/custom/useDebounce";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SearchContent = ({ setOpen }: IProps) => {
-  const getRepo = useRecoilValue(repoAtom);
-  const [getSearchParam, setSearchParam] = useRecoilState(categorySearchContentParamAtom);
-
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const {
+    categorySearchContentParam: getSearchParam,
+    setCategorySearchContentParam: setSearchParam,
+  } = useCategoryStore();
   const [search, setSearch] = useState<string>(getSearchParam || "");
   const debouncedValue = useDebounce<string>(search, 1000);
 

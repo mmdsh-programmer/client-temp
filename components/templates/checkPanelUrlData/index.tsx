@@ -11,12 +11,24 @@ import { useSearchParams } from "next/navigation";
 const CheckPanelUrlData = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const setCategory = useCategoryStore((state) => state.setCategory);
-  const setCategoryShow = useCategoryStore((state) => state.setCategoryShow);
-  const setDocument = useDocumentStore((state) => state.setSelectedDocument);
-  const setDocumentShow = useDocumentStore((state) => state.setDocumentShow);
-  const getSelectedVersion = useVersionStore((state) => state.selectedVersion);
-  const setShowVersionList = useVersionStore((state) => state.setVersionModalList);
+  const setCategory = useCategoryStore((state) => {
+    return state.setCategory;
+  });
+  const setCategoryShow = useCategoryStore((state) => {
+    return state.setCategoryShow;
+  });
+  const setDocument = useDocumentStore((state) => {
+    return state.setSelectedDocument;
+  });
+  const setDocumentShow = useDocumentStore((state) => {
+    return state.setDocumentShow;
+  });
+  const getSelectedVersion = useVersionStore((state) => {
+    return state.selectedVersion;
+  });
+  const setShowVersionList = useVersionStore((state) => {
+    return state.setVersionModalList;
+  });
 
   const searchParams = useSearchParams();
   const repoId = searchParams?.get("repoId");

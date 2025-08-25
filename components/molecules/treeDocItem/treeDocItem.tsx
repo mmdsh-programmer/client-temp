@@ -1,12 +1,10 @@
+import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-
 import DocumentIcon from "../documentIcon";
 import DocumentMenu from "../documentMenu";
 import { IDocumentTreeItem } from "atom/category";
-import React from "react";
 import { TickIcon } from "@components/atoms/icons";
-import { documentTemplateAtom } from "atom/document";
-import { useRecoilState } from "recoil";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   docItem: IDocumentTreeItem;
@@ -14,30 +12,22 @@ interface IProps {
 }
 
 const TreeDocItem = ({ docItem, enableAction }: IProps) => {
-  const [getDocumentTemplate, setDocumentTemplate] =
-    useRecoilState(documentTemplateAtom);
-
+  const { documentTemplate: getDocumentTemplate, setDocumentTemplate } = useDocumentStore();
   const handleDocClick = () => {
-    setDocumentTemplate((prevState) => {
-      return prevState?.id === docItem.id ? null : docItem;
-    });
+    setDocumentTemplate(getDocumentTemplate?.id === docItem.id ? null : docItem);
   };
 
   return (
     <div className={`${docItem.creatorSSOID ? "" : "bg-gray-300"} document-tree-item`}>
-      <div className="pr-4 flex">
-        <Button
-          placeholder="button"
-          className="flex p-2 bg-transparent "
-          onClick={handleDocClick}
-        >
+      <div className="flex pr-4">
+        <Button placeholder="button" className="flex bg-transparent p-2" onClick={handleDocClick}>
           <div className="flex">
             {!enableAction && getDocumentTemplate?.id === docItem.id ? (
-              <TickIcon className="fill-purple-normal w-5 h-5 flex-none" />
+              <TickIcon className="h-5 w-5 flex-none fill-purple-normal" />
             ) : null}
           </div>
           <DocumentIcon document={docItem} />
-          <Typography className="text-primary_normal lowercase mr-2" key={docItem.id}>
+          <Typography className="mr-2 lowercase text-primary_normal" key={docItem.id}>
             {docItem.name}
           </Typography>
           {enableAction ? (

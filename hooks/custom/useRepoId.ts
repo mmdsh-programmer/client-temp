@@ -1,14 +1,18 @@
 import { usePathname, useSearchParams } from "next/navigation";
-import { useRecoilValue } from "recoil";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
 
 const useRepoId = () => {
   const currentPath = usePathname();
   const searchParams = useSearchParams();
-  const getRepo = useRecoilValue(repoAtom);
-  const getSelectedDocument = useRecoilValue(selectedDocumentAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const getSelectedDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
+
   const { data: userInfo } = useGetUser();
 
   const getRepoId = searchParams?.get("repoId");

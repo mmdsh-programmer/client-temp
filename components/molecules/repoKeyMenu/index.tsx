@@ -1,28 +1,22 @@
-import {
- CopyIcon, DeleteIcon, MoreDotIcon 
-} from "@components/atoms/icons";
 import React, { useState } from "react";
-
+import { CopyIcon, DeleteIcon, MoreDotIcon } from "@components/atoms/icons";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { IPublicKey } from "@interface/repo.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
 import copy from "copy-to-clipboard";
-import { deleteRepoKeyAtom } from "@atom/repository";
 import { toast } from "react-toastify";
-import { useSetRecoilState } from "recoil";
+import { useDeleteRepoKeyStore } from "@store/repository";
 
 interface IProps {
   keyItem: IPublicKey;
   isList?: boolean;
 }
 
-const RepoKeyMenu = ({
- keyItem, isList 
-}: IProps) => {
-  const setDeleteKeyModal = useSetRecoilState(deleteRepoKeyAtom);
-  const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<
-    boolean | null
-  >(false);
+const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
+  const setDeleteKeyModal = useDeleteRepoKeyStore((state) => {
+    return state.setDeleteRepoKey;
+  });
+  const [openRepoActionDrawer, setOpenRepoActionDrawer] = useState<boolean | null>(false);
 
   const handleCopyKey = () => {
     copy(keyItem.key);
@@ -32,7 +26,7 @@ const RepoKeyMenu = ({
   const menuList = [
     {
       text: "کپی کلید",
-      icon: <CopyIcon className="w-4 h-4 fill-icon-active" />,
+      icon: <CopyIcon className="h-4 w-4 fill-icon-active" />,
       onClick: () => {
         handleCopyKey();
         setOpenRepoActionDrawer(false);
@@ -58,28 +52,28 @@ const RepoKeyMenu = ({
             }}
             menuList={menuList}
             icon={
-              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                <MoreDotIcon className="w-4 h-4" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
+                <MoreDotIcon className="h-4 w-4" />
               </div>
             }
           />
         </div>
       ) : (
-        <div className="flex items-center gap-1 justify-end">
+        <div className="flex items-center justify-end gap-1">
           <MenuTemplate
             setOpenDrawer={() => {
               setOpenRepoActionDrawer(true);
             }}
             menuList={menuList}
             icon={
-              <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">
-                <MoreDotIcon className="w-4 h-4" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
+                <MoreDotIcon className="h-4 w-4" />
               </div>
             }
           />
         </div>
       )}
-      <div className="xs:hidden flex">
+      <div className="flex xs:hidden">
         <DrawerTemplate
           openDrawer={openRepoActionDrawer}
           setOpenDrawer={setOpenRepoActionDrawer}

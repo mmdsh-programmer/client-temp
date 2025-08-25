@@ -1,21 +1,22 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { EDocumentTypes } from "@interface/enums";
-import { editorDataAtom } from "atom/editor";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
-import useGetLastVersion from "@hooks/version/useGetLastVersion";
-import { versionModalListAtom } from "@atom/version";
 import { useEffect } from "react";
+import { EDocumentTypes } from "@interface/enums";
+import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import { usePathname } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useEditorStore } from "@store/editor";
+import { useVersionStore } from "@store/version";
 
 const DocumentLastVersion = () => {
-  const repository = useRecoilValue(repoAtom);
-  const [getSelectedDocument, setSelectedDocument] =
-    useRecoilState(selectedDocumentAtom);
-  const setEditorVersion = useSetRecoilState(editorDataAtom);
-  const [getVersionModalList, setVersionModalList] =
-    useRecoilState(versionModalListAtom);
+  const repository = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const { selectedDocument: getSelectedDocument, setSelectedDocument } = useDocumentStore();
+  const setEditorVersion = useEditorStore((state) => {
+    return state.setEditorData;
+  });
+  const { versionModalList: getVersionModalList, setVersionModalList } = useVersionStore();
 
   const currentPath = usePathname();
 
@@ -44,15 +45,8 @@ const DocumentLastVersion = () => {
     if (!getLastVersion && isSuccess) {
       setVersionModalList(true);
     }
-    if (
-      document?.contentType === EDocumentTypes.board &&
-      getLastVersion &&
-      !getVersionModalList
-    ) {
-      window.open(
-        `http://localhost:8080/board/${getLastVersion?.id}`,
-        "_blank"
-      );
+    if (document?.contentType === EDocumentTypes.board && getLastVersion && !getVersionModalList) {
+      window.open(`http://localhost:8080/board/${getLastVersion?.id}`, "_blank");
     } else {
       setEditorVersion(getLastVersion || null);
     }

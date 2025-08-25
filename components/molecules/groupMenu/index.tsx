@@ -1,11 +1,10 @@
 import React from "react";
 import { IGetGroups } from "@interface/group.interface";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { deleteGroupAtom, editGroupAtom, groupDrawerAtom, selectedGroupAtom } from "@atom/group";
 import MenuTemplate from "@components/templates/menuTemplate";
 import DrawerTemplate from "@components/templates/drawerTemplate";
-import { repoAtom } from "@atom/repository";
 import { ERoles } from "@interface/enums";
+import { useGroupStore } from "@store/group";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   group?: IGetGroups;
@@ -13,11 +12,16 @@ interface IProps {
 }
 
 const GroupMenu = ({ group, showDrawer }: IProps) => {
-  const setEditGroupModal = useSetRecoilState(editGroupAtom);
-  const setDeleteGroupModal = useSetRecoilState(deleteGroupAtom);
-  const [getGroupDrawer, setGroupDrawer] = useRecoilState(groupDrawerAtom);
-  const setGroup = useSetRecoilState(selectedGroupAtom);
-  const getRepo = useRecoilValue(repoAtom);
+  const {
+    setEditGroup: setEditGroupModal,
+    setDeleteGroup: setDeleteGroupModal,
+    groupDrawer: getGroupDrawer,
+    setGroupDrawer,
+    setSelectedGroup: setGroup,
+  } = useGroupStore();
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
 
   const menuList = [
     {
@@ -47,7 +51,9 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
     <div className="repo-group-menu flex xs:hidden">
       <DrawerTemplate
         openDrawer={getGroupDrawer}
-        setOpenDrawer={setGroupDrawer}
+        setOpenDrawer={() => {
+          return setGroupDrawer(false);
+        }}
         menuList={menuList}
       />
     </div>

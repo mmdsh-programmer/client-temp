@@ -3,18 +3,16 @@
 import React, { useEffect } from "react";
 import { Typography } from "@material-tailwind/react";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import EditorTab from "@components/organisms/editorTab";
-import { selectedDocumentAtom } from "@atom/document";
 import useGetDocument from "@hooks/document/useGetDocument";
-import { useRecoilState } from "recoil";
 import useRepoId from "@hooks/custom/useRepoId";
 import { Spinner } from "@components/atoms/spinner";
+import { useDocumentStore } from "@store/document";
 
 const EditPage = () => {
   const currentPath = usePathname();
-  const [getSelectedDocument, setDocument] =
-    useRecoilState(selectedDocumentAtom);
+  const { selectedDocument: getSelectedDocument, setSelectedDocument: setDocument } =
+    useDocumentStore();
 
   const repoId = useRepoId();
 
@@ -31,7 +29,7 @@ const EditPage = () => {
     +documentId!,
     sharedDocuments === "true" || currentPath === "/admin/sharedDocuments",
     true,
-    true
+    true,
   );
 
   useEffect(() => {
@@ -42,16 +40,16 @@ const EditPage = () => {
 
   if (!documentId) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <h1 className="font-bold ml-2">سند مورد نظر پیدا نشد</h1>
+      <div className="flex h-screen w-full items-center justify-center">
+        <h1 className="ml-2 font-bold">سند مورد نظر پیدا نشد</h1>
       </div>
     );
   }
 
   if (isFetchingDocument) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <Typography className="font-bold ml-2">لطفا صبر کنید</Typography>
+      <div className="flex h-screen w-full items-center justify-center">
+        <Typography className="ml-2 font-bold">لطفا صبر کنید</Typography>
         <Spinner className="h-5 w-5 text-primary" />
       </div>
     );
@@ -59,8 +57,8 @@ const EditPage = () => {
 
   if (error) {
     return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <Typography className="font-bold ml-2 flex flex-col items-center">
+      <div className="flex h-screen w-full items-center justify-center">
+        <Typography className="ml-2 flex flex-col items-center font-bold">
           نسخه ای در سند مورد نظر پیدا نشد
         </Typography>
       </div>

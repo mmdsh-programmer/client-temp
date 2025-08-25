@@ -1,42 +1,29 @@
-import {
- DeleteIcon,
- EditIcon
-} from "@components/atoms/icons";
-import {
-  deleteTagAtom,
-  editTagAtom,
-  selectedTagAtom,
-  tagDrawerAtom,
-} from "@atom/tag";
-import {
- useRecoilState,
- useSetRecoilState
-} from "recoil";
-
+import React from "react";
+import { DeleteIcon, EditIcon } from "@components/atoms/icons";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import { ITag } from "@interface/tags.interface";
 import MenuTemplate from "@components/templates/menuTemplate";
-import React from "react";
 import { IDomainTag } from "@interface/domain.interface";
+import { useTagStore } from "@store/tag";
 
 interface IProps {
   tag?: ITag | IDomainTag;
   showDrawer?: boolean;
 }
 
-const TagMenu = ({
- tag, showDrawer 
-}: IProps) => {
-  const setEditTagModal = useSetRecoilState(editTagAtom);
-  const setDeleteTagModal = useSetRecoilState(deleteTagAtom);
-  const [openTagActionDrawer, setOpenTagActionDrawer] =
-    useRecoilState(tagDrawerAtom);
-  const setTag = useSetRecoilState(selectedTagAtom);
+const TagMenu = ({ tag, showDrawer }: IProps) => {
+  const {
+    setEditTag: setEditTagModal,
+    setDeleteTag: setDeleteTagModal,
+    tagDrawer: openTagActionDrawer,
+    setTagDrawer: setOpenTagActionDrawer,
+    setSelectedTag: setTag,
+  } = useTagStore();
 
   const menuList = [
     {
       text: " ویرایش تگ",
-      icon: <EditIcon className="w-4 h-4" />,
+      icon: <EditIcon className="h-4 w-4" />,
       onClick: () => {
         setEditTagModal(true);
         setOpenTagActionDrawer(false);
@@ -48,7 +35,7 @@ const TagMenu = ({
     },
     {
       text: "حذف تگ",
-      icon: <DeleteIcon className="w-4 h-4" />,
+      icon: <DeleteIcon className="h-4 w-4" />,
       onClick: () => {
         setDeleteTagModal(true);
         setOpenTagActionDrawer(false);
@@ -61,10 +48,12 @@ const TagMenu = ({
   ];
 
   return showDrawer ? (
-    <div className="tag-menu xs:hidden flex">
+    <div className="tag-menu flex xs:hidden">
       <DrawerTemplate
         openDrawer={openTagActionDrawer}
-        setOpenDrawer={setOpenTagActionDrawer}
+        setOpenDrawer={() => {
+          return setOpenTagActionDrawer(false);
+        }}
         menuList={menuList}
       />
     </div>

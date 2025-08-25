@@ -9,13 +9,13 @@ import {
 } from "@components/atoms/icons";
 import { ERepoGrouping } from "@interface/enums";
 import RepoTypeCard from "@components/molecules/repoTypeCard";
-import { repoGroupingAtom } from "@atom/repository";
 import useGetMyInfo from "@hooks/useGetMyInfo";
-import { useSetRecoilState } from "recoil";
+import { useRepositoryStore } from "@store/repository";
 
 const RepoTypesCards = () => {
-  const setRepoGroup = useSetRecoilState(repoGroupingAtom);
-
+  const setRepoGroup = useRepositoryStore((state) => {
+    return state.setRepoGrouping;
+  });
   const { data: getMyInfo } = useGetMyInfo();
 
   const repoTypeData = useMemo(() => {
@@ -40,9 +40,7 @@ const RepoTypesCards = () => {
       },
       {
         cardTitle: "مخزن‌های نشان‌شده",
-        icon: (
-          <BookmarkRepoIcon className="h-full w-full fill-icon-active" />
-        ),
+        icon: <BookmarkRepoIcon className="h-full w-full fill-icon-active" />,
         onClick: () => {
           return setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
         },
@@ -61,9 +59,8 @@ const RepoTypesCards = () => {
     ];
   }, [getMyInfo]);
 
-  
   return (
-    <div className="hidden xs:flex gap-4 flex-wrap min-w-full">
+    <div className="hidden min-w-full flex-wrap gap-4 xs:flex">
       {repoTypeData.map((item) => {
         return (
           <RepoTypeCard

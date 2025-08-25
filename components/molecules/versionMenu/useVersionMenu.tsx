@@ -1,3 +1,4 @@
+import React from "react";
 import {
   CancelVersionIcon,
   ComparisionIcon,
@@ -10,24 +11,17 @@ import {
   LastVersionIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import {
-  compareVersionAtom,
-  selectedVersionAtom,
-  versionDrawerAtom,
-  versionModalListAtom,
-} from "@atom/version";
-import { editorDataAtom, editorModalAtom, editorModeAtom } from "@atom/editor";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { IVersion } from "@interface/version.interface";
-import React from "react";
 import copy from "copy-to-clipboard";
-import { repoAtom } from "@atom/repository";
-import { selectedDocumentAtom } from "@atom/document";
 import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import { EDocumentTypes, EDraftStatus, ERoles, EVersionStatus } from "@interface/enums";
+import { useEditorStore } from "@store/editor";
+import { useRepositoryStore } from "@store/repository";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 
 interface MenuItem {
   text: string;
@@ -58,15 +52,21 @@ const useVersionMenuList = (
   lastVersion: IVersion | undefined,
   toggleModal: (modalName: keyof ModalType, value: boolean) => void,
 ): MenuItem[] => {
-  const getRepo = useRecoilValue(repoAtom);
-  const getDocument = useRecoilValue(selectedDocumentAtom);
-  const setVersion = useSetRecoilState(selectedVersionAtom);
-  const [compareVersion, setCompareVersion] = useRecoilState(compareVersionAtom);
-  const setEditorMode = useSetRecoilState(editorModeAtom);
-  const setEditorModal = useSetRecoilState(editorModalAtom);
-  const setVersionModalList = useSetRecoilState(versionModalListAtom);
-  const setVersionData = useSetRecoilState(editorDataAtom);
-  const setOpenVersionActionDrawer = useSetRecoilState(versionDrawerAtom);
+  const getRepo = useRepositoryStore((state) => {
+    return state.repo;
+  });
+  const getDocument = useDocumentStore((state) => {
+    return state.selectedDocument;
+  });
+  const {
+    setSelectedVersion: setVersion,
+    compareVersion,
+    setCompareVersion,
+    setVersionModalList,
+    setVersionDrawer: setOpenVersionActionDrawer,
+  } = useVersionStore();
+  const { setEditorMode, setEditorModal, setEditorData: setVersionData } = useEditorStore();
+
   const currentPath = usePathname();
 
   const repoId = useRepoId();

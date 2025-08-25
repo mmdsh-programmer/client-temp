@@ -17,7 +17,6 @@ import {
 import { ERoles } from "@interface/enums";
 import { IRepo } from "@interface/repo.interface";
 import React from "react";
-import { repoActivityAtom, repoAtom } from "@atom/repository";
 import { toPersianDigit } from "@utils/index";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { useFeedStore } from "@store/feed";

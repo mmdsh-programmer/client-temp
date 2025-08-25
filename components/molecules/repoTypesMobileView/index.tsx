@@ -1,61 +1,62 @@
+import React from "react";
 import {
   FolderArchiveIcon,
   FolderBookmarkIcon,
   FolderShareIcon,
   MyFolderIcon,
 } from "@components/atoms/icons";
-import { repoAtom, repoGroupingAtom } from "@atom/repository";
-import { useRecoilState, useSetRecoilState } from "recoil";
-
 import { ERepoGrouping } from "@interface/enums";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
+import { useRepositoryStore } from "@store/repository";
 
 const RepoTypesMobileView = () => {
-  const [getRepoGroup, setRepoGroup] = useRecoilState(repoGroupingAtom);
-  const setRepo = useSetRecoilState(repoAtom);
+  const {
+    repoGrouping: getRepoGroup,
+    setRepoGrouping: setRepoGroup,
+    setRepo,
+  } = useRepositoryStore();
 
   return (
-    <div className="repo-types-mobile-view w-full px-4 absolute bottom-0 xs:hidden min-h-16 h-16 bg-primary border-normal">
-      <div className="flex justify-between items-center h-full">
+    <div className="repo-types-mobile-view absolute bottom-0 h-16 min-h-16 w-full border-normal bg-primary px-4 xs:hidden">
+      <div className="flex h-full items-center justify-between">
         <div
-          className={`repo-types-mobile-view__myRepo flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.MY_REPO ? "text-primary_normal stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
+          className={`repo-types-mobile-view__myRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.MY_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
           onClick={() => {
             setRepoGroup(ERepoGrouping.MY_REPO);
             setRepo(null);
           }}
         >
-          <MyFolderIcon className="h-6 w-6 " />
+          <MyFolderIcon className="h-6 w-6" />
           <Typography className="title_t4">مخزن‌های من</Typography>
         </div>
         <div
-          className={`repo-types-mobile-view__bookmarkRepo flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "text-primary_normal stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
+          className={`repo-types-mobile-view__bookmarkRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
           onClick={() => {
             setRepoGroup(ERepoGrouping.BOOKMARK_REPO);
             setRepo(null);
           }}
         >
-          <FolderBookmarkIcon className="h-6 w-6 " />
+          <FolderBookmarkIcon className="h-6 w-6" />
           <Typography className="title_t4">نشان شده</Typography>
         </div>
         <div
-          className={`repo-types-mobile-view__accessRepo flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.ACCESS_REPO ? "text-primary_normal stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
+          className={`repo-types-mobile-view__accessRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.ACCESS_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
           onClick={() => {
             setRepoGroup(ERepoGrouping.ACCESS_REPO);
             setRepo(null);
           }}
         >
-          <FolderShareIcon className="h-6 w-6 " />
+          <FolderShareIcon className="h-6 w-6" />
           <Typography className="title_t4">اشتراکی</Typography>
         </div>
         <div
-          className={`repo-types-mobile-view__archiveRepo flex flex-col items-center cursor-pointer ${getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "text-primary_normal stroke-icon-active" : "text-gray-400 stroke-gray-400"}`}
+          className={`repo-types-mobile-view__archiveRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
           onClick={() => {
             setRepoGroup(ERepoGrouping.ARCHIVE_REPO);
             setRepo(null);
           }}
         >
-          <FolderArchiveIcon className="h-6 w-6 " />
+          <FolderArchiveIcon className="h-6 w-6" />
           <Typography className="title_t4">بایگانی شده</Typography>
         </div>
       </div>

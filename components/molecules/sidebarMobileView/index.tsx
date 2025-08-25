@@ -68,8 +68,8 @@ const SidebarMobileView = () => {
     router.push(path);
   };
 
-  const handleRepoSelection = (repoGrouping: ERepoGrouping) => {
-    setRepoGrouping(repoGrouping);
+  const handleRepoSelection = (repoGroup: ERepoGrouping) => {
+    setRepoGrouping(repoGroup);
     setShowList(false);
   };
 

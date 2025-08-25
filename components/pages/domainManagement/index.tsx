@@ -3,32 +3,29 @@
 import React, { useEffect } from "react";
 import DomainConfig from "@components/organisms/domain";
 import { Typography } from "@material-tailwind/react";
-import { repoAtom } from "@atom/repository";
-import { useResetRecoilState } from "recoil";
-import { categoryAtom, categoryShowAtom } from "@atom/category";
-import { documentShowAtom, selectedDocumentAtom } from "@atom/document";
-import { versionModalListAtom } from "@atom/version";
+import { useRepositoryStore } from "@store/repository";
+import { useCategoryStore } from "@store/category";
+import { useDocumentStore } from "@store/document";
+import { useVersionStore } from "@store/version";
 
 const DomainManagementPage = () => {
-  const resetRepo = useResetRecoilState(repoAtom);
-  const resetCategory = useResetRecoilState(categoryAtom);
-  const resetCategoryShow = useResetRecoilState(categoryShowAtom);
-  const resetDocument = useResetRecoilState(selectedDocumentAtom);
-  const resetDocumentShow = useResetRecoilState(documentShowAtom);
-  const resetShowVersionList = useResetRecoilState(versionModalListAtom);
+  const { setRepo } = useRepositoryStore();
+  const { setCategory, setCategoryShow } = useCategoryStore();
+  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { setVersionModalList } = useVersionStore();
 
   useEffect(() => {
-    resetRepo();
-    resetCategory();
-    resetCategoryShow();
-    resetDocument();
-    resetDocumentShow();
-    resetShowVersionList();
+    setRepo(null);
+    setCategory(null);
+    setCategoryShow(null);
+    setSelectedDocument(null);
+    setDocumentShow(null);
+    setVersionModalList(false);
   }, []);
 
   return (
     <div className="flex h-full flex-col gap-6 overflow-hidden">
-      <div className="domain-header flex items-center justify-between px-4 pt-4 xs:p-0" >
+      <div className="domain-header flex items-center justify-between px-4 pt-4 xs:p-0">
         <Typography className="title_t1 text-primary_normal">مدیریت دامنه</Typography>
       </div>
       <div className="h-[calc(100%-50px)] rounded-lg bg-white shadow-small">

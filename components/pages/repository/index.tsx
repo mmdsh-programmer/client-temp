@@ -1,20 +1,23 @@
 "use client";
 
 import React from "react";
-import { bulkItemsAtom } from "atom/bulk";
 import CategoryBulk from "@components/molecules/categoryBulk";
-import { useRecoilState, useRecoilValue } from "recoil";
 import RepoInfo from "@components/organisms/repoInfo";
 import CategoryList from "@components/organisms/category";
 import VersionDialogView from "@components/organisms/versionView/versionDialogView";
-import { versionModalListAtom } from "@atom/version";
-import { editorModalAtom } from "@atom/editor";
 import Editor from "@components/organisms/dialogs/editor";
+import { useVersionStore } from "@store/version";
+import { useBulkStore } from "@store/bulk";
+import { useEditorStore } from "@store/editor";
 
 const Repository = () => {
-  const getShowVersionList = useRecoilValue(versionModalListAtom);
-  const getBulkItems = useRecoilValue(bulkItemsAtom);
-  const [getEditorModal, setEditorModal] = useRecoilState(editorModalAtom);
+  const getShowVersionList = useVersionStore((state) => {
+    return state.versionModalList;
+  });
+  const getBulkItems = useBulkStore((state) => {
+    return state.bulkItems;
+  });
+  const { editorModal: getEditorModal, setEditorModal } = useEditorStore();
 
   return (
     <div className="flex flex-col gap-4 xs:gap-6">
