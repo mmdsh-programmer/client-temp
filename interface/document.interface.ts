@@ -194,3 +194,15 @@ export interface IWhiteList {
   blackList: IWhiteListItem[];
   whiteList: IWhiteListItem[];
 }
+
+export interface IDocumentWhiteListRequest {
+  documentId: number;
+  documentName: string;
+  id: number;
+  repoId: number;
+  repoName: string;
+  type: string;
+  userFullName: string;
+  userSSOID: number;
+  username: string;
+}

@@ -6,32 +6,30 @@ import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
 import { toast } from "react-toastify";
-import useBlockCategory from "@hooks/category/useBlockCategory";
-import useGetCategoryBlocklist from "@hooks/category/useGetCategoryBlocklist";
 import { useRepositoryStore } from "@store/repository";
-import { useCategoryStore } from "@store/category";
+import useGetDocumentBlocklist from "@hooks/document/useGetDocumentBlocklist";
+import { useDocumentStore } from "@store/document";
+import useBlockDocument from "@hooks/document/useBlockDocument";
 
-const CategoryBlockList = () => {
+const DocumentBlockList = () => {
   const getRepo = useRepositoryStore((state) => {
     return state.repo;
   });
-  const category = useCategoryStore((state) => {
-    return state.category;
-  });
+  const { selectedDocument } = useDocumentStore();
 
   const {
     data: getDocumentBlockList,
     isFetching,
     isLoading,
-  } = useGetCategoryBlocklist(getRepo!.id, category!.id, 20);
-  const blockDocument = useBlockCategory();
+  } = useGetDocumentBlocklist(getRepo!.id, selectedDocument!.id, 20);
+  const blockDocument = useBlockDocument();
 
   const handleDelete = (username: string) => {
-    if (!getRepo || !category) return;
+    if (!getRepo || !selectedDocument) return;
     if (!username) return;
     blockDocument.mutate({
       repoId: getRepo.id,
-      categoryId: category.id,
+      documentId: selectedDocument.id,
       username,
       type: "unblock",
       callBack: () => {
@@ -47,7 +45,7 @@ const CategoryBlockList = () => {
         {isLoading || isFetching ? (
           <Spinner className="h-6 w-6 text-primary" />
         ) : (
-          <div className="category-block-list flex flex-wrap gap-2">
+          <div className="document-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
               return page.list.length ? (
                 page.list.map((blockItem) => {
@@ -95,4 +93,4 @@ const CategoryBlockList = () => {
   );
 };
 
-export default CategoryBlockList;
+export default DocumentBlockList;

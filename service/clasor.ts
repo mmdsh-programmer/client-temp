@@ -35,6 +35,7 @@ import {
   IClasorField,
   IDocument,
   IDocumentMetadata,
+  IDocumentWhiteListRequest,
   IWhiteList,
 } from "@interface/document.interface";
 import { IContentSearchListItem, IContentSearchResult } from "@interface/contentSearch.interface";
@@ -1695,6 +1696,26 @@ export const getPublishDocumentInfo = async (
       {
         params: {
           disableVersions,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishDocumentUserList = async (
+  accessToken: string | undefined,
+  repoId: number,
+  documentId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IWhiteList>>(
+      `repositories/${repoId}/documents/${documentId}/getUserList`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
@@ -3370,7 +3391,6 @@ export const getPublishChildren = async (
   offset: number,
   size: number,
   categoryId?: number,
-  ssoId?: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -3406,7 +3426,6 @@ export const getPublishChildren = async (
           parentId: categoryId,
           offset,
           size,
-          userssoid: ssoId,
         },
       },
     );
@@ -3487,6 +3506,96 @@ export const getDomainPublishRepoList = async (
         params: {
           offset,
           size,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const addToWhiteListRequest = async (accessToken: string, repoId: number, docId: number) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/whiteList/requests`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getWhiteListRequest = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IDocumentWhiteListRequest>>
+    >(`repositories/${repoId}/documents/${docId}/whiteList/requests`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const acceptWhiteListRequest = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  requestId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/whiteList/requests/${requestId}/accept`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const rejectWhiteListRequest = async (
+  accessToken: string,
+  repoId: number,
+  docId: number,
+  requestId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/documents/${docId}/whiteList/requests/${requestId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );

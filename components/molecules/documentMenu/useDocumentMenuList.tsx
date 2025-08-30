@@ -52,6 +52,7 @@ type Modals = {
   createPublishLink: boolean;
   deletePublishLink: boolean;
   documentPublicVersion: boolean;
+  documentWhiteListRequests: boolean;
 };
 
 const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps) => {
@@ -348,6 +349,23 @@ const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps
       },
       className: "document-access",
     },
+    ...(document?.hasWhiteList ? 
+      [{
+        text: "درخواست‌های دسترسی به سند",
+        icon: <LockIcon className="h-4 w-4" />,
+        disabled:
+          currentPath === "/admin/myDocuments" ||
+          currentPath === "/admin/sharedDocuments" ||
+          currentPath === "/admin/dashboard" ||
+          getRepo?.roleName === ERoles.writer ||
+          getRepo?.roleName === ERoles.viewer ||
+          getRepo?.roleName === ERoles.editor,
+        onClick: () => {
+          toggleModal("documentWhiteListRequests", true);
+          if (document) setDocument(document);
+        },
+        className: "document-white-list-requests",
+      }] : []),
     ...(document?.isPublish
       ? [
           {

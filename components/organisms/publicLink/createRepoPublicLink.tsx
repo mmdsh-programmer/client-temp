@@ -45,7 +45,7 @@ interface IData {
 }
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setOpen: (open: boolean | null) => void;
 }
 
 const CreateRepoPublicLink = ({ setOpen }: IProps) => {

@@ -2,6 +2,7 @@
 
 import { IActionError, IReportFilter } from "@interface/app.interface";
 import {
+  acceptWhiteListRequest,
   addToDocumentBlackList,
   addToDocumentWhiteList,
   addUserToDocumentBlocklist,
@@ -22,7 +23,9 @@ import {
   getDocumentPublishLink,
   getDocumentWhiteBlackList,
   getUserDocument,
+  getWhiteListRequest,
   publicLastVersion,
+  rejectWhiteListRequest,
   updateDocumentPassword,
 } from "@service/clasor";
 
@@ -50,7 +53,7 @@ export const getDocumentAction = async (
   isDirectAccess?: boolean,
   offset?: number,
   size?: number,
-  disableVersions?: boolean
+  disableVersions?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -61,7 +64,7 @@ export const getDocumentAction = async (
       isDirectAccess,
       offset,
       size,
-      disableVersions
+      disableVersions,
     );
 
     return response;
@@ -79,7 +82,7 @@ export const createDocumentAction = async (
   description?: string,
   order?: number | null,
   imageUrl?: string,
-  publicKeyId?: string
+  publicKeyId?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -93,7 +96,7 @@ export const createDocumentAction = async (
       description,
       order,
       imageUrl,
-      publicKeyId
+      publicKeyId,
     );
 
     return response;
@@ -127,7 +130,7 @@ export const createDocumentTemplateAction = async (
       description,
       order,
       imageUrl,
-      publicKeyId
+      publicKeyId,
     );
 
     return response;
@@ -146,7 +149,7 @@ export const editDocumentAction = async (
   order?: number | null,
   isHidden?: boolean,
   tagIds?: number[],
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   const domain = await getDomainHost();
@@ -166,12 +169,11 @@ export const editDocumentAction = async (
       order,
       isHidden,
       tagIds,
-      isDirectAccess
+      isDirectAccess,
     );
 
     // revalidate page of document if exists
     revalidateTag(`dc-${documentId}`);
-
 
     return response;
   } catch (error) {
@@ -179,21 +181,14 @@ export const editDocumentAction = async (
   }
 };
 
-export const deleteDocumentAction = async (
-  repoId: number,
-  documentId: number
-) => {
+export const deleteDocumentAction = async (repoId: number, documentId: number) => {
   const userInfo = await getMe();
   const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
   }
   try {
-    const response = await deleteDocument(
-      userInfo.access_token,
-      repoId,
-      documentId
-    );
+    const response = await deleteDocument(userInfo.access_token, repoId, documentId);
 
     // revalidate page of document if exists
     revalidateTag(`dc-${documentId}`);
@@ -210,7 +205,7 @@ export const getUserDocumentAction = async (
   offset: number,
   size: number,
   filters: IReportFilter | null | undefined,
-  reportType: "myDocuments" | "myAccessDocuments" | null
+  reportType: "myDocuments" | "myAccessDocuments" | null,
 ) => {
   const userInfo = await getMe();
   const domain = await getDomainHost();
@@ -228,7 +223,7 @@ export const getUserDocumentAction = async (
       size,
       filters,
       reportType,
-      domainInfo.types
+      domainInfo.types,
     );
 
     return response;
@@ -240,16 +235,11 @@ export const getUserDocumentAction = async (
 export const bookmarkDocumentAction = async (
   repoId: number,
   documentId: number,
-  detach?: boolean
+  detach?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await bookmarkDocument(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      detach
-    );
+    const response = await bookmarkDocument(userInfo.access_token, repoId, documentId, detach);
 
     return response;
   } catch (error) {
@@ -261,7 +251,7 @@ export const getDocumentBlocklistAction = async (
   repoId: number,
   documentId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   const userInfo = await getMe();
   try {
@@ -270,7 +260,7 @@ export const getDocumentBlocklistAction = async (
       repoId,
       documentId,
       offset,
-      size
+      size,
     );
 
     return response;
@@ -283,7 +273,7 @@ export const addUserToDocumentBlocklistAction = async (
   repoId: number,
   documentId: number,
   username: string,
-  type: "block" | "unblock"
+  type: "block" | "unblock",
 ) => {
   const userInfo = await getMe();
   try {
@@ -292,7 +282,7 @@ export const addUserToDocumentBlocklistAction = async (
       repoId,
       documentId,
       username,
-      type
+      type,
     );
 
     return response;
@@ -301,17 +291,10 @@ export const addUserToDocumentBlocklistAction = async (
   }
 };
 
-export const getDocumentWhiteBlackListAction = async (
-  repoId: number,
-  documentId: number
-) => {
+export const getDocumentWhiteBlackListAction = async (repoId: number, documentId: number) => {
   const userInfo = await getMe();
   try {
-    const response = await getDocumentWhiteBlackList(
-      userInfo.access_token,
-      repoId,
-      documentId
-    );
+    const response = await getDocumentWhiteBlackList(userInfo.access_token, repoId, documentId);
 
     return response;
   } catch (error) {
@@ -322,7 +305,7 @@ export const getDocumentWhiteBlackListAction = async (
 export const addToDocumentBlackListAction = async (
   repoId: number,
   documentId: number,
-  usernameList: string[]
+  usernameList: string[],
 ) => {
   const userInfo = await getMe();
   try {
@@ -330,7 +313,7 @@ export const addToDocumentBlackListAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      usernameList
+      usernameList,
     );
 
     // revalidate page of document if exists
@@ -345,7 +328,7 @@ export const addToDocumentBlackListAction = async (
 export const addToDocumentWhiteListAction = async (
   repoId: number,
   documentId: number,
-  usernameList: string[]
+  usernameList: string[],
 ) => {
   const userInfo = await getMe();
   try {
@@ -353,9 +336,8 @@ export const addToDocumentWhiteListAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      usernameList
+      usernameList,
     );
-
 
     // revalidate page of document if exists
     revalidateTag(`dc-${documentId}`);
@@ -369,7 +351,7 @@ export const addToDocumentWhiteListAction = async (
 export const createDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  password: string
+  password: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -377,7 +359,7 @@ export const createDocumentPasswordAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      password
+      password,
     );
 
     // revalidate page of document if exists
@@ -393,7 +375,7 @@ export const updateDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
   oldPassword: string | undefined,
-  newPassword: string
+  newPassword: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -402,7 +384,7 @@ export const updateDocumentPasswordAction = async (
       repoId,
       documentId,
       oldPassword,
-      newPassword
+      newPassword,
     );
 
     return response;
@@ -414,7 +396,7 @@ export const updateDocumentPasswordAction = async (
 export const deleteDocumentPasswordAction = async (
   repoId: number,
   documentId: number,
-  oldPassword: string
+  oldPassword: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -422,7 +404,7 @@ export const deleteDocumentPasswordAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      oldPassword
+      oldPassword,
     );
 
     return response;
@@ -434,7 +416,7 @@ export const deleteDocumentPasswordAction = async (
 export const documentEnableUserGroupHashAction = async (
   repoId: number,
   documentId: number,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -442,7 +424,7 @@ export const documentEnableUserGroupHashAction = async (
       userInfo.access_token,
       repoId,
       documentId,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -493,17 +475,10 @@ export const getDocumentPublishLinkAction = async (
   }
 };
 
-export const deleteDocumentPublishLinkAction = async (
-  repoId: number,
-  documentId: number
-) => {
+export const deleteDocumentPublishLinkAction = async (repoId: number, documentId: number) => {
   try {
     const userInfo = await getMe();
-    const response = await deleteDocumentPublishLink(
-      userInfo.access_token,
-      repoId,
-      documentId
-    );
+    const response = await deleteDocumentPublishLink(userInfo.access_token, repoId, documentId);
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);
@@ -514,7 +489,7 @@ export const publicLastVersionAction = async (
   repoId: number,
   documentId: number,
   isDirectAccess?: boolean,
-  draftId?: number
+  draftId?: number,
 ) => {
   const userInfo = await getMe();
   const domain = await getDomainHost();
@@ -528,7 +503,7 @@ export const publicLastVersionAction = async (
       repoId,
       documentId,
       isDirectAccess,
-      draftId
+      draftId,
     );
 
     // revalidate page of version if exists
@@ -537,6 +512,65 @@ export const publicLastVersionAction = async (
     // revalidate empty page of document if exists
     revalidateTag(`dc-${documentId}`);
 
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getWhiteListRequestAction = async (
+  repoId: number,
+  documentId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await getWhiteListRequest(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      offset,
+      size,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const acceptWhiteListRequestAction = async (
+  repoId: number,
+  documentId: number,
+  requestId: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await acceptWhiteListRequest(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      requestId,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const rejectWhiteListRequestAction = async (
+  repoId: number,
+  documentId: number,
+  requestId: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await rejectWhiteListRequest(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      requestId,
+    );
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

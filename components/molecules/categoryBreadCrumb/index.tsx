@@ -11,7 +11,7 @@ const CategoryBreadCrumb = () => {
   });
   const [getCategoryShow, setCategoryShow] = [
     useCategoryStore((state) => {
-      return state.category;
+      return state.categoryShow;
     }),
     useCategoryStore((state) => {
       return state.setCategoryShow;

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import useDeleteGroup from "@hooks/group/useDeleteGroup";
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
+  setOpen: (open: boolean | null) => void;
 }
 
 const GroupDeleteDialog = ({ setOpen }: IProps) => {

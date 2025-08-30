@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { RecoilRoot } from "recoil";
 import { ThemeProvider } from "@material-tailwind/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
@@ -27,7 +26,7 @@ const MainProvider = ({ children }: IProps) => {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <RecoilRoot>{children}</RecoilRoot>
+        {children}
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <ToastContainer

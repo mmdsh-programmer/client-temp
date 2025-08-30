@@ -93,7 +93,7 @@ const TableView = ({
                             });
                           },
                           className:
-                            "categoryOrder whitespace-nowrap hidden !px-1 xl:table-cell !max-w-[70px] !w-[70px]",
+                            "categoryOrder whitespace-nowrap hidden !px-1 xl:flex !max-w-[70px] !w-[70px]",
                         },
                     {
                       key: "name",

@@ -36,6 +36,7 @@ export enum EEmptyList {
   BRANCH_USERS = "branch_users",
   DOMAIN_USERS = "domain_users",
   FOLLOWING_REPO = "following-repo",
+  WHITE_LIST_REQUESTS = "white_list_requests",
 }
 
 interface IProps {
@@ -286,6 +287,14 @@ const EmptyList = ({ type }: IProps) => {
           <div className="flex flex-col items-center justify-center">
             <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
               شما در حال حاضر مخزنی را دنبال نکرده‌اید.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.WHITE_LIST_REQUESTS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+              شما در حال حاضر درخواست دسترسی به سند وجود ندارد.
             </Typography>
           </div>
         );

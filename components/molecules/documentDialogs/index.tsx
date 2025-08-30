@@ -15,6 +15,7 @@ import DocumentDirectAccessDialog from "@components/organisms/dialogs/document/d
 import DocumentCreatePublishLinkDialog from "@components/organisms/dialogs/document/documentCreatePublishLinkDialog";
 import DocumentDeletePublishLinkDialog from "@components/organisms/dialogs/document/documentDeletePublishLinkDialog";
 import DocumentPublicVersionDialog from "@components/organisms/dialogs/document/documentPublicVersionDialog";
+import DocumentWhiteListRequestsDialog from "@components/organisms/dialogs/document/documentWhiteListRequestsDialog";
 
 interface DocumentDialogsProps {
   modalsState: {
@@ -36,11 +37,12 @@ interface DocumentDialogsProps {
     createPublishLink: boolean;
     deletePublishLink: boolean;
     documentPublicVersion: boolean;
+    documentWhiteListRequests: boolean;
   };
   toggleModal: (modalName: keyof DocumentDialogsProps["modalsState"], value: boolean) => void;
 }
 
-const  DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleModal }) => {
+const DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleModal }) => {
   return (
     <>
       {modalsState.deleteDocument ? (
@@ -152,6 +154,13 @@ const  DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleM
         <DocumentPublicVersionDialog
           setOpen={() => {
             return toggleModal("documentPublicVersion", false);
+          }}
+        />
+      ) : null}
+      {modalsState.documentWhiteListRequests ? (
+        <DocumentWhiteListRequestsDialog
+          setOpen={() => {
+            return toggleModal("documentWhiteListRequests", false);
           }}
         />
       ) : null}

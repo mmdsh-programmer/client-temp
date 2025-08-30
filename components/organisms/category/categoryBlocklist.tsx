@@ -12,15 +12,11 @@ import useBlockCategory from "@hooks/category/useBlockCategory";
 import useGetCategoryBlocklist from "@hooks/category/useGetCategoryBlocklist";
 
 const CategoryBlockList = () => {
-  const getRepo = useRepositoryStore((s) => {
-    return s.repo;
-  });
-  const category = useCategoryStore((s) => {
-    return s.category;
-  });
+  const { repo: getRepo } = useRepositoryStore();
+  const { category } = useCategoryStore();
 
   const {
-    data: getDocumentBlockList,
+    data: getCategoryBlockList,
     isFetching,
     isLoading,
   } = useGetCategoryBlocklist(getRepo!.id, category!.id, 20);
@@ -48,7 +44,7 @@ const CategoryBlockList = () => {
           <Spinner className="h-6 w-6 text-primary" />
         ) : (
           <div className="category-block-list flex flex-wrap gap-2">
-            {getDocumentBlockList?.pages.map((page) => {
+            {getCategoryBlockList?.pages.map((page) => {
               return page.list.length ? (
                 page.list.map((blockItem) => {
                   return (

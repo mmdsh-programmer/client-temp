@@ -2,6 +2,7 @@
 
 import { confirmComment, createComment, getPublishCommentList } from "@service/social";
 import {
+  addToWhiteListRequest,
   createRepoPublishLink,
   deletePublishLink,
   getAllPublishChildren,
@@ -10,7 +11,6 @@ import {
   searchPublishContent,
 } from "@service/clasor";
 import { getMe, userInfoAction } from "./auth";
-
 import { IActionError } from "@interface/app.interface";
 import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -58,10 +58,8 @@ export const getPublishChildrenAction = async (
   size: number,
   categoryId?: number,
 ) => {
-  const userInfo = await userInfoAction();
   try {
-    const ssoId = userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
-    const response = await getPublishChildren(repoId, offset, size, categoryId, ssoId);
+    const response = await getPublishChildren(repoId, offset, size, categoryId);
 
     return response;
   } catch (error) {
@@ -154,6 +152,20 @@ export const createPublishCommentAction = async (
     if (shouldConfirm) {
       await confirmComment(response.result);
     }
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const addToWhiteListRequestAction = async (
+  repoId: number,
+  docId: number,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await addToWhiteListRequest(userInfo.access_token, repoId, docId);
 
     return response;
   } catch (error) {
