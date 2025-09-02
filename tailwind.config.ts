@@ -8,9 +8,9 @@ module.exports = withMT({
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/clasor-content-preview/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/not-found.{js,ts,jsx,tsx,mdx}",
+    "./app/notFound.{js,ts,jsx,tsx,mdx}",
   ],
-  darkMode: ["class", '[data-mode="dark"]'],
+  darkMode: ["class", "[data-mode=\"dark\"]"],
   theme: {
     extend: {
       colors: {

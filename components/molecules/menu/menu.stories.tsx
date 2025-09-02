@@ -34,14 +34,14 @@ export const SmallVariant: StoryObj<typeof MenuComponent> = {
         text: "جستجو",
         icon: <span>🔍</span>,
         onClick: () => {
-          return alert("Small Item 1 clicked");
+          return console.log("Small Item 1 clicked");
         },
       },
       {
         text: "تنظیمات",
         icon: <span>⚙️</span>,
         onClick: () => {
-          return alert("Small Item 2 clicked");
+          return console.log("Small Item 2 clicked");
         },
       },
     ],
@@ -58,14 +58,14 @@ export const MediumVariant: StoryObj<typeof MenuComponent> = {
         text: "جستجو",
         icon: <span>🔍</span>,
         onClick: () => {
-          return alert("Medium Item 1 clicked");
+          return console.log("Medium Item 1 clicked");
         },
       },
       {
         text: "تنظیمات",
         icon: <span>⚙️</span>,
         onClick: () => {
-          return alert("Medium Item 2 clicked");
+          return console.log("Medium Item 2 clicked");
         },
       },
     ],
@@ -82,14 +82,14 @@ export const LargeVariant: StoryObj<typeof MenuComponent> = {
         text: "جستجو",
         icon: <span>🔍</span>,
         onClick: () => {
-          return alert("Large Item 1 clicked");
+          return console.log("Large Item 1 clicked");
         },
       },
       {
         text: "تنظیمات",
         icon: <span>⚙️</span>,
         onClick: () => {
-          return alert("Large Item 2 clicked");
+          return console.log("Large Item 2 clicked");
         },
       },
     ],

@@ -41,9 +41,9 @@ const nextConfig = {
     }
     return [];
   },
-  experimental: {
-    cacheHandler: "./cacheHandler.mjs",
-  },
+  // experimental: {
+  //   cacheHandler: "./cacheHandler.mjs",
+  // },
 };
 
 module.exports = nextConfig;
