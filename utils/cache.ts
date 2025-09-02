@@ -62,7 +62,7 @@ export const cacheWithKey = async (
 // Next.js cache tag generation (for compatibility with existing code)
 export const generateCachePageTag = async (tag: string[], revalidate = 24 * 3600) => {
   try {
-    await fetch(`${process.env.BACKEND_URL}/v1`, {
+    await fetch(`${process.env.BACKEND_URL}`, {
       next: {
         tags: tag,
         revalidate,
