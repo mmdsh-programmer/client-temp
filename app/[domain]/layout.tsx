@@ -9,9 +9,6 @@ import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
-  params: Promise <{
-    domain: string;
-  }>;
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
@@ -25,7 +22,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   } else {
     const domain = awaitedParams;
     domainUrl = decodeKey(domain);
-     }
+  }
 
   try {
     const { content } = await getCustomPostByDomain(domainUrl);
@@ -46,11 +43,9 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   }
 }
 
-const DomainLayout = async ({ children, params }: IProps) => {
-  const { domain } = await params;
-
+const DomainLayout = async ({ children }: IProps) => {
   return (
-    <ThemeLoaderProvider domain={domain}>
+    <ThemeLoaderProvider>
       <>
         <MainProvider>
           <LayoutTransitionProvider

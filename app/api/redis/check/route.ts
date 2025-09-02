@@ -7,21 +7,21 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const client = await getRedisClient();
-    if(!client || !client.isReady){
-      return NextResponse.json({ error: "Failed to retrieve data" }, { status: 500 });
+
+    if (!client || !client.isReady) {
+      return NextResponse.json(
+        { error: "Redis is not connected" },
+        { status: 500 }
+      );
     }
-  
-    
-    if(client && client.isReady){
-      await client.set("ping", "pong");
-      const value = await client.get("ping");
-      return NextResponse.json({ data : value });
-    }
-    return NextResponse.json({ message : "Redis is not connected"  });
+
+    const pong = await client.ping();
+
+    return NextResponse.json({ data: pong });
   } catch (error) {
     console.error("Redis GET Error:", error);
     return NextResponse.json(
-      { error: "Failed to retrieve data" },
+      { error: "Failed to connect to Redis" },
       { status: 500 }
     );
   }

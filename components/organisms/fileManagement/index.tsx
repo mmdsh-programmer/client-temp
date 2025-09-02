@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { ClasorFileManagement, IFile } from "cls-file-management";
+import { ClasorFileManagement } from "cls-file-management";
 import React, { useCallback, useState } from "react";
 import FileManagementDialog from "@components/templates/dialog/fileManagementDialog";
 import axios from "axios";
@@ -12,6 +12,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
 import useRenameFile from "@hooks/files/useRenameFile";
 import { useRepositoryStore } from "@store/repository";
+import { IFile } from "@interface/file.interface";
 
 const fileTablePageSize = 20;
 
@@ -203,7 +204,7 @@ const Files = ({
       }}
       handleSelect={handleSelect}
     >
-      {/* <ClasorFileManagement
+      <ClasorFileManagement
         files={files}
         cropMode={false}
         isFetching={isFetching}
@@ -223,9 +224,7 @@ const Files = ({
         onSearchFile={(search?: string) => {
           setName(search);
         }}
-      /> */}
-
-      ااااااا
+      />
     </FileManagementDialog>
   );
 };

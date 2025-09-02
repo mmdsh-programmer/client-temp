@@ -213,6 +213,6 @@ export const CacheHandler = {
 };
 
 // Legacy support for existing code
-CacheHandler.onCreation = CacheHandler.onCreation;
+CacheHandler.onCreation();
 
 export default CacheHandler;
