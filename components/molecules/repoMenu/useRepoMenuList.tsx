@@ -222,7 +222,9 @@ const useRepoMenuList = (
         "مخزن منتشرشده",
         <PublishIcon className="h-4 w-4 fill-icon-active stroke-0" />,
         () => {
-          const url = `/publish/${toPersianDigit(repo.name.replaceAll(/\s+/g, "-"))}/${repo.id}`;
+          const url = toPersianDigit(
+              `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
+            );
           window.open(url, "_blank");
         },
       ),
