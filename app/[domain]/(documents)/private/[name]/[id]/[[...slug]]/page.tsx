@@ -25,7 +25,7 @@ import RedirectPage from "@components/pages/redirectPage";
 import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
-import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
+import PublishDocumentAccessWrapper from "@components/pages/publish/@publishDocumentAccessWrapper";
 
 type PublishContentPageProps = {
   params: Promise<{ domain: string; name: string; id: string; slug?: string[] }>;
