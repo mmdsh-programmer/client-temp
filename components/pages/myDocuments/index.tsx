@@ -8,31 +8,23 @@ import VersionDialogView from "@components/organisms/versionView/versionDialogVi
 import { useVersionStore } from "@store/version";
 import { useBulkStore } from "@store/bulk";
 import { useEditorStore } from "@store/editor";
+import { useSearchParams } from "next/navigation";
 import { useRepositoryStore } from "@store/repository";
-import { useCategoryStore } from "@store/category";
-import { useDocumentStore } from "@store/document";
 
 const MyDocumentsPage = () => {
-  const getShowVersionList = useVersionStore((state) => {
-    return state.versionModalList;
-  });
-  const getBulkItems = useBulkStore((state) => {
-    return state.bulkItems;
-  });
+  const searchParams = useSearchParams();
+  const repoId = searchParams?.get("repoId");
+
+  const { setRepositoryId } = useRepositoryStore();
+  const { versionModalList: getShowVersionList } = useVersionStore();
+  const { bulkItems: getBulkItems } = useBulkStore();
   const { editorModal: getEditorModal, setEditorModal } = useEditorStore();
-  const { setRepo } = useRepositoryStore();
-  const { setCategory, setCategoryShow } = useCategoryStore();
-  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
-  const { setBulkItems } = useBulkStore();
 
   useEffect(() => {
-    setRepo(null);
-    setCategory(null);
-    setCategoryShow(null);
-    setSelectedDocument(null);
-    setDocumentShow(null);
-    setBulkItems([]);
-  }, []);
+    if (repoId) {
+      setRepositoryId(+repoId);
+    }
+  }, [repoId]);
 
   return (
     <div className="flex flex-col gap-4 xs:gap-6">

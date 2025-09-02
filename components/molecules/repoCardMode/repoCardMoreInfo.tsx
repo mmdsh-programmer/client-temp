@@ -3,21 +3,17 @@ import { IRepo } from "@interface/repo.interface";
 import ImageComponent from "@components/atoms/image";
 import ProgressBar from "@components/molecules/progressBar";
 import { UserIcon } from "@components/atoms/icons";
-import { useRepoInfoStore } from "@store/repository";
 import useGetReport from "@hooks/report/useGetReport";
 import useGetUsers from "@hooks/user/useGetRepoUsers";
 import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   repo: IRepo;
+  setRepoInfo: React.Dispatch<React.SetStateAction<IRepo | null>>;
 }
 
-const RepoCardMoreInfo = ({ repo }: IProps) => {
+const RepoCardMoreInfo = ({ repo, setRepoInfo }: IProps) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const setRepoInfo = useRepoInfoStore((state) => {
-    return state.setRepoInfo;
-  });
 
   const accessRoles = repo.roleName === "admin" || repo.roleName === "owner";
   const { data: users, isFetching } = useGetUsers(repo.id, 3, accessRoles);
@@ -26,7 +22,7 @@ const RepoCardMoreInfo = ({ repo }: IProps) => {
 
   const handleClickOutside = (event: MouseEvent) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setRepoInfo(undefined);
+      setRepoInfo(null);
     }
   };
 

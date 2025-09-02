@@ -1,14 +1,17 @@
 /* eslint-disable no-nested-ternary */
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { EEmptyList } from "@components/molecules/emptyList";
 import TabComponent from "@components/molecules/tab";
 import useGetAllRepositories from "@hooks/repository/useGetAllRepositories";
 import CardView from "../repoView/cardView";
 import useGetMyRepoList from "@hooks/repository/useGetMyRepoList";
 import useGetAccessList from "@hooks/repository/useGetAccessList";
-import RepoMenu from "@components/molecules/repoMenu";
 import { IRepoView } from "@interface/repo.interface";
 import { Typography } from "@material-tailwind/react";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import RepoDialogs from "@components/molecules/repoDialogs";
+import { useRepoActionDrawerStore, useRepositoryStore } from "@store/repository";
+import useRepoMenuList from "@components/molecules/repoMenu/useRepoMenuList";
 
 export enum ETabs {
   ALL_REPO = "همه‌ی مخزن‌ها",
@@ -18,6 +21,29 @@ export enum ETabs {
 
 const DashboardRepositories = () => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.ALL_REPO);
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { repo, setRepo } = useRepositoryStore();
+  const { openRepoActionDrawer, setOpenRepoActionDrawer } = useRepoActionDrawerStore();
+
+  const handleSetModal = useCallback(
+    (modalName: string) => {
+      if (repo) {
+        setRepo(repo);
+        setActiveModal(modalName);
+      }
+    },
+    [repo, setRepo],
+  );
+
+  const menuList = useRepoMenuList(repo, handleSetModal).map((item) => {
+    return {
+      ...item,
+      onClick: () => {
+        item.onClick();
+        setOpenRepoActionDrawer(false);
+      },
+    };
+  });
 
   const {
     data: allRepoList,
@@ -83,7 +109,7 @@ const DashboardRepositories = () => {
 
   const renderList = () => {
     return (
-      <div className="min-h-[calc(100vh-220px)] h-[calc(100vh-220px)] overflow-auto">
+      <div className="h-[calc(100vh-220px)] min-h-[calc(100vh-220px)] overflow-auto">
         <CardView {...commonProps} />
       </div>
     );
@@ -117,7 +143,19 @@ const DashboardRepositories = () => {
           setActiveTab={setActiveTab}
         />
       </div>
-      <RepoMenu showDrawer />
+      <div className="xs:hidden">
+        <DrawerTemplate
+          openDrawer={openRepoActionDrawer}
+          setOpenDrawer={setOpenRepoActionDrawer}
+          menuList={menuList}
+        />
+      </div>
+      <RepoDialogs
+        activeModal={activeModal}
+        closeModal={() => {
+          return setActiveModal(null);
+        }}
+      />
     </div>
   );
 };

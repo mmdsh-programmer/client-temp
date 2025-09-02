@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { IRepo, IPublicKey } from "@interface/repo.interface";
 import { ERepoGrouping } from "@interface/enums";
+import { devtools } from "zustand/middleware";
+import { logger } from "./logger";
 
 interface RepositoryState {
   repo: IRepo | null;
@@ -11,42 +14,50 @@ interface RepositoryState {
   setRepositoryId: (id: number | null) => void;
 }
 
-export const useRepositoryStore = create<RepositoryState>((set) => {
-  return {
-    repo: null,
-    setRepo: (repo) => {
-      if (repo) {
-        localStorage.setItem("CLASOR:SELECTED_REPO", JSON.stringify(repo));
-      } else {
-        localStorage.removeItem("CLASOR:SELECTED_REPO");
-      }
-      set({ repo });
-    },
-    repoGrouping: ERepoGrouping.DASHBOARD,
-    setRepoGrouping: (group) => {
-      set({ repoGrouping: group });
-    },
-    repositoryId: null,
-    setRepositoryId: (id) => {
-      set({ repositoryId: id });
-    },
-  };
-});
+export const useRepositoryStore = create<RepositoryState>()(
+  devtools(
+    logger((set) => {
+      return {
+        repo: null,
+        setRepo: (repo) => {
+          if (repo) {
+            localStorage.setItem("CLASOR:SELECTED_REPO", JSON.stringify(repo));
+          } else {
+            localStorage.removeItem("CLASOR:SELECTED_REPO");
+          }
+          (set as any)({ repo }, false, "setRepo");
+        },
+        repoGrouping: ERepoGrouping.DASHBOARD,
+        setRepoGrouping: (group) => {
+          (set as any)({ repoGrouping: group }, false, "repoGrouping");
+        },
+        repositoryId: null,
+        setRepositoryId: (id) => {
+          set({ repositoryId: id });
+        },
+      };
+    }),
+    { name: "RepositoryStore" },
+  ),
+);
 
-// Zustand store for repoInfo (replaces repoInfoAtom)
 export const useRepoInfoStore = create<{
   repoInfo: IRepo | undefined;
   setRepoInfo: (repo: IRepo | undefined) => void;
-}>((set) => {
-  return {
-    repoInfo: undefined,
-    setRepoInfo: (repo) => {
-      return set({ repoInfo: repo });
-    },
-  };
-});
+}>()(
+  devtools(
+    logger((set) => {
+      return {
+        repoInfo: undefined,
+        setRepoInfo: (repo) => {
+          return set({ repoInfo: repo });
+        },
+      };
+    }),
+    { name: "RepoInfoStore" },
+  ),
+);
 
-// Zustand store for repoActionDrawer (replaces repoActionDrawerAtom)
 export const useRepoActionDrawerStore = create<{
   openRepoActionDrawer: boolean | null;
   setOpenRepoActionDrawer: (
@@ -71,7 +82,6 @@ export const useRepoActionDrawerStore = create<{
   };
 });
 
-// Zustand store for repoActivity (replaces repoActivityAtom)
 export const useRepoActivityStore = create<{
   showRepoActivity: boolean;
   setShowRepoActivity: (show: boolean) => void;
@@ -84,7 +94,6 @@ export const useRepoActivityStore = create<{
   };
 });
 
-// Zustand store for deleteRepoKey (replaces deleteRepoKeyAtom)
 export const useDeleteRepoKeyStore = create<{
   deleteRepoKey: IPublicKey | null;
   setDeleteRepoKey: (key: IPublicKey | null) => void;

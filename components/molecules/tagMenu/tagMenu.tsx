@@ -59,7 +59,7 @@ const TagMenu = ({ tag, showDrawer }: IProps) => {
     </div>
   ) : (
     <MenuTemplate
-      setOpenDrawer={() => {
+      onMobileClick={() => {
         setTag(tag);
         setOpenTagActionDrawer(true);
       }}

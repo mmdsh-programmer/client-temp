@@ -1,17 +1,15 @@
+import React from "react";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categorySchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import useEditCategory from "@hooks/category/useEditCategory";
 import { useForm } from "react-hook-form";
-import useGetUser from "@hooks/auth/useGetUser";
-import { usePathname } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRepositoryStore } from "@store/repository";
 import { useCategoryStore } from "@store/category";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IDataForm {
   id?: number;
@@ -26,11 +24,9 @@ interface IProps {
 }
 
 const CategoryEditDialog = ({ setOpen }: IProps) => {
-  const { repo: getRepo } = useRepositoryStore();
+  const repoId = useRepoId();
   const { category: getCategory, setCategory } = useCategoryStore();
-  const currentPath = usePathname();
 
-  const { data: userInfo } = useGetUser();
   const editCategory = useEditCategory();
 
   const form = useForm<IDataForm>({
@@ -56,11 +52,6 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = (dataForm: IDataForm) => {
-    const repoId =
-      currentPath === "/admin/myDocuments"
-        ? userInfo!.repository.id
-        : getRepo!.id;
-
     if (
       dataForm.description?.trim() === getCategory?.description &&
       dataForm.name.trim() === getCategory?.name &&
@@ -108,11 +99,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             }}
             className="category-edit-dialog__form-name"
           />
-          {errors.name && (
-            <Typography className="warning_text">
-              {errors.name?.message}
-            </Typography>
-          )}
+          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
           <Typography className="form_label">اولویت دسته‌بندی</Typography>
@@ -129,9 +116,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             className="category-edit-dialog__form-order"
           />
           {errors.order && (
-            <Typography className="warning_text">
-              {errors.order?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.order?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -144,9 +129,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             className="category-edit-dialog__form-description"
           />
           {errors.description && (
-            <Typography className="warning_text">
-              {errors.description?.message}
-            </Typography>
+            <Typography className="warning_text">{errors.description?.message}</Typography>
           )}
         </div>
       </form>

@@ -1,35 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDocumentStore } from "@store/document";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody } from "@material-tailwind/react";
 import VersionList from "../version/versionList";
 import { useVersionStore } from "@store/version";
-import VersionMenu from "@components/molecules/versionMenu";
 import { usePathname } from "next/navigation";
 import { useCategoryStore } from "@store/category";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import VersionDialogs from "@components/molecules/versionDialogs";
+import useVersionMenu from "@components/molecules/versionMenu/useVersionMenu";
 
 const VersionDialogView = () => {
-  const getSelectedDocument = useDocumentStore((s) => {
-    return s.selectedDocument;
-  });
-  const setSelectedDocument = useDocumentStore((s) => {
-    return s.setSelectedDocument;
-  });
-  const setDocumentShow = useDocumentStore((s) => {
-    return s.setDocumentShow;
-  });
-  const setVersionModalList = useVersionStore((s) => {
-    return s.setVersionModalList;
-  });
-  const setLink = useCategoryStore((s) => {
-    return s.setCategorySearchContentLink;
-  });
-
   const currentPath = usePathname();
+
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { setCategorySearchContentLink: setLink } = useCategoryStore();
+  const { selectedDocument, setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { selectedVersion, setVersionModalList, versionDrawer, setVersionDrawer } =
+    useVersionStore();
+
+  const menuList = useVersionMenu(selectedVersion, undefined, setActiveModal);
+  const closeModal = () => {
+    return setActiveModal(null);
+  };
+
+  const drawerMenuList = menuList.map((item) => {
+    return {
+      ...item,
+      onClick: () => {
+        item.onClick();
+        setVersionDrawer(false);
+      },
+    };
+  });
 
   return (
     <InfoDialog
-      dialogHeader={getSelectedDocument?.name}
+      dialogHeader={selectedDocument?.name}
       setOpen={() => {
         setVersionModalList(false);
         setLink(null);
@@ -44,7 +51,12 @@ const VersionDialogView = () => {
         <VersionList />
       </DialogBody>
       <div className="flex xs:hidden">
-        <VersionMenu showDrawer />
+        <DrawerTemplate
+          openDrawer={versionDrawer}
+          setOpenDrawer={setVersionDrawer}
+          menuList={drawerMenuList}
+        />
+        <VersionDialogs activeModal={activeModal} closeModal={closeModal} />{" "}
       </div>
     </InfoDialog>
   );

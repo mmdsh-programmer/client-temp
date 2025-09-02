@@ -64,8 +64,10 @@
   padding: 15px !important;
 }
 
-li,
-li * {
+.clasor-preview-content li,
+.clasor-preview-content li *,
+.ck-content li,
+.ck-content li * {
   direction: ltr;
   text-align: left;
 }

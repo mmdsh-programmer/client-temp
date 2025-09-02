@@ -47,7 +47,7 @@ const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
       {isList ? (
         <div className="flex xs:hidden">
           <MenuTemplate
-            setOpenDrawer={() => {
+            onMobileClick={() => {
               setOpenRepoActionDrawer(true);
             }}
             menuList={menuList}
@@ -61,7 +61,7 @@ const RepoKeyMenu = ({ keyItem, isList }: IProps) => {
       ) : (
         <div className="flex items-center justify-end gap-1">
           <MenuTemplate
-            setOpenDrawer={() => {
+            onMobileClick={() => {
               setOpenRepoActionDrawer(true);
             }}
             menuList={menuList}

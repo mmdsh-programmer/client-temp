@@ -4,22 +4,15 @@ import { Button, Typography } from "@material-tailwind/react";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { useCategoryStore } from "@store/category";
 import { useBulkStore } from "@store/bulk";
+import { useRepositoryStore } from "@store/repository";
+import { usePathname } from "next/navigation";
 
 const CategoryBreadCrumb = () => {
-  const setCategory = useCategoryStore((state) => {
-    return state.setCategory;
-  });
-  const [getCategoryShow, setCategoryShow] = [
-    useCategoryStore((state) => {
-      return state.categoryShow;
-    }),
-    useCategoryStore((state) => {
-      return state.setCategoryShow;
-    }),
-  ];
-  const setBulkItems = useBulkStore((state) => {
-    return state.setBulkItems;
-  });
+  const currentPath = usePathname();
+
+  const { setRepositoryId } = useRepositoryStore();
+  const { categoryShow: getCategoryShow, setCategoryShow, setCategory } = useCategoryStore();
+  const { setBulkItems } = useBulkStore();
   const breadCrumbRef = useRef<ICategoryMetadata[]>([]);
 
   const breadCrumb = useMemo(() => {
@@ -63,6 +56,9 @@ const CategoryBreadCrumb = () => {
       setBulkItems([]);
     } else {
       clearBreadCrumb();
+    }
+    if (currentPath !== "/admin/repositories") {
+      setRepositoryId(null);
     }
   };
 

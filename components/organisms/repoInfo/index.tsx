@@ -1,19 +1,42 @@
 "use client";
 
+import React, { useCallback, useState } from "react";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
-
 import ChipMolecule from "@components/molecules/chip";
-import React from "react";
 import RepoImage from "@components/molecules/repoDefaultImage";
 import RepoMenu from "@components/molecules/repoMenu";
 import TagList from "../tagList";
 import { Typography } from "@material-tailwind/react";
-import { useRepositoryStore } from "@store/repository";
+import { useRepoActionDrawerStore, useRepositoryStore } from "@store/repository";
+import DrawerTemplate from "@components/templates/drawerTemplate";
+import RepoDialogs from "@components/molecules/repoDialogs";
+import useRepoMenuList from "@components/molecules/repoMenu/useRepoMenuList";
 
 const RepoInfo = () => {
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { repo: getRepo, setRepo } = useRepositoryStore();
+  const { openRepoActionDrawer, setOpenRepoActionDrawer } = useRepoActionDrawerStore();
+
+  const handleSetModal = useCallback(
+    (modalName: string) => {
+      if (getRepo) {
+        setRepo(getRepo);
+        setActiveModal(modalName);
+      }
+    },
+    [getRepo, setRepo],
+  );
+
+  const menuList = useRepoMenuList(getRepo, handleSetModal).map((item) => {
+    return {
+      ...item,
+      onClick: () => {
+        item.onClick();
+        setOpenRepoActionDrawer(false);
+      },
+    };
   });
+
   return (
     <div className="repo-info flex rounded-none bg-primary bg-white p-4 shadow-small xs:rounded-lg">
       <div className="w-full">
@@ -39,7 +62,7 @@ const RepoInfo = () => {
                 {getRepo && FaDateFromTimestamp(+new Date(getRepo.createDate))}
               </Typography>
             </div>
-            {getRepo ? <RepoMenu repo={getRepo} showLog /> : null}
+            {getRepo ? <RepoMenu repo={getRepo} /> : null}
           </div>
           <div className="mt-2 sm:mt-0 md:mt-2 lg:mt-0">
             <Typography className="body_b3 h-[26px] truncate">{getRepo?.description}</Typography>
@@ -49,7 +72,19 @@ const RepoInfo = () => {
           </div>
         </div>
       </div>
-      <RepoMenu showDrawer showLog />
+      <div className="xs:hidden">
+        <DrawerTemplate
+          openDrawer={openRepoActionDrawer}
+          setOpenDrawer={setOpenRepoActionDrawer}
+          menuList={menuList}
+        />
+      </div>
+      <RepoDialogs
+        activeModal={activeModal}
+        closeModal={() => {
+          return setActiveModal(null);
+        }}
+      />
     </div>
   );
 };

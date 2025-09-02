@@ -14,9 +14,7 @@ import { useDocumentStore } from "@store/document";
 
 const VersionList = () => {
   const repoId = useRepoId();
-  const getSelectedDocument = useDocumentStore((state) => {
-    return state.selectedDocument;
-  });
+  const { selectedDocument: getSelectedDocument } = useDocumentStore();
   const currentPath = usePathname();
 
   const searchParams = useSearchParams();
@@ -47,7 +45,7 @@ const VersionList = () => {
       currentPath === "/admin/sharedDocuments" ||
       (currentPath === "/admin/dashboard" &&
         getSelectedDocument?.repoId !== userInfo?.repository.id),
-    true,
+    !!repoId,
   );
 
   const order = [

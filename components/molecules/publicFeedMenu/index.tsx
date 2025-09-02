@@ -28,7 +28,7 @@ const PublicFeedMenu = ({ feed }: IProps) => {
   ];
   return (
     <>
-      <MenuTemplate setOpenDrawer={() => {}} menuList={menuList} />
+      <MenuTemplate onMobileClick={() => {}} menuList={menuList} />
       {openEditFeedDialog ? (
         <PublicFeedEditDialog feed={feed} setOpen={setEditFeedDialog} />
       ) : null}

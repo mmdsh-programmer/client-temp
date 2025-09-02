@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { EDocumentTypes } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IPublicKey } from "@interface/repo.interface";
+import { devtools } from "zustand/middleware";
+import { logger } from "./logger";
 
 interface IDocInfo {
   title: string;
@@ -28,46 +31,52 @@ export const useDocumentStore = create<{
       | { name: string; id: number }[]
       | ((prev: { name: string; id: number }[]) => { name: string; id: number }[]),
   ) => void;
-}>((set) => {
-  return {
-    selectedDocument: null,
-    setSelectedDocument: (doc) => {
-      return set({ selectedDocument: doc });
-    },
-    documentShow: null,
-    setDocumentShow: (doc) => {
-      return set({ documentShow: doc });
-    },
-    documentType: null,
-    setDocumentType: (type) => {
-      return set({ documentType: type });
-    },
-    documentInfo: null,
-    setDocumentInfo: (info) => {
-      return set({ documentInfo: info });
-    },
-    documentKey: null,
-    setDocumentKey: (key) => {
-      return set({ documentKey: key });
-    },
-    documentTemplate: null,
-    setDocumentTemplate: (doc) => {
-      return set({ documentTemplate: doc });
-    },
-    tempDocTag: [],
-    setTempDocTag: (tagsOrUpdater) => {
-      return set((state) => {
-        const nextTags =
-          typeof tagsOrUpdater === "function"
-            ? (tagsOrUpdater as (prev: { name: string; id: number }[]) => { name: string; id: number }[])(
-                state.tempDocTag,
-              )
-            : tagsOrUpdater;
-        return { tempDocTag: nextTags };
-      });
-    },
-  };
-});
+}>()(
+  devtools(
+    logger((set) => {
+      return {
+        selectedDocument: null,
+        setSelectedDocument: (doc) => {
+          return (set as any)({ selectedDocument: doc }, false, "selectedDocument");
+        },
+        documentShow: null,
+        setDocumentShow: (doc) => {
+          return (set as any)({ documentShow: doc }, false, "documentShow");
+        },
+        documentType: null,
+        setDocumentType: (type) => {
+          return set({ documentType: type });
+        },
+        documentInfo: null,
+        setDocumentInfo: (info) => {
+          return set({ documentInfo: info });
+        },
+        documentKey: null,
+        setDocumentKey: (key) => {
+          return set({ documentKey: key });
+        },
+        documentTemplate: null,
+        setDocumentTemplate: (doc) => {
+          return set({ documentTemplate: doc });
+        },
+        tempDocTag: [],
+        setTempDocTag: (tagsOrUpdater) => {
+          return set((state) => {
+            const nextTags =
+              typeof tagsOrUpdater === "function"
+                ? (
+                    tagsOrUpdater as (
+                      prev: { name: string; id: number }[],
+                    ) => { name: string; id: number }[]
+                  )(state.tempDocTag)
+                : tagsOrUpdater;
+            return { tempDocTag: nextTags };
+          });
+        },
+      };
+    }),
+  ),
+);
 
 interface DocumentDrawerState {
   documentDrawer: boolean;

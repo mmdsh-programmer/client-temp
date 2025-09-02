@@ -1,43 +1,24 @@
 "use client";
 
-import React, { ReactNode, useEffect } from "react";
-
-import Error from "@app/error";
+import React, { ReactNode } from "react";
+import AppError from "@app/error";
 import PanelUrl from "../panelUrl";
 import SpinnerText from "@components/molecules/spinnerText";
-import { toast } from "react-toastify";
-import { useDebouncedCallback } from "use-debounce";
-import useGetUser from "@hooks/auth/useGetUser";
-import { useRouter } from "next/navigation";
+import useAppStartup from "@hooks/useAppStartup";
 
 interface IProps {
   children: ReactNode;
 }
 
 const Start = ({ children }: IProps) => {
-  const router = useRouter();
-  const { data: userInfo, isLoading, isError, error, refetch } = useGetUser();
-
-  const handleToast = useDebouncedCallback(() => {
-    toast.info("لطفا وارد حساب کاربری خود شوید.");
-    router.push("/");
-  }, 100);
-  
-  useEffect(() => {
-    if (userInfo === null) {
-      handleToast();
-    }
-  }, [userInfo]);
+  const { userInfo, isLoading, isError, error, refetch } = useAppStartup();
 
   if (isError) {
-    console.log({
-      type: "error",
-      error: JSON.stringify(error),
-    });
+    const renderError = error instanceof Error ? error : new Error(String(error ?? "خطای نامشخص"));
     return (
       <div>
-        <Error
-          error={error}
+        <AppError
+          error={renderError}
           reset={() => {
             refetch();
           }}

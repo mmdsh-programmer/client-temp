@@ -59,7 +59,7 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
     </div>
   ) : (
     <MenuTemplate
-      setOpenDrawer={() => {
+      onMobileClick={() => {
         setGroup(group);
         setGroupDrawer(true);
       }}

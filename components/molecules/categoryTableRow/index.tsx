@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
 import { useCategoryStore } from "@store/category";
 import { useBulkStore } from "@store/bulk";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   category: ICategoryMetadata;
@@ -16,19 +17,16 @@ interface IProps {
 
 const CategoryTableRow = ({ category: categoryProp }: IProps) => {
   const currentPath = usePathname();
-  const setCategoryParent = useCategoryStore((state) => {
-    return state.setCategoryShow;
-  });
-  const getBulkItems = useBulkStore((state) => {
-    return state.bulkItems;
-  });
-  const setBulkItems = useBulkStore((state) => {
-    return state.setBulkItems;
-  });
+  const { setRepositoryId } = useRepositoryStore();
+  const { setCategoryShow } = useCategoryStore();
+  const { bulkItems: getBulkItems, setBulkItems } = useBulkStore();
 
   const handleRowClick = (selectedCategory: ICategoryMetadata) => {
-    setCategoryParent(selectedCategory);
+    setCategoryShow(selectedCategory);
     setBulkItems([]);
+    if (currentPath !== "/admin/repositories") {
+      setRepositoryId(selectedCategory.repoId);
+    }
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {

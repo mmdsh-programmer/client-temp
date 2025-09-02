@@ -1,30 +1,39 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import RepoSearch from "@components/molecules/repoSearch";
-import RepoMenu from "@components/molecules/repoMenu";
-import { useRepositoryStore } from "@store/repository";
-import { useCategoryStore } from "@store/category";
-import { useDocumentStore } from "@store/document";
-import { useVersionStore } from "@store/version";
+import { useRepoActionDrawerStore, useRepositoryStore } from "@store/repository";
 import AccessRepoList from "@components/organisms/repoList/accessRepoList";
 import RepoCreateDialogStepper from "@components/organisms/dialogs/repository/repoCreateDialogStepper";
+import DrawerTemplate from "../drawerTemplate";
+import RepoDialogs from "@components/molecules/repoDialogs";
+import useRepoMenuList from "@components/molecules/repoMenu/useRepoMenuList";
 
 const AccessRepoPage = () => {
-  const { setRepo } = useRepositoryStore();
-  const { setCategory, setCategoryShow } = useCategoryStore();
-  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
-  const { setVersionModalList } = useVersionStore();
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { repo, setRepo } = useRepositoryStore();
+  const { openRepoActionDrawer, setOpenRepoActionDrawer } = useRepoActionDrawerStore();
 
-  useEffect(() => {
-    setRepo(null);
-    setCategory(null);
-    setCategoryShow(null);
-    setSelectedDocument(null);
-    setDocumentShow(null);
-    setVersionModalList(false);
-  }, []);
+  const handleSetModal = useCallback(
+    (modalName: string) => {
+      if (repo) {
+        setRepo(repo);
+        setActiveModal(modalName);
+      }
+    },
+    [repo, setRepo],
+  );
+
+  const menuList = useRepoMenuList(repo, handleSetModal).map((item) => {
+    return {
+      ...item,
+      onClick: () => {
+        item.onClick();
+        setOpenRepoActionDrawer(false);
+      },
+    };
+  });
 
   return (
     <div className="page-container flex h-full w-full flex-col">
@@ -40,7 +49,19 @@ const AccessRepoPage = () => {
             className="repo-list-header"
           />
           <AccessRepoList />
-          <RepoMenu showDrawer />
+          <div className="xs:hidden">
+            <DrawerTemplate
+              openDrawer={openRepoActionDrawer}
+              setOpenDrawer={setOpenRepoActionDrawer}
+              menuList={menuList}
+            />
+          </div>
+          <RepoDialogs
+            activeModal={activeModal}
+            closeModal={() => {
+              return setActiveModal(null);
+            }}
+          />
         </div>
       </div>
     </div>

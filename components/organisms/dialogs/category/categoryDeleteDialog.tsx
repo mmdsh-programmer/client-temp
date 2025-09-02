@@ -1,14 +1,12 @@
-import { Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import { Typography } from "@material-tailwind/react";
 import { useCategoryStore } from "@store/category";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { toast } from "react-toastify";
 import useDeleteCategory from "@hooks/category/useDeleteCategory";
-import useGetUser from "@hooks/auth/useGetUser";
-import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
-import { useRepositoryStore } from "@store/repository";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -16,23 +14,12 @@ interface IProps {
 }
 
 const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
-  const [getCategory, setCategory] = [
-    useCategoryStore((state) => {
-      return state.category;
-    }),
-    useCategoryStore((state) => {
-      return state.setCategory;
-    }),
-  ];
+  const repoId = useRepoId();
+  const { category: getCategory, setCategory } = useCategoryStore();
 
   const [errorMessage, setErrorMessage] = useState("");
   const [forceDelete, setForceDelete] = useState(false);
-  const currentPath = usePathname();
 
-  const { data: userInfo } = useGetUser();
   const deleteCategory = useDeleteCategory();
 
   const handleClose = () => {
@@ -43,7 +30,6 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
 
   const handleDelete = async () => {
     const selectedCat = category || getCategory;
-    const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
     if (!repoId || !selectedCat) {
       return;
     }

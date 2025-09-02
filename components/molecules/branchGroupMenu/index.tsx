@@ -28,7 +28,7 @@ const BranchGroupMenu = ({ group }: IProps) => {
   ];
   return (
     <>
-      <MenuTemplate setOpenDrawer={() => {}} menuList={menuList} />
+      <MenuTemplate onMobileClick={() => {}} menuList={menuList} />
       {openEditGroupDialog ? (
         <PositionEditDialog group={group} setOpen={setEditGroupDialog} />
       ) : null}

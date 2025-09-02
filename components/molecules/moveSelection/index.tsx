@@ -3,29 +3,19 @@ import { Button } from "@material-tailwind/react";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 import MoveBreadCrumb from "../moveBreadCrumb";
 import MoveChildren from "@components/organisms/moveChildren";
-import useGetUser from "@hooks/auth/useGetUser";
-import { usePathname } from "next/navigation";
 import { useCategoryStore } from "@store/category";
-import { useRepositoryStore } from "@store/repository";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   target: "category" | "document";
 }
 
 const MoveSelection = ({ target }: IProps) => {
-  const getCategoryMoveDest = useCategoryStore((state) => {
-    return state.categoryMoveDest;
-  });
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
+  const repoId = useRepoId();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const currentPath = usePathname();
 
-  const { data: userInfo } = useGetUser();
-
-  const repoId = currentPath === "/admin/myDocuments" ? userInfo!.repository.id : getRepo!.id;
+  const { categoryMoveDest: getCategoryMoveDest } = useCategoryStore();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -51,7 +41,7 @@ const MoveSelection = ({ target }: IProps) => {
         />
       </Button>
       {isOpen && (
-        <div className="absolute z-[99999] mt-2 w-full min-w-max rounded-md bg-white p-[1px] ring-1 ring-black ring-opacity-5">
+        <div className="z-[99999] mt-2 w-full min-w-max rounded-md bg-white p-[1px] ring-1 ring-black ring-opacity-5">
           <MoveBreadCrumb />
           {repoId ? <MoveChildren target={target} repoId={repoId} /> : null}
         </div>

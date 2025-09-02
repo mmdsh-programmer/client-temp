@@ -1,15 +1,13 @@
+import React from "react";
 import DocumentEncryption from "./documentEncryption";
 import DocumentInfo from "@components/organisms/dialogs/document/documentCreate/documentInfo";
 import DocumentTemplate from "@components/organisms/dialogs/document/documentCreate/documentTemplate";
 import DocumentType from "@components/organisms/dialogs/document/documentCreate/documentType";
 import DocumentVersion from "@components/organisms/dialogs/document/documentCreate/documentVersion";
-import React from "react";
 import StepperDialog from "@components/templates/dialog/stepperDialog";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
-import { usePathname } from "next/navigation";
-import useGetUser from "@hooks/auth/useGetUser";
-import { useRepositoryStore } from "@store/repository";
 import { useDocumentStepperStore } from "@store/stepper";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   isTemplate: boolean;
@@ -18,14 +16,7 @@ interface IProps {
 
 const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
   const { documentActiveStep: getActiveStep } = useDocumentStepperStore();
-  const { repo: getRepo } = useRepositoryStore();
-  const currentPath = usePathname();
-
-  const { data: userInfo } = useGetUser();
-  const repoId =
-    currentPath === "/admin/myDocuments"
-      ? userInfo!.repository.id
-      : getRepo!.id;
+  const repoId = useRepoId();
 
   const { close } = useStepperNavigate();
   const handleClose = () => {
@@ -36,9 +27,7 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
   const stepList = [
     "نوع سند",
     "عنوان و توضیحات سند",
-    ...(isTemplate
-      ? ["نام نسخه سند"]
-      : ["نمونه سند", "رمز گذاری سند", "نام نسخه سند"]),
+    ...(isTemplate ? ["نام نسخه سند"] : ["نمونه سند", "رمز گذاری سند", "نام نسخه سند"]),
   ];
 
   const renderStepperContent = () => {
@@ -57,7 +46,7 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
         return isTemplate ? (
           <DocumentVersion isTemplate={isTemplate} setOpen={setOpen} />
         ) : (
-          <DocumentEncryption repoId={repoId} />
+          <DocumentEncryption repoId={repoId!} />
         );
       case 4:
         return <DocumentVersion isTemplate={isTemplate} setOpen={setOpen} />;
@@ -72,7 +61,7 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
       stepList={stepList}
       handleClose={handleClose}
       activeStep={getActiveStep}
-      className={isTemplate ? "template-create-dialog" :"document-create-dialog"}
+      className={isTemplate ? "template-create-dialog" : "document-create-dialog"}
     >
       {renderStepperContent()}
     </StepperDialog>

@@ -13,22 +13,19 @@ import DrawerTemplate from "@components/templates/drawerTemplate";
 import { ERoles } from "@interface/enums";
 import MenuTemplate from "@components/templates/menuTemplate";
 import { useRepositoryStore } from "@store/repository";
-import { useCategoryDrawerStore, useCategoryStore } from "@store/category";
+import { useCategoryStore } from "@store/category";
 
 interface IProps {
-  showDrawer?: boolean;
+  openDrawer?: boolean;
+  setOpenDrawer?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
+const CategoryDocumentCreateMenu = ({ openDrawer, setOpenDrawer }: IProps) => {
   const [createCategoryModal, setCreateCategoryModal] = useState(false);
   const [createDocumentModal, setCreateDocumentModal] = useState(false);
   const [createTemplateModal, setCreateTemplateModal] = useState(false);
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
+  const { repo: getRepo } = useRepositoryStore();
   const { setCategory, categoryShow: getCategoryShow } = useCategoryStore();
-  const { categoryDrawer: openCreateDrawer, setCategoryDrawer: setOpenCreateDrawer } =
-    useCategoryDrawerStore();
 
   const menuList: {
     text: string;
@@ -74,12 +71,12 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
 
   return (
     <>
-      {showDrawer ? (
+      {openDrawer ? (
         <div className="categoryCreateMenu flex xs:hidden">
           <DrawerTemplate
-            openDrawer={openCreateDrawer}
+            openDrawer={openDrawer}
             setOpenDrawer={() => {
-              return setOpenCreateDrawer(false);
+              return setOpenDrawer?.(false);
             }}
             menuList={menuList}
           />
@@ -88,8 +85,8 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
         <>
           <div className="categoryCreateMenu hidden xs:flex">
             <MenuTemplate
-              setOpenDrawer={() => {
-                setOpenCreateDrawer(true);
+              onMobileClick={() => {
+                setOpenDrawer?.(true);
               }}
               menuList={menuList}
               icon={
@@ -110,7 +107,7 @@ const CategoryDocumentCreateMenu = ({ showDrawer }: IProps) => {
             <Button
               className="z-[99] h-[54px] w-[54px] rounded-full bg-primary-normal p-0"
               onClick={() => {
-                setOpenCreateDrawer(true);
+                setOpenDrawer?.(true);
               }}
             >
               <AddIcon className="h-6 w-6 stroke-white" />

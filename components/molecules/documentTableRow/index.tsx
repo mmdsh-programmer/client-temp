@@ -18,19 +18,9 @@ interface IProps {
 
 const DocumentTableRow = ({ document }: IProps) => {
   const currentPath = usePathname();
-
-  const getBulkItems = useBulkStore((state) => {
-    return state.bulkItems;
-  });
-  const setBulkItems = useBulkStore((state) => {
-    return state.setBulkItems;
-  });
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
-  const selectedCat = useCategoryStore((state) => {
-    return state.category;
-  });
+  const { setBulkItems, bulkItems: getBulkItems } = useBulkStore();
+  const { repo: getRepo } = useRepositoryStore();
+  const { category: selectedCat } = useCategoryStore();
 
   const { data: userInfo } = useGetUser();
 

@@ -87,7 +87,7 @@ Default.args = {
   ],
   icon: "🔍",
   className: "",
-  setOpenDrawer: () => {
+  onMobileClick: () => {
     return console.log("Drawer opened");
   },
 };

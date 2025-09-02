@@ -1630,6 +1630,16 @@ export const getPublishDocumentVersion = async (
         },
       },
     );
+    console.log(
+      JSON.stringify(
+        {
+          type: "getPublishDocumentVersion",
+          data: response.data.data,
+        },
+        null,
+        0,
+      ),
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1654,7 +1664,16 @@ export const getPublishDocumentLastVersion = async (
         },
       },
     );
-
+    console.log(
+      JSON.stringify(
+        {
+          type: "getPublishDocumentLastVersion",
+          data: response.data.data,
+        },
+        null,
+        0,
+      ),
+    );
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -1698,6 +1717,16 @@ export const getPublishDocumentInfo = async (
           disableVersions,
         },
       },
+    );
+     console.log(
+      JSON.stringify(
+        {
+          type: "getPublishDocumentInfo",
+          data: response.data.data,
+        },
+        null,
+        0,
+      ),
     );
     return response.data.data;
   } catch (error) {
@@ -2290,6 +2319,17 @@ export const publicLastVersion = async (
         },
         params,
       },
+    );
+
+     console.log(
+      JSON.stringify(
+        {
+          type: "publicLastVersion",
+          data: response.data.data,
+        },
+        null,
+        0,
+      ),
     );
 
     return response.data.data;

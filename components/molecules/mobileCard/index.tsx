@@ -1,5 +1,5 @@
-import CardItemRow from "./cardItemRow";
 import React from "react";
+import CardItemRow from "./cardItemRow";
 import { Typography } from "@material-tailwind/react";
 
 interface IProps {
@@ -11,30 +11,21 @@ interface IProps {
   onClick?: () => void;
 }
 
-const MobileCard = ({
-  name,
-  cardAction,
-  icon,
-  className,
-  description,
-  onClick,
-}: IProps) => {
+const MobileCard = ({ name, cardAction, icon, className, description, onClick }: IProps) => {
   return (
     <div
-      className={`${className || ""} cursor-pointer flex flex-col w-full shadow-xSmall bg-white rounded-lg p-4 gap-4`}
+      className={`${className || ""} flex w-full cursor-pointer flex-col gap-4 rounded-lg bg-white p-4 shadow-xSmall`}
       onClick={onClick}
     >
-      <div className="flex justify-between items-center w-full gap-[10px]">
-        <div className="flex items-start max-w-[70%] gap-3 flex-grow">
+      <div className="flex w-full items-center justify-between gap-[10px]">
+        <div className="flex max-w-[70%] flex-grow items-start gap-3">
           {icon}
           {typeof name === "string" ? (
-            <Typography className="title_t2 !text-primary_normal max-w-full truncate">
+            <Typography className="title_t2 max-w-full truncate !text-primary_normal">
               {name}
             </Typography>
           ) : (
-            <Typography className="text-primary_normal title_t2 max-w-full truncate">
-              {name}
-            </Typography>
+            name
           )}
         </div>
         <div

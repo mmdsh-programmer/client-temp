@@ -7,6 +7,7 @@ import { useVersionStore } from "@store/version";
 import useGetCategory from "@hooks/category/useGetCategory";
 import useGetDocument from "@hooks/document/useGetDocument";
 import { useSearchParams } from "next/navigation";
+import { useRepositoryStore } from "@store/repository";
 
 const CheckPanelUrlData = () => {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -32,12 +33,19 @@ const CheckPanelUrlData = () => {
 
   const searchParams = useSearchParams();
   const repoId = searchParams?.get("repoId");
+  const { repositoryId } = useRepositoryStore();
+
   const categoryId = searchParams?.get("categoryId");
   const documentId = searchParams?.get("documentId");
 
   const { data: getCategory } = useGetCategory(+repoId!, +categoryId!, !!categoryId);
 
-  const { data: getDocument } = useGetDocument(+repoId!, +documentId!, !!documentId, true);
+  const { data: getDocument, isSuccess } = useGetDocument(
+    repositoryId!,
+    +documentId!,
+    !!documentId,
+    !!repositoryId,
+  );
 
   useEffect(() => {
     if (isInitialized || !categoryId || !getCategory) return;
@@ -48,7 +56,7 @@ const CheckPanelUrlData = () => {
   }, [getCategory, categoryId]);
 
   useEffect(() => {
-    if (documentId && getDocument) {
+    if (documentId && isSuccess && getDocument) {
       setDocument(getDocument);
       setDocumentShow(getDocument);
       if (!getSelectedVersion) {

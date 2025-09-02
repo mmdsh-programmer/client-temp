@@ -53,7 +53,7 @@ const BranchMenu = ({ branchItem }: IProps) => {
       }}
     >
       <MenuTemplate
-        setOpenDrawer={() => {}}
+        onMobileClick={() => {}}
         menuList={menuList}
         icon={
           <div className="rounded-lg bg-white p-1 shadow-none border-2 border-gray-50 flex justify-center items-center h-8 w-8">

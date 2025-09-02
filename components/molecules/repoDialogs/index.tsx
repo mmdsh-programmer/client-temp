@@ -13,133 +13,44 @@ import { useRepositoryStore } from "@store/repository";
 import PrivateFeedCreateDialog from "@components/organisms/dialogs/privateFeed/privateFeedCreateDialog";
 
 interface IRepoDialogsProps {
-  modals: {
-    edit: boolean;
-    delete: boolean;
-    archive: boolean;
-    restore: boolean;
-    bookmark: boolean;
-    share: boolean;
-    key: boolean;
-    leave: boolean;
-    fileManagement: boolean;
-    versionRequests: boolean;
-    privateFeed: boolean;
-  };
-  setModalState: (key: keyof IRepoDialogsProps["modals"], state: boolean) => void;
+  activeModal: string | null;
+  closeModal: () => void;
 }
 
-const RepoDialogs = ({ modals, setModalState }: IRepoDialogsProps) => {
-  const [getRepo, setRepo] = [
-    useRepositoryStore((state) => {
-      return state.repo;
-    }),
-    useRepositoryStore((state) => {
-      return state.setRepo;
-    }),
-  ];
+const RepoDialogs = ({ activeModal, closeModal }: IRepoDialogsProps) => {
+  const { repo: getRepo } = useRepositoryStore();
+
+  if (!activeModal) {
+    return null;
+  }
 
   const handleClose = () => {
-    if (window.location.pathname === "/admin/dashboard" && getRepo) {
-      setRepo(null);
-    }
+    closeModal();
   };
 
   return (
     <>
-      {modals.edit ? (
-        <RepoEditDialog
-          setOpen={() => {
-            setModalState("edit", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.delete ? (
-        <RepoDeleteDialog
-          setOpen={() => {
-            setModalState("delete", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.archive ? (
-        <RepoArchiveDialog
-          setOpen={() => {
-            setModalState("archive", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.restore ? (
-        <RepoRestoreDialog
-          setOpen={() => {
-            setModalState("restore", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.bookmark && getRepo ? (
-        <RepoBookmarkDialog
-          repo={getRepo}
-          setOpen={() => {
-            setModalState("bookmark", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.share ? (
-        <RepoShareDialog
-          setOpen={() => {
-            setModalState("share", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.key ? (
-        <RepoKeyDialog
-          setOpen={() => {
-            setModalState("key", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.leave ? (
-        <RepoLeaveDialog
-          setOpen={() => {
-            setModalState("leave", false);
-            handleClose();
-          }}
-        />
-      ) : null}
-      {modals.fileManagement && getRepo ? (
+      {activeModal === "edit" ? <RepoEditDialog setOpen={handleClose} /> : null}
+      {activeModal === "delete" ? <RepoDeleteDialog setOpen={handleClose} /> : null}
+      {activeModal === "archive" ? <RepoArchiveDialog setOpen={handleClose} /> : null}
+      {activeModal === "restore" ? <RepoRestoreDialog setOpen={handleClose} /> : null}
+      {activeModal === "bookmark" ? <RepoBookmarkDialog setOpen={handleClose} /> : null}
+      {activeModal === "share" ? <RepoShareDialog setOpen={handleClose} /> : null}
+      {activeModal === "key" ? <RepoKeyDialog setOpen={handleClose} /> : null}
+      {activeModal === "leave" ? <RepoLeaveDialog setOpen={handleClose} /> : null}
+      {activeModal === "fileManagement" && getRepo ? (
         <Files
           type="public"
           userGroupHash={getRepo.userGroupHash}
           resourceId={getRepo?.id}
           dialogHeader="افزودن فایل"
-          handleClose={() => {
-            setModalState("fileManagement", false);
-            handleClose();
-          }}
+          handleClose={handleClose}
         />
       ) : null}
-      {modals.versionRequests ? (
-        <RepoVersionRequestsDialog
-          setOpen={() => {
-            setModalState("versionRequests", false);
-            handleClose();
-          }}
-        />
+      {activeModal === "versionRequests" ? (
+        <RepoVersionRequestsDialog setOpen={handleClose} />
       ) : null}
-      {modals.privateFeed ? (
-        <PrivateFeedCreateDialog
-          setOpen={() => {
-            setModalState("privateFeed", false);
-            handleClose();
-          }}
-        />
-      ) : null}
+      {activeModal === "privateFeed" ? <PrivateFeedCreateDialog setOpen={handleClose} /> : null}
     </>
   );
 };

@@ -1,5 +1,4 @@
 import React from "react";
-import { useCategoryDrawerStore, useCategoryStore } from "@store/category";
 import { ICategoryMetadata } from "@interface/category.interface";
 import {
   AddRectangleIcon,
@@ -16,145 +15,136 @@ import {
 import { ERoles } from "@interface/enums";
 import { usePathname } from "next/navigation";
 import { useRepositoryStore } from "@store/repository";
+import { MenuItem } from "@components/templates/menuTemplate";
 
-interface UseCategoryMenuListProps {
-  category?: ICategoryMetadata;
-  toggleModal: (modalName: keyof Modals, value: boolean) => void;
-}
-
-type Modals = {
-  editCategoryModal: boolean;
-  deleteCategoryModal: boolean;
-  moveModal: boolean;
-  hideModal: boolean;
-  visibleModal: boolean;
-  categoryAccessModal: boolean;
-  createCategoryModal: boolean;
-  createDocumentModal: boolean;
-  createTemplateModal: boolean;
+const createItem = (
+  text: string,
+  icon: JSX.Element,
+  onClick: () => void,
+  className?: string,
+  options: { disabled?: boolean; subMenu?: MenuItem[] } = {},
+): MenuItem => {
+  return {
+    text,
+    icon,
+    onClick,
+    disabled: options.disabled || false,
+    subMenu: options.subMenu,
+    className,
+  };
 };
 
-const useCategoryMenuList = ({ category, toggleModal }: UseCategoryMenuListProps) => {
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
+const useCategoryMenuList = (
+  category: ICategoryMetadata | null,
+  setModal: (modalName: string) => void,
+): MenuItem[] => {
+  const repo = useRepositoryStore((s) => {
+    return s.repo;
   });
-  const setCategory = useCategoryStore((state) => {
-    return state.setCategory;
-  });
-  const setOpenCategoryActionDrawer = useCategoryDrawerStore((state) => {
-    return state.setCategoryDrawer;
-  });
-  const currentPath = usePathname();
+  const pathname = usePathname();
 
-  const createOptions = [
-    {
-      text: "ساخت زیر دسته بندی",
-      icon: <CategoryAddIcon className="h-4 w-4" />,
-      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("createCategoryModal", true);
-        if (category) setCategory(category);
+  if (!category) return [];
+
+  const role = repo?.roleName;
+
+  const createSubMenuItems: MenuItem[] = [
+    createItem(
+      "ساخت زیر دسته بندی",
+      <CategoryAddIcon className="h-4 w-4" />,
+      () => {
+        return setModal("createCategory");
       },
-      className: "create-category",
-    },
-    {
-      text: "ساخت سند",
-      icon: <DocumentAddIcon className="h-4 w-4" />,
-      disabled: getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("createDocumentModal", true);
-        if (category) setCategory(category);
+      "create-category",
+      { disabled: role === ERoles.writer || role === ERoles.viewer },
+    ),
+    createItem(
+      "ساخت سند",
+      <DocumentAddIcon className="h-4 w-4" />,
+      () => {
+        return setModal("createDocument");
       },
-      className: "create-document",
-    },
-    {
-      text: "ساخت نمونه سند",
-      icon: <TemplateAddIcon className="h-4 w-4" />,
-      disabled:
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
-      onClick: () => {
-        toggleModal("createTemplateModal", true);
-        if (category) setCategory(category);
+      "create-document",
+      { disabled: role === ERoles.viewer },
+    ),
+    createItem(
+      "ساخت نمونه سند",
+      <TemplateAddIcon className="h-4 w-4" />,
+      () => {
+        return setModal("createTemplate");
       },
-      className: "create-template",
-    },
+      "create-template",
+      { disabled: role === ERoles.writer || role === ERoles.viewer || role === ERoles.editor },
+    ),
   ];
 
-  const menuList = [
-    {
-      text: "ایجاد",
-      subMenu: createOptions,
-      onClick: () => {},
-      icon: <AddRectangleIcon className="h-4 w-4 fill-icon-active" />,
-    },
-    {
-      text: "ویرایش دسته بندی",
-      icon: <EditIcon className="h-4 w-4" />,
-      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("editCategoryModal", true);
-        if (category) setCategory(category);
+  const menuItems: MenuItem[] = [
+    createItem("ایجاد", <AddRectangleIcon className="h-4 w-4 fill-icon-active" />, () => {}, "", {
+      subMenu: createSubMenuItems,
+    }),
+    createItem(
+      "ویرایش دسته بندی",
+      <EditIcon className="h-4 w-4" />,
+      () => {
+        return setModal("editCategory");
       },
-      className: "edit-category",
-    },
-    {
-      text: "انتقال",
-      icon: <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
-      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("moveModal", true);
-        if (category) setCategory(category);
+      "edit-category",
+      { disabled: role === ERoles.writer || role === ERoles.viewer },
+    ),
+    createItem(
+      "انتقال",
+      <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
+      () => {
+        return setModal("move");
       },
-      className: "move-category",
-    },
-    {
-      text: category?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
-      icon: category?.isHidden ? (
-        <VisibleIcon className="h-4 w-4" />
-      ) : (
-        <HiddenIcon className="h-4 w-4" />
-      ),
-      disabled:
-        currentPath === "/admin/myDocuments" ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal(category?.isHidden ? "visibleModal" : "hideModal", true);
-        setOpenCategoryActionDrawer(false);
-        if (category) setCategory(category);
+      "move-category",
+      { disabled: role === ERoles.writer || role === ERoles.viewer },
+    ),
+    createItem(
+      category.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
+      category.isHidden ? <VisibleIcon className="h-4 w-4" /> : <HiddenIcon className="h-4 w-4" />,
+      () => {
+        return setModal(category.isHidden ? "visible" : "hide");
       },
-      className: `${category?.isHidden ? "hide-category" : "visible-category"}`,
-    },
-    {
-      text: "محدودیت دسترسی روی پنل",
-      icon: <LockIcon className="h-4 w-4" />,
-      disabled:
-        currentPath === "/admin/myDocuments" ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
-      onClick: () => {
-        toggleModal("categoryAccessModal", true);
-        if (category) setCategory(category);
+      `${category?.isHidden ? "hide-category" : "visible-category"}`,
+      {
+        disabled:
+          pathname === "/admin/dashboard" ||
+          pathname === "/admin/myDocuments" ||
+          role === ERoles.writer ||
+          role === ERoles.viewer,
       },
-      className: "category-access",
-    },
-    {
-      text: "حذف دسته بندی",
-      icon: <DeleteIcon className="h-4 w-4" />,
-      disabled: getRepo?.roleName === ERoles.writer || getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("deleteCategoryModal", true);
-        setOpenCategoryActionDrawer(false);
-        if (category) setCategory(category);
+    ),
+    createItem(
+      "محدودیت دسترسی روی پنل",
+      <LockIcon className="h-4 w-4" />,
+      () => {
+        return setModal("accessCategory");
       },
-      className: "delete-category",
-    },
+      "category-access",
+      {
+        disabled:
+          pathname === "/admin/dashboard" ||
+          pathname === "/admin/myDocuments" ||
+          role === ERoles.writer ||
+          role === ERoles.viewer ||
+          role === ERoles.editor,
+      },
+    ),
   ];
 
-  return menuList;
+  menuItems.push(
+    createItem(
+      "حذف دسته بندی",
+      <DeleteIcon className="h-4 w-4" />,
+      () => {
+        return setModal("deleteCategory");
+      },
+      "delete-category",
+      { disabled: role === ERoles.writer || role === ERoles.viewer },
+    ),
+  );
+
+  return menuItems;
 };
 
 export default useCategoryMenuList;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import { FaDateFromTimestamp, translateRoles } from "@utils/index";
 import { CircleIcon } from "@components/atoms/icons";
@@ -6,7 +6,6 @@ import { IRepo } from "@interface/repo.interface";
 import RepoCardMoreInfo from "./repoCardMoreInfo";
 import RepoDefaultImage from "../repoDefaultImage";
 import RepoMenu from "@components/molecules/repoMenu";
-import { useRepoInfoStore } from "@store/repository";
 import { useRouter } from "next/navigation";
 
 interface IProps {
@@ -15,9 +14,7 @@ interface IProps {
 
 const RepoCardMode = ({ repo }: IProps) => {
   const router = useRouter();
-  const repoInfo = useRepoInfoStore((state) => {
-    return state.repoInfo;
-  });
+  const [repoInfo, setRepoInfo] = useState<IRepo | null>(null);
 
   return (
     <Card
@@ -60,10 +57,10 @@ const RepoCardMode = ({ repo }: IProps) => {
             e.stopPropagation();
           }}
         >
-          <RepoMenu repo={repo} />
+          <RepoMenu repo={repo} setRepoInfo={setRepoInfo} />
         </div>
       </div>
-      {repoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} /> : null}
+      {repoInfo?.id === repo.id ? <RepoCardMoreInfo repo={repo} setRepoInfo={setRepoInfo} /> : null}
     </Card>
   );
 };

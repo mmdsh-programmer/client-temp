@@ -5,9 +5,7 @@ import { ICategoryMetadata } from "@interface/category.interface";
 import { useCategoryStore } from "@store/category";
 
 const MoveBreadCrumb = () => {
-  const [getCategoryMoveDest, setCategoryMoveDest] = useCategoryStore((state) => {
-    return [state.categoryMoveDest, state.setCategoryMoveDest];
-  });
+  const { categoryMoveDest: getCategoryMoveDest, setCategoryMoveDest } = useCategoryStore();
   const [breadCrumb, setBreadCrumb] = useState<ICategoryMetadata[]>([]);
 
   useEffect(() => {

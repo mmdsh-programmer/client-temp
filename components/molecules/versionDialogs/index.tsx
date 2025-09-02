@@ -15,121 +15,42 @@ import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/
 import { useVersionStore } from "@store/version";
 
 interface IVersionDialogsProps {
-  modals: {
-    compare: boolean;
-    delete: boolean;
-    edit: boolean;
-    clone: boolean;
-    confirm: boolean;
-    cancelConfirm: boolean;
-    public: boolean;
-    cancelPublic: boolean;
-    lastVersion: boolean;
-    publicDraft: boolean;
-    acceptConfirmDraft: boolean;
-    acceptPublicVersion: boolean;
-    acceptPublicDraft: boolean;
-    rejectPublicDraft: boolean;
-  };
-  setModalState: (key: keyof IVersionDialogsProps["modals"], state: boolean) => void;
+  activeModal: string | null;
+  closeModal: () => void;
 }
 
-const VersionDialogs = ({ modals, setModalState }: IVersionDialogsProps) => {
+const VersionDialogs = ({ activeModal, closeModal }: IVersionDialogsProps) => {
   const { compareVersion, setCompareVersion } = useVersionStore();
+
+  if (!activeModal) {
+    return null;
+  }
 
   return (
     <>
-      {modals.delete ? (
-        <VersionDeleteDialog
-          setOpen={() => {
-            return setModalState("delete", false);
-          }}
-        />
-      ) : null}
-      {modals.clone ? (
-        <VersionCloneDialog
-          setOpen={() => {
-            return setModalState("clone", false);
-          }}
-        />
-      ) : null}
-      {modals.compare ? (
+      {activeModal === "delete" ? <VersionDeleteDialog setOpen={closeModal} /> : null}
+      {activeModal === "clone" ? <VersionCloneDialog setOpen={closeModal} /> : null}
+      {activeModal === "compare" ? (
         <DiffVersionDialog
           setOpen={() => {
-            setModalState("compare", false);
+            closeModal();
             setCompareVersion(null);
           }}
         />
       ) : null}
-      {modals.confirm ? (
-        <VersionConfirmDialog
-          setOpen={() => {
-            return setModalState("confirm", false);
-          }}
-        />
+      {activeModal === "confirm" ? <VersionConfirmDialog setOpen={closeModal} /> : null}
+      {activeModal === "cancelConfirm" ? <VersionCancelConfirmDialog setOpen={closeModal} /> : null}
+      {activeModal === "public" ? <VersionPublicDialog setOpen={closeModal} /> : null}
+      {activeModal === "cancelPublic" ? <VersionCancelPublicDialog setOpen={closeModal} /> : null}
+      {activeModal === "lastVersion" ? <LastVersionDialog setOpen={closeModal} /> : null}
+      {activeModal === "publicDraft" ? <ConfirmPublicDraftDialog setOpen={closeModal} /> : null}
+      {activeModal === "acceptConfirmDraft" ? <AcceptDraftDialog setOpen={closeModal} /> : null}
+      {activeModal === "acceptPublicVersion" ? <AcceptVersionDialog setOpen={closeModal} /> : null}
+      {activeModal === "acceptPublicDraft" ? (
+        <AcceptPublicDraftDialog setOpen={closeModal} />
       ) : null}
-      {modals.cancelConfirm ? (
-        <VersionCancelConfirmDialog
-          setOpen={() => {
-            return setModalState("cancelConfirm", false);
-          }}
-        />
-      ) : null}
-      {modals.public ? (
-        <VersionPublicDialog
-          setOpen={() => {
-            return setModalState("public", false);
-          }}
-        />
-      ) : null}
-      {modals.cancelPublic ? (
-        <VersionCancelPublicDialog
-          setOpen={() => {
-            return setModalState("cancelPublic", false);
-          }}
-        />
-      ) : null}
-      {modals.lastVersion ? (
-        <LastVersionDialog
-          setOpen={() => {
-            return setModalState("lastVersion", false);
-          }}
-        />
-      ) : null}
-      {modals.publicDraft ? (
-        <ConfirmPublicDraftDialog
-          setOpen={() => {
-            return setModalState("publicDraft", false);
-          }}
-        />
-      ) : null}
-      {modals.acceptConfirmDraft ? (
-        <AcceptDraftDialog
-          setOpen={() => {
-            return setModalState("acceptConfirmDraft", false);
-          }}
-        />
-      ) : null}
-      {modals.acceptPublicVersion ? (
-        <AcceptVersionDialog
-          setOpen={() => {
-            return setModalState("acceptPublicVersion", false);
-          }}
-        />
-      ) : null}
-      {modals.acceptPublicDraft ? (
-        <AcceptPublicDraftDialog
-          setOpen={() => {
-            return setModalState("acceptPublicDraft", false);
-          }}
-        />
-      ) : null}
-      {modals.rejectPublicDraft ? (
-        <VersionCancelConfirmDialog
-          setOpen={() => {
-            return setModalState("rejectPublicDraft", false);
-          }}
-        />
+      {activeModal === "rejectPublicDraft" ? (
+        <VersionCancelConfirmDialog setOpen={closeModal} />
       ) : null}
       {compareVersion?.version && !compareVersion.compare ? <DiffVersionAlert /> : null}
     </>

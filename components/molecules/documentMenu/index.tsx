@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import DrawerTemplate from "@components/templates/drawerTemplate";
+import React, { useCallback, useState } from "react";
 import MenuTemplate from "@components/templates/menuTemplate";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { InvisibleIcon, MoreDotIcon, StarIcon } from "@components/atoms/icons";
@@ -9,94 +8,56 @@ import { usePathname } from "next/navigation";
 import { useDocumentDrawerStore, useDocumentStore } from "@store/document";
 
 interface IProps {
-  document?: IDocumentMetadata;
-  showDrawer?: boolean;
+  document: IDocumentMetadata;
 }
 
-const DocumentMenu = ({ document, showDrawer }: IProps) => {
+const DocumentMenu = ({ document }: IProps) => {
   const currentPath = usePathname();
-  const setDocument = useDocumentStore((state) => {
-    return state.setSelectedDocument;
-  });
-  const [openDocumentActionDrawer, setOpenDocumentActionDrawer] = [
-    useDocumentDrawerStore((state) => {
-      return state.documentDrawer;
-    }),
-    useDocumentDrawerStore((state) => {
-      return state.setDocumentDrawer;
-    }),
-  ];
 
-  const [modals, setModals] = useState({
-    editDocument: false,
-    deleteDocument: false,
-    move: false,
-    hide: false,
-    visible: false,
-    editContent: false,
-    documentTags: false,
-    documentAccess: false,
-    bookmarkDocument: false,
-    createPassword: false,
-    updatePassword: false,
-    deletePassword: false,
-    documentAccessPublishing: false,
-    documentVersionList: false,
-    documentDirectAccess: false,
-    createPublishLink: false,
-    deletePublishLink: false,
-    documentPublicVersion: false,
-    documentWhiteListRequests: false,
-  });
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const { setDocumentDrawer } = useDocumentDrawerStore();
+  const { setSelectedDocument } = useDocumentStore();
 
-  const toggleModal = (modalName: keyof typeof modals, value: boolean) => {
-    setModals((prev) => {
-      return { ...prev, [modalName]: value };
-    });
+  const handleSetModal = useCallback(
+    (modalName: string) => {
+      setSelectedDocument(document);
+      setActiveModal(modalName);
+    },
+    [document, setSelectedDocument],
+  );
+
+  const menuList = useDocumentMenuList(document, handleSetModal);
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setSelectedDocument(null);
   };
 
-  const menuList = useDocumentMenuList({ document, toggleModal });
+  if (menuList.length === 0) {
+    return null;
+  }
 
   return (
     <>
-      {showDrawer ? (
-        <div className="document-menu flex xs:hidden">
-          <DrawerTemplate
-            openDrawer={openDocumentActionDrawer}
-            setOpenDrawer={(open) => {
-              setOpenDocumentActionDrawer(!!open);
-            }}
-            menuList={menuList}
-          />
-        </div>
-      ) : (
-        <div className="document-menu flex items-center justify-end gap-1">
-          {document?.isHidden ? <InvisibleIcon className="h-4 w-4 flex-none" /> : null}
-          {currentPath !== "/admin/sharedDocuments" && document?.isBookmarked ? (
-            <StarIcon className="h-4 w-4 fill-amber-600 stroke-amber-600" />
-          ) : null}
-          <MenuTemplate
-            setOpenDrawer={() => {
-              setDocument(document || null);
-              setOpenDocumentActionDrawer(true);
-            }}
-            menuList={menuList}
-            icon={
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
-                <MoreDotIcon className="h-4 w-4" />
-              </div>
-            }
-            className="document-menu"
-          />
-        </div>
-      )}
-      <DocumentDialogs
-        modalsState={modals}
-        toggleModal={(modalName, value) => {
-          toggleModal(modalName as keyof typeof modals, value);
-          setDocument(null);
-        }}
-      />
+      <div className="document-menu flex items-center justify-end gap-1">
+        {document?.isHidden ? <InvisibleIcon className="h-4 w-4 flex-none" /> : null}
+        {currentPath !== "/admin/sharedDocuments" && document?.isBookmarked ? (
+          <StarIcon className="h-4 w-4 fill-amber-600 stroke-amber-600" />
+        ) : null}
+        <MenuTemplate
+          menuList={menuList}
+          onMobileClick={() => {
+            setSelectedDocument(document || null);
+            setDocumentDrawer(true);
+          }}
+          icon={
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
+              <MoreDotIcon className="h-4 w-4" />
+            </div>
+          }
+        />
+      </div>
+      <DocumentDialogs activeModal={activeModal} closeModal={closeModal} />
     </>
   );
 };

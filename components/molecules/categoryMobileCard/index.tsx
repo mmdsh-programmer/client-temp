@@ -1,10 +1,10 @@
+import React from "react";
 import { Typography } from "@material-tailwind/react";
 import CategoryMenu from "../categoryMenu/categoryMenu";
 import { FaDateFromTimestamp } from "@utils/index";
 import { FolderIcon } from "@components/atoms/icons";
 import { ICategoryMetadata } from "@interface/category.interface";
 import MobileCard from "../mobileCard";
-import React from "react";
 import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
@@ -65,10 +65,10 @@ const CategoryMobileCard = ({ category }: IProps) => {
               })}
             />
           )}
-          <div className="flex max-w-full gap-2">
+          <div className="flex items-center max-w-full gap-2">
             <FolderIcon className="h-5 min-h-5 w-5 min-w-5 stroke-blue-gray-600" />
             <Typography
-              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
+              className="flex text-primary_normal max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
               title={category.name}
             >
               {category.name}

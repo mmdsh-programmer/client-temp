@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ArrowLeftRectangleIcon,
   ConfirmationVersionIcon,
@@ -19,406 +20,339 @@ import {
 } from "@components/atoms/icons";
 import { ERoles } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
-import React from "react";
 import { toPersianDigit } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { useRepositoryStore } from "@store/repository";
-import { useDocumentStore, useDocumentDrawerStore } from "@store/document";
+import { useDocumentDrawerStore, useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
 import { useEditorStore } from "@store/editor";
+import { MenuItem } from "@components/templates/menuTemplate";
 
-interface UseDocumentMenuListProps {
-  document?: IDocumentMetadata;
-  toggleModal: (modalName: keyof Modals, value: boolean) => void;
-}
-
-type Modals = {
-  editDocument: boolean;
-  deleteDocument: boolean;
-  move: boolean;
-  hide: boolean;
-  visible: boolean;
-  editContent: boolean;
-  documentTags: boolean;
-  documentAccess: boolean;
-  bookmarkDocument: boolean;
-  createPassword: boolean;
-  updatePassword: boolean;
-  deletePassword: boolean;
-  documentAccessPublishing: boolean;
-  documentDirectAccess: boolean;
-  createPublishLink: boolean;
-  deletePublishLink: boolean;
-  documentPublicVersion: boolean;
-  documentWhiteListRequests: boolean;
+const createItem = (
+  text: string,
+  icon: JSX.Element,
+  onClick: () => void,
+  options: { className?: string; disabled?: boolean; subMenu?: MenuItem[] } = {},
+): MenuItem => {
+  return {
+    text,
+    icon,
+    onClick,
+    className: options.className,
+    disabled: options.disabled || false,
+    subMenu: options.subMenu,
+  };
 };
 
-const useDocumentMenuList = ({ document, toggleModal }: UseDocumentMenuListProps) => {
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
-  const setDocument = useDocumentStore((state) => {
-    return state.setSelectedDocument;
-  });
-  const setDocumentShow = useDocumentStore((state) => {
-    return state.setDocumentShow;
-  });
-  const setShowVersionList = useVersionStore((state) => {
-    return state.setVersionModalList;
-  });
-  const setEditorMode = useEditorStore((state) => {
-    return state.setEditorMode;
-  });
-  const setEditorModal = useEditorStore((state) => {
-    return state.setEditorModal;
-  });
-  const setOpenDocumentActionDrawer = useDocumentDrawerStore((state) => {
-    return state.setDocumentDrawer;
-  });
-  const currentPath = usePathname();
-
+const useDocumentMenuList = (
+  document: IDocumentMetadata | null,
+  setModal: (modalName: string) => void,
+): MenuItem[] => {
+  const { setSelectedDocument, setDocumentShow } = useDocumentStore();
+  const { setDocumentDrawer } = useDocumentDrawerStore();
+  const { setVersionModalList } = useVersionStore();
+  const { setEditorMode, setEditorModal } = useEditorStore();
+  const { repo, setRepositoryId } = useRepositoryStore();
+  const pathname = usePathname();
   const { data: userInfo } = useGetUser();
   const { data: getDomainInfo } = useGetDomainInfo();
+
+  if (!document) return [];
+
   const content = JSON.parse(getDomainInfo?.content || "{}");
   const { enablePersonalDocs } = content;
+  const role = repo?.roleName;
 
-  const adminOrOwnerRole = () => {
+  const isLimitedOnPanel = [
+    "/admin/myDocuments",
+    "/admin/sharedDocuments",
+    "/admin/dashboard",
+  ].some((p) => {
+    return pathname.startsWith(p);
+  });
+
+  const isAdminOrOwner = () => {
     if (
-      currentPath === "/admin/myDocuments" ||
-      (currentPath === "/admin/dashboard" && userInfo?.repository.id === document?.repoId)
-    ) {
+      pathname === "/admin/myDocuments" ||
+      (pathname === "/admin/dashboard" && userInfo?.repository.id === document?.repoId)
+    )
       return true;
-    }
     if (
-      currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
-    ) {
+      pathname === "/admin/sharedDocuments" ||
+      (pathname === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
+    )
       return document?.accesses?.[0] === "admin";
-    }
-    if (currentPath === "/admin/dashboard" && document?.accesses?.[0] === "admin") {
-      return true;
-    }
-    if (getRepo) {
-      return getRepo?.roleName === "admin" || getRepo?.roleName === "owner";
-    }
+    return role === "admin" || role === "owner";
   };
 
-  const editOptions = [
-    {
-      text: "ویرایش محتوا",
-      icon: <EditContentIcon className="h-4 w-4" />,
-      disabled: !adminOrOwnerRole(),
-      onClick: () => {
+  const restrictedRoles = [ERoles.writer, ERoles.viewer, ERoles.editor];
+
+  const editSubMenuItems: MenuItem[] = [
+    createItem(
+      "ویرایش محتوا",
+      <EditContentIcon className="h-4 w-4" />,
+      () => {
         setEditorMode("edit");
         setEditorModal(true);
-        setShowVersionList(false);
-        if (document) {
-          setDocument(document);
-        }
+        setVersionModalList(false);
       },
-      className: "document-edit-content",
-    },
-    {
-      text: "ویرایش سند",
-      icon: <EditDocumentIcon className="h-4 w-4" />,
-      disabled: !adminOrOwnerRole(),
-      onClick: () => {
-        toggleModal("editDocument", true);
-        if (document) setDocument(document);
+      { className: "document-edit-content", disabled: !isAdminOrOwner() },
+    ),
+    createItem(
+      "ویرایش سند",
+      <EditDocumentIcon className="h-4 w-4" />,
+      () => {
+        return setModal("editDocument");
       },
-      className: "document-edit",
-    },
-    {
-      text: "تگ های سند",
-      icon: <DocumentTagsIcon className="h-4 w-4" />,
-      onClick: () => {
-        toggleModal("documentTags", true);
-        if (document) {
-          setDocument(document);
-        }
+      {
+        className: "document-edit",
+        disabled: !isAdminOrOwner(),
       },
-      className: "document-edit-tags",
-    },
+    ),
+    createItem(
+      "تگ های سند",
+      <DocumentTagsIcon className="h-4 w-4" />,
+      () => {
+        return setModal("documentTags");
+      },
+      {
+        className: "document-edit-tags",
+      },
+    ),
   ];
 
-  const publishLimitationDocOptions = [
-    {
-      text: document?.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
-      icon: document?.isHidden ? (
-        <VisibleIcon className="h-4 w-4" />
-      ) : (
-        <HiddenIcon className="h-4 w-4" />
-      ),
-      disabled:
-        currentPath === "/admin/myDocuments" ||
-        currentPath === "/admin/sharedDocuments" ||
-        currentPath === "/admin/dashboard" ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal(document?.isHidden ? "visible" : "hide", true);
-        setOpenDocumentActionDrawer(false);
-        if (document) setDocument(document);
+  const publishLimitationSubMenuItems: MenuItem[] = [
+    createItem(
+      document.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
+      document.isHidden ? <VisibleIcon className="h-4 w-4" /> : <HiddenIcon className="h-4 w-4" />,
+      () => {
+        setModal(document.isHidden ? "visible" : "hide");
+        setDocumentDrawer(false);
       },
-      className: `${document?.isHidden ? "document-visible" : "document-hide"}`,
-    },
-    {
-      text: "محدودیت کاربران",
-      icon: <LimitationIcon className="h-4 w-4" />,
-      disabled:
-        currentPath === "/admin/myDocuments" ||
-        currentPath === "/admin/sharedDocuments" ||
-        currentPath === "/admin/dashboard" ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
-      onClick: () => {
-        toggleModal("documentAccessPublishing", true);
-        if (document) setDocument(document);
+      {
+        className: document.isHidden ? "document-visible" : "document-hide",
+        disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
       },
-      className: "document-limitation",
-    },
-    ...(document?.hasPassword
+    ),
+    createItem(
+      "محدودیت کاربران",
+      <LimitationIcon className="h-4 w-4" />,
+      () => {
+        return setModal("documentAccessPublishing");
+      },
+      {
+        className: "document-limitation",
+        disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
+      },
+    ),
+    ...(document.hasPassword
       ? [
-          {
-            text: "ویرایش رمز عبور",
-            icon: <PasswordIcon className="h-4 w-4" />,
-            disabled:
-              currentPath === "/admin/myDocuments" ||
-              currentPath === "/admin/sharedDocuments" ||
-              currentPath === "/admin/dashboard" ||
-              getRepo?.roleName === ERoles.writer ||
-              getRepo?.roleName === ERoles.viewer ||
-              getRepo?.roleName === ERoles.editor,
-            onClick: () => {
-              toggleModal("updatePassword", true);
-              if (document) setDocument(document);
+          createItem(
+            "ویرایش رمز عبور",
+            <PasswordIcon className="h-4 w-4" />,
+            () => {
+              return setModal("updatePassword");
             },
-            className: "document-edit-password",
-          },
-          {
-            text: "حذف رمز عبور",
-            icon: <PasswordIcon className="h-4 w-4" />,
-            disabled:
-              currentPath === "/admin/myDocuments" ||
-              currentPath === "/admin/sharedDocuments" ||
-              currentPath === "/admin/dashboard" ||
-              getRepo?.roleName === ERoles.writer ||
-              getRepo?.roleName === ERoles.viewer ||
-              getRepo?.roleName === ERoles.editor,
-            onClick: () => {
-              toggleModal("deletePassword", true);
-              if (document) setDocument(document);
+            {
+              className: "document-edit-password",
+              disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
             },
-            className: "document-delete-password",
-          },
+          ),
+          createItem(
+            "حذف رمز عبور",
+            <PasswordIcon className="h-4 w-4" />,
+            () => {
+              return setModal("deletePassword");
+            },
+            {
+              className: "document-delete-password",
+              disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
+            },
+          ),
         ]
       : [
-          {
-            text: "اعمال رمز عبور",
-            icon: <PasswordIcon className="h-4 w-4" />,
-            disabled:
-              currentPath === "/admin/myDocuments" ||
-              currentPath === "/admin/sharedDocuments" ||
-              currentPath === "/admin/dashboard" ||
-              getRepo?.roleName === ERoles.writer ||
-              getRepo?.roleName === ERoles.viewer ||
-              getRepo?.roleName === ERoles.editor,
-            onClick: () => {
-              toggleModal("createPassword", true);
-              if (document) setDocument(document);
+          createItem(
+            "اعمال رمز عبور",
+            <PasswordIcon className="h-4 w-4" />,
+            () => {
+              return setModal("createPassword");
             },
-            className: "document-create-password",
-          },
+            {
+              className: "document-create-password",
+              disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
+            },
+          ),
         ]),
   ];
 
-  const publishDocOptions = [
-    {
-      text: " لینک انتشار",
-      icon: <CopyIcon className="h-4 w-4 fill-icon-active" />,
-      onClick: () => {
+  const publishDocSubMenuItems: MenuItem[] = [
+    createItem(
+      "لینک انتشار",
+      <CopyIcon className="h-4 w-4 fill-icon-active" />,
+      () => {
         const url = toPersianDigit(
-          `/share/${toPersianDigit(
-            `${getRepo?.name.replaceAll(/\s+/g, "-")}`,
-          )}/${getRepo?.id}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`,
+          `/share/${toPersianDigit(`${document.repoName?.replaceAll(/\s+/g, "-")}`)}/${document.repoId}/${document?.name.replaceAll(/\s+/g, "-")}/${document?.id}`,
         );
         window.open(url, "_blank");
       },
-      className: "document-copy-publish-link",
-    },
-    {
-      text: "حذف لینک انتشار",
-      icon: <DeleteIcon className="h-4 w-4" />,
-      disabled:
-        currentPath === "/admin/sharedDocuments" ||
-        currentPath === "/admin/myDocuments" ||
-        currentPath === "/admin/dashboard" ||
-        getRepo?.roleName !== ERoles.owner,
-      onClick: () => {
-        toggleModal("deletePublishLink", true);
-        setOpenDocumentActionDrawer(false);
-        if (document) setDocument(document);
+      { className: "document-copy-publish-link" },
+    ),
+    createItem(
+      "حذف لینک انتشار",
+      <DeleteIcon className="h-4 w-4" />,
+      () => {
+        setModal("deletePublishLink");
+        setDocumentDrawer(false);
       },
-      className: "document-delete-publish-link",
-    },
+      {
+        className: "document-delete-publish-link",
+        disabled: isLimitedOnPanel || role !== ERoles.owner,
+      },
+    ),
   ];
 
-  const menuList = [
-    {
-      text: "ویرایش",
-      subMenu: editOptions,
-      onClick: () => {},
-      icon: <EditIcon className="h-4 w-4" />,
-    },
-    {
-      text: document?.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
-      icon: <DocumentBookmarkIcon className="h-4 w-4" />,
-      disabled:
-      (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
-      currentPath === "/admin/sharedDocuments",
-      onClick: () => {
-        toggleModal("bookmarkDocument", true);
-        setOpenDocumentActionDrawer(false);
-        if (document) setDocument(document);
+  const menuItems: MenuItem[] = [
+    createItem("ویرایش", <EditIcon className="h-4 w-4" />, () => {}, { subMenu: editSubMenuItems }),
+    createItem(
+      document.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
+      <DocumentBookmarkIcon className="h-4 w-4" />,
+      () => {
+        setModal("bookmarkDocument");
+        setDocumentDrawer(false);
       },
-      className: `${document?.isBookmarked ? "document-delete-bookmark" : "document-bookmark"}`,
-    },
-    {
-      text: "انتقال",
-      icon: <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
-      disabled:
-        currentPath === "/admin/sharedDocuments" ||
-        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("move", true);
-        if (document) setDocument(document);
+      {
+        className: document.isBookmarked ? "document-delete-bookmark" : "document-bookmark",
+        disabled:
+          (pathname.startsWith("/admin/dashboard") &&
+            document.repoId !== userInfo?.repository.id) ||
+          pathname.startsWith("/admin/sharedDocuments"),
       },
-      className: "document-move",
-    },
-    {
-      text: "نسخه های سند",
-      icon: <LastVersionIcon className="h-4 w-4" />,
-      onClick: () => {
-        setShowVersionList(true);
-        if (document) {
-          setDocument(document);
-          setDocumentShow(document);
+    ),
+    createItem(
+      "انتقال",
+      <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
+      () => {
+        return setModal("move");
+      },
+      {
+        className: "document-move",
+        disabled:
+          pathname.startsWith("/admin/sharedDocuments") ||
+          (pathname.startsWith("/admin/dashboard") &&
+            document.repoId !== userInfo?.repository.id) ||
+          (role ? restrictedRoles.includes(role) : false),
+      },
+    ),
+    createItem(
+      "نسخه های سند",
+      <LastVersionIcon className="h-4 w-4" />,
+      () => {
+        setVersionModalList(true);
+        setDocumentShow(document);
+        setSelectedDocument(document);
+        if (pathname !== "/admin/repositories") {
+          setRepositoryId(document.repoId);
         }
       },
-      className: "document-version-list",
-    },
-    {
-      text: "عمومی سازی آخرین نسخه",
-      icon: <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
-      disabled: !adminOrOwnerRole(),
-      onClick: () => {
-        toggleModal("documentPublicVersion", true);
-        setOpenDocumentActionDrawer(false);
-        if (document) setDocument(document);
+      { className: "document-version-list" },
+    ),
+    createItem(
+      "عمومی سازی آخرین نسخه",
+      <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
+      () => {
+        setModal("documentPublicVersion");
+        setDocumentDrawer(false);
       },
-      className: "document-public-version",
-    },
-    {
-      text: "دسترسی مستقیم به سند",
-      icon: <LockIcon className="h-4 w-4" />,
-      disabled: !enablePersonalDocs && !adminOrOwnerRole(),
-      onClick: () => {
-        toggleModal("documentDirectAccess", true);
-        if (document) setDocument(document);
+      { className: "document-public-version", disabled: !isAdminOrOwner() },
+    ),
+    createItem(
+      "دسترسی مستقیم به سند",
+      <LockIcon className="h-4 w-4" />,
+      () => {
+        return setModal("documentDirectAccess");
       },
-      className: "document-direct-access",
-    },
-    {
-      text: "محدودیت دسترسی در پنل",
-      icon: <LockIcon className="h-4 w-4" />,
-      disabled:
-        currentPath === "/admin/myDocuments" ||
-        currentPath === "/admin/sharedDocuments" ||
-        currentPath === "/admin/dashboard" ||
-        getRepo?.roleName === ERoles.writer ||
-        getRepo?.roleName === ERoles.viewer ||
-        getRepo?.roleName === ERoles.editor,
-      onClick: () => {
-        toggleModal("documentAccess", true);
-        if (document) setDocument(document);
+      { className: "document-direct-access", disabled: !!enablePersonalDocs && !isAdminOrOwner() },
+    ),
+    createItem(
+      "محدودیت دسترسی در پنل",
+      <LockIcon className="h-4 w-4" />,
+      () => {
+        return setModal("documentAccess");
       },
-      className: "document-access",
-    },
-    ...(document?.hasWhiteList ? 
-      [{
-        text: "درخواست‌های دسترسی به سند",
-        icon: <LockIcon className="h-4 w-4" />,
-        disabled:
-          currentPath === "/admin/myDocuments" ||
-          currentPath === "/admin/sharedDocuments" ||
-          currentPath === "/admin/dashboard" ||
-          getRepo?.roleName === ERoles.writer ||
-          getRepo?.roleName === ERoles.viewer ||
-          getRepo?.roleName === ERoles.editor,
-        onClick: () => {
-          toggleModal("documentWhiteListRequests", true);
-          if (document) setDocument(document);
-        },
-        className: "document-white-list-requests",
-      }] : []),
-    ...(document?.isPublish
-      ? [
-          {
-            text: "سند منتشر شده",
-            subMenu: publishDocOptions,
-            onClick: () => {},
-            icon: <GlobeIcon className="h-4 w-4 fill-icon-active" />,
-          },
-        ]
-      : [
-          {
-            text: "ایجاد لینک انتشار",
-            icon: <GlobeIcon className="h-4 w-4 fill-icon-active" />,
-            disabled:
-              currentPath === "/admin/sharedDocuments" ||
-              currentPath === "/admin/myDocuments" ||
-              currentPath === "/admin/dashboard" ||
-              getRepo?.roleName === ERoles.admin ||
-              getRepo?.roleName === ERoles.editor ||
-              getRepo?.roleName === ERoles.writer ||
-              getRepo?.roleName === ERoles.viewer,
-            onClick: () => {
-              toggleModal("createPublishLink", true);
-              if (document) setDocument(document);
-            },
-            className: "document-create-publish-link",
-          },
-        ]),
-    {
-      text: "محدودیت در انتشار",
-      icon: <PublishedLimitationIcon className="h-4 w-4" />,
-      subMenu: publishLimitationDocOptions,
-      onClick: () => {},
-    },
-    {
-      text: "حذف سند",
-      icon: <DeleteIcon className="h-4 w-4" />,
-      disabled:
-        currentPath === "/admin/sharedDocuments" ||
-        (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id) ||
-        (getRepo?.roleName === ERoles.writer &&
-          document?.creator?.userName !== userInfo?.username) ||
-        getRepo?.roleName === ERoles.viewer,
-      onClick: () => {
-        toggleModal("deleteDocument", true);
-        setOpenDocumentActionDrawer(false);
-        if (document) setDocument(document);
+      {
+        className: "document-access",
+        disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
       },
-      className: "document-delete",
-    },
+    ),
   ];
 
-  return menuList;
+  if (document.hasWhiteList) {
+    menuItems.push(
+      createItem(
+        "درخواست‌های دسترسی به سند",
+        <LockIcon className="h-4 w-4" />,
+        () => {
+          return setModal("documentWhiteListRequests");
+        },
+        {
+          className: "document-white-list-requests",
+          disabled: isLimitedOnPanel || (role ? restrictedRoles.includes(role) : false),
+        },
+      ),
+    );
+  }
+
+  if (document.isPublish) {
+    menuItems.push(
+      createItem("سند منتشر شده", <GlobeIcon className="h-4 w-4 fill-icon-active" />, () => {}, {
+        subMenu: publishDocSubMenuItems,
+      }),
+    );
+  } else {
+    menuItems.push(
+      createItem(
+        "ایجاد لینک انتشار",
+        <GlobeIcon className="h-4 w-4 fill-icon-active" />,
+        () => {
+          return setModal("createPublishLink");
+        },
+        {
+          className: "document-create-publish-link",
+          disabled: isLimitedOnPanel || role !== ERoles.owner,
+        },
+      ),
+    );
+  }
+
+  menuItems.push(
+    createItem("محدودیت در انتشار", <PublishedLimitationIcon className="h-4 w-4" />, () => {}, {
+      subMenu: publishLimitationSubMenuItems,
+    }),
+  );
+
+  menuItems.push(
+    createItem(
+      "حذف سند",
+      <DeleteIcon className="h-4 w-4" />,
+      () => {
+        setModal("deleteDocument");
+        setDocumentDrawer(false);
+      },
+      {
+        className: "document-delete",
+        disabled:
+          pathname.startsWith("/admin/sharedDocuments") ||
+          (pathname.startsWith("/admin/dashboard") &&
+            document.repoId !== userInfo?.repository.id) ||
+          (role === ERoles.writer && document.creator?.userName !== userInfo?.username) ||
+          role === ERoles.viewer,
+      },
+    ),
+  );
+
+  return menuItems;
 };
 
 export default useDocumentMenuList;

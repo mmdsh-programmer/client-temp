@@ -16,153 +16,53 @@ import DocumentCreatePublishLinkDialog from "@components/organisms/dialogs/docum
 import DocumentDeletePublishLinkDialog from "@components/organisms/dialogs/document/documentDeletePublishLinkDialog";
 import DocumentPublicVersionDialog from "@components/organisms/dialogs/document/documentPublicVersionDialog";
 import DocumentWhiteListRequestsDialog from "@components/organisms/dialogs/document/documentWhiteListRequestsDialog";
+import { useDocumentStore } from "@store/document";
 
-interface DocumentDialogsProps {
-  modalsState: {
-    deleteDocument: boolean;
-    editDocument: boolean;
-    move: boolean;
-    hide: boolean;
-    visible: boolean;
-    bookmarkDocument: boolean;
-    documentAccess: boolean;
-    documentTags: boolean;
-    documentAccessPublishing: boolean;
-    createPassword: boolean;
-    updatePassword: boolean;
-    deletePassword: boolean;
-    editContent: boolean;
-    documentVersionList: boolean;
-    documentDirectAccess: boolean;
-    createPublishLink: boolean;
-    deletePublishLink: boolean;
-    documentPublicVersion: boolean;
-    documentWhiteListRequests: boolean;
-  };
-  toggleModal: (modalName: keyof DocumentDialogsProps["modalsState"], value: boolean) => void;
+interface IDocumentDialogsProps {
+  activeModal: string | null;
+  closeModal: () => void;
 }
+const DocumentDialogs = ({ activeModal, closeModal }: IDocumentDialogsProps) => {
+  const { selectedDocument } = useDocumentStore();
 
-const DocumentDialogs: React.FC<DocumentDialogsProps> = ({ modalsState, toggleModal }) => {
+  if (!activeModal || !selectedDocument) return null;
+
   return (
     <>
-      {modalsState.deleteDocument ? (
-        <DocumentDeleteDialog
-          setOpen={() => {
-            return toggleModal("deleteDocument", false);
-          }}
-        />
+      {activeModal === "deleteDocument" ? <DocumentDeleteDialog setOpen={closeModal} /> : null}
+      {activeModal === "editDocument" ? <DocumentEditDialog setOpen={closeModal} /> : null}
+      {activeModal === "hide" ? <DocumentHideDialog setOpen={closeModal} /> : null}
+      {activeModal === "visible" ? <DocumentVisibleDialog setOpen={closeModal} /> : null}
+      {activeModal === "move" ? <DocumentMoveDialog setOpen={closeModal} /> : null}
+      {activeModal === "bookmarkDocument" ? <DocumentBookmarkDialog setOpen={closeModal} /> : null}
+      {activeModal === "documentAccess" ? <DocumentAccessDialog setOpen={closeModal} /> : null}
+      {activeModal === "documentTags" ? <DocumentTagsDialog setOpen={closeModal} /> : null}
+      {activeModal === "documentAccessPublishing" ? (
+        <DocumentAccessPublishingDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.editDocument ? (
-        <DocumentEditDialog
-          setOpen={() => {
-            return toggleModal("editDocument", false);
-          }}
-        />
+      {activeModal === "createPassword" ? (
+        <DocumentCreatePasswordDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.hide ? (
-        <DocumentHideDialog
-          setOpen={() => {
-            return toggleModal("hide", false);
-          }}
-        />
+      {activeModal === "updatePassword" ? (
+        <DocumentUpdatePasswordDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.visible ? (
-        <DocumentVisibleDialog
-          setOpen={() => {
-            return toggleModal("visible", false);
-          }}
-        />
+      {activeModal === "deletePassword" ? (
+        <DocumentDeletePasswordDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.move ? (
-        <DocumentMoveDialog
-          setOpen={() => {
-            return toggleModal("move", false);
-          }}
-        />
+      {activeModal === "documentDirectAccess" ? (
+        <DocumentDirectAccessDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.bookmarkDocument ? (
-        <DocumentBookmarkDialog
-          setOpen={() => {
-            return toggleModal("bookmarkDocument", false);
-          }}
-        />
+      {activeModal === "createPublishLink" ? (
+        <DocumentCreatePublishLinkDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.documentAccess ? (
-        <DocumentAccessDialog
-          setOpen={() => {
-            return toggleModal("documentAccess", false);
-          }}
-        />
+      {activeModal === "deletePublishLink" ? (
+        <DocumentDeletePublishLinkDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.documentTags ? (
-        <DocumentTagsDialog
-          setOpen={() => {
-            return toggleModal("documentTags", false);
-          }}
-        />
+      {activeModal === "documentPublicVersion" ? (
+        <DocumentPublicVersionDialog setOpen={closeModal} />
       ) : null}
-      {modalsState.documentAccessPublishing ? (
-        <DocumentAccessPublishingDialog
-          setOpen={() => {
-            return toggleModal("documentAccessPublishing", false);
-          }}
-        />
-      ) : null}
-      {modalsState.createPassword ? (
-        <DocumentCreatePasswordDialog
-          setOpen={() => {
-            return toggleModal("createPassword", false);
-          }}
-        />
-      ) : null}
-      {modalsState.updatePassword ? (
-        <DocumentUpdatePasswordDialog
-          setOpen={() => {
-            return toggleModal("updatePassword", false);
-          }}
-        />
-      ) : null}
-      {modalsState.deletePassword ? (
-        <DocumentDeletePasswordDialog
-          setOpen={() => {
-            return toggleModal("deletePassword", false);
-          }}
-        />
-      ) : null}
-      {modalsState.documentDirectAccess ? (
-        <DocumentDirectAccessDialog
-          setOpen={() => {
-            return toggleModal("documentDirectAccess", false);
-          }}
-        />
-      ) : null}
-      {modalsState.createPublishLink ? (
-        <DocumentCreatePublishLinkDialog
-          setOpen={() => {
-            return toggleModal("createPublishLink", false);
-          }}
-        />
-      ) : null}
-      {modalsState.deletePublishLink ? (
-        <DocumentDeletePublishLinkDialog
-          setOpen={() => {
-            return toggleModal("deletePublishLink", false);
-          }}
-        />
-      ) : null}
-      {modalsState.documentPublicVersion ? (
-        <DocumentPublicVersionDialog
-          setOpen={() => {
-            return toggleModal("documentPublicVersion", false);
-          }}
-        />
-      ) : null}
-      {modalsState.documentWhiteListRequests ? (
-        <DocumentWhiteListRequestsDialog
-          setOpen={() => {
-            return toggleModal("documentWhiteListRequests", false);
-          }}
-        />
+      {activeModal === "documentWhiteListRequests" ? (
+        <DocumentWhiteListRequestsDialog setOpen={closeModal} />
       ) : null}
     </>
   );

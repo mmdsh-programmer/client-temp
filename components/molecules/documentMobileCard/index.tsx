@@ -98,10 +98,10 @@ const DocumentMobileCard = ({ document }: IProps) => {
               })}
             />
           )}
-          <div className="flex max-w-full gap-2">
+          <div className="flex items-center max-w-full gap-2">
             <DocumentIcon document={document} />
             <Typography
-              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
+              className="flex text-primary_normal max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
               title={document.name}
             >
               {document.name}

@@ -56,7 +56,7 @@ const DraftRequestMenu = ({ showDrawer, request }: IProps) => {
     </div>
   ) : (
     <MenuTemplate
-      setOpenDrawer={() => {
+      onMobileClick={() => {
         setRequest(request);
         setOpenRequestActionDrawer(true);
       }}

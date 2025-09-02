@@ -8,92 +8,27 @@ import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryM
 import CategoryVisibleDialog from "../../organisms/dialogs/category/categoryVisibleDialog";
 import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
 
-interface CategoryDialogsProps {
-  modals: {
-    editCategoryModal: boolean;
-    deleteCategoryModal: boolean;
-    moveModal: boolean;
-    hideModal: boolean;
-    visibleModal: boolean;
-    categoryAccessModal: boolean;
-    createCategoryModal: boolean;
-    createDocumentModal: boolean;
-    createTemplateModal: boolean;
-  };
-  toggleModal: (
-    modalName: keyof CategoryDialogsProps["modals"],
-    value: boolean
-  ) => void;
+interface ICategoryDialogsProps {
+  activeModal: string | null;
+  closeModal: () => void;
 }
 
-const CategoryDialogs = ({ modals, toggleModal }: CategoryDialogsProps) => {
+const CategoryDialogs = ({ activeModal, closeModal }: ICategoryDialogsProps) => {
+  if (!activeModal) return null;
+
   return (
     <>
-      {modals.editCategoryModal ? (
-        <CategoryEditDialog
-          setOpen={() => {
-            return toggleModal("editCategoryModal", false);
-          }}
-        />
+      {activeModal === "editCategory" ? <CategoryEditDialog setOpen={closeModal} /> : null}
+      {activeModal === "deleteCategory" ? <CategoryDeleteDialog setOpen={closeModal} /> : null}
+      {activeModal === "move" ? <CategoryMoveDialog setOpen={closeModal} /> : null}
+      {activeModal === "hide" ? <CategoryHideDialog setOpen={closeModal} /> : null}
+      {activeModal === "visible" ? <CategoryVisibleDialog setOpen={closeModal} /> : null}
+      {activeModal === "createCategory" ? <CategoryCreateDialog setOpen={closeModal} /> : null}
+      {activeModal === "createDocument" ? (
+        <DocumentCreate isTemplate={false} setOpen={closeModal} />
       ) : null}
-      {modals.deleteCategoryModal ? (
-        <CategoryDeleteDialog
-          setOpen={() => {
-            return toggleModal("deleteCategoryModal", false);
-          }}
-        />
-      ) : null}
-      {modals.moveModal ? (
-        <CategoryMoveDialog
-          setOpen={() => {
-            return toggleModal("moveModal", false);
-          }}
-        />
-      ) : null}
-      {modals.hideModal ? (
-        <CategoryHideDialog
-          setOpen={() => {
-            return toggleModal("hideModal", false);
-          }}
-        />
-      ) : null}
-      {modals.visibleModal ? (
-        <CategoryVisibleDialog
-          setOpen={() => {
-            return toggleModal("visibleModal", false);
-          }}
-        />
-      ) : null}
-      {modals.createCategoryModal ? (
-        <CategoryCreateDialog
-          setOpen={() => {
-            return toggleModal("createCategoryModal", false);
-          }}
-        />
-      ) : null}
-      {modals.createDocumentModal ? (
-        <DocumentCreate
-          isTemplate={false}
-          setOpen={() => {
-            return toggleModal("createDocumentModal", false);
-          }}
-        />
-      ) : null}
-      {modals.createTemplateModal ? (
-        <DocumentCreate
-          isTemplate
-          setOpen={() => {
-            return toggleModal("createTemplateModal", false);
-          }}
-        />
-      ) : null}
-      {modals.categoryAccessModal ? (
-        <CategoryAccessDialog
-          setOpen={() => {
-            return toggleModal("categoryAccessModal", false);
-          }}
-        />
-      ) : null}
+      {activeModal === "createTemplate" ? <DocumentCreate isTemplate setOpen={closeModal} /> : null}
+      {activeModal === "accessCategory" ? <CategoryAccessDialog setOpen={closeModal} /> : null}
     </>
   );
 };

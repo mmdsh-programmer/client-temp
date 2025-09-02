@@ -44,6 +44,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "components/molecules/repoMenu/repoMenuList.tsط"
-  ],
+, "app/[domain]/admin/template.tss"  ],
   "exclude": ["node_modules"]
 }

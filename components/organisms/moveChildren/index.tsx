@@ -56,53 +56,55 @@ const MoveChildren = ({ target, repoId }: IProps) => {
   });
 
   return (
-    <div className={`move-${target}-list`}>
+    <>
       {isLoading ? (
-        <div className="px-2 py-1">
+        <div className="flex h-10 w-full items-center justify-center">
           <Spinner className="h-4 w-4 text-primary" />
         </div>
       ) : (
-        moveChildren?.pages.map((page) => {
-          return (
-            <Fragment key={page.offset}>
-              {page.list.length ? (
-                page.list.map((subItem) => {
-                  if (
-                    target === "category" &&
-                    bulkItemsCategories?.some((bulkItem) => {
-                      return bulkItem.id === subItem.id;
-                    })
-                  ) {
-                    return null;
-                  }
-                  return (
-                    <div
-                      key={`move-category-${subItem.id}`}
-                      className="move-category-item flex cursor-pointer items-center gap-2 px-2 py-1"
-                      onClick={() => {
-                        setCategoryMoveDest(subItem as ICategoryMetadata);
-                      }}
-                    >
-                      <FolderIcon className="h-4 w-4 stroke-icon-active" />
-                      <Typography className="caption_c1 text-primary_normal">
-                        {subItem.name}
-                      </Typography>
-                    </div>
-                  );
-                })
-              ) : (
-                <Typography className="caption_c1 p-2 text-primary_normal">
-                  موردی برای نمایش وجود ندارد
-                </Typography>
-              )}
-            </Fragment>
-          );
-        })
+        <div className={`move-${target}-list overflow-y-auto max-h-[200px]`}>
+          {moveChildren?.pages.map((page) => {
+            return (
+              <Fragment key={page.offset}>
+                {page.list.length ? (
+                  page.list.map((subItem) => {
+                    if (
+                      target === "category" &&
+                      bulkItemsCategories?.some((bulkItem) => {
+                        return bulkItem.id === subItem.id;
+                      })
+                    ) {
+                      return null;
+                    }
+                    return (
+                      <div
+                        key={`move-category-${subItem.id}`}
+                        className="move-category-item flex cursor-pointer items-center gap-2 px-2 py-1"
+                        onClick={() => {
+                          setCategoryMoveDest(subItem as ICategoryMetadata);
+                        }}
+                      >
+                        <FolderIcon className="h-4 w-4 stroke-icon-active" />
+                        <Typography className="caption_c1 text-primary_normal">
+                          {subItem.name}
+                        </Typography>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <Typography className="caption_c1 p-2 text-primary_normal">
+                    موردی برای نمایش وجود ندارد
+                  </Typography>
+                )}
+              </Fragment>
+            );
+          })}
+        </div>
       )}
       <RenderIf isTrue={hasNextPage}>
         <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
       </RenderIf>
-    </div>
+    </>
   );
 };
 

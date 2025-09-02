@@ -28,7 +28,7 @@ const PrivateFeedMenu = ({ feed }: IProps) => {
   ];
   return (
     <>
-      <MenuTemplate setOpenDrawer={() => {}} menuList={menuList} />
+      <MenuTemplate onMobileClick={() => {}} menuList={menuList} />
       {openEditFeedDialog ? (
         <PrivateFeedEditDialog feed={feed} setOpen={setEditFeedDialog} />
       ) : null}

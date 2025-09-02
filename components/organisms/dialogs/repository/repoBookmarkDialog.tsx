@@ -1,5 +1,4 @@
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import { IRepo } from "@interface/repo.interface";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
@@ -7,12 +6,11 @@ import useBookmarkRepo from "@hooks/repository/useBookmarkRepo";
 import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
-  repo?: IRepo;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
-  const { setRepo } = useRepositoryStore();
+const RepoBookmarkDialog = ({ setOpen }: IProps) => {
+  const { repo, setRepo } = useRepositoryStore();
   const { isPending, mutate } = useBookmarkRepo();
 
   const handleClose = () => {
@@ -59,7 +57,7 @@ const RepoBookmarkDialog = ({ repo, setOpen }: IProps) => {
       <Typography
         title={repo?.name}
         placeholder="name"
-        className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
+        className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
       >
         {repo?.name}
       </Typography>
