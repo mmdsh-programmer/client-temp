@@ -68,9 +68,9 @@ const PanelUrl = () => {
         `${window.location.origin}${window.location.pathname}?repoId=${documentShow.repoId}&documentId=${documentShow.id}`,
       );
     }
-    if (window.location.pathname === "/admin/dashboard" && !repositoryId) {
-      window.history.replaceState(null, "", `${window.location.origin}${window.location.pathname}`);
-    }
+    // if (window.location.pathname === "/admin/dashboard" && !repositoryId) {
+    //   window.history.replaceState(null, "", `${window.location.origin}${window.location.pathname}`);
+    // }
   }, [documentShow, categoryShow, repo, repositoryId]);
 
   return null;
