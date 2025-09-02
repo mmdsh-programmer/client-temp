@@ -8,10 +8,12 @@ export const getDomainHost = async () => {
 
   let domain: string | null = null;
 
+  const headersList = await headers();
+
   if (isDev) {
     domain = envDomain || null;
   } else {
-    domain = headers?.().get("host");
+    domain = headersList.get("host");
   }
 
   return domain;

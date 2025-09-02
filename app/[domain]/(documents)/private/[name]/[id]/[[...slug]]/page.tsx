@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import {
@@ -26,11 +27,9 @@ import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
 import PublishDocumentAccessWrapper from "@components/pages/publish/PublishDocumentAccessWrapper";
 
-type PageParams = {
-  domain: string;
-  name: string;
-  id: string;
-  slug?: string[];
+type PublishContentPageProps = {
+  params: Promise<{ domain: string; name: string; id: string; slug?: string[] }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 async function fetchDocumentVersion(
@@ -70,9 +69,12 @@ async function fetchDocumentVersion(
   );
 }
 
-export default async function PublishContentPage({ params }: { params: PageParams }) {
+export default async function PublishContentPage({
+  params,
+}: PublishContentPageProps): Promise<any> {
   try {
-    const { id, name, slug, domain } = params;
+    const awaitedParams = await params;
+    const { id, name, slug, domain } = awaitedParams;
 
     const decodeId = decodeURIComponent(id);
     // Check for English digits in slug before converting

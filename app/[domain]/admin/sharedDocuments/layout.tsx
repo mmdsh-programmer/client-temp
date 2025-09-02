@@ -3,9 +3,6 @@ import React from "react";
 
 interface IProps {
   children: React.ReactNode;
-  params: {
-    domain: string;
-  };
 }
 
 export const metadata: Metadata = {

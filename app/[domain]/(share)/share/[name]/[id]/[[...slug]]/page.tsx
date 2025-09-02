@@ -20,16 +20,15 @@ export const generateStaticParams = async () => {
   return [];
 };
 
-interface PageParams {
-  domain: string;
-  name: string;
-  id: string;
-  slug: string[];
-}
+type PublishContentPageProps = {
+  params: Promise<{ domain: string; name: string; id: string; slug: string[] }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
-const SharePage = async ({ params }: { params: PageParams }) => {
+const SharePage = async ({ params }: PublishContentPageProps) => {
   try {
-    const { id, name, slug, domain } = params;
+    const awaitedParams = await params;
+    const { id, name, slug, domain } = awaitedParams;
 
     const decodeId = decodeURIComponent(id);
     if (hasEnglishDigits(decodeId)) {

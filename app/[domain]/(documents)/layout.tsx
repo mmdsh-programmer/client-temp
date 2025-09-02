@@ -7,18 +7,20 @@ import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
-  params: { id: string; name: string; domain: string };
+  params: Promise<{ domain: string }>;
 }
 
 const PublishSlugLayout = async ({ children, params }: IProps) => {
   try {
+    const awaitedParams = await params;
+
     const isDev = process.env.NODE_ENV === "development";
     let domain: string = "";
 
     if (isDev) {
       domain = process.env.DOMAIN || "";
     } else {
-      domain = decodeKey(params.domain);
+      domain = decodeKey(awaitedParams.domain);
     }
 
     const { content } = await getCustomPostByDomain(domain);

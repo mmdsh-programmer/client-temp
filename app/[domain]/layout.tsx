@@ -9,13 +9,13 @@ import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
-  params: {
+  params: Promise <{
     domain: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-
+  const awaitedParams = await params;
   const isDev = process.env.NODE_ENV === "development";
 
   let domainUrl: string = "";
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   if (isDev) {
     domainUrl = process.env.DOMAIN || "";
   } else {
-    const domain = await params;
+    const domain = awaitedParams;
     domainUrl = decodeKey(domain);
      }
 

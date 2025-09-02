@@ -537,7 +537,7 @@ export const editSocialProfile = async (
   );
 
   const redisClient = await getRedisClient();
-  await redisClient?.remove(`user-social:${accessToken}`);
+  await redisClient?.del(`user-social:${accessToken}`);
 
   if (response.data.hasError) {
     return handleSocialStatusError(response.data);

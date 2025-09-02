@@ -12,23 +12,25 @@ import { generateCachePageTag } from "@utils/redis";
 import { getCustomPostByDomain } from "@service/clasor";
 
 interface MainPageProps {
-  params: {
+  params: Promise<{
     domain: string;
-  };
+  }>;
 }
 const MainPage = async ({ params }: MainPageProps) => {
   try {
+    const awaitedParams = await params;
+
     const isDev = process.env.NODE_ENV === "development";
     let domain: string = "";
 
     if (isDev) {
       domain = process.env.DOMAIN || "";
     } else {
-      domain = decodeKey(params.domain);
+      domain = decodeKey(awaitedParams.domain);
     }
     const { content, enablePublishPage } = await getCustomPostByDomain(domain);
     const domainInfo = JSON.parse(content ?? "{}") as ICustomPostData;
-    await generateCachePageTag([`i-${params.domain}`], 900);
+    await generateCachePageTag([`i-${awaitedParams.domain}`], 900);
     if (enablePublishPage) {
       const { projectName, projectDescription, heroImage, logo } = domainInfo;
       return (

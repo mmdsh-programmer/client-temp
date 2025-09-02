@@ -2,15 +2,21 @@ import React from "react";
 import SubscribePage from "@components/pages/subscribe";
 
 interface IProps {
-  params: {
+  params: Promise<{
     hash: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     hasPassword?: string;
-  };
+  }>;
 }
 
-const Subscribe = ({ params: { hash }, searchParams: { hasPassword } }: IProps) => {
+const Subscribe = async ({ params, searchParams }: IProps) => {
+  const awaitedParams = await params;
+  const { hash } = awaitedParams;
+
+  const awaitedSearchParams = await searchParams;
+  const { hasPassword } = awaitedSearchParams;
+
   return <SubscribePage hash={hash} hasPassword={hasPassword} />;
 };
 

@@ -5,20 +5,22 @@ import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
 import PublishHeader from "@components/organisms/header/publishHeader";
 
-interface IProps {
+type IProps = {
   children: React.ReactNode;
-  params: { id: string; name: string; domain: string };
-}
+  params: Promise<{ domain: string }>;
+};
 
 const ShareSlugLayout = async ({ children, params }: IProps) => {
   try {
+    const awaitedParams = await params;
+
     const isDev = process.env.NODE_ENV === "development";
     let domain: string = "";
 
     if (isDev) {
       domain = process.env.DOMAIN || "";
     } else {
-      domain = decodeKey(params.domain);
+      domain = decodeKey(awaitedParams.domain);
     }
     const { content } = await getCustomPostByDomain(domain);
     const { projectName, logo } = JSON.parse(content) as ICustomPostData;

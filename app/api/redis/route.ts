@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req) {
   try {
-    const headersList = headers();
+    const headersList = await headers();
     const Authorization = headersList.get("Authorization");
     if (
       !Authorization ||
@@ -19,7 +19,7 @@ export async function GET(req) {
       );
     }
     const redisHandler = await getRedisClient();
-    if(!redisHandler || !redisHandler.isOpen){
+    if(!redisHandler || !redisHandler.isReady){
       return NextResponse.json({ error: "Redis is not ready" }, { status: 400 });
     }
     const key = req.nextUrl.searchParams?.get("key");
@@ -28,7 +28,7 @@ export async function GET(req) {
       return NextResponse.json({ error: "Key is required" }, { status: 400 });
     }
 
-    const keyType = await redisHandler?.type(key);
+    const keyType = await redisHandler?.get(key);
 
     let value;
     switch (keyType) {
@@ -37,23 +37,23 @@ export async function GET(req) {
         break;
 
       case "hash":
-        value = await redisHandler?.hGetAll(key);
+        value = await redisHandler?.get(key);
         break;
 
       case "list":
-        value = await redisHandler?.lRange(key, 0, -1); // Get all elements in the list
+        value = await redisHandler?.get(key); // Get all elements in the list
         break;
 
       case "set":
-        value = await redisHandler?.sMembers(key); // Get all members of the set
+        value = await redisHandler?.get(key); // Get all members of the set
         break;
 
       case "zset": // Sorted set
-        value = await redisHandler?.zRange(key, 0, -1, { WITHSCORES: true }); // Get all elements with scores
+        value = await redisHandler?.get(key); // Get all elements with scores
         break;
 
       case "stream":
-        value = await redisHandler?.xRange(key, "-", "+"); // Get all entries in the stream
+        value = await redisHandler?.get(key); // Get all entries in the stream
         break;
 
       case "none": // Key doesn't exist

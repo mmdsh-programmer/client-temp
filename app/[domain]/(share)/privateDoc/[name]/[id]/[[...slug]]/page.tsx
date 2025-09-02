@@ -22,14 +22,10 @@ export const generateStaticParams = async () => {
   return [];
 };
 
-interface PageParams {
-  domain: string;
-
-  name: string;
-  id: string;
-  slug: string[];
-}
-
+type PublishContentPageProps = {
+  params: Promise<{ domain: string; name: string; id: string; slug: string[] }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 async function fetchDocumentVersion(
   documentId: number,
   versionId: number | undefined,
@@ -53,9 +49,10 @@ async function fetchDocumentVersion(
   return getPublishedDocumentVersion(accessToken!, documentId, lastVersion.id, documentPassword);
 }
 
-export default async function PrivateSharePage({ params }: { params: PageParams }) {
+export default async function PrivateSharePage({ params }: PublishContentPageProps) {
   try {
-    const { id, name, slug, domain } = params;
+    const awaitedParams = await params;
+    const { id, name, slug, domain } = awaitedParams;
 
     const decodeId = decodeURIComponent(id);
     if (hasEnglishDigits(decodeId)) {
@@ -106,9 +103,11 @@ export default async function PrivateSharePage({ params }: { params: PageParams 
 
     // check password cookie
     // caution: reading cookies will cause server side rendering
-    const documentPassword = cookies().get(`document-${documentId}-password`)?.value;
+    const cookieStore = await cookies();
 
-    const encodedToken = cookies().get("token")?.value;
+    const documentPassword = cookieStore.get(`document-${documentId}-password`)?.value;
+
+    const encodedToken = cookieStore.get("token")?.value;
     let accessToken: string | undefined;
 
     if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && !encodedToken) {
