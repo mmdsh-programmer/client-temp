@@ -3,12 +3,16 @@ import "@styles/globals.css";
 import LayoutTransitionProvider from "provider/layoutTransition";
 import MainProvider from "provider/mainProvider";
 import type { Metadata } from "next";
-import ThemeLoaderProvider from "provider/themeLoaderProvider";
 import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
+import { ICustomPostData } from "@interface/app.interface";
+import RootLayout from "@app/layout";
 
 interface IProps {
   children: React.ReactNode;
+  params: Promise<{
+    domain: string;
+  }>;
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
@@ -43,9 +47,23 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   }
 }
 
-const DomainLayout = async ({ children }: IProps) => {
+const DomainLayout = async ({ children, params }: IProps) => {
+  const { domain } = await params;
+
+  const isDev = process.env.NODE_ENV === "development";
+  let domainHash: string = "";
+
+  if (isDev) {
+    domainHash = process.env.DOMAIN || "";
+  } else {
+    domainHash = decodeKey(domain);
+  }
+  const { content } = await getCustomPostByDomain(domainHash);
+  const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
+
+  
   return (
-    <ThemeLoaderProvider>
+    <RootLayout themeStyle={theme}>
       <>
         <MainProvider>
           <LayoutTransitionProvider
@@ -58,7 +76,7 @@ const DomainLayout = async ({ children }: IProps) => {
         </MainProvider>
         <p className="absolute -z-50 hidden">3.20.0.2-v3</p>
       </>
-    </ThemeLoaderProvider>
+    </RootLayout>
   );
 };
 
