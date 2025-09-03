@@ -31,8 +31,19 @@ export interface IProps {
 const EditorFooter = ({ editorRef }: IProps) => {
   const { repo: getRepo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
-  const { editorMode, setEditorMode, editorData: getVersionData, setEditorData: setVersionData, editorPublicKey: key, setEditorModal } = useEditorStore();
-  const { setSelectedVersion: setVersion, setVersionModalList } = useVersionStore();
+  const {
+    editorMode,
+    setEditorMode,
+    editorData: getVersionData,
+    setEditorData: setVersionData,
+    editorPublicKey: key,
+    setEditorModal,
+  } = useEditorStore();
+  const {
+    selectedVersion,
+    setSelectedVersion: setVersion,
+    setVersionModalList,
+  } = useVersionStore();
 
   const [checked, setChecked] = useState(false);
   const autoSaveRef = useRef<Worker>();
@@ -71,17 +82,17 @@ const EditorFooter = ({ editorRef }: IProps) => {
   };
 
   const renderTitle = () => {
-    if (!getVersionData) {
+    if (!selectedVersion) {
       return "_";
     }
     if (editorMode === "preview") {
-      return `${getVersionData.versionNumber}
+      return `${selectedVersion.versionNumber}
       ${` (${
-        translateVersionStatus(getVersionData.status, getVersionData.state).translated
-      } ${getVersionData.status === "accepted" ? "-عمومی" : ""})`}`;
+        translateVersionStatus(selectedVersion.status, selectedVersion.state).translated
+      } ${selectedVersion.status === "accepted" ? "-عمومی" : ""})`}`;
     }
 
-    return `${getVersionData.versionNumber} (پیش نویس)`;
+    return `${selectedVersion.versionNumber} (پیش نویس)`;
   };
 
   const handleChangeEditorMode = () => {
@@ -180,7 +191,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   }, 100);
 
   const handleSaveData = useDebouncedCallback(async (data: any, serverAction = false) => {
-    if(serverAction){
+    if (serverAction) {
       handleSave(data);
       return;
     }
@@ -201,7 +212,8 @@ const EditorFooter = ({ editorRef }: IProps) => {
           `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${selectedDocument.id}/versions/${getVersionData.id}`,
           {
             content: selectedDocument?.publicKeyId ? (encryptedContent as string) : content,
-            outline: selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
+            outline:
+              selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
             versionNumber: getVersionData.versionNumber,
           },
           {
@@ -226,7 +238,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           const item = {
             ...getVersionData,
             state: "draft",
-            status: "editing"
+            status: "editing",
           } as IVersion;
           setVersionData(item);
           setVersion(item);
@@ -344,7 +356,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
         <LoadingButton
           className="editor-footer__save-button !hidden !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
-            editorRef.current?.on("getData", (data: string) => {return handleSaveData(data, true);});
+            editorRef.current?.on("getData", (data: string) => {
+              return handleSaveData(data, true);
+            });
             editorRef.current?.getData();
           }}
           disabled={saveEditorHook.isPending || isLoading}

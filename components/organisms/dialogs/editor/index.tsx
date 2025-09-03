@@ -82,15 +82,18 @@ const Editor = ({ setOpen }: IProps) => {
 
   const isEncryptedContent = useMemo(() => {
     const content = getVersionData?.content;
-    if (!content) return false;
+    if (!content) {
+      return false;
+    }
+
     try {
-      const parsed = JSON.parse(content as unknown as string);
-      return Boolean(
+      const parsed = JSON.parse(content);
+      return (
         parsed &&
-          typeof parsed === "object" &&
-          "key" in (parsed as Record<string, unknown>) &&
-          "iv" in (parsed as Record<string, unknown>) &&
-          "content" in (parsed as Record<string, unknown>),
+        typeof parsed === "object" &&
+        "key" in (parsed as Record<string, unknown>) &&
+        "iv" in (parsed as Record<string, unknown>) &&
+        "content" in (parsed as Record<string, unknown>)
       );
     } catch {
       return false;

@@ -17,10 +17,10 @@ export const useResetStates = () => {
   });
 
   useEffect(() => {
-    if (!pathname?.includes("/admin/repositories")) {
+    if (pathname !== "/admin/repositories") {
       setRepo(null);
+      setRepositoryId(null);
     }
-    setRepositoryId(null);
     setCategory(null);
     setCategoryShow(null);
     setSelectedDocument(null);

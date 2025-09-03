@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
 import { ICustomPostData } from "@interface/app.interface";
-import RootLayout from "@app/layout";
+import ThemeLoaderProvider from "provider/themeLoaderProvider";
 
 interface IProps {
   children: React.ReactNode;
@@ -61,22 +61,19 @@ const DomainLayout = async ({ children, params }: IProps) => {
   const { content } = await getCustomPostByDomain(domainHash);
   const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
 
-  
   return (
-    <RootLayout themeStyle={theme}>
-      <>
-        <MainProvider>
-          <LayoutTransitionProvider
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {children}
-          </LayoutTransitionProvider>
-        </MainProvider>
-        <p className="absolute -z-50 hidden">3.20.0.2-v3</p>
-      </>
-    </RootLayout>
+    <ThemeLoaderProvider theme={theme}>
+      <MainProvider>
+        <LayoutTransitionProvider
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {children}
+        </LayoutTransitionProvider>
+      </MainProvider>
+      <p className="absolute -z-50 hidden">3.20.0.2-v3</p>
+    </ThemeLoaderProvider>
   );
 };
 
