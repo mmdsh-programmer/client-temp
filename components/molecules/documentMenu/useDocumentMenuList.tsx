@@ -97,6 +97,7 @@ const useDocumentMenuList = (
         setEditorMode("edit");
         setEditorModal(true);
         setVersionModalList(false);
+        setSelectedDocument(document);
       },
       { className: "document-edit-content", disabled: !isAdminOrOwner() },
     ),

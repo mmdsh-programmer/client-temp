@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CacheHandler } from "../cacheHandler.mjs";
 
 let cacheInstance: any = null;
@@ -5,7 +6,7 @@ let cacheInstance: any = null;
 export const getCacheInstance = async () => {
   if (!cacheInstance) {
     const { handlers } = await CacheHandler.onCreation();
-    cacheInstance = handlers[0];
+    [cacheInstance] = handlers;
   }
   return cacheInstance;
 };
@@ -30,36 +31,30 @@ export const cacheClear = async () => {
   return await cache.clear();
 };
 
-// Helper function for generating cache keys
 export const generateCacheKey = (...parts: string[]) => {
   return parts.join(":");
 };
 
-// Helper function for cache with automatic key generation
 export const cacheWithKey = async (
   keyParts: string[],
   getter: () => Promise<any>,
-  options?: { ttl?: number }
+  options?: { ttl?: number },
 ) => {
   const key = generateCacheKey(...keyParts);
-  
-  // Try to get from cache first
+
   let result = await cacheGet(key);
-  
+
   if (result === null) {
-    // If not in cache, get from source
     result = await getter();
-    
-    // Store in cache
+
     if (result !== null && result !== undefined) {
       await cacheSet(key, result, options);
     }
   }
-  
+
   return result;
 };
 
-// Next.js cache tag generation (for compatibility with existing code)
 export const generateCachePageTag = async (tag: string[], revalidate = 24 * 3600) => {
   try {
     await fetch(`${process.env.BACKEND_URL}`, {
@@ -73,39 +68,55 @@ export const generateCachePageTag = async (tag: string[], revalidate = 24 * 3600
   }
 };
 
-// Enhanced Redis client wrapper for backward compatibility
 export const getRedisClient = async () => {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-shadow, import/no-self-import
     const { getCacheInstance } = await import("./cache");
     const cache = await getCacheInstance();
-    
-    // Return a Redis-like interface for backward compatibility
+
     return {
       isReady: true,
+
       get: async (key: string) => {
         const value = await cache.get(key);
-        return value ? JSON.stringify(value) : null;
+        if (value === null) return null;
+
+        if (typeof value === "string") return value;
+        return JSON.stringify(value);
       },
+
       set: async (key: string, value: string, options?: { EX?: number }) => {
-        const parsedValue = JSON.parse(value);
+        let parsedValue: any;
+        try {
+          parsedValue = JSON.parse(value);
+        } catch {
+          parsedValue = value;
+        }
+
         const ttl = options?.EX ? options.EX * 1000 : undefined;
         await cache.set(key, parsedValue, { ttl });
       },
+
       del: async (key: string) => {
         return await cache.delete(key);
       },
+
       keys: async (pattern: string) => {
-        // This is a simplified implementation
-        // In a real Redis implementation, you'd use SCAN
         console.warn("keys() method is not fully implemented in cache wrapper");
         return [];
       },
-      disconnect: async () => {
-        // No-op for compatibility
-      }
+
+      ping: async () => {
+        if (cache.ping) {
+          return await cache.ping();
+        }
+        return "PONG";
+      },
+
+      disconnect: async () => {},
     };
   } catch (error) {
     console.error("Error getting Redis client wrapper:", error);
     return null;
   }
-}; 
+};

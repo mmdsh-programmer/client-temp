@@ -17,7 +17,8 @@ const nextConfig = {
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
-    },
+    }, 
+    cacheHandler: "./cacheHandler.mjs",
   },
   webpack: (config, { isServer }) => {
     const newConfig = { ...config };
@@ -41,9 +42,6 @@ const nextConfig = {
     }
     return [];
   },
-  // experimental: {
-  //   cacheHandler: "./cacheHandler.mjs",
-  // },
 };
 
 module.exports = nextConfig;

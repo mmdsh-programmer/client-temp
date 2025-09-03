@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateKey, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "./utils";
 import { NextURL } from "next/dist/server/web/next-url";
 import { headers } from "next/headers";
-
-// import { getCustomPostByDomain } from "@service/social";
-
+import { generateKey, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "./utils";
+import { requestContext } from "lib/requestContext";
+import { logErrorResponse, logRequest, logResponse } from "lib/logging";
 
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
-
 const corsOptions = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
-
 const pages = [
   "/cache",
   "/admin",
@@ -24,22 +21,19 @@ const pages = [
   "/subscribe",
   "/feeds",
   "/share",
-  "/privateDoc"
+  "/privateDoc",
 ];
 
-function parseUrlSegments(pathname: string): string[] {
-  return pathname.split("/").map(slug => {
+function parseUrlSegments(pathname: string) {
+  return pathname.split("/").map((slug) => {
     return removeSpecialCharacters(decodeURIComponent(slug));
   });
 }
-
-function extractCategoryIds(slugs: string[], startIndex: number, endIndex: number): string[] {
+function extractCategoryIds(slugs: string[], startIndex: number, endIndex: number) {
   const ids: string[] = [];
   for (let i = startIndex; i < endIndex; i += 2) {
     const catId = Number(toEnglishDigit(slugs[i]));
-    if (!Number.isNaN(catId)) {
-      ids.push(toPersianDigit(catId));
-    }
+    if (!Number.isNaN(catId)) ids.push(toPersianDigit(catId));
   }
   return ids;
 }
@@ -47,194 +41,170 @@ function extractCategoryIds(slugs: string[], startIndex: number, endIndex: numbe
 function convertDocsUrlToPublishUrl(url: NextURL): NextURL | null {
   const { pathname } = url;
   const isPrivate = pathname.startsWith("/private/page");
-  
-  if (!pathname.startsWith("/page") && !isPrivate) {
-    return null;
-  }
+  if (!pathname.startsWith("/page") && !isPrivate) return null;
 
   const slugs = parseUrlSegments(pathname);
   const repoIdIndex = isPrivate ? 4 : 3;
   const repoId = slugs[repoIdIndex];
   const repoName = slugs[repoIdIndex - 1];
-  
-  // Handle repository-only URL (no document)
+
   if (repoId && slugs.length === 4) {
     const newUrl = new NextURL(url);
     newUrl.pathname = `/publish/${repoName}/${repoId}`;
     return newUrl;
   }
-
-  // Handle document URLs
-  if (slugs.length < 6) {
-    return null;
-  }
+  if (slugs.length < 6) return null;
 
   const documentId = slugs[slugs.length - 3];
   const documentName = slugs[slugs.length - 4];
   const versionId = slugs[slugs.length - 1];
   const versionName = slugs[slugs.length - 2];
 
-  if (!documentId || !documentName || !versionId) {
-    return null;
-  }
-
   const newUrl = new NextURL(url);
-  
-  // Extract category IDs
   const categoryStartIndex = isPrivate ? 6 : 5;
   const categoryEndIndex = slugs.length - 4;
   const categoryIds = extractCategoryIds(slugs, categoryStartIndex, categoryEndIndex);
-  
-  if (categoryIds.length > 0) {
-    newUrl.searchParams.set("ids", categoryIds.join("-"));
-  }
+  if (categoryIds.length > 0) newUrl.searchParams.set("ids", categoryIds.join("-"));
 
   const basePath = isPrivate ? "/private" : "/publish";
   newUrl.pathname = `${basePath}/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`;
-  
   return newUrl;
 }
 
 function convertOldPublishUrl(url: NextURL): NextURL | null {
   const { pathname } = url;
-
-  if (!pathname.startsWith("/publish")) {
-    return null;
-  }
+  if (!pathname.startsWith("/publish")) return null;
 
   const slugs = parseUrlSegments(pathname);
-  
-  if (slugs.length < 4) {
-    return null;
-  }
+  if (slugs.length < 4) return null;
 
   const repoId = slugs[2];
   const repoName = slugs[3];
-
-  // Validate that repoId is numeric and repoName is not numeric
-  const repoIdNum = Number(toEnglishDigit(repoId));
-  const repoNameNum = Number(toEnglishDigit(repoName));
-  
-  if (Number.isNaN(repoIdNum) || !Number.isNaN(repoNameNum)) {
+  if (
+    Number.isNaN(Number(toEnglishDigit(repoId))) ||
+    !Number.isNaN(Number(toEnglishDigit(repoName)))
+  )
     return null;
-  }
 
   const newUrl = new NextURL(url);
-  
-  // Handle repository-only URL
   if (slugs.length === 4) {
     newUrl.pathname = toPersianDigit(`/publish/${repoName}/${repoId}`);
     return newUrl;
   }
 
-  // Handle document URLs
   const lastSlug = toEnglishDigit(slugs[slugs.length - 1]);
   const hasVersion = lastSlug.startsWith("v-") && !Number.isNaN(Number(lastSlug.substring(2)));
-  
   const documentOffset = hasVersion ? 3 : 1;
   const nameOffset = hasVersion ? 4 : 2;
-  
+
   const documentId = slugs[slugs.length - documentOffset];
   const documentName = slugs[slugs.length - nameOffset];
 
-  if (!documentId || !documentName) {
-    return null;
-  }
-
-  // Extract category IDs
   const categoryStartIndex = 5;
   const categoryEndIndex = slugs.length - nameOffset;
   const categoryIds = extractCategoryIds(slugs, categoryStartIndex, categoryEndIndex);
-  
-  if (categoryIds.length > 0) {
-    newUrl.searchParams.set("ids", categoryIds.join("-"));
-  }
+  if (categoryIds.length > 0) newUrl.searchParams.set("ids", categoryIds.join("-"));
 
   if (!hasVersion) {
-    newUrl.pathname = toPersianDigit(`/publish/${repoName}/${repoId}/${documentName}/${documentId}`);
+    newUrl.pathname = toPersianDigit(
+      `/publish/${repoName}/${repoId}/${documentName}/${documentId}`,
+    );
     return newUrl;
   }
 
-  const versionId = lastSlug.substring(2); // Remove "v-" prefix
+  const versionId = lastSlug.substring(2);
   const versionName = slugs[slugs.length - 2];
-
-  if (!versionId || !versionName) {
-    return null;
-  }
-
-  newUrl.pathname = toPersianDigit(`/publish/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`);
+  newUrl.pathname = toPersianDigit(
+    `/publish/${repoName}/${repoId}/${documentName}/${documentId}/${versionName}/v-${versionId}`,
+  );
   return newUrl;
 }
 
+// -------- Middleware اصلی --------
 export async function middleware(request: NextRequest) {
-  try {
-    const headersList = await headers();
-    const domain = headersList.get("host");
-    
-    // Handle CORS
-    const origin = request.headers.get("origin") ?? "";
-    const isAllowedOrigin = allowedOrigins.includes(origin);
-    const isPreflight = request.method === "OPTIONS";
-
-    if (isPreflight) {
-      const preflightHeaders = {
-        ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
-        ...corsOptions,
-      };
-      return NextResponse.json({}, { headers: preflightHeaders });
-    }
-
-    const response = NextResponse.next();
-
-    if (isAllowedOrigin) {
-      response.headers.set("Access-Control-Allow-Origin", origin);
-    }
-
-    Object.entries(corsOptions).forEach(([key, value]) => {
-      response.headers.set(key, value);
+  const startTime = Date.now();
+  const arn = crypto.randomUUID();
+  const referenceNumber = request.headers.get("x-reference-number") || crypto.randomUUID();
+  const bodyClone = await request
+    .clone()
+    .json()
+    .catch(() => {
+      return null;
     });
+  const reqHeaders = new Headers(request.headers);
+  reqHeaders.set("x-arn", arn);
+  reqHeaders.set("x-reference-number", referenceNumber);
 
-    const url = request.nextUrl;
-    const { pathname } = url;
+  return requestContext.run({ arn, referenceNumber }, async () => {
+    const response = NextResponse.next({ request: { headers: reqHeaders } });
 
-    // Handle docs URL conversion
-    const newDocsUrl = convertDocsUrlToPublishUrl(url);
-    if (newDocsUrl) {
-      return NextResponse.redirect(newDocsUrl);
-    }
+    try {
+      const url = request.nextUrl;
+      const path = url.pathname;
+      const host = (await headers()).get("host");
 
-    // Handle old publish URL conversion (skip if already on /publish root)
-    if (pathname !== "/publish") {
-      const newPublishUrl = convertOldPublishUrl(url);
-      if (newPublishUrl) {
-        return NextResponse.redirect(newPublishUrl);
+      // -------- Logging Async --------
+      if (path.startsWith("/api")) {
+        response.headers.set("x-reference-number", referenceNumber);
+        response.headers.set("x-trace-id", arn);
+        logRequest(request, startTime, arn, referenceNumber, bodyClone).catch(console.error);
+        logResponse(request, response, startTime, arn, referenceNumber).catch(console.error);
       }
-    }
 
-    // Handle domain-based routing
-    if (domain) {
-      const isInPages = pages.some(page => {
-        return pathname.startsWith(page);
+      // -------- CORS -----------
+      const origin = request.headers.get("origin") ?? "";
+      const isAllowedOrigin = allowedOrigins.includes(origin);
+      if (request.method === "OPTIONS") {
+        const preflightHeaders = {
+          ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
+          ...corsOptions,
+        };
+        return NextResponse.json({}, { headers: preflightHeaders });
+      }
+      if (isAllowedOrigin) response.headers.set("Access-Control-Allow-Origin", origin);
+      Object.entries(corsOptions).forEach(([key, value]) => {
+        return response.headers.set(key, value);
       });
-      
-      if (isInPages) {
-        const domainKey = generateKey(domain);
-        url.pathname = `/${domainKey}${pathname}`;
-        return NextResponse.rewrite(url);
+
+      // -------- URL rewrite/redirect --------
+      const newDocsUrl = convertDocsUrlToPublishUrl(url);
+      if (newDocsUrl) return NextResponse.redirect(newDocsUrl);
+      if (path !== "/publish") {
+        const newPublishUrl = convertOldPublishUrl(url);
+        if (newPublishUrl) return NextResponse.redirect(newPublishUrl);
       }
-      
-      if (pathname === "/") {
-        const domainKey = generateKey(domain);
-        url.pathname = `/${domainKey}`;
-        return NextResponse.rewrite(url);
+
+      // -------- Domain-based rewrite --------
+      if (host) {
+        const isInPages = pages.some((page) => {
+          return path.startsWith(page);
+        });
+        if (isInPages) {
+          const domainKey = generateKey(host);
+          url.pathname = `/${domainKey}${path}`;
+          return NextResponse.rewrite(url);
+        }
+        if (path === "/") {
+          const domainKey = generateKey(host);
+          url.pathname = `/${domainKey}`;
+          return NextResponse.rewrite(url);
+        }
+      }
+    } catch (error) {
+      logErrorResponse(request, startTime, arn, error, referenceNumber).catch(console.error);
+      if (request.nextUrl.pathname.startsWith("/api")) {
+        const errorResponse = NextResponse.json(
+          { error: "Internal Server Error", referenceNumber, traceId: arn },
+          { status: 500 },
+        );
+        errorResponse.headers.set("x-reference-number", referenceNumber);
+        errorResponse.headers.set("x-trace-id", arn);
+        return errorResponse;
       }
     }
 
     return response;
-  } catch (error) {
-    console.error("Middleware error:", error);
-    return NextResponse.next();
-  }
+  });
 }
 
 export const config = {
@@ -252,6 +222,7 @@ export const config = {
     "/private/:path*",
     "/feeds/:path*",
     "/share/:path*",
-    "/privateDoc/:path*"
+    "/privateDoc/:path*",
   ],
+  runtime: "nodejs",
 };
