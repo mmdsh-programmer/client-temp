@@ -5,13 +5,11 @@ import type { Metadata } from "next";
 import { getCustomPostByDomain } from "@service/clasor";
 import Script from "next/script";
 import localFont from "next/font/local";
-import { ICustomPostData, IThemeInfo } from "@interface/app.interface";
+import { IThemeInfo } from "@interface/app.interface";
 
 interface IProps {
   children: React.ReactNode;
-  params: Promise<{
-    domain: string;
-  }>;
+  themeStyle?: IThemeInfo;
 }
 
 const iranYekanFont = localFont({
@@ -66,21 +64,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   }
 }
 
-const RootLayout = async ({ children, params }: IProps) => {
-  const awaitedParams = await params;
-  const { domain } = awaitedParams;
-
-  const isDev = process.env.NODE_ENV === "development";
-  let domainHash: string = "";
-
-  if (isDev) {
-    domainHash = process.env.DOMAIN || "";
-  } else {
-    domainHash = decodeKey(domain);
-  }
-  const { content } = await getCustomPostByDomain(domainHash);
-  const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
-
+const RootLayout = async ({ children, themeStyle }: IProps) => {
   return (
     <html lang="fa">
       <head>
@@ -93,7 +77,7 @@ const RootLayout = async ({ children, params }: IProps) => {
       </head>
       <body
         className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}
-        style={theme as IThemeInfo}
+        style={themeStyle}
       >
         {children}
       </body>
