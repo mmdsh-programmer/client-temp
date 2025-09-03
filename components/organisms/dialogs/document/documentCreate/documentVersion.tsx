@@ -112,7 +112,10 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
             return;
           }
           if (getDocumentType !== EDocumentTypes.file) {
-            const defaultContent = "<article class='clasor-editor-content'></article>";
+            const defaultContent =
+              getDocumentType === EDocumentTypes.classic
+                ? "<article class='clasor-editor-content'></article>"
+                : "";
             const encryptWithPublicKey = (content: string, publicKeyPem?: string) => {
               if (!publicKeyPem) return content;
               try {

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { useCategoryStore } from "@store/category";
 import { useFilterStore } from "@store/filter";
-
 import ChildrenTree from "../childrenTree";
 import { EEmptyList } from "@components/molecules/emptyList";
 import { ICategoryView } from "@interface/category.interface";
@@ -17,28 +16,14 @@ import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { usePathname } from "next/navigation";
 
 const CategoryChildren = () => {
-  const getListMode = useAppStore((s) => {
-    return s.categoryListMode;
-  });
-  const getRepo = useRepositoryStore((s) => {
-    return s.repo;
-  });
-  const getSortParams = useSortStore((s) => {
-    return s.sort;
-  });
-  const getCategoryShow = useCategoryStore((s) => {
-    return s.categoryShow;
-  });
-  const queryParams = useCategoryStore((s) => {
-    return s.categoryQueryParams;
-  });
-  const getFilterChildren = useFilterStore((s) => {
-    return s.filterChildren;
-  });
-  const getFilterReport = useFilterStore((s) => {
-    return s.filterReport;
-  });
   const currentPath = usePathname();
+  const { categoryListMode: getListMode } = useAppStore();
+  const { repo: getRepo } = useRepositoryStore();
+  const { sort: getSortParams } = useSortStore();
+  const { categoryShow: getCategoryShow } = useCategoryStore();
+  const { categoryQueryParams: queryParams } = useCategoryStore();
+  const { filterChildren: getFilterChildren } = useFilterStore();
+  const { filterReport: getFilterReport } = useFilterStore();
 
   const { data: userInfo } = useGetUser();
 

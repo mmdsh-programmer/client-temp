@@ -2,6 +2,7 @@ import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import {
   getCustomPostByDomain,
   getDocumentPublishLink,
+  getPublishDocumentUserList,
   getPublishedDocumentLastVersion,
   getPublishedDocumentVersion,
 } from "@service/clasor";
@@ -17,6 +18,7 @@ import RedirectPage from "@components/pages/redirectPage";
 import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
+import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
 
 export const generateStaticParams = async () => {
   return [];
@@ -115,6 +117,21 @@ export default async function PrivateSharePage({ params }: PublishContentPagePro
     } else if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken) {
       const userInfo = await getMe();
       accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+      
+      const documentUserList = await getPublishDocumentUserList(
+        accessToken,
+        repoId,
+        documentId,
+      );
+      const documentWhiteList = documentUserList.whiteList;
+
+      const isUserInWhiteList = documentWhiteList.some((user) => {
+        return user.preferred_username === userInfo.username;
+      });
+
+      if (!isUserInWhiteList) {
+        return <PublishDocumentAccessWrapper repoId={repoId} docId={documentId} />;
+      }
     }
 
     if (documentInfo?.hasPassword && !documentPassword) {

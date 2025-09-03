@@ -1,7 +1,7 @@
 import { usePathname, useRouter } from "next/navigation";
 
 import ConfirmDialog from "@components/templates/dialog/confirmDialog";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useLeaveRepo from "@hooks/repository/useLeaveRepo";
 import { useRepositoryStore } from "@store/repository";
@@ -16,6 +16,8 @@ interface IProps {
 
 const RepoLeaveDialog = ({ setOpen }: IProps) => {
   const router = useRouter();
+  const [isNavigating, setIsNavigating] = useState(false);
+
   const { repo: getRepo, setRepo } = useRepositoryStore();
   const { isPending, mutate } = useLeaveRepo();
 
@@ -34,8 +36,11 @@ const RepoLeaveDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
-        router.push("/admin/dashboard");
-        if (currentPath === "/admin/dashboard") {
+        if (currentPath === "/admin/repositories") {
+          if (isNavigating) return;
+          setIsNavigating(true);
+          router.push("/admin/dashboard");
+        } else {
           setRepo(null);
           localStorage.removeItem("CLASOR:SELECTED_REPO");
         }
@@ -43,6 +48,14 @@ const RepoLeaveDialog = ({ setOpen }: IProps) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (isNavigating && currentPath === "/admin/dashboard") {
+      setRepo(null);
+      setIsNavigating(false);
+      localStorage.removeItem("CLASOR:SELECTED_REPO");
+    }
+  }, [currentPath, isNavigating, setRepo]);
 
   return (
     <ConfirmDialog
@@ -53,11 +66,11 @@ const RepoLeaveDialog = ({ setOpen }: IProps) => {
       className="repo-leave-dialog"
     >
       <form className="flex flex-col gap-5">
-        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
           آیا از ترک"
           <span
             title={getRepo?.name}
-            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
           >
             {getRepo?.name}
           </span>
