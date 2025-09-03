@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { usePathname, useSearchParams } from "next/navigation";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
+import { EDocumentTypes } from "@interface/enums";
 
 interface IForm {
   name: string;
@@ -58,7 +59,10 @@ const VersionCreateDialog = ({ close }: IProps) => {
       repoId,
       documentId: getDocument!.id,
       versionNumber: dataForm.name,
-      content: "<article class='clasor-editor-content'></article>",
+      content:
+        getDocument?.contentType === EDocumentTypes.classic
+          ? "<article class='clasor-editor-content'></article>"
+          : "",
       outline: "",
       isDirectAccess:
         sharedDocuments === "true" ||

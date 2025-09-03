@@ -1203,6 +1203,8 @@ export const getChildren = async (
     finalType = "document";
   }
 
+  console.log("---------------------------------filters---------------------------------", filters);
+
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>

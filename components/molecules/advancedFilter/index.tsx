@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SelectAtom, { IOption } from "../select";
 import { useFilterStore } from "@store/filter";
-import { useRepositoryStore } from "@store/repository";
 import { EDocumentTypes } from "@interface/enums";
 import InputAtom from "@components/atoms/input";
 import LoadingButton from "../loadingButton";
@@ -11,32 +10,17 @@ import useGetTags from "@hooks/tag/useGetTags";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AdvancedFilter = ({ setOpen }: IProps) => {
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
   const currentPath = usePathname();
-  const [getFilterChildren, setFilterChildren] = [
-    useFilterStore((state) => {
-      return state.filterChildren;
-    }),
-    useFilterStore((state) => {
-      return state.setFilterChildren;
-    }),
-  ];
-  const [getFilterReport, setFilterReport] = [
-    useFilterStore((state) => {
-      return state.filterReport;
-    }),
-    useFilterStore((state) => {
-      return state.setFilterReport;
-    }),
-  ];
+  const repoId = useRepoId();
+  const { filterChildren: getFilterChildren, setFilterChildren } = useFilterStore();
+  const { filterReport: getFilterReport, setFilterReport } = useFilterStore();
 
   const [searchType, setSearchType] = useState<IOption>({
     value: getFilterChildren ? "currentCategory" : "currentRepo",
@@ -50,21 +34,11 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
 
   const { data: userInfo } = useGetUser();
 
-  const repoId = () => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    if (currentPath === "/admin/sharedDocuments") {
-      return undefined;
-    }
-    return getRepo!.id;
-  };
-
   const { data: getTags } = useGetTags(
-    repoId()!,
+    repoId!,
     currentPath === "/admin/sharedDocuments",
     30,
-    !!repoId(),
+    !!repoId,
   );
   const { data: getDomainTags } = useGetDomainTags(30, !!userInfo?.domainConfig.useDomainTag);
   const tagList = userInfo?.domainConfig.useDomainTag ? getDomainTags : getTags;
@@ -237,7 +211,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 <SelectBox
                   options={[
                     { label: "نمونه سند", value: "template" },
-                    { label: "نشان شده", value: "bookmark" },
+                    { label: "نشان شده", value: "bookmarked" },
                   ]}
                   className="h-12 flex-grow xs:!h-10"
                   selectedOptions={moreFilter}
