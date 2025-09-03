@@ -5,11 +5,9 @@ import type { Metadata } from "next";
 import { getCustomPostByDomain } from "@service/clasor";
 import Script from "next/script";
 import localFont from "next/font/local";
-import { IThemeInfo } from "@interface/app.interface";
 
 interface IProps {
   children: React.ReactNode;
-  themeStyle?: IThemeInfo;
 }
 
 const iranYekanFont = localFont({
@@ -64,7 +62,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   }
 }
 
-const RootLayout = async ({ children, themeStyle }: IProps) => {
+const RootLayout = async ({ children }: IProps) => {
   return (
     <html lang="fa">
       <head>
@@ -75,10 +73,7 @@ const RootLayout = async ({ children, themeStyle }: IProps) => {
           defer
         />
       </head>
-      <body
-        className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}
-        style={themeStyle}
-      >
+      <body className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}>
         {children}
       </body>
     </html>

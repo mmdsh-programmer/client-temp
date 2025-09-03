@@ -17,7 +17,7 @@ const useGetRepo = (
       handleClientSideHookError(response as IActionError);
       if (response as IRepo) {
         setRepo(response as IRepo);
-        setRepositoryId(null);
+        setRepositoryId(repoId);
         window.localStorage.setItem(
           "CLASOR:SELECTED_REPO",
           JSON.stringify(response)
