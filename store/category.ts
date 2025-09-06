@@ -23,41 +23,86 @@ interface CategoryState {
 }
 
 export const useCategoryStore = create<CategoryState>()(
-  devtools(
-    logger((set: Parameters<StateCreator<CategoryState>>[0]) => {
-      return {
-        category: null,
-        setCategory: (cat) => {
-          (set as any)({ category: cat }, false, "setCategory");
-        },
-        categoryShow: null,
-        setCategoryShow: (cat) => {
-          (set as any)({ categoryShow: cat }, false, "setCategoryShow");
-        },
-        categoryQueryParams: { limit: 10, page: 1, total: 0 },
-        setCategoryQueryParams: (params) => {
-          (set as any)({ categoryQueryParams: params }, false, "setCategoryQueryParams");
-        },
-        categoryMoveDest: null,
-        setCategoryMoveDest: (cat) => {
-          (set as any)({ categoryMoveDest: cat }, false, "setCategoryMoveDest");
-        },
-        categorySearchContentParam: "",
-        setCategorySearchContentParam: (param) => {
-          (set as any)({ categorySearchContentParam: param }, false, "setCategorySearchContentParam");
-        },
-        categorySearchContentOpen: false,
-        setCategorySearchContentOpen: (open) => {
-          (set as any)({ categorySearchContentOpen: open }, false, "setCategorySearchContentOpen");
-        },
-        categorySearchContentLink: null,
-        setCategorySearchContentLink: (link) => {
-          (set as any)({ categorySearchContentLink: link }, false, "setCategorySearchContentLink");
-        },
-      };
-    }),
-    { name: "CategoryStore" },
-  ),
+  process.env.NODE_ENV === "development"
+    ? devtools(
+        logger((set) => {
+          return {
+            category: null,
+            setCategory: (cat) => {
+              return (set as any)({ category: cat }, false, "setCategory");
+            },
+            categoryShow: null,
+            setCategoryShow: (cat) => {
+              return (set as any)({ categoryShow: cat }, false, "setCategoryShow");
+            },
+            categoryQueryParams: { limit: 10, page: 1, total: 0 },
+            setCategoryQueryParams: (params) => {
+              return (set as any)({ categoryQueryParams: params }, false, "setCategoryQueryParams");
+            },
+            categoryMoveDest: null,
+            setCategoryMoveDest: (cat) => {
+              return (set as any)({ categoryMoveDest: cat }, false, "setCategoryMoveDest");
+            },
+            categorySearchContentParam: "",
+            setCategorySearchContentParam: (param) => {
+              return (set as any)(
+                { categorySearchContentParam: param },
+                false,
+                "setCategorySearchContentParam",
+              );
+            },
+            categorySearchContentOpen: false,
+            setCategorySearchContentOpen: (open) => {
+              return (set as any)(
+                { categorySearchContentOpen: open },
+                false,
+                "setCategorySearchContentOpen",
+              );
+            },
+            categorySearchContentLink: null,
+            setCategorySearchContentLink: (link) => {
+              return (set as any)(
+                { categorySearchContentLink: link },
+                false,
+                "setCategorySearchContentLink",
+              );
+            },
+          };
+        }),
+        { name: "CategoryStore" },
+      )
+    : (set) => {
+        return {
+          category: null,
+          setCategory: (cat) => {
+            return set({ category: cat });
+          },
+          categoryShow: null,
+          setCategoryShow: (cat) => {
+            return set({ categoryShow: cat });
+          },
+          categoryQueryParams: { limit: 10, page: 1, total: 0 },
+          setCategoryQueryParams: (params) => {
+            return set({ categoryQueryParams: params });
+          },
+          categoryMoveDest: null,
+          setCategoryMoveDest: (cat) => {
+            return set({ categoryMoveDest: cat });
+          },
+          categorySearchContentParam: "",
+          setCategorySearchContentParam: (param) => {
+            return set({ categorySearchContentParam: param });
+          },
+          categorySearchContentOpen: false,
+          setCategorySearchContentOpen: (open) => {
+            return set({ categorySearchContentOpen: open });
+          },
+          categorySearchContentLink: null,
+          setCategorySearchContentLink: (link) => {
+            return set({ categorySearchContentLink: link });
+          },
+        };
+      },
 );
 
 interface CategoryDrawerState {

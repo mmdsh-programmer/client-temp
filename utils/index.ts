@@ -52,7 +52,7 @@ export const translateVersionStatus = (status: string, state: string) => {
       break;
     case "editing":
       translated = "پیش نویس";
-      className = "label text-secondary bg-gray-50";
+      className = "label text-primary bg-primary-light";
 
       break;
     case "pending":
@@ -67,11 +67,11 @@ export const translateVersionStatus = (status: string, state: string) => {
       break;
     case "waitForDirectPublic":
       translated = "در انتظار تایید و عمومی شدن";
-      className = "label !bg-gray-100 !text-primary";
+      className = "label !bg-gray-100 text-primary";
       break;
     case "rejected":
       translated = "رد شده";
-      className = "label text-white !bg-error";
+      className = "label text-white bg-error";
       break;
 
     case "public":
@@ -83,7 +83,7 @@ export const translateVersionStatus = (status: string, state: string) => {
   }
   return {
     translated,
-    className: `${className} flex items-center justify-center h-6 !px-2 rounded-full`,
+    className: `${className} `,
   };
 };
 

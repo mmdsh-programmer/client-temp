@@ -44,7 +44,7 @@ const RepoKeyDialog = ({ setOpen }: IProps) => {
   ) : (
     <InfoDialog dialogHeader="لیست کلید های مخزن" setOpen={handleClose}>
       <div className="flex flex-grow flex-col p-4">
-        {getRepo?.roleName === ERoles.owner ? (
+        {getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin ? (
           <Button
             placeholder="create repo key"
             className="repo-key-dialog__create-button mr-auto flex h-8 items-center justify-between border-[1px] border-normal bg-white px-1 shadow-none hover:bg-transparent hover:shadow-none"

@@ -50,7 +50,7 @@ const SharedDocumentList = () => {
     fetchNextPage: reportFetchNextPage,
     isFetchingNextPage: reportIsFetchingNextPage,
     isFetching: reportIsFetching,
-    type: EEmptyList.CHILDREN,
+    type: EEmptyList.SHARED_DOCUMENTS,
   };
 
   return (

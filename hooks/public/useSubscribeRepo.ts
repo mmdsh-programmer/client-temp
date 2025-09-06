@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { subscribeRepoAction } from "@actions/public";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +11,6 @@ interface ISubscribeResult {
 }
 interface CustomError {
   message: string;
-  repoId?: number;
 }
 
 const useSubscribeRepo = () => {
@@ -38,11 +38,10 @@ const useSubscribeRepo = () => {
     },
     onError: (error, values) => {
       const { errorCallBack } = values;
-
-      const { message, repoId } = (error as unknown) as CustomError;
-      errorCallBack?.(repoId);
-      console.log("------------------ error subscribe ---------------------", message, repoId);
-      toast.error(message || "خطای نامشخصی رخ داد");
+      
+      const { message } = error as CustomError;
+      toast.error((message as any).message || "خطای نامشخصی رخ داد");
+      errorCallBack?.((message as any).repoId);
     },
   });
 };

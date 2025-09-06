@@ -17,6 +17,7 @@ import { useEditorStore } from "@store/editor";
 import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
+import RemoteEditorWithLoader from "./remoteEditorWithLoader";
 
 interface IProps {
   getEditorConfig: () => {
@@ -29,6 +30,7 @@ interface IProps {
 const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const [openTemplateDialog, setOpenTemplateDialog] = useState(false);
   const [versionData, setVersionData] = useState(version);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
 
   const timestampRef = useRef(Date.now());
   const currentPath = usePathname();
@@ -37,7 +39,11 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   const { repo: getRepo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
-  const { editorMode, editorDecryptedContent: decryptedContent, editorListDrawer: listDrawer } = useEditorStore();
+  const {
+    editorMode,
+    editorDecryptedContent: decryptedContent,
+    editorListDrawer: listDrawer,
+  } = useEditorStore();
 
   const repoId = useRepoId();
   const { data: userInfo, isLoading } = useGetUser();
@@ -117,10 +123,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     }
 
     return (
-      <RemoteEditor
+      <RemoteEditorWithLoader
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
         editorMode={editorMode}
-        ref={getEditorConfig().ref}
+        refObj={getEditorConfig().ref}
         loadData={getLoadData() as IClassicData}
         onGetConfig={handleSaveConfig}
         onChange={handleChange}
@@ -141,11 +147,11 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
 
   return (
     <div className="relative flex h-full bg-white">
-      {(currentPath === "/admin/sharedDocuments" || sharedDocuments === "true") ?  (
+      {currentPath === "/admin/sharedDocuments" || sharedDocuments === "true" ? (
         <DocumentEnableUserGroup />
       ) : null}
       {listDrawer && getEditorConfig().ref ? (
-        <div className="w-full xs:w-[300px] editor-sidebar-wrapper">
+        <div className="editor-sidebar-wrapper w-full xs:w-[300px]">
           <EditorDrawer version={versionData} />
         </div>
       ) : null}

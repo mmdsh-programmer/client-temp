@@ -22,13 +22,7 @@ interface IProps {
   onSelect?: (keyItem: IPublicKey) => void;
 }
 
-const RepoKeyList = ({
-  repoId,
-  hasAction,
-  isSelectable,
-  onSelect,
-  selectedKeyId,
-}: IProps) => {
+const RepoKeyList = ({ repoId, hasAction, isSelectable, onSelect, selectedKeyId }: IProps) => {
   const {
     data: publicKeyList,
     isLoading,
@@ -39,34 +33,35 @@ const RepoKeyList = ({
     error,
     refetch,
   } = useGetRepoPublicKeys(repoId, 10);
-  
+
   const { repo: getRepo } = useRepositoryStore();
 
-  const tableHead = hasAction && getRepo?.roleName === ERoles.owner
-    ? [
-        {
-          key: "keyName",
-          value: "نام کلید",
-        },
-        {
-          key: "keyValue",
-          value: "کلید",
-        },
-        {
-          key: "action",
-          value: "عملیات",
-        },
-      ]
-    : [
-        {
-          key: "keyName",
-          value: "نام کلید",
-        },
-        {
-          key: "keyValue",
-          value: "کلید",
-        },
-      ];
+  const tableHead =
+    hasAction && (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin)
+      ? [
+          {
+            key: "keyName",
+            value: "نام کلید",
+          },
+          {
+            key: "keyValue",
+            value: "کلید",
+          },
+          {
+            key: "action",
+            value: "عملیات",
+          },
+        ]
+      : [
+          {
+            key: "keyName",
+            value: "نام کلید",
+          },
+          {
+            key: "keyValue",
+            value: "کلید",
+          },
+        ];
 
   const itemCount = publicKeyList?.pages[0]?.list?.length;
 
@@ -81,11 +76,11 @@ const RepoKeyList = ({
 
   // eslint-disable-next-line no-nested-ternary
   return isLoading ? (
-    <div className="w-full h-full flex justify-center items-center my-2">
+    <div className="my-2 flex h-full w-full items-center justify-center">
       <Spinner className="h-8 w-8 text-primary" />
     </div>
   ) : itemCount ? (
-    <table className="w-full min-w-max ">
+    <table className="w-full min-w-max">
       <TableHead tableHead={tableHead} />
       <tbody>
         {publicKeyList?.pages.map((page) => {
@@ -95,21 +90,22 @@ const RepoKeyList = ({
                 key={`publick-key-table-item-${key.id}`}
                 className="public-key-table-item"
                 tableCell={
-                  hasAction && getRepo?.roleName === ERoles.owner
+                  hasAction &&
+                  (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin)
                     ? [
                         { data: key.name },
                         {
                           data: key.key,
                           className: "max-w-28",
                         },
-                        { data: <RepoKeyMenu keyItem={key} />,  stopPropagation: true, },
+                        { data: <RepoKeyMenu keyItem={key} />, stopPropagation: true },
                       ]
                     : [
                         {
                           data: (
                             <span className="flex items-center">
                               {selectedKeyId === key.id ? (
-                                <TickIcon className="h-4 w-4 fill-purple-normal ml-2" />
+                                <TickIcon className="ml-2 h-4 w-4 fill-purple-normal" />
                               ) : null}
                               {key.name}
                             </span>
@@ -135,7 +131,7 @@ const RepoKeyList = ({
               {
                 data: (
                   <LoadMore
-                    className="self-center !shadow-none underline text-[10px] text-primary_normal !font-normal"
+                    className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none"
                     isFetchingNextPage={isFetchingNextPage}
                     fetchNextPage={fetchNextPage}
                   />

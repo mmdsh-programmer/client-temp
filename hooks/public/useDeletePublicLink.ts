@@ -20,14 +20,13 @@ const useDeletePublicLink = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId, roleId } = values;
+      const { callBack, roleId } = values;
       const allRoles = queryClient.getQueryData(["getRoles"]) as IRoles[];
 
       const findRole = allRoles.find((role) => {
         return role.id === roleId;
       });
 
-      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });

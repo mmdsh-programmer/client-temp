@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { useCategoryStore } from "@store/category";
 import { useFilterStore } from "@store/filter";
 import ChildrenTree from "../childrenTree";
@@ -8,31 +8,22 @@ import MobileView from "../categoryView/categoryMobileView";
 import RenderIf from "@components/atoms/renderIf";
 import TableView from "../categoryView/categoryTableView";
 import { useAppStore } from "@store/app";
-import { useRepositoryStore } from "@store/repository";
 import { useSortStore } from "@store/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
-import useGetUser from "@hooks/auth/useGetUser";
 import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { usePathname } from "next/navigation";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const CategoryChildren = () => {
   const currentPath = usePathname();
+  const repoId = useRepoId();
+
   const { categoryListMode: getListMode } = useAppStore();
-  const { repo: getRepo } = useRepositoryStore();
   const { sort: getSortParams } = useSortStore();
   const { categoryShow: getCategoryShow } = useCategoryStore();
   const { categoryQueryParams: queryParams } = useCategoryStore();
   const { filterChildren: getFilterChildren } = useFilterStore();
   const { filterReport: getFilterReport } = useFilterStore();
-
-  const { data: userInfo } = useGetUser();
-
-  const repoId = useMemo(() => {
-    if (currentPath === "/admin/myDocuments") {
-      return userInfo!.repository.id;
-    }
-    return getRepo!.id;
-  }, [currentPath, userInfo, getRepo]);
 
   const {
     data: childrenData,
@@ -43,7 +34,7 @@ const CategoryChildren = () => {
     isFetching: childrenIsFetching,
     refetch: refetchChildren,
   } = useGetCategoryChildren(
-    repoId,
+    repoId!,
     getCategoryShow?.id,
     getSortParams,
     queryParams.limit,
@@ -64,7 +55,7 @@ const CategoryChildren = () => {
     isFetching: reportIsFetching,
     refetch: refetchReport,
   } = useGetUserDocuments(
-    repoId,
+    repoId!,
     getSortParams,
     queryParams.limit,
     getFilterReport,
