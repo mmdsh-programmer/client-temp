@@ -119,7 +119,7 @@ const VersionTableView = ({
                             <div className="flex flex-wrap items-center gap-2">
                               <div className="flex flex-wrap gap-1">
                                 <div
-                                  className={`${
+                                  className={`flex h-6 items-center justify-center rounded-full !px-2 ${
                                     translateVersionStatus(version.status, version.state).className
                                   }`}
                                 >

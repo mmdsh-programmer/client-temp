@@ -7,6 +7,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import ToastCloseButton from "@components/atoms/button/toastCloseButton";
+import GlobalLoading from "./globalLoading";
 
 interface IProps {
   children: React.ReactNode;
@@ -26,6 +27,7 @@ const MainProvider = ({ children }: IProps) => {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
+        <GlobalLoading />
         {children}
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

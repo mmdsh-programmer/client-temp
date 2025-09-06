@@ -24,7 +24,6 @@ const LinkWrapperMenu = ({ role }: IProps) => {
       roleId: role.id,
       callBack: (name?: string) => {
         setRepo({ ...(getRepo as IRepo), [`${name}PublicLink`]: null });
-
         toast.success("لینک مورد نظر با موفقیت حذف شد");
       },
     });

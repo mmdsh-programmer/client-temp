@@ -26,7 +26,8 @@ interface ITableHead {
   className?: string;
 }
 
-const TableView = ({
+const 
+TableView = ({
   isLoading,
   getCategoryList,
   hasNextPage,

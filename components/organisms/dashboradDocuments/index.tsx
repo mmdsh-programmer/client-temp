@@ -131,7 +131,7 @@ const DashboardDocuments = () => {
     isFetchingNextPage:
       activeTab === ETabs.MY_DOCUMENTS ? childrenIsFetchingNextPage : reportIsFetchingNextPage,
     isFetching: activeTab === ETabs.MY_DOCUMENTS ? childrenIsFetching : reportIsFetching,
-    type: EEmptyList.CHILDREN,
+    type: activeTab === ETabs.MY_DOCUMENTS ? EEmptyList.CHILDREN : EEmptyList.SHARED_DOCUMENTS,
   };
 
   const renderContent = () => {

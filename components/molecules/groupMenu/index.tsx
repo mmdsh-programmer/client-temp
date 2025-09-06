@@ -43,7 +43,7 @@ const GroupMenu = ({ group, showDrawer }: IProps) => {
         }
       },
       className: "repo-group-menu__delete",
-      disabled: getRepo?.roleName !== ERoles.owner,
+      disabled: getRepo?.roleName !== ERoles.owner && getRepo?.roleName !== ERoles.admin,
     },
   ];
 

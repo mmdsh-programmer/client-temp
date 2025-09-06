@@ -55,10 +55,10 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
       tabTitle: ETabs.LINK,
       tabContent: activeTab === ETabs.LINK ? <PublicLink /> : null,
     },
-    getRepo?.roleName === "owner" && {
+    getRepo?.roleName === "owner" || getRepo?.roleName === "admin" ? {
       tabTitle: ETabs.PUBLISH,
       tabContent: activeTab === ETabs.PUBLISH ? <PublishLink /> : null,
-    },
+    } : null,
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;

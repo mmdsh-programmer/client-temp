@@ -37,6 +37,7 @@ export enum EEmptyList {
   DOMAIN_USERS = "domain_users",
   FOLLOWING_REPO = "following-repo",
   WHITE_LIST_REQUESTS = "white_list_requests",
+  SHARED_DOCUMENTS = "shared_documents",
 }
 
 interface IProps {
@@ -92,6 +93,14 @@ const EmptyList = ({ type }: IProps) => {
             <Typography placeholder="empty-message" className="caption_c1 text-gray-500">
               برای ایجاد دسته‌بندی یا سند جدید می توانید روی دکمه ایجاد کلیک کنید و اطلاعات
               دسته‌بندی یا سند خود را وارد کنید.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.SHARED_DOCUMENTS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+              در حال حاضر سندی با شما به اشتراک گذاشته نشده است.
             </Typography>
           </div>
         );

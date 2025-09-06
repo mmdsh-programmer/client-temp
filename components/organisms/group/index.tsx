@@ -16,7 +16,7 @@ const Groups = () => {
       <div className="flex flex-col gap-5 pt-5">
         <div className="flex items-center justify-between">
           <Typography className="title_t4 text-secondary ">لیست گروه‌ها</Typography>
-          {getRepo?.roleName === ERoles.owner ? (
+          {getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin? (
             <Button
               placeholder="create group"
               className="create-group-button flex h-8 items-center justify-between border-[1px] border-normal bg-white px-1 shadow-none hover:bg-transparent hover:shadow-none"

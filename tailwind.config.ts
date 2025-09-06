@@ -10,6 +10,18 @@ module.exports = withMT({
     "./node_modules/clasor-content-preview/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/notFound.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    "bg-gray-50",
+    "bg-gray-100",
+    "bg-info",
+    "bg-primary-light",
+    "bg-error",
+    "text-primary_normal",
+    "!text-success",
+    "!text-secondary",
+    "!text-hint",
+    "text-primary",
+  ],
   darkMode: ["class", "[data-mode=\"dark\"]"],
   theme: {
     extend: {
@@ -58,6 +70,14 @@ module.exports = withMT({
         stroke: {
           primary: "var(--stroke-primary)",
         },
+        marker: {
+          yellow: "#fdfd77",
+          green: "#62f962",
+          pink: "#fc7899",
+          blue: "#72ccfd",
+          "pen-red": "#e71313",
+          "pen-green": "#128a00",
+        },
       },
       backgroundColor: {
         primary: "var(--bg-primary-color)",
@@ -65,6 +85,7 @@ module.exports = withMT({
         "primary-normal": "var(--primary-normal)",
         secondary: "var(--bg-secondary-color)",
         tertiary: "var(--bg-tertiary-color)",
+        error: "var(--error)",
       },
       borderColor: {
         normal: "var(--border-normal)",
@@ -112,6 +133,7 @@ module.exports = withMT({
       animation: {
         marquee: "marquee 20s linear infinite",
         floatBubble: "floatBubble 4s ease-in-out infinite",
+        loading: "loading 2s 2.5s ease-in-out infinite",
       },
       keyframes: {
         floatBubble: {
@@ -121,6 +143,19 @@ module.exports = withMT({
         marquee: {
           "0%": { transform: "translateX(0%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        loading: {
+          "0%": {
+            "background-size": "400% 100%",
+            "background-position": "100% 0",
+          },
+          "50%": {
+            "background-size": "200% 100%",
+          },
+          "100%": {
+            "background-size": "400% 100%",
+            "background-position": "-100% 0",
+          },
         },
       },
     },

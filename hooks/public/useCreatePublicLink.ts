@@ -28,9 +28,8 @@ const useCreatePublicLink = () => {
       return response;
     },
     onSuccess: async (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack } = values;
       // TODO: check these invalidate queries
-      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });

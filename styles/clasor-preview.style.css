@@ -8,7 +8,7 @@
 }
 
 .clasor-preview-content .clasor-preview-content__render-server-content {
-  @apply !rounded-none px-5 xs:px-8;
+  @apply !rounded-none px-5 xs:px-8 text-primary_normal;
 }
 
 .publish-file-preview .preview-wrapper {
@@ -174,4 +174,28 @@ table td:has(*[style*="text-align:center"]) {
 .clasor-preview-content table :where(th, td) {
   white-space: nowrap;
   vertical-align: middle;
+}
+
+.marker-green {
+  @apply bg-marker-green
+}
+
+.marker-yellow {
+  @apply bg-marker-yellow
+}
+
+.marker-blue {
+  @apply bg-marker-blue
+}
+
+.marker-pink {
+  @apply bg-marker-pink
+}
+
+.pen-green {
+  @apply text-marker-pen-green !bg-transparent
+}
+
+.pen-red {
+  @apply text-marker-pen-red !bg-transparent
 }

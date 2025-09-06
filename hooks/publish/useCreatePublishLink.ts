@@ -24,11 +24,7 @@ const useCreatePublishLink = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
-      queryClient.invalidateQueries({
-        queryKey: [`getRepo-${repoId}`],
-      });
-
+      const { callBack } = values;
       queryClient.invalidateQueries({
         queryKey: ["myRepoList-false-isPublished"],
       });

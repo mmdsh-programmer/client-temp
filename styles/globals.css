@@ -362,6 +362,36 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   @apply !mt-0;
 }
 
+.app-sidebar-content input,
+.file-management-wrapper input {
+  @apply bg-transparent
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--primary-normal);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><path d='M6.00039 10.2002L3.30039 7.5002L2.33372 8.46687L6.00039 12.1335L14.0004 4.13354L13.0337 3.16687L6.00039 10.2002Z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 @media (max-width: 480px) {
   .custom-dialog {
     @apply !min-h-[100%] !max-h-[100%] !h-[100%] !w-full !m-0 !rounded-none
@@ -379,5 +409,21 @@ ul.menu:has(li.shepherd-enabled.shepherd-target) {
   .custom-dialog {
     @apply !min-h-[800px] !max-h-[800px] !h-[800px]
 
+  }
+}
+
+@keyframes moveGradient {
+  0% {
+    background-size: 400% 100%;
+    background-position: 100% 0
+  }
+
+  50% {
+    background-size: 200% 100%
+  }
+
+  100% {
+    background-size: 400% 100%;
+    background-position: -100% 0,
   }
 }
