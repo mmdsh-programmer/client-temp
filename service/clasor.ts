@@ -1433,6 +1433,7 @@ export const getContent = async (
         params: {
           offset,
           size,
+          withHashId: true,
         },
       },
     );
@@ -1718,7 +1719,7 @@ export const getPublishDocumentInfo = async (
         },
       },
     );
-     console.log(
+    console.log(
       JSON.stringify(
         {
           type: "getPublishDocumentInfo",
@@ -1772,6 +1773,7 @@ export const searchPublishContent = async (
         repoId,
         offset,
         size,
+        withHashId: true,
       },
     });
 
@@ -2321,7 +2323,7 @@ export const publicLastVersion = async (
       },
     );
 
-     console.log(
+    console.log(
       JSON.stringify(
         {
           type: "publicLastVersion",

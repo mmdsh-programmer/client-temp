@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 const MyDocumentsLayout = ({ children }: IProps) => {
-  return children;
+  return <div className="w-full">{children}</div>;
 };
 
 export default MyDocumentsLayout;

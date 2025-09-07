@@ -373,7 +373,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type="checkbox"] {
+.file-management-wrapper input[type="checkbox"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -385,7 +385,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-input[type="checkbox"]:checked {
+.file-management-wrapper input[type="checkbox"]:checked {
   background-color: var(--primary-normal);
   background-image: url("data:image/svg+xml;utf8,<svg fill='white' viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'><path d='M6.00039 10.2002L3.30039 7.5002L2.33372 8.46687L6.00039 12.1335L14.0004 4.13354L13.0337 3.16687L6.00039 10.2002Z'/></svg>");
   background-repeat: no-repeat;

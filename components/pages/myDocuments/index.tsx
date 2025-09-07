@@ -37,7 +37,7 @@ const MyDocumentsPage = () => {
           }}
         />
       ) : null}
-      <div className="relative">{getBulkItems.length ? <CategoryBulk /> : null}</div>
+      {getBulkItems.length ? <CategoryBulk /> : null}{" "}
     </div>
   );
 };

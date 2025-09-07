@@ -4,6 +4,8 @@ import { IContentSearchListItem } from "@interface/contentSearch.interface";
 import useGetDocument from "@hooks/document/useGetDocument";
 import { useCategoryStore } from "@store/category";
 import { Spinner } from "@components/atoms/spinner";
+import { useRepositoryStore } from "@store/repository";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   data: IContentSearchListItem;
@@ -11,21 +13,28 @@ interface IProps {
 }
 
 export const ResultItem = ({ data, onClick }: IProps) => {
+  const router = useRouter();
   const [isEnabled, setEnabled] = useState<boolean>(false);
-  const setLink = useCategoryStore((s) => 
-{return s.setCategorySearchContentLink;});
+  const { repo: getRepo } = useRepositoryStore();
+  const setLink = useCategoryStore((s) => {
+    return s.setCategorySearchContentLink;
+  });
   const {
     data: documentInfo,
     isError,
     isLoading,
-  } = useGetDocument(data.repoId, data.documentId, isEnabled);
+  } = useGetDocument(data.repoId, data.documentId, false, isEnabled);
 
   const handleDocumentSelect = () => {
     setEnabled(true);
     const redirectLink = `${window.location.origin}${window.location.pathname}?repoId=${data.repoId}${documentInfo?.categoryId ? `&categoryId=${documentInfo?.categoryId}` : ""}&documentId=${data.documentId}`;
     setEnabled(false);
+    router.replace(redirectLink);
+
     onClick?.();
-    setLink(redirectLink);
+    setTimeout(() => {
+      setLink(redirectLink);
+    }, 1500);
   };
 
   useEffect(() => {
@@ -48,7 +57,7 @@ export const ResultItem = ({ data, onClick }: IProps) => {
       ) : null}
       <DocIcon className="fill-info ml-2 h-6 w-6 flex-none" />
       <span className="overflow-hidden text-ellipsis whitespace-nowrap">
-        {data.repoName}
+        {getRepo?.name}
         {" > "}
         {data.documentName}
       </span>
