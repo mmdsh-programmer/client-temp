@@ -1,7 +1,7 @@
 import React from "react";
 import { ListItem } from "@material-tailwind/react";
 import { IContentSearchListItem } from "@interface/contentSearch.interface";
-import { toPersianDigit } from "@utils/index";
+import { removeSpecialCharacters, toPersianDigit } from "@utils/index";
 import useCreateDocumentLink from "@hooks/document/useCreateDocumentLink";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@components/atoms/spinner";
@@ -26,10 +26,10 @@ const PublishSearchResultItem = ({ resultItem, disabled, setDisableItems }: IPro
       repoId: resultItem.repoId,
       documentId: resultItem.documentId,
       callBack: (data) => {
-        const redirectLink = `${window.location.origin}/publish/${toPersianDigit(`${data.repoName.replaceAll(/\s+/g, "-")}`)}/${data.repoId}
-        /${data.id}/${toPersianDigit(
-          `${data.name.replaceAll(/\s+/g, "-")}`,
-        )}/v-${resultItem.versionId}`;
+        const url = toPersianDigit(
+          `/${removeSpecialCharacters(data.repoName)}/${data.repoId}/${removeSpecialCharacters(data.name)}/${data.id}/${removeSpecialCharacters(resultItem.versionName)}/v-${resultItem.versionId}`,
+        );
+        const redirectLink = `${window.location.origin}/publish/${url}`;
 
         router.replace(redirectLink);
         setOpenSearch(false);

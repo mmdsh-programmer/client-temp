@@ -4,6 +4,7 @@ import { Button } from "@material-tailwind/react";
 import SearchContent from "@components/molecules/searchContent";
 import { usePathname } from "next/navigation";
 import { useFilterStore } from "@store/filter";
+import { useCategoryStore } from "@store/category";
 
 interface IProps {
   open: boolean;
@@ -28,6 +29,8 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
       return state.setFilterReport;
     }),
   ];
+  const { categorySearchContentLink } = useCategoryStore();
+
   const [openSearchModal, setOpenSearchModal] = useState(false);
 
   return (
@@ -57,7 +60,7 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
       >
         <FilterIcon className="h-5 w-5 stroke-gray-500" />
       </Button>
-      {openSearchModal && <SearchContent setOpen={setOpenSearchModal} />}
+      {openSearchModal && !categorySearchContentLink && <SearchContent setOpen={setOpenSearchModal} />}
     </div>
   );
 };

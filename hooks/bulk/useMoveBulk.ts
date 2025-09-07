@@ -22,18 +22,18 @@ const useMoveBulk = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, currentParentId, destCategory } = values;
+      const { callBack, repoId, currentParentId, destCategory } = values;
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "root"}-children-for-move`],
+        queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children-for-move`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${destCategory || "root"}-children-for-move`],
+        queryKey: [`repo-${repoId}-category-${destCategory || "root"}-children-for-move`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${currentParentId || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`category-${destCategory || "root"}-children`],
+        queryKey: [`repo-${repoId}-category-${destCategory || "root"}-children`],
       });
       callBack?.();
     },

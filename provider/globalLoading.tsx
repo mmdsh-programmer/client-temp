@@ -7,6 +7,18 @@ const GlobalLoading = () => {
 
   if (!isFetching && !isLoggingOut) return null;
 
+  if (isLoggingOut) {
+    return (
+      <div className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
+        <div
+          className="h-16 w-16 animate-spin rounded-full border-8 border-solid border-white border-t-transparent"
+          role="status"
+        />
+        <p className="mt-4 text-lg font-semibold text-white">در حال خروج...</p>
+      </div>
+    );
+  }
+
   return (
     <div
       className="fixed left-0 top-0 z-[9999] h-2 w-full"
@@ -15,7 +27,6 @@ const GlobalLoading = () => {
         animation: "moveGradient 2.5s ease-in-out infinite",
       }}
     />
-      
   );
 };
 
