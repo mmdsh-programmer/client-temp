@@ -11,7 +11,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 // import { createVersion } from "@service/clasor";
 
-
 const useCreateVersion = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -27,43 +26,35 @@ const useCreateVersion = () => {
       onSuccessHandler?: () => void;
       onErrorHandler?: () => void;
     }) => {
-      const {
-        accessToken,
-        repoId,
-        documentId,
-        versionNumber,
-        content,
-        outline,
-        isDirectAccess,
-      } = values;
-      if(!accessToken){
+      const { accessToken, repoId, documentId, versionNumber, content, outline, isDirectAccess } =
+        values;
+      if (!accessToken) {
         const response = await createVersionAction(
           repoId,
           documentId,
           versionNumber,
           content,
           outline,
-          isDirectAccess
+          isDirectAccess,
         );
-  
+
         handleClientSideHookError(response as IActionError);
         return response as IAddVersion;
       }
 
-
       const response = await axios.post<IServerResult<IAddVersion>>(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${documentId}/versions`,
-            { versionNumber, content, outline },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-              params: {
-                isDirectAccess,
-              },
-            },
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${documentId}/versions`,
+        { versionNumber, content, outline },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          params: {
+            isDirectAccess,
+          },
+        },
       );
-      
+
       return response.data.data;
     },
     onSuccess: async (response, values) => {
@@ -91,7 +82,7 @@ const useCreateVersion = () => {
           ...cachePages,
           pages: cachePages.pages.map((page, index) => {
             return index === 0
-              ? { ...{ ...page, total: page.total + 1}, list: [newVersion, ...page.list] }
+              ? { ...{ ...page, total: page.total + 1 }, list: [newVersion, ...page.list] }
               : page;
           }),
         };

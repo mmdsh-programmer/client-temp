@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestContext } from "./requestContext";
 import { headers } from "next/headers";
+import fs from "fs";
+import path from "path";
 
 export enum EAction {
   "GetRequest" = "GET-request",
@@ -243,4 +245,89 @@ export async function getTraceInfo() {
   }
 
   return { referenceNumber, arn };
+}
+
+const rewriteLogFile = path.join(process.cwd(), "logs", "rewrite.log");
+
+function ensureLogDirExists(filePath: string) {
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+function writeLog(file: string, data: any) {
+  try {
+    ensureLogDirExists(file);
+    const logLine = `${JSON.stringify(data, null, 0)}\n`;
+    fs.appendFile(file, logLine, (err) => {
+      if (err) {
+        console.error(
+          JSON.stringify(
+            {
+              level: "error",
+              message: "Failed to rewrite log",
+              error: err?.message || String(err),
+              file,
+              data,
+            },
+            null,
+            0,
+          ),
+        );
+      }
+    });
+  } catch (err) {
+    console.error(
+      JSON.stringify(
+        {
+          level: "error",
+          message: "Failed to stringify rewrite log",
+          error: err || String(err),
+          file,
+          data,
+        },
+        null,
+        0,
+      ),
+    );
+  }
+}
+
+export async function logRewrite({
+  from,
+  to,
+  search,
+  host,
+  referenceNumber,
+  arn,
+  success,
+  error,
+}: {
+  from: string;
+  to?: string;
+  search?: string;
+  host?: string | null;
+  referenceNumber: string;
+  arn: string;
+  success: boolean;
+  error?: any;
+}) {
+  const logData = {
+    level: success ? "info" : "error",
+    type: "rewrite",
+    timestamp: new Date().toISOString(),
+    from,
+    to: to || null,
+    search: search || null,
+    host: host || null,
+    referenceNumber,
+    traceId: arn,
+    success,
+    ...(error && { error: error instanceof Error ? error.message : String(error) }),
+  };
+
+  writeLog(rewriteLogFile, logData);
+
+  console.info(JSON.stringify(logData, null, 0));
 }
