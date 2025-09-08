@@ -3,7 +3,7 @@ import { NextURL } from "next/dist/server/web/next-url";
 import { headers } from "next/headers";
 import { generateKey, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "./utils";
 import { requestContext } from "lib/requestContext";
-import { logErrorResponse, logRequest, logResponse } from "lib/logging";
+import { logErrorResponse, logRequest, logResponse, logRewrite } from "lib/logging";
 
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
 const corsOptions = {
@@ -166,27 +166,106 @@ export async function middleware(request: NextRequest) {
         return response.headers.set(key, value);
       });
 
-      // -------- URL rewrite/redirect --------
-      const newDocsUrl = convertDocsUrlToPublishUrl(url);
-      if (newDocsUrl) return NextResponse.redirect(newDocsUrl);
-      if (path !== "/publish") {
-        const newPublishUrl = convertOldPublishUrl(url);
-        if (newPublishUrl) return NextResponse.redirect(newPublishUrl);
+      // -------- Blog Rewrite --------
+      if (path.startsWith("/blog")) {
+        try {
+          if (process.env.BLOG_BOX_URL && process.env.BLOG_BOX_ID) {
+            const dest = `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_BOX_ID}${path.replace("/blog", "")}`;
+            console.log(`[INFO] Attempting to rewrite to: ${dest}`)
+            await logRewrite({
+              from: url.pathname,
+              to: dest,
+              host,
+              referenceNumber,
+              arn,
+              success: true,
+            });
+            return NextResponse.rewrite(dest);
+          } else {
+            await logRewrite({
+              from: url.pathname,
+              host,
+              referenceNumber,
+              arn,
+              success: false,
+              error: "BLOG_BOX_URL or BLOG_BOX_ID not set",
+            });
+          }
+        } catch (err) {
+          await logRewrite({
+            from: url.pathname,
+            host,
+            referenceNumber,
+            arn,
+            success: false,
+            error: err,
+          });
+        }
       }
 
-      // -------- Domain-based rewrite --------
-      if (host) {
-        const isInPages = pages.some((page) => {
-          return path.startsWith(page);
+      // -------- Docs Rewrite --------
+      const newDocsUrl = convertDocsUrlToPublishUrl(url);
+      if (newDocsUrl) {
+        console.info("🔀 Docs → Publish Rewrite");
+        await logRewrite({
+          from: url.pathname,
+          to: newDocsUrl.pathname,
+          search: newDocsUrl.search,
+          host,
+          referenceNumber,
+          arn,
+          success: true,
         });
+        return NextResponse.redirect(newDocsUrl);
+      }
+
+      // -------- Old Publish Rewrite --------
+      if (path !== "/publish") {
+        const newPublishUrl = convertOldPublishUrl(url);
+        if (newPublishUrl) {
+          console.info("🔀 Old Publish → New Publish Rewrite");
+          await logRewrite({
+            from: url.pathname,
+            to: newPublishUrl.pathname,
+            search: newPublishUrl.search,
+            host,
+            referenceNumber,
+            arn,
+            success: true,
+          });
+          return NextResponse.redirect(newPublishUrl);
+        }
+      }
+
+      // -------- Domain Rewrite --------
+      if (host) {
+        const isInPages = pages.some((page) => path.startsWith(page));
         if (isInPages) {
           const domainKey = generateKey(host);
-          url.pathname = `/${domainKey}${path}`;
+          const dest = `/${domainKey}${path}`;
+          await logRewrite({
+            from: url.pathname,
+            to: dest,
+            host,
+            referenceNumber,
+            arn,
+            success: true,
+          });
+          url.pathname = dest;
           return NextResponse.rewrite(url);
         }
         if (path === "/") {
           const domainKey = generateKey(host);
-          url.pathname = `/${domainKey}`;
+          const dest = `/${domainKey}`;
+          await logRewrite({
+            from: "/",
+            to: dest,
+            host,
+            referenceNumber,
+            arn,
+            success: true,
+          });
+          url.pathname = dest;
           return NextResponse.rewrite(url);
         }
       }

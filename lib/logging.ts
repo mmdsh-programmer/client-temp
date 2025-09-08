@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestContext } from "./requestContext";
 import { headers } from "next/headers";
+import { appendFile, mkdir } from "fs/promises";
+import path from "path";
 
 export enum EAction {
   "GetRequest" = "GET-request",
@@ -243,4 +245,64 @@ export async function getTraceInfo() {
   }
 
   return { referenceNumber, arn };
+}
+
+const rewriteLogFile = path.join(process.cwd(), "logs", "rewrite.log");
+
+async function writeLog(file: string, data: any) {
+  try {
+    const dir = path.dirname(file);
+    await mkdir(dir, { recursive: true });
+
+    const logLine = `${JSON.stringify(data, null, 0)}\n`;
+
+    await appendFile(file, logLine);
+  } catch (err: any) {
+    console.error(
+      JSON.stringify({
+        level: "error",
+        message: "CRITICAL: Failed to write to log file.",
+        error: err?.message || String(err),
+        file,
+      }),
+    );
+  }
+}
+
+export async function logRewrite({
+  from,
+  to,
+  search,
+  host,
+  referenceNumber,
+  arn,
+  success,
+  error,
+}: {
+  from: string;
+  to?: string;
+  search?: string;
+  host?: string | null;
+  referenceNumber: string;
+  arn: string;
+  success: boolean;
+  error?: any;
+}) {
+  const logData = {
+    level: success ? "info" : "error",
+    type: "rewrite",
+    timestamp: new Date().toISOString(),
+    from,
+    to: to || null,
+    search: search || null,
+    host: host || null,
+    referenceNumber,
+    traceId: arn,
+    success,
+    ...(error && { error: error instanceof Error ? error.message : String(error) }),
+  };
+
+  console.log(JSON.stringify(logData, null, 2));
+
+  await writeLog(rewriteLogFile, logData);
 }

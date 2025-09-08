@@ -40,6 +40,7 @@ const nextConfig = {
         },
       ];
     }
+    console.warn("⚠️ No BLOG_BOX_URL or BLOG_BOX_ID provided, no rewrites applied.");
     return [];
   },
 };

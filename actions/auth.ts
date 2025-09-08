@@ -178,10 +178,12 @@ export const logoutAction = async () => {
   if (!encodedToken) {
     return;
   }
+
+  (await cookies()).delete("token");
+
   try {
     const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
 
-    // get domain and find proper custom post base on domain
     const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
@@ -197,14 +199,19 @@ export const logoutAction = async () => {
       refresh_token: string;
     };
 
-    await revokePodToken(clientId, clientSecret, access_token, "access_token");
-    await revokePodToken(clientId, clientSecret, refresh_token, "refresh_token");
+    revokePodToken(clientId, clientSecret, access_token, "access_token").catch((err) => {
+      console.error("Failed to revoke access_token in background:", err);
+    });
 
-    (await cookies()).delete("token");
+    revokePodToken(clientId, clientSecret, refresh_token, "refresh_token").catch((err) => {
+      console.error("Failed to revoke refresh_token in background:", err);
+    });
 
     const redisClient = await getRedisClient();
     if (redisClient && redisClient.isReady) {
-      await redisClient.del(`user:${access_token}`);
+      redisClient.del(`user:${access_token}`).catch((err) => {
+        console.error("Failed to delete user from Redis in background:", err);
+      });
       console.log(
         JSON.stringify(
           {
@@ -217,7 +224,6 @@ export const logoutAction = async () => {
       );
     }
   } catch (error) {
-    (await cookies()).delete("token");
     return normalizeError(error as IActionError);
   }
 };
