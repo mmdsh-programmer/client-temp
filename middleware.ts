@@ -171,6 +171,7 @@ export async function middleware(request: NextRequest) {
         try {
           if (process.env.BLOG_BOX_URL && process.env.BLOG_BOX_ID) {
             const dest = `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_BOX_ID}${path.replace("/blog", "")}`;
+            console.log(`[INFO] Attempting to rewrite to: ${dest}`)
             await logRewrite({
               from: url.pathname,
               to: dest,

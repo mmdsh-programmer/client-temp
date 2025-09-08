@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestContext } from "./requestContext";
 import { headers } from "next/headers";
-import fs from "fs";
+import { appendFile, mkdir } from "fs/promises";
 import path from "path";
 
 export enum EAction {
@@ -249,47 +249,22 @@ export async function getTraceInfo() {
 
 const rewriteLogFile = path.join(process.cwd(), "logs", "rewrite.log");
 
-function ensureLogDirExists(filePath: string) {
-  const dir = path.dirname(filePath);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-}
-
-function writeLog(file: string, data: any) {
+async function writeLog(file: string, data: any) {
   try {
-    ensureLogDirExists(file);
+    const dir = path.dirname(file);
+    await mkdir(dir, { recursive: true });
+
     const logLine = `${JSON.stringify(data, null, 0)}\n`;
-    fs.appendFile(file, logLine, (err) => {
-      if (err) {
-        console.error(
-          JSON.stringify(
-            {
-              level: "error",
-              message: "Failed to rewrite log",
-              error: err?.message || String(err),
-              file,
-              data,
-            },
-            null,
-            0,
-          ),
-        );
-      }
-    });
-  } catch (err) {
+
+    await appendFile(file, logLine);
+  } catch (err: any) {
     console.error(
-      JSON.stringify(
-        {
-          level: "error",
-          message: "Failed to stringify rewrite log",
-          error: err || String(err),
-          file,
-          data,
-        },
-        null,
-        0,
-      ),
+      JSON.stringify({
+        level: "error",
+        message: "CRITICAL: Failed to write to log file.",
+        error: err?.message || String(err),
+        file,
+      }),
     );
   }
 }
@@ -327,7 +302,7 @@ export async function logRewrite({
     ...(error && { error: error instanceof Error ? error.message : String(error) }),
   };
 
-  writeLog(rewriteLogFile, logData);
+  console.log(JSON.stringify(logData, null, 2));
 
-  console.info(JSON.stringify(logData, null, 0));
+  await writeLog(rewriteLogFile, logData);
 }
