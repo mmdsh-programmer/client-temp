@@ -171,7 +171,7 @@ export async function middleware(request: NextRequest) {
         try {
           if (process.env.BLOG_BOX_URL && process.env.BLOG_BOX_ID) {
             const dest = `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_BOX_ID}${path.replace("/blog", "")}`;
-            console.log(`[INFO] Attempting to rewrite to: ${dest}`)
+            console.log(`[INFO] Attempting to rewrite to: ${dest}`);
             await logRewrite({
               from: url.pathname,
               to: dest,
@@ -181,16 +181,15 @@ export async function middleware(request: NextRequest) {
               success: true,
             });
             return NextResponse.rewrite(dest);
-          } else {
-            await logRewrite({
-              from: url.pathname,
-              host,
-              referenceNumber,
-              arn,
-              success: false,
-              error: "BLOG_BOX_URL or BLOG_BOX_ID not set",
-            });
-          }
+          } 
+          await logRewrite({
+            from: url.pathname,
+            host,
+            referenceNumber,
+            arn,
+            success: false,
+            error: "BLOG_BOX_URL or BLOG_BOX_ID not set",
+          });
         } catch (err) {
           await logRewrite({
             from: url.pathname,
@@ -239,7 +238,7 @@ export async function middleware(request: NextRequest) {
 
       // -------- Domain Rewrite --------
       if (host) {
-        const isInPages = pages.some((page) => path.startsWith(page));
+        const isInPages = pages.some((page) => {return path.startsWith(page);});
         if (isInPages) {
           const domainKey = generateKey(host);
           const dest = `/${domainKey}${path}`;

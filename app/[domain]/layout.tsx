@@ -48,33 +48,39 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 const DomainLayout = async ({ children, params }: IProps) => {
-  const { domain } = await params;
+  try {
+   const { domain } = await params;
 
-  const isDev = process.env.NODE_ENV === "development";
-  let domainHash: string = "";
+    const isDev = process.env.NODE_ENV === "development";
+    let domainHash: string = "";
 
-  if (isDev) {
-    domainHash = process.env.DOMAIN || "";
-  } else {
-    domainHash = decodeKey(domain);
+    if (isDev) {
+      domainHash = process.env.DOMAIN || "";
+    } else {
+      domainHash = decodeKey(domain);
+    }
+    const { content } = await getCustomPostByDomain(domainHash);
+    const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
+
+    return (
+      <ThemeLoaderProvider theme={theme}>
+        <MainProvider>
+          <LayoutTransitionProvider
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {children}
+          </LayoutTransitionProvider>
+        </MainProvider>
+        <p className="absolute -z-50 hidden">3.20.4.7-v3</p>
+      </ThemeLoaderProvider>
+    ); 
+  } catch (error) {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>> Layout error");
+    console.log(error);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
   }
-  const { content } = await getCustomPostByDomain(domainHash);
-  const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
-
-  return (
-    <ThemeLoaderProvider theme={theme}>
-      <MainProvider>
-        <LayoutTransitionProvider
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          {children}
-        </LayoutTransitionProvider>
-      </MainProvider>
-      <p className="absolute -z-50 hidden">3.20.4.7-v3</p>
-    </ThemeLoaderProvider>
-  );
 };
 
 export default DomainLayout;
