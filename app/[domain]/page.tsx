@@ -78,10 +78,12 @@ import React from "react";
 //   }
 // };
 
-const MainPage = async (
+const MainPage = (
   // { params }: MainPageProps
 ) => {
-  return <h1>MainPage</h1>
-}
+  return <h1>MainPage</h1>;
+};
+
+
 
 export default MainPage;

@@ -14,12 +14,7 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    }, 
-    cacheHandler: "./cacheHandler.mjs",
-  },
+  cacheHandler: "./cacheHandler.mjs",
   webpack: (config, { isServer }) => {
     const newConfig = { ...config };
     newConfig.resolve.alias.canvas = false;
