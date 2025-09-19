@@ -1,12 +1,11 @@
-import { getClient as getClusterClient } from "./cacheHandler.mjs";
-import { getClient as getStackClient } from "./cacheHandler.develop.mjs";
-
 export async function register() {
     if (process.env.NEXT_RUNTIME === "nodejs") {
         try {
             if(process.env.NODE_ENV === "production"){
+                const { getClient: getClusterClient } = await import("./cacheHandler.mjs");
                 await getClusterClient();
             } else {
+                const { getClient: getStackClient } = await import("./cacheHandler.develop.mjs");
                 await getStackClient();
             }
         } catch (error) {
