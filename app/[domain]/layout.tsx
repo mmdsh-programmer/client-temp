@@ -1,6 +1,5 @@
 import React from "react";
 import "@styles/globals.css";
-import LayoutTransitionProvider from "provider/layoutTransition";
 import MainProvider from "provider/mainProvider";
 import type { Metadata } from "next";
 import { decodeKey } from "@utils/index";
@@ -48,7 +47,8 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 const DomainLayout = async ({ children, params }: IProps) => {
-   const { domain } = await params;
+   try {
+    const { domain } = await params;
 
     const isDev = process.env.NODE_ENV === "development";
     let domainHash: string = "";
@@ -64,17 +64,18 @@ const DomainLayout = async ({ children, params }: IProps) => {
     return (
       <ThemeLoaderProvider theme={theme}>
         <MainProvider>
-          <LayoutTransitionProvider
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {children}
-          </LayoutTransitionProvider>
+          {children}
         </MainProvider>
         <p className="absolute -z-50 hidden">3.20.4.7-v3</p>
       </ThemeLoaderProvider>
     ); 
+   } catch (error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <h1 className="text-red-500">{(error as Error)?.message ?? "خطا در دریافت اطلاعات دامنه !"}</h1>
+      </div>
+    );
+   }
 };
 
 export default DomainLayout;
