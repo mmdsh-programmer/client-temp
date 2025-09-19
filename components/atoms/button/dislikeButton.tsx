@@ -26,10 +26,12 @@ const DislikeButton = ({
 }: IProps) => {
   return (
     <Button
+      placeholder=""
       onClick={onClick}
       className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 ${dislikeButtonClassName}`}
       title={dislikeCount.toString()}
       disabled={dislikePending}
+      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <RenderIf isTrue={!!showCounter}>
         <span className={counterClassName}>{dislikeCount.toString()}</span>

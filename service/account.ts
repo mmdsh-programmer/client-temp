@@ -11,7 +11,6 @@ import axios, { AxiosError, isAxiosError } from "axios";
 
 import { IGetTokenResponse } from "@interface/app.interface";
 import { bracketStringify } from "@utils/index";
-import { getRedisClient } from "@utils/redis";
 import { userInfo } from "./clasor";
 
 const axiosAccountsInstance = axios.create({
@@ -127,7 +126,7 @@ export const getPodAccessToken = async (
       expiresAt
     );
     if (userData) {
-      const redisClient = await getRedisClient();
+      const redisClient = await global.clientPromise;
       await redisClient?.set(
         `user:${result.data.access_token}`,
         JSON.stringify(userData),

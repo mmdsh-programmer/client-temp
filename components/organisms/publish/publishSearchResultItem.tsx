@@ -41,7 +41,7 @@ const PublishSearchResultItem = ({ resultItem, disabled, setDisableItems }: IPro
   };
 
   return (
-    <ListItem onClick={handleResultItemClick} className="flex min-h-12 gap-2" disabled={disabled}>
+    <ListItem {...({} as React.ComponentProps<typeof ListItem>)} onClick={handleResultItemClick} className="flex min-h-12 gap-2" disabled={disabled}>
       {createDocumentLinkHook.isPending ? (
         <div className="flex w-fit flex-shrink-0 items-center justify-center">
           <Spinner className="h-4 w-4 text-primary" />

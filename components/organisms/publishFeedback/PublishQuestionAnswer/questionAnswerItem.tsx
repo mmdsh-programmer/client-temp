@@ -21,7 +21,7 @@ import CommentDialog from "@components/organisms/dialogs/publish/commentDialog";
 interface IProps {
   questionItem: IQAList;
   parentPostId: number;
-  children?: JSX.Element;
+  children?: React.JSX.Element;
   isAnswer?: boolean;
 }
 
@@ -58,12 +58,14 @@ const QuestionAnswerItem = ({
       <Card
         shadow={false}
         className={`w-full pt-[30px] pb-5 px-5 flex flex-col gap-2.5 border-b-2 border-solid border-gray-200 rounded-none ${isAnswer ? "border-r-4 border-r-gray-200 bg-secondary" : "bg-white"}`}
+        {...({} as React.ComponentProps<typeof Card>)}
       >
         <CardHeader
           color="transparent"
           floated={false}
           shadow={false}
           className="flex items-center justify-between gap-2 pt-0 mt-0 mx-0"
+          {...({} as React.ComponentProps<typeof CardHeader>)}
         >
           <div className="flex items-center gap-2">
             <h6 className="text-sm text-gray-800 font-bold whitespace-nowrap max-w-44 sm:max-w-fit overflow-hidden text-ellipsis">
@@ -77,13 +79,13 @@ const QuestionAnswerItem = ({
             </time>
           </div>
         </CardHeader>
-        <CardBody className="p-0 word-break">
+        <CardBody className="p-0 word-break" {...({} as React.ComponentProps<typeof CardBody>)}>
           <QuestionAnswerContentPreview
             content={questionItem.content}
             className="text-sm"
           />
         </CardBody>
-        <CardFooter className="flex items-center p-0 gap-2 justify-between">
+        <CardFooter {...({} as React.ComponentProps<typeof CardFooter>)} className="flex items-center p-0 gap-2 justify-between">
           <RenderIf isTrue={!isAnswer}>
             <div className="flex items-center gap-2">
               <Button
@@ -91,6 +93,7 @@ const QuestionAnswerItem = ({
                 variant="text"
                 className="border-none !p-0 flex gap-1 items-center"
                 onClick={handleOpenCollapse}
+                {...({} as React.ComponentProps<typeof Button>)}
               >
                 <span className="text-[13px] leading-5 text-gray-500">
                   مشاهده بیشتر
@@ -105,6 +108,7 @@ const QuestionAnswerItem = ({
                 variant="text"
                 className="bullet border-none !p-0 text-[13px] leading-5 text-link"
                 onClick={handleOpenCommentsDialog}
+                {...({} as React.ComponentProps<typeof Button>)}
               >
                 <span className="hidden sm:block">مشاهده دیدگاه ها</span>
                 <ChatIcon className="block sm:hidden w-4 h-4 !fill-gray-500 scale-125" />
@@ -114,6 +118,7 @@ const QuestionAnswerItem = ({
                   variant="text"
                   className="bullet border-none !p-0 text-[13px] leading-5 text-link"
                   onClick={handleOpenAnswer}
+                  {...({} as React.ComponentProps<typeof Button>)}
                 >
                   <span className="hidden sm:block">پاسخ به پرسش</span>
                   <TickIcon className="block sm:hidden w-4 h-4 !fill-gray-500" />
@@ -131,6 +136,7 @@ const QuestionAnswerItem = ({
               variant="text"
               className="bullet border-none !p-0 text-[13px] leading-5 text-link"
               onClick={handleOpenEdit}
+              {...({} as React.ComponentProps<typeof Button>)}
             >
               <span className="hidden sm:block">
                 {isAnswer ? "ویرایش پاسخ" : "ویرایش پرسش"}

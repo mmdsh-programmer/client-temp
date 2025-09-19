@@ -33,7 +33,11 @@ const ChatInput = ({
               className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               isPrimary
             >
-              <Typography className="text__label__button !text-primary_normal px-3 font-medium">
+              <Typography
+                placeholder=""
+                className="text__label__button !text-primary_normal px-3 font-medium"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 ارسال
               </Typography>
             </LoadingButton>

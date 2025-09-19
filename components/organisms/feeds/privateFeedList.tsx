@@ -42,7 +42,7 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
         <Button
-          placeholder="button"
+          {...({} as React.ComponentProps<typeof Button>)}
           className="h-5 w-5 bg-transparent p-0"
           onClick={() => {
             return setRepo(null);
@@ -50,7 +50,7 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
         >
           <BackIcon className="h-4 w-4 fill-icon-hover" />
         </Button>
-        <Typography className="caption_c1 lowercase text-primary_normal">{repo?.label}</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 lowercase text-primary_normal">{repo?.label}</Typography>
       </div>
       {feedList?.length ? (
         <div className="mt-5 flex h-[calc(100vh-360px)] flex-col gap-2 overflow-y-auto px-5">

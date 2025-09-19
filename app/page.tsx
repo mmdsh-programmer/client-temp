@@ -1,5 +1,7 @@
 import React from "react";
 
+export const dynamic = "force-dynamic";
+
 const Home = () => {
   return (
      <div style={{ textAlign: "center", padding: "50px" }}>

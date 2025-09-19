@@ -49,7 +49,9 @@ const EditPage = () => {
   if (isFetchingDocument) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
-        <Typography className="ml-2 font-bold">لطفا صبر کنید</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="ml-2 font-bold">
+          لطفا صبر کنید
+        </Typography>
         <Spinner className="h-5 w-5 text-primary" />
       </div>
     );
@@ -58,7 +60,10 @@ const EditPage = () => {
   if (error) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
-        <Typography className="ml-2 flex flex-col items-center font-bold">
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="ml-2 flex flex-col items-center font-bold"
+        >
           نسخه ای در سند مورد نظر پیدا نشد
         </Typography>
       </div>

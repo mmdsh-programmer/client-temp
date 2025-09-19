@@ -38,6 +38,7 @@ const ProgressBar = ({ report }: IProps) => {
     <Typography
       placeholder="progress-bar"
       className="font-iranYekan text-xs text-primary_normal truncate cursor-default"
+      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
     >
       {volumeUnit(usage)} از {volumeUnit(total)}
     </Typography>

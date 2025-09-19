@@ -10,10 +10,10 @@ interface IProps {
 const CloseButton = ({ onClose, disabled }: IProps) => {
   return (
     <Button
-      placeholder="close button"
       className="close-button bg-transparent shadow-none hover:shadow-none outline-none p-0"
       onClick={onClose}
       disabled={disabled}
+      {...({} as React.ComponentProps<typeof Button>)}
     >
       <XIcon className="fill-icon-hover w-6 h-6" />
     </Button>

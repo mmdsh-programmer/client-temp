@@ -79,13 +79,13 @@ const SubscribePasswordRequest = ({ hash, hasPassword }: IProps) => {
               setShowPassword(!showPassword);
             }}
           />
-          <Typography className="label">رمز عبور</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">رمز عبور</Typography>
           <FormInput
             type={showPassword ? "text" : "password"}
             register={{ ...register("password") }}
           />
           {errors.password && (
-            <Typography className="warning_text">{errors.password?.message}</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.password?.message}</Typography>
           )}
         </div>
       </form>

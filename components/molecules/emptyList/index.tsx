@@ -51,10 +51,18 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.MY_REPO:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر مخزنی ندارید.
             </Typography>
-            <Typography placeholder="empty-message" className="caption_c1 text-gray-500">
+            <Typography
+              placeholder="empty-message"
+              className="caption_c1 text-gray-500"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               برای ایجاد مخزن جدید می توانید روی دکمه ایجاد مخزن کلیک کنید و اطلاعات مخزن خود را
               وارد کنید.
             </Typography>
@@ -62,35 +70,59 @@ const EmptyList = ({ type }: IProps) => {
         );
       case EEmptyList.BOOKMARK_REPO:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر مخزن نشان شده‌ای ندارید.
           </Typography>
         );
       case EEmptyList.ARCHIVE_REPO:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر مخزن بایگانی شده‌ای ندارید.
           </Typography>
         );
       case EEmptyList.PUBLISHED_REPO:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر مخزن منتشر شده ای ندارید.
           </Typography>
         );
       case EEmptyList.ACCESS_REPO:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر مخزن اشتراکی ندارید.
           </Typography>
         );
       case EEmptyList.CHILDREN:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر دسته‌بندی یا سندی ندارید.
             </Typography>
-            <Typography placeholder="empty-message" className="caption_c1 text-gray-500">
+            <Typography
+              placeholder="empty-message"
+              className="caption_c1 text-gray-500"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               برای ایجاد دسته‌بندی یا سند جدید می توانید روی دکمه ایجاد کلیک کنید و اطلاعات
               دسته‌بندی یا سند خود را وارد کنید.
             </Typography>
@@ -99,7 +131,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.SHARED_DOCUMENTS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               در حال حاضر سندی با شما به اشتراک گذاشته نشده است.
             </Typography>
           </div>
@@ -107,75 +143,123 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.CATEGORY:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر دسته‌بندی ندارید.
             </Typography>
           </div>
         );
       case EEmptyList.RELEASE:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر درخواست فعالی ندارید.
           </Typography>
         );
       case EEmptyList.FILTER:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             نتیجه‌ای یافت نشد.
           </Typography>
         );
       case EEmptyList.REPO_KEYS:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر کلیدی ندارید
           </Typography>
         );
       case EEmptyList.GROUP:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر گروهی ندارید
           </Typography>
         );
       case EEmptyList.TEMPLATE:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر نمونه سندی ندارید
           </Typography>
         );
       case EEmptyList.BLOCKLIST:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             در حال حاضر کاربر مسدود شده‌ای روی این سند وجود ندارد
           </Typography>
         );
       case EEmptyList.DOC_TAGS:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             در حال حاضر تگی روی این سند وجود ندارد
           </Typography>
         );
       case EEmptyList.WHITE_LIST:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             در حال حاضر لیست سفیدی وجود ندارد
           </Typography>
         );
       case EEmptyList.BLACK_LIST:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             در حال حاضر لیست سیاهی وجود ندارد
           </Typography>
         );
       case EEmptyList.JOIN_REPO_REQUESTS:
         return (
-          <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+          <Typography
+            placeholder="empty-message"
+            className="title_t3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             شما در حال حاضر درخواست دعوت به مخزنی ندارید.
           </Typography>
         );
       case EEmptyList.FEEDBACK:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر لیست بازخوردی ندارید.
             </Typography>
           </div>
@@ -183,7 +267,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.VERSION:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر نسخه‌ای ندارید.
             </Typography>
           </div>
@@ -191,7 +279,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.DRAFT_REQUESTS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر لیست درخواستی ندارید.
             </Typography>
           </div>
@@ -199,7 +291,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.VERSION_REQUESTS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر لیست درخواستی ندارید.
             </Typography>
           </div>
@@ -207,7 +303,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.COMMENTS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر لیست نظراتی ندارید.
             </Typography>
           </div>
@@ -215,7 +315,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.QUESTION_LIST:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               برای این سند سوالی وجود ندارد
             </Typography>
           </div>
@@ -223,7 +327,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.ANSWER_LIST:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               برای این سوال، پاسخی وجود ندارد
             </Typography>
           </div>
@@ -231,7 +339,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.ACCESS_LIST:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر لیست مجازی ندارید.
             </Typography>
           </div>
@@ -239,7 +351,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.FEED_LIST:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               خبرنامه ای برای نمایش وجود ندارد.
             </Typography>
           </div>
@@ -247,12 +363,24 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.BRANCH_INFO:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               <div className="flex flex-col items-center justify-center">
-                <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+                <Typography
+                  placeholder="empty-message"
+                  className="title_t3 text-primary_normal"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
                   شما در حال حاضر شعبه‌ای را انتخاب نکرده‌اید.
                 </Typography>
-                <Typography placeholder="empty-message" className="caption_c1 text-gray-500">
+                <Typography
+                  placeholder="empty-message"
+                  className="caption_c1 text-gray-500"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
                   برای نمایش اطلاعات شعبه، شعبه موردنظرتان را انتخاب کنید.
                 </Typography>
               </div>
@@ -262,7 +390,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.BRANCH_GROUP:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               گروهی برای نمایش وجود ندارد.
             </Typography>
           </div>
@@ -270,7 +402,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.DOMAIN_PUBLICFEEDS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               خبرنامه‌ای برای نمایش وجود ندارد
             </Typography>
           </div>
@@ -278,7 +414,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.BRANCH_USERS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               در شعبه موردنظر فردی دارای سمت وجود ندارد.
             </Typography>
           </div>
@@ -286,7 +426,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.DOMAIN_USERS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               در حال حاضر هیچ کاربری به دامنه دسترسی ندارد
             </Typography>
           </div>
@@ -294,7 +438,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.FOLLOWING_REPO:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر مخزنی را دنبال نکرده‌اید.
             </Typography>
           </div>
@@ -302,7 +450,11 @@ const EmptyList = ({ type }: IProps) => {
       case EEmptyList.WHITE_LIST_REQUESTS:
         return (
           <div className="flex flex-col items-center justify-center">
-            <Typography placeholder="empty-message" className="title_t3 text-primary_normal">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               شما در حال حاضر درخواست دسترسی به سند وجود ندارد.
             </Typography>
           </div>

@@ -60,7 +60,11 @@ const SearchableDropdown = ({
                     return handleSelectOption(option);
                   }}
                 >
-                  <Typography className="select_option__text truncate text-right text-primary_normal">
+                  <Typography
+                    placeholder=""
+                    className="select_option__text truncate text-right text-primary_normal"
+                    {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                  >
                     {option.label}
                   </Typography>
                 </li>
@@ -70,7 +74,11 @@ const SearchableDropdown = ({
         );
       }
       return (
-        <Typography className="select_option__text truncate text-right text-primary_normal">
+        <Typography
+          placeholder=""
+          className="select_option__text truncate text-right text-primary_normal"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
           موردی یافت نشد.
         </Typography>
       );
@@ -87,7 +95,11 @@ const SearchableDropdown = ({
                   return handleSelectOption(option);
                 }}
               >
-                <Typography className="select_option__text truncate text-right text-primary_normal">
+                <Typography
+                  placeholder=""
+                  className="select_option__text truncate text-right text-primary_normal"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
                   {option.label}
                 </Typography>
               </li>
@@ -97,7 +109,11 @@ const SearchableDropdown = ({
       );
     }
     return (
-      <Typography className="select_option__text truncate text-right text-primary_normal">
+      <Typography
+        placeholder=""
+        className="select_option__text truncate text-right text-primary_normal"
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+      >
         موردی یافت نشد.
       </Typography>
     );
@@ -141,6 +157,8 @@ const SearchableDropdown = ({
             onClick={() => {
               setOpen?.(true);
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <AddIcon className="w-4 h-4 stroke-icon-hover" />
           </Button>

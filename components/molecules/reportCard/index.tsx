@@ -17,17 +17,31 @@ const ReportCard = ({ title, icon, description }: IProps) => {
         {icon}
       </div>
       <div className="block md:flex flex-col gap-2 flex-grow items-start">
-        <Typography className="mt-3 md:mt-0 title_t1 font-bold">
+        <Typography
+          placeholder=""
+          className="mt-3 md:mt-0 title_t1 font-bold"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
           {title}
         </Typography>
         <div className="flex mt-2 md:mt-0 w-full gap-2 justify-between">
           {description.map((descItem) => {
             return (
               <div key={descItem.label} className="flex flex-wrap gap-x-1 items-center ">
-                <Typography className="body_b3 text-hint">
+                <Typography
+                  placeholder=""
+                  className="body_b3 text-hint"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
                   {descItem.label}
                 </Typography>
-                <Typography className="caption_c2">{descItem.value}</Typography>
+                <Typography
+                  placeholder=""
+                  className="caption_c2"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  {descItem.value}
+                </Typography>
               </div>
             );
           })}

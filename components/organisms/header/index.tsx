@@ -47,6 +47,7 @@ const Header = () => {
           {currentPath?.includes("/panel-admin-clasor") ? (
             <div className="flex items-center gap-2">
               <Button
+                {...({} as React.ComponentProps<typeof Button>)}
                 className="back-button p-0 bg-transparent"
                 onClick={() => {
                   return window.history.back();
@@ -54,7 +55,7 @@ const Header = () => {
               >
                 <BackIcon className="h-5 w-5 fill-icon-active" />
               </Button>
-              <Typography>پنل ادمین</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)}>پنل ادمین</Typography>
             </div>
           ) : (
             <Breadcrumb />
@@ -68,6 +69,7 @@ const Header = () => {
             {userInfo?.isClasorAdmin &&
             currentPath !== "/panel-admin-clasor" ? (
               <Button
+                {...({} as React.ComponentProps<typeof Button>)}
                 onClick={handleAdminPanelNavigation}
                 className="panel-admin__button rounded-full bg-white p-1 shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
                 title="پنل ادمین"
@@ -76,6 +78,7 @@ const Header = () => {
               </Button>
             ) : null}
             <Button
+              {...({} as React.ComponentProps<typeof Button>)}
               onClick={() => {
                 return setOpenRequestDialog(true);
               }}
@@ -84,6 +87,7 @@ const Header = () => {
               <AlertIcon className=" h-4 w-4" />
             </Button>
             <Button
+              {...({} as React.ComponentProps<typeof Button>)}
               onClick={() => {
                 return setOpenFeedbackDialog(true);
               }}

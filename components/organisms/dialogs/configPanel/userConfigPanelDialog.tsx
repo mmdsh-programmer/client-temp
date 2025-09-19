@@ -89,7 +89,10 @@ const UserConfigPanelDialog = () => {
     >
       {isLoading ? (
         <div className="flex w-full justify-center">
-          <Spinner className="text-primary h-6 w-6" />
+          <Spinner
+            className="text-primary h-6 w-6"
+            {...({} as  Omit<React.ComponentProps<typeof Spinner>, "className">)}
+          />
         </div>
       ) : (
         <div className="flex flex-col gap-4">
@@ -102,7 +105,11 @@ const UserConfigPanelDialog = () => {
                   key={`notif-access-${userConfig.serviceName}`}
                   className="hover:border-primary mb-1 flex w-full justify-between rounded-md border p-2"
                 >
-                  <Typography className="title_t2 !text-primary_normal">
+                  <Typography
+                    placeholder=""
+                    className="title_t2 !text-primary_normal"
+                    {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                  >
                     {userConfig.title}
                   </Typography>
                   <Switch
@@ -124,6 +131,7 @@ const UserConfigPanelDialog = () => {
                     getRepo?.roleName === ERoles.editor ||
                     getRepo?.roleName === ERoles.writer ||
                     getRepo?.roleName === ERoles.viewer}
+                    {...({} as  Omit<React.ComponentProps<typeof Switch>, "color" | "defaultChecked" | "crossOrigin" | "onChange" | "readOnly" | "disabled">)}
                   />
                 </div>
               );

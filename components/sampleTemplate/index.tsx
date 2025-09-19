@@ -5,9 +5,9 @@ import React from "react";
 
 const SampleTemplate = () => {
   return (
-    <Button className="bg-primary p-5" >
-        SampleTemplate
-      </Button>
+    <Button {...({} as React.ComponentProps<typeof Button>)} className="bg-primary p-5">
+      SampleTemplate
+    </Button>
   );
 };
 

@@ -77,17 +77,17 @@ const SidebarRepoList = () => {
   ];
 
   return (
-    <List placeholder="sidebar-list" className="min-w-[200px] gap-1 p-0">
+    <List {...({} as React.ComponentProps<typeof List>)} className="min-w-[200px] gap-1 p-0">
       {sidebarList.map((item) => {
         return (
           <ListItem
+            {...({} as React.ComponentProps<typeof ListItem>)}
             key={item.className}
-            placeholder="sidebar-item"
             className={`p-0 ${item.className}`}
           >
             <Link href={item.path} className="w-full">
               <Button
-                placeholder="sidebar-button"
+                {...({} as React.ComponentProps<typeof Button>)}
                 className={`h-[44px] w-full justify-start 
                      gap-1 bg-transparent px-3 text-link
                 ${
@@ -99,7 +99,7 @@ const SidebarRepoList = () => {
                 onClick={item.onClick}
               >
                 {item.icon}
-                <Typography placeholder="sidebar-text" className="title_t3">
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">
                   {item.text}
                 </Typography>
               </Button>

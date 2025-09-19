@@ -31,6 +31,7 @@ const RepoAttachDefaultImage = ({ onClick, disabled }: IProps) => {
               return onClick(image.name);
             }}
             disabled={disabled}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             {image.icon}
           </Button>

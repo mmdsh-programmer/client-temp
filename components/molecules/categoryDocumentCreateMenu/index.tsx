@@ -92,7 +92,13 @@ const CategoryDocumentCreateMenu = ({ openDrawer, setOpenDrawer }: IProps) => {
               icon={
                 <>
                   <div className="hidden items-center justify-center gap-2 md:flex">
-                    <Typography className="title_t3 !px-2 text-white">ایجاد</Typography>
+                    <Typography
+                      placeholder=""
+                      className="title_t3 !px-2 text-white"
+                      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                    >
+                      ایجاد
+                    </Typography>
                     <ArrowDownIcon className="h-5 w-5" />
                   </div>
                   <div className="hidden items-center justify-center md:!hidden xs:flex">
@@ -105,10 +111,12 @@ const CategoryDocumentCreateMenu = ({ openDrawer, setOpenDrawer }: IProps) => {
           </div>
           <div className="absolute bottom-20 left-6 z-[999] xs:hidden">
             <Button
+              placeholder=""
               className="z-[99] h-[54px] w-[54px] rounded-full bg-primary-normal p-0"
               onClick={() => {
                 setOpenDrawer?.(true);
               }}
+              {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
             >
               <AddIcon className="h-6 w-6 stroke-white" />
             </Button>

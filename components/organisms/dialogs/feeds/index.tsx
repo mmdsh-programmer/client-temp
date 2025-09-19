@@ -15,10 +15,10 @@ const FeedsDialog = ({ setOpen }: IProps) => {
       setOpen={setOpen}
       dialogHeader="خبرنامه ها"
     >
-      <DialogBody className="flex-grow p-0">
+      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="flex-grow p-0">
         <Feeds />
       </DialogBody>
-      <DialogFooter>
+      <DialogFooter {...({} as React.ComponentProps<typeof DialogFooter>)}>
         {null}
       </DialogFooter>
     </InfoDialog>

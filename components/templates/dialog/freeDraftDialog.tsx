@@ -43,13 +43,18 @@ const FreeDraftDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
+        {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
         <div className="flex items-center">
-          <Typography className="form__title"> آزادسازی ویرایشگر </Typography>
+          <Typography 
+          className="form__title"
+          {...({} as React.ComponentProps<typeof Typography>)}
+          > آزادسازی ویرایشگر </Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton
@@ -61,6 +66,7 @@ const FreeDraftDialog = ({
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
+        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <div className="body_b3 flex text-primary_normal">
           مهلت استفاده شما از ویرایشگر به پایان رسیده.
@@ -83,6 +89,7 @@ const FreeDraftDialog = ({
       <DialogFooter
         placeholder="dialog footer"
         className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        {...({} as Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
       >
         <LoadingButton
           className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !text-white flex-grow"
@@ -96,7 +103,10 @@ const FreeDraftDialog = ({
           disabled={onResumeLoading || onCloseLoading}
           className="dialog-footer__cancel-button !flex-grow"
         >
-          <Typography className="text__label__button">
+          <Typography 
+            className="text__label__button"
+            {...({} as  React.ComponentProps<typeof Typography>)}
+          >
             نه ، ذخیره و بستن ویرایشگر
           </Typography>
         </CancelButton>

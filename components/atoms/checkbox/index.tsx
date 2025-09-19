@@ -46,7 +46,13 @@ const CustomCheckbox = ({
           <path d="M5 13l4 4L19 7" />
         </svg>
       </span>
-      <Typography className="form_label">{label}</Typography>
+      <Typography
+        placeholder=""
+        className="form_label"
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+      >
+        {label}
+      </Typography>
     </label>
   );
 };

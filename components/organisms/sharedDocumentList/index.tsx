@@ -57,8 +57,9 @@ const SharedDocumentList = () => {
     <div className="flex flex-col gap-4 xs:gap-6">
       <div className="category-header flex items-center justify-between px-4 xs:px-0">
         <div className="flex items-center gap-1">
-          <Typography className="title_t1 text-primary_normal">لیست اسناد</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t1 text-primary_normal">لیست اسناد</Typography>
           <Button
+            {...({} as React.ComponentProps<typeof Button>)}
             className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
             onClick={() => {
               setActiveTour(ETourSection.DOCUMENTS);

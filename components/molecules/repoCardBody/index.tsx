@@ -17,6 +17,7 @@ const RepoCardBody = ({ icon, children, title }: IProps) => {
             placeholder={title}
             title={title}
             className="ml-2 font-iranYekan font-medium text-lg truncate"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             {title}
           </Typography>
@@ -28,3 +29,4 @@ const RepoCardBody = ({ icon, children, title }: IProps) => {
 };
 
 export default RepoCardBody;
+

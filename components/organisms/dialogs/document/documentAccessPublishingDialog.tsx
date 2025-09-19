@@ -143,7 +143,13 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
             value="black-list"
           />
         </div>
-        {isLoading ? <Spinner className="h-6 w-6" color="deep-purple" /> : renderList()}
+        {isLoading ? (
+          <Spinner
+            className="h-6 w-6"
+            color="deep-purple"
+            {...({} as  Omit<React.ComponentProps<typeof Spinner>, "className" | "color">)}
+          />
+        ) : renderList()}
       </div>
     </ConfirmFullHeightDialog>
   );

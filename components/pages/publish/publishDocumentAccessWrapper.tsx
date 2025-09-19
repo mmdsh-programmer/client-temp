@@ -27,11 +27,14 @@ const PublishDocumentAccessWrapper = ({ repoId, docId }: IProps) => {
   return (
     <div className="flex h-full items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-4">
-        <Typography className="title_t2 text-primary_normal">
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="title_t2 text-primary_normal"
+        >
           شما به این سند دسترسی ندارید. لطفا درخواست دسترسی دهید.
         </Typography>
         <LoadingButton
-          className="rounded-md whitespace-nowrap bg-primary-normal !px-5 !w-max text-white shadow-lg hover:bg-primary-normal"
+          className="!w-max whitespace-nowrap rounded-md bg-primary-normal !px-5 text-white shadow-lg hover:bg-primary-normal"
           onClick={handleRequest}
           loading={addToDocumentWhiteList.isPending}
           disabled={addToDocumentWhiteList.isPending}

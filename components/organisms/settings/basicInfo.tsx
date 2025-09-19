@@ -15,7 +15,7 @@ const BasicInfo = ({ domain, onInputChange, register }: BasicInfoProps) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <Typography className="form_label">نام دامنه</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام دامنه</Typography>
         <FormInput
           placeholder="نام دامنه"
           register={{
@@ -27,7 +27,7 @@ const BasicInfo = ({ domain, onInputChange, register }: BasicInfoProps) => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Typography className="form_label">توضیحات دامنه</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات دامنه</Typography>
         <TextareaAtom
           placeholder="توضیحات دامنه"
           register={{

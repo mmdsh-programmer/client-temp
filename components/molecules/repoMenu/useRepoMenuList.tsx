@@ -25,14 +25,14 @@ import {
 
 export interface MenuItem {
   text: string;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element;
   onClick: () => void;
   className?: string;
 }
 
 const createItem = (
   text: string,
-  icon: JSX.Element,
+  icon: React.JSX.Element,
   onClick: () => void,
   className?: string,
 ): MenuItem => {

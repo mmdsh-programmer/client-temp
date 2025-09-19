@@ -67,10 +67,10 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
 
   return (
     <>
-      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6">
+      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="flex-grow px-5 py-3 xs:p-6">
         <form className="repo-create-dialog__form flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <Typography className="label">عنوان مخزن</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">عنوان مخزن</Typography>
             <FormInput
               placeholder="عنوان مخزن"
               register={{ ...register("name") }}
@@ -78,24 +78,24 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
               className="repo-create-dialog__input"
             />
             {errors.name && (
-              <Typography className="warning_text">{errors.name?.message}</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <Typography className="label">توضیحات مخزن</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">توضیحات مخزن</Typography>
             <TextareaAtom
               placeholder="توضیحات مخزن"
               register={{ ...register("description") }}
               className="repo-create-dialog__textarea"
             />
             {errors.description && (
-              <Typography className="warning_text">{errors.description?.message}</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.description?.message}</Typography>
             )}
           </div>
         </form>
       </DialogBody>
       <DialogFooter
-        placeholder="dialog footer"
+        {...({} as React.ComponentProps<typeof DialogFooter>)}
         className="dialog__footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
@@ -106,7 +106,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          <Typography className="text__label__button font-iranYekan text-white">ادامه</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button font-iranYekan text-white">ادامه</Typography>
         </LoadingButton>
       </DialogFooter>
     </>

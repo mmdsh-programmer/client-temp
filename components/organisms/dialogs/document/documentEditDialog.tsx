@@ -115,7 +115,13 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="document-edit__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام سند</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            نام سند
+          </Typography>
           <FormInput
             placeholder="نام سند"
             register={{
@@ -126,11 +132,23 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             className="document-edit__form-name"
           />
           {errors.title && (
-            <Typography className="warning_text">{errors.title?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.title?.message}
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">اولویت سند </Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            اولویت سند 
+          </Typography>
           <FormInput
             type="number"
             min={1}
@@ -143,11 +161,23 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             className="document-edit__form-order"
           />
           {errors.order && (
-            <Typography className="warning_text">{errors.order?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.order?.message}
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">توضیحات سند</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            توضیحات سند
+          </Typography>
           <TextareaAtom
             placeholder="توضیحات سند"
             register={{
@@ -156,7 +186,13 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             className="document-edit__form-description"
           />
           {errors.description && (
-            <Typography className="warning_text">{errors.description?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.description?.message}
+            </Typography>
           )}
         </div>
       </form>

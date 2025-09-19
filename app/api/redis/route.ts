@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { getRedisClient } from "@utils/redis";
 import { headers } from "next/headers";
 
 // forces the route handler to be dynamic
@@ -18,7 +17,7 @@ export async function GET(req) {
         { status: 401 }
       );
     }
-    const redisHandler = await getRedisClient();
+    const redisHandler = await global.clientPromise;
     if(!redisHandler || !redisHandler.isReady){
       return NextResponse.json({ error: "Redis is not ready" }, { status: 400 });
     }

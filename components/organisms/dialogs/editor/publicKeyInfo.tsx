@@ -8,7 +8,7 @@ import useGetKey from "@hooks/repository/useGetKey";
 interface IProps {
   repoId: number;
   publicKeyId?: number;
-  children: JSX.Element;
+  children: React.JSX.Element;
 }
 
 const PublicKeyInfo = ({ children, repoId, publicKeyId }: IProps) => {
@@ -33,8 +33,10 @@ const PublicKeyInfo = ({ children, repoId, publicKeyId }: IProps) => {
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <Typography className="font-bold ml-2">لطفا صبر کنید</Typography>
+      <div className="flex h-full w-full items-center justify-center">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="ml-2 font-bold">
+          لطفا صبر کنید
+        </Typography>
         <Spinner className="h-5 w-5 text-primary" />
       </div>
     );

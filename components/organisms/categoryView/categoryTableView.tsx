@@ -200,9 +200,17 @@ TableView = ({
               setFilterChildren(null);
               setFilterReport(null);
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <DeleteIcon className="h-4 w-4 fill-white" />
-            <Typography className="label text-white">حذف فیلتر</Typography>
+            <Typography
+              placeholder=""
+              className="label text-white"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              حذف فیلتر
+            </Typography>
           </Button>
         </div>
       ) : null}

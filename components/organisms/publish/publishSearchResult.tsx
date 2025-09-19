@@ -58,7 +58,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
   const total = searchData?.pages[0].total;
 
   return (
-    <List className="list w-full max-h-72 overflow-auto">
+    <List {...({} as React.ComponentProps<typeof List>)} className="list w-full max-h-72 overflow-auto">
       {total ? (
         searchData?.pages.map((page, pageIndex) => {
           return page.list.map((searchResult) => {
@@ -74,7 +74,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
           });
         })
       ) : (
-        <ListItem className="block min-h-12 gap-2 text-right text-ellipsis overflow-hidden whitespace-nowrap">
+        <ListItem {...({} as React.ComponentProps<typeof ListItem>)} className="block min-h-12 gap-2 text-right text-ellipsis overflow-hidden whitespace-nowrap">
           موردی برای نمایش وجود ندارد
         </ListItem>
       )}

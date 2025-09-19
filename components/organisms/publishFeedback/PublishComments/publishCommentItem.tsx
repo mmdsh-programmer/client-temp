@@ -33,10 +33,12 @@ const PublishCommentItem = ({ postId, commentItem }: IProps) => {
 
   return (
     <Card
+      {...({} as React.ComponentProps<typeof Card>)}
       shadow={false}
       className="w-full pt-[30px] pb-5 px-5 flex flex-col gap-2.5 border-b-2 border-solid border-gray-200 rounded-none bg-white"
     >
       <CardHeader
+        {...({} as React.ComponentProps<typeof CardHeader>)}
         color="transparent"
         floated={false}
         shadow={false}
@@ -54,10 +56,10 @@ const PublishCommentItem = ({ postId, commentItem }: IProps) => {
           </time>
         </div>
       </CardHeader>
-      <CardBody className="p-0">
-        <Typography className="text-sm word-break">{commentItem.text}</Typography>
+      <CardBody {...({} as React.ComponentProps<typeof CardBody>)} className="p-0">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-sm word-break">{commentItem.text}</Typography>
       </CardBody>
-      <CardFooter className="flex items-center p-0 gap-2 justify-between">
+      <CardFooter {...({} as React.ComponentProps<typeof CardFooter>)} className="flex items-center p-0 gap-2 justify-between">
         <RenderIf
           isTrue={!!userInfo && +userInfo.ssoId === +commentItem.user.ssoId}
         >

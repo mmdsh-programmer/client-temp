@@ -35,9 +35,13 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon, className }: IProps)
       handler={setOpenMenu}
       allowHover
       offset={15}
+      {...({} as  React.ComponentProps<typeof Menu>)}
     >
-      <MenuHandler className="font-light text-[12px] pl-4 pr-2 py-2 flex items-center justify-between">
-        <MenuItem className="font-light text-[12px]">
+      <MenuHandler
+        className="font-light text-[12px] pl-4 pr-2 py-2 flex items-center justify-between"
+        {...({} as  React.ComponentProps<typeof MenuHandler>)}
+      >
+        <MenuItem className="font-light text-[12px]" {...({} as  React.ComponentProps<typeof MenuItem>)}>
           <div className="flex gap-2">
             {icon}
             {menuName}
@@ -52,6 +56,7 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon, className }: IProps)
       <MenuList
         className={`${className}!min-w-max !w-auto -ml-3 !z-[99999] font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
         placeholder="menu-list"
+        {...({} as  Omit<React.ComponentProps<typeof MenuList>, "placeholder">)}
       >
         {subMenuList.map((menuItem, index) => {
           return (
@@ -62,12 +67,14 @@ const NestedMenu = ({ variant, menuName, subMenuList, icon, className }: IProps)
               className={`p-2 ${menuItem.className || ""}`}
               onClick={menuItem.onClick}
               disabled={menuItem.disabled}
+              {...({} as  Omit<React.ComponentProps<typeof MenuItem>, "placeholder">)}
             >
               <div className="flex">
                 {menuItem.icon}
                 <Typography
                   placeholder="menu-item-text"
                   className={`font-iranYekan ${variant === "small" ? " font-light text-[12px] mr-2" : "font-medium text-base mb-1"}`}
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                 >
                   {menuItem.text}
                 </Typography>

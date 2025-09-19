@@ -42,16 +42,32 @@ const DocumentWhiteListMenu = ({ request }: IProps) => {
       ) : (
         <>
           <Button
+            placeholder=""
             className="request-menu__reject-button h-8 w-16 bg-gray-50 hover:bg-gray-50 xs:w-20"
             onClick={handleRejectRequest}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
-            <Typography className="text__label__button text-primary_normal">ردکردن</Typography>
+            <Typography
+              placeholder=""
+              className="text__label__button text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              ردکردن
+            </Typography>
           </Button>
           <Button
+            placeholder=""
             className="request-menu__accept-button h-8 w-16 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal xs:w-20"
             onClick={handleAcceptRequest}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
-            <Typography className="text__label__button text-white">تایید</Typography>
+            <Typography
+              placeholder=""
+              className="text__label__button text-white"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              تایید
+            </Typography>
           </Button>
         </>
       )}

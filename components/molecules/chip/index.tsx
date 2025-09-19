@@ -15,8 +15,10 @@ const ChipMolecule = ({ className, value, icon, actionIcon }: IProps) => {
     >
       {icon ? <div className="w-8 h-8 ">{icon}</div> : null}
       <Typography
+        placeholder=""
         title={value}
         className="label truncate text-right lowercase "
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
       >
         {value}
       </Typography>

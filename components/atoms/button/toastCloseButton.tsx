@@ -11,6 +11,7 @@ const ToastCloseButton = ({ closeToast }: CloseButtonProps) => {
         onClick={(e: React.MouseEvent<HTMLElement>) => {
           closeToast(e);
         }}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         <XIcon className="fill-white w-6 h-6" />
       </Button>

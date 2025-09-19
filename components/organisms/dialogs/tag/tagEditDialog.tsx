@@ -106,7 +106,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="label">نام تگ</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">نام تگ</Typography>
           <FormInput
             placeholder="نام تگ"
             register={{
@@ -116,12 +116,12 @@ const TagEditDialog = ({ setOpen }: IProps) => {
             }}
             className="tag-edit-dialog__name"
           />
-          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
+          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
         </div>
         {userInfo?.domainConfig.useDomainTag ? (
           <>
             <div className="flex flex-col gap-2">
-              <Typography className="form_label">اولویت تگ </Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">اولویت تگ </Typography>
               <FormInput
                 type="number"
                 min={0}
@@ -134,11 +134,11 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                 className="tag-edit-dialog__priority"
               />
               {errors.order && (
-                <Typography className="warning_text">{errors.order?.message}</Typography>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.order?.message}</Typography>
               )}
             </div>
             <div className="flex flex-col gap-2">
-              <Typography className="form_label">توضیحات تگ</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات تگ</Typography>
               <TextareaAtom
                 placeholder="توضیحات تگ"
                 register={{
@@ -149,7 +149,7 @@ const TagEditDialog = ({ setOpen }: IProps) => {
                 className="tag-edit-dialog__description"
               />
               {errors.description && (
-                <Typography className="warning_text">{errors.description?.message}</Typography>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.description?.message}</Typography>
               )}
             </div>
           </>

@@ -8,7 +8,11 @@ interface IProps {
 
 const FileLabel = ({ name, extension }: IProps) => {
   return (
-    <Typography className="label">
+    <Typography
+      placeholder=""
+      className="label"
+      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+    >
       {name}.{extension}
     </Typography>
   );

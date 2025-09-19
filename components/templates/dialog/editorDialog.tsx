@@ -51,19 +51,26 @@ const EditorDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as  Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header border-b-none flex items-center gap-[10px] border-normal bg-white px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
+        {...({} as  Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
         <EditorHeader dialogHeader={dialogHeader} setOpen={handleClose} />
       </DialogHeader>
       <div className="block h-2 w-full bg-secondary xs:hidden" />
-      <DialogBody placeholder="dialog body" className="dialog-body flex-grow overflow-auto p-0">
+      <DialogBody 
+        placeholder="dialog body" 
+        className="dialog-body flex-grow overflow-auto p-0"
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+      >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
+        {...({} as  Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
         className="dialog-footer flex gap-2 border-t-[0.5px] border-t-gray-200 p-5 xs:gap-3 xs:px-6 xs:py-4"
       >
         {renderFooter()}

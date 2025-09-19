@@ -37,10 +37,17 @@ const DocumentInfo = () => {
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <form className="document-info-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
-            <Typography className="form_label">نام سند</Typography>
+            <Typography
+              placeholder=""
+              className="form_label"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              نام سند
+            </Typography>
             <FormInput
               className="document-info-form__name w-full"
               placeholder="نام سند"
@@ -49,13 +56,23 @@ const DocumentInfo = () => {
               }}
             />
             {errors.title && (
-              <Typography className="warning_text">
+              <Typography
+                placeholder=""
+                className="warning_text"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 {errors.title?.message}
               </Typography>
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <Typography className="form_label">اولویت سند </Typography>
+            <Typography
+              placeholder=""
+              className="form_label"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              اولویت سند 
+            </Typography>
             <FormInput
               className="document-info-form__order w-full"
               placeholder="اولویت سند"
@@ -66,13 +83,23 @@ const DocumentInfo = () => {
               }}
             />
             {errors.order && (
-              <Typography className="warning_text">
+              <Typography
+                placeholder=""
+                className="warning_text"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 {errors.order?.message}
               </Typography>
             )}
           </div>
           <div className="flex flex-col gap-2">
-            <Typography className="form_label">توضیحات سند</Typography>
+            <Typography
+              placeholder=""
+              className="form_label"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              توضیحات سند
+            </Typography>
             <TextareaAtom
               className="document-info-form__description w-full"
               placeholder="توضیحات سند"
@@ -83,7 +110,11 @@ const DocumentInfo = () => {
               }}
             />
             {errors.description && (
-              <Typography className="warning_text">
+              <Typography
+                placeholder=""
+                className="warning_text"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 {errors.description?.message}
               </Typography>
             )}

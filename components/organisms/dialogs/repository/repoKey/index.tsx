@@ -46,14 +46,14 @@ const RepoKeyDialog = ({ setOpen }: IProps) => {
       <div className="flex flex-grow flex-col p-4">
         {getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin ? (
           <Button
-            placeholder="create repo key"
+            {...({} as React.ComponentProps<typeof Button>)}
             className="repo-key-dialog__create-button mr-auto flex h-8 items-center justify-between border-[1px] border-normal bg-white px-1 shadow-none hover:bg-transparent hover:shadow-none"
             onClick={() => {
               setCreateRepoKey(true);
             }}
           >
             <AddIcon className="h-5 w-5 stroke-icon-active" />
-            <Typography className="text__label__button px-2 text-primary_normal">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button px-2 text-primary_normal">
               ایجاد کلید
             </Typography>
           </Button>

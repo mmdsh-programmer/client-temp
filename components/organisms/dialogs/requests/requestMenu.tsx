@@ -40,16 +40,18 @@ const RequestMenu = ({ request, setAcceptedRepo }: IProps) => {
       ) : (
         <>
           <Button
+            {...({} as React.ComponentProps<typeof Button>)}
             className="request-menu__reject-button h-8 w-16 bg-gray-50 hover:bg-gray-50 xs:w-20 "
             onClick={handleRejectRequest}
           >
-            <Typography className="text__label__button text-primary_normal">ردکردن</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-primary_normal">ردکردن</Typography>
           </Button>
           <Button
+            {...({} as React.ComponentProps<typeof Button>)}
             className="request-menu__accept-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal h-8 w-16 xs:w-20"
             onClick={handleAcceptRequest}
           >
-            <Typography className="text__label__button text-white">تایید</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">تایید</Typography>
           </Button>
         </>
       )}

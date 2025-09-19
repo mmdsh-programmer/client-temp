@@ -24,7 +24,7 @@ const DesktopMenu = ({
     >
       <Button
         className={`${className || ""} rounded-lg bg-transparent p-1 shadow-none flex justify-center hover:shadow-none items-center`}
-        placeholder="menu-button"
+        {...({} as React.ComponentProps<typeof Button>)}
       >
         {icon || <MoreDotIcon className="w-4 h-4 " />}
       </Button>

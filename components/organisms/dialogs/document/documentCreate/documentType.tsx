@@ -64,6 +64,7 @@ const DocumentType = ({
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <form className="document-type flex flex-col gap-5" onSubmit={handleSelectType}>
           {isLoading ? (
@@ -72,7 +73,13 @@ const DocumentType = ({
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <Typography className="form_label">نوع سند</Typography>
+              <Typography
+                placeholder=""
+                className="form_label"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                نوع سند
+              </Typography>
               <SelectAtom
                 className="document-type__select w-full h-[46px] flex items-center !bg-gray-50 justify-between pr-3 pl-2 rounded-lg border-[1px] border-normal"
                 defaultOption={defaultOption}

@@ -55,7 +55,7 @@ const PublishRepoSubscribeButton = ({
       case ERepoSubscriptionStatus.ACCEPTED:
         return (
           <div className="flex flex-col items-center gap-2">
-            <Typography className="caption_c1">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1">
               درخواست دریافت اعلانات توسط مدیر دامنه تایید شده
             </Typography>
             <LoadingButton
@@ -65,14 +65,14 @@ const PublishRepoSubscribeButton = ({
               disabled={loading}
               isPrimary
             >
-              <Typography className="body_b3">لغو دریافت اعلان</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="body_b3">لغو دریافت اعلان</Typography>
             </LoadingButton>
           </div>
         );
       case ERepoSubscriptionStatus.PENDING:
         return (
           <div className="flex flex-col items-center gap-3">
-            <Typography className="caption_c1 text-center">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 text-center">
               درخواست دریافت اعلانات برای مدیر دامنه ارسال شده
             </Typography>
             <LoadingButton
@@ -88,7 +88,7 @@ const PublishRepoSubscribeButton = ({
       case ERepoSubscriptionStatus.REJECTED:
         return (
           <div className="flex flex-col items-center gap-2">
-            <Typography className="body_b3 text-warning">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="body_b3 text-warning">
               درخواست دریافت اعلانات توسط مدیر دامنه رد شده
             </Typography>
             <LoadingButton
@@ -118,7 +118,7 @@ const PublishRepoSubscribeButton = ({
   if (loading) {
     return (
       <div className="flex w-full justify-center">
-        <Spinner className="h-5 w-5 text-primary" />
+        <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-5 w-5 text-primary" />
       </div>
     );
   }

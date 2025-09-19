@@ -85,6 +85,7 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
     >
       آیا از تایید و عمومی سازی پیش نویس"
       <Typography
+        {...({} as React.ComponentProps<typeof Typography>)}
         title={getSelectedVersion?.versionNumber}
         className="flex max-w-[100px] cursor-pointer items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
       >
@@ -92,7 +93,7 @@ const ConfirmPublicDraftDialog = ({ setOpen }: IProps) => {
       </Typography>
       " اطمینان دارید؟
       {!getVersionModalList ? (
-        <Typography className="warning_text mt-6">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text mt-6">
           لطفاً قبل از تایید، تغییرات خود را ذخیره کنید. پس از تایید، صفحه ویرایشگر بسته خواهد شد.
         </Typography>
       ) : null}

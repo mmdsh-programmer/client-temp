@@ -20,34 +20,44 @@ const CategoryBulk = () => {
         <div className="flex h-full items-center justify-evenly">
           <div className="flex items-center justify-center gap-2 pl-4 pr-3">
             <InfoIcon className="h-6 w-6 stroke-white" />
-            <Typography placeholder="" className="label_l2 whitespace-nowrap !text-white">
+            <Typography
+              placeholder=""
+              className="label_l2 whitespace-nowrap !text-white"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               {getBulkItems.length} مورد انتخاب شده
             </Typography>
           </div>
           <div className="h-full border-r-2 border-gray-500" />
           <Button
+            placeholder=""
             className="move label_l2 h-full px-4"
             onClick={() => {
               setOpenMoveDialog(true);
             }}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             انتقال
           </Button>
           <div className="h-full border-r-2 border-gray-500" />
           <Button
+            placeholder=""
             className="delete label_l2 h-full px-4"
             onClick={() => {
               setOpenDeleteDialog(true);
             }}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             حذف
           </Button>
           <div className="h-full border-r-2 border-gray-500" />
           <Button
+            placeholder=""
             className="cancel label_l2 h-full px-2"
             onClick={() => {
               setBulkItems([]);
             }}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <XIcon className="h-5 w-5 fill-gray-50" />
           </Button>

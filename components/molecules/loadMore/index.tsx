@@ -32,6 +32,7 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
         fetchNextPage();
       }}
       disabled={isFetchingNextPage}
+      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       {isFetchingNextPage ? (
         <div className="spinner" />
@@ -39,6 +40,7 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
         <Typography
           placeholder=""
           className="font-iranYekan text-gray-600 text-xs"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
         >
           نمایش موارد بیشتر
         </Typography>

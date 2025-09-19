@@ -55,12 +55,12 @@ const Sidebar = ({ children }: IProps) => {
       <div className="flex h-[80px] items-center justify-center px-2 py-4">{children}</div>
       <hr className="" />
       <ListItem
+        {...({} as React.ComponentProps<typeof ListItem>)}
         key={ERepoGrouping.DASHBOARD}
-        placeholder="sidebar-item"
         className={`sidebar-item-${sidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} dashboard p-2 hover:!bg-transparent`}
       >
         <Button
-          placeholder="sidebar-button"
+          {...({} as React.ComponentProps<typeof Button>)}
           className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link sidebar-button-${sidebarSection === ESidebarSection.DASHBOARD ? "active" : ""} ${sidebarSection === ESidebarSection.DASHBOARD ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
           onClick={() => {
             navigateTo("/admin/dashboard", () => {
@@ -71,7 +71,7 @@ const Sidebar = ({ children }: IProps) => {
           }}
         >
           <DashboardIcon className="h-6 w-6" />
-          <Typography placeholder="sidebar-text" className="title_t3">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">
             {ESidebarSection.DASHBOARD}
           </Typography>
         </Button>
@@ -79,6 +79,7 @@ const Sidebar = ({ children }: IProps) => {
       <hr className="" />
       {(enablePersonalDocs ?? true) ? (
         <Accordion
+          {...({} as React.ComponentProps<typeof Accordion>)}
           className="personal-document-sidebar w-full max-w-full"
           open={open === 1}
           icon={
@@ -89,14 +90,15 @@ const Sidebar = ({ children }: IProps) => {
           animate={CUSTOM_ANIMATION}
         >
           <AccordionHeader
+            {...({} as React.ComponentProps<typeof AccordionHeader>)}
             className={`flex-row-reverse justify-end px-3 ${open === 1 ? "border-none" : "border-b-2 border-normal"}`}
             onClick={() => {
               return handleOpen(1);
             }}
           >
-            <Typography className="title_t4">اسناد شخصی</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4">اسناد شخصی</Typography>
           </AccordionHeader>
-          <AccordionBody>
+          <AccordionBody {...({} as React.ComponentProps<typeof AccordionBody>)}>
             <div className="border-b-2 border-normal px-3 pb-3">
               <SidebarDocuments />
             </div>
@@ -104,6 +106,7 @@ const Sidebar = ({ children }: IProps) => {
         </Accordion>
       ) : null}
       <Accordion
+        {...({} as React.ComponentProps<typeof Accordion>)}
         className="repo-list-sidebar w-full max-w-full"
         open={open === 2}
         icon={
@@ -114,14 +117,15 @@ const Sidebar = ({ children }: IProps) => {
         animate={CUSTOM_ANIMATION}
       >
         <AccordionHeader
+          {...({} as React.ComponentProps<typeof AccordionHeader>)}
           className={`flex-row-reverse justify-end px-3 ${open === 2 ? "border-none" : "border-b-2 border-normal"}`}
           onClick={() => {
             return handleOpen(2);
           }}
         >
-          <Typography className="title_t4">مدیریت مخزن‌ها</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4">مدیریت مخزن‌ها</Typography>
         </AccordionHeader>
-        <AccordionBody>
+        <AccordionBody {...({} as React.ComponentProps<typeof AccordionBody>)}>
           <div className="border-b-2 border-normal px-3 pb-3">
             <SidebarRepoList />
           </div>
@@ -130,11 +134,11 @@ const Sidebar = ({ children }: IProps) => {
       {userInfo?.domainRole === "owner" || userInfo?.domainRole === "participant" ? (
         <>
           <ListItem
-            placeholder="sidebar-item"
+            {...({} as React.ComponentProps<typeof ListItem>)}
             className="domain-management-sidebar dashboard p-2 hover:!bg-transparent"
           >
             <Button
-              placeholder="sidebar-button"
+              {...({} as React.ComponentProps<typeof Button>)}
               className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.DOMAIN_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
               onClick={() => {
                 navigateTo("/admin/domainManagement", () => {
@@ -145,7 +149,7 @@ const Sidebar = ({ children }: IProps) => {
               }}
             >
               <UserGroupIcon className="h-6 w-6" />
-              <Typography placeholder="sidebar-text" className="title_t3">
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">
                 مدیریت دامنه
               </Typography>
             </Button>
@@ -155,11 +159,11 @@ const Sidebar = ({ children }: IProps) => {
       ) : null}
       {(enableBranch ?? true) ? (
         <ListItem
-          placeholder="sidebar-item"
+          {...({} as React.ComponentProps<typeof ListItem>)}
           className="branch-management-sidebar dashboard p-2 hover:!bg-transparent"
         >
           <Button
-            placeholder="sidebar-button"
+            {...({} as React.ComponentProps<typeof Button>)}
             className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.BRANCH_MANAGEMENT ? "bg-gray-100 !stroke-icon-active text-primary_normal" : ""} hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
             onClick={() => {
               navigateTo("/admin/branchManagement", () => {
@@ -170,7 +174,7 @@ const Sidebar = ({ children }: IProps) => {
             }}
           >
             <UserGroupIcon className="h-6 w-6" />
-            <Typography placeholder="sidebar-text" className="title_t3">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">
               مدیریت سازمانی
             </Typography>
           </Button>

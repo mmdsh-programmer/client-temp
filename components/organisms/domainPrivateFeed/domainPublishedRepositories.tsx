@@ -41,7 +41,7 @@ const DomainPublishedRepositories = () => {
                 return (
                   <div key={repo.id} className="aspect-square">
                     <Card
-                      placeholder="card"
+                      {...({} as React.ComponentProps<typeof Card>)}
                       key={`repo-card-item-${repo.id}`}
                       className="repo-publish-card h-full flex-col rounded-lg border-[1px] border-normal bg-white shadow-small last:flex"
                     >
@@ -58,6 +58,7 @@ const DomainPublishedRepositories = () => {
                           />
                         </div>
                         <Typography
+                          {...({} as React.ComponentProps<typeof Typography>)}
                           className="title_t2 w-full truncate px-2 pb-8 pt-4 text-center font-[450]"
                           title={repo.name}
                         >

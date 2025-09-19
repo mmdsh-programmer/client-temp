@@ -27,7 +27,13 @@ const RepoTypesMobileView = () => {
           }}
         >
           <MyFolderIcon className="h-6 w-6" />
-          <Typography className="title_t4">مخزن‌های من</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            مخزن‌های من
+          </Typography>
         </div>
         <div
           className={`repo-types-mobile-view__bookmarkRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.BOOKMARK_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
@@ -37,7 +43,13 @@ const RepoTypesMobileView = () => {
           }}
         >
           <FolderBookmarkIcon className="h-6 w-6" />
-          <Typography className="title_t4">نشان شده</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            نشان شده
+          </Typography>
         </div>
         <div
           className={`repo-types-mobile-view__accessRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.ACCESS_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
@@ -47,7 +59,13 @@ const RepoTypesMobileView = () => {
           }}
         >
           <FolderShareIcon className="h-6 w-6" />
-          <Typography className="title_t4">اشتراکی</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            اشتراکی
+          </Typography>
         </div>
         <div
           className={`repo-types-mobile-view__archiveRepo flex cursor-pointer flex-col items-center ${getRepoGroup === ERepoGrouping.ARCHIVE_REPO ? "stroke-icon-active text-primary_normal" : "stroke-gray-400 text-gray-400"}`}
@@ -57,7 +75,13 @@ const RepoTypesMobileView = () => {
           }}
         >
           <FolderArchiveIcon className="h-6 w-6" />
-          <Typography className="title_t4">بایگانی شده</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            بایگانی شده
+          </Typography>
         </div>
       </div>
     </div>

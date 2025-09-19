@@ -78,7 +78,7 @@ const DocumentWhiteList = ({
         onChange={handleInputChange}
         className="document-white-list__name-input"
       />
-      <Typography className="title_t4 text-secondary ">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary ">
         لیست سفید سند
       </Typography>
       {isLoading ? (
@@ -109,6 +109,7 @@ const DocumentWhiteList = ({
                     }
                     actionIcon={
                       <Button
+                        {...({} as React.ComponentProps<typeof Button>)}
                         className="delete-button bg-transparent p-0"
                         onClick={() => {
                           removeUser(item.username);

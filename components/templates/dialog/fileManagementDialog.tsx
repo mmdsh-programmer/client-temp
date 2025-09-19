@@ -41,14 +41,19 @@ const fileManagementDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as  Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header rounded-md rounded-b-none flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-2 border-b-none xs:border-b-[0.5px] border-normal"
+        {...({} as  Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
         <div className="flex items-center">
           <BackButton onClick={handleClose} />
-          <Typography className="form__title">{dialogHeader}</Typography>
+          <Typography 
+            className="form__title"
+            {...({} as  React.ComponentProps<typeof Typography>)}
+          >{dialogHeader}</Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />
@@ -57,22 +62,26 @@ const fileManagementDialog = ({
       <DialogBody
         placeholder="dialog body"
         className={`${dialogBodyClassName || ""} dialog-body`}
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
         className="dialog-footer bg-white rounded-md rounded-t-none p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        {...({} as  Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
       >
         <Button
           placeholder=" button"
           variant="text"
           className="dialog-footer__submit-button flex justify-center items-center flex-1 xs:flex-0 w-full md:w-[100px] h-10 md:h-8 px-3 md:px-1 hover:bg-primary-normal bg-primary-normal active:bg-primary-normal "
           onClick={handleSelect}
+          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           <Typography
             placeholder=""
             className="text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-white"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             افزودن
           </Typography>

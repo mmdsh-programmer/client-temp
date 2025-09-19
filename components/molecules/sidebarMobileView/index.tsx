@@ -93,9 +93,17 @@ const SidebarMobileView = () => {
             onClick={() => {
               return handleDocumentNavigation("/admin/myDocuments", ESidebarSection.MY_DOCUMENTS);
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <MyDocumentsIcon className="ml-3 h-6 w-6" />
-            <Typography className="title_t3">سندهای من</Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              سندهای من
+            </Typography>
           </Button>
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
@@ -109,9 +117,17 @@ const SidebarMobileView = () => {
                 ESidebarSection.SHARED_DOCUMENTS,
               );
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <SharedDocumentsIcon className="ml-3 h-6 w-6" />
-            <Typography className="title_t3">سندهای اشتراکی</Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              سندهای اشتراکی
+            </Typography>
           </Button>
         </div>
       </div>
@@ -133,9 +149,17 @@ const SidebarMobileView = () => {
               setSidebarSection(ESidebarSection.MY_REPOS);
               router.push("/admin/myRepoList");
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <MyFolderIcon className="ml-3 h-6 w-6" />
-            <Typography className="title_t3">مخزن‌های من</Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              مخزن‌های من
+            </Typography>
           </Button>
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
@@ -148,13 +172,21 @@ const SidebarMobileView = () => {
               setSidebarSection(ESidebarSection.SHARED_REPOS);
               router.push("/admin/accessRepoList");
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <FolderShareIcon
               className={`ml-3 h-6 w-6 ${
                 repoGrouping === ERepoGrouping.ACCESS_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">مخزن‌های اشتراکی</Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              مخزن‌های اشتراکی
+            </Typography>
           </Button>
 
           <Button
@@ -168,13 +200,21 @@ const SidebarMobileView = () => {
               setSidebarSection(ESidebarSection.BOOKMARK_REPOS);
               router.push("/admin/bookmarkRepoList");
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <BookmarkRepoIcon
               className={`ml-3 h-6 w-6 ${
                 repoGrouping === ERepoGrouping.BOOKMARK_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">مخزن‌های نشان شده </Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              مخزن‌های نشان شده 
+            </Typography>
           </Button>
 
           <Button
@@ -188,13 +228,21 @@ const SidebarMobileView = () => {
               setSidebarSection(ESidebarSection.ARCHIVE_REPOS);
               router.push("/admin/archiveRepoList");
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <ArchiveIcon
               className={`ml-3 h-6 w-6 ${
                 repoGrouping === ERepoGrouping.ARCHIVE_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3">مخزن‌های بایگانی </Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              مخزن‌های بایگانی 
+            </Typography>
           </Button>
           <Button
             className={`flex w-full cursor-pointer flex-row items-center justify-start bg-transparent px-4 py-3 ${
@@ -207,13 +255,21 @@ const SidebarMobileView = () => {
               setSidebarSection(ESidebarSection.PUBLISHED_REPOS);
               router.push("/admin/publishedRepoList");
             }}
+            placeholder=""
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <PublishIcon
               className={`ml-3 h-6 w-6 ${
                 repoGrouping === ERepoGrouping.PUBLISHED_REPO ? "fill-icon-active" : "fill-gray-400"
               }`}
             />
-            <Typography className="title_t3"> مخزن‌های منتشرشده </Typography>
+            <Typography
+              placeholder=""
+              className="title_t3"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+               مخزن‌های منتشرشده 
+            </Typography>
           </Button>
         </div>
       </div>
@@ -237,9 +293,17 @@ const SidebarMobileView = () => {
                   ESidebarSection.DOMAIN_MANAGEMENT,
                 );
               }}
+              placeholder=""
+              {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
             >
               <UserGroupIcon className="ml-3 h-6 w-6" />
-              <Typography className="title_t3">مدیریت دامنه</Typography>
+              <Typography
+                placeholder=""
+                className="title_t3"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                مدیریت دامنه
+              </Typography>
             </Button>
           ) : null}
           {(enableBranch ?? true) ? (
@@ -257,9 +321,17 @@ const SidebarMobileView = () => {
                   setShowList(true);
                 }
               }}
+              placeholder=""
+              {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
             >
               <UserGroupIcon className="ml-3 h-6 w-6" />
-              <Typography className="title_t3">مدیریت سازمانی</Typography>
+              <Typography
+                placeholder=""
+                className="title_t3"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                مدیریت سازمانی
+              </Typography>
             </Button>
           ) : null}
         </div>
@@ -289,7 +361,13 @@ const SidebarMobileView = () => {
           }}
         >
           <DashboardIcon className="h-6 w-6" />
-          <Typography className="title_t4">داشبورد</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            داشبورد
+          </Typography>
         </div>
         {(enablePersonalDocs ?? true) ? (
           <div
@@ -308,7 +386,13 @@ const SidebarMobileView = () => {
             }}
           >
             <MyDocumentsIcon className="h-6 w-6" />
-            <Typography className="title_t4">اسناد</Typography>
+            <Typography
+              placeholder=""
+              className="title_t4"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              اسناد
+            </Typography>
           </div>
         ) : null}
         <div
@@ -327,7 +411,13 @@ const SidebarMobileView = () => {
           }}
         >
           <MyFolderIcon className="h-6 w-6" />
-          <Typography className="title_t4">مخزن‌ها</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            مخزن‌ها
+          </Typography>
         </div>
         <div
           className={`flex cursor-pointer flex-col items-center ${
@@ -345,7 +435,13 @@ const SidebarMobileView = () => {
           }}
         >
           <UserGroupIcon className="h-6 w-6" />
-          <Typography className="title_t4">مدیریت دامنه</Typography>
+          <Typography
+            placeholder=""
+            className="title_t4"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            مدیریت دامنه
+          </Typography>
         </div>
       </div>
     );

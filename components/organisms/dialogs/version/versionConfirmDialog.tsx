@@ -112,7 +112,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
       </span>
       " اطمینان دارید؟
       {!getVersionModalList ? (
-        <Typography className="warning_text mt-6">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text mt-6">
           لطفاً قبل از تایید، تغییرات خود را ذخیره کنید. پس از تایید، صفحه ویرایشگر بسته خواهد شد.
         </Typography>
       ) : null}

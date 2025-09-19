@@ -1,3 +1,5 @@
+/* eslint-disable camelcase */
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -9,7 +11,6 @@ import Error from "@components/organisms/error";
 import BasicError from "@utils/error";
 import { Spinner } from "@components/atoms/spinner";
 
- 
 const SignInComponent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -73,7 +74,12 @@ const SignInComponent = () => {
     return (
       <div className="get-user-info bg-slate-50 flex h-screen w-screen items-center justify-center">
         <Spinner className="h-8 w-8 text-primary" />
-        <Typography className="title_t1 mr-2 font-bold">در حال دریافت اطلاعات کاربری</Typography>
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="title_t1 mr-2 font-bold"
+        >
+          در حال دریافت اطلاعات کاربری
+        </Typography>
       </div>
     );
   }

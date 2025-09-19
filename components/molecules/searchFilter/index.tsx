@@ -41,6 +41,8 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
             setOpenSearchModal(true);
           }}
           className="searchContent flex items-center justify-center rounded-lg border-2 border-gray-100 bg-white p-1 shadow-none"
+          placeholder=""
+          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           <SearchIcon className="h-5 w-5 stroke-gray-500" />
         </Button>
@@ -57,6 +59,7 @@ const SearchFilter = ({ open, setOpen }: IProps) => {
         }}
         placeholder=""
         className="advancedFilter bg-whiteShadow-none flex items-center justify-center rounded-lg border-2 border-gray-100 p-1"
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         <FilterIcon className="h-5 w-5 stroke-gray-500" />
       </Button>

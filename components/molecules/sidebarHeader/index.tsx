@@ -16,6 +16,7 @@ const SidebarHeader = ({ domainInfo }: IProps) => {
       <Card
         placeholder="sidebar-header"
         className="sidebar-header shadow-none px-3 py-2 text-primary_normal bg-primary-light rounded-md cursor-pointer hover:bg-primary-light w-full border-[1px] border-gray-200"
+        {...({} as  Omit<React.ComponentProps<typeof Card>, "placeholder">)}
       >
         <div className="flex items-center">
           <div className="w-10 h-10 min-w-10 min-h-10 rounded-md p-1">
@@ -35,12 +36,14 @@ const SidebarHeader = ({ domainInfo }: IProps) => {
             <Typography
               placeholder=""
               className="font-iranYekan font-medium text-[13px] group"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {domainInfo?.projectName ?? "نام پروژه"}
             </Typography>
             <Typography
               placeholder=""
               className="font-iranYekan text-hint text-xs"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {domainInfo?.projectDescription ?? "توضیحات پروژه"}
             </Typography>

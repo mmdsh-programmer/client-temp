@@ -39,10 +39,16 @@ const DocumentWhiteListRequestsDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="document-white-list-requests-dialog flex !h-full w-full max-w-full flex-col rounded-none bg-primary xs:!h-[500px] xs:!min-w-[450px] xs:!max-w-[450px] xs:rounded-lg"
     >
-      <DialogBody>
+      <DialogBody
+        placeholder=""
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+      >
         {isLoading ? (
           <div className="flex w-full items-center justify-center">
-            <Spinner className="h-6 w-6 text-primary" />
+            <Spinner
+              className="h-6 w-6 text-primary"
+              {...({} as  Omit<React.ComponentProps<typeof Spinner>, "className">)}
+            />
           </div>
         ) : listLength ? (
           <>
@@ -56,8 +62,10 @@ const DocumentWhiteListRequestsDialog = ({ setOpen }: IProps) => {
                     >
                       <div className="flex flex-grow gap-1">
                         <Typography
+                          placeholder=""
                           className="label_l2 w-auto cursor-pointer truncate text-primary_normal"
                           title={request.userFullName}
+                          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                         >
                           {request.userFullName}
                         </Typography>

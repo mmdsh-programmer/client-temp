@@ -79,19 +79,19 @@ const AddMemberToPositionDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام کاربری</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام کاربری</Typography>
           <FormInput
             placeholder="نام کاربری"
             register={{ ...register("username") }}
           />
           {errors.username && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.username?.message}
             </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">انتخاب گروه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">انتخاب گروه </Typography>
           {isLoading ? (
             <Spinner className="h-5 w-5 text-primary" />
           ) : (

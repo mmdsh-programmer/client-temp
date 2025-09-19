@@ -73,7 +73,7 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
         <PublishForcePublicProfile customText="برای نوشتن پاسخ باید پروفایل کاربری شما عمومی باشد" />
       ) : (
         <form className="flex flex-col gap-2">
-          <Typography className="text-xs text-gray-800 mb-2">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs text-gray-800 mb-2">
             پاسخ خود را بنویسید
           </Typography>
 

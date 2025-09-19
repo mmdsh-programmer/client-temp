@@ -19,8 +19,10 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
     <div className="w-full flex gap-2 justify-between items-center p-4 rounded-lg border-normal border-[1px]">
       <div className="flex flex-col flex-grow items-start max-w-[90%]">
         <Typography
+          placeholder=""
           className="title_t2 text-primary_normal truncate max-w-full"
           dir="ltr"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
         >
           {file.name}
         </Typography>
@@ -35,7 +37,11 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
           >
             <DownloadIcon className="h-5 w-5 pt-1" />
           </a>
-          <Typography className="title_t4 text-hint">
+          <Typography
+            placeholder=""
+            className="title_t4 text-hint"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             {fileSizeInKB < 1000
               ? `${fileSizeInKB.toFixed(2)} KB`
               : `${fileSizeInMB?.toFixed(2)} MB`}
@@ -43,11 +49,13 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
         </div>
       </div>
       <Button
+        placeholder=""
         className="bg-transparent !p-0"
         onClick={() => {
           return onDelete(file);
         }}
         disabled={isDeleting}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         <DeleteIcon className="h-5 w-5 fill-icon-hover" />
       </Button>

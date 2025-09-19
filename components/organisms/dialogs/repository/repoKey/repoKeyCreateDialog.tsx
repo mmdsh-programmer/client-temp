@@ -95,7 +95,7 @@ const RepoKeyCreateDialog = ({
       className="repo-key-create-dialog h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4"
     >
       <form className="repo-key-create-dialog__form flex flex-col gap-2">
-        <Typography className="label">نام کلید</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">نام کلید</Typography>
         <FormInput
           id="repo-key-name"
           placeholder="نام کلید"
@@ -103,12 +103,12 @@ const RepoKeyCreateDialog = ({
           className="repo-key-create-dialog__input"
         />
         {errors.name ? (
-          <Typography className="warning_text">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
             {errors.name?.message}
           </Typography>
         ) : null}
 
-        <Typography className="label mt-2">کلید عمومی</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label mt-2">کلید عمومی</Typography>
         <TextareaAtom
           id="repo-public-key"
           placeholder="کلید عمومی..."
@@ -116,14 +116,14 @@ const RepoKeyCreateDialog = ({
           className="repo-public-key__textarea"
         />
         {errors.publicKey ? (
-          <Typography className="warning_text">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
             {errors.publicKey?.message}
           </Typography>
         ) : null}
 
         {showPrivateKey ? (
           <>
-            <Typography className="label mt-2">کلید خصوصی</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label mt-2">کلید خصوصی</Typography>
             <TextareaAtom
               id="repo-private-key"
               placeholder="کلید خصوصی..."
@@ -131,7 +131,7 @@ const RepoKeyCreateDialog = ({
               register={{ ...register("privateKey") }}
               className="repo-private-key__textarea"
             />
-            <Typography className="text-xs mt-1">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs mt-1">
               *کلید خصوصی را کپی کنید. کلید خصوصی ذخیره نخواهد شد*
             </Typography>
           </>
@@ -140,7 +140,7 @@ const RepoKeyCreateDialog = ({
         <div className="flex justify-end gap-2 mt-2">
           {showPrivateKey ? (
             <Button
-              placeholder="button"
+              {...({} as React.ComponentProps<typeof Button>)}
               className="repo-private-key__delete-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !p-2 !px-3"
               onClick={clearKeys}
             >
@@ -148,7 +148,7 @@ const RepoKeyCreateDialog = ({
             </Button>
           ) : null}
           <Button
-            placeholder="button"
+            {...({} as React.ComponentProps<typeof Button>)}
             className="repo-key__generate-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !p-2 !px-3"
             onClick={generateKey}
           >

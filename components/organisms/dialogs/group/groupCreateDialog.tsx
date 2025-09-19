@@ -114,29 +114,29 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> نام گروه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> نام گروه </Typography>
           <FormInput
             placeholder="نام گروه"
             register={{ ...register("title") }}
             className="repo-group-create-form__input"
           />
           {errors.title && (
-            <Typography className="warning_text">{errors.title?.message}</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.title?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">توضیحات گروه</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات گروه</Typography>
           <TextareaAtom
             placeholder="توضیحات گروه"
             register={{ ...register("description") }}
             className="repo-group-create-form__textarea"
           />
           {errors.description && (
-            <Typography className="warning_text">{errors.description?.message}</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.description?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> اعضای گروه</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> اعضای گروه</Typography>
           <SearchableDropdown
             background="!bg-gray-50"
             options={filteredUsers}
@@ -161,7 +161,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
             }}
           />
           {errors.members && (
-            <Typography className="warning_text">{errors.members?.message}</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.members?.message}</Typography>
           )}
         </div>
         <div className="group-create-form__members-list flex flex-wrap gap-2">
@@ -184,6 +184,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
                 }
                 actionIcon={
                   <Button
+                    {...({} as React.ComponentProps<typeof Button>)}
                     className="group-create-form__member-delete-button bg-transparent p-0"
                     onClick={() => {
                       handleDelete(item.username);

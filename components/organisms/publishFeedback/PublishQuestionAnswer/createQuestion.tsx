@@ -67,7 +67,7 @@ const CreateQuestion = ({ postId }: IProps) => {
 
   return (
     <div>
-      <Typography className="mb-2 text-xs text-gray-800">پرسش خود را بنویسید</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="mb-2 text-xs text-gray-800">پرسش خود را بنویسید</Typography>
 
       <div className="h-52">
         <QuestionAnswerEditor ref={editorRef} />

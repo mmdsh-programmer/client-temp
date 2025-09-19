@@ -25,14 +25,14 @@ const TableHead = ({ tableHead, className }: IProps) => {
             >
               {head.isSorted ? (
                 <div className={`${head.className || ""} flex items-center`}>
-                  <Typography className="table-head py-1 text-secondary">
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)} className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>
                   <Sort onClick={head.sortAction} />
                 </div>
               ) : (
                 <div className={`${head.className || ""} flex items-center`}>
-                  <Typography className="table-head py-1 text-secondary">
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)} className="table-head py-1 text-secondary">
                     {head.value}
                   </Typography>
                 </div>

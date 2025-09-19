@@ -85,14 +85,14 @@ const MoveChildren = ({ target, repoId }: IProps) => {
                         }}
                       >
                         <FolderIcon className="h-4 w-4 stroke-icon-active" />
-                        <Typography className="caption_c1 text-primary_normal">
+                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 text-primary_normal">
                           {subItem.name}
                         </Typography>
                       </div>
                     );
                   })
                 ) : (
-                  <Typography className="caption_c1 p-2 text-primary_normal">
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 p-2 text-primary_normal">
                     موردی برای نمایش وجود ندارد
                   </Typography>
                 )}

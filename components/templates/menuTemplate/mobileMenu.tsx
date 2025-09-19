@@ -15,8 +15,8 @@ const MobileMenu = ({
     <div className="flex gap-x-2 justify-end">
       <Button
         className={`${className || ""} rounded-lg bg-transparent p-0 shadow-none flex justify-center hover:shadow-none items-center`}
-        placeholder="menu-button"
         onClick={setOpenDrawer}
+        {...({} as React.ComponentProps<typeof Button>)}
       >
         {icon || <MoreDotIcon className="w-4 h-4" />}
       </Button>

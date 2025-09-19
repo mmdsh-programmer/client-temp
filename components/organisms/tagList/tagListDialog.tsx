@@ -76,11 +76,11 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
 
   return (
     <InfoDialog dialogHeader="لیست تگ‌ها" setOpen={handleClose} className="tag-list-dialog">
-      <DialogBody placeholder="dialog body" className="dialog-body h-full p-0">
+      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="dialog-body h-full p-0">
         <div className="h-full px-5 py-3 xs:p-6">
           {isLoading ? (
             <div className="flex h-full w-full items-center justify-center">
-              <Spinner className="h-6 w-6 text-primary" />
+              <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-6 w-6 text-primary" />
             </div>
           ) : (
             <>
@@ -125,7 +125,7 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                           key={tag.id}
                           className="tag-item flex items-center justify-between rounded-lg px-2 py-1 hover:bg-gray-50"
                         >
-                          <Typography className="label_l2 cursor-default lowercase text-primary_normal">
+                          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l2 cursor-default lowercase text-primary_normal">
                             {tag.name}
                           </Typography>
                           {!userInfo?.domainConfig.useDomainTag && adminRole ? (
@@ -139,12 +139,13 @@ const TagListDialog = ({ setOpen, repoId }: IProps) => {
                 {!userInfo?.domainConfig.useDomainTag && adminRole ? (
                   <div className="w-full self-end">
                     <Button
+                      {...({} as React.ComponentProps<typeof Button>)}
                       className="create-tag w-full bg-secondary hover:bg-secondary active:bg-secondary"
                       onClick={() => {
                         setOpenTagCreateModal(true);
                       }}
                     >
-                      <Typography className="text__label__button text-white">افزودن تگ</Typography>
+                      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">افزودن تگ</Typography>
                     </Button>
                   </div>
                 ) : null}

@@ -77,7 +77,7 @@ const DocumentBlackList = ({
         onChange={handleInputChange}
         className="document-black-list__name-input"
       />
-      <Typography className="title_t4 text-secondary ">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary ">
         لیست سیاه سند
       </Typography>
       {isLoading ? (
@@ -108,6 +108,7 @@ const DocumentBlackList = ({
                     }
                     actionIcon={
                       <Button
+                        {...({} as React.ComponentProps<typeof Button>)}
                         className="delete-button bg-transparent p-0"
                         onClick={() => {
                           removeUser(item.username);

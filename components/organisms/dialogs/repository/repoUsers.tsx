@@ -69,7 +69,7 @@ const RepoUsers = () => {
                       </div>
                     )}
                   </div>
-                  <Typography> {user.userInfo.userName}</Typography>
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)}> {user.userInfo.userName}</Typography>
                   <select
                     id="user-create-role"
                     className="repo-users__select-role text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"
@@ -113,7 +113,7 @@ const RepoUsers = () => {
                       </div>
                     )}
                   </div>
-                  <Typography> {user.user.preferred_username}</Typography>
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)}> {user.user.preferred_username}</Typography>
                   <select
                     id="user-create-role"
                     className="text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"

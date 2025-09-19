@@ -55,8 +55,8 @@ const RepoBookmarkDialog = ({ setOpen }: IProps) => {
     >
       آیا از {repo?.bookmark ? " حذف نشان   " : "  نشان‌دار کردن  "}"
       <Typography
+        {...({} as React.ComponentProps<typeof Typography>)}
         title={repo?.name}
-        placeholder="name"
         className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
       >
         {repo?.name}

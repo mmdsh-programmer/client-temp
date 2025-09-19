@@ -11,9 +11,16 @@ const DocumentTemplate = () => {
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6 "
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <div className="document-template flex flex-col gap-2">
-          <Typography className="form_label">انتخاب نمونه سند</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            انتخاب نمونه سند
+          </Typography>
           <ChildrenTree move={false} enableAction={false} />
         </div>
       </DialogBody>

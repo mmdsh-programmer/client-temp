@@ -35,11 +35,13 @@ const InfoDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
       className={`${className} flex h-dvh m-0 w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
+        {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder">)}
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
@@ -50,7 +52,10 @@ const InfoDialog = ({
               <BackButton className="!py-0 !pl-2 !pr-0" onClick={handleClose} />
             </div>
           ) : null}
-          <Typography className="form__title">{dialogHeader}</Typography>
+          <Typography 
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="form__title"
+          >{dialogHeader}</Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />

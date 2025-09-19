@@ -90,6 +90,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
         className={`${getListDrawer ? "right-[3%] sm:right-[310px]" : "right-[3%]"} absolute bottom-[20px] flex items-center gap-2 rounded-full bg-[#222] p-2 shadow-xl`}
       >
         <Button
+          {...({} as React.ComponentProps<typeof Button>)}
           className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
           onClick={() => {
             setOpenSpeedDial(!openSpeedDial);
@@ -106,6 +107,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
                 <DownloadPDF />
               ))}
             <Button
+              {...({} as React.ComponentProps<typeof Button>)}
               className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
               onClick={() => {
                 setListDrawer(!getListDrawer);
@@ -116,6 +118,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
             <RenderIf isTrue={getVersion?.state === "draft" && getVersion?.status === "editing"}>
               <>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setDraftConfirmModal(true);
@@ -126,6 +129,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
                   <ConfirmationVersionIcon className="h-4 w-4 fill-white" />
                 </Button>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setPublicDraftModal(true);
@@ -140,6 +144,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
             <RenderIf isTrue={getVersion?.state === "draft" && getVersion?.status === "pending"}>
               <>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setDraftAcceptConfirmModal(true);
@@ -150,6 +155,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
                   <ConfirmationVersionIcon className="h-4 w-4 fill-white" />
                 </Button>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setDraftRejectConfirmModal(true);
@@ -171,6 +177,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
               }
             >
               <Button
+                {...({} as React.ComponentProps<typeof Button>)}
                 className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                 onClick={() => {
                   setVersionPublicModal(true);
@@ -189,6 +196,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
             >
               <>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setVersionRejectPublicModal(true);
@@ -198,6 +206,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
                   <CancelVersionIcon className="h-5 w-5 stroke-white" />
                 </Button>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setVersionAcceptPublicModal(true);
@@ -219,6 +228,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
             >
               <>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setAcceptPublicDraftModal(true);
@@ -228,6 +238,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
                   <ConfirmationVersionIcon className="h-4 w-4 fill-white" />
                 </Button>
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
                   onClick={() => {
                     setDraftRejectConfirmModal(true);

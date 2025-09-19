@@ -59,7 +59,10 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="category-access-dialog min-h-[350px]"
     >
-      <DialogBody>
+      <DialogBody
+        placeholder=""
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+      >
         <form className="flex flex-col gap-6">
           <div className="flex gap-2">
             <div className="searchable-dropdown flex-grow">
@@ -77,7 +80,13 @@ const CategoryAccessDialog = ({ setOpen }: IProps) => {
               loading={blockCatgory.isPending}
               disabled={!value}
             >
-              <Typography className="text__label__button text-white">افزودن</Typography>
+              <Typography
+                placeholder=""
+                className="text__label__button text-white"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                افزودن
+              </Typography>
             </LoadingButton>
           </div>
           <CategoryBlockList />

@@ -85,7 +85,7 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
           </div>
           <FormInput placeholder="عنوان" register={{ ...register("name") }} />
           {errors.name && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.name?.message}
             </Typography>
           )}

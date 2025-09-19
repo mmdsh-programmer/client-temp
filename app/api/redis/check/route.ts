@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import { getRedisClient } from "@utils/redis";
 
 // forces the route handler to be dynamic
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const client = await getRedisClient();
+    const client = await global.clientPromise;
 
     if (!client || !client.isReady) {
       return NextResponse.json(

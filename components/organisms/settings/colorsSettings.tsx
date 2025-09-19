@@ -12,7 +12,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های اصلی</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های اصلی</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="رنگ اصلی"
@@ -31,7 +31,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های پس‌زمینه</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های پس‌زمینه</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="پس‌زمینه اصلی"
@@ -71,7 +71,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های وضعیت</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های وضعیت</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="رنگ خطا"
@@ -118,7 +118,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های متن</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های متن</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="متن اصلی"
@@ -172,7 +172,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های آیکون</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های آیکون</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="آیکون فعال"
@@ -191,7 +191,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های خاکستری</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های خاکستری</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="خاکستری 50"
@@ -259,7 +259,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های اضافی</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های اضافی</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="نارنجی 100"
@@ -278,7 +278,7 @@ const ColorsSettings = ({ domain, onColorChange }: ColorsSettingsProps) => {
         </div>
       </div>
       <div>
-        <Typography className="title_t2 mb-4">رنگ‌های حاشیه</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 mb-4">رنگ‌های حاشیه</Typography>
         <div className="grid grid-cols-1 gap-6">
           <ColorInput
             label="حاشیه معمولی"

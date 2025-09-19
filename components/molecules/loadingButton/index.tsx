@@ -30,6 +30,7 @@ const LoadingButton = ({
       className={`${className || ""} flex justify-center items-center gap-2 w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg`}
       onClick={onClick}
       disabled={disabled}
+      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <>
         {children}

@@ -24,7 +24,10 @@ const ChatDesktopRepoLog = ({
   // Show loading while checking access
   if (isCheckingAccess) {
     return (
-      <Card className="repo-log flex w-full rounded-none bg-primary p-4 shadow-small xs:w-80 xs:rounded-lg">
+      <Card
+        {...({} as React.ComponentProps<typeof Card>)}
+        className="repo-log flex w-full rounded-none bg-primary p-4 shadow-small xs:w-80 xs:rounded-lg"
+      >
         <ChatActivation
           handleClose={handleClose}
           enableChat={enableChat}
@@ -37,7 +40,10 @@ const ChatDesktopRepoLog = ({
 
   if (!selectedRepo?.chatThreadId || !userCanAccessChat) {
     return (
-      <Card className="repo-log flex w-full rounded-none bg-primary p-4 shadow-small xs:w-80 xs:rounded-lg">
+      <Card
+        {...({} as React.ComponentProps<typeof Card>)}
+        className="repo-log flex w-full rounded-none bg-primary p-4 shadow-small xs:w-80 xs:rounded-lg"
+      >
         <ChatActivation
           handleClose={handleClose}
           enableChat={enableChat}
@@ -49,7 +55,10 @@ const ChatDesktopRepoLog = ({
 
   if (permissionError) {
     return (
-      <Card className="repo-log flex w-full rounded-none bg-primary p-4 shadow-small xs:w-80 xs:rounded-lg">
+      <Card
+        {...({} as React.ComponentProps<typeof Card>)}
+        className="repo-log flex w-full rounded-none bg-primary p-4 shadow-small xs:w-80 xs:rounded-lg"
+      >
         <ChatPermissionError
           handleClose={handleClose}
           retryLoad={loadChatData}
@@ -60,7 +69,10 @@ const ChatDesktopRepoLog = ({
   }
 
   return (
-    <Card className="repo-log overflow-hidden flex w-full h-full max-h-[calc(100vh-120px)] flex-col rounded-none bg-primary shadow-small xs:w-96 xs:rounded-lg sticky top-0">
+    <Card
+      {...({} as React.ComponentProps<typeof Card>)}
+      className="repo-log sticky top-0 flex h-full max-h-[calc(100vh-120px)] w-full flex-col overflow-hidden rounded-none bg-primary shadow-small xs:w-96 xs:rounded-lg"
+    >
       <ChatFeedContent
         handleClose={handleClose}
         chatState={chatState}
@@ -75,4 +87,4 @@ const ChatDesktopRepoLog = ({
   );
 };
 
-export default ChatDesktopRepoLog; 
+export default ChatDesktopRepoLog;

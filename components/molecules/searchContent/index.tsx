@@ -38,7 +38,7 @@ const SearchContent = ({ setOpen }: IProps) => {
 
   return (
     <InfoDialog dialogHeader="جست و جو در محتوا" setOpen={handleClose}>
-      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6">
+      <DialogBody placeholder="dialog body" className="flex-grow px-5 py-3 xs:p-6" {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}>
         <div className="ml-2 flex h-10 w-full max-w-full flex-grow items-center gap-2 rounded-lg border-[1px] border-normal bg-gray-50 px-3">
           <SearchIcon className="h-5 w-5 stroke-icon-hover" />
           <InputAtom

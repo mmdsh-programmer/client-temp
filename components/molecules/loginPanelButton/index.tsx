@@ -8,7 +8,12 @@ import React from "react";
 const LoginPanelButton = () => {
   return (
     <Link href="/admin/dashboard" title="پنل ادمین">
-      <IconButton className="bg-tertiary" variant="text">
+      <IconButton
+        placeholder=""
+        className="bg-tertiary"
+        variant="text"
+        {...({} as  Omit<React.ComponentProps<typeof IconButton>, "placeholder">)}
+      >
         <PanelIcon className="h-5 w-5 fill-white" />
       </IconButton>
     </Link>

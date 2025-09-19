@@ -24,6 +24,7 @@ const Error = ({ error, reset }: IProps) => {
               <Button
                 className="font-bold py-2 px-4 rounded"
                 onClick={reset}
+                {...({} as React.ComponentProps<typeof Button>)}
               >
                 تلاش مجدد
               </Button>

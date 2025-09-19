@@ -27,9 +27,14 @@ const AdminFeedbackDialog = ({ setOpen, feedback }: IProps) => {
       <DialogBody
         placeholder="dialog body"
         className="flex-grow px-5 py-3 xs:p-6"
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <div className="flex flex-col gap-4">
-          <Typography className="body_b3 text-primary_normal">
+          <Typography
+            placeholder=""
+            className="body_b3 text-primary_normal"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             {feedback?.data.message}
           </Typography>
           <div className="grid grid-cols-1 xs:grid-cols-2 gap-2">
@@ -40,7 +45,13 @@ const AdminFeedbackDialog = ({ setOpen, feedback }: IProps) => {
                   key={item}
                 >
                   <DocIcon className="w-5 h-5 fill-info" />
-                  <Typography className="caption_c1">{`فایل ${index + 1}`}</Typography>
+                  <Typography
+                    placeholder=""
+                    className="caption_c1"
+                    {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                  >
+                    {`فایل ${index + 1}`}
+                  </Typography>
                   <span className="">.</span>
                   <a
                     className="caption_c2 text-info"

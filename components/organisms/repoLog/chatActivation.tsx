@@ -13,17 +13,17 @@ interface IProps {
 const ChatActivation = ({ handleClose, enableChat, isLoading, message }: IProps) => {
   return (
     <>
-      <CardHeader className="m-0 flex justify-between rounded-none shadow-none" floated={false}>
-        <Typography className="form__title">فعالیت ها</Typography>
+      <CardHeader {...({} as React.ComponentProps<typeof CardHeader>)} className="m-0 flex justify-between rounded-none shadow-none" floated={false}>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">فعالیت ها</Typography>
         <CloseButton onClose={handleClose} />
       </CardHeader>
-      <CardBody className="mt-4 flex items-center justify-center p-0">
+      <CardBody {...({} as React.ComponentProps<typeof CardBody>)} className="mt-4 flex items-center justify-center p-0">
         <LoadingButton
           className="!w-full bg-purple-normal hover:bg-purple-normal active:bg-purple-normal"
           onClick={enableChat}
           loading={isLoading}
         >
-          <Typography className="text__label__button text-white">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">
             {message || "مشاهده تغییرات مخزن"}
           </Typography>
         </LoadingButton>

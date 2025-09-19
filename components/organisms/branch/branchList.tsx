@@ -45,7 +45,7 @@ const BranchList = ({ branchId }: IProps) => {
     <>
       {isLoading ? (
         <div className="w-full flex justify-center h-3 my-3">
-          <Spinner className="w-4 h-4 text-primary" />
+          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="w-4 h-4 text-primary" />
         </div>
       ) : (
         branchList?.pages.map((page) => {
@@ -63,7 +63,7 @@ const BranchList = ({ branchId }: IProps) => {
             })
           ) : (
             <div className="flex items-center w-full">
-              <Typography className="text-right text-xs pr-4 py-1 text-dashboard-text-color-light">
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-right text-xs pr-4 py-1 text-dashboard-text-color-light">
                 موردی وجود ندارد
               </Typography>
             </div>

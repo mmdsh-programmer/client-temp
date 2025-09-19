@@ -82,7 +82,10 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="document-direct-access-dialog min-h-[350px]"
     >
-      <DialogBody>
+      <DialogBody
+        placeholder=""
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+      >
         <form className="direct-access-form flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex !h-12 items-center gap-2 rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2 pr-3">
@@ -93,7 +96,10 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 register={{ ...register("username") }}
               />
               {isFetchingRoles ? (
-                <Spinner className="h-3 w-3 text-primary" />
+                <Spinner
+                  className="h-3 w-3 text-primary"
+                  {...({} as  Omit<React.ComponentProps<typeof Spinner>, "className">)}
+                />
               ) : (
                 <SelectAtom
                   className="direct-access-form__role w-auto"
@@ -113,13 +119,23 @@ const DocumentDirectAccessDialog = ({ setOpen }: IProps) => {
                 onClick={handleSubmit(onSubmit)}
                 className="direct-access-form__add !h-8 !rounded-sm !bg-white px-3 shadow-none hover:bg-white hover:shadow-none"
               >
-                <Typography className="text__label__button font-medium !text-primary_normal">
+                <Typography
+                  placeholder=""
+                  className="text__label__button font-medium !text-primary_normal"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
                   افزودن
                 </Typography>
               </LoadingButton>
             </div>
             {errors.username ? (
-              <Typography className="warning_text">{errors.username?.message}</Typography>
+              <Typography
+                placeholder=""
+                className="warning_text"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                {errors.username?.message}
+              </Typography>
             ) : null}
           </div>
           <DocumentAccessList />

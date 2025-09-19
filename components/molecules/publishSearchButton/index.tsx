@@ -18,7 +18,13 @@ const PublishSearchButton = () => {
 
   return (
     <>
-      <IconButton className="bg-tertiary" variant="text" onClick={handleOpenSearch}>
+      <IconButton
+        placeholder=""
+        className="bg-tertiary"
+        variant="text"
+        onClick={handleOpenSearch}
+        {...({} as  Omit<React.ComponentProps<typeof IconButton>, "placeholder">)}
+      >
         <SearchIcon className="h-5 w-5 stroke-white xs:h-7 xs:w-7" />
       </IconButton>
 

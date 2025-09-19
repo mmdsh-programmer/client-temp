@@ -67,7 +67,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
 
   return (
     <>
-      <Typography className="title_t4 text-secondary">تگ‌های انتخاب شده</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary">تگ‌های انتخاب شده</Typography>
       <div className="document-tag-list flex flex-col">
         {tagList?.length ? (
           <div className="tag-list flex flex-wrap gap-2">
@@ -80,6 +80,7 @@ const DocumentTagList = ({ tagList }: IProps) => {
                   actionIcon={
                     adminOrOwnerRole() ? (
                       <Button
+                        {...({} as React.ComponentProps<typeof Button>)}
                         className="delete-button bg-transparent p-0"
                         onClick={() => {
                           return handleDelete(tag);

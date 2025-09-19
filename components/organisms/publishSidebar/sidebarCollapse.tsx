@@ -4,7 +4,7 @@ import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 
 interface IProps {
   title: string;
-  children: JSX.Element;
+  children: React.ReactElement;
   className?: string;
   onClick?: () => void;
   defaultOpen?: boolean;
@@ -29,6 +29,7 @@ const SidebarCollapse = ({
   return (
     <>
       <Button
+        {...({} as React.ComponentProps<typeof Button>)}
         onClick={toggleOpen}
         className={`collapse-button py-2 justify-start bg-transparent flex items-center w-full hover:bg-purple-light rounded-[5px] px-1 ${className} ${open ? "active-collapse" : ""}`}
       >
@@ -42,7 +43,7 @@ const SidebarCollapse = ({
           {title}
         </span>
       </Button>
-      <Collapse open={open}>
+      <Collapse {...({} as React.ComponentProps<typeof Collapse>)} open={open}>
         <div className="pr-4 collapse-content flex flex-col">
           {open ? children : null}
         </div>

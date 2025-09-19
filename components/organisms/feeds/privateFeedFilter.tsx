@@ -10,7 +10,7 @@ interface IProps {
 const PrivateFeedFilter = ({ selectedOptions, setSelectedOptions }: IProps) => {
   return (
     <div className="flex flex-grow flex-col gap-2">
-      <Typography className="form_label">فیلتر مخزن</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">فیلتر مخزن</Typography>
       <SelectBox
         options={[
           { label: "همه", value: undefined },

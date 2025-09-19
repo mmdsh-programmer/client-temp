@@ -38,6 +38,7 @@ const MoveBreadCrumb = () => {
               setCategoryMoveDest(null);
               setBreadCrumb([]);
             }}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <BackIcon className="h-4 w-4 fill-icon-hover" />
           </Button>
@@ -50,20 +51,35 @@ const MoveBreadCrumb = () => {
                   onClick={() => {
                     setCategoryMoveDest(breadItem);
                   }}
+                  {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
                 >
                   {/* eslint-disable-next-line no-nested-ternary */}
                   {breadCrumb.length > 2 ? (
                     index === 0 || index === breadCrumb.length - 1 ? (
-                      <Typography className="caption_c1 text-primary_normal">
+                      <Typography
+                        placeholder=""
+                        className="caption_c1 text-primary_normal"
+                        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                      >
                         {breadItem.name}
                       </Typography>
                     ) : (
                       (index !== 0 || index !== breadCrumb.length - 1) && (
-                        <Typography className="caption_c1 text-primary_normal">...</Typography>
+                        <Typography
+                          placeholder=""
+                          className="caption_c1 text-primary_normal"
+                          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                        >
+                          ...
+                        </Typography>
                       )
                     )
                   ) : (
-                    <Typography className="caption_c1 text-primary_normal">
+                    <Typography
+                      placeholder=""
+                      className="caption_c1 text-primary_normal"
+                      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                    >
                       {breadItem.name}
                     </Typography>
                   )}

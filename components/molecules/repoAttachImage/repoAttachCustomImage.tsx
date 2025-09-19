@@ -28,10 +28,18 @@ const RepoAttachCustomImage = ({
           className="repo-attach-default-image__radio"
           label={
             <div>
-              <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
+              <Typography
+                placeholder=""
+                className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 تصویر پیش‌فرض
               </Typography>
-              <Typography className="text-[12px] font-normal leading-[20px] -tracking-[0.12px] text-hint">
+              <Typography
+                placeholder=""
+                className="text-[12px] font-normal leading-[20px] -tracking-[0.12px] text-hint"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 انتخاب تصویر پیش‌فرض برای مخزن
               </Typography>
             </div>
@@ -56,10 +64,18 @@ const RepoAttachCustomImage = ({
           name="custom_image"
           label={
             <div>
-              <Typography className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
+              <Typography
+                placeholder=""
+                className="text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 تصویر سفارشی
               </Typography>
-              <Typography className="text-[12px] font-normal leading-[20px] -tracking-[0.12px] text-hint">
+              <Typography
+                placeholder=""
+                className="text-[12px] font-normal leading-[20px] -tracking-[0.12px] text-hint"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 انتخاب تصویر دلخواه برای مخزن
               </Typography>
             </div>
@@ -78,6 +94,7 @@ const RepoAttachCustomImage = ({
           className="repo-attach-custom-image-button flex h-[82px] w-[82px] items-center justify-center rounded-lg border-[1px] border-dashed border-normal bg-secondary p-0"
           placeholder=""
           disabled={imageType !== "custom"}
+          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           {imageHash ? (
             <RepoDefaultImage imageHash={imageHash} />

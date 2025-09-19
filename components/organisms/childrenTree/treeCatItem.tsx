@@ -105,7 +105,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
             </div>
             <FolderIcon className="h-5 w-5 fill-gray-400" />
           </div>
-          <Typography className="mr-2 lowercase text-primary_normal" key={catItem.id}>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="mr-2 lowercase text-primary_normal" key={catItem.id}>
             {catItem.name}
           </Typography>
           {enableAction ? (
@@ -118,7 +118,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
       <div className="flex flex-col pr-6">
         {isLoading && <div className="spinner" />}
         {!isLoading && openCategory === catItem.id && (
-          <Collapse open={openCategory === catItem.id}>
+          <Collapse {...({} as React.ComponentProps<typeof Collapse>)} open={openCategory === catItem.id}>
             {categoryChildren?.pages.map((page) => {
               if (page.list.length) {
                 return page.list.map((item: ICategoryMetadata | IDocumentMetadata) => {
@@ -138,7 +138,7 @@ const TreeCatItem = ({ catItem, move, enableAction }: IProps) => {
                 });
               }
               return (
-                <Typography className="text-center text-xs" key={`doc-create-no-item-${page}`}>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-center text-xs" key={`doc-create-no-item-${page}`}>
                   موردی برای نمایش وجود ندارد
                 </Typography>
               );

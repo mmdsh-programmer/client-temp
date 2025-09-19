@@ -26,10 +26,12 @@ const LikeButton = ({
 }: IProps) => {
   return (
     <Button
+      placeholder=""
       onClick={onClick}
       className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 ${likeButtonClassName}`}
       title={likeCount.toString()}
       disabled={likePending}
+      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <RenderIf isTrue={!!showCounter}>
         <span className={counterClassName}>{likeCount.toString()}</span>

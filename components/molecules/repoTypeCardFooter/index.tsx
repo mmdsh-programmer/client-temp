@@ -19,6 +19,7 @@ const RepoTypeCardFooter = ({ icon, repoNumber, tooltipContent }: IProps) => {
             placeholder=""
             className="repo-number font-iranYekan text-link text-[12px] mr-1 truncate"
             title={repoNumber !== 0 ? `${repoNumber} مخزن` : "مخزنی وجود ندارد"}
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             {repoNumber !== 0 ? `${repoNumber} مخزن` : "مخزنی وجود ندارد"}
           </Typography>
@@ -29,6 +30,7 @@ const RepoTypeCardFooter = ({ icon, repoNumber, tooltipContent }: IProps) => {
         content={tooltipContent}
         placement="bottom"
         className="rounded shadow-lg bg-gray-900 text-gray-100 font-iranYekan text-xs p-2"
+        {...({} as  React.ComponentProps<typeof Tooltip>)}
       >
         <div className="cursor-pointer">
           <QuestionIcon className="h-5 w-5" />

@@ -60,6 +60,7 @@ const RepoMenu = ({ repo, showLog = false, setRepoInfo }: IProps) => {
             onClick={() => {
               setActiveTour(ETourSection.REPO);
             }}
+            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <InfoIcon className="h-4 w-4 stroke-primary-normal" />
           </Button>

@@ -24,7 +24,7 @@ const EditorFileFooter = () => {
   const { selectedFile: getSelectedFile } = useFileStore();
 
   const [checked, setChecked] = useState(false);
-  const autoSaveRef = useRef<Worker>();
+  const autoSaveRef = useRef<Worker | undefined>(undefined);
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const currentPath = usePathname();
@@ -137,13 +137,14 @@ const EditorFileFooter = () => {
   return editorMode === "preview" ? (
     <div className="flex w-full items-center justify-between gap-2">
       <Button
+        {...({} as React.ComponentProps<typeof Button>)}
         className="flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase xs:w-[208px]"
         title={renderTitle()}
         onClick={() => {
           setVersionModalList(true);
         }}
       >
-        <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l3 text-primary_normal">{renderTitle()}</Typography>
         <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
       </Button>
       <CancelButton onClick={handleChangeEditorMode}>ویرایش</CancelButton>
@@ -152,13 +153,14 @@ const EditorFileFooter = () => {
     <div className="flex w-full flex-col items-center justify-between gap-4 md:flex-row">
       <div className="flex w-full flex-col gap-5 md:w-auto xs:flex-row xs:gap-4">
         <Button
+          {...({} as React.ComponentProps<typeof Button>)}
           className="flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase md:w-[208px] xs:w-[50%]"
           title={renderTitle()}
           onClick={() => {
             setVersionModalList(true);
           }}
         >
-          <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l3 text-primary_normal">{renderTitle()}</Typography>
           <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
         </Button>
         <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
@@ -186,7 +188,7 @@ const EditorFileFooter = () => {
           }}
           disabled={saveFileEditorHook.isPending}
         >
-          <Typography className="text__label__button text-white">ذخیره</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
         </LoadingButton>
       </div>
     </div>

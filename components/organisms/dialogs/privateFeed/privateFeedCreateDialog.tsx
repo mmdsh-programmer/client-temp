@@ -127,31 +127,31 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">انتخاب مخزن</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">انتخاب مخزن</Typography>
           {renderRepo()}
           {!repoInfo?.value && (
-            <Typography className="warning_text">لطفا یک مخزن را انتخاب کنید.</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">لطفا یک مخزن را انتخاب کنید.</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> عنوان</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> عنوان</Typography>
           <FormInput placeholder="عنوان " register={{ ...register("name") }} />
-          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
+          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">متن </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">متن </Typography>
           <TextareaAtom placeholder="متن" register={{ ...register("content") }} />
           {errors.content && (
-            <Typography className="warning_text">{errors.content?.message}</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.content?.message}</Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> لینک</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> لینک</Typography>
           <FormInput placeholder="لینک " register={{ ...register("link") }} />
-          {errors.link && <Typography className="warning_text">{errors.link?.message}</Typography>}
+          {errors.link && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.link?.message}</Typography>}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">عکس خبرنامه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">عکس خبرنامه </Typography>
           {ImagesIsLoading ? (
             <div className="flex h-[50px] w-full items-center justify-center">
               <Spinner className="h-5 w-5 text-primary" />
@@ -162,7 +162,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
                 return page.list.map((hash) => {
                   return (
                     <Button
-                      placeholder="button"
+                      {...({} as React.ComponentProps<typeof Button>)}
                       key={hash}
                       className="flex h-[70px] w-[70px] flex-grow items-center justify-center rounded-lg border-[1px] border-normal bg-primary focus:bg-secondary focus:outline-2 focus:outline-gray-200"
                       onClick={() => {

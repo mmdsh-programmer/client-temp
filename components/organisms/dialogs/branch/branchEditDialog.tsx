@@ -66,7 +66,13 @@ const BranchEditDialog = ({ branch, setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام شعبه</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            نام شعبه
+          </Typography>
           <FormInput
             placeholder="نام شعبه"
             register={{
@@ -76,23 +82,43 @@ const BranchEditDialog = ({ branch, setOpen }: IProps) => {
             }}
           />
           {errors.name && (
-            <Typography className="warning_text">
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               {errors.name?.message}
             </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نوع شعبه</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            نوع شعبه
+          </Typography>
           <FormInput placeholder={branch.repoTypeName} readOnly />
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> مالک </Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+             مالک 
+          </Typography>
           <FormInput
             placeholder="مالک شعبه"
             register={{ ...register("username", { value: branch.userName }) }}
           />
           {errors.username && (
-            <Typography className="warning_text">
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               {errors.username?.message}
             </Typography>
           )}

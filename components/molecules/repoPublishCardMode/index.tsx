@@ -16,6 +16,7 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
       placeholder="card"
       key={`repo-card-item-${repo.id}`}
       className="repo-publish-card last:flex flex-col h-full rounded-lg bg-white border-[1px] border-normal shadow-small"
+      {...({} as  Omit<React.ComponentProps<typeof Card>, "placeholder">)}
     >
       <Link
         className="h-full"
@@ -29,7 +30,11 @@ const RepoPublishCardMode = ({ repo }: IProps) => {
           <div className="default-repo-image h-40 w-full flex-1 bg-primary-normal relative flex items-center justify-center rounded-t-md">
             <RepoDefaultImage className="!w-32 !h-32" imageHash={repo.imageFileHash} />
           </div>
-          <Typography className="title_t2 w-full pb-8 pt-4 text-center sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]">
+          <Typography
+            placeholder=""
+            className="title_t2 w-full pb-8 pt-4 text-center sm:w-[70px] md:w-[30px] lg:w-full truncate font-[450]"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             {repo.name}
           </Typography>
         </div>

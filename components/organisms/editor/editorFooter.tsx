@@ -46,7 +46,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   } = useVersionStore();
 
   const [checked, setChecked] = useState(false);
-  const autoSaveRef = useRef<Worker>();
+  const autoSaveRef = useRef<Worker | undefined>(undefined);
   const saveBtnRef = useRef<HTMLButtonElement | null>(null);
   const currentPath = usePathname();
   const searchParams = useSearchParams();
@@ -294,6 +294,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
   return editorMode === "preview" ? (
     <div className="editor-footer__preview-mode flex w-full items-center justify-between gap-2">
       <Button
+        {...({} as React.ComponentProps<typeof Button>)}
         className="editor-footer__version-number flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase xs:w-[208px]"
         title={renderTitle()}
         onClick={() => {
@@ -303,7 +304,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setVersionData(null);
         }}
       >
-        <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l3 text-primary_normal">{renderTitle()}</Typography>
         <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
       </Button>
 
@@ -319,6 +320,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     <div className="editor-footer__edit-mode flex w-full flex-col items-center justify-between gap-4 md:flex-row">
       <div className="flex w-full flex-col gap-5 md:w-auto xs:flex-row xs:gap-4">
         <Button
+          {...({} as React.ComponentProps<typeof Button>)}
           className="editor-footer__version-number flex w-full items-center justify-between rounded-lg border-[1px] border-normal bg-transparent pl-2 pr-3 lowercase md:w-[208px] xs:w-[50%]"
           title={renderTitle()}
           onClick={() => {
@@ -328,7 +330,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             setVersionData(null);
           }}
         >
-          <Typography className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l3 text-primary_normal">{renderTitle()}</Typography>
           <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
         </Button>
         <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
@@ -364,7 +366,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           disabled={saveEditorHook.isPending || isLoading}
           loading={isLoading || saveEditorHook.isPending}
         >
-          <Typography className="text__label__button text-white">ذخیره</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
         </LoadingButton>
         <LoadingButton
           className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
@@ -375,7 +377,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           disabled={saveEditorHook.isPending || isLoading}
           loading={isLoading || saveEditorHook.isPending}
         >
-          <Typography className="text__label__button text-white">ذخیره</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
         </LoadingButton>
       </div>
     </div>

@@ -38,13 +38,13 @@ const PublishTinyLink = () => {
   if (createTinyLinkHook.isPending) {
     return (
       <div className="flex w-fit items-center">
-        <Spinner className="h-5 w-5 text-primary" />
+        <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-5 w-5 text-primary" />
       </div>
     );
   }
 
   return (
-    <Button className="w-fit min-w-fit border-none p-3" onClick={handleCopyLink} variant="outlined">
+    <Button {...({} as React.ComponentProps<typeof Button>)} className="w-fit min-w-fit border-none p-3" onClick={handleCopyLink} variant="outlined">
       <ShareIcon className="block h-6 w-6 stroke-white" />
     </Button>
   );

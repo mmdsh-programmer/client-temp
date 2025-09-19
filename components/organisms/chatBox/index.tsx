@@ -20,7 +20,7 @@ import useEnableDocChat from "@hooks/chat/useEnableDocChat";
 import useGetUser from "@hooks/auth/useGetUser";
 
 const ChatBox = () => {
-  const chat = React.useRef<any>();
+  const chat = React.useRef<any>(null);
   const selectedDocument = useDocumentStore((s) => {
     return s.selectedDocument;
   });
@@ -319,7 +319,11 @@ const ChatBox = () => {
           onClick={enableChat}
           loading={enableChatHook.isPending}
         >
-          <Typography className="text__label__button text-white">
+          <Typography
+            placeholder=""
+            className="text__label__button text-white"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             فعالسازی چت
           </Typography>
         </LoadingButton>
@@ -335,7 +339,11 @@ const ChatBox = () => {
           onClick={enableChat}
           loading={enableChatHook.isPending}
         >
-          <Typography className="text__label__button text-white">
+          <Typography
+            placeholder=""
+            className="text__label__button text-white"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             خطایی رخ داد. تلاش مجدد
           </Typography>
         </LoadingButton>

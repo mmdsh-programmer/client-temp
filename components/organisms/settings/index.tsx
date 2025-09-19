@@ -273,9 +273,9 @@ const Settings = () => {
   if (isLoading || uploadLoading) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <Spinner className="h-8 w-8 text-primary" />
+        <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-8 w-8 text-primary" />
         {uploadLoading && (
-          <Typography className="mt-2">در حال آپلود لوگو... {uploadProgress}%</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="mt-2">در حال آپلود لوگو... {uploadProgress}%</Typography>
         )}
       </div>
     );
@@ -286,7 +286,7 @@ const Settings = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex flex-col gap-5">
-            <Typography className="title_t2">تنظیمات پایه</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2">تنظیمات پایه</Typography>
             <div className="flex flex-col gap-5">
               <BasicInfo
                 domain={formValues}
@@ -302,7 +302,7 @@ const Settings = () => {
             </div>
           </div>
           <div className="flex flex-col gap-5">
-            <Typography className="title_t2">تنظیمات پیشرفته</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2">تنظیمات پیشرفته</Typography>
             <AdvancedSettings domain={formValues} onCheckboxChange={handleCheckboxChange} />
           </div>
         </div>
@@ -312,7 +312,7 @@ const Settings = () => {
             onClick={handleSubmit(onSubmit)}
             loading={updateDomain.isPending || uploadLoading}
           >
-            <Typography className="text__label__button text-white">ذخیره</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
           </LoadingButton>
         </div>
       </form>

@@ -58,7 +58,7 @@ const AdminPanelFeedback = () => {
 
   return (
     <div className="flex flex-col gap-4 !m-4 xs:!m-0">
-      <Typography className="title_t1">لیست بازخوردها</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t1">لیست بازخوردها</Typography>
       <div className="hidden xs:block">
         <AdminTableView {...commonProps} />
       </div>

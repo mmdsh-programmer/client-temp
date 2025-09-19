@@ -27,10 +27,12 @@ const DownloadExcel = ({ editorRef, version }: IProps) => {
 
   return (
     <Button
+      placeholder=""
       className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
       title="دانلود اکسل"
       onClick={handleExcelDownload}
       disabled={!(editorMode === "preview" || editorMode === "temporaryPreview")}
+      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <DocumentExcelIcon className="h-5 w-5 fill-white" />
     </Button>

@@ -40,6 +40,7 @@ const DomainParticipant = () => {
             {
               data: (
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   onClick={() => {
                     handleDeleteClick(user.userName);
                     setOpenDeleteParticipantDialog(true);

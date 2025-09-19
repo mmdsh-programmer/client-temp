@@ -28,6 +28,7 @@ const DomainSubscription = () => {
                   {
                     data: (
                       <Typography
+                        {...({} as React.ComponentProps<typeof Typography>)}
                         className="title_t3 mr-2 flex w-12 max-w-[200px] gap-2 truncate sm:w-20 md:w-auto"
                         title={request.repoName}
                       >

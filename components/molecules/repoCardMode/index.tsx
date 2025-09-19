@@ -27,6 +27,7 @@ const RepoCardMode = ({ repo }: IProps) => {
           router.push(`/admin/repositories?repoId=${repo.id}`);
         }
       }}
+      {...({} as  Omit<React.ComponentProps<typeof Card>, "placeholder">)}
     >
       <div className="flex items-center justify-between p-4">
         <div className="flex max-w-[70%] items-center gap-3">
@@ -34,19 +35,35 @@ const RepoCardMode = ({ repo }: IProps) => {
             <RepoDefaultImage imageHash={repo.imageFileHash} />
           </div>
           <div className="repo__info flex max-w-[80%] flex-grow flex-col">
-            <Typography className="repo__name title_t1 max-w-full truncate font-[450] !text-primary_normal">
+            <Typography
+              placeholder=""
+              className="repo__name title_t1 max-w-full truncate font-[450] !text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               {repo.name}
             </Typography>
             <div className="repo__info-details flex items-center gap-2">
-              <Typography className="repo__info-details-date caption_c2 text-hint">
+              <Typography
+                placeholder=""
+                className="repo__info-details-date caption_c2 text-hint"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 {repo ? FaDateFromTimestamp(+new Date(repo.createDate)) : null}
               </Typography>
               <CircleIcon className="h-2 w-2" />
-              <Typography className="repo__info-details-role caption_c2 text-hint">
+              <Typography
+                placeholder=""
+                className="repo__info-details-role caption_c2 text-hint"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 {translateRoles(repo?.roleName)}
               </Typography>
               <CircleIcon className="h-2 w-2" />
-              <Typography className="repo__info-details-status caption_c2 text-hint">
+              <Typography
+                placeholder=""
+                className="repo__info-details-status caption_c2 text-hint"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
                 {repo.isArchived ? "غیرفعال" : "فعال"}
               </Typography>
             </div>

@@ -7,7 +7,6 @@ import { editSocialProfile, getMySocialProfile } from "@service/social";
 import { getCustomPostByDomain, userInfo, userMetadata } from "@service/clasor";
 import { getPodAccessToken, refreshPodAccessToken, revokePodToken } from "@service/account";
 import { IActionError } from "@interface/app.interface";
-import { getRedisClient } from "@utils/redis";
 import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
@@ -207,7 +206,7 @@ export const logoutAction = async () => {
       console.error("Failed to revoke refresh_token in background:", err);
     });
 
-    const redisClient = await getRedisClient();
+    const redisClient = await global.clientPromise;
     if (redisClient && redisClient.isReady) {
       redisClient.del(`user:${access_token}`).catch((err) => {
         console.error("Failed to delete user from Redis in background:", err);

@@ -132,7 +132,11 @@ const DashboardRepositories = () => {
 
   return (
     <div className="flex flex-col gap-0 xs:gap-4">
-      <Typography className="title_t1 p-4 font-medium text-primary_normal xs:p-0">
+      <Typography
+        placeholder=""
+        className="title_t1 p-4 font-medium text-primary_normal xs:p-0"
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+      >
         مخزن‌ها
       </Typography>
       <div className="px-4 xs:px-0">

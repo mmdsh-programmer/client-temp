@@ -28,6 +28,7 @@ const PublishBottomNav = () => {
   return getPublishVersion ? (
     <div className="fixed bottom-12 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#222] p-2 shadow-xl">
       <Button
+        {...({} as React.ComponentProps<typeof Button>)}
         className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
         onClick={() => {
           setOpenSpeedDial(!openSpeedDial);
@@ -48,6 +49,7 @@ const PublishBottomNav = () => {
         <PublishTinyLink />
 
         <Button
+          {...({} as React.ComponentProps<typeof Button>)}
           className="w-fit min-w-fit border-none p-3"
           onClick={openOutlineDrawer}
           variant="outlined"

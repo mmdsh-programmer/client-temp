@@ -89,14 +89,26 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
           />
           {hasExpireTime ? (
             <>
-              <Typography className="label"> انتخاب تاریخ</Typography>
+              <Typography
+                placeholder=""
+                className="label"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                 انتخاب تاریخ
+              </Typography>
               <DatePicker
                 onChange={submitCalendar}
                 className="z-[999999] delay-200"
                 inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
               />
               {errors.expireTime && (
-                <Typography className="warning_text">{errors.expireTime?.message}</Typography>
+                <Typography
+                  placeholder=""
+                  className="warning_text"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  {errors.expireTime?.message}
+                </Typography>
               )}
             </>
           ) : null}
@@ -104,11 +116,19 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
         {isCreateLink ? (
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <Typography className="form_label"> لینک منتشرشده سند</Typography>
+              <Typography
+                placeholder=""
+                className="form_label"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                 لینک منتشرشده سند
+              </Typography>
               <div className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3">
                 <Typography
+                  placeholder=""
                   className="font-300 w-full cursor-pointer truncate text-sm text-placeholder"
                   dir="ltr"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                 >
                   {toPersianDigit(
                     `${window.location.origin}/share/${toPersianDigit(
@@ -128,6 +148,8 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
                       copy(url);
                       toast.success("لینک مخزن کپی شد");
                     }}
+                    placeholder=""
+                    {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
                   >
                     <CopyIcon className="h-4 w-4 fill-icon-active" />
                   </Button>
@@ -144,6 +166,8 @@ const DocumentCreatePublishLinkDialog = ({ setOpen }: IProps) => {
                 );
                 window.open(url, "_blank");
               }}
+              placeholder=""
+              {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
             >
               ورود به صفحه سند منتشرشده
             </Button>

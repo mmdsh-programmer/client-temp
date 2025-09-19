@@ -10,7 +10,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
-  children: JSX.Element;
+  children: React.JSX.Element;
   version: IVersion;
 }
 

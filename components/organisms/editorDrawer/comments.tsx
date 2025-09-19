@@ -48,7 +48,7 @@ const Comments = ({ version }: IProps) => {
                           <UserIcon className="h-5 w-5 fill-icon-hover" />
                         </div>
                       )}
-                      <Typography className="title_t4 text-primary_normal">
+                      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-primary_normal">
                         {comment.user.name}
                       </Typography>
                     </div>
@@ -59,7 +59,7 @@ const Comments = ({ version }: IProps) => {
                     ) : null}
                   </div>
                   <div className="w-full">
-                    <Typography className="body_b3 break-words">
+                    <Typography {...({} as React.ComponentProps<typeof Typography>)} className="body_b3 break-words">
                       {comment.text}
                     </Typography>
                   </div>

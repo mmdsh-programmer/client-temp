@@ -83,7 +83,7 @@ const PublishQuestionAnswerEditDialog = ({
       customSize="lg"
     >
       <form className="flex flex-col gap-2">
-        <Typography className="text-xs text-gray-800 mb-2">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs text-gray-800 mb-2">
           متن خود را بنویسید
         </Typography>
 

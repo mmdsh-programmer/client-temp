@@ -35,7 +35,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
       className="join-to-repo-requests__dialog xs:!min-w-[450px] xs:!max-w-[450px]"
     >
       <DialogBody
-        placeholder="dialog body"
+        {...({} as React.ComponentProps<typeof DialogBody>)}
         className="h-[450px] flex-grow overflow-auto px-5 py-3 xs:p-6"
       >
         {isLoading ? (
@@ -54,6 +54,7 @@ const UserJoinToRepoRequests = ({ setOpen }: IProps) => {
                     >
                       <div className="flex flex-grow gap-1">
                         <Typography
+                          {...({} as React.ComponentProps<typeof Typography>)}
                           className="label_l2 w-auto max-w-[50px] cursor-pointer truncate text-primary_normal xs:max-w-[90px]"
                           title={request.repoName}
                         >

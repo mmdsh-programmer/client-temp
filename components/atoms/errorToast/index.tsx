@@ -27,6 +27,7 @@ const ErrorToast = ({
           variant="text"
           onClick={handleCopyToClipboard}
           className="px-2 py-1"
+          {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           کپی
         </Button>

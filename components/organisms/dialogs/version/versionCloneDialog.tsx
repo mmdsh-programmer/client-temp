@@ -104,10 +104,10 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       ) : (
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <Typography className="form_label">نام نسخه</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام نسخه</Typography>
             <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
             {errors.name && (
-              <Typography className="warning_text">{errors.name?.message}</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>
             )}
           </div>
         </form>

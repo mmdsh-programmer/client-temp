@@ -1,11 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "../node_modules/cls-file-management/dist/style.css";
 @import "./outline.style.css";
 @import "./clasor-preview.style.css";
 @import "./landing.css";
 @import "./google-fonts.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
 @layer base {

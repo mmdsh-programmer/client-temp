@@ -100,7 +100,9 @@ const SelectAtom = ({
                   }}
                 >
                   <Typography
+                    placeholder=""
                     className={`${option.className || ""} select_option__text truncate text-right text-primary_normal`}
+                    {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                   >
                     {option.label}
                   </Typography>

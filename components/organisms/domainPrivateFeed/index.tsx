@@ -31,22 +31,22 @@ const PrivateFeed = () => {
       <Tabs value={activeTab} className="h-full">
         <div className="flex h-[76px] min-h-[76px] items-center justify-between">
           <TabsHeader
+            {...({} as React.ComponentProps<typeof TabsHeader>)}
             className="flex w-[210px] items-center overflow-x-auto rounded-lg bg-secondary p-[2px] text-secondary"
             indicatorProps={{
               className: "p-2 rounded-lg shadow-small !text-purple-normal",
             }}
-            placeholder="tabs-header"
           >
             {tabList.map((tab) => {
               return (
                 <Tab
+                  {...({} as React.ComponentProps<typeof Tab>)}
                   key={tab.tabTitle}
                   value={tab.tabTitle}
                   onClick={() => {
                     return setActiveTab(tab.tabTitle);
                   }}
                   className="flex h-9 text-nowrap p-2 font-iranYekan text-[12px] font-medium leading-[18px] -tracking-[0.12px] text-secondary"
-                  placeholder="tab"
                   activeClassName="text-primary_normal "
                 >
                   {tab.tabTitle}
@@ -64,10 +64,10 @@ const PrivateFeed = () => {
             }}
           />
         </div>
-        <TabsBody placeholder="tab-body" className="h-[calc(100%-80px)]">
+        <TabsBody {...({} as React.ComponentProps<typeof TabsBody>)} className="h-[calc(100%-80px)]">
           {tabList.map((tab) => {
             return (
-              <TabPanel key={tab.tabTitle} value={tab.tabTitle} className="h-full p-0 overflow-auto">
+              <TabPanel {...({} as React.ComponentProps<typeof TabPanel>)} key={tab.tabTitle} value={tab.tabTitle} className="h-full p-0 overflow-auto">
                 {tab.tabContent}
               </TabPanel>
             );

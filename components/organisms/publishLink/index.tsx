@@ -35,9 +35,10 @@ const PublishLink = () => {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <Typography className="form_label"> لینک منتشرشده مخزن</Typography>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> لینک منتشرشده مخزن</Typography>
                 <div className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3">
                   <Typography
+                    {...({} as React.ComponentProps<typeof Typography>)}
                     className="font-300 w-full cursor-pointer truncate text-sm text-placeholder"
                     dir="ltr"
                   >
@@ -47,6 +48,7 @@ const PublishLink = () => {
                   </Typography>
                   <div className="flex items-center">
                     <Button
+                      {...({} as React.ComponentProps<typeof Button>)}
                       className="repo-link-wrapper__copy-link-button h-7 w-8 rounded-none bg-white p-0"
                       onClick={() => {
                         const url = toPersianDigit(
@@ -62,6 +64,7 @@ const PublishLink = () => {
                 </div>
               </div>
               <Button
+                {...({} as React.ComponentProps<typeof Button>)}
                 className="text__label__button w-fit bg-transparent p-0 !text-[12px] text-[#0C8CE9]"
                 onClick={() => {
                   const url = toPersianDigit(
@@ -73,7 +76,7 @@ const PublishLink = () => {
                 ورود به صفحه مخزن منتشرشده
               </Button>
             </div>
-            <Typography className="title_t3">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">
               مخزن شما انتشار یافته. آیا می‌خواهید آن را لغو کنید؟
             </Typography>
             <LoadingButton
@@ -81,7 +84,7 @@ const PublishLink = () => {
               onClick={handleDelete}
               loading={deletePublishLink.isPending}
             >
-              <Typography className="text__label__button text-white">لغو انتشار</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">لغو انتشار</Typography>
             </LoadingButton>
           </div>
         ) : (

@@ -30,8 +30,10 @@ const MoveSelection = ({ target }: IProps) => {
       }}
     >
       <Button
+        placeholder=""
         onClick={toggleDropdown}
         className={`move-${target}__select flex h-12 w-full items-center justify-between gap-x-2 truncate rounded-md border-[1px] border-normal bg-transparent pl-2 pr-3 font-iranYekan text-[13px] font-normal lowercase leading-[18.2px] -tracking-[0.13px] text-primary_normal focus:outline-none`}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         {getCategoryMoveDest ? getCategoryMoveDest.name : " انتخاب کنید"}
         <ChevronLeftIcon

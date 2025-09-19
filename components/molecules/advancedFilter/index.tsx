@@ -132,7 +132,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
           <div className="flex w-full flex-col gap-4 xs:gap-2">
             <div className="grid flex-grow grid-cols-1 grid-rows-[min-content] items-end gap-x-2 gap-y-4 pb-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7">
               <div className="flex flex-grow flex-col gap-2">
-                <Typography className="form_label">جستجو</Typography>
+                <Typography
+                  placeholder=""
+                  className="form_label"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  جستجو
+                </Typography>
                 <InputAtom
                   className="!h-12 flex-grow rounded-md !border-2 !border-normal bg-white !py-0 !font-iranYekan !text-[13px] !text-primary_normal outline-none placeholder:!font-iranYekan focus:!border-normal focus:!border-t-normal focus:outline-none xs:!h-10"
                   placeholder="جستجو در عنوان"
@@ -143,7 +149,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <div className="flex flex-grow flex-col gap-2">
-                <Typography className="form_label">نوع جستجو</Typography>
+                <Typography
+                  placeholder=""
+                  className="form_label"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  نوع جستجو
+                </Typography>
                 <SelectAtom
                   options={searchTypeOptions}
                   className="h-12 !w-full justify-between border-[2px] border-normal bg-white pl-1 pr-2 xs:!h-10"
@@ -153,7 +165,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <div className="flex flex-grow flex-col gap-2">
-                <Typography className="form_label">نوع</Typography>
+                <Typography
+                  placeholder=""
+                  className="form_label"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  نوع
+                </Typography>
                 <SelectBox
                   options={[
                     { label: "سند", value: "document" },
@@ -166,7 +184,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <div className="flex flex-grow flex-col gap-2">
-                <Typography className="form_label">نوع محتوا</Typography>
+                <Typography
+                  placeholder=""
+                  className="form_label"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  نوع محتوا
+                </Typography>
                 <SelectBox
                   options={[
                     { label: "کلاسور", value: "clasor" },
@@ -181,7 +205,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 />
               </div>
               <div className="flex flex-grow flex-col gap-2">
-                <Typography className="form_label">تگ‌ها</Typography>
+                <Typography
+                  placeholder=""
+                  className="form_label"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  تگ‌ها
+                </Typography>
 
                 {!tagOptions.length && currentPath !== "/admin/sharedDocuments" ? (
                   <SelectAtom
@@ -207,7 +237,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 )}
               </div>
               <div className="flex flex-grow flex-col gap-2">
-                <Typography className="form_label">سایر فیلترها</Typography>
+                <Typography
+                  placeholder=""
+                  className="form_label"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  سایر فیلترها
+                </Typography>
                 <SelectBox
                   options={[
                     { label: "نمونه سند", value: "template" },
@@ -228,7 +264,13 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 className="col-span-1 !h-10 !w-full bg-primary-normal !px-4 hover:bg-primary-normal active:bg-primary-normal sm:col-start-2 sm:!w-auto md:col-start-2 lg:col-start-3 xl:col-start-7"
                 onClick={handleFilter}
               >
-                <Typography className="text__label__button text-white">اعمال فیلتر</Typography>
+                <Typography
+                  placeholder=""
+                  className="text__label__button text-white"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                >
+                  اعمال فیلتر
+                </Typography>
               </LoadingButton>
             </div>
           </div>

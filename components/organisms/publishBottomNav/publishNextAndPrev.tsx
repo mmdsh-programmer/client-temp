@@ -105,6 +105,7 @@ const PublishNextAndPrev = ({ selectedDocument }: IProps) => {
   return (
     <>
       <Button
+        {...({} as React.ComponentProps<typeof Button>)}
         className="w-fit min-w-fit p-2.5 border-none"
         variant="outlined"
         onClick={() => {
@@ -116,6 +117,7 @@ const PublishNextAndPrev = ({ selectedDocument }: IProps) => {
       </Button>
 
       <Button
+        {...({} as React.ComponentProps<typeof Button>)}
         className="w-fit min-w-fit p-2.5 border-none"
         variant="outlined"
         onClick={() => {

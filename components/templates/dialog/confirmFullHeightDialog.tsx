@@ -47,10 +47,12 @@ const ConfirmFullHeightDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
+        {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
@@ -65,7 +67,10 @@ const ConfirmFullHeightDialog = ({
               />
             </div>
           ) : null}
-          <Typography className="form__title">{dialogHeader}</Typography>
+          <Typography 
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="form__title"
+          >{dialogHeader}</Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
@@ -75,12 +80,14 @@ const ConfirmFullHeightDialog = ({
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6"
+        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
         className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
+        {...({} as Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
@@ -91,7 +98,10 @@ const ConfirmFullHeightDialog = ({
           loading={isPending}
           disabled={disabled}
         >
-          <Typography className="text__label__button text-white">تایید</Typography>
+          <Typography 
+            className="text__label__button text-white"
+            {...({} as React.ComponentProps<typeof Typography>)}
+          >تایید</Typography>
         </LoadingButton>
       </DialogFooter>
     </Dialog>

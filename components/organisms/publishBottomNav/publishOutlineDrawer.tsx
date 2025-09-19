@@ -49,12 +49,14 @@ const PublishOutlineDrawer = ({ outline }: IProps) => {
 
   return (
     <Drawer
+      {...({} as React.ComponentProps<typeof Drawer>)}
       open={openPublishOutlineDrawer}
       onClose={closeDrawer}
       className="p-4"
       placement="left"
     >
       <IconButton
+        {...({} as React.ComponentProps<typeof IconButton>)}
         onClick={closeDrawer}
         variant="outlined"
         className="!absolute right-3 top-4"

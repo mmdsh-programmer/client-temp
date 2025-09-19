@@ -68,7 +68,7 @@ const InviteToRepo = () => {
     <form className="repo-invite-form pb-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="my-4 flex flex-col gap-2">
         <div className="flex flex-col gap-2">
-          <Typography className="label"> اشتراک گذاری با </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label"> اشتراک گذاری با </Typography>
           <div className="flex !h-12 items-center gap-2 rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2 pr-3">
             <InputAtom
               id="username"
@@ -77,7 +77,7 @@ const InviteToRepo = () => {
               register={{ ...register("username") }}
             />
             {isLoadingRoles ? (
-              <Spinner className="text-primary h-6 w-6" />
+              <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="text-primary h-6 w-6" />
             ) : (
               <SelectAtom
                 className="repo-invite-form__select w-auto"
@@ -97,16 +97,16 @@ const InviteToRepo = () => {
               onClick={handleSubmit(onSubmit)}
               className="repo-invite-form__button !h-8 !rounded-sm !bg-white px-3 shadow-none hover:bg-white hover:shadow-none"
             >
-              <Typography className="text__label__button font-medium !text-primary_normal">
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button font-medium !text-primary_normal">
                 دعوت
               </Typography>
             </LoadingButton>
           </div>
         </div>
         {errors.username && (
-          <Typography className="warning_text">{errors.username?.message}</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.username?.message}</Typography>
         )}
-        <Typography className="caption_c2 text-placeholder">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c2 text-placeholder">
           برای اشتراک‌گذاری با سایر کاربران، نام کاربری و سطوح دسترسی مورد نظر را در این قسمت وارد
           کنید.
         </Typography>

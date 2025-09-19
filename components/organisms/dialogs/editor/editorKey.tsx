@@ -107,7 +107,7 @@ const EditorKey = ({
       setOpen={setOpen}
     >
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-        <Typography className="label">کلید خصوصی</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">کلید خصوصی</Typography>
         <TextareaAtom
           className="mt-3"
           id="repo-private-key"
@@ -115,7 +115,7 @@ const EditorKey = ({
           register={{ ...register("privateKey") }}
         />
         {errors.privateKey ? (
-          <Typography className="warning_text mt-2">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text mt-2">
             {errors.privateKey?.message}
           </Typography>
         ) : null}

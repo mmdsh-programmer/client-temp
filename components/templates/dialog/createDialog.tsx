@@ -53,15 +53,17 @@ const CreateDialog = ({
       size={customSize || "sm"}
       open
       handler={handleClose}
-      className={`${className} flex flex-col !rounded-none shrink-0 h-dvh m-0 w-full max-w-full xs:h-auto xs:min-w-[400px] xs:max-w-[400px] bg-white xs:!rounded-lg `}
+      className={`${className} m-0 flex h-dvh w-full max-w-full shrink-0 flex-col !rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:!rounded-lg`}
       onClick={handleBackdropClick}
       dismiss={{
         enabled: false,
       }}
+      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "handler" | "open">)}
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center xs:justify-between gap-[10px] xs:gap-0 px-[6px] xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
+        {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} disabled={isPending} />
@@ -70,29 +72,33 @@ const CreateDialog = ({
           {backToMain ? (
             <div className="hidden xs:block">
               <BackButton
-                className="!pl-2 !pr-0 !py-0"
+                className="!py-0 !pl-2 !pr-0"
                 onClick={handleClose}
                 disabled={isPending}
               />
             </div>
           ) : null}
-          <Typography className="form__title">{dialogHeader}</Typography>
+          <Typography className="form__title" {...({} as React.ComponentProps<typeof Typography>)}>
+            {dialogHeader}
+          </Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
         </div>
       </DialogHeader>
-      <div className="block xs:hidden h-2 w-full bg-secondary" />
+      <div className="block h-2 w-full bg-secondary xs:hidden" />
       <DialogBody
         placeholder="dialog body"
-        className="dialog-body flex-grow px-5 py-3 xs:p-6 !h-[calc(100vh-180px)] xs:!h-max xs:!max-h-max overflow-auto"
+        className="dialog-body !h-[calc(100vh-180px)] flex-grow overflow-auto px-5 py-3 xs:!h-max xs:!max-h-max xs:p-6"
+        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         {children}
       </DialogBody>
       <RenderIf isTrue={showFooter}>
         <DialogFooter
           placeholder="dialog footer"
-          className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+          className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
+          {...({} as Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
         >
           <CancelButton onClick={handleClose} disabled={isPending}>
             انصراف
@@ -102,7 +108,10 @@ const CreateDialog = ({
             onClick={onSubmit}
             loading={isPending}
           >
-            <Typography className="text__label__button text-white">
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="text__label__button text-white"
+            >
               ایجاد
             </Typography>
           </LoadingButton>

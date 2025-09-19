@@ -19,7 +19,12 @@ const MenuItemRenderer = ({ item }: { item: MenuItem }) => {
       dir="rtl"
     >
       {item.icon}
-      <Typography className="select_option__text font-normal">{item.text}</Typography>
+      <Typography
+        {...({} as React.ComponentProps<typeof Typography>)}
+        className="select_option__text font-normal"
+      >
+        {item.text}
+      </Typography>
     </li>
   );
 };
@@ -37,9 +42,11 @@ const SubMenuRenderer = ({ item }: { item: MenuItem }) => {
       <Button
         className="flex w-full items-center justify-between bg-transparent px-0 text-primary_normal"
         onClick={toggleOpen}
-        placeholder="submenu-button"
+        {...({} as React.ComponentProps<typeof Button>)}
       >
-        <Typography className="select_option__text font-normal">{item.text}</Typography>
+        <Typography 
+        {...({} as React.ComponentProps<typeof Typography>)}
+        className="select_option__text font-normal">{item.text}</Typography>
         <ChevronLeftIcon
           className={`h-2 w-2 stroke-icon-active ${isOpen ? "rotate-90 transition-transform" : "-rotate-180 transform-none"}`}
         />
@@ -64,7 +71,7 @@ const DrawerTemplate = ({ menuList, openDrawer, setOpenDrawer }: IProps) => {
         return setOpenDrawer(false);
       }}
       className="!h-auto max-h-[70vh] overflow-y-auto overflow-x-hidden p-4"
-      placeholder="action-drawer"
+      {...({} as Omit<React.ComponentProps<typeof Drawer>, "open">)}
     >
       <ul className="ml-4 w-full overflow-hidden p-[2px] font-iranYekan text-primary_normal">
         {menuList.map((menuItem) => {

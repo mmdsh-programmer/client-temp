@@ -65,7 +65,11 @@ const Breadcrumb = () => {
       return (
         <div className="breadcumb-list flex items-center">
           <div className="flex items-center">
-            <Typography className="mx-2 font-iranYekan text-xs text-link xs:text-sm">
+            <Typography
+              placeholder=""
+              className="mx-2 font-iranYekan text-xs text-link xs:text-sm"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               ...
             </Typography>
             <div className="flex h-6 w-[14px] items-center justify-center">
@@ -79,18 +83,22 @@ const Breadcrumb = () => {
             return (
               <div key={uniqueKey} className="flex items-center">
                 <Button
+                  placeholder=""
                   className="border-none bg-transparent p-0 !shadow-none outline-none"
                   onClick={() => {
                     if (list.indexOf(breadcrumbItem) === 1) {
                       router.push("/admin/dashboard");
                     }
                   }}
+                  {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
                 >
                   <div className="flex items-center">
                     <Typography
+                      placeholder=""
                       title={String(breadcrumbItem)}
                       className={`mx-2 truncate whitespace-nowrap font-iranYekan text-xs lowercase xs:text-sm
                     ${isLast ? "text-primary_normal" : "text-link"}`}
+                      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                     >
                       {breadcrumbItem}
                     </Typography>
@@ -116,18 +124,22 @@ const Breadcrumb = () => {
           return (
             <div key={uniqueKey} className="flex items-center">
               <Button
+                placeholder=""
                 className="border-none bg-transparent p-0 !shadow-none outline-none"
                 onClick={() => {
                   if (list.indexOf(breadcrumbItem) === 1) {
                     router.push("/admin/dashboard");
                   }
                 }}
+                {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
               >
                 <div className="flex items-center">
                   <Typography
+                    placeholder=""
                     title={String(breadcrumbItem)}
                     className={`mx-2 truncate whitespace-nowrap font-iranYekan text-xs lowercase xs:text-sm
                     ${isLast ? "text-primary_normal" : "text-link"}`}
+                    {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                   >
                     {breadcrumbItem}
                   </Typography>

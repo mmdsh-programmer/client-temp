@@ -113,7 +113,7 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="repo-requests-dialog flex !h-full w-full max-w-full flex-col rounded-none bg-primary xs:!h-[600px] xs:!min-w-[80%] xs:!max-w-[80%] xs:rounded-lg "
     >
-      <DialogBody placeholder="dialog body" className="dialog-body h-full overflow-auto p-0">
+      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="dialog-body h-full overflow-auto p-0">
         <div className="flex h-[calc(100%-160px)] flex-col gap-4 overflow-auto p-4 xs:h-[535px] xs:p-6">
           {getRepo?.roleName === "owner" ? (
             <TabComponent tabList={tabList} activeTab={activeTab} setActiveTab={setActiveTab} />

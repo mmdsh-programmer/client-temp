@@ -39,13 +39,14 @@ const DomainPublicFeedList = () => {
                             />
                           </div>
                         ) : null}
-                        <Typography className="title_t3">{publicFeed.name}</Typography>
+                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">{publicFeed.name}</Typography>
                       </div>
                     ),
                   },
                   {
                     data: (
                       <Typography
+                        {...({} as React.ComponentProps<typeof Typography>)}
                         className="title_t3 text- mr-2 flex w-12 max-w-[150px] gap-2 truncate sm:w-20 md:w-auto"
                         title={publicFeed.content}
                       >
@@ -56,6 +57,7 @@ const DomainPublicFeedList = () => {
                   {
                     data: (
                       <Typography
+                        {...({} as React.ComponentProps<typeof Typography>)}
                         dir="ltr"
                         className="title_t3 mr-2 flex w-12 max-w-[150px] gap-2 truncate text-blue-600 sm:w-20 md:w-auto"
                         title={link}

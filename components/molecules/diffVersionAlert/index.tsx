@@ -14,8 +14,14 @@ const DiffVersionAlert = () => {
         onClose={() => {
           return setCompareVersion(null);
         }}
+        {...({} as  Omit<React.ComponentProps<typeof Alert>, "open" | "onClose">)}
       >
-        <Typography>{`نسخه ${compareVersion?.version?.data.versionNumber} برای مقایسه انتخاب شده است`}</Typography>
+        <Typography
+          placeholder=""
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          {`نسخه ${compareVersion?.version?.data.versionNumber} برای مقایسه انتخاب شده است`}
+        </Typography>
       </Alert>
     </div>
   );

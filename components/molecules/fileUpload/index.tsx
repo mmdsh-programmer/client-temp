@@ -15,7 +15,11 @@ const FileUpload = ({ progress, onUpload }: IProps) => {
     >
       <div className="flex w-full">
         <div className="relative !w-full !h-12 flex justify-center items-center bg-primary-light rounded-lg hover:bg-primary-light active:bg-primary-light">
-          <Typography className="text__label__button text-primary">
+          <Typography
+            placeholder=""
+            className="text__label__button text-primary"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
             بارگذاری فایل ضمیمه
           </Typography>
           <div

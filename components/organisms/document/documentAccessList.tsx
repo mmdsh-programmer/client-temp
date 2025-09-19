@@ -38,7 +38,7 @@ const DocumentAccessList = () => {
 
   return (
     <>
-      <Typography className="title_t4 text-secondary">لیست کاربران مجاز در سند</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary">لیست کاربران مجاز در سند</Typography>
       <div className="flex w-full flex-col">
         {isLoading || isFetching ? (
           <div className="flex w-full items-center justify-center">
@@ -71,6 +71,7 @@ const DocumentAccessList = () => {
                             <Spinner className="h-4 w-4 text-primary" />
                           ) : (
                             <Button
+                              {...({} as React.ComponentProps<typeof Button>)}
                               className="delete-button bg-transparent p-0"
                               onClick={() => {
                                 setSelectedUser(accessItem.userName);

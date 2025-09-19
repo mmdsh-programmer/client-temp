@@ -138,14 +138,14 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
           />
           {hasPassword && (
             <>
-              <Typography className="label">رمز عبور</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">رمز عبور</Typography>
               <FormInput
                 type="password"
                 register={{ ...register("password") }}
                 className="repo-create-public-link-form__password-input"
               />
               {errors.password && (
-                <Typography className="warning_text">{errors.password?.message}</Typography>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.password?.message}</Typography>
               )}
             </>
           )}
@@ -161,14 +161,14 @@ const CreateRepoPublicLink = ({ setOpen }: IProps) => {
           />
           {hasExpireTime ? (
             <>
-              <Typography className="label"> انتخاب تاریخ</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label"> انتخاب تاریخ</Typography>
               <DatePicker
                 onChange={submitCalendar}
                 className="repo-create-public-link-form__date-picker z-[999999] delay-200"
                 inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
               />
               {errors.expireTime && (
-                <Typography className="warning_text">{errors.expireTime?.message}</Typography>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.expireTime?.message}</Typography>
               )}
             </>
           ) : null}

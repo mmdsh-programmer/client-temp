@@ -87,14 +87,14 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
     >
       <form className="flex flex-col gap-8">
         <div>
-          <Typography className="caption_c1 !warning_text">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 !warning_text">
             در حال حاضر این سند هیچ نسخه‌ای ندارد. آیا مایلید یک نسخه جدید ایجاد کنید؟
           </Typography>
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام نسخه</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام نسخه</Typography>
           <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
-          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
+          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
         </div>
       </form>
     </CreateDialog>

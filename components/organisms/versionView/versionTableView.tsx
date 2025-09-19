@@ -126,7 +126,10 @@ const VersionTableView = ({
                                   {translateVersionStatus(version.status, version.state).translated}
                                 </div>
                                 <RenderIf isTrue={version.status === "accepted"}>
-                                  <Typography className="label text-info flex h-6 items-center justify-center rounded-full bg-blue-50 !px-2">
+                                  <Typography
+                                    {...({} as React.ComponentProps<typeof Typography>)}
+                                    className="label text-info flex h-6 items-center justify-center rounded-full bg-blue-50 !px-2"
+                                  >
                                     عمومی
                                   </Typography>
                                 </RenderIf>
@@ -140,7 +143,10 @@ const VersionTableView = ({
                               >
                                 <>
                                   <LastVersionIcon className="h-5 w-5 fill-green-400" />
-                                  <Typography className="label text-green-400">
+                                  <Typography
+                                    {...({} as React.ComponentProps<typeof Typography>)}
+                                    className="label text-green-400"
+                                  >
                                     آخرین نسخه
                                   </Typography>
                                 </>

@@ -67,7 +67,13 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
     >
       <form className="delete-password-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">رمز عبور سابق</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            رمز عبور سابق
+          </Typography>
           <FormInput
             type="password"
             placeholder="رمز عبور سابق"
@@ -77,7 +83,13 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
             className="delete-password-form__old-password"
           />
           {errors.oldPassword && (
-            <Typography className="warning_text">{errors.oldPassword?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.oldPassword?.message}
+            </Typography>
           )}
         </div>
       </form>

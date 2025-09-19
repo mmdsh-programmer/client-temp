@@ -53,12 +53,12 @@ const Tags = ({ handleClose }: IProps) => {
   return (
     <>
       <DialogBody
-        placeholder="dialog body"
+        {...({} as React.ComponentProps<typeof DialogBody>)}
         className="repo-tags__dialog-body flex-grow px-5 py-3 xs:p-6"
       >
         <form className="repo-tags__form flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <Typography className="label"> تگ</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label"> تگ</Typography>
             <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
               <InputAtom
                 className="repo-tags__input !w-auto h-auto overflow-hidden !p-0 border-none"
@@ -70,7 +70,7 @@ const Tags = ({ handleClose }: IProps) => {
                 onClick={handleSubmit(onSubmit)}
                 className="repo-tags__add-button !h-8 !bg-white !w-auto !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               >
-                <Typography className="!text-primary_normal text__label__button px-3">
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="!text-primary_normal text__label__button px-3">
                   افزودن
                 </Typography>
               </LoadingButton>
@@ -98,7 +98,7 @@ const Tags = ({ handleClose }: IProps) => {
         )}
       </DialogBody>
       <DialogFooter
-        placeholder="dialog footer"
+        {...({} as React.ComponentProps<typeof DialogFooter>)}
         className="repo-tags__dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
@@ -110,7 +110,7 @@ const Tags = ({ handleClose }: IProps) => {
             return setRepoActiveStep(3);
           }}
         >
-          <Typography className="text__label__button text-white">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">
             ادامه
           </Typography>
         </LoadingButton>

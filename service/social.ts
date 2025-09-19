@@ -13,7 +13,6 @@ import { IQAList, IQAResponse } from "@interface/qa.interface";
 import axios, { AxiosError } from "axios";
 
 import { IComment } from "@interface/version.interface";
-import { getRedisClient } from "@utils/redis";
 import qs from "qs";
 
 const axiosSocialInstance = axios.create({
@@ -494,7 +493,7 @@ export const getMySocialProfile = async (accessToken: string, expiresAt: number)
     },
   });
 
-  const redisClient = await getRedisClient();
+  const redisClient = await global.clientPromise;
   const cacheData = await redisClient?.get(`user-social:${accessToken}`);
   if (cacheData) {
     const cacheResult = JSON.parse(cacheData);
@@ -536,7 +535,7 @@ export const editSocialProfile = async (
     }
   );
 
-  const redisClient = await getRedisClient();
+  const redisClient = await global.clientPromise;
   await redisClient?.del(`user-social:${accessToken}`);
 
   if (response.data.hasError) {

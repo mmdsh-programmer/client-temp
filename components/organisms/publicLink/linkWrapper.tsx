@@ -61,13 +61,14 @@ const LinkWrapper = ({ role }: IProps) => {
   return (
     <div className="link-wrapper">
       <div className="flex flex-col gap-2">
-        <Typography className="label">{translateRoles(role.name)}</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">{translateRoles(role.name)}</Typography>
         <div className="flex w-full items-center justify-between gap-2">
           <div
             className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3"
             key={role.id}
           >
             <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
               className={`truncate ${
                 readLink() ? "text-primary_normal" : "w-full text-placeholder"
               } font-300 cursor-pointer text-sm`}
@@ -82,6 +83,7 @@ const LinkWrapper = ({ role }: IProps) => {
             <div className="flex items-center">
               {readLink() ? (
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="repo-link-wrapper__copy-link-button h-7 w-8 rounded-none bg-white p-0"
                   onClick={() => {
                     copy(
@@ -101,6 +103,7 @@ const LinkWrapper = ({ role }: IProps) => {
             <LinkWrapperMenu role={role} />
           ) : (
             <Button
+              {...({} as React.ComponentProps<typeof Button>)}
               onClick={handleOpenShareAccess}
               className="repo-link-wrapper__create-link-button h-10 w-10 border-[1px] border-normal bg-white p-0"
             >
@@ -112,6 +115,7 @@ const LinkWrapper = ({ role }: IProps) => {
         <div className="flex justify-between gap-2">
           {readLink() ? (
             <Button
+              {...({} as React.ComponentProps<typeof Button>)}
               key={role.id}
               className="repo-public-link__copy-link-button bg-transparent p-0"
               onClick={() => {
@@ -130,7 +134,7 @@ const LinkWrapper = ({ role }: IProps) => {
               {isPending ? (
                 <Spinner className="text-info h-4 w-4" />
               ) : (
-                <Typography className="text__label__button !text-[10px] text-link">
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button !text-[10px] text-link">
                   کپی لینک کوتاه
                 </Typography>
               )}

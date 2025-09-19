@@ -77,7 +77,11 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
               checked={!!forceDelete}
               className="category-delete-dialog__checkbox"
             />
-            <Typography className="warning_text">
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               دسته‌بندی {(category || getCategory)?.name} دارای زیرمجموعه می‌باشد، آیا می‌خواهید این
               دسته‌بندی را حذف کنید؟
             </Typography>

@@ -43,23 +43,30 @@ const DeleteDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
+        {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
-        <Typography className="form__title">{dialogHeader}</Typography>
+        <Typography 
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="form__title"
+        >{dialogHeader}</Typography>
         <CloseButton onClose={handleClose} disabled={isPending} />
       </DialogHeader>
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
+        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         {children}
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
         className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        {...({} as Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
           انصراف
@@ -70,7 +77,10 @@ const DeleteDialog = ({
           loading={isPending}
           isPrimary={false}
         >
-          <Typography className="text__label__button text-white">
+          <Typography  
+            className="text__label__button text-white"
+            {...({} as React.ComponentProps<typeof Typography>)}
+          >
             {isArchive ? "آرشیو" : "حذف"}
           </Typography>
         </LoadingButton>

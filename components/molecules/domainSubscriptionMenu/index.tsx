@@ -40,8 +40,15 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
           variant="text"
           className="flex h-12 w-[50%] items-center justify-center gap-2 rounded-lg bg-primary-normal px-3 hover:bg-primary-normal xs:h-8 xs:w-[100px] xs:px-1"
           disabled
+          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
-          <Typography className="text__label__button text-white">تاییدشده</Typography>
+          <Typography
+            placeholder=""
+            className="text__label__button text-white"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            تاییدشده
+          </Typography>
         </Button>
       );
     }
@@ -51,8 +58,15 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
         variant="text"
         className="flex h-12 w-[50%] items-center justify-center gap-2 rounded-lg bg-red-300 px-3 hover:bg-red-300 xs:h-8 xs:w-[100px] xs:px-1"
         disabled
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
-        <Typography className="text__label__button text-error">ردشده</Typography>
+        <Typography
+          placeholder=""
+          className="text__label__button text-error"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          ردشده
+        </Typography>
       </Button>
     );
   };
@@ -64,14 +78,26 @@ const DomainSubscriptionMenu = ({ request }: IProps) => {
         onClick={handleReject}
         loading={rejectRequest.isPending}
       >
-        <Typography className="text__label__button text-primary_normal">ردکردن</Typography>
+        <Typography
+          placeholder=""
+          className="text__label__button text-primary_normal"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          ردکردن
+        </Typography>
       </LoadingButton>
       <LoadingButton
         className="bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
         onClick={handleAccept}
         loading={acceptRequest.isPending}
       >
-        <Typography className="text__label__button text-white">تایید</Typography>
+        <Typography
+          placeholder=""
+          className="text__label__button text-white"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          تایید
+        </Typography>
       </LoadingButton>
     </div>
   ) : (

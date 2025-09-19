@@ -38,10 +38,10 @@ const CategoryBlockList = () => {
 
   return (
     <>
-      <Typography className="title_t4 text-secondary">لیست کاربران مسدودشده</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary">لیست کاربران مسدودشده</Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6 text-primary" />
+          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-6 w-6 text-primary" />
         ) : (
           <div className="category-block-list flex flex-wrap gap-2">
             {getCategoryBlockList?.pages.map((page) => {
@@ -65,9 +65,10 @@ const CategoryBlockList = () => {
                       }
                       actionIcon={
                         blockDocument.isPending ? (
-                          <Spinner className="h-4 w-4 text-primary" />
+                          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-4 w-4 text-primary" />
                         ) : (
                           <Button
+                            {...({} as React.ComponentProps<typeof Button>)}
                             className="delete-button bg-transparent p-0"
                             onClick={() => {
                               handleDelete(blockItem.userInfo.userName);

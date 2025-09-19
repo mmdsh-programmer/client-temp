@@ -26,7 +26,12 @@ const DomainManagementPage = () => {
   return (
     <div className="flex h-full flex-col gap-6 overflow-hidden">
       <div className="domain-header flex items-center justify-between px-4 pt-4 xs:p-0">
-        <Typography className="title_t1 text-primary_normal">مدیریت دامنه</Typography>
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="title_t1 text-primary_normal"
+        >
+          مدیریت دامنه
+        </Typography>
       </div>
       <div className="h-[calc(100%-50px)] rounded-lg bg-white shadow-small">
         <DomainConfig />

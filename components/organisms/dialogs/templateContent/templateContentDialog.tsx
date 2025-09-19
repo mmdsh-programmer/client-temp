@@ -53,7 +53,7 @@ const TemplateContentDialog = ({ setOpen, editorRef }: IProps) => {
       sharedDocuments === "true" ||
       (currentPath === "/admin/dashboard" &&
         userInfo?.repository.id !== getDocumentTemplate?.repoId) ? (
-        <Typography className="title_t3 text-primary_normal">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3 text-primary_normal">
           شما به نمونه‌ سندهای این منبع دسترسی ندارید.
         </Typography>
       ) : (

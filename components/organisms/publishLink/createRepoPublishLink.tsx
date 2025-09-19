@@ -85,7 +85,7 @@ const CreateRepoPublishLink = () => {
   return (
     <>
       <DialogBody
-        placeholder="dialog body publish-repo"
+        {...({} as React.ComponentProps<typeof DialogBody>)}
         className="repo-create-publish-link__dialog-body flex-grow px-5 py-3 xs:p-0 xs:pb-6"
       >
         <form className="flex flex-col gap-6">
@@ -100,14 +100,14 @@ const CreateRepoPublishLink = () => {
             />
             {hasExpireTime ? (
               <>
-                <Typography className="label"> انتخاب تاریخ</Typography>
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label"> انتخاب تاریخ</Typography>
                 <DatePicker
                   onChange={submitCalendar}
                   className="z-[999999] delay-200"
                   inputClass="datePicker__input rounded-lg border-[1px] outline-none bg-gray-50 h-12 border-normal w-full !font-iranYekan placeholder:!font-iranYekan"
                 />
                 {errors.expireTime && (
-                  <Typography className="warning_text">{errors.expireTime?.message}</Typography>
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.expireTime?.message}</Typography>
                 )}
               </>
             ) : null}
@@ -115,7 +115,7 @@ const CreateRepoPublishLink = () => {
         </form>
       </DialogBody>
       <DialogFooter
-        placeholder="dialog footer"
+        {...({} as React.ComponentProps<typeof DialogFooter>)}
         className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:p-0 xs:pt-6"
       >
         <LoadingButton
@@ -123,7 +123,7 @@ const CreateRepoPublishLink = () => {
           onClick={handleSubmit(onSubmit)}
           loading={createPublishLink.isPending}
         >
-          <Typography className="text__label__button text-white">ایجاد</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ایجاد</Typography>
         </LoadingButton>
       </DialogFooter>
     </>

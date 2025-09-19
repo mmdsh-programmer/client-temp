@@ -62,7 +62,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
 
   return (
     <div>
-      <Typography className="text-xs text-gray-800 mb-2">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs text-gray-800 mb-2">
         نظر خود را بنویسید
       </Typography>
 
@@ -76,7 +76,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
           className="!w-full font-iranYekan border-2 border-solid border-gray-200 text-xs text-gray-800 outline-none focus:outline-none py-2.5 px-2 rounded-lg"
         />
         {errors.text && (
-          <Typography className="warning_text">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
             {errors.text?.message}
           </Typography>
         )}

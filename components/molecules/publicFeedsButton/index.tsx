@@ -14,7 +14,12 @@ const PublicFeedsButton = () => {
 
   return (
     <>
-      <IconButton className="bg-tertiary" onClick={toggleFeedsDialog}>
+      <IconButton
+        placeholder=""
+        className="bg-tertiary"
+        onClick={toggleFeedsDialog}
+        {...({} as  Omit<React.ComponentProps<typeof IconButton>, "placeholder">)}
+      >
         <FeedIcon className="stroke-white w-5 h-5 xs:w-6 xs:h-6" />
       </IconButton>
 

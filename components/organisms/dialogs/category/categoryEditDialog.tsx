@@ -89,7 +89,13 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="category-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام دسته‌بندی</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            نام دسته‌بندی
+          </Typography>
           <FormInput
             placeholder="نام دسته بندی"
             register={{
@@ -99,10 +105,24 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             }}
             className="category-edit-dialog__form-name"
           />
-          {errors.name && <Typography className="warning_text">{errors.name?.message}</Typography>}
+          {errors.name && (
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.name?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">اولویت دسته‌بندی</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            اولویت دسته‌بندی
+          </Typography>
           <FormInput
             placeholder="اولویت دسته بندی"
             type="number"
@@ -116,11 +136,23 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             className="category-edit-dialog__form-order"
           />
           {errors.order && (
-            <Typography className="warning_text">{errors.order?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.order?.message}
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">توضیحات دسته بندی</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            توضیحات دسته بندی
+          </Typography>
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
             register={{
@@ -129,7 +161,13 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
             className="category-edit-dialog__form-description"
           />
           {errors.description && (
-            <Typography className="warning_text">{errors.description?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.description?.message}
+            </Typography>
           )}
         </div>
       </form>

@@ -112,6 +112,7 @@ const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }:
         <Button
           placeholder=""
           className="userProfile rounded-full p-1 bg-white shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
+          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           {userData?.profileImage ? (
             <ImageComponent

@@ -133,7 +133,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">نام سمت</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام سمت</Typography>
           <FormInput
             placeholder="نام سمت"
             register={{
@@ -143,13 +143,13 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
             }}
           />
           {errors.title && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.title?.message}
             </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">اعضای سمت </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">اعضای سمت </Typography>
           <FormInput
             placeholder="نام کاربری را وارد کنید..."
             onKeyDown={handleSpaceClick}
@@ -177,6 +177,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
                   }
                   actionIcon={
                     <Button
+                      {...({} as React.ComponentProps<typeof Button>)}
                       className="bg-white p-1 rounded-full"
                       onClick={() => {
                         removeUser(item.username);
@@ -192,7 +193,7 @@ const PositionEditDialog = ({ group, setOpen }: IProps) => {
             })}
           </div>
           {errors.members && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.members?.message}
             </Typography>
           )}

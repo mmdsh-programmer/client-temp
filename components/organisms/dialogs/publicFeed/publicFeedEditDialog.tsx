@@ -76,19 +76,19 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> عنوان</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> عنوان</Typography>
           <FormInput
             placeholder="عنوان "
             register={{ ...register("name", { value: feed.name }) }}
           />
           {errors.name && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.name?.message}
             </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">توضیحات </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات </Typography>
           <TextareaAtom
             placeholder="توضیحات"
             register={{ ...register("content", { value: feed.content }) }}
@@ -96,19 +96,19 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label"> لینک</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> لینک</Typography>
           <FormInput
             placeholder="لینک "
             register={{ ...register("link", { value: link }) }}
           />
           {errors.link && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.link?.message}
             </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">عکس خبرنامه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">عکس خبرنامه </Typography>
           {isLoading ? (
             <div className="w-full justify-center items-center flex h-[50px]">
               <Spinner className="h-5 w-5 text-primary" />
@@ -119,7 +119,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
                 return page.list.map((hash) => {
                   return (
                     <Button
-                      placeholder="button"
+                      {...({} as React.ComponentProps<typeof Button>)}
                       key={hash}
                       className={`flex flex-grow ${image === hash ? "!bg-secondary !outline-2 !outline-gray-200" : ""} focus:bg-secondary focus:outline-2 focus:outline-gray-200 
                         justify-center items-center rounded-lg border-[1px] 

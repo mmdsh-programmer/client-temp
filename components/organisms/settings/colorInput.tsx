@@ -14,9 +14,9 @@ interface ColorInputProps {
 const ColorInput = ({ label, color, fieldName, description, onColorChange }: ColorInputProps) => {
   return (
     <div className="flex flex-col gap-2">
-      <Typography className="form_label">{label}</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">{label}</Typography>
       <div className="flex h-9 w-full flex-grow items-center gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-0 pr-2">
-        <Typography className="ml-3 !w-full flex-grow">{color}</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="ml-3 !w-full flex-grow">{color}</Typography>
         <InputAtom
           placeholder="جستجو ..."
           type="color"
@@ -27,7 +27,7 @@ const ColorInput = ({ label, color, fieldName, description, onColorChange }: Col
           }}
         />
       </div>
-      <Typography className="caption_c2 text-gray-500 pr-2">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c2 text-gray-500 pr-2">
         {description}
       </Typography>
     </div>

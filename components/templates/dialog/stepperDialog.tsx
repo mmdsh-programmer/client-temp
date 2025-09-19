@@ -32,15 +32,20 @@ const StepperDialog = ({
       dismiss={{
         enabled: false,
       }}
+      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
     >
       <DialogHeader
         placeholder="dialog header"
         className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
+        {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
         <div className="block xs:hidden">
           <BackButton onClick={handleClose} />
         </div>
-        <Typography className="form__title">{dialogHeader}</Typography>
+        <Typography 
+          className="form__title"
+          {...({} as React.ComponentProps<typeof Typography>)}
+        >{dialogHeader}</Typography>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} />
         </div>

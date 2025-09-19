@@ -112,7 +112,11 @@ const SelectBox = ({
                         return handleOptionChange(option.value);
                       }}
                     />
-                    <Typography className="select_option__text truncate text-right text-primary_normal">
+                    <Typography
+                      placeholder=""
+                      className="select_option__text truncate text-right text-primary_normal"
+                      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                    >
                       {option.label}
                     </Typography>
                   </div>

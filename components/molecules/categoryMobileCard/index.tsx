@@ -68,8 +68,10 @@ const CategoryMobileCard = ({ category }: IProps) => {
           <div className="flex items-center max-w-full gap-2">
             <FolderIcon className="h-5 min-h-5 w-5 min-w-5 stroke-blue-gray-600" />
             <Typography
+              placeholder=""
               className="flex text-primary_normal max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
               title={category.name}
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {category.name}
             </Typography>

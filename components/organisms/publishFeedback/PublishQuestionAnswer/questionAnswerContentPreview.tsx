@@ -11,10 +11,10 @@ interface IProps {
 }
 
 const QuestionAnswerContentPreview = ({ content, className }: IProps) => {
-  const getCodeSnippets = (): (JSX.Element | string)[] => {
+  const getCodeSnippets = (): (React.JSX.Element | string)[] => {
     const tempElement = document.createElement("div");
     tempElement.innerHTML = content;
-    const jsxElements: (JSX.Element | string)[] = [];
+    const jsxElements: (React.JSX.Element | string)[] = [];
     for (const node of Array.from(tempElement.childNodes)) {
       if (
         node.nodeType === Node.ELEMENT_NODE &&

@@ -21,7 +21,11 @@ const MobileCard = ({ name, cardAction, icon, className, description, onClick }:
         <div className="flex max-w-[70%] flex-grow items-start gap-3">
           {icon}
           {typeof name === "string" ? (
-            <Typography className="title_t2 max-w-full truncate !text-primary_normal">
+            <Typography
+              placeholder=""
+              className="title_t2 max-w-full truncate !text-primary_normal"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
               {name}
             </Typography>
           ) : (

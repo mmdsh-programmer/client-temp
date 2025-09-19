@@ -69,8 +69,8 @@ export interface RepoLogProps {
   userInfo: { access_token?: string; userId?: number; username?: string } | undefined;
   chatState: ChatState;
   setChatState: React.Dispatch<React.SetStateAction<ChatState>>;
-  chatRef: React.RefObject<ChatFeed<string>>;
-  containerRef: React.RefObject<HTMLDivElement>;
+  chatRef: React.RefObject<ChatFeed<string, Message<string>, Author<string>> | null>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   userCanAccessChat: boolean;
   permissionError: boolean;
   enableChatHook: ReturnType<typeof useEnableRepoChat>;
@@ -78,7 +78,7 @@ export interface RepoLogProps {
   loadChatData: (threadId?: number) => void;
   renderCustomChatBubble: (
     props: ChatBubbleProps<string, Message<string>, Author<string>>,
-  ) => JSX.Element;
+  ) => React.JSX.Element;
   handleClose: () => void;
   isCheckingAccess: boolean;
   handleScroll: (e: React.UIEvent<HTMLDivElement>) => void;

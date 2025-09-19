@@ -12,6 +12,7 @@ export interface IProps {
 const HamburgerButton = ({ isOpen, setIsOpen }: IProps) => {
   return (
     <Button
+      {...({} as React.ComponentProps<typeof Button>)}
       onClick={() => {
         return setIsOpen(!isOpen);
       }}

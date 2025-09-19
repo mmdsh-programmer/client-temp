@@ -72,7 +72,7 @@ const RepoImage = ({
   return (
     <>
       <DialogBody
-        placeholder="dialog body"
+        {...({} as React.ComponentProps<typeof DialogBody>)}
         className="repo-image__dialog-body flex-grow px-5 py-3 xs:p-6"
       >
         <RepoAttachCustomImage
@@ -84,7 +84,7 @@ const RepoImage = ({
         />
       </DialogBody>
       <DialogFooter
-        placeholder="dialog footer"
+        {...({} as React.ComponentProps<typeof DialogFooter>)}
         className="repo-image__dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
@@ -95,7 +95,7 @@ const RepoImage = ({
           onClick={handleSubmit(onSubmit)}
           loading={isPending}
         >
-          <Typography className="text__label__button text-white">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">
             ادامه
           </Typography>
         </LoadingButton>

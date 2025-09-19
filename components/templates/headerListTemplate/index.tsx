@@ -30,7 +30,10 @@ const HeaderListTemplate = ({
   return (
     <header className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-1">
-        <Typography className="title_t1 version-list text-primary_normal">{header}</Typography>
+        <Typography 
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="title_t1 version-list text-primary_normal"
+        >{header}</Typography>
         <Button
           className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
           onClick={() => {
@@ -38,6 +41,7 @@ const HeaderListTemplate = ({
               header === "لیست نسخه‌ها" ? ETourSection.VERSION : ETourSection.DASHBOARD,
             );
           }}
+          {...({} as React.ComponentProps<typeof Button>)}
         >
           <InfoIcon className="h-5 w-5 stroke-primary-normal" />
         </Button>
@@ -74,6 +78,7 @@ const HeaderListTemplate = ({
                 !userInfo?.domainConfig?.accessToCreateRepo &&
                 header !== "لیست نسخه‌ها"
               }
+              {...({} as React.ComponentProps<typeof Button>)}
             >
               <AddIcon className="h-5 w-5 stroke-white" />
             </Button>
@@ -90,6 +95,7 @@ const HeaderListTemplate = ({
                 !userInfo?.domainConfig?.accessToCreateRepo &&
                 header !== "لیست نسخه‌ها"
               }
+              {...({} as React.ComponentProps<typeof Button>)}
             >
               <AddIcon className="h-6 w-6 stroke-white" />
             </Button>

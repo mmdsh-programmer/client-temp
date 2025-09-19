@@ -54,13 +54,13 @@ const AddDomainParticipantDialog = ({ setOpen }: IProps) => {
       className=""
     >
       <form className="flex flex-col gap-2">
-        <Typography className="form_label">اعضای دامنه </Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">اعضای دامنه </Typography>
         <FormInput
           placeholder="نام کاربری را وارد کنید..."
           register={{ ...register("username") }}
           />
         {errors.username && (
-          <Typography className="warning_text">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
             {errors.username?.message}
           </Typography>
         )}

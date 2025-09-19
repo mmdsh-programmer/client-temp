@@ -13,6 +13,7 @@ const Sort = ({ onClick }: IProps) => {
         className="p-0 bg-transparent shadow-none"
         placeholder="sort button"
         onClick={onClick}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         <FillArrow className="w-[9px] h-[9px] fill-gray-400" />
       </Button>
@@ -20,6 +21,7 @@ const Sort = ({ onClick }: IProps) => {
         className="p-0 bg-transparent shadow-none"
         placeholder="sort button"
         onClick={onClick}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         <FillArrow className="w-[9px] h-[9px] fill-gray-400 rotate-180" />
       </Button>

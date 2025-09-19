@@ -45,7 +45,7 @@ const PublishSearchContent = () => {
       <div className="flex h-full w-full flex-wrap justify-between xs:h-auto">
         <div className="flex w-full flex-wrap items-start gap-5 px-5 py-4">
           <form className="flex w-full flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-            <Typography className="label">متن جست و جو</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">متن جست و جو</Typography>
             <div className="flex items-center gap-2">
               <FormInput
                 className="w-fit"
@@ -54,6 +54,7 @@ const PublishSearchContent = () => {
                 register={{ ...register("searchText") }}
               />
               <Button
+                {...({} as React.ComponentProps<typeof Button>)}
                 disabled={!isDirty || !isValid}
                 className="max-h-12 w-fit border-blue-gray-200"
                 variant="outlined"
@@ -64,7 +65,7 @@ const PublishSearchContent = () => {
             </div>
 
             {errors.searchText ? (
-              <Typography className="warning_text">{errors.searchText?.message}</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.searchText?.message}</Typography>
             ) : null}
           </form>
 

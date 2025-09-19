@@ -63,7 +63,11 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
       className="document-bookmark-dialog"
       isPending={bookmarkDocument.isPending}
     >
-      <Typography className="text-center">
+      <Typography
+        placeholder=""
+        className="text-center"
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+      >
         {document?.isBookmarked
           ? "آیا از حذف نشان‌گذاری این سند اطمینان دارید؟"
           : "آیا از نشان‌گذاری این سند اطمینان دارید؟"}

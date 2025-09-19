@@ -17,7 +17,7 @@ const Branch = () => {
       {userInfo?.isClasorAdmin ? (
         <div className="flex items-center gap-2 p-3 justify-end border-b-2 border-normal">
           <IconButton
-            placeholder="create button"
+            {...({} as React.ComponentProps<typeof IconButton>)}
             className="bg-primary-normal w-6 h-6 flex justify-center"
             onClick={() => {
               setOpen(true);

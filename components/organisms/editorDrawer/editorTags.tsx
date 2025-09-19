@@ -101,7 +101,7 @@ const EditorTags = () => {
           onClick={handleSubmit}
           loading={editDocument.isPending}
         >
-          <Typography className="text__label__button text-white">ارسال</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ارسال</Typography>
         </LoadingButton>
       ) : null}
       {openCreateTagDialog ? (

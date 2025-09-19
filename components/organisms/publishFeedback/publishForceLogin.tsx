@@ -10,7 +10,7 @@ interface IProps {
 const PublishForceLogin = ({ customText }: IProps) => {
   return (
     <div className="flex flex-col items-center gap-6">
-      <Typography className="text-sm text-gray-800 font-bold">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-sm text-gray-800 font-bold">
         {customText ||
           "برای پرسیدن سوال باید وارد پنل کاربری یا در سایت عضو شوید"}
       </Typography>

@@ -26,7 +26,7 @@ import { MenuItem } from "@components/templates/menuTemplate";
 
 const createItem = (
   text: string,
-  icon: JSX.Element,
+  icon: React.JSX.Element,
   onClick: () => void,
   options: { className?: string; disabled?: boolean } = {},
 ): MenuItem => {

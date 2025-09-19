@@ -53,7 +53,7 @@ const VersionMobileView = ({
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner className="h-8 w-8 text-primary" />
+          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-8 w-8 text-primary" />
         </div>
       ) : listLength ? (
         <div className="version-list-mobile flex h-[calc(100vh-140px)] flex-col gap-3 overflow-auto rounded-lg">
@@ -67,10 +67,10 @@ const VersionMobileView = ({
                     lastVersion?.id === version.id &&
                     (version.status === "private" || version.status === "accepted") ? (
                       <div className="flex items-center gap-1">
-                        <Typography className="title_t2 text-primary_normal">
+                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 text-primary_normal">
                           {version.versionNumber}
                         </Typography>
-                        <Typography className="label text-green-400">آخرین نسخه</Typography>
+                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label text-green-400">آخرین نسخه</Typography>
                       </div>
                     ) : (
                       version.versionNumber

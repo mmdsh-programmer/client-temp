@@ -189,13 +189,23 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
 
   return (
     <>
-      <DialogBody placeholder="dialog body" className="dialog-body flex-grow px-5 py-3 xs:p-6">
+      <DialogBody
+        placeholder="dialog body"
+        className="dialog-body flex-grow px-5 py-3 xs:p-6"
+        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+      >
         <form
           className="document-version-form flex flex-col gap-5"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col gap-2">
-            <Typography className="form_label">نام نسخه</Typography>
+            <Typography
+              placeholder=""
+              className="form_label"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              نام نسخه
+            </Typography>
             <FormInput
               className="document-version-form__name w-full"
               placeholder="نام نسخه"
@@ -204,7 +214,13 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               }}
             />
             {errors.versionNumber && (
-              <Typography className="warning_text">{errors.versionNumber?.message}</Typography>
+              <Typography
+                placeholder=""
+                className="warning_text"
+                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              >
+                {errors.versionNumber?.message}
+              </Typography>
             )}
           </div>
         </form>

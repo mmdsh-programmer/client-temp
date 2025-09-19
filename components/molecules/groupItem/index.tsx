@@ -15,8 +15,18 @@ const GroupItem = ({ group }: IProps) => {
         <UserGroupIcon className="w-7 h-7 overflow-hidden" />
       </div>
       <div className="flex flex-col flex-grow">
-        <Typography className="title_t3 text-primary_normal">{group.title}</Typography>
-        <Typography className="label text-primary_normal">
+        <Typography
+          placeholder=""
+          className="title_t3 text-primary_normal"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          {group.title}
+        </Typography>
+        <Typography
+          placeholder=""
+          className="label text-primary_normal"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
           {group.description}
         </Typography>
       </div>

@@ -38,7 +38,11 @@ const SearchContentResult = ({ repoId }: { repoId: number }) => {
       ref={listInnerRef}
     >
       <RenderIf isTrue={!getSearchParam}>
-        <Typography className="text__label__button pt-4 text-right text-hint">
+        <Typography
+          placeholder=""
+          className="text__label__button pt-4 text-right text-hint"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
           کادر جست و جو بالا را تکمیل کنید...
         </Typography>
       </RenderIf>

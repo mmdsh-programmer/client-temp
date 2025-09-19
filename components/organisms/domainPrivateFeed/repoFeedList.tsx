@@ -52,13 +52,14 @@ const RepoFeedList = () => {
                             />
                           </div>
                         ) : null}
-                        <Typography className="title_t3">{privateFeed.name}</Typography>
+                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">{privateFeed.name}</Typography>
                       </div>
                     ),
                   },
                   {
                     data: (
                       <Typography
+                        {...({} as React.ComponentProps<typeof Typography>)}
                         className="title_t3 text- mr-2 flex w-12 max-w-[150px] gap-2 truncate sm:w-20 md:w-auto"
                         title={privateFeed.content}
                       >
@@ -69,6 +70,7 @@ const RepoFeedList = () => {
                   {
                     data: (
                       <Typography
+                        {...({} as React.ComponentProps<typeof Typography>)}
                         dir="ltr"
                         className="title_t3 mr-2 flex w-12 max-w-[150px] gap-2 truncate text-blue-600 sm:w-20 md:w-auto"
                         title={link}
@@ -99,7 +101,7 @@ const RepoFeedList = () => {
     <div className="flex h-full flex-col gap-4">
       <div className="flex gap-2">
         <Button
-          placeholder="button"
+          {...({} as React.ComponentProps<typeof Button>)}
           className="h-5 w-5 bg-transparent p-0"
           onClick={() => {
             return setRepoFeed(null);
@@ -107,7 +109,7 @@ const RepoFeedList = () => {
         >
           <BackIcon className="h-4 w-4 fill-icon-hover" />
         </Button>
-        <Typography className="caption_c1 lowercase text-primary_normal">
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 lowercase text-primary_normal">
           {getRepoFeed?.label}
         </Typography>
       </div>

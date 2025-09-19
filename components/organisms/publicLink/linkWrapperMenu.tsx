@@ -31,6 +31,7 @@ const LinkWrapperMenu = ({ role }: IProps) => {
 
   return (
     <Button
+      {...({} as React.ComponentProps<typeof Button>)}
       className="public-link-delete-button !min-h-10 !min-w-10 border-[1px] border-normal bg-white p-0"
       onClick={handleRemovePublicLink}
     >

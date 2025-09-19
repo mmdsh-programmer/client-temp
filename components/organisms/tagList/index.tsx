@@ -75,7 +75,7 @@ const TagList = ({ repoId }: { repoId: number }) => {
   return (
     <div className="">
       {isLoading ? (
-        <Spinner className="h-5 w-5 text-primary" />
+        <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-5 w-5 text-primary" />
       ) : (
         <div className="tag-list flex flex-wrap gap-2">
           {tags?.pages.map((page) => {
@@ -106,10 +106,10 @@ const TagList = ({ repoId }: { repoId: number }) => {
           ) : null}
           {tagCount && tagCount > 2 ? (
             <Button
+              {...({} as React.ComponentProps<typeof Button>)}
               onClick={() => {
                 setOpenTagsModal(true);
               }}
-              placeholder=""
               className="all-tags__button bg-transparent p-0 font-iranYekan text-[10px] text-gray-400 shadow-none hover:shadow-none"
             >
               نمایش بیشتر

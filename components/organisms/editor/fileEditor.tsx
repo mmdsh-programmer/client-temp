@@ -72,12 +72,17 @@ const FileEditor = () => {
   return (
     <div className="file-Editor h-full">
       {editorMode === "preview" || editorMode === "temporaryPreview" ? (
-        <div className="file-editor__preview ">
+        <div className="file-editor__preview">
           <RenderIf isTrue={!!getSelectedFile}>
             <>
               <PreviewFile file={getSelectedFile as IFile} />
               <div className="mt-4 flex items-center justify-center gap-2">
-                <Typography className="title_t2 !text-primary_normal">دانلود فایل</Typography>
+                <Typography
+                  {...({} as React.ComponentProps<typeof Typography>)}
+                  className="title_t2 !text-primary_normal"
+                >
+                  دانلود فایل
+                </Typography>
                 <a
                   href={source}
                   download
@@ -95,7 +100,12 @@ const FileEditor = () => {
           </RenderIf>
           <RenderIf isTrue={!getSelectedFile}>
             <div className="empty-file-message w-full text-center">
-              <Typography className="p-20 font-bold">هنوز فایلی بارگذاری نشده است!</Typography>
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="p-20 font-bold"
+              >
+                هنوز فایلی بارگذاری نشده است!
+              </Typography>
             </div>
           </RenderIf>
         </div>
@@ -113,9 +123,15 @@ const FileEditor = () => {
               onClick={() => {
                 setShowFilePicker(true);
               }}
+              {...({} as React.ComponentProps<typeof Button>)}
             >
               <UploadIcon className="h-4 w-4 !stroke-white" />
-              <Typography className="title_t2 text-white">انتخاب فایل</Typography>
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="title_t2 text-white"
+              >
+                انتخاب فایل
+              </Typography>
             </Button>
           </div>
 

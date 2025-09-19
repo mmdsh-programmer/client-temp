@@ -45,7 +45,17 @@ const CustomRadio = ({
           <circle cx="12" cy="12" r="6" fill="currentColor" />
         </svg>
       </span>
-      {typeof label === "string" ? <Typography className="form_label">{label}</Typography> : label}
+      {typeof label === "string" ? (
+        <Typography
+          placeholder=""
+          className="form_label"
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          {label}
+        </Typography>
+      ) : (
+        label
+      )}
     </label>
   );
 };

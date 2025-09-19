@@ -25,17 +25,18 @@ const JoinToRepoDialog = ({ repo, setAcceptedRepo, setOpen }: IProps) => {
       backToMain
     >
       <DialogBody
-        placeholder="dialog body"
+        {...({} as React.ComponentProps<typeof DialogBody>)}
         className="h-[200px] flex-grow overflow-auto px-5 py-3 xs:p-6"
       >
         <div className="flex flex-col gap-4">
-          <Typography className="title_t2 text-primary_normal">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 text-primary_normal">
             {`شما با موفقیت به مخزن ${repo.repoName} پیوستید.`}
           </Typography>
           <div className="flex flex-col gap-2">
-            <Typography className="form_label"> لینک ورود به مخزن</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> لینک ورود به مخزن</Typography>
             <div className="flex h-10 flex-grow items-center justify-between gap-2 overflow-hidden rounded-lg border-[1px] border-normal bg-gray-50 pl-2 pr-3">
               <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
                 className="font-300 w-full cursor-pointer truncate text-sm text-placeholder"
                 dir="ltr"
               >
@@ -43,6 +44,7 @@ const JoinToRepoDialog = ({ repo, setAcceptedRepo, setOpen }: IProps) => {
               </Typography>
               <div className="flex items-center">
                 <Button
+                  {...({} as React.ComponentProps<typeof Button>)}
                   className="repo-link-wrapper__copy-link-button h-7 w-8 rounded-none bg-white p-0"
                   onClick={() => {
                     copy(`${window.location.origin}/admin/repositories?repoId=${repo.repoId}`);
@@ -55,6 +57,7 @@ const JoinToRepoDialog = ({ repo, setAcceptedRepo, setOpen }: IProps) => {
             </div>
           </div>
           <Button
+            {...({} as React.ComponentProps<typeof Button>)}
             className="text__label__button w-fit bg-transparent p-0 !text-[12px] text-[#0C8CE9]"
             onClick={() => {
               handleClose();

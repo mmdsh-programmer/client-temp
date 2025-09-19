@@ -63,13 +63,13 @@ const EditorHeader = ({ dialogHeader, setOpen, disabled }: IProps) => {
       <div className="block xs:hidden">
         <BackButton onClick={handleClose} />
       </div>
-      <Typography className="editor-header__title title_t1">{dialogHeader}</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="editor-header__title title_t1">{dialogHeader}</Typography>
       <div className="hidden items-center gap-2 xs:flex">
         <CloseButton onClose={handleClose} disabled={disabled} />
       </div>
     </>
   ) : (
-    <Typography className="editor-header__title title_t1">{dialogHeader}</Typography>
+    <Typography {...({} as React.ComponentProps<typeof Typography>)} className="editor-header__title title_t1">{dialogHeader}</Typography>
   );
 };
 

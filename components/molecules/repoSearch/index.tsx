@@ -49,8 +49,16 @@ const RepoSearch = () => {
               setRepoSearchParam({ repoType, search: undefined });
             }
           }}
+          placeholder=""
+          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
-          <Typography className="text__label__button !text-[11px] text-white">اعمال</Typography>
+          <Typography
+            placeholder=""
+            className="text__label__button !text-[11px] text-white"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            اعمال
+          </Typography>
         </Button>
       </div>
     </div>

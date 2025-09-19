@@ -74,7 +74,13 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
     >
       <form className="create-password-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">رمز عبور</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            رمز عبور
+          </Typography>
           <FormInput
             type="password"
             placeholder="رمز عبور"
@@ -84,11 +90,23 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             className="create-password-form__password"
           />
           {errors.password && (
-            <Typography className="warning_text">{errors.password?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.password?.message}
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">تکرار رمز عبور</Typography>
+          <Typography
+            placeholder=""
+            className="form_label"
+            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          >
+            تکرار رمز عبور
+          </Typography>
           <FormInput
             type="password"
             placeholder="تکرار رمز عبور"
@@ -98,7 +116,13 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             className="create-password-form__confirm-password"
           />
           {errors.confirmPassword && (
-            <Typography className="warning_text">{errors.confirmPassword?.message}</Typography>
+            <Typography
+              placeholder=""
+              className="warning_text"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              {errors.confirmPassword?.message}
+            </Typography>
           )}
         </div>
       </form>

@@ -64,10 +64,12 @@ const DownloadPDF = () => {
   return (
     <>
       <Button
+        placeholder=""
         className="download-pdf__button bg-transparent p-0"
         title="دانلود pdf"
         onClick={handleDownloadFile}
         disabled={loading || !getSelectedDocument}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         {loading ? <div className="spinner" /> : <PDFIcon className="h-5 w-5 fill-white" />}
       </Button>

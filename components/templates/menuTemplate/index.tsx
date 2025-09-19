@@ -28,7 +28,7 @@ const MenuTemplate = ({ menuList, onMobileClick, icon, className }: IProps) => {
         <MenuComponent variant="small" menuList={menuList} className="!w-auto !min-w-max">
           <Button
             className={`${className || ""} flex items-center justify-center rounded-lg bg-transparent p-1 shadow-none hover:shadow-none`}
-            placeholder="menu-button"
+            {...({} as React.ComponentProps<typeof Button>)}
           >
             {triggerIcon}
           </Button>
@@ -37,7 +37,7 @@ const MenuTemplate = ({ menuList, onMobileClick, icon, className }: IProps) => {
       <div className="mobile-menu flex xs:hidden">
         <Button
           className={`${className || ""} flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none hover:shadow-none`}
-          placeholder="menu-button"
+          {...({} as React.ComponentProps<typeof Button>)}
           onClick={onMobileClick}
         >
           {triggerIcon}

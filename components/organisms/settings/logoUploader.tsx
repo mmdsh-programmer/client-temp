@@ -13,7 +13,7 @@ interface LogoUploaderProps {
 const LogoUploader = ({ onInputChange, register, logoHash }: LogoUploaderProps) => {
   return (
     <div className="flex flex-col gap-2">
-      <Typography className="form_label">لوگو</Typography>
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">لوگو</Typography>
       <FormInput
         placeholder="لوگو"
         register={{

@@ -27,7 +27,12 @@ const BranchManagementPage = () => {
   return (
     <div className="flex h-full flex-col gap-6 overflow-hidden">
       <div className="category-header flex items-center justify-between px-4 xs:px-0">
-        <Typography className="title_t1 text-primary_normal">مدیریت شعبات</Typography>
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="title_t1 text-primary_normal"
+        >
+          مدیریت شعبات
+        </Typography>
       </div>
       <div className="flex h-[calc(100%-50px)] justify-evenly gap-2">
         <div className="hidden h-full w-[30%] max-w-[260px] basis-1/5 xs:block">

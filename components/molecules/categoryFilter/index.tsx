@@ -117,7 +117,13 @@ const CategoryFilter = () => {
             className="!h-10 !w-full bg-secondary !px-4 hover:bg-secondary active:bg-secondary sm:!w-auto"
             onClick={handleFilter}
           >
-            <Typography className="text__label__button text-white">اعمال فیلتر</Typography>
+            <Typography
+              placeholder=""
+              className="text__label__button text-white"
+              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              اعمال فیلتر
+            </Typography>
           </LoadingButton>
         </div>
       </div>

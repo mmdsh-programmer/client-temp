@@ -47,7 +47,7 @@ const VersionDialogView = () => {
       }}
       className="version-list__container !h-full !min-h-[95%] !min-w-[95%] xs:!h-[95%]"
     >
-      <DialogBody placeholder="dialog body" className="dialog-body h-full p-0 xs:p-6">
+      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="dialog-body h-full p-0 xs:p-6">
         <VersionList />
       </DialogBody>
       <div className="flex xs:hidden">

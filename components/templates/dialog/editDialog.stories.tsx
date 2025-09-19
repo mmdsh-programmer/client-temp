@@ -26,7 +26,10 @@ const Template: StoryFn<IProps> = (args) => {
     <EditDialog {...args} setOpen={setOpen} isPending={isPending}>
       <div>
         <form className="flex flex-col gap-2 ">
-          <Typography className="label">نام تگ</Typography>
+          <Typography 
+            className="label"
+            {...({} as React.ComponentProps<typeof Typography>)}
+          >نام تگ</Typography>
           <FormInput placeholder="نام تگ" />
         </form>
       </div>

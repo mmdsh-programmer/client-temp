@@ -5,7 +5,7 @@ interface IProps {
   classNameText?: string;
   classNameButton?: string;
   text: string;
-  icon: JSX.Element | React.ReactNode;
+  icon: React.ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: () => any;
   disabled?: boolean;
@@ -21,13 +21,21 @@ const IconTextButton = ({
 }: IProps) => {
   return (
     <Button
+      placeholder=""
       className={`${classNameButton || ""} flex justify-center items-center rounded-lg `}
       onClick={onClick}
       disabled={disabled}
+      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <>
         {icon}
-        <Typography className={classNameText}>{text}</Typography>
+        <Typography
+          placeholder=""
+          className={classNameText}
+          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        >
+          {text}
+        </Typography>
       </>
     </Button>
   );

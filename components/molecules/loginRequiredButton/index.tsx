@@ -25,6 +25,7 @@ const LoginRequiredButton = ({ message, description }: IProps) => {
         variant="text"
         className="sm:!px-10 py-5 lg:mt-0 sm:bg-primary-normal text-white font-iranYekan !max-h-[unset] bg-primary-normal flex justify-center items-center gap-2 w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg"
         onClick={handleClick}
+        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
          <span className="hidden sm:block">{message}</span>
       </Button>

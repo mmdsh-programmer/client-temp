@@ -17,9 +17,9 @@ interface IProps {
     currentUser: number;
     hasOldMessages: boolean;
   };
-  chatRef: React.RefObject<ChatFeed<string>>;
-  containerRef: React.RefObject<HTMLDivElement>;
-  renderCustomChatBubble: (props: ChatBubbleProps<string, Message<string>, Author<string>>) => JSX.Element;
+  chatRef: React.RefObject<ChatFeed<string, Message<string>, Author<string>> | null>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  renderCustomChatBubble: (props: ChatBubbleProps<string, Message<string>, Author<string>>) => React.JSX.Element;
   isMobile: boolean;
   handleScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
   isLoadingMore?: boolean;
@@ -46,11 +46,11 @@ const ChatFeedContent = ({
 
   return (
     <>
-      <CardHeader className="m-0 p-4 flex justify-between rounded-none shadow-none" floated={false}>
-        <Typography className="form__title">فعالیت ها</Typography>
+      <CardHeader {...({} as React.ComponentProps<typeof CardHeader>)} className="m-0 p-4 flex justify-between rounded-none shadow-none" floated={false}>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">فعالیت ها</Typography>
         <CloseButton onClose={handleClose} />
       </CardHeader>
-      <CardBody className="p-0 flex-grow overflow-hidden">
+      <CardBody {...({} as React.ComponentProps<typeof CardBody>)} className="p-0 flex-grow overflow-hidden">
         <div 
           className="chat-log flex h-full flex-col" 
           ref={containerRef}
@@ -58,7 +58,7 @@ const ChatFeedContent = ({
         >
           {isLoadingMore && chatState.hasOldMessages && (
             <div className="text-center py-2">
-              <Typography className="text-sm">در حال بارگذاری پیام‌های بیشتر...</Typography>
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-sm">در حال بارگذاری پیام‌های بیشتر...</Typography>
             </div>
           )}
           {chatState.messages.length > 0 ? (
@@ -75,7 +75,7 @@ const ChatFeedContent = ({
               hasOldMessages={chatState.hasOldMessages}
             />
           ) : (
-            <Typography className="text-center">هیچ تغییری یافت نشد</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-center">هیچ تغییری یافت نشد</Typography>
           )}
         </div>
       </CardBody>

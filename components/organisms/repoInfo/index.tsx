@@ -42,6 +42,7 @@ const RepoInfo = () => {
             <div className="flex w-[70%] flex-grow flex-col">
               <div className="repoCreationDate flex items-center gap-1">
                 <Typography
+                  {...({} as React.ComponentProps<typeof Typography>)}
                   className="title_t1 max-w-[50%] truncate !font-[450] !text-primary_normal"
                   title={getRepo?.name}
                 >
@@ -52,14 +53,14 @@ const RepoInfo = () => {
                   className="border-[1px] border-normal bg-primary-light px-2 py-[2px] text-primary"
                 />
               </div>
-              <Typography className="caption_c2 text-hint">
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c2 text-hint">
                 {getRepo && FaDateFromTimestamp(+new Date(getRepo.createDate))}
               </Typography>
             </div>
             {getRepo ? <RepoMenu repo={getRepo} showLog /> : null}
           </div>
           <div className="mt-2 sm:mt-0 md:mt-2 lg:mt-0">
-            <Typography className="body_b3 h-[26px] truncate">{getRepo?.description}</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="body_b3 h-[26px] truncate">{getRepo?.description}</Typography>
             <div className="mt-2 sm:mt-4 md:mt-2 lg:mt-4">
               {getRepo ? <TagList repoId={getRepo.id} /> : null}
             </div>

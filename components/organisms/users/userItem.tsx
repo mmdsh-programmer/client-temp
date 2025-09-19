@@ -121,7 +121,7 @@ const UserItem = ({ user }: IProps) => {
     ) {
       return (
         <div className="repo-user__role flex h-9 w-[120px] items-center justify-between rounded-lg border-[1px] border-normal pl-2 pr-3">
-          <Typography className="select_option__text text-primary_normal">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="select_option__text text-primary_normal">
             {translateRoles(user.userRole)}
           </Typography>
         </div>
@@ -130,7 +130,7 @@ const UserItem = ({ user }: IProps) => {
     if (editRole.isPending || deleteUser.isPending || transferOwnership.isPending) {
       return (
         <div className="w-5">
-          <Spinner className="h-4 w-4 text-primary" />
+          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-4 w-4 text-primary" />
         </div>
       );
     }
@@ -167,7 +167,7 @@ const UserItem = ({ user }: IProps) => {
           <UserIcon className="h-full w-full overflow-hidden rounded-[64px] border-[2px] border-normal fill-icon-hover p-1" />
         )}
       </div>
-      <Typography className="title_t3 flex-grow text-primary_normal">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3 flex-grow text-primary_normal">
         {user.userInfo.name}
       </Typography>
       {renderUserRole()}

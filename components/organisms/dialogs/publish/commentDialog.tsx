@@ -16,16 +16,16 @@ const CommentDialog = ({ postId, setOpen }: IProps) => {
   };
 
   return (
-    <Dialog placeholder="" size="lg" open handler={handleClose}>
+    <Dialog {...({} as React.ComponentProps<typeof Dialog>)} size="lg" open handler={handleClose}>
       <DialogHeader
-        placeholder="dialog header"
+        {...({} as React.ComponentProps<typeof DialogHeader>)}
         className="bg-white flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
       >
         <div className="flex items-center">
           <div className="block xs:hidden">
             <BackButton onClick={handleClose} />
           </div>
-          <Typography className="form__title">دیدگاه کاربران</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">دیدگاه کاربران</Typography>
         </div>
         <CloseButton onClose={handleClose} />
       </DialogHeader>

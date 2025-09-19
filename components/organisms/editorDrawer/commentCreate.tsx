@@ -55,7 +55,7 @@ const CommentCreate = ({ version }: IProps) => {
               placeholder="نظر خود را بنویسید."
             />
             {errors.text && (
-              <Typography className="warning_text">
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
                 {errors.text?.message}
               </Typography>
             )}
@@ -65,7 +65,7 @@ const CommentCreate = ({ version }: IProps) => {
               className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
               isPrimary
             >
-              <Typography className="text__label__button !text-primary_normal px-3 font-medium">
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button !text-primary_normal px-3 font-medium">
                 ارسال
               </Typography>
             </LoadingButton>

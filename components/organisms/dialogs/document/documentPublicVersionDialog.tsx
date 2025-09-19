@@ -53,8 +53,10 @@ const DocumentPublicVersionDialog = ({ setOpen }: IProps) => {
     >
       آیا از عمومی سازی آخرین نسخه سند "
       <Typography
+        placeholder=""
         title={document?.name}
         className="flex max-w-[100px] cursor-pointer items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
       >
         {document?.name}
       </Typography>

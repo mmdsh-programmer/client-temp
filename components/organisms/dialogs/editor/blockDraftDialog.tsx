@@ -32,7 +32,7 @@ const BlockDraftDialog = ({ editorRef, onClose }: IProps) => {
   const editorContent = useRef<unknown>(null);
 
   const [showFreeDraftModal, setShowFreeDraftModal] = useState(false);
-  const workerRef = useRef<Worker>();
+  const workerRef = useRef<Worker>(null);
 
   const currentPath = usePathname();
   const searchParams = useSearchParams();

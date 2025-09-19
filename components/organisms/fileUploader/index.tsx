@@ -45,7 +45,7 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
     file,
     onDeleteFile,
   } = props;
-  const xhrRef = useRef<XMLHttpRequest>();
+  const xhrRef = useRef<XMLHttpRequest | undefined>(undefined);
   const timeoutRef = useRef(0);
   const [progress, setProgress] = useState<number>(0);
   const [failed, setFailed] = useState<string | null>(null);
@@ -166,15 +166,16 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
         />
         {/*  eslint-disable-next-line no-nested-ternary */}
         {failed ? (
-          <Button className="uploaded-file__retry-button bg-transparent p-0" onClick={retryUpload}>
+          <Button {...({} as React.ComponentProps<typeof Button>)} className="uploaded-file__retry-button bg-transparent p-0" onClick={retryUpload}>
             <ReloadIcon className="h-6 w-6" />
           </Button>
         ) : progress && progress === 100 ? (
-          <Button className="uploaded-file__success-button bg-transparent p-0">
+          <Button {...({} as React.ComponentProps<typeof Button>)} className="uploaded-file__success-button bg-transparent p-0">
             <TickIcon className="h-5 w-5 fill-[#249e00]" />
           </Button>
         ) : (
           <Button
+            {...({} as React.ComponentProps<typeof Button>)}
             className="uploaded-file__delete-button bg-transparent p-0"
             onClick={() => {
               return onDeleteFile?.(file);
@@ -186,12 +187,13 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
         )}
         <div className="uploaded-file__file-info flex flex-col flex-grow items-end max-w-[90%]">
           <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
             className="uploaded-file__file-name title_t2 text-primary_normal truncate max-w-full"
             dir="ltr"
           >
             {file.name}
           </Typography>
-          <Typography className="uploaded-file__file-size title_t4 flex justify-end text-hint">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="uploaded-file__file-size title_t4 flex justify-end text-hint">
             {fileSizeInKB < 1000
               ? `${fileSizeInKB.toFixed(2)} کیلوبایت`
               : `${fileSizeInMB?.toFixed(2)} مگابایت`}
@@ -229,7 +231,7 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
           {getButtonJsx()}
         </div>
       </div>
-      <Typography className="warning_text">
+      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
         {failed || errorMessage || " "}
       </Typography>
     </div>

@@ -72,6 +72,7 @@ const ChatMobileRepoLog = ({
 
   return (
     <Drawer
+      {...({} as React.ComponentProps<typeof Drawer>)}
       placement="bottom"
       open={showRepoActivity}
       onClose={handleClose}
@@ -80,7 +81,7 @@ const ChatMobileRepoLog = ({
         className: "fixed inset-0 bg-black/60 z-[9999]",
       }}
     >
-      <Card className="repo-log flex h-full w-full flex-col !rounded-b-none !rounded-t-xl bg-primary shadow-small">
+      <Card {...({} as React.ComponentProps<typeof Card>)} className="repo-log flex h-full w-full flex-col !rounded-b-none !rounded-t-xl bg-primary shadow-small">
         {renderContent()}
       </Card>
     </Drawer>

@@ -6,13 +6,13 @@ import React, { useContext, useEffect, useRef } from "react";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useSelectedLayoutSegment } from "next/navigation";
 
-function usePreviousValue<T>(value: T): T | undefined {
-  const prevValue = useRef<T>();
+function usePreviousValue<T>(value: T): T | null {
+  const prevValue = useRef<T>(null);
  
   useEffect(() => {
     prevValue.current = value;
     return () => {
-      prevValue.current = undefined;
+      prevValue.current = null;
     };
   });
  

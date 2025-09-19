@@ -24,6 +24,14 @@ type Story = StoryObj<typeof RepoCardBody>;
 export const Default: Story = {
   args: {
     title: "bookmark Repo",
-    children: <Typography className="text-sm text-gray-600">هیچی.</Typography>,
+    children: (
+      <Typography
+        placeholder=""
+        className="text-sm text-gray-600"
+        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+      >
+        هیچی.
+      </Typography>
+    ),
   },
 };

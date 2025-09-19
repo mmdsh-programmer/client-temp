@@ -31,10 +31,15 @@ const BranchCollapse = ({ children, className, isActive, childItem }: IProps) =>
   };
 
   return (
-    <Accordion open={open}>
+    <Accordion
+      placeholder=""
+      open={open}
+      {...({} as  Omit<React.ComponentProps<typeof Accordion>, "placeholder" | "open">)}
+    >
       <AccordionHeader
         placeholder="accordionHeader"
         className={`flex border-b-0 p-0 ${className}`}
+        {...({} as  Omit<React.ComponentProps<typeof AccordionHeader>, "placeholder">)}
       >
         <div className="flex w-full min-w-full items-center justify-between gap-2">
           <div className="flex flex-grow items-center">
@@ -69,9 +74,11 @@ const BranchCollapse = ({ children, className, isActive, childItem }: IProps) =>
                   className={`h-5 w-5 ${childItem.parentId ? "fill-[#79B8FF]" : "fill-[#FF9500]"} ml-2 flex-none self-start`}
                 />
                 <Typography
+                  placeholder=""
                   title={childItem.title}
                   className="w-[100px] max-w-[100px] truncate"
                   variant="small"
+                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                 >
                   {childItem.title}
                 </Typography>

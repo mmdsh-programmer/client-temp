@@ -21,18 +21,13 @@ interface IDataForm {
   password: string;
 }
 
-const PublishDocumentPassword = ({
-  documentId,
-  documentPassword,
-  errorMessage,
-}: IProps) => {
+const PublishDocumentPassword = ({ documentId, documentPassword, errorMessage }: IProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentPasswordSchema),
   });
-  const { register, handleSubmit, formState, reset, setError, clearErrors } =
-    form;
+  const { register, handleSubmit, formState, reset, setError, clearErrors } = form;
   const { errors } = formState;
 
   const saveDocumentPasswordHook = useSetPublishDocumentPassword();
@@ -62,10 +57,12 @@ const PublishDocumentPassword = ({
   }, [errorMessage]);
 
   return (
-    <div className="scroller flex justify-center items-center w-full h-full overflow-y-auto">
-      <form className="w-[400px] max-w-[400px] h-fit flex flex-col gap-5 px-5 xs:px-0">
+    <div className="scroller flex h-full w-full items-center justify-center overflow-y-auto">
+      <form className="flex h-fit w-[400px] max-w-[400px] flex-col gap-5 px-5 xs:px-0">
         <div className="flex flex-col gap-2">
-          <Typography className="form_label">رمز عبور سند</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            رمز عبور سند
+          </Typography>
           <FormInput
             type="password"
             placeholder="رمز عبور"
@@ -81,7 +78,10 @@ const PublishDocumentPassword = ({
           />
 
           {errors.password ? (
-            <Typography className="warning_text">
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
               {errors.password?.message}
             </Typography>
           ) : null}
@@ -92,7 +92,10 @@ const PublishDocumentPassword = ({
           onClick={handleSubmit(onSubmit)}
           loading={loading}
         >
-          <Typography className="text__label__button text-white">
+          <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="text__label__button text-white"
+          >
             تایید
           </Typography>
         </LoadingButton>

@@ -1,7 +1,7 @@
 "use client";
 
 interface IProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   isTrue: boolean;
 }
 const RenderIf = ({ children, isTrue }: IProps) => {

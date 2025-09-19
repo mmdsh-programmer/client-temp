@@ -168,14 +168,14 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     >
       <form className="feedback__form flex flex-col gap-4 ">
         <div className="feedback__form-content flex flex-col gap-2">
-          <Typography className="form_label text-primary_normal"> متن بازخورد</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label text-primary_normal"> متن بازخورد</Typography>
           <TextareaAtom
             placeholder="لطفا متن خود را وارد کنید"
             register={{ ...register("content") }}
             className="feedback__form-content-textarea"
           />
           {errors.content && (
-            <Typography className="warning_text">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
               {errors.content?.message}
             </Typography>
           )}
@@ -190,7 +190,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
                 <UploadIcon className="h-5 w-5 stroke-[#667585]" />
               </div>
               <div className="flex gap-[3px]">
-                <Typography className="select_option__text text-[#0369CD]">
+                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="select_option__text text-[#0369CD]">
                   برای آپلود کلیک کنید
                 </Typography>
               </div>
@@ -205,7 +205,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
           </div>
         ) : null}
         <div className="feedback__form-file-list flex flex-col gap-2">
-          <Typography className="title_t3 text-hint">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3 text-hint">
             مشاهده همه فایل‌ها
           </Typography>
           {fileInfo?.map((info, index) => {

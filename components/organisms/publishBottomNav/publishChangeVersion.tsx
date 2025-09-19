@@ -65,9 +65,9 @@ const PublishChangeVersion = ({ repoId, documentId, selectedVersionId }: IProps)
   }
 
   return (
-    <Menu placement="top-end" open={openMenu} handler={setOpenMenu}>
-      <MenuHandler>
-        <Button className="flex w-32 flex-none justify-between gap-2.5 rounded-[100px] bg-white bg-opacity-15 px-3 leading-4">
+    <Menu {...({} as React.ComponentProps<typeof Menu>)} placement="top-end" open={openMenu} handler={setOpenMenu}>
+      <MenuHandler {...({} as React.ComponentProps<typeof MenuHandler>)}>
+        <Button {...({} as React.ComponentProps<typeof Button>)} className="flex w-32 flex-none justify-between gap-2.5 rounded-[100px] bg-white bg-opacity-15 px-3 leading-4">
           <span className="flex-none overflow-hidden text-ellipsis whitespace-nowrap text-sm text-white">
             {getPublishVersion?.versionNumber}
           </span>
@@ -76,11 +76,12 @@ const PublishChangeVersion = ({ repoId, documentId, selectedVersionId }: IProps)
           />
         </Button>
       </MenuHandler>
-      <MenuList className="w-32 border-none bg-[#222] p-1.5">
+      <MenuList {...({} as React.ComponentProps<typeof MenuList>)} className="w-32 border-none bg-[#222] p-1.5">
         {publishVersions?.pages.map((publicVersionPage, index) => {
           return publicVersionPage?.list.map((publishVersion) => {
             return (
               <MenuItem
+                {...({} as React.ComponentProps<typeof MenuItem>)}
                 className={`overflow-hidden text-ellipsis whitespace-nowrap text-white hover:!bg-white hover:!bg-opacity-15 hover:!text-white ${publishVersion.id === selectedVersionId ? "bg-white bg-opacity-15" : ""}`}
                 // eslint-disable-next-line react/no-array-index-key
                 key={`publish-version-${publishVersion.id}-${index}`}
