@@ -20,6 +20,16 @@ const nextConfig = {
       process.env.NODE_ENV === "production"
         ? require.resolve("./cacheHandler.develop.mjs")
         : undefined,
+    webpack: (config, { isServer }) => {
+      const newConfig = { ...config };
+      newConfig.resolve.alias.canvas = false;
+      if (!isServer) {
+        newConfig.resolve.fallback = {
+          fs: false,
+        };
+      }
+      return newConfig;
+    },
     async rewrites() {
       if(process.env.BLOG_BOX_URL && process.env.BLOG_BOX_ID){ 
         return [

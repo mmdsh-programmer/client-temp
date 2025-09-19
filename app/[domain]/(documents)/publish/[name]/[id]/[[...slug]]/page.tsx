@@ -21,9 +21,9 @@ import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
 import RepositoryInfo from "@components/organisms/repositoryInfo";
 import { ServerError } from "@utils/error";
-import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
 import { unstable_cache as unstableCache } from "next/cache";
+import { generateCachePageTag } from "@utils/generateCachePageTag";
 
 export const generateStaticParams = async () => {
   return [];

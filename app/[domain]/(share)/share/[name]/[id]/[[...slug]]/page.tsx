@@ -12,9 +12,9 @@ import PublishVersionContent from "@components/pages/publish";
 import React from "react";
 import RedirectPage from "@components/pages/redirectPage";
 import { ServerError } from "@utils/error";
-import { generateCachePageTag } from "@utils/redis";
 import { notFound } from "next/navigation";
 import { ICustomPostData } from "@interface/app.interface";
+import { generateCachePageTag } from "@utils/generateCachePageTag";
 
 export const generateStaticParams = async () => {
   return [];
