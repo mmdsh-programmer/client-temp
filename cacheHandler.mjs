@@ -27,7 +27,6 @@ async function connectToRedis(){
             },
         },
     });
-
     // ✅ Correct Error Handling: Log errors instead of throwing them.
     // An event listener that throws an error will crash the entire Node.js process.
     newClient.on("error", (err) => {
@@ -70,7 +69,7 @@ async function connectToRedis(){
     }
 }
 
-export const getClient = () => {
+export function getClient() {
     if(process.env.NEXT_PHASE === "phase-production-build"){
         return null;
     }
@@ -83,7 +82,7 @@ export const getClient = () => {
     global.redisClientPromise = connectToRedis();
 
     return global.redisClientPromise;
-};
+}
 
 // This hook from `@neshca/cache-handler` is the ideal place to initialize the client.
 CacheHandler.onCreation(async () => {
@@ -94,7 +93,7 @@ CacheHandler.onCreation(async () => {
         const cluster = await getClient();
 
         const redisHandler = createClusterHandler({
-            keyPrefix: "pls:",
+            keyPrefix: "cls:",
             timeoutMs: 1000,
             cluster,
         });
