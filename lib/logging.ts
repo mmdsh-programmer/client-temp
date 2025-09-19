@@ -247,28 +247,6 @@ export async function getTraceInfo() {
   return { referenceNumber, arn };
 }
 
-const rewriteLogFile = path.join(process.cwd(), "logs", "rewrite.log");
-
-async function writeLog(file: string, data: any) {
-  try {
-    const dir = path.dirname(file);
-    await mkdir(dir, { recursive: true });
-
-    const logLine = `${JSON.stringify(data)}`;
-
-    await appendFile(file, logLine);
-  } catch (err: any) {
-    console.error(
-      JSON.stringify({
-        level: "error",
-        message: "CRITICAL: Failed to write to log file.",
-        error: err?.message || String(err),
-        file,
-      }),
-    );
-  }
-}
-
 export async function logRewrite({
   from,
   to,
@@ -301,8 +279,5 @@ export async function logRewrite({
     success,
     ...(error && { error: error instanceof Error ? error.message : String(error) }),
   };
-
   console.log(JSON.stringify(logData));
-
-  await writeLog(rewriteLogFile, logData);
 }
