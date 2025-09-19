@@ -22,7 +22,7 @@ const nextConfig = {
         : undefined,
     webpack: (config, { isServer }) => {
       const newConfig = { ...config };
-      // newConfig.resolve.alias.canvas = false;
+      newConfig.resolve.alias.canvas = false;
       newConfig.resolve.alias.net = false;
       newConfig.resolve.alias.tls = false;
       newConfig.resolve.alias.crypto = false;
