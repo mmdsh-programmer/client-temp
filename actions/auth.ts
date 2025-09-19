@@ -206,7 +206,7 @@ export const logoutAction = async () => {
       console.error("Failed to revoke refresh_token in background:", err);
     });
 
-    const redisClient = await global.clientPromise;
+    const redisClient = await global.redisClientPromise;
     if (redisClient && redisClient.isReady) {
       redisClient.del(`user:${access_token}`).catch((err) => {
         console.error("Failed to delete user from Redis in background:", err);

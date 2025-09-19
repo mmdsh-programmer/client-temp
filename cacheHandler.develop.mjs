@@ -23,12 +23,12 @@ export const getClient = async () => {
       await waitForResolve();
       return getClient();
     }
-    if (global.client && global.client.isReady) {
-      return global.client;
+    if (global.redisClientPromise && global.redisClientPromise.isReady) {
+      return global.redisClientPromise;
     }
     global.isPending = true;
     console.log("Starting Redis connection");
-    global.client = createClient({
+    global.redisClientPromise = createClient({
       url: `redis://${process.env.REDIS_NODE}`,
       socket: {
         reconnectStrategy: (times) => {
@@ -38,26 +38,26 @@ export const getClient = async () => {
     });
 
     // Redis won't work without error handling.
-    global.client.on("error", (err) => {
+    global.redisClientPromise.on("error", (err) => {
       console.error("Redis Client Error:", err);
     });
-    global.client.on("connect", () => {
+    global.redisClientPromise.on("connect", () => {
       global.isPending = false;
       console.log("Redis Client Connected");
     });
     // Add these cluster-specific event handlers
-    global.client.on("nodeError", (err, node) => {
+    global.redisClientPromise.on("nodeError", (err, node) => {
       console.error(`Redis Node ${node} Error:`, err);
     });
-    global.client.on("cluster down", () => {
+    global.redisClientPromise.on("cluster down", () => {
       console.error("Redis Cluster is down");
     });
-    global.client.on("node error", () => {
+    global.redisClientPromise.on("node error", () => {
       console.error("Redis Cluster is down");
     });
     
-    await global.client.connect();
-    return global.client;
+    await global.redisClientPromise.connect();
+    return global.redisClientPromise;
   } catch (error) {
     console.error(error);
     return null;

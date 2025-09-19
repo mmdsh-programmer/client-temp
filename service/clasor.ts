@@ -61,8 +61,8 @@ import { IPositionList } from "@interface/position.interface";
 import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import { decryptKey } from "@utils/crypto";
-import { generateCachePageTag } from "@utils/redis";
 import qs from "qs";
+import { generateCachePageTag } from "@utils/generateCachePageTag";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -178,7 +178,7 @@ export const getToken = async (code: string, redirectUrl: string) => {
 };
 
 export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
-  const redisClient = await global.clientPromise;
+  const redisClient = await global.redisClientPromise;
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
   if (cachedUser) {
     console.log(
@@ -4569,7 +4569,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
       throw new NotFoundError(["دامنه ارسال شده خالی می باشد."]);
     }
 
-    const redisClient = await global.clientPromise;
+    const redisClient = await global.redisClientPromise;
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
       const cacheResult = JSON.parse(cachedDomain);
@@ -4637,7 +4637,7 @@ export const updateCustomPostByDomain = async (
       throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
 
-    const redisClient = await global.clientPromise;
+    const redisClient = await global.redisClientPromise;
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
@@ -4862,7 +4862,7 @@ export const addPartyToDomainParticipants = async (
   accessToken: string,
   userNameList: string,
 ) => {
-  const redisClient = await global.clientPromise;
+  const redisClient = await global.redisClientPromise;
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
@@ -4897,7 +4897,7 @@ export const removePartyFromDomainParticipants = async (
   accessToken: string,
   userNameList: string[],
 ) => {
-  const redisClient = await global.clientPromise;
+  const redisClient = await global.redisClientPromise;
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 

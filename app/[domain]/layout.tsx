@@ -48,7 +48,6 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 const DomainLayout = async ({ children, params }: IProps) => {
-  try {
    const { domain } = await params;
 
     const isDev = process.env.NODE_ENV === "development";
@@ -76,11 +75,6 @@ const DomainLayout = async ({ children, params }: IProps) => {
         <p className="absolute -z-50 hidden">3.20.4.7-v3</p>
       </ThemeLoaderProvider>
     ); 
-  } catch (error) {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>> Layout error");
-    console.log(error);
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-  }
 };
 
 export default DomainLayout;

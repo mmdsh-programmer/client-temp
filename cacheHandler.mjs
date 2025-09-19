@@ -45,7 +45,7 @@ async function connectToRedis(){
     newClient.on("end", () => {
         console.warn("Redis client connection has ended.");
         // Setting the promise to null will allow for a fresh connection attempt on next request.
-        global.clientPromise = null;
+        global.redisClientPromise = null;
     });
 
     newClient.on("cluster down", () => {
@@ -75,14 +75,14 @@ export const getClient = () => {
         return null;
     }
     // If the promise already exists, return it to reuse the connection/connection attempt.
-    if (global.clientPromise) {
-        return global.clientPromise;
+    if (global.redisClientPromise) {
+        return global.redisClientPromise;
     }
 
     // Otherwise, create a new connection promise and store it for future calls.
-    global.clientPromise = connectToRedis();
+    global.redisClientPromise = connectToRedis();
 
-    return global.clientPromise;
+    return global.redisClientPromise;
 };
 
 // This hook from `@neshca/cache-handler` is the ideal place to initialize the client.
