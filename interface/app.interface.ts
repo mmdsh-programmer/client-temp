@@ -357,3 +357,39 @@ export interface IEditorValue {
   content: string;
   outline: string;
 }
+
+export interface IHandshake {
+  algorithm: string;
+  device: {
+    agent: string;
+    browser: string;
+    current: boolean;
+    deviceType: string;
+    id: number;
+    ip: string;
+    language: string;
+    lastAccessTime: number;
+    lastAccessTimeShamsi: string;
+    location: Record<string, unknown>;
+    os: string;
+    osVersion: string;
+    uid: string;
+  };
+  expires_in: number;
+  keyFormat: string;
+  keyId: string;
+  privateKey: string;
+  publicKey: string;
+  user: {
+    email_verified: boolean;
+    family_name: string;
+    given_name: string;
+    hasPassword: boolean;
+    id: number;
+    nationalcode_serial_verified: boolean;
+    nationalcode_verified: boolean;
+    phone_number_verified: boolean;
+    physical_verified: boolean;
+    preferred_username: string;
+  };
+}
