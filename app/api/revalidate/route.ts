@@ -60,6 +60,17 @@ export async function POST(req: Request) {
 
   try {
     const body = (await req.json()) as BuildTagsInput;
+    const client = await global.redisClientPromise;
+
+    if (
+      body.domain &&
+      !body.versionId &&
+      !body.documentId &&
+      !body.repositoryId &&
+      (!body.tags || body.tags.length === 0)
+    ) {
+      await client.del(`domain-${body.domain}`);
+    }
     const tags = buildTags(body);
 
     if (!tags || tags.length === 0) {
