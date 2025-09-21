@@ -15,9 +15,6 @@ export const initiateAutoLoginAction = async () => {
 
     const handshakeResponse = await handshake(accessToken);
     const { privateKey, keyId } = handshakeResponse;
-    if (!privateKey || !keyId) {
-      throw new Error("Key data not received from handshake.");
-    }
 
     const timestamp = Date.now();
     const dataToSign = `access_token: ${accessToken}\nkey_id: ${keyId}\ntimestamp: ${timestamp}`;
@@ -25,15 +22,15 @@ export const initiateAutoLoginAction = async () => {
     const privateKeyObject = forge.pki.privateKeyFromPem(privateKey);
 
     const md = forge.md.sha256.create();
-    md.update(dataToSign, "utf8");
+    md.update(dataToSign);
 
     const signatureBytes = privateKeyObject.sign(md);
 
     const signature = forge.util.encode64(signatureBytes);
 
     const submitAutoLogin = await initiateAutoLogin(keyId, timestamp, signature, accessToken);
-
-    return submitAutoLogin;
+    console.log("------------------- submitAutoLogin ----------------------", submitAutoLogin);
+    
   } catch (error: any) {
     console.error("Auto-login action failed:", error);
     if (error.response?.data) {
