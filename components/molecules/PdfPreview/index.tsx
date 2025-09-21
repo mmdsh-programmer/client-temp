@@ -9,8 +9,10 @@ interface IProps {
   fileLink: string;
 }
 
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url,
+).toString();
 
 const PdfPreview = ({ fileLink }: IProps) => {
   const [numPages, setNumPages] = useState<number | null>(null);
@@ -23,7 +25,7 @@ const PdfPreview = ({ fileLink }: IProps) => {
     <Document
       file={fileLink}
       onLoadSuccess={onDocumentLoadSuccess}
-      className="flex flex-col items-center h-[calc(100vh-300px)] overflow-x-auto mb-4 w-[100vw] md:w-[calc(100vw-300px)] font-iranYekan"
+      className="mb-4 flex h-[calc(100vh-300px)] w-[100vw] flex-col items-center overflow-x-auto font-iranYekan md:w-[calc(100vw-300px)]"
       loading="در حال بارگیری نسخه..."
       error="در دانلود نسخه از سرور مشکلی بوجود آمد."
     >
