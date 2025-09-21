@@ -64,20 +64,22 @@
   padding: 15px !important;
 }
 
-.clasor-preview-content li,
+/* .clasor-preview-content li,
 .clasor-preview-content li *,
 .ck-content li,
 .ck-content li * {
   direction: ltr;
   text-align: left;
-}
+} */
 
 li:has(*[dir="rtl"]) {
   direction: rtl !important;
+  text-align: right;
 }
 
 li:has(*[dir="ltr"]) {
   direction: ltr !important;
+  text-align: left;
 }
 
 *[dir="rtl"] {
