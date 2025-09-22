@@ -166,13 +166,7 @@ export default async function PublishContentPage({ params }: PublishContentPageP
       async () => {
         return Date.now();
       },
-      [
-        "publish:revalidate-timestamp",
-        `vr-${versionData.id}`,
-        `dc-${documentId}`,
-        `rp-ph-${repository.id}`,
-        `i-${domain}`,
-      ],
+      cacheTags,
       { tags: cacheTags, revalidate: 24 * 3600 },
     );
 

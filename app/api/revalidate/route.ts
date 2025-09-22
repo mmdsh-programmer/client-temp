@@ -46,6 +46,11 @@ function buildTags(input: BuildTagsInput): string[] {
 }
 
 async function authorize() {
+  // اگر API_TOKEN تنظیم نشده، authorize رو skip می‌کنیم
+  if (!process.env.API_TOKEN) {
+    return null;
+  }
+
   const headersList = await headers();
   const authorization = headersList.get("Authorization");
   if (!authorization || authorization.replace("Bearer ", "") !== process.env.API_TOKEN) {
