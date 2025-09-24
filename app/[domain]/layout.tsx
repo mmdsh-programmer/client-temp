@@ -16,22 +16,30 @@ interface IProps {
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const awaitedParams = await params;
-  console.log("------------------------ admin layout ---------------------", JSON.stringify(awaitedParams));
-
+  
   const isDev = process.env.NODE_ENV === "development";
-
+  
   let domainUrl: string = "";
-
+  
   if (isDev) {
     domainUrl = process.env.DOMAIN || "";
   } else {
     const domain = awaitedParams;
     domainUrl = decodeKey(domain);
   }
+  console.log("------------------------ admin layout ---------------------", JSON.stringify(awaitedParams));
 
   try {
     const { content } = await getCustomPostByDomain(domainUrl);
     const domainInfo = JSON.parse(content ?? "{}");
+      console.log(
+      JSON.stringify({
+        type: "domain_info:content",
+        data: domainInfo,
+        logo: domainInfo.logo,
+        podspaceUrl: process.env.NEXT_PUBLIC_PODSPACE_API
+      }),
+    );
     return {
       title: domainInfo.projectName,
       description: domainInfo.projectDescription,
