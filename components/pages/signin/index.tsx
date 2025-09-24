@@ -29,7 +29,7 @@ const SignInComponent = () => {
         const selectedRepoString = window.localStorage.getItem("CLASOR:SELECTED_REPO");
         const selectedRepo = selectedRepoString ? JSON.parse(selectedRepoString) : null;
         if (selectedRepo) {
-          router.push(`/admin/.?repoId=${selectedRepo.id}`);
+          router.push(`/admin/repositories?repoId=${selectedRepo.id}`);
         } else if (window.localStorage.getItem("CLASOR:PANEL_URL")) {
           const redirectLink = `${
             window.location.origin

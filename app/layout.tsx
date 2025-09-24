@@ -53,6 +53,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
         type: "domain_info:content",
         data: domainInfo,
         logo: domainInfo.logo,
+        podspaceUrl: process.env.NEXT_PUBLIC_PODSPACE_API
       }),
     );
     return {
@@ -62,7 +63,14 @@ export async function generateMetadata({ params }): Promise<Metadata> {
         icon: `${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${domainInfo.logo}?time=${Date.now()}`,
       },
     };
-  } catch {
+  } catch (error) {
+    console.log(
+      JSON.stringify({
+        type: "app_layout:error",
+        error,
+        podspaceUrl: process.env.NEXT_PUBLIC_PODSPACE_API
+      }),
+    );
     return {
       title: "کلاسور",
       description: "کلاسور",
