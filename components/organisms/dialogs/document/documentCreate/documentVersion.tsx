@@ -17,6 +17,7 @@ import forge from "node-forge";
 import { useDocumentStore } from "@store/document";
 import { useCategoryStore } from "@store/category";
 import { useRepositoryStore } from "@store/repository";
+import useCreateFormVersion from "@hooks/version/useCreateFormVersion";
 
 interface IProps {
   isTemplate: boolean;
@@ -43,6 +44,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const createDocumentHook = useCreateDocument();
   const createVersionHook = useCreateVersion();
   const createFileVersionHook = useCreateFileVersion();
+  const createFormVersionHook = useCreateFormVersion();
   const createDocFromTemplateHook = useCreateDocumentTemplate();
 
   const form = useForm<IForm>();
@@ -111,7 +113,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
             toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
             return;
           }
-          if (getDocumentType !== EDocumentTypes.file) {
+          if (getDocumentType !== EDocumentTypes.file && getDocumentType !== EDocumentTypes.form) {
             const defaultContent =
               getDocumentType === EDocumentTypes.classic
                 ? "<article class='clasor-editor-content'></article>"
@@ -160,8 +162,19 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
                 setOpen(false);
               },
             });
-          } else {
+          } else if (getDocumentType === EDocumentTypes.file) {
             createFileVersionHook.mutate({
+              repoId,
+              documentId: result.id,
+              versionNumber: dataForm.versionNumber,
+              callBack: () => {
+                close();
+                setOpen(false);
+                toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
+              },
+            });
+          } else {
+            createFormVersionHook.mutate({
               repoId,
               documentId: result.id,
               versionNumber: dataForm.versionNumber,
@@ -192,7 +205,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
-        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <form
           className="document-version-form flex flex-col gap-5"
@@ -202,7 +215,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="form_label"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               نام نسخه
             </Typography>
@@ -217,7 +230,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               <Typography
                 placeholder=""
                 className="warning_text"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {errors.versionNumber?.message}
               </Typography>

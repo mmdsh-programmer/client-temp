@@ -21,7 +21,7 @@ export enum EDraftStatus {
   pending = "pending",
   rejected = "rejected",
   accepted = "accepted",
-  waitForDirectPublic= "waitForDirectPublic"
+  waitForDirectPublic = "waitForDirectPublic",
 }
 
 export enum EVersionStatus {
@@ -43,6 +43,7 @@ export enum EDocumentTypes {
   excel = "excel",
   board = "board",
   latex = "latex",
+  form = "form",
 }
 
 export enum ECategoryAction {
