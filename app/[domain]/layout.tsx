@@ -15,29 +15,31 @@ interface IProps {
 }
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const awaitedParams = await params;
-  
+  const { domain } = await params;
+
   const isDev = process.env.NODE_ENV === "development";
-  
+
   let domainUrl: string = "";
-  
+
   if (isDev) {
     domainUrl = process.env.DOMAIN || "";
   } else {
-    const domain = awaitedParams;
     domainUrl = decodeKey(domain);
   }
-  console.log("------------------------ admin layout ---------------------", JSON.stringify(domainUrl));
+  console.log(
+    "------------------------ admin layout ---------------------",
+    JSON.stringify(domainUrl),
+  );
 
   try {
     const { content } = await getCustomPostByDomain(domainUrl);
     const domainInfo = JSON.parse(content ?? "{}");
-      console.log(
+    console.log(
       JSON.stringify({
         type: "domain_info:content",
         data: domainInfo,
         logo: domainInfo.logo,
-        podspaceUrl: process.env.NEXT_PUBLIC_PODSPACE_API
+        podspaceUrl: process.env.NEXT_PUBLIC_PODSPACE_API,
       }),
     );
     return {
@@ -57,7 +59,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 }
 
 const DomainLayout = async ({ children, params }: IProps) => {
-   try {
+  try {
     const { domain } = await params;
 
     const isDev = process.env.NODE_ENV === "development";
@@ -73,19 +75,19 @@ const DomainLayout = async ({ children, params }: IProps) => {
 
     return (
       <ThemeLoaderProvider theme={theme}>
-        <MainProvider>
-          {children}
-        </MainProvider>
+        <MainProvider>{children}</MainProvider>
         <p className="absolute -z-50 hidden">3.20.4.7-v3</p>
       </ThemeLoaderProvider>
-    ); 
-   } catch (error) {
+    );
+  } catch (error) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <h1 className="text-red-500">{(error as Error)?.message ?? "خطا در دریافت اطلاعات دامنه !"}</h1>
+      <div className="flex h-full w-full items-center justify-center">
+        <h1 className="text-red-500">
+          {(error as Error)?.message ?? "خطا در دریافت اطلاعات دامنه !"}
+        </h1>
       </div>
     );
-   }
+  }
 };
 
 export default DomainLayout;
