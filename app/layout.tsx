@@ -48,6 +48,10 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   try {
     const { content } = await getCustomPostByDomain(domainUrl);
     const domainInfo = JSON.parse(content ?? "{}");
+    console.log(
+      "------------------------------ domain info ---------------------------",
+      JSON.stringify(domainInfo),
+    );
     return {
       title: domainInfo.projectName,
       description: domainInfo.projectDescription,
