@@ -35,6 +35,8 @@ const iranYekanFont = localFont({
 export async function generateMetadata({ params }): Promise<Metadata> {
   const { domain } = await params;
 
+  console.log("------------------------ domain layout ---------------------", JSON.stringify(domain));
+
   const isDev = process.env.NODE_ENV === "development";
 
   let domainUrl: string = "";

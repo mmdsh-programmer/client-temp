@@ -16,6 +16,8 @@ interface IProps {
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const awaitedParams = await params;
+  console.log("------------------------ admin layout ---------------------", JSON.stringify(awaitedParams));
+
   const isDev = process.env.NODE_ENV === "development";
 
   let domainUrl: string = "";
