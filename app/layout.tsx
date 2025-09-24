@@ -49,8 +49,11 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     const { content } = await getCustomPostByDomain(domainUrl);
     const domainInfo = JSON.parse(content ?? "{}");
     console.log(
-      "------------------------------ domain info ---------------------------",
-      JSON.stringify(domainInfo),
+      JSON.stringify({
+        type: "domain_info:content",
+        data: domainInfo,
+        logo: domainInfo.logo,
+      }),
     );
     return {
       title: domainInfo.projectName,
