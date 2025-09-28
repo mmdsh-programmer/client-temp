@@ -229,7 +229,6 @@ export const initiateAutoLogin = async (
       timestamp,
       signature,
       access_token: accessToken,
-      scope: "login"
     };
     const headers = {
       Authorization: `Bearer ${process.env.API_TOKEN}`,
@@ -237,9 +236,9 @@ export const initiateAutoLogin = async (
     };
     const result = await axiosAccountsInstance.post<any>(url, options, {
       headers,
-      // params:{
-      //    scope: "login"
-      // }
+      params:{
+         scope: "login"
+      }
     });
 
 
