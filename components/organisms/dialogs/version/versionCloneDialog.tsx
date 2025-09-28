@@ -17,6 +17,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useGetUser from "@hooks/auth/useGetUser";
 import { Spinner } from "@components/atoms/spinner";
 import { getMe } from "@actions/auth";
+import { EDocumentTypes } from "@interface/enums";
+import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
+import useCreateFormVersion from "@hooks/version/useCreateFormVersion";
 
 interface IForm {
   name: string;
@@ -52,6 +55,8 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     true,
   );
   const createVersion = useCreateVersion();
+  const createFileVersionHook = useCreateFileVersion();
+  const createFormVersionHook = useCreateFormVersion();
 
   const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
 
@@ -71,29 +76,67 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   const onSubmit = async (dataForm: IForm) => {
     if (!repoId) return;
     const info = await getMe();
-    createVersion.mutate({
-      accessToken: info.access_token,
-      repoId,
-      documentId: getDocument!.id,
-      versionNumber: dataForm.name,
-      content: getVersionInfo?.content || "",
-      outline: getVersionInfo?.outline || "",
-      isDirectAccess:
-        sharedDocuments === "true" ||
-        currentPath === "/admin/sharedDocuments" ||
-        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
-          ? true
-          : undefined,
-      onSuccessHandler: () => {
-        toast.success(" نسخه با موفقیت ایجاد شد.");
-        handleClose();
-      },
-    });
+    if (getDocument?.contentType === EDocumentTypes.classic) {
+      createVersion.mutate({
+        accessToken: info.access_token,
+        repoId,
+        documentId: getDocument!.id,
+        versionNumber: dataForm.name,
+        content: getVersionInfo?.content || "",
+        outline: getVersionInfo?.outline || "",
+        isDirectAccess:
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            ? true
+            : undefined,
+        onSuccessHandler: () => {
+          toast.success(" نسخه با موفقیت ایجاد شد.");
+          handleClose();
+        },
+      });
+    } else if (getDocument?.contentType === EDocumentTypes.file) {
+      createFileVersionHook.mutate({
+        repoId,
+        documentId: getDocument!.id,
+        versionNumber: dataForm.name,
+        isDirectAccess:
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            ? true
+            : undefined,
+        callBack: () => {
+          handleClose();
+          toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
+        },
+      });
+    } else {
+      createFormVersionHook.mutate({
+        repoId,
+        documentId: getDocument!.id,
+        versionNumber: dataForm.name,
+        isDirectAccess:
+          sharedDocuments === "true" ||
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            ? true
+            : undefined,
+        callBack: () => {
+          handleClose();
+          toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
+        },
+      });
+    }
   };
 
   return (
     <CreateDialog
-      isPending={createVersion.isPending}
+      isPending={
+        createVersion.isPending ||
+        createFileVersionHook.isPending ||
+        createFormVersionHook.isPending
+      }
       dialogHeader="ایجاد نسخه جدید از این نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
@@ -104,10 +147,17 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       ) : (
         <form className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام نسخه</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+              نام نسخه
+            </Typography>
             <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
             {errors.name && (
-              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="warning_text"
+              >
+                {errors.name?.message}
+              </Typography>
             )}
           </div>
         </form>

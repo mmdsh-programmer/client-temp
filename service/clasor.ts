@@ -2435,6 +2435,33 @@ export const createFileVersion = async (
   }
 };
 
+export const createFormVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionNumber: string,
+  isDirectAccess?: boolean,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/createVersion`,
+      { versionNumber },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          isDirectAccess,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const deleteVersion = async (
   accessToken: string,
   repoId: number,
@@ -2620,6 +2647,58 @@ export const cancelConfirmVersion = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const getFormVersionExport = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  fileType: "XLSX" | "CSV",
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/exportResult`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          fileType,
+          dataType: "RAW"
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const collaborateFormVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/collaborate`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////////// FILE MANAGEMENT //////////////////////////////
+
 export const getResourceFiles = async (
   accessToken: string,
   resourceId: number,
@@ -2733,6 +2812,7 @@ export const createUploadLink = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
 
 /// //////////////////////// RELEASE DOCS //////////////////////////
 export const getPendingDrafts = async (

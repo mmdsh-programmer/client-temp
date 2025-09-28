@@ -9,7 +9,7 @@ import {
 } from "@utils/error";
 import axios, { AxiosError, isAxiosError } from "axios";
 
-import { IGetTokenResponse } from "@interface/app.interface";
+import { IGetTokenResponse, IHandshake } from "@interface/app.interface";
 import { bracketStringify } from "@utils/index";
 import { userInfo } from "./clasor";
 
@@ -59,7 +59,7 @@ axiosAccountsInstance.interceptors.response.use(
     };
     console.log(JSON.stringify(log, null, 0));
     return Promise.reject(error);
-  }
+  },
 );
 
 // TODO: proper handler for error
@@ -67,8 +67,8 @@ axiosAccountsInstance.interceptors.response.use(
 export const handleAccountStatusError = (error: AxiosError<unknown>) => {
   if (isAxiosError(error)) {
     const message = [
-      (error as { response?: { data?: { messages?: string[] } } }).response?.data
-        ?.messages?.[0] || error.message,
+      (error as { response?: { data?: { messages?: string[] } } }).response?.data?.messages?.[0] ||
+        error.message,
     ];
     switch (error.response?.status) {
       case 400:
@@ -82,10 +82,7 @@ export const handleAccountStatusError = (error: AxiosError<unknown>) => {
       case 422:
         throw new UnprocessableError(message, error as IOriginalError);
       default:
-        throw new ServerError(
-          ["خطا در ارتباط با سرویس خارجی"],
-          error as IOriginalError
-        );
+        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
     }
   } else {
     throw new ServerError(["حطای نامشخصی رخ داد"]);
@@ -97,7 +94,7 @@ export const getPodAccessToken = async (
   redirectUrl: string,
   clientId: string,
   clientSecret: string,
-  domain: string
+  domain: string,
 ): Promise<IGetTokenResponse> => {
   try {
     const url = "/oauth2/token";
@@ -111,20 +108,12 @@ export const getPodAccessToken = async (
     const headers = {
       "Content-Type": "application/x-www-form-urlencoded",
     };
-    const result = await axiosAccountsInstance.post<IGetTokenResponse>(
-      url,
-      options,
-      {
-        headers,
-      }
-    );
+    const result = await axiosAccountsInstance.post<IGetTokenResponse>(url, options, {
+      headers,
+    });
 
     const expiresAt = result.data.expires_in;
-    const userData = await userInfo(
-      result.data.access_token,
-      domain,
-      expiresAt
-    );
+    const userData = await userInfo(result.data.access_token, domain, expiresAt);
     if (userData) {
       const redisClient = await global.redisClientPromise;
       await redisClient?.set(
@@ -144,7 +133,7 @@ export const revokePodToken = async (
   username,
   password,
   token: string,
-  type: string
+  type: string,
 ): Promise<void> => {
   try {
     const url = "/oauth2/token/revoke";
@@ -163,7 +152,7 @@ export const revokePodToken = async (
           token_type_hint: type,
           token,
         },
-      }
+      },
     );
   } catch (error) {
     return handleAccountStatusError(error as AxiosError<unknown>);
@@ -173,7 +162,7 @@ export const revokePodToken = async (
 export const refreshPodAccessToken = async (
   refreshToken: string,
   clientId: string,
-  clientSecret: string
+  clientSecret: string,
 ) => {
   try {
     const url = "/oauth2/token";
@@ -192,7 +181,7 @@ export const refreshPodAccessToken = async (
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-      }
+      },
     );
 
     return result.data as {
@@ -201,6 +190,61 @@ export const refreshPodAccessToken = async (
       expires_in: number;
     };
   } catch (error) {
+    return handleAccountStatusError(error as AxiosError<unknown>);
+  }
+};
+
+export const handshake = async (accessToken: string): Promise<IHandshake> => {
+  try {
+    const url = "/handshake/users";
+    const options = {
+      keyAlgorithm: "RSA",
+      keyFormat: "PEM",
+      renew: true,
+    };
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    const result = await axiosAccountsInstance.post<IHandshake>(url, options, {
+      headers,
+    });
+
+    return result.data;
+  } catch (error) {
+    return handleAccountStatusError(error as AxiosError<unknown>);
+  }
+};
+
+export const initiateAutoLogin = async (
+  keyId: string,
+  timestamp: number,
+  signature: string,
+  accessToken: string
+): Promise<any> => {
+  try {
+    const url = "/oauth2/submit/autoLogin";
+    const options = {
+      key_id: keyId,
+      timestamp,
+      signature,
+      access_token: accessToken,
+    };
+    const headers = {
+      Authorization: `Bearer ${process.env.API_TOKEN}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    const result = await axiosAccountsInstance.post<any>(url, options, {
+      headers,
+      params:{
+         scope: "login"
+      }
+    });
+
+
+    return result.data;
+  } catch (error) {
+    console.log("--------------- error ---------------------", (error as any).response.data);
     return handleAccountStatusError(error as AxiosError<unknown>);
   }
 };
