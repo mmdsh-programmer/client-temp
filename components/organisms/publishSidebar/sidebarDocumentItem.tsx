@@ -1,11 +1,10 @@
 "use client";
 
+import React from "react";
 import { DocumentIcon, LockIcon } from "@components/atoms/icons";
 import { isPrivate, removeSpecialCharacters, toPersianDigit } from "@utils/index";
-
 import { IDocumentMetadata } from "@interface/document.interface";
 import Link from "next/link";
-import React from "react";
 import { usePathname } from "next/navigation";
 
 interface IProps {

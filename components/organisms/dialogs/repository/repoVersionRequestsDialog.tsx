@@ -31,7 +31,8 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
   const { repo: getRepo } = useRepositoryStore();
   const { setSelectedVersion } = useVersionStore();
   const { editorModal } = useEditorStore();
-  const { selectedRequest, acceptVersion, setAcceptVersion, rejectVersion, setRejectVersion } = useReleaseDocsStore();
+  const { selectedRequest, acceptVersion, setAcceptVersion, rejectVersion, setRejectVersion } =
+    useReleaseDocsStore();
 
   const handleClose = () => {
     setOpen(false);
@@ -41,11 +42,11 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
   const tabList = [
     {
       tabTitle: ETabs.DRAFT_REQUESTS,
-      tabContent: <DraftRequests />,
+      tabContent: activeTab === ETabs.DRAFT_REQUESTS ? <DraftRequests /> : null,
     },
     {
       tabTitle: ETabs.VERSION_REQUESTS,
-      tabContent: <VersionRequests />,
+      tabContent: activeTab === ETabs.VERSION_REQUESTS ? <VersionRequests /> : null,
     },
   ];
 
@@ -111,9 +112,12 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     <InfoDialog
       dialogHeader="درخواست‌های تایید نسخه"
       setOpen={handleClose}
-      className="repo-requests-dialog flex !h-full w-full max-w-full flex-col rounded-none bg-primary xs:!h-[600px] xs:!min-w-[80%] xs:!max-w-[80%] xs:rounded-lg "
+      className="repo-requests-dialog flex !h-full w-full max-w-full flex-col rounded-none bg-primary xs:!h-[600px] xs:!min-w-[80%] xs:!max-w-[80%] xs:rounded-lg"
     >
-      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="dialog-body h-full overflow-auto p-0">
+      <DialogBody
+        {...({} as React.ComponentProps<typeof DialogBody>)}
+        className="dialog-body h-full overflow-auto p-0"
+      >
         <div className="flex h-[calc(100%-160px)] flex-col gap-4 overflow-auto p-4 xs:h-[535px] xs:p-6">
           {getRepo?.roleName === "owner" ? (
             <TabComponent tabList={tabList} activeTab={activeTab} setActiveTab={setActiveTab} />

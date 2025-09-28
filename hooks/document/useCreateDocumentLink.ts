@@ -5,15 +5,16 @@ import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { IDocumentMetadata } from "@interface/document.interface";
 
-const useCreateDocumentLink = (repoId: number, documentId: number) => {
+const useCreateDocumentLink = () => {
   return useMutation({
-    mutationKey: [`create-repo-${repoId}-document-${documentId}-link`],
+    mutationKey: ["create-document-link"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
       callBack?: (data: IDocumentMetadata) => void;
       errorCallback?: () => void;
     }) => {
+      const { repoId, documentId } = values;
       const response = await getDocumentAction(repoId, documentId);
       handleClientSideHookError(response as IActionError);
       return response as IDocumentMetadata;

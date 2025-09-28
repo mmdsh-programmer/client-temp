@@ -42,7 +42,7 @@ const DownloadPDF = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/pdf",
-        Authorization: `Bearer ${userInfo?.access_token}`,
+        Authorization: `Bearer ${userInfo!.access_token}`,
       },
     });
 

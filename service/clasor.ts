@@ -40,7 +40,7 @@ import {
 } from "@interface/document.interface";
 import { IContentSearchListItem, IContentSearchResult } from "@interface/contentSearch.interface";
 import { ICreateGroup, IGetGroup, IGetGroups, IUpdateGroup } from "@interface/group.interface";
-import { IDomainSubscriptionList, IDomainTag, IDomainTagList } from "@interface/domain.interface";
+import { IDomainDocuments, IDomainSubscriptionList, IDomainTag, IDomainTagList } from "@interface/domain.interface";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   IListResponse,
@@ -4669,6 +4669,34 @@ export const updateCustomPostByDomain = async (
         headers: { domainUrl: domain, Authorization: `Bearer ${accessToken}` },
       },
     );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDomainDocuments = async (
+  domainUrl: string,
+  accessToken: string,
+  title: string,
+  tagIds: number | number[] | undefined,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IDomainDocuments>>("/domain/report/documents", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        title,
+        tagIds,
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {

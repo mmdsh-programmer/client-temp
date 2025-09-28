@@ -1,8 +1,5 @@
 import React from "react";
-import { decodeKey } from "@utils/index";
 import "../styles/globals.css";
-import type { Metadata } from "next";
-import { getCustomPostByDomain } from "@service/clasor";
 import Script from "next/script";
 import localFont from "next/font/local";
 

@@ -1,11 +1,12 @@
-import { List, ListItem } from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { List, ListItem } from "@material-tailwind/react";
 import Error from "@components/organisms/error";
 import LoadMore from "@components/molecules/loadMore";
-import PublishSearchResultItem from "./publishSearchResultItem";
+import PublishSearchResultItem from "./publishContentSearchResultItem";
 import useSearchPublishContent from "@hooks/publish/useSearchPublishContent";
 import { Spinner } from "@components/atoms/spinner";
+import useGetDomainDocuments from "@hooks/domain/useGetDomainDocuments";
+import PublishAdvancedSearchResultItem from "./publishAdvancedSearchResultItem";
 
 export interface ISearchResultItem {
   versionId: number;
@@ -19,10 +20,10 @@ export interface ISearchResultItem {
 
 interface IProps {
   searchText: string;
-  id?: number;
+  tags: number[];
 }
 
-const PublishSearchResult = ({ searchText, id }: IProps) => {
+const PublishAdvancedSearchResult = ({ searchText, tags }: IProps) => {
   const [disableItems, setDisableItems] = useState(false);
   const {
     data: searchData,
@@ -33,7 +34,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
     isError,
     error,
     refetch,
-  } = useSearchPublishContent(id, searchText, 20);
+  } = useGetDomainDocuments(searchText, tags, 20);
 
   const onResultItemClick = (value: boolean) => {
     setDisableItems(value);
@@ -41,7 +42,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
 
   if (isError) {
     return (
-      <div className="w-full flex justify-center items-center max-h-72 overflow-auto">
+      <div className="flex max-h-72 w-full items-center justify-center overflow-auto">
         <Error error={error} retry={refetch} />
       </div>
     );
@@ -49,7 +50,7 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
 
   if (isLoading) {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="flex w-full items-center justify-center">
         <Spinner className="h-8 w-8 text-primary" />
       </div>
     );
@@ -58,35 +59,36 @@ const PublishSearchResult = ({ searchText, id }: IProps) => {
   const total = searchData?.pages[0].total;
 
   return (
-    <List {...({} as React.ComponentProps<typeof List>)} className="list w-full max-h-72 overflow-auto">
+    <List
+      {...({} as React.ComponentProps<typeof List>)}
+      className="list max-h-72 w-full overflow-auto"
+    >
       {total ? (
-        searchData?.pages.map((page, pageIndex) => {
+        searchData?.pages.map((page) => {
           return page.list.map((searchResult) => {
             return (
-              <PublishSearchResultItem
+              <PublishAdvancedSearchResultItem
                 resultItem={searchResult}
                 disabled={disableItems}
                 setDisableItems={onResultItemClick}
-                // eslint-disable-next-line react/no-array-index-key
-                key={`searchItem-${pageIndex}-${searchResult.versionId}`}
+                key={`searchItem-${searchResult.id}`}
               />
             );
           });
         })
       ) : (
-        <ListItem {...({} as React.ComponentProps<typeof ListItem>)} className="block min-h-12 gap-2 text-right text-ellipsis overflow-hidden whitespace-nowrap">
+        <ListItem
+          {...({} as React.ComponentProps<typeof ListItem>)}
+          className="block min-h-12 gap-2 overflow-hidden text-ellipsis whitespace-nowrap text-right"
+        >
           موردی برای نمایش وجود ندارد
         </ListItem>
       )}
-
       {hasNextPage ? (
-        <LoadMore
-          fetchNextPage={fetchNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-        />
+        <LoadMore fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage} />
       ) : null}
     </List>
   );
 };
 
-export default PublishSearchResult;
+export default PublishAdvancedSearchResult;

@@ -177,7 +177,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                     { label: "سند", value: "document" },
                     { label: "دسته بندی", value: "category" },
                   ]}
-                  className="h-12 w-full xs:!h-10"
+                  className="h-12 w-full xs:!h-10 bg-white"
                   selectedOptions={type}
                   setSelectedOptions={setType}
                   defaultOption="نوع"
@@ -198,7 +198,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                     { label: "فایل", value: "file" },
                   ]}
                   defaultOption="نوع محتوا"
-                  className="h-12 flex-grow xs:!h-10"
+                  className="h-12 flex-grow xs:!h-10 bg-white"
                   selectedOptions={documentType}
                   setSelectedOptions={setDocumentType}
                   disabled={!type.includes("document")}
@@ -224,7 +224,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                 ) : (
                   <SelectBox
                     options={tagOptions}
-                    className="h-12 flex-grow xs:!h-10"
+                    className="h-12 flex-grow xs:!h-10 bg-white"
                     selectedOptions={tags}
                     setSelectedOptions={setTags}
                     defaultOption="تگ‌ها"
@@ -249,7 +249,7 @@ const AdvancedFilter = ({ setOpen }: IProps) => {
                     { label: "نمونه سند", value: "template" },
                     { label: "نشان شده", value: "bookmarked" },
                   ]}
-                  className="h-12 flex-grow xs:!h-10"
+                  className="h-12 flex-grow xs:!h-10 bg-white"
                   selectedOptions={moreFilter}
                   setSelectedOptions={setMoreFilter}
                   defaultOption="سایر فیلترها"

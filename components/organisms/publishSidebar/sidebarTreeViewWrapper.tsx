@@ -51,6 +51,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
     isFetchingNextPage: isFetchingChildrenNextPage,
     hasNextPage: childrenHasNextPage,
     fetchNextPage,
+    refetch
   } = useGetPublishChildren(repoId, 20, undefined, true);
 
   const {
@@ -91,6 +92,10 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
 
 
   const ids = searchParams.get("ids");
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [repoId]);
 
   const renderItems = (
     page: IListResponse<ICategoryMetadata | IDocumentMetadata>,

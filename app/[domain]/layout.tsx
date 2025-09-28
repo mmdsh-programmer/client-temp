@@ -26,10 +26,6 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   } else {
     domainUrl = decodeKey(domain);
   }
-  console.log(
-    "------------------------ admin layout ---------------------",
-    JSON.stringify(domainUrl),
-  );
 
   try {
     const { content } = await getCustomPostByDomain(domainUrl);

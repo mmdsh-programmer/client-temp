@@ -7,6 +7,7 @@ import {
   deletePublishLink,
   getAllPublishChildren,
   getPublishChildren,
+  getPublishDocumentLastVersion,
   getPublishDocumentVersions,
   searchPublishContent,
 } from "@service/clasor";
@@ -93,8 +94,7 @@ export const getPublishDocumentVersionsAction = async (
 ) => {
   const userInfo = await userInfoAction();
   try {
-    const ssoId =
-      userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
+    const ssoId = userInfo && !("error" in userInfo) ? userInfo.ssoId : undefined;
     const domain = await getDomainHost();
     if (!domain) {
       throw new Error("Domain is not found");
@@ -159,13 +159,30 @@ export const createPublishCommentAction = async (
   }
 };
 
-export const addToWhiteListRequestAction = async (
-  repoId: number,
-  docId: number,
-) => {
+export const addToWhiteListRequestAction = async (repoId: number, docId: number) => {
   const userInfo = await getMe();
   try {
     const response = await addToWhiteListRequest(userInfo.access_token, repoId, docId);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishDocumentLastVersionAction = async (
+  repoId: number,
+  docId: number,
+  password?: string,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getPublishDocumentLastVersion(
+      repoId,
+      docId,
+      password,
+      userInfo.access_token,
+    );
 
     return response;
   } catch (error) {

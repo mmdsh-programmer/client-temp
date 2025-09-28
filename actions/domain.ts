@@ -12,6 +12,7 @@ import {
   addPartyToDomainParticipants,
   removePartyFromDomainParticipants,
   updateCustomPostByDomain,
+  getDomainDocuments,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { getDomainHost } from "@utils/getDomain";
@@ -226,7 +227,7 @@ export const removePartyFromDomainParticipantsAction = async (userNameList: stri
   try {
     const userInfo = await getMe();
     const domain = await getDomainHost();
-    
+
     if (!domain) {
       throw new Error("Domain is not found");
     }
@@ -235,6 +236,35 @@ export const removePartyFromDomainParticipantsAction = async (userNameList: stri
       domain,
       userInfo.access_token,
       userNameList,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getDomainDocumentsAction = async (
+  title: string,
+  tagIds: number | number[] | undefined,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const domain = await getDomainHost();
+
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const response = await getDomainDocuments(
+      domain,
+      userInfo.access_token,
+      title,
+      tagIds,
+      offset,
+      size,
     );
 
     return response;

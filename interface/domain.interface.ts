@@ -118,3 +118,57 @@ export interface ContentType {
 export interface ThemeColors {
   [key: string]: string;
 }
+
+interface ICreator {
+  ssoId: number;
+  userName: string;
+  name: string;
+  img: string;
+  contactId: number | null;
+}
+
+export interface IDocumentItem {
+  id: number;
+  repoId: number;
+  title: string;
+  name: string;
+  updateDate: number;
+  updatedAt: number;
+  description: string | null;
+  createDate: number;
+  createdAt: number;
+  metadata: string | null;
+  contentType: string;
+  chatThreadId: number | null;
+  isPublished: boolean;
+  publishExpireTime: number | null;
+  tags: number[] | [];
+  creator: ICreator;
+  folderHash: string | null;
+  userGroupHash: string | null;
+  attachmentUserGroup: string | null;
+  imageUrl: string | null;
+  slug: string | null;
+  hasPassword: boolean;
+  publicKeyId: number | null;
+  imageAlt: string | null;
+  readTime: number | null;
+  type: string;
+  order: number | null;
+  repoTypeId: number;
+  isHidden: boolean;
+  isCommitted: boolean;
+  hasWhiteList: boolean;
+  hasBlackList: boolean;
+  isTemplate: boolean;
+  customPostEntityId: number;
+  customPostId: number;
+  categoryId: number | null;
+}
+
+export interface IDomainDocuments {
+  list: IDocumentItem[];
+  offset: number;
+  size: number;
+  total: number;
+}

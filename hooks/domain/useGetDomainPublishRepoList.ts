@@ -12,7 +12,7 @@ const useGetDomainPublishRepoList = (size: number, enabled?: boolean) => {
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: enabled,
+    enabled,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

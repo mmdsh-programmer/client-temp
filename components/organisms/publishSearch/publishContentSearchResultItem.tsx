@@ -11,7 +11,7 @@ interface IProps {
   disabled?: boolean;
 }
 
-const PublishSearchResultItem = ({ resultItem, disabled, setDisableItems }: IProps) => {
+const PublishContentSearchResultItem = ({ resultItem, disabled, setDisableItems }: IProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -48,4 +48,4 @@ const PublishSearchResultItem = ({ resultItem, disabled, setDisableItems }: IPro
   );
 };
 
-export default PublishSearchResultItem;
+export default PublishContentSearchResultItem;

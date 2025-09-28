@@ -1,5 +1,4 @@
-import React, { Fragment } from "react";
-
+import React, { Fragment, useEffect } from "react";
 import { ICategoryMetadata } from "@interface/category.interface";
 import SidebarCollapse from "./sidebarCollapse";
 import SidebarDocumentItem from "./sidebarDocumentItem";
@@ -16,13 +15,7 @@ interface IProps {
   categoryIds: number[];
 }
 
-const SidebarCategoryItem = ({
-  repoId,
-  repoName,
-  category,
-  parentUrl,
-  categoryIds,
-}: IProps) => {
+const SidebarCategoryItem = ({ repoId, repoName, category, parentUrl, categoryIds }: IProps) => {
   const searchParams = useSearchParams();
   const ids = searchParams.get("ids");
   const defaultState = ids?.includes(toPersianDigit(category.id).toString());
@@ -33,22 +26,25 @@ const SidebarCategoryItem = ({
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
+    refetch,
   } = useGetPublishChildren(repoId, 10, category.id);
 
   const total = categoryChildren?.pages[0].total;
 
+  useEffect(() => {
+    refetch();
+  }, [repoId]);
+
   if (!isLoading && !total) {
     return (
-      <span className="text-[10px] text-gray-700 pt-2 pb-3 pr-2">
-        موردی برای نمایش وجود ندارد
-      </span>
+      <span className="pb-3 pr-2 pt-2 text-[10px] text-gray-700">موردی برای نمایش وجود ندارد</span>
     );
   }
 
   return (
     <>
       {isLoading ? (
-        <div className="w-full flex justify-center py-2">
+        <div className="flex w-full justify-center py-2">
           <Spinner className="h-5 w-5 text-primary" />
         </div>
       ) : (
@@ -57,11 +53,7 @@ const SidebarCategoryItem = ({
             <Fragment key={`fragment-card-${page.list[0]?.id}`}>
               {page.list?.length
                 ? page.list.map((childItem) => {
-                    if (
-                      childItem &&
-                      childItem.type === "category" &&
-                      !childItem.isHidden
-                    ) {
+                    if (childItem && childItem.type === "category" && !childItem.isHidden) {
                       const catIds = [...categoryIds, childItem.id];
                       return (
                         <SidebarCollapse
@@ -80,11 +72,7 @@ const SidebarCategoryItem = ({
                       );
                     }
 
-                    if (
-                      childItem &&
-                      childItem.type === "document" &&
-                      !childItem.isHidden
-                    ) {
+                    if (childItem && childItem.type === "document" && !childItem.isHidden) {
                       return (
                         <SidebarDocumentItem
                           key={`category-${childItem.categoryId}-document-${childItem.id}-tree-item`}
@@ -105,7 +93,7 @@ const SidebarCategoryItem = ({
 
       {!!hasNextPage && !isFetchingNextPage && (
         <button
-          className="underline underline-offset-8 text-[10px] text-primary_normal mb-3 mt-2 w-fit"
+          className="mb-3 mt-2 w-fit text-[10px] text-primary_normal underline underline-offset-8"
           onClick={() => {
             fetchNextPage();
           }}
@@ -116,7 +104,7 @@ const SidebarCategoryItem = ({
       )}
 
       {isFetchingNextPage && (
-        <div className="w-full flex justify-center pt-4">
+        <div className="flex w-full justify-center pt-4">
           <Spinner className="h-5 w-5 text-primary" />
         </div>
       )}
