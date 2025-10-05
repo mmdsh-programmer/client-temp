@@ -48,6 +48,8 @@ export interface IVersion {
   documentTitle?: string;
   repoName?: string;
   newOne?: boolean;
+  formId: number | null;
+  formHash: string | null
 }
 
 export interface IComment {
@@ -162,4 +164,21 @@ export interface IVersionView {
   isFetchingNextPage: boolean;
   lastVersion?: IVersion;
   type: EEmptyList;
+}
+
+export interface IResponse {
+  id: number;
+  username: string;
+  created: string;
+  edited: boolean;
+  encryptionResponse: boolean;
+  gradingStatus: string;
+  totalScore: number;
+}
+
+export interface IFormVersionResponseList {
+  list: IResponse[];
+  offset: number;
+  size: number;
+  total: number;
 }

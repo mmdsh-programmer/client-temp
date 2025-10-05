@@ -14,6 +14,8 @@ import { Spinner } from "@components/atoms/spinner";
 import { useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
 import { useEditorStore } from "@store/editor";
+import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
+import { useRepositoryStore } from "@store/repository";
 
 const VersionTableView = ({
   isLoading,
@@ -24,11 +26,13 @@ const VersionTableView = ({
   lastVersion,
   type,
 }: IVersionView) => {
+  const { repo } = useRepositoryStore();
   const getSelectedDocument = useDocumentStore((state) => {
     return state.selectedDocument;
   });
   const { setVersionModalList, setSelectedVersion } = useVersionStore();
   const { setEditorData, setEditorMode, setEditorModal } = useEditorStore();
+  const collaborateFrom = useCollaborateFormVersion();
 
   const listLength = getVersionList?.[0].length;
 
@@ -48,6 +52,20 @@ const VersionTableView = ({
       return;
     }
     window.open(`http://localhost:8080/board/${value.id}`);
+  };
+
+  const handleOpenFormEditor = (value: IVersion) => {
+    if (isLoading) {
+      return;
+    }
+    collaborateFrom.mutate({
+      repoId: repo!.id,
+      documentId: getSelectedDocument!.id,
+      versionId: value.id,
+      callBack: () => {
+        window.open(`https://podform.sandpod.ir/app/form/build/${value.formId}`);
+      },
+    });
   };
 
   return (
@@ -90,10 +108,12 @@ const VersionTableView = ({
                       key={`version-table-item-${version.id}`}
                       className="version-table-item"
                       onClick={() => {
-                        if (getSelectedDocument?.contentType !== EDocumentTypes.board) {
-                          handleOpenEditor(version);
-                        } else {
+                        if (getSelectedDocument?.contentType === EDocumentTypes.form) {
+                          handleOpenFormEditor(version);
+                        } else if (getSelectedDocument?.contentType === EDocumentTypes.board) {
                           handleOpenBoardEditor(version);
+                        } else {
+                          handleOpenEditor(version);
                         }
                       }}
                       tableCell={[

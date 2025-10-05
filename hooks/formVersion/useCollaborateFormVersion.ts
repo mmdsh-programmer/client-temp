@@ -1,28 +1,22 @@
-import { createFormVersionAction } from "@actions/version";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { collaborateFormVersionAction } from "@actions/podForm";
 
-const useCreateFormVersion = () => {
+const useCollaborateFormVersion = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["createFormVersion"],
+    mutationKey: ["collaborateFormVersion"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
-      versionNumber: string;
-      isDirectAccess?: boolean;
+      versionId: number;
       callBack?: () => void;
       onErrorHandler?: () => void;
     }) => {
-      const { repoId, documentId, versionNumber, isDirectAccess } = values;
-      const response = await createFormVersionAction(
-        repoId,
-        documentId,
-        versionNumber,
-        isDirectAccess,
-      );
+      const { repoId, documentId, versionId } = values;
+      const response = await collaborateFormVersionAction(repoId, documentId, versionId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
@@ -42,4 +36,4 @@ const useCreateFormVersion = () => {
   });
 };
 
-export default useCreateFormVersion;
+export default useCollaborateFormVersion;

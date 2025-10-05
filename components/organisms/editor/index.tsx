@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
-import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
+import { IRemoteEditorRef } from "clasor-remote-editor";
 import { usePathname, useSearchParams } from "next/navigation";
-
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
 import { EDocumentTypes } from "@interface/enums";
 import EditorDrawer from "../editorDrawer";
@@ -30,7 +29,6 @@ interface IProps {
 const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const [openTemplateDialog, setOpenTemplateDialog] = useState(false);
   const [versionData, setVersionData] = useState(version);
-  const [iframeLoaded, setIframeLoaded] = useState(false);
 
   const timestampRef = useRef(Date.now());
   const currentPath = usePathname();

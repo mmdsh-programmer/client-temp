@@ -13,7 +13,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import { EDocumentTypes } from "@interface/enums";
 import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
-import useCreateFormVersion from "@hooks/version/useCreateFormVersion";
+import useCreateFormVersion from "@hooks/formVersion/useCreateFormVersion";
 
 interface IForm {
   name: string;

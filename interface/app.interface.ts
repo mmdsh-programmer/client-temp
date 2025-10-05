@@ -393,3 +393,11 @@ export interface IHandshake {
     preferred_username: string;
   };
 }
+
+export interface IAutoLogin {
+  access_token: string;
+  signature: string;
+  key_id: string;
+  timestamp: string;
+  auto_login_code: string;
+}

@@ -19,7 +19,7 @@ import { Spinner } from "@components/atoms/spinner";
 import { getMe } from "@actions/auth";
 import { EDocumentTypes } from "@interface/enums";
 import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
-import useCreateFormVersion from "@hooks/version/useCreateFormVersion";
+import useCreateFormVersion from "@hooks/formVersion/useCreateFormVersion";
 
 interface IForm {
   name: string;

@@ -9,7 +9,7 @@ import {
 } from "@utils/error";
 import axios, { AxiosError, isAxiosError } from "axios";
 
-import { IGetTokenResponse, IHandshake } from "@interface/app.interface";
+import { IAutoLogin, IGetTokenResponse, IHandshake } from "@interface/app.interface";
 import { bracketStringify } from "@utils/index";
 import { userInfo } from "./clasor";
 
@@ -116,11 +116,9 @@ export const getPodAccessToken = async (
     const userData = await userInfo(result.data.access_token, domain, expiresAt);
     if (userData) {
       const redisClient = await global.redisClientPromise;
-      await redisClient?.set(
-        `user:${result.data.access_token}`,
-        JSON.stringify(userData),
-        { EX: expiresAt }
-      );
+      await redisClient?.set(`user:${result.data.access_token}`, JSON.stringify(userData), {
+        EX: expiresAt,
+      });
     }
 
     return result.data;
@@ -220,8 +218,8 @@ export const initiateAutoLogin = async (
   keyId: string,
   timestamp: number,
   signature: string,
-  accessToken: string
-): Promise<any> => {
+  accessToken: string,
+): Promise<IAutoLogin> => {
   try {
     const url = "/oauth2/submit/autoLogin";
     const options = {
@@ -234,13 +232,12 @@ export const initiateAutoLogin = async (
       Authorization: `Bearer ${process.env.API_TOKEN}`,
       "Content-Type": "application/x-www-form-urlencoded",
     };
-    const result = await axiosAccountsInstance.post<any>(url, options, {
+    const result = await axiosAccountsInstance.post<IAutoLogin>(url, options, {
       headers,
-      params:{
-         scope: "login"
-      }
+      params: {
+        scope: "login",
+      },
     });
-
 
     return result.data;
   } catch (error) {

@@ -13,6 +13,7 @@ import AcceptDraftDialog from "@components/organisms/dialogs/draftRequest/accept
 import AcceptVersionDialog from "@components/organisms/dialogs/versionRequest/acceptVersionDialog";
 import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftPublicDialog";
 import { useVersionStore } from "@store/version";
+import FormVersionResponseListDialog from "@components/organisms/dialogs/version/formVersionResponseListDialog";
 
 interface IVersionDialogsProps {
   activeModal: string | null;
@@ -53,6 +54,9 @@ const VersionDialogs = ({ activeModal, closeModal }: IVersionDialogsProps) => {
         <VersionCancelConfirmDialog setOpen={closeModal} />
       ) : null}
       {compareVersion?.version && !compareVersion.compare ? <DiffVersionAlert /> : null}
+      {activeModal === "formVersionExport" ? (
+        <FormVersionResponseListDialog setOpen={closeModal} />
+      ) : null}
     </>
   );
 };

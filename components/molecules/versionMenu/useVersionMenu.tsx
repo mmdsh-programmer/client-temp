@@ -9,6 +9,7 @@ import {
   EditIcon,
   GlobeIcon,
   LastVersionIcon,
+  PublishIcon,
   ShareIcon,
 } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
@@ -209,6 +210,15 @@ const useVersionMenu = (
           ),
         ]
       : []),
+    ...(getDocument.contentType === EDocumentTypes.form
+      ? [
+          createItem(
+            "خروجی‌های نسخه",
+            <PublishIcon className="h-4 w-4 fill-icon-active" />,
+            createAction("formVersionExport"),
+          ),
+        ]
+      : []),
   ];
 
   const publicOptions: MenuItem[] = [
@@ -238,6 +248,15 @@ const useVersionMenu = (
           ),
         ]
       : []),
+    ...(getDocument.contentType === EDocumentTypes.form
+      ? [
+          createItem(
+            "خروجی‌های نسخه",
+            <PublishIcon className="h-4 w-4 fill-icon-active" />,
+            createAction("formVersionExport"),
+          ),
+        ]
+      : []),
   ];
 
   const footerOptions: MenuItem[] = [
@@ -252,6 +271,21 @@ const useVersionMenu = (
       },
       { className: "copy-version-hash" },
     ),
+    ...(getDocument.contentType === EDocumentTypes.form
+      ? [
+          createItem(
+            "کپی لینک فرم",
+            <CopyIcon className="h-4 w-4 fill-icon-active stroke-[1.5]" />,
+            () => {
+              if (version.formHash) {
+                copy(`https://podform.sandpod.ir/f/${version.formHash}`);
+                toast.success("لینک فرم کپی شد.");
+              }
+            },
+            { className: "copy-form-version-link" },
+          ),
+        ]
+      : []),
     createItem(
       "کپی آدرس اشتراک‌ گذاری",
       <ShareIcon className="h-4 w-4 stroke-icon-active" />,

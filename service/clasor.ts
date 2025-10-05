@@ -15,6 +15,7 @@ import {
   IAddVersion,
   IComment,
   IFileVersion,
+  IFormVersionResponseList,
   ILikeList,
   IVersion,
 } from "@interface/version.interface";
@@ -2656,19 +2657,25 @@ export const getFormVersionExport = async (
   fileType: "XLSX" | "CSV",
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<any>>(
+    const acceptHeader = fileType === "XLSX"
+      ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      : "text/csv";
+
+    const response = await axiosClasorInstance.get(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/exportResult`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          Accept: acceptHeader,
         },
         params: {
           fileType,
           dataType: "RAW"
         },
+        responseType: "blob",
       },
     );
-    return response.data.data;
+    return response.data as Blob;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -2688,6 +2695,34 @@ export const collaborateFormVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getResponseListFormVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  offset: number,
+  size: number
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IFormVersionResponseList>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/responses`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params:{
+          offset,
+          size
+        }
       },
     );
 
