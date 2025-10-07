@@ -30,14 +30,6 @@ export async function generateMetadata({ params }): Promise<Metadata> {
   try {
     const { content } = await getCustomPostByDomain(domainUrl);
     const domainInfo = JSON.parse(content ?? "{}");
-    console.log(
-      JSON.stringify({
-        type: "domain_info:content",
-        data: domainInfo,
-        logo: domainInfo.logo,
-        podspaceUrl: process.env.NEXT_PUBLIC_PODSPACE_API,
-      }),
-    );
     return {
       title: domainInfo.projectName,
       description: domainInfo.projectDescription,
