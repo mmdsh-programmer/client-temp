@@ -13,6 +13,7 @@ export interface IProps {
   renderDialog?: (close: () => void) => React.ReactNode;
   renderSearch?: React.ReactNode;
   className?: string;
+  disabled?: boolean;
 }
 
 const HeaderListTemplate = ({
@@ -22,6 +23,7 @@ const HeaderListTemplate = ({
   renderDialog,
   renderSearch,
   className,
+  disabled,
 }: IProps) => {
   const [openCreateRepo, setOpenCreateRepo] = useState(false);
   const { setActiveTour } = useTourStore();
@@ -30,10 +32,12 @@ const HeaderListTemplate = ({
   return (
     <header className={`flex items-center justify-between ${className}`}>
       <div className="flex items-center gap-1">
-        <Typography 
+        <Typography
           {...({} as React.ComponentProps<typeof Typography>)}
           className="title_t1 version-list text-primary_normal"
-        >{header}</Typography>
+        >
+          {header}
+        </Typography>
         <Button
           className="flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none"
           onClick={() => {
@@ -59,10 +63,11 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                !userInfo?.isClasorAdmin &&
-                userInfo?.domainRole !== "owner" &&
-                !userInfo?.domainConfig?.accessToCreateRepo &&
-                header !== "لیست نسخه‌ها"
+                disabled ||
+                (!userInfo?.isClasorAdmin &&
+                  userInfo?.domainRole !== "owner" &&
+                  !userInfo?.domainConfig?.accessToCreateRepo &&
+                  header !== "لیست نسخه‌ها")
               }
             />
           </div>
@@ -73,10 +78,11 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                !userInfo?.isClasorAdmin &&
-                userInfo?.domainRole !== "owner" &&
-                !userInfo?.domainConfig?.accessToCreateRepo &&
-                header !== "لیست نسخه‌ها"
+                disabled ||
+                (!userInfo?.isClasorAdmin &&
+                  userInfo?.domainRole !== "owner" &&
+                  !userInfo?.domainConfig?.accessToCreateRepo &&
+                  header !== "لیست نسخه‌ها")
               }
               {...({} as React.ComponentProps<typeof Button>)}
             >
@@ -90,10 +96,11 @@ const HeaderListTemplate = ({
                 setOpenCreateRepo(true);
               }}
               disabled={
-                !userInfo?.isClasorAdmin &&
-                userInfo?.domainRole !== "owner" &&
-                !userInfo?.domainConfig?.accessToCreateRepo &&
-                header !== "لیست نسخه‌ها"
+                disabled ||
+                (!userInfo?.isClasorAdmin &&
+                  userInfo?.domainRole !== "owner" &&
+                  !userInfo?.domainConfig?.accessToCreateRepo &&
+                  header !== "لیست نسخه‌ها")
               }
               {...({} as React.ComponentProps<typeof Button>)}
             >

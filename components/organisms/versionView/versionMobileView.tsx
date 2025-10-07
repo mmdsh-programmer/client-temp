@@ -12,6 +12,9 @@ import { Spinner } from "@components/atoms/spinner";
 import { useDocumentStore } from "@store/document";
 import { useEditorStore } from "@store/editor";
 import { useVersionStore } from "@store/version";
+import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
+import { useRepositoryStore } from "@store/repository";
+import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
 
 const VersionMobileView = ({
   isLoading,
@@ -22,11 +25,14 @@ const VersionMobileView = ({
   lastVersion,
   type,
 }: IVersionView) => {
+  const { repo } = useRepositoryStore();
   const getSelectedDocument = useDocumentStore((state) => {
     return state.selectedDocument;
   });
   const { versionModalList, setVersionModalList, setSelectedVersion } = useVersionStore();
   const { setEditorData, setEditorMode, setEditorModal } = useEditorStore();
+  const collaborateFrom = useCollaborateFormVersion();
+  const autoLogin = useAutoLoginCode();
 
   const listLength = getVersionList?.[0].length;
 
@@ -48,12 +54,34 @@ const VersionMobileView = ({
     window.open(`http://localhost:8080/board/${value.id}`);
   };
 
+  const handleOpenFormEditor = (value: IVersion) => {
+    if (isLoading) {
+      return;
+    }
+    collaborateFrom.mutate({
+      repoId: repo!.id,
+      documentId: getSelectedDocument!.id,
+      versionId: value.id,
+      callBack: () => {
+        autoLogin.mutate({
+          callBack: (code) => {
+            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/auto-login?form_hash=${value.formHash}&auto_login_code=${code}`;
+            window.open(url);
+          },
+        });
+      },
+    });
+  };
+
   return (
     <>
       {/* eslint-disable-next-line no-nested-ternary */}
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">
-          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-8 w-8 text-primary" />
+          <Spinner
+            {...({} as React.ComponentProps<typeof Spinner>)}
+            className="h-8 w-8 text-primary"
+          />
         </div>
       ) : listLength ? (
         <div className="version-list-mobile flex h-[calc(100vh-140px)] flex-col gap-3 overflow-auto rounded-lg">
@@ -67,10 +95,18 @@ const VersionMobileView = ({
                     lastVersion?.id === version.id &&
                     (version.status === "private" || version.status === "accepted") ? (
                       <div className="flex items-center gap-1">
-                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2 text-primary_normal">
+                        <Typography
+                          {...({} as React.ComponentProps<typeof Typography>)}
+                          className="title_t2 text-primary_normal"
+                        >
                           {version.versionNumber}
                         </Typography>
-                        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label text-green-400">آخرین نسخه</Typography>
+                        <Typography
+                          {...({} as React.ComponentProps<typeof Typography>)}
+                          className="label text-green-400"
+                        >
+                          آخرین نسخه
+                        </Typography>
                       </div>
                     ) : (
                       version.versionNumber
@@ -94,10 +130,12 @@ const VersionMobileView = ({
                     },
                   ]}
                   onClick={() => {
-                    if (getSelectedDocument?.contentType !== EDocumentTypes.board) {
-                      handleOpenEditor(version);
-                    } else {
+                    if (getSelectedDocument?.contentType === EDocumentTypes.form) {
+                      handleOpenFormEditor(version);
+                    } else if (getSelectedDocument?.contentType === EDocumentTypes.board) {
                       handleOpenBoardEditor(version);
+                    } else {
+                      handleOpenEditor(version);
                     }
                   }}
                   cardAction={<VersionMenu version={version} lastVersion={lastVersion} />}

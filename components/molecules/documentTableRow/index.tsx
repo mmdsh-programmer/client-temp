@@ -11,6 +11,10 @@ import Checkbox from "@components/atoms/checkbox";
 import { useRepositoryStore } from "@store/repository";
 import { useBulkStore } from "@store/bulk";
 import { useCategoryStore } from "@store/category";
+import { EDocumentTypes } from "@interface/enums";
+import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
+import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
+import useGetLastVersion from "@hooks/version/useGetLastVersion";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -23,6 +27,19 @@ const DocumentTableRow = ({ document }: IProps) => {
   const { category: selectedCat } = useCategoryStore();
 
   const { data: userInfo } = useGetUser();
+  const {
+    data: getLastVersion,
+    isSuccess: lastVersionIsSuccess,
+    error: lastVersionError,
+  } = useGetLastVersion(
+    getRepo!.id,
+    document!.id,
+    currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
+      document.contentType === EDocumentTypes.form
+  );
+  const collaborateFrom = useCollaborateFormVersion();
+  const autoLogin = useAutoLoginCode();
 
   const repoUserGroupHash =
     currentPath === "/admin/myDocuments" ||
@@ -31,26 +48,41 @@ const DocumentTableRow = ({ document }: IProps) => {
       : getRepo?.userGroupHash;
 
   const handleRowClick = () => {
-    const path = selectedCat
-      ? `edit?repoId=${document.repoId}&categoryId=${
-          selectedCat.id
-        }&documentId=${document.id}&repoGroupHash=${
-          repoUserGroupHash
-        }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${
-          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }`
-      : `edit?repoId=${document.repoId}&documentId=${
-          document.id
-        }&repoGroupHash=${repoUserGroupHash}&type=${document?.contentType}${
-          document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
-        }${
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id)
-            ? "&sharedDocuments=true"
-            : ""
-        }`;
-
-    window.open(path, "_blank");
+    if (document.contentType === EDocumentTypes.form) {
+      collaborateFrom.mutate({
+        repoId: getRepo!.id,
+        documentId: document!.id,
+        versionId: getLastVersion!.id,
+        callBack: () => {
+          autoLogin.mutate({
+            callBack: (code) => {
+              const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/auto-login?form_hash=${getLastVersion!.formHash}&auto_login_code=${code}`;
+              window.open(url);
+            },
+          });
+        },
+      });
+    } else {
+      const path = selectedCat
+        ? `edit?repoId=${document.repoId}&categoryId=${
+            selectedCat.id
+          }&documentId=${document.id}&repoGroupHash=${
+            repoUserGroupHash
+          }&catGroupHash=${selectedCat.userGroupHash}&type=${document?.contentType}${
+            document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+          }`
+        : `edit?repoId=${document.repoId}&documentId=${
+            document.id
+          }&repoGroupHash=${repoUserGroupHash}&type=${document?.contentType}${
+            document.chatThreadId ? `&chatThreadId=${document.chatThreadId}` : ""
+          }${
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" && document?.repoId !== userInfo?.repository.id)
+              ? "&sharedDocuments=true"
+              : ""
+          }`;
+      window.open(path, "_blank");
+    }
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {

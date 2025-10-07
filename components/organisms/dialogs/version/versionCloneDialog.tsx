@@ -19,7 +19,6 @@ import { Spinner } from "@components/atoms/spinner";
 import { getMe } from "@actions/auth";
 import { EDocumentTypes } from "@interface/enums";
 import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
-import useCreateFormVersion from "@hooks/formVersion/useCreateFormVersion";
 
 interface IForm {
   name: string;
@@ -56,7 +55,6 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
   );
   const createVersion = useCreateVersion();
   const createFileVersionHook = useCreateFileVersion();
-  const createFormVersionHook = useCreateFormVersion();
 
   const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
 
@@ -111,32 +109,12 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
           toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
         },
       });
-    } else {
-      createFormVersionHook.mutate({
-        repoId,
-        documentId: getDocument!.id,
-        versionNumber: dataForm.name,
-        isDirectAccess:
-          sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
-            ? true
-            : undefined,
-        callBack: () => {
-          handleClose();
-          toast.success("نسخه مورد نظر با موفقیت ایجاد گردید.");
-        },
-      });
     }
   };
 
   return (
     <CreateDialog
-      isPending={
-        createVersion.isPending ||
-        createFileVersionHook.isPending ||
-        createFormVersionHook.isPending
-      }
+      isPending={createVersion.isPending || createFileVersionHook.isPending}
       dialogHeader="ایجاد نسخه جدید از این نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}

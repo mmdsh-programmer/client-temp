@@ -5,7 +5,6 @@ import { getMe } from "./auth";
 import { handshake, initiateAutoLogin } from "@service/account";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
-import { getCustomPostByDomainAction } from "./domain";
 import { getDomainHost } from "@utils/getDomain";
 import { getCustomPostByDomain } from "@service/clasor";
 
@@ -37,15 +36,12 @@ export const initiateAutoLoginAction = async () => {
     const signature = forge.util.encode64(signatureBytes);
 
     const submitAutoLogin = await initiateAutoLogin(keyId, timestamp, signature, accessToken);
-    // const redirectUri = `https://docs.sandpod.ir?access_token=${accessToken}&key_id=${keyId}&timestamp=${timestamp}&signature=${signature}`;
-    const redirectUri = `${decodeURIComponent("https://docs.sandpod.ir/signin")}&scope=login`;
-    const loginUrl = `${process.env.ACCOUNTS}/oauth2/authorize/?client_id=${domainInfo.clientId}&response_type=code&scope=login&auto_login_code=${submitAutoLogin.auto_login_code}&redirect_uri=${redirectUri}`;
-    return loginUrl;
-  } catch (error: any) {
-    console.error("Auto-login action failed:", error);
-    if (error.response?.data) {
-      console.error("API Error details:", error.response.data);
-    }
+    
+    // const redirectUri = `${decodeURIComponent("http://localhost:4000/signin")}`;
+    // const loginUrl = `${process.env.ACCOUNTS}/oauth2/authorize/?client_id=3af5ah4dcc48c39e7cdf00783817da&redirect_uri=${redirectUri}&response_type=code&scope=profile&auto_login_code=${submitAutoLogin.auto_login_code}`;
+
+    return submitAutoLogin.auto_login_code;
+  } catch (error) {
     return normalizeError(error as IActionError);
   }
 };

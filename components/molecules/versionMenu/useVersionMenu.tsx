@@ -24,6 +24,8 @@ import { useRepositoryStore } from "@store/repository";
 import { useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
 import { MenuItem } from "@components/templates/menuTemplate";
+import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
+import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
 
 const createItem = (
   text: string,
@@ -74,15 +76,35 @@ const useVersionMenu = (
   lastVersion: IVersion | undefined,
   setModal: (modalName: string) => void,
 ): MenuItem[] => {
+  const { repo } = useRepositoryStore();
   const { selectedDocument: getDocument } = useDocumentStore();
   const { setSelectedVersion, compareVersion, setCompareVersion, setVersionModalList } =
     useVersionStore();
   const { setEditorMode, setEditorModal, setEditorData: setVersionData } = useEditorStore();
   const repoId = useRepoId();
-  const { data: userInfo } = useGetUser();
   const { isAdminOrOwner, isWriterOrViewer } = useRoles();
 
+  const { data: userInfo } = useGetUser();
+  const collaborateFrom = useCollaborateFormVersion();
+  const autoLogin = useAutoLoginCode();
+
   if (!version || !getDocument) return [];
+
+  const handleOpenFormEditor = () => {
+    collaborateFrom.mutate({
+      repoId: repo!.id,
+      documentId: getDocument!.id,
+      versionId: version.id,
+      callBack: () => {
+        autoLogin.mutate({
+          callBack: (code) => {
+            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/auto-login?form_hash=${version.formHash}&auto_login_code=${code}`;
+            window.open(url);
+          },
+        });
+      },
+    });
+  };
 
   const createAction = (modalName: string) => {
     return () => {
@@ -98,13 +120,18 @@ const useVersionMenu = (
       createAction("clone"),
       {
         className: "clone-version",
-        disabled: isWriterOrViewer() && version.creator?.userName !== userInfo?.username,
+        disabled:
+          getDocument.contentType === EDocumentTypes.form ||
+          (isWriterOrViewer() && version.creator?.userName !== userInfo?.username),
       },
     ),
     createItem(
       "ویرایش",
       <EditIcon className="h-4 w-4" />,
       () => {
+        if (getDocument.contentType === EDocumentTypes.form) {
+          handleOpenFormEditor();
+        }
         setSelectedVersion(version);
         setEditorMode("edit");
         setEditorModal(true);

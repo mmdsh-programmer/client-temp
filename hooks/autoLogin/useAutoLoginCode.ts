@@ -4,7 +4,7 @@ import { handleClientSideHookError } from "@utils/error";
 import { toast } from "react-toastify";
 import { initiateAutoLoginAction } from "@actions/autoLogin";
 
-const useAutoLogin = () => {
+const useAutoLoginCode = () => {
   return useMutation({
     mutationKey: ["autoLogin"],
     mutationFn: async (values: { callBack?: (url: string) => void }) => {
@@ -22,4 +22,4 @@ const useAutoLogin = () => {
   });
 };
 
-export default useAutoLogin;
+export default useAutoLoginCode;

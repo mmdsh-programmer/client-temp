@@ -1,7 +1,6 @@
 import {
   AlertIcon,
   BackIcon,
-  FolderArchiveIcon,
   LogoMobileIcon,
   ThemeIcon,
   UserFillIcon,
@@ -15,7 +14,6 @@ import ProfileMenu from "@components/molecules/profileMenu";
 import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRepositoryStore } from "@store/repository";
-import useAutoLogin from "@hooks/autoLogin/useAutoLogin";
 
 const Header = () => {
   const router = useRouter();
@@ -26,21 +24,12 @@ const Header = () => {
   const currentPath = usePathname();
 
   const { data: userInfo } = useGetUser();
-  const autoLogin = useAutoLogin();
 
   const handleAdminPanelNavigation = () => {
     if (isNavigating) return;
 
     setIsNavigating(true);
     router.push("/panel-admin-clasor");
-  };
-
-  const handleAutoLogin = () => {
-    autoLogin.mutate({
-      callBack: (url) => {
-        window.open(url);
-      },
-    });
   };
 
   useEffect(() => {
@@ -78,13 +67,6 @@ const Header = () => {
             <LogoMobileIcon className="h-full w-full" />
           </div>
           <div className="mr-auto flex items-center gap-4">
-            <Button
-              {...({} as React.ComponentProps<typeof Button>)}
-              onClick={handleAutoLogin}
-              className="autoLogin__button flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg"
-            >
-              <FolderArchiveIcon className="h-4 w-4 stroke-icon-hover" />
-            </Button>
             {userInfo?.isClasorAdmin && currentPath !== "/panel-admin-clasor" ? (
               <Button
                 {...({} as React.ComponentProps<typeof Button>)}

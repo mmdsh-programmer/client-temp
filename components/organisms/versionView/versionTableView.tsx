@@ -16,6 +16,8 @@ import { useVersionStore } from "@store/version";
 import { useEditorStore } from "@store/editor";
 import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
 import { useRepositoryStore } from "@store/repository";
+import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
+
 
 const VersionTableView = ({
   isLoading,
@@ -33,6 +35,7 @@ const VersionTableView = ({
   const { setVersionModalList, setSelectedVersion } = useVersionStore();
   const { setEditorData, setEditorMode, setEditorModal } = useEditorStore();
   const collaborateFrom = useCollaborateFormVersion();
+  const autoLogin = useAutoLoginCode();
 
   const listLength = getVersionList?.[0].length;
 
@@ -63,7 +66,15 @@ const VersionTableView = ({
       documentId: getSelectedDocument!.id,
       versionId: value.id,
       callBack: () => {
-        window.open(`https://podform.sandpod.ir/app/form/build/${value.formId}`);
+        autoLogin.mutate({
+          callBack: (code) => {
+            const redirectUri = decodeURIComponent(`${process.env.NEXT_PUBLIC_PODFORM_URL}/app/form/build/${value.formId}`);
+            const loginUrl = `${process.env.NEXT_PUBLIC_ACCOUNTS}/oauth2/authorize/?client_id=18168453xfe98412ea0a164708f9c9288&redirect_uri=${redirectUri}&response_type=code&scope=profile&auto_login_code=${code}`;
+            
+            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/auto-login?form_hash=${value.formHash}&auto_login_code=${code}`;
+            window.open(url);
+          },
+        });
       },
     });
   };

@@ -94,6 +94,7 @@ const VersionList = () => {
           return <VersionCreateDialog close={close} />;
         }}
         className="version-list-header"
+        disabled={!!sortedVersion?.[0].length}
       />
       <div className="hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
         <VersionTableView {...commonProps} />
