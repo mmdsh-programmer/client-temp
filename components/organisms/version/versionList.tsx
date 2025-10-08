@@ -11,6 +11,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useDocumentStore } from "@store/document";
+import { EDocumentTypes } from "@interface/enums";
 
 const VersionList = () => {
   const repoId = useRepoId();
@@ -94,7 +95,7 @@ const VersionList = () => {
           return <VersionCreateDialog close={close} />;
         }}
         className="version-list-header"
-        disabled={!!sortedVersion?.[0].length}
+        disabled={getSelectedDocument?.contentType === EDocumentTypes.form && !!sortedVersion?.[0].length}
       />
       <div className="hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
         <VersionTableView {...commonProps} />

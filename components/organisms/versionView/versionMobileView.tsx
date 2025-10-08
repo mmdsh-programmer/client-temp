@@ -65,7 +65,7 @@ const VersionMobileView = ({
       callBack: () => {
         autoLogin.mutate({
           callBack: (code) => {
-            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/auto-login?form_hash=${value.formHash}&auto_login_code=${code}`;
+            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/app/auto-login?form_Id=${value.formId}&auto_login_code=${code}&embed=false`;
             window.open(url);
           },
         });

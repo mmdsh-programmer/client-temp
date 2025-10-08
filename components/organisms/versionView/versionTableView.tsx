@@ -18,7 +18,6 @@ import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVers
 import { useRepositoryStore } from "@store/repository";
 import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
 
-
 const VersionTableView = ({
   isLoading,
   getVersionList,
@@ -68,11 +67,7 @@ const VersionTableView = ({
       callBack: () => {
         autoLogin.mutate({
           callBack: (code) => {
-            // const redirectUri = decodeURIComponent(`${process.env.NEXT_PUBLIC_PODFORM_URL}/app/form/build/${value.formId}`);
-            // const redirectUri = `https://podform.sandpod.ir/app/validate`;
-            // const loginUrl = `${process.env.NEXT_PUBLIC_ACCOUNTS}/oauth2/authorize/?client_id=18168453xfe98412ea0a164708f9c9288&redirect_uri=${redirectUri}&response_type=code&scope=profile&auto_login_code=${code}`;
-            
-            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/auto-login?form_hash=${value.formHash}&auto_login_code=${code}&embed=false`;
+            const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/app/auto-login?form_Id=${value.formId}&auto_login_code=${code}&embed=true`;
             window.open(url);
           },
         });
