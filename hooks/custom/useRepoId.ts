@@ -17,30 +17,29 @@ const useRepoId = () => {
   const sharedDocuments = searchParams?.get("sharedDocuments");
 
   const repoId = () => {
-    if (
+   if (
       currentPath === "/admin/myDocuments" ||
       (currentPath === "/admin/dashboard" &&
         (getSelectedDocument?.repoId === userInfo?.repository.id ||
           category?.repoId === userInfo?.repository.id))
     ) {
-      return userInfo!.repository.id;
+      return userInfo?.repository?.id || null;
     }
     if (currentPath === "/admin/sharedDocuments" && getSelectedDocument) {
-      return getSelectedDocument!.repoId;
+      return getSelectedDocument.repoId || null;
     }
     if (
       currentPath === "/admin/dashboard" &&
       getSelectedDocument?.repoId !== userInfo?.repository.id
     ) {
-      return getSelectedDocument!.repoId;
+      return getSelectedDocument?.repoId || null;
     }
-    if (sharedDocuments === "true") {
-      return +getRepoId!;
+    if (sharedDocuments === "true" && getRepoId) {
+      return +getRepoId;
     }
-    if (getRepo) {
-      return getRepo!.id;
+    if (getRepo?.id) {
+      return getRepo.id;
     }
-    return null;
   };
 
   return repoId();

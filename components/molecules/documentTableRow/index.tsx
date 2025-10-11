@@ -8,13 +8,14 @@ import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import Checkbox from "@components/atoms/checkbox";
-import { useRepositoryStore } from "@store/repository";
 import { useBulkStore } from "@store/bulk";
 import { useCategoryStore } from "@store/category";
 import { EDocumentTypes } from "@interface/enums";
 import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
 import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
 import useGetLastVersion from "@hooks/version/useGetLastVersion";
+import useRepoId from "@hooks/custom/useRepoId";
+import { useRepositoryStore } from "@store/repository";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -22,9 +23,10 @@ interface IProps {
 
 const DocumentTableRow = ({ document }: IProps) => {
   const currentPath = usePathname();
-  const { setBulkItems, bulkItems: getBulkItems } = useBulkStore();
   const { repo: getRepo } = useRepositoryStore();
+  const { setBulkItems, bulkItems: getBulkItems } = useBulkStore();
   const { category: selectedCat } = useCategoryStore();
+  const repoId = useRepoId();
 
   const { data: userInfo } = useGetUser();
   const {
@@ -32,11 +34,11 @@ const DocumentTableRow = ({ document }: IProps) => {
     isSuccess: lastVersionIsSuccess,
     error: lastVersionError,
   } = useGetLastVersion(
-    getRepo!.id,
+    repoId!,
     document!.id,
     currentPath === "/admin/sharedDocuments" ||
       (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
-      document.contentType === EDocumentTypes.form
+    document.contentType === EDocumentTypes.form && !!repoId,
   );
   const collaborateFrom = useCollaborateFormVersion();
   const autoLogin = useAutoLoginCode();
@@ -49,10 +51,14 @@ const DocumentTableRow = ({ document }: IProps) => {
 
   const handleRowClick = () => {
     if (document.contentType === EDocumentTypes.form) {
+      if (!repoId || !getLastVersion) {
+        console.error("شناسه مخزن وجود ندارد.");
+        return;
+      }
       collaborateFrom.mutate({
-        repoId: getRepo!.id,
+        repoId,
         documentId: document!.id,
-        versionId: getLastVersion!.id,
+        versionId: getLastVersion.id,
         callBack: () => {
           autoLogin.mutate({
             callBack: (code) => {

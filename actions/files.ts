@@ -100,7 +100,6 @@ export const publicHashAction = async (resourceId: number, hash: string) => {
 
 export const getPublishAttachmentAction = async (
   docId: number,
-  versionId: number,
   offset: number,
   size: number,
 ) => {
@@ -109,7 +108,6 @@ export const getPublishAttachmentAction = async (
     const response = await getPublishAttachment(
       userInfo.access_token,
       docId,
-      versionId,
       offset,
       size,
     );

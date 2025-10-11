@@ -47,7 +47,7 @@ import {
   IDomainTag,
   IDomainTagList,
 } from "@interface/domain.interface";
-import { IFile, IPodspaceResult } from "@interface/file.interface";
+import { IFile, IPodspaceResult, IPublishAttachmentList } from "@interface/file.interface";
 import {
   IListResponse,
   IPublicKey,
@@ -2875,21 +2875,20 @@ export const publicHash = async (accessToken: string, resourceId: number, hash: 
 export const getPublishAttachment = async (
   accessToken: string,
   docId: number,
-  versionId: number,
   offset: number,
   size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get(
-      `publish/document/${docId}/versions/${versionId}/exportResult`,
+    const response = await axiosClasorInstance.get<{ data: IPublishAttachmentList }>(
+      `publish/document/${docId}/attachments`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        params:{
+        params: {
           offset,
-          size
-        }
+          size,
+        },
       },
     );
 

@@ -43,3 +43,42 @@ export interface IFile {
   };
   version: string;
 }
+
+export interface IPublishFile {
+  attributes: [];
+  cachePolicy: string;
+  created: number;
+  extension: string;
+  hash: string;
+  indexState: string;
+  md5: string;
+  name: string;
+  owner: {
+    username: string;
+    name: string;
+    ssoId: number;
+    roles: string[];
+    type: string;
+  };
+  parentHash: string;
+  sha256: string;
+  size: number;
+  thumbnail: string;
+  type: string;
+  updated: number;
+  uploader: {
+    username: string;
+    name: string;
+    ssoId: number;
+    roles: string[];
+    type: string;
+  };
+  version: string;
+}
+
+export interface IPublishAttachmentList {
+  list: IPublishFile[];
+  offset: number;
+  size: number;
+  total: number;
+}
