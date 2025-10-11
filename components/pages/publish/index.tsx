@@ -1,3 +1,4 @@
+import React from "react";
 import ClientSideProvider from "provider/clientSideProvider";
 import ConnectRemoteEditor from "@components/organisms/publish/connectRemoteEditor";
 import { EDocumentTypes } from "@interface/enums";
@@ -8,10 +9,10 @@ import PublishBottomNav from "@components/organisms/publishBottomNav";
 import PublishFeeback from "@components/organisms/publishFeedback";
 import PublishOutlineDrawer from "@components/organisms/publishBottomNav/publishOutlineDrawer";
 import PublishVersion from "../../organisms/publish/publishVersion";
-import React from "react";
 import RenderClientContent from "@components/organisms/publish/renderClientContent";
 import { RenderServerSideContent } from "clasor-content-preview";
 import PublishFilePreview from "@components/organisms/publish/publishFilePreview";
+import PublishFilesDrawer from "@components/organisms/publishBottomNav/publishFilesDrawer";
 
 interface IProps {
   version: IVersion;
@@ -49,6 +50,7 @@ const PublishVersionContent = ({ version, document }: IProps) => {
         <PublishBottomNav />
       </section>
       <PublishOutlineDrawer outline={version.outline || "[]"} />
+      <PublishFilesDrawer version={version} />
     </>
   );
 };

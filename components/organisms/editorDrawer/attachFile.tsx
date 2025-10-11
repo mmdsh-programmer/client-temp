@@ -2,39 +2,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { ChangeEvent, useState } from "react";
-import FileList from "../fileList";
 import FileUpload from "@components/molecules/fileUpload";
-import { IFile } from "cls-file-management";
 import axios from "axios";
 import { toast } from "react-toastify";
-import useDeleteFile from "@hooks/files/useDeleteFile";
 import useGetFiles from "@hooks/files/useGetFiles";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useQueryClient } from "@tanstack/react-query";
-import useRepoId from "@hooks/custom/useRepoId";
 import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 import { Spinner } from "@components/atoms/spinner";
 import { useDocumentStore } from "@store/document";
+import FileItem from "@components/molecules/fileItem";
 
 const fileTablePageSize = 20;
 
-const AttachFile = ({
-  attachmentUserGroup,
-}: {
-  attachmentUserGroup: string;
-}) => {
-  const repoId = useRepoId();
+const AttachFile = ({ attachmentUserGroup }: { attachmentUserGroup: string }) => {
   const { selectedDocument: getDocument } = useDocumentStore();
   const [processCount, setProcessCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const {
-    data: userInfo,
-    refetch: refetchUser,
-    isFetching: isFetchingUserInfo,
-  } = useGetUser();
+  const { data: userInfo, refetch: refetchUser, isFetching: isFetchingUserInfo } = useGetUser();
 
   const {
     data: files,
@@ -43,28 +30,9 @@ const AttachFile = ({
   } = useGetFiles(getDocument!.id, attachmentUserGroup, fileTablePageSize);
 
   const createUploadLink = useCreateUploadLink();
-  const deleteFile = useDeleteFile();
-
-  const handleDeleteFile = (file: IFile) => {
-    setIsLoading(true);
-    if (getDocument && repoId) {
-      deleteFile.mutate({
-        repoId,
-        resourceId: getDocument.id,
-        fileHash: file.hash,
-        type: "private",
-        userGroupHash: getDocument.attachmentUserGroup || "",
-        callBack: () => {
-          setIsLoading(false);
-          refetch();
-        },
-      });
-    }
-  };
 
   const onSuccess = () => {
     toast.success("آپلود موفق");
-    setIsLoading(false);
     refetch();
   };
 
@@ -76,7 +44,6 @@ const AttachFile = ({
 
     const token = userInfo?.access_token;
     if (!isFetchingUserInfo && token) {
-      setIsLoading(true);
 
       const fileItem = file;
       const fileData = new FormData();
@@ -102,12 +69,10 @@ const AttachFile = ({
                   _token_issuer_: "1",
                 },
                 onUploadProgress(progressEvent: any) {
-                  const progress = Math.round(
-                    (progressEvent.loaded * 100) / progressEvent.total
-                  );
+                  const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                   setProcessCount(progress);
                 },
-              }
+              },
             );
             if (result.data.result) {
               await onSuccess();
@@ -117,8 +82,6 @@ const AttachFile = ({
               refetchUser();
             }
             toast.error("خطا در بارگذاری فایل");
-          } finally {
-            setIsLoading(false);
           }
         },
       });
@@ -129,28 +92,28 @@ const AttachFile = ({
     }
   };
 
+  const fileList =
+    files?.pages?.flatMap((page) => {
+      return page?.list;
+    }) || [];
+
   return (
-    <div className="h-full flex flex-col gap-6 justify-between px-6 py-4">
-        {isLoadingFiles ? (
-          <div className="h-full flex justify-center">
-            <Spinner className="h-5 w-5 text-primary" />
-          </div>
-        ) : userInfo ? (
-          <FileList
-            files={
-              files?.pages?.flatMap((page) => {
-                return page?.list;
-              }) || []
-            }
-            onDelete={handleDeleteFile}
-            isDeleting={isLoading}
-            userToken={userInfo?.access_token}
-          />
-        ) : null}
-        {getDocument?.attachmentUserGroup ? (
-          <FileUpload onUpload={handleUploadClick} progress={processCount} />
-        ) : null}
-      </div>
+    <div className="flex h-full flex-col justify-between gap-6 px-6 py-4">
+      {isLoadingFiles ? (
+        <div className="flex h-full justify-center">
+          <Spinner className="h-5 w-5 text-primary" />
+        </div>
+      ) : userInfo ? (
+        <div className="flex h-[calc(100vh-320px)] flex-col gap-4 overflow-auto">
+          {fileList.map((file) => {
+            return <FileItem key={file.name} file={file} />;
+          })}
+        </div>
+      ) : null}
+      {getDocument?.attachmentUserGroup ? (
+        <FileUpload onUpload={handleUploadClick} progress={processCount} />
+      ) : null}
+    </div>
   );
 };
 

@@ -13,6 +13,8 @@ export const usePublishStore = create<{
   setOpenPublishPageSearchContent: (open: SetBoolean) => void;
   openPublishOutlineDrawer: boolean;
   setOpenPublishOutlineDrawer: (open: SetBoolean) => void;
+  openPublishFilesDrawer: boolean;
+  setOpenPublishFilesDrawer: (open: SetBoolean) => void;
 }>((set) => {
   return {
     publishVersion: null,
@@ -40,6 +42,15 @@ export const usePublishStore = create<{
         });
       }
       return set({ openPublishOutlineDrawer: open });
+    },
+    openPublishFilesDrawer: false,
+    setOpenPublishFilesDrawer: (open) => {
+      if (typeof open === "function") {
+        return set((s) => {
+          return { openPublishFilesDrawer: (open as (prev: boolean) => boolean)(s.openPublishFilesDrawer) };
+        });
+      }
+      return set({ openPublishFilesDrawer: open });
     },
   };
 });

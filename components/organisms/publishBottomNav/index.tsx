@@ -6,7 +6,7 @@ import LikeAndDislike from "../like&dislike";
 import PublishNextAndPrev from "./publishNextAndPrev";
 import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import { Button } from "@material-tailwind/react";
-import { MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
+import { ImageIcon, MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
 import PublishTinyLink from "./publishTinyLink";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { usePublishStore } from "@store/publish";
@@ -17,6 +17,7 @@ const PublishBottomNav = () => {
     publishVersion: getPublishVersion,
     publishPageSelectedDocument: getPublishPageSelectedDocument,
     setOpenPublishOutlineDrawer,
+    setOpenPublishFilesDrawer,
   } = usePublishStore();
   const { data: userData } = useGetOptionalUser();
   const { data: getDomainInfo } = useGetDomainInfo();
@@ -45,9 +46,7 @@ const PublishBottomNav = () => {
         {getPublishPageSelectedDocument ? (
           <PublishNextAndPrev selectedDocument={getPublishPageSelectedDocument} />
         ) : null}
-
         <PublishTinyLink />
-
         <Button
           {...({} as React.ComponentProps<typeof Button>)}
           className="w-fit min-w-fit border-none p-3"
@@ -55,6 +54,16 @@ const PublishBottomNav = () => {
           variant="outlined"
         >
           <MoreLineIcon className="block h-6 w-6 stroke-white" />
+        </Button>
+        <Button
+          {...({} as React.ComponentProps<typeof Button>)}
+          className="w-fit min-w-fit border-none p-3"
+          onClick={() => {
+            return setOpenPublishFilesDrawer(true);
+          }}
+          variant="outlined"
+        >
+          <ImageIcon className="block h-6 w-6 fill-white" />
         </Button>
         <div className="h-5 w-[1px] bg-white bg-opacity-15" />
 

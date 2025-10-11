@@ -1,36 +1,40 @@
-import { Button, Typography } from "@material-tailwind/react";
-import { DeleteIcon, DownloadIcon } from "@components/atoms/icons";
-
+import React, { useState } from "react";
+import { Typography } from "@material-tailwind/react";
+import { DownloadIcon } from "@components/atoms/icons";
 import { IFile } from "cls-file-management";
-import React from "react";
+import useGetUser from "@hooks/auth/useGetUser";
+import { Spinner } from "@components/atoms/spinner";
+import FileItemMenu from "./fileItemMenu";
 
 interface IProps {
   file: IFile;
-  onDelete: (file: IFile) => void;
-  isDeleting: boolean;
-  userToken: string;
 }
 
-const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
+const FileItem = ({ file }: IProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: userInfo } = useGetUser();
+
   const fileSizeInKB = file.size / 1000;
   const fileSizeInMB = fileSizeInKB / 1000;
 
   return (
-    <div className="w-full flex gap-2 justify-between items-center p-4 rounded-lg border-normal border-[1px]">
-      <div className="flex flex-col flex-grow items-start max-w-[90%]">
+    <div className="flex w-full items-center justify-between gap-2 rounded-lg border-[1px] border-normal p-4">
+      <div className="flex max-w-[80%] flex-grow flex-col items-start">
         <Typography
           placeholder=""
-          className="title_t2 text-primary_normal truncate max-w-full"
+          className="title_t2 max-w-full truncate text-primary_normal"
+          title={file.name}
           dir="ltr"
-          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
         >
           {file.name}
         </Typography>
         <div className="flex items-center gap-1">
           <a
-            className="p-0 bg-transparent"
+            className="bg-transparent p-0"
             download
-            href={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userToken}&time=${Date.now()}`}
+            href={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${file.hash}?&checkUserGroupAccess=true&Authorization=${userInfo?.access_token}&time=${Date.now()}`}
             onClick={(e) => {
               return e.stopPropagation();
             }}
@@ -40,7 +44,7 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
           <Typography
             placeholder=""
             className="title_t4 text-hint"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             {fileSizeInKB < 1000
               ? `${fileSizeInKB.toFixed(2)} KB`
@@ -48,17 +52,11 @@ const FileItem = ({ file, isDeleting, onDelete, userToken }: IProps) => {
           </Typography>
         </div>
       </div>
-      <Button
-        placeholder=""
-        className="bg-transparent !p-0"
-        onClick={() => {
-          return onDelete(file);
-        }}
-        disabled={isDeleting}
-        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
-      >
-        <DeleteIcon className="h-5 w-5 fill-icon-hover" />
-      </Button>
+      {isLoading ? (
+        <Spinner className="h-5 w-5" />
+      ) : (
+        <FileItemMenu file={file} setIsLoading={setIsLoading} />
+      )}
     </div>
   );
 };

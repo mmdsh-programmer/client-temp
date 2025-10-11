@@ -41,7 +41,12 @@ import {
 } from "@interface/document.interface";
 import { IContentSearchListItem, IContentSearchResult } from "@interface/contentSearch.interface";
 import { ICreateGroup, IGetGroup, IGetGroups, IUpdateGroup } from "@interface/group.interface";
-import { IDomainDocuments, IDomainSubscriptionList, IDomainTag, IDomainTagList } from "@interface/domain.interface";
+import {
+  IDomainDocuments,
+  IDomainSubscriptionList,
+  IDomainTag,
+  IDomainTagList,
+} from "@interface/domain.interface";
 import { IFile, IPodspaceResult } from "@interface/file.interface";
 import {
   IListResponse,
@@ -2657,9 +2662,10 @@ export const getFormVersionExport = async (
   fileType: "XLSX" | "CSV",
 ) => {
   try {
-    const acceptHeader = fileType === "XLSX"
-      ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      : "text/csv";
+    const acceptHeader =
+      fileType === "XLSX"
+        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        : "text/csv";
 
     const response = await axiosClasorInstance.get(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/exportResult`,
@@ -2670,7 +2676,7 @@ export const getFormVersionExport = async (
         },
         params: {
           fileType,
-          dataType: "RAW"
+          dataType: "RAW",
         },
         responseType: "blob",
       },
@@ -2710,7 +2716,7 @@ export const getResponseListFormVersion = async (
   documentId: number,
   versionId: number,
   offset: number,
-  size: number
+  size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IFormVersionResponseList>>(
@@ -2719,10 +2725,10 @@ export const getResponseListFormVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        params:{
+        params: {
           offset,
-          size
-        }
+          size,
+        },
       },
     );
 
@@ -2848,6 +2854,50 @@ export const createUploadLink = async (
   }
 };
 
+export const publicHash = async (accessToken: string, resourceId: number, hash: string) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      `fileManagement/resource/${resourceId}/file/${hash}/public`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPublishAttachment = async (
+  accessToken: string,
+  docId: number,
+  versionId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get(
+      `publish/document/${docId}/versions/${versionId}/exportResult`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params:{
+          offset,
+          size
+        }
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
 
 /// //////////////////////// RELEASE DOCS //////////////////////////
 export const getPendingDrafts = async (
@@ -4800,18 +4850,21 @@ export const getDomainDocuments = async (
   size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IDomainDocuments>>("/domain/report/documents", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        domainUrl,
+    const response = await axiosClasorInstance.get<IServerResult<IDomainDocuments>>(
+      "/domain/report/documents",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+        params: {
+          title,
+          tagIds,
+          offset,
+          size,
+        },
       },
-      params: {
-        title,
-        tagIds,
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {

@@ -11,35 +11,29 @@ const FileUpload = ({ progress, onUpload }: IProps) => {
   return (
     <label
       htmlFor="input-file"
-      className="gap-2 flex justify-center items-center rounded-lg border-normal border-[1px] cursor-pointer"
+      className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border-[1px] border-normal"
     >
       <div className="flex w-full">
-        <div className="relative !w-full !h-12 flex justify-center items-center bg-primary-light rounded-lg hover:bg-primary-light active:bg-primary-light">
+        <div className="relative flex !h-12 !w-full items-center justify-center rounded-lg bg-primary-light hover:bg-primary-light active:bg-primary-light">
           <Typography
             placeholder=""
             className="text__label__button text-primary"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             بارگذاری فایل ضمیمه
           </Typography>
-          <div
-            className={`absolute !h-12 inset-0 rounded-lg px-6
-               ${progress > 0 && progress < 100 ? "bg-secondary opacity-50" : "bg-transparent opacity-100"}
-           `}
-            style={{
-              width: `${progress}%`,
-              transition: "width 0.3s ease",
-            }}
-          />
+          {progress > 0 && progress < 100 ? (
+            <div
+              className="absolute inset-0 !h-12 rounded-lg bg-primary-normal px-6 opacity-50"
+              style={{
+                width: `${progress}%`,
+                transition: "width 0.3s ease",
+              }}
+            />
+          ) : null}
         </div>
       </div>
-      <input
-        type="file"
-        id="input-file"
-        className="hidden"
-        onChange={onUpload}
-        accept="image/*"
-      />
+      <input type="file" id="input-file" className="hidden" onChange={onUpload} accept="image/*" />
     </label>
   );
 };

@@ -1,7 +1,13 @@
 "use server";
 
-import { createUploadLink, deleteFile, editFile, getResourceFiles } from "@service/clasor";
-
+import {
+  createUploadLink,
+  deleteFile,
+  editFile,
+  getPublishAttachment,
+  getResourceFiles,
+  publicHash,
+} from "@service/clasor";
 import { IActionError } from "@interface/app.interface";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
@@ -13,7 +19,7 @@ export const getFileAction = async (
   size: number,
   name?: string,
   order?: string,
-  dataType?: string
+  dataType?: string,
 ) => {
   const userInfo = await getMe();
   try {
@@ -25,7 +31,7 @@ export const getFileAction = async (
       size,
       name,
       order,
-      dataType
+      dataType,
     );
 
     return response;
@@ -34,19 +40,10 @@ export const getFileAction = async (
   }
 };
 
-export const renameFileAction = async (
-  resourceId: number,
-  newName: string,
-  hash: string
-) => {
+export const renameFileAction = async (resourceId: number, newName: string, hash: string) => {
   const userInfo = await getMe();
   try {
-    const response = await editFile(
-      userInfo.access_token,
-      resourceId,
-      newName,
-      hash
-    );
+    const response = await editFile(userInfo.access_token, resourceId, newName, hash);
 
     return response;
   } catch (error) {
@@ -65,7 +62,7 @@ export const createUploadLinkAction = async (
       userInfo.access_token,
       resourceId,
       userGroupHash,
-      isPublic
+      isPublic,
     );
 
     return response;
@@ -78,17 +75,11 @@ export const deleteFileAction = async (
   repoId: number,
   resourceId: number,
   fileHash: string,
-  type: "private" | "public"
+  type: "private" | "public",
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await deleteFile(
-      userInfo.access_token,
-      repoId,
-      resourceId,
-      fileHash,
-      type
-    );
+    const response = await deleteFile(userInfo.access_token, repoId, resourceId, fileHash, type);
 
     return response;
   } catch (error) {
@@ -96,3 +87,35 @@ export const deleteFileAction = async (
   }
 };
 
+export const publicHashAction = async (resourceId: number, hash: string) => {
+  const userInfo = await getMe();
+  try {
+    const response = await publicHash(userInfo.access_token, resourceId, hash);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishAttachmentAction = async (
+  docId: number,
+  versionId: number,
+  offset: number,
+  size: number,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getPublishAttachment(
+      userInfo.access_token,
+      docId,
+      versionId,
+      offset,
+      size,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
