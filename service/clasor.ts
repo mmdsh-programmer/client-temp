@@ -2872,6 +2872,26 @@ export const publicHash = async (accessToken: string, resourceId: number, hash: 
   }
 };
 
+export const repoPublicHashList = async (accessToken: string, repoId: number, hashList: string[]) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      `repositories/${repoId}/publicHash`,
+      {
+        hashList,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
 export const getPublishAttachment = async (
   accessToken: string,
   docId: number,

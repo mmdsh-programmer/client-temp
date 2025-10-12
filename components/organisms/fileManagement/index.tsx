@@ -13,6 +13,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import useRenameFile from "@hooks/files/useRenameFile";
 import { useRepositoryStore } from "@store/repository";
 import { IFile } from "@interface/file.interface";
+import useRepoPublicFile from "@hooks/files/useRepoPublicFile";
 
 const fileTablePageSize = 20;
 
@@ -58,10 +59,29 @@ const Files = ({
   const createUploadLink = useCreateUploadLink();
   const renameHook = useRenameFile();
   const deleteFile = useDeleteFile();
+  const repoPublicFile = useRepoPublicFile();
 
   const handleDataType = useCallback((dtype: string) => {
     return setDataType(dtype);
   }, []);
+
+  const handlePublicFile = useCallback(
+    (file: IFile) => {
+      setIsLoading(true);
+      repoPublicFile.mutate({
+        repoId: getRepo!.id,
+        userGroupHash,
+        hashList: [file.hash],
+        callBack: () => {
+          setIsLoading(false);
+          queryClient.invalidateQueries({
+            queryKey: [`getFiles-${userGroupHash}`],
+          });
+        },
+      });
+    },
+    [deleteFile, getRepo, resourceId, userGroupHash, type, refetch],
+  );
 
   const handleRenameFile = useCallback(
     (file: IFile, newName: string) => {
@@ -73,7 +93,9 @@ const Files = ({
         userGroupHash: file.parentHash,
         callBack: () => {
           setIsLoading(false);
-          refetch();
+          queryClient.invalidateQueries({
+            queryKey: [`getFiles-${userGroupHash}`],
+          });
         },
       });
     },
@@ -91,7 +113,9 @@ const Files = ({
         type,
         callBack: () => {
           setIsLoading(false);
-          refetch();
+          queryClient.invalidateQueries({
+            queryKey: [`getFiles-${userGroupHash}`],
+          });
         },
       });
     },
@@ -175,6 +199,7 @@ const Files = ({
       }
       setIsError(true);
       toast.error("آپلود ناموفق");
+      setIsError(false);
     }
   };
 
@@ -221,6 +246,7 @@ const Files = ({
         onRenameFile={handleRenameFile}
         onDeleteFile={handleDeleteFile}
         onUploadFile={handleUploadFile}
+        onPublicFile={handlePublicFile}
         onSearchFile={(search?: string) => {
           setName(search);
         }}

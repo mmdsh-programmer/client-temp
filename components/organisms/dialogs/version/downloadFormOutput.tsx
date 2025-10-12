@@ -1,13 +1,19 @@
 import React, { useRef, useState } from "react";
+import { IResponse } from "@interface/version.interface";
 import useGetUser from "@hooks/auth/useGetUser";
-import { Button, Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
 import useRepoId from "@hooks/custom/useRepoId";
 import { useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
-import LoadingButton from "@components/molecules/loadingButton";
+import { toast } from "react-toastify";
+import { DownloadIcon } from "@components/atoms/icons";
+import { Button } from "@material-tailwind/react";
+import { Spinner } from "@components/atoms/spinner";
 
-const FormOutput = () => {
+interface IProps {
+  response: IResponse;
+}
+
+const DownloadFormOutput = ({ response }: IProps) => {
   const [loading, setLoading] = useState(false);
   const linkRef = useRef<HTMLAnchorElement>(null);
 
@@ -21,7 +27,7 @@ const FormOutput = () => {
 
   const { data: userInfo, refetch } = useGetUser();
 
-  const handleDownloadOutput = async (event: React.MouseEvent<HTMLElement>) => {
+  const handleDownloadPDF = async (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     refetch();
 
@@ -30,7 +36,7 @@ const FormOutput = () => {
       return;
     }
 
-    const link = `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${getDocument!.id}/versions/${getVersion!.id}/exportResult?fileType=XLSX&dataType=RAW`;
+    const link = `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${getDocument!.id}/versions/${getVersion!.id}/responses/${response.id}/pdf`;
     try {
       setLoading(true);
       const result = await fetch(link, {
@@ -38,6 +44,7 @@ const FormOutput = () => {
         headers: {
           Accept: "application/json, text/plain, */*",
           Authorization: `Bearer ${userInfo.access_token}`,
+          "Content-Type": "application/pdf",
         },
       });
 
@@ -51,7 +58,7 @@ const FormOutput = () => {
         return;
       }
       linkRef.current.href = url;
-      linkRef.current.setAttribute("download", `${getDocument?.name}.xlsx`);
+      linkRef.current.setAttribute("download", `${getDocument?.name}.pdf`);
       linkRef.current.click();
       window.URL.revokeObjectURL(url);
     } catch (err) {
@@ -60,23 +67,20 @@ const FormOutput = () => {
       setLoading(false);
     }
   };
-  return (
-    <LoadingButton
-      className="!w-fit bg-primary-normal !px-5 hover:bg-primary-normal active:bg-primary-normal"
-      onClick={handleDownloadOutput as () => Promise<void>}
-      loading={loading}
+  return loading ? (
+    <Spinner className="h-5 w-5" />
+  ) : (
+    <Button
+      placeholder=""
+      className="!w-fit bg-transparent p-0"
+      onClick={(e) => {
+        return handleDownloadPDF(e);
+      }}
+      {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
-      <a hidden ref={linkRef} download>
-        downloadLInk
-      </a>
-      <Typography
-        {...({} as React.ComponentProps<typeof Typography>)}
-        className="text__label__button text-white"
-      >
-        نتایج داده‌ها
-      </Typography>
-    </LoadingButton>
+      <DownloadIcon className="h-5 w-5" />
+    </Button>
   );
 };
 
-export default FormOutput;
+export default DownloadFormOutput;

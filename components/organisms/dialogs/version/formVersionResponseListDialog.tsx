@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import { Button, DialogBody } from "@material-tailwind/react";
+import { DialogBody } from "@material-tailwind/react";
 import { useDocumentStore } from "@store/document";
 import useRepoId from "@hooks/custom/useRepoId";
 import { useVersionStore } from "@store/version";
@@ -9,11 +9,9 @@ import { Spinner } from "@components/atoms/spinner";
 import TableHead from "@components/molecules/tableHead";
 import TableCell from "@components/molecules/tableCell";
 import { FaDate } from "@utils/index";
-import { toast } from "react-toastify";
-import useGetUser from "@hooks/auth/useGetUser";
-import { DownloadIcon } from "@components/atoms/icons";
 import FormOutput from "./formOutput";
-import { IResponse } from "@interface/version.interface";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import DownloadFormOutput from "./downloadFormOutput";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +29,6 @@ const FormVersionResponseListDialog = ({ setOpen }: IProps) => {
     return s.selectedVersion;
   });
 
-  const { data: userInfo, refetch } = useGetUser();
   const { data: getVersionResponse, isLoading: versionResponseLoading } = useGetVersionResponse(
     repoId!,
     getDocument!.id,
@@ -39,46 +36,7 @@ const FormVersionResponseListDialog = ({ setOpen }: IProps) => {
     20,
   );
 
-  const handleDownloadPDF = async (event: React.MouseEvent<HTMLElement>, response: IResponse) => {
-    event.preventDefault();
-    refetch();
-
-    if (!getDocument || !getVersion || !userInfo) {
-      toast.error("اطلاعات لازم برای ایجاد pdf وجود ندارد.");
-      return;
-    }
-
-    const link = `${process.env.NEXT_PUBLIC_BACKEND_URL}/repositories/${repoId}/documents/${getDocument!.id}/versions/${getVersion!.id}/responses/${response.id}/pdf`;
-    try {
-      setLoading(true);
-      const result = await fetch(link, {
-        method: "GET",
-        headers: {
-          // Accept: "application/json, text/plain, */*",
-          Authorization: `Bearer ${userInfo.access_token}`,
-          // "Content-Type": "application/pdf"
-        },
-      });
-
-      if (!result.ok) {
-        throw new Error("دانلود فایل با خطا مواجه شد.");
-      }
-
-      const blob = await result.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      if (!linkRef.current) {
-        return;
-      }
-      linkRef.current.href = url;
-      linkRef.current.setAttribute("download", `${getDocument?.name}.pdf`);
-      linkRef.current.click();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      toast.error("خطا در دانلود فایل");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const listLength = getVersionResponse?.pages[0].total;
 
   const handleClose = () => {
     setOpen(false);
@@ -92,14 +50,16 @@ const FormVersionResponseListDialog = ({ setOpen }: IProps) => {
     >
       <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="h-full p-0">
         <div className="flex flex-col gap-4 p-4 xs:p-6">
-          <div className="self-end">
-            <FormOutput />
-          </div>
+          {listLength ? (
+            <div className="self-end">
+              <FormOutput />
+            </div>
+          ) : null}
           {versionResponseLoading ? (
             <div className="flex justify-center">
               <Spinner className="h-8 w-8" />
             </div>
-          ) : (
+          ) : listLength ? (
             <div className="overflow-auto">
               <table className="w-full min-w-max overflow-hidden">
                 <TableHead
@@ -139,22 +99,7 @@ const FormVersionResponseListDialog = ({ setOpen }: IProps) => {
                               className: "",
                             },
                             {
-                              data: (
-                                <Button
-                                  placeholder=""
-                                  className="!w-fit bg-transparent"
-                                  onClick={(e) => {
-                                    return handleDownloadPDF(e, response);
-                                  }}
-                                  loading={loading}
-                                  {...({} as Omit<
-                                    React.ComponentProps<typeof Button>,
-                                    "placeholder"
-                                  >)}
-                                >
-                                  <DownloadIcon className="h-5 w-5" />
-                                </Button>
-                              ),
+                              data: <DownloadFormOutput response={response} />,
                               className: "",
                             },
                           ]}
@@ -165,6 +110,8 @@ const FormVersionResponseListDialog = ({ setOpen }: IProps) => {
                 </tbody>
               </table>
             </div>
+          ) : (
+            <EmptyList type={EEmptyList.FORM_OUTPUT} />
           )}
         </div>
       </DialogBody>

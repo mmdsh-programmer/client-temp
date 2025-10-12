@@ -72,7 +72,7 @@ const PublishFilesDrawer = ({ version }: IProps) => {
         });
       });
     }
-    return <EmptyList type={EEmptyList.VERSION} />;
+    return <EmptyList type={EEmptyList.ATTACHMENT} />;
   };
 
   return (

@@ -237,15 +237,6 @@ const useVersionMenu = (
           ),
         ]
       : []),
-    ...(getDocument.contentType === EDocumentTypes.form
-      ? [
-          createItem(
-            "خروجی‌های نسخه",
-            <PublishIcon className="h-4 w-4 fill-icon-active" />,
-            createAction("formVersionExport"),
-          ),
-        ]
-      : []),
   ];
 
   const publicOptions: MenuItem[] = [
@@ -284,20 +275,6 @@ const useVersionMenu = (
           ),
         ]
       : []),
-  ];
-
-  const footerOptions: MenuItem[] = [
-    createItem(
-      "کپی هش فایل",
-      <CopyIcon className="h-4 w-4 fill-icon-active stroke-[1.5]" />,
-      () => {
-        if (version.hash) {
-          copy(version.hash);
-          toast.success("هش مربوط به پیش نویس کپی شد.");
-        }
-      },
-      { className: "copy-version-hash" },
-    ),
     ...(getDocument.contentType === EDocumentTypes.form
       ? [
           createItem(
@@ -313,6 +290,20 @@ const useVersionMenu = (
           ),
         ]
       : []),
+  ];
+
+  const footerOptions: MenuItem[] = [
+    createItem(
+      "کپی هش فایل",
+      <CopyIcon className="h-4 w-4 fill-icon-active stroke-[1.5]" />,
+      () => {
+        if (version.hash) {
+          copy(version.hash);
+          toast.success("هش مربوط به پیش نویس کپی شد.");
+        }
+      },
+      { className: "copy-version-hash" },
+    ),
     createItem(
       "کپی آدرس اشتراک‌ گذاری",
       <ShareIcon className="h-4 w-4 stroke-icon-active" />,

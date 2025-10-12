@@ -38,6 +38,8 @@ export enum EEmptyList {
   FOLLOWING_REPO = "following-repo",
   WHITE_LIST_REQUESTS = "white_list_requests",
   SHARED_DOCUMENTS = "shared_documents",
+  ATTACHMENT = "attachment",
+  FORM_OUTPUT = "form_output",
 }
 
 interface IProps {
@@ -54,14 +56,14 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر مخزنی ندارید.
             </Typography>
             <Typography
               placeholder="empty-message"
               className="caption_c1 text-gray-500"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               برای ایجاد مخزن جدید می توانید روی دکمه ایجاد مخزن کلیک کنید و اطلاعات مخزن خود را
               وارد کنید.
@@ -73,7 +75,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر مخزن نشان شده‌ای ندارید.
           </Typography>
@@ -83,7 +85,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر مخزن بایگانی شده‌ای ندارید.
           </Typography>
@@ -93,7 +95,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر مخزن منتشر شده ای ندارید.
           </Typography>
@@ -103,7 +105,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر مخزن اشتراکی ندارید.
           </Typography>
@@ -114,14 +116,14 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر دسته‌بندی یا سندی ندارید.
             </Typography>
             <Typography
               placeholder="empty-message"
               className="caption_c1 text-gray-500"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               برای ایجاد دسته‌بندی یا سند جدید می توانید روی دکمه ایجاد کلیک کنید و اطلاعات
               دسته‌بندی یا سند خود را وارد کنید.
@@ -134,7 +136,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               در حال حاضر سندی با شما به اشتراک گذاشته نشده است.
             </Typography>
@@ -146,7 +148,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر دسته‌بندی ندارید.
             </Typography>
@@ -157,7 +159,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر درخواست فعالی ندارید.
           </Typography>
@@ -167,7 +169,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             نتیجه‌ای یافت نشد.
           </Typography>
@@ -177,7 +179,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر کلیدی ندارید
           </Typography>
@@ -187,7 +189,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر گروهی ندارید
           </Typography>
@@ -197,7 +199,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر نمونه سندی ندارید
           </Typography>
@@ -207,7 +209,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             در حال حاضر کاربر مسدود شده‌ای روی این سند وجود ندارد
           </Typography>
@@ -217,7 +219,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             در حال حاضر تگی روی این سند وجود ندارد
           </Typography>
@@ -227,7 +229,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             در حال حاضر لیست سفیدی وجود ندارد
           </Typography>
@@ -237,7 +239,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             در حال حاضر لیست سیاهی وجود ندارد
           </Typography>
@@ -247,7 +249,7 @@ const EmptyList = ({ type }: IProps) => {
           <Typography
             placeholder="empty-message"
             className="title_t3 text-primary_normal"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             شما در حال حاضر درخواست دعوت به مخزنی ندارید.
           </Typography>
@@ -258,7 +260,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر لیست بازخوردی ندارید.
             </Typography>
@@ -270,7 +272,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر نسخه‌ای ندارید.
             </Typography>
@@ -282,7 +284,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر لیست درخواستی ندارید.
             </Typography>
@@ -294,7 +296,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر لیست درخواستی ندارید.
             </Typography>
@@ -306,7 +308,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر لیست نظراتی ندارید.
             </Typography>
@@ -318,7 +320,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               برای این سند سوالی وجود ندارد
             </Typography>
@@ -330,7 +332,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               برای این سوال، پاسخی وجود ندارد
             </Typography>
@@ -342,7 +344,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر لیست مجازی ندارید.
             </Typography>
@@ -354,7 +356,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               خبرنامه ای برای نمایش وجود ندارد.
             </Typography>
@@ -366,20 +368,20 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               <div className="flex flex-col items-center justify-center">
                 <Typography
                   placeholder="empty-message"
                   className="title_t3 text-primary_normal"
-                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                  {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                 >
                   شما در حال حاضر شعبه‌ای را انتخاب نکرده‌اید.
                 </Typography>
                 <Typography
                   placeholder="empty-message"
                   className="caption_c1 text-gray-500"
-                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                  {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                 >
                   برای نمایش اطلاعات شعبه، شعبه موردنظرتان را انتخاب کنید.
                 </Typography>
@@ -393,7 +395,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               گروهی برای نمایش وجود ندارد.
             </Typography>
@@ -405,7 +407,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               خبرنامه‌ای برای نمایش وجود ندارد
             </Typography>
@@ -417,7 +419,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               در شعبه موردنظر فردی دارای سمت وجود ندارد.
             </Typography>
@@ -429,7 +431,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               در حال حاضر هیچ کاربری به دامنه دسترسی ندارد
             </Typography>
@@ -441,7 +443,7 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر مخزنی را دنبال نکرده‌اید.
             </Typography>
@@ -453,9 +455,33 @@ const EmptyList = ({ type }: IProps) => {
             <Typography
               placeholder="empty-message"
               className="title_t3 text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               شما در حال حاضر درخواست دسترسی به سند وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.ATTACHMENT:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              فایلی برای این سند وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.FORM_OUTPUT:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              هنوز هیچ پاسخی برای این فرم ثبت نشده است.
             </Typography>
           </div>
         );

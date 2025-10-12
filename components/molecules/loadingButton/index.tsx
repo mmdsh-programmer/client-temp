@@ -7,7 +7,7 @@ interface IProps {
   loading?: boolean;
   children: React.ReactNode;
   className?: string;
-  onClick: () => void;
+  onClick: (() => void) | (() => Promise<void>);
   disabled?: boolean;
   isPrimary?: boolean;
 }

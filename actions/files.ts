@@ -7,6 +7,7 @@ import {
   getPublishAttachment,
   getResourceFiles,
   publicHash,
+  repoPublicHashList,
 } from "@service/clasor";
 import { IActionError } from "@interface/app.interface";
 import { getMe } from "./auth";
@@ -91,6 +92,17 @@ export const publicHashAction = async (resourceId: number, hash: string) => {
   const userInfo = await getMe();
   try {
     const response = await publicHash(userInfo.access_token, resourceId, hash);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const repoPublicHashAction = async (repoId: number, hashList: string[]) => {
+  const userInfo = await getMe();
+  try {
+    const response = await repoPublicHashList(userInfo.access_token, repoId, hashList);
 
     return response;
   } catch (error) {
