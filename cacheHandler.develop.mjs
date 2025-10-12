@@ -1,219 +1,76 @@
-/* eslint-disable no-restricted-exports */
+import { LRUCache } from "lru-cache";
 
-import { CacheHandler } from "@neshca/cache-handler";
-import { createClient } from "redis";
-import createLruHandler from "@neshca/cache-handler/local-lru";
-import createRedisHandler from "@neshca/cache-handler/redis-stack";
+const memoryCache = new LRUCache({ max: 500 });
 
-export const waitForResolve = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 1000);
-  });
-};
+console.log(
+  JSON.stringify({
+    type: "memory-cache",
+    action: "init",
+    event: "memory_cache_creation",
+    message: "Memory cache initialized for development mode",
+  })
+);
 
 export const getClient = async () => {
-  try {
-    if (process.env.NEXT_PHASE === "phase-production-build") {
+  if (!global.redisClientPromise) {
+    global.redisClientPromise = (async () => {
       console.log(
         JSON.stringify({
-          type: "redis",
-          phase: "production-build",
-          message: "Skipping Redis connection during build",
-        }),
-      );
-      return null;
-    }
-    if (global.isPending) {
-      console.log(
-        JSON.stringify({
-          type: "redis",
-          action: "waiting",
-          message: "Waiting for pending Redis connection",
-        }),
-      );
-      await waitForResolve();
-      return getClient();
-    }
-    if (global.redisClientPromise && global.redisClientPromise.isReady) {
-      console.log(
-        JSON.stringify({
-          type: "redis",
-          action: "reuse",
-          message: "Reusing existing Redis connection",
-        }),
-      );
-      return global.redisClientPromise;
-    }
-    global.isPending = true;
-    console.log(
-      JSON.stringify({
-        type: "redis",
-        action: "start",
-        message: "Starting Redis connection",
-        url: `redis://${process.env.REDIS_NODE}`,
-      }),
-    );
-    global.redisClientPromise = createClient({
-      url: `redis://${process.env.REDIS_NODE}`,
-      socket: {
-        reconnectStrategy: (times) => {
-          return Math.min(times * 100, 2000);
-        },
-      },
-    });
-
-    // Redis won't work without error handling.
-    global.redisClientPromise.on("error", (err) => {
-      console.log(
-        JSON.stringify({
-          type: "redis",
-          action: "error",
-          event: "client_error",
-          error: err.message,
-          stack: err.stack,
-        }),
-      );
-    });
-    global.redisClientPromise.on("connect", () => {
-      global.isPending = false;
-      console.log(
-        JSON.stringify({
-          type: "redis",
+          type: "memory-cache",
           action: "success",
-          event: "connected",
-          message: "Redis Client Connected",
-        }),
+          event: "memory_cache_ready",
+          message: "Memory cache client is ready and set on global (development mode)",
+        })
       );
-    });
-    // Add these cluster-specific event handlers
-    global.redisClientPromise.on("nodeError", (err, node) => {
-      console.log(
-        JSON.stringify({
-          type: "redis",
-          action: "error",
-          event: "node_error",
-          node,
-          error: err.message,
-        }),
-      );
-    });
-    global.redisClientPromise.on("cluster down", () => {
-      console.log(
-        JSON.stringify({
-          type: "redis",
-          action: "error",
-          event: "cluster_down",
-          message: "Redis Cluster is down",
-        }),
-      );
-    });
-    global.redisClientPromise.on("node error", () => {
-      console.log(
-        JSON.stringify({
-          type: "redis",
-          action: "error",
-          event: "node_error_fallback",
-          message: "Redis Cluster is down",
-        }),
-      );
-    });
-
-    await global.redisClientPromise.connect();
-    console.log(
-      JSON.stringify({
-        type: "redis",
-        action: "success",
-        event: "connection_established",
-        message: "Redis connection established successfully",
-      }),
-    );
-    return global.redisClientPromise;
-  } catch (error) {
-    console.log(
-      JSON.stringify({
-        type: "redis",
-        action: "error",
-        event: "connection_failed",
-        error: error.message,
-        stack: error.stack,
-      }),
-    );
-    return null;
-  }
-};
-
-CacheHandler.onCreation(async () => {
-  console.log(
-    JSON.stringify({
-      type: "redis",
-      action: "init",
-      event: "cache_handler_creation",
-      message: "Initializing CacheHandler",
-    }),
-  );
-  const redisClient = await getClient();
-
-  /** @type {import("@neshca/cache-handler").Handler | null} */
-  let handler;
-
-  if (redisClient?.isReady) {
-    console.log(
-      JSON.stringify({
-        type: "redis",
-        action: "init",
-        event: "redis_handler_creation",
-        message: "Creating Redis handler",
-      }),
-    );
-    // Create the `redis-stack` Handler if the client is available and connected.
-    handler = await createRedisHandler({
-      client: redisClient,
-      keyPrefix: "cls:", // Do not use a dynamic and unique prefix for each Next.js build because it will create unique cache data for each instance of Next.js, and the cache will not be shared.
-      timeoutMs: 3000,
-    });
-    console.log(
-      JSON.stringify({
-        type: "redis",
-        action: "success",
-        event: "redis_handler_created",
-        message: "Redis handler created successfully",
-      }),
-    );
+      return {
+        isReady: true,
+        get: async (key) => {
+          const value = memoryCache.get(key);
+          console.log(
+            JSON.stringify({
+              type: "memory-cache",
+              action: "get",
+              key,
+              found: value !== undefined,
+            })
+          );
+          return value;
+        },
+        set: async (key, value, opts) => {
+          memoryCache.set(key, value);
+          console.log(
+            JSON.stringify({
+              type: "memory-cache",
+              action: "set",
+              key,
+              opts,
+            })
+          );
+          return true;
+        },
+        del: async (key) => {
+          const deleted = memoryCache.delete(key);
+          console.log(
+            JSON.stringify({
+              type: "memory-cache",
+              action: "del",
+              key,
+              deleted,
+            })
+          );
+          return deleted;
+        },
+      };
+    })();
   } else {
     console.log(
       JSON.stringify({
-        type: "redis",
-        action: "fallback",
-        event: "lru_handler_creation",
-        message: "Redis not available, falling back to LRU handler",
-      }),
-    );
-    // Fallback to LRU handler if Redis client is not available.
-    // The application will still work, but the cache will be in memory only and not shared.
-    handler = createLruHandler();
-    console.log(
-      JSON.stringify({
-        type: "redis",
-        action: "warning",
-        event: "lru_handler_created",
-        message: "LRU handler created (cache will be in-memory only)",
-      }),
+        type: "memory-cache",
+        action: "reuse",
+        event: "memory_cache_reuse",
+        message: "Reusing existing memory cache client (development mode)",
+      })
     );
   }
-
-  console.log(
-    JSON.stringify({
-      type: "redis",
-      action: "success",
-      event: "cache_handler_ready",
-      handlers: handler ? ["redis"] : ["lru"],
-    }),
-  );
-  return {
-    handlers: [handler],
-  };
-});
-
-export { CacheHandler as default } from "@neshca/cache-handler";
+  return global.redisClientPromise;
+};

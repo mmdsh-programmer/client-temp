@@ -29,45 +29,45 @@ const pages = [
 ];
 
 function addSecurityHeaders(response: NextResponse) {
-  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  response.headers.set(
-    "Permissions-Policy",
-    "geolocation=(), camera=(), microphone=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()",
-  );
+  // response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  // response.headers.set("X-Content-Type-Options", "nosniff");
+  // response.headers.set("X-Frame-Options", "DENY");
+  // response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  // response.headers.set(
+  //   "Permissions-Policy",
+  //   "geolocation=(), camera=(), microphone=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()",
+  // );
 
-  const FRAME_ENV_KEYS = [
-    "NEXT_PUBLIC_CLASSIC_EDITOR",
-    "NEXT_PUBLIC_WORD_EDITOR",
-    "NEXT_PUBLIC_FLOWCHART_EDITOR",
-    "NEXT_PUBLIC_EXCEL_EDITOR",
-    "NEXT_PUBLIC_LATEX_EDITOR",
-    "NEXT_PUBLIC_BOARD_URL",
-  ];
-  const dynamicFrames = FRAME_ENV_KEYS.map((key) => {
-    return process.env[key];
-  }).filter(Boolean);
-  const frameSrcList = ["'self'", ...dynamicFrames].join(" ");
+  // const FRAME_ENV_KEYS = [
+  //   "NEXT_PUBLIC_CLASSIC_EDITOR",
+  //   "NEXT_PUBLIC_WORD_EDITOR",
+  //   "NEXT_PUBLIC_FLOWCHART_EDITOR",
+  //   "NEXT_PUBLIC_EXCEL_EDITOR",
+  //   "NEXT_PUBLIC_LATEX_EDITOR",
+  //   "NEXT_PUBLIC_BOARD_URL",
+  // ];
+  // const dynamicFrames = FRAME_ENV_KEYS.map((key) => {
+  //   return process.env[key];
+  // }).filter(Boolean);
+  // const frameSrcList = ["'self'", ...dynamicFrames].join(" ");
 
-  const csp = [
-    "default-src 'self'",
-    "img-src 'self' data: https: blob: file:",
-    "media-src 'self' data: https: blob: file:",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://podlytics.sandpod.ir",
-    "style-src 'self' 'unsafe-inline'",
-    "font-src * data: blob:",
-    "connect-src 'self' https: wss: https://podlytics.sandpod.ir",
-    "frame-ancestors 'none'",
-    `frame-src ${frameSrcList} data: blob:`,
-    "base-uri 'self'",
-    "form-action 'self'",
-    "object-src 'none'",
-    "upgrade-insecure-requests",
-  ].join("; ");
-  response.headers.set("Content-Security-Policy", csp);
-  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  // const csp = [
+  //   "default-src 'self'",
+  //   "img-src 'self' data: https: blob: file:",
+  //   "media-src 'self' data: https: blob: file:",
+  //   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://podlytics.sandpod.ir",
+  //   "style-src 'self' 'unsafe-inline'",
+  //   "font-src * data: blob:",
+  //   "connect-src 'self' https: wss: https://podlytics.sandpod.ir",
+  //   "frame-ancestors 'none'",
+  //   `frame-src ${frameSrcList} data: blob:`,
+  //   "base-uri 'self'",
+  //   "form-action 'self'",
+  //   "object-src 'none'",
+  //   "upgrade-insecure-requests",
+  // ].join("; ");
+  // response.headers.set("Content-Security-Policy", csp);
+  // response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 
   if (process.env.NODE_ENV === "production") {
     response.headers.delete("X-Middleware-Rewrite");
