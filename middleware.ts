@@ -5,6 +5,10 @@ import { generateKey, removeSpecialCharacters, toEnglishDigit, toPersianDigit } 
 import { requestContext } from "lib/requestContext";
 import { logErrorResponse, logRequest, logResponse, logRewrite } from "lib/logging";
 
+const ipRequestLog = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000;
+const RATE_LIMIT_MAX = 100; // maximum allowed requests per IP per minute
+
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
 const corsOptions = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -23,6 +27,54 @@ const pages = [
   "/share",
   "/privateDoc",
 ];
+
+function addSecurityHeaders(response: NextResponse) {
+  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set(
+    "Permissions-Policy",
+    "geolocation=(), camera=(), microphone=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()",
+  );
+
+  const FRAME_ENV_KEYS = [
+    "NEXT_PUBLIC_CLASSIC_EDITOR",
+    "NEXT_PUBLIC_WORD_EDITOR",
+    "NEXT_PUBLIC_FLOWCHART_EDITOR",
+    "NEXT_PUBLIC_EXCEL_EDITOR",
+    "NEXT_PUBLIC_LATEX_EDITOR",
+    "NEXT_PUBLIC_BOARD_URL",
+  ];
+  const dynamicFrames = FRAME_ENV_KEYS.map((key) => {
+    return process.env[key];
+  }).filter(Boolean);
+  const frameSrcList = ["'self'", ...dynamicFrames].join(" ");
+
+  const csp = [
+    "default-src 'self'",
+    "img-src 'self' data: https: blob: file:",
+    "media-src 'self' data: https: blob: file:",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://podlytics.sandpod.ir",
+    "style-src 'self' 'unsafe-inline'",
+    "font-src * data: blob:",
+    "connect-src 'self' https: wss: https://podlytics.sandpod.ir",
+    "frame-ancestors 'none'",
+    `frame-src ${frameSrcList} data: blob:`,
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+  response.headers.set("Content-Security-Policy", csp);
+  response.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+
+  if (process.env.NODE_ENV === "production") {
+    response.headers.delete("X-Middleware-Rewrite");
+    response.headers.delete("X-Action-Revalidated");
+  }
+  return response;
+}
 
 function parseUrlSegments(pathname: string) {
   return pathname.split("/").map((slug) => {
@@ -122,6 +174,18 @@ function convertOldPublishUrl(url: NextURL): NextURL | null {
 
 // -------- Middleware اصلی --------
 export async function middleware(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
+  const now = Date.now();
+  let reqLog = ipRequestLog.get(ip) || [];
+  reqLog = reqLog.filter((t: number) => {
+    return now - t < RATE_LIMIT_WINDOW;
+  });
+  reqLog.push(now);
+  if (reqLog.length > RATE_LIMIT_MAX) {
+    return new Response("Too many requests", { status: 429 });
+  }
+  ipRequestLog.set(ip, reqLog);
+
   const startTime = Date.now();
   const arn = crypto.randomUUID();
   const referenceNumber = request.headers.get("x-reference-number") || crypto.randomUUID();
@@ -158,6 +222,14 @@ export async function middleware(request: NextRequest) {
         const preflightHeaders = {
           ...(isAllowedOrigin && { "Access-Control-Allow-Origin": origin }),
           ...corsOptions,
+          "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
+          "X-Content-Type-Options": "nosniff",
+          "X-Frame-Options": "DENY",
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+          "Permissions-Policy":
+            "geolocation=(), camera=(), microphone=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), ambient-light-sensor=()",
+          "Content-Security-Policy":
+            "default-src 'self'; img-src 'self' data: https: blob: file:; media-src 'self' data: https: blob: file:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https: wss:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests",
         };
         return NextResponse.json({}, { headers: preflightHeaders });
       }
@@ -180,8 +252,8 @@ export async function middleware(request: NextRequest) {
               arn,
               success: true,
             });
-            return NextResponse.rewrite(dest);
-          } 
+            return addSecurityHeaders(NextResponse.rewrite(dest));
+          }
           await logRewrite({
             from: url.pathname,
             host,
@@ -215,7 +287,7 @@ export async function middleware(request: NextRequest) {
           arn,
           success: true,
         });
-        return NextResponse.redirect(newDocsUrl);
+        return addSecurityHeaders(NextResponse.redirect(newDocsUrl));
       }
 
       // -------- Old Publish Rewrite --------
@@ -232,13 +304,15 @@ export async function middleware(request: NextRequest) {
             arn,
             success: true,
           });
-          return NextResponse.redirect(newPublishUrl);
+          return addSecurityHeaders(NextResponse.redirect(newPublishUrl));
         }
       }
 
       // -------- Domain Rewrite --------
       if (host) {
-        const isInPages = pages.some((page) => {return path.startsWith(page);});
+        const isInPages = pages.some((page) => {
+          return path.startsWith(page);
+        });
         if (isInPages) {
           const domainKey = generateKey(host);
           const dest = `/${domainKey}${path}`;
@@ -251,7 +325,7 @@ export async function middleware(request: NextRequest) {
             success: true,
           });
           url.pathname = dest;
-          return NextResponse.rewrite(url);
+          return addSecurityHeaders(NextResponse.rewrite(url));
         }
         if (path === "/") {
           const domainKey = generateKey(host);
@@ -265,7 +339,7 @@ export async function middleware(request: NextRequest) {
             success: true,
           });
           url.pathname = dest;
-          return NextResponse.rewrite(url);
+          return addSecurityHeaders(NextResponse.rewrite(url));
         }
       }
     } catch (error) {
@@ -281,7 +355,7 @@ export async function middleware(request: NextRequest) {
       }
     }
 
-    return response;
+    return addSecurityHeaders(response);
   });
 }
 
