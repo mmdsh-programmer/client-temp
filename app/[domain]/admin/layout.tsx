@@ -7,7 +7,7 @@ import { getCustomPostByDomain } from "@service/clasor";
 
 interface IProps {
   children: React.ReactNode;
-  params: Promise <{
+  params: Promise<{
     domain: string;
   }>;
 }
@@ -34,9 +34,7 @@ const AdminLayout = async ({ children, params }: IProps) => {
 
   return (
     <ErrorBoundary>
-      <BaseTemplate domainInfo={domainInfo}>
-      {children}
-      </BaseTemplate>
+      <BaseTemplate domainInfo={domainInfo}>{children}</BaseTemplate>
     </ErrorBoundary>
   );
 };

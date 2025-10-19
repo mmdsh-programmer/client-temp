@@ -2,14 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { useRepositoryStore } from "@store/repository";
-import { useRouter, useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import Error from "@components/organisms/error";
 import { IRepo } from "interface/repo.interface";
 import { Spinner } from "@components/atoms/spinner";
 import useGetRepo from "@hooks/repository/useGetRepo";
 import "react-toastify/dist/ReactToastify.min.css";
-
 
 interface IProps {
   children: React.ReactNode;
@@ -73,9 +72,30 @@ const CheckRepoInfo = ({ children }: IProps) => {
   }
 
   if (error) {
-    return (
-      <Error error={{ message: "خطا در دریافت اطلاعات مخزن" }} retry={refetch} />
+    const { errorList, errorCode } = error as unknown as {
+      errorList: string[];
+      errorCode: number;
+    };
+
+    console.log(
+      JSON.stringify(
+        {
+          errorList,
+          errorCode,
+          error: true,
+          referenceNumber: "NOT_DEFINED",
+        },
+        null,
+        0,
+      ),
     );
+
+    const errorMsg = error.message;
+
+    if (errorMsg === "NOT_DEFINED") {
+      return notFound();
+    }
+    return <Error error={{ message: errorMsg }} />;
   }
 
   return <div className="check-repo-info flex h-[calc(100%-20px)] gap-3">{children}</div>;

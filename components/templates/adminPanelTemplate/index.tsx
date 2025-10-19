@@ -4,18 +4,26 @@ import Header from "@components/organisms/header";
 import React from "react";
 import Start from "../start";
 import SidebarMobileView from "@components/molecules/sidebarMobileView";
+import NotFoundTemplate from "../not-found";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   children: React.ReactNode;
 }
 
 const AdminPanelTemplate = ({ children }: IProps) => {
+  const { data: userInfo } = useGetUser();
+
+  if (!userInfo?.isClasorAdmin) {
+    return <NotFoundTemplate />;
+  }
+  
   return (
     <Start>
-      <div className="flex max-w-screen-2xl m-auto">
-        <main className="bg-secondary flex-grow h-screen overflow-hidden">
+      <div className="m-auto flex max-w-screen-2xl">
+        <main className="h-screen flex-grow overflow-hidden bg-secondary">
           <Header />
-          <div className="overflow-auto h-[calc(100vh-110px)] xs:h-[calc(100vh-80px)] flex flex-col px-0 py-0 xs:px-8 xs:pt-6 xs:pb-8">
+          <div className="flex h-[calc(100vh-110px)] flex-col overflow-auto px-0 py-0 xs:h-[calc(100vh-80px)] xs:px-8 xs:pb-8 xs:pt-6">
             {children}
           </div>
         </main>

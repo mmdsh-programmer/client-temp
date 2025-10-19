@@ -176,7 +176,6 @@ export const getToken = async (code: string, redirectUrl: string) => {
       code,
       redirectUrl,
     });
-
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
@@ -2872,7 +2871,11 @@ export const publicHash = async (accessToken: string, resourceId: number, hash: 
   }
 };
 
-export const repoPublicHashList = async (accessToken: string, repoId: number, hashList: string[]) => {
+export const repoPublicHashList = async (
+  accessToken: string,
+  repoId: number,
+  hashList: string[],
+) => {
   try {
     const response = await axiosClasorInstance.patch(
       `repositories/${repoId}/publicHash`,

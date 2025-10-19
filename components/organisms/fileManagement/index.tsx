@@ -14,6 +14,7 @@ import useRenameFile from "@hooks/files/useRenameFile";
 import { useRepositoryStore } from "@store/repository";
 import { IFile } from "@interface/file.interface";
 import useRepoPublicFile from "@hooks/files/useRepoPublicFile";
+import { validateBeforeUpload, extractFileFromUnknown } from "../../../utils/uploadGuards";
 
 const fileTablePageSize = 20;
 
@@ -134,7 +135,6 @@ const Files = ({
   }, [refetch]);
 
   const handleUploadFile = async (item: any, showCropper: boolean) => {
-    setProcessCount(0);
     const token = userInfo?.access_token;
 
     if (!token) {
@@ -142,6 +142,20 @@ const Files = ({
       return;
     }
 
+    // try {
+    //   const file = await extractFileFromUnknown(item);
+    //   if (file) {
+    //     const { valid, message } = await validateBeforeUpload(file);
+    //     if (!valid) {
+    //       toast.error(message || "آپلود این فایل مجاز نیست");
+    //       return;
+    //     }
+    //   }
+    // } catch (_) {
+    //   // Ignore guard errors; proceed to server-side validation
+    // }
+
+    setProcessCount(0);
     setIsLoading(true);
 
     const uploadFile = async (fileData: FormData | any) => {

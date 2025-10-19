@@ -247,7 +247,9 @@ export default async function PublishContentPage({
       ),
     );
 
-    const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    const errorMsg = typeof message === "string" ? message : message.message;
+
     if ((error as unknown as IActionError).errorCode === 401) {
       return (
         <LoginRequiredButton
@@ -256,14 +258,14 @@ export default async function PublishContentPage({
         />
       );
     }
-    if (message === "NEXT_NOT_FOUND") {
+    if (errorMsg === "NEXT_NOT_FOUND") {
       return notFound();
     }
     return (
       <section className="main bg-slate-50 grid h-[calc(100vh-156px)] w-full place-items-center justify-items-center text-center">
         <div className="flex flex-col items-center justify-center">
           <FolderEmptyIcon />
-          <p>{message}</p>
+          <p>{errorMsg}</p>
         </div>
       </section>
     );

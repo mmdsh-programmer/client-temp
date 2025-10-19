@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { MoreDotIcon } from "@components/atoms/icons";
+import { InvisibleIcon, MoreDotIcon } from "@components/atoms/icons";
 import { useCategoryDrawerStore, useCategoryStore } from "@store/category";
 import { ICategoryMetadata } from "@interface/category.interface";
 import useCategoryMenuList from "./useCategoryMenuList";
@@ -24,7 +24,7 @@ const CategoryMenu = ({ category }: IProps) => {
   );
 
   const menuList = useCategoryMenuList(category, handleSetModal);
-  
+
   const closeModal = () => {
     setActiveModal(null);
     setCategory(null);
@@ -32,11 +32,8 @@ const CategoryMenu = ({ category }: IProps) => {
 
   return (
     <>
-      <div
-        onClick={(e) => {
-          return e.stopPropagation();
-        }}
-      >
+      <div className="category-menu flex items-center justify-end gap-1">
+        {category?.isHidden ? <InvisibleIcon className="h-4 w-4 flex-none" /> : null}
         <MenuTemplate
           menuList={menuList}
           onMobileClick={() => {

@@ -4037,3 +4037,17 @@ export const PanelIcon = (props: IProps) => {
   );
 };
 
+export const AttachIcon = (props: IProps) => {
+  const { className, fill } = props;
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 24 24" fill={fill}>
+      <path
+        d="M20.25 13.2025L14.42 19.0325C11.98 21.4725 8.02 21.4725 5.58 19.0325C3.14 16.5925 3.14 12.6325 5.58 10.1925L11.3 4.4725C12.93 2.8425 15.57 2.8425 17.19 4.4725C18.82 6.1025 18.82 8.7425 17.19 10.3625L11.43 16.1225C10.62 16.9325 9.29999 16.9325 8.47999 16.1225C7.66999 15.3125 7.66999 13.9925 8.47999 13.1725L14.35 7.3025"
+        stroke="black"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};

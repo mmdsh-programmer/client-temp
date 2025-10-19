@@ -6,7 +6,7 @@ import LikeAndDislike from "../like&dislike";
 import PublishNextAndPrev from "./publishNextAndPrev";
 import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import { Button } from "@material-tailwind/react";
-import { ImageIcon, MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
+import { AttachIcon, MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
 import PublishTinyLink from "./publishTinyLink";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { usePublishStore } from "@store/publish";
@@ -63,7 +63,7 @@ const PublishBottomNav = () => {
           }}
           variant="outlined"
         >
-          <ImageIcon className="block h-6 w-6 fill-white" />
+          <AttachIcon className="block h-6 w-6 fill-white" />
         </Button>
         <div className="h-5 w-[1px] bg-white bg-opacity-15" />
 

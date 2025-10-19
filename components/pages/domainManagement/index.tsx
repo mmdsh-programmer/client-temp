@@ -7,12 +7,15 @@ import { useRepositoryStore } from "@store/repository";
 import { useCategoryStore } from "@store/category";
 import { useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
+import useGetUser from "@hooks/auth/useGetUser";
+import NotFoundTemplate from "@components/templates/not-found";
 
 const DomainManagementPage = () => {
   const { setRepo } = useRepositoryStore();
   const { setCategory, setCategoryShow } = useCategoryStore();
   const { setSelectedDocument, setDocumentShow } = useDocumentStore();
   const { setVersionModalList } = useVersionStore();
+  const { data: userInfo } = useGetUser();
 
   useEffect(() => {
     setRepo(null);
@@ -22,6 +25,10 @@ const DomainManagementPage = () => {
     setDocumentShow(null);
     setVersionModalList(false);
   }, []);
+
+  if (userInfo?.domainRole !== null) {
+    return <NotFoundTemplate />;
+  }
 
   return (
     <div className="flex h-full flex-col gap-6 overflow-hidden">

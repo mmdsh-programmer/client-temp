@@ -134,6 +134,7 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
       errorList: string[];
       errorCode: number;
     };
+
     console.log(
       JSON.stringify(
         {
@@ -147,15 +148,18 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
       ),
     );
 
-    const message = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
-    if (message === "NEXT_NOT_FOUND") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
+    const errorMsg = typeof message === "string" ? message : message.message;
+
+    if (errorMsg === "NEXT_NOT_FOUND") {
       return notFound();
     }
     return (
       <section className="main bg-slate-50 grid h-[calc(100vh-81px)] w-full place-items-center justify-items-center text-center">
         <div className="flex flex-col items-center justify-center">
           <FolderEmptyIcon />
-          <p>{message}</p>
+          <p>{errorMsg}</p>
         </div>
       </section>
     );
