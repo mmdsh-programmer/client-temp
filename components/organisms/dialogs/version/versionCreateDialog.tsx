@@ -101,6 +101,8 @@ const VersionCreateDialog = ({ close }: IProps) => {
         repoId,
         documentId: getDocument!.id,
         versionNumber: dataForm.name,
+        formType: "GENERAL",
+        formDisplay: "CLASSIC",
         isDirectAccess:
           sharedDocuments === "true" ||
           currentPath === "/admin/sharedDocuments" ||

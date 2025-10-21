@@ -35,6 +35,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     documentInfo: getDocumentInfo,
     documentTemplate: getDocumentTemplate,
     documentKey: getDocumentKey,
+    documentFormContentInfo,
   } = useDocumentStore();
   const { category: getCategory, categoryShow: getCategoryShow } = useCategoryStore();
   const { repo: getRepo } = useRepositoryStore();
@@ -178,6 +179,8 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
               repoId,
               documentId: result.id,
               versionNumber: dataForm.versionNumber,
+              formType: documentFormContentInfo!.type,
+              formDisplay: documentFormContentInfo!.display,
               callBack: () => {
                 close();
                 setOpen(false);

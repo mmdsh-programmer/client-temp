@@ -14,6 +14,8 @@ export const createFormVersionAction = async (
   repoId: number,
   documentId: number,
   versionNumber: string,
+  formType: "GENERAL" | "EXAM",
+  formDisplay: "CLASSIC" | "CARD",
   isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
@@ -23,6 +25,8 @@ export const createFormVersionAction = async (
       repoId,
       documentId,
       versionNumber,
+      formType,
+      formDisplay,
       isDirectAccess,
     );
 

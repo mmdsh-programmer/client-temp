@@ -6,6 +6,7 @@ import {
   ForbiddenError,
   IOriginalError,
   InputError,
+  NetworkError,
   NotFoundError,
   ServerError,
   UnprocessableError,
@@ -75,6 +76,7 @@ const axiosClasorInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 20000,
 });
 
 axiosClasorInstance.interceptors.request.use(
@@ -149,6 +151,10 @@ axiosClasorInstance.interceptors.response.use(
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   if (isAxiosError(error)) {
     const message = [error.response?.data?.messages?.[0] || error.message];
+    if (error.code === "ENOTFOUND") {
+      const msg = "خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.";
+      throw new NetworkError(message, error as IOriginalError);
+    }
     switch (error.response?.status) {
       case 400:
         throw new InputError(message, error as IOriginalError);
@@ -2445,12 +2451,14 @@ export const createFormVersion = async (
   repoId: number,
   documentId: number,
   versionNumber: string,
+  formType: "GENERAL" | "EXAM",
+  formDisplay: "CLASSIC" | "CARD",
   isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `repositories/${repoId}/documents/${documentId}/versions/createVersion`,
-      { versionNumber },
+      { versionNumber, formType, formDisplay },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

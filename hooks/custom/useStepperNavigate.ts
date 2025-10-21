@@ -25,14 +25,22 @@ const useStepperNavigate = () => {
 
   const handleNextStep = () => {
     return setActiveStep((cur) => {
-      if (cur === 1 && !getDocumentType?.includes(EDocumentTypes.classic)) return cur + 2;
+      if (
+        (cur === 1 && !getDocumentType?.includes(EDocumentTypes.classic)) &&
+        !getDocumentType?.includes(EDocumentTypes.form)
+      )
+        return cur + 2;
       return cur + 1;
     });
   };
 
   const handlePrevStep = () => {
     return setActiveStep((cur) => {
-      if (cur === 3 && !getDocumentType?.includes(EDocumentTypes.classic)) return cur - 2;
+      if (
+        (cur === 3 && !getDocumentType?.includes(EDocumentTypes.classic)) &&
+        !getDocumentType?.includes(EDocumentTypes.form)
+      )
+        return cur - 2;
       return cur - 1;
     });
   };

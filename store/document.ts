@@ -12,6 +12,11 @@ interface IDocInfo {
   description?: string;
 }
 
+interface IFormInfo {
+  type: "GENERAL" | "EXAM";
+  display: "CLASSIC" | "CARD";
+}
+
 export const useDocumentStore = create<{
   selectedDocument: IDocumentMetadata | null;
   setSelectedDocument: (doc: IDocumentMetadata | null) => void;
@@ -21,6 +26,8 @@ export const useDocumentStore = create<{
   setDocumentType: (type: EDocumentTypes | null) => void;
   documentInfo: IDocInfo | null;
   setDocumentInfo: (info: IDocInfo | null) => void;
+  documentFormContentInfo: IFormInfo | null;
+  setDocumentFormContentInfo: (info: IFormInfo | null) => void;
   documentKey: IPublicKey | null;
   setDocumentKey: (key: IPublicKey | null) => void;
   documentTemplate: IDocumentMetadata | null;
@@ -50,6 +57,10 @@ export const useDocumentStore = create<{
         documentInfo: null,
         setDocumentInfo: (info) => {
           return set({ documentInfo: info });
+        },
+        documentFormContentInfo: null,
+        setDocumentFormContentInfo: (info) => {
+          return set({ documentFormContentInfo: info });
         },
         documentKey: null,
         setDocumentKey: (key) => {

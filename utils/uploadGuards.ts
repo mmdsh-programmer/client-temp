@@ -1,3 +1,5 @@
+import DOMPurify from "dompurify";
+
 const EXECUTABLE_EXTENSIONS = new Set([
   // Windows executables/scripts
   "exe",
@@ -61,14 +63,8 @@ const BLOCKED_MIME_PREFIXES = [
 ];
 
 const TEXTUAL_SVG_MIME = "image/svg+xml";
-const TEXTUAL_HTML_MIMES = new Set([
-  "text/html",
-  "application/xhtml+xml",
-]);
-const TEXTUAL_XML_MIMES = new Set([
-  "text/xml",
-  "application/xml",
-]);
+const TEXTUAL_HTML_MIMES = new Set(["text/html", "application/xhtml+xml"]);
+const TEXTUAL_XML_MIMES = new Set(["text/xml", "application/xml"]);
 const SVG_RELATED_EXTENSIONS = new Set(["svg", "svgz", "xml", "xhtml", "html", "htm"]);
 
 function getExtension(filename: string): string {
@@ -157,9 +153,106 @@ export async function isUnsafeSvg(file: File): Promise<boolean> {
   return false;
 }
 
+// Sanitize SVG content using DOMPurify
+export async function sanitizeSvgFile(file: File): Promise<File> {
+  const originalContent = await file.text();
+
+  // Configure DOMPurify for SVG sanitization
+  const cleanContent = DOMPurify.sanitize(originalContent, {
+    USE_PROFILES: { svg: true, svgFilters: true },
+    ALLOWED_TAGS: [
+      "svg",
+      "g",
+      "path",
+      "circle",
+      "rect",
+      "line",
+      "polyline",
+      "polygon",
+      "ellipse",
+      "text",
+      "tspan",
+      "defs",
+      "clipPath",
+      "mask",
+      "pattern",
+      "linearGradient",
+      "radialGradient",
+      "stop",
+      "image",
+      "use",
+      "symbol",
+      "marker",
+      "title",
+      "desc",
+      "metadata",
+    ],
+    ALLOWED_ATTR: [
+      "viewBox",
+      "width",
+      "height",
+      "x",
+      "y",
+      "cx",
+      "cy",
+      "r",
+      "rx",
+      "ry",
+      "d",
+      "fill",
+      "stroke",
+      "stroke-width",
+      "stroke-linecap",
+      "stroke-linejoin",
+      "stroke-dasharray",
+      "stroke-dashoffset",
+      "opacity",
+      "fill-opacity",
+      "stroke-opacity",
+      "transform",
+      "id",
+      "class",
+      "style",
+      "href",
+      "xlink:href",
+      "gradientUnits",
+      "gradientTransform",
+      "spreadMethod",
+      "offset",
+      "stop-color",
+      "stop-opacity",
+      "patternUnits",
+      "patternTransform",
+      "markerUnits",
+      "markerWidth",
+      "markerHeight",
+      "orient",
+      "refX",
+      "refY",
+      "markerUnits",
+      "preserveAspectRatio",
+      "xmlns",
+      "xmlns:xlink",
+    ],
+    ALLOW_DATA_ATTR: false,
+    ALLOW_UNKNOWN_PROTOCOLS: false,
+    SANITIZE_DOM: true,
+    KEEP_CONTENT: true,
+    RETURN_DOM: false,
+    RETURN_DOM_FRAGMENT: false,
+  });
+
+  // Create a new File object with sanitized content
+  const sanitizedBlob = new Blob([cleanContent], { type: "image/svg+xml" });
+  return new File([sanitizedBlob], file.name, {
+    type: "image/svg+xml",
+    lastModified: file.lastModified,
+  });
+}
+
 export async function validateBeforeUpload(
   file: File,
-): Promise<{ valid: boolean; message?: string }> {
+): Promise<{ valid: boolean; message?: string; sanitizedFile?: File }> {
   const execCheck = shouldBlockExecutable(file);
   if (execCheck.block) {
     switch (execCheck.reason) {
@@ -206,7 +299,17 @@ export async function validateBeforeUpload(
 
       if (containsSvgMarker || mime === TEXTUAL_SVG_MIME || ext === "svg") {
         if (await isUnsafeSvg(file)) {
-          return { valid: false, message: "فایل SVG دارای محتوای ناامن است و آپلود نمی‌شود." };
+          // Instead of blocking, sanitize the SVG file
+          try {
+            const sanitizedFile = await sanitizeSvgFile(file);
+            return {
+              valid: true,
+              message: "فایل SVG پاک‌سازی شده و آماده آپلود است.",
+              sanitizedFile,
+            };
+          } catch (error) {
+            return { valid: false, message: "خطا در پاک‌سازی فایل SVG." };
+          }
         }
       }
     } catch {
@@ -238,10 +341,13 @@ export async function extractFileFromUnknown(input: unknown): Promise<File | nul
     if (anyInput?.raw && anyInput.raw instanceof File) {
       return anyInput.raw as File;
     }
-    const blob: Blob | undefined = anyInput?.blob instanceof Blob ? (anyInput.blob as Blob) : undefined;
+    const blob: Blob | undefined =
+      anyInput?.blob instanceof Blob ? (anyInput.blob as Blob) : undefined;
     if (blob) {
-      const name: string = typeof anyInput?.name === "string" && anyInput.name ? (anyInput.name as string) : "upload";
-      const type: string = (typeof anyInput?.type === "string" ? (anyInput.type as string) : "") || (blob.type || "");
+      const name: string =
+        typeof anyInput?.name === "string" && anyInput.name ? (anyInput.name as string) : "upload";
+      const type: string =
+        (typeof anyInput?.type === "string" ? (anyInput.type as string) : "") || blob.type || "";
       return new File([blob], name, { type });
     }
     return null;

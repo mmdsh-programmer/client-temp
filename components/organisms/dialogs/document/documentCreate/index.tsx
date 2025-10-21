@@ -8,6 +8,9 @@ import StepperDialog from "@components/templates/dialog/stepperDialog";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { useDocumentStepperStore } from "@store/stepper";
 import useRepoId from "@hooks/custom/useRepoId";
+import { useDocumentStore } from "@store/document";
+import { EDocumentTypes } from "@interface/enums";
+import FormType from "./formType";
 
 interface IProps {
   isTemplate: boolean;
@@ -16,6 +19,8 @@ interface IProps {
 
 const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
   const { documentActiveStep: getActiveStep } = useDocumentStepperStore();
+  const { documentType } = useDocumentStore();
+
   const repoId = useRepoId();
 
   const { close } = useStepperNavigate();
@@ -27,7 +32,13 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
   const stepList = [
     "نوع سند",
     "عنوان و توضیحات سند",
-    ...(isTemplate ? ["نام نسخه سند"] : ["نمونه سند", "رمز گذاری سند", "نام نسخه سند"]),
+    ...(isTemplate
+      ? ["نام نسخه سند"]
+      : [
+          documentType === EDocumentTypes.classic ? "نمونه سند" : "مشخصات فرم",
+          "رمز گذاری سند",
+          "نام نسخه سند",
+        ]),
   ];
 
   const renderStepperContent = () => {
@@ -37,11 +48,13 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
       case 1:
         return <DocumentInfo />;
       case 2:
-        return isTemplate ? (
-          <DocumentVersion isTemplate={isTemplate} setOpen={setOpen} />
-        ) : (
-          <DocumentTemplate />
-        );
+        if (isTemplate) {
+          return <DocumentVersion isTemplate={isTemplate} setOpen={setOpen} />;
+        }
+        if (documentType === EDocumentTypes.classic) {
+          return <DocumentTemplate />;
+        }
+        return <FormType setOpen={setOpen} />;
       case 3:
         return isTemplate ? (
           <DocumentVersion isTemplate={isTemplate} setOpen={setOpen} />

@@ -246,7 +246,15 @@ const EditorFooter = ({ editorRef }: IProps) => {
         return response.data;
       } catch (error: any) {
         setIsLoading(false);
-        toast.error(error.message || "خطای نامشخصی رخ داد");
+        if (error.code === "ECONNABORTED") {
+          toast.error(
+            "در ارتباط با سرور مشکلی پیش آمد (تایم اوت). لطفا اتصال اینترنت خود را بررسی کنید.",
+          );
+        } else if (error.message === "Network Error") {
+          toast.error("خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.");
+        } else {
+          toast.error(error.message || "خطای نامشخصی رخ داد");
+        }
       }
     } else {
       setIsLoading(false);
@@ -304,7 +312,12 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setVersionData(null);
         }}
       >
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="label_l3 text-primary_normal"
+        >
+          {renderTitle()}
+        </Typography>
         <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
       </Button>
 
@@ -330,7 +343,12 @@ const EditorFooter = ({ editorRef }: IProps) => {
             setVersionData(null);
           }}
         >
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label_l3 text-primary_normal">{renderTitle()}</Typography>
+          <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="label_l3 text-primary_normal"
+          >
+            {renderTitle()}
+          </Typography>
           <ChevronLeftIcon className="h-2.5 w-2.5 -rotate-90 stroke-icon-active" />
         </Button>
         <div className="!hidden border-r-[1px] border-r-normal xs:!block" />
@@ -366,7 +384,12 @@ const EditorFooter = ({ editorRef }: IProps) => {
           disabled={saveEditorHook.isPending || isLoading}
           loading={isLoading || saveEditorHook.isPending}
         >
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
+          <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="text__label__button text-white"
+          >
+            ذخیره
+          </Typography>
         </LoadingButton>
         <LoadingButton
           className="editor-footer__save-button !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
@@ -377,7 +400,12 @@ const EditorFooter = ({ editorRef }: IProps) => {
           disabled={saveEditorHook.isPending || isLoading}
           loading={isLoading || saveEditorHook.isPending}
         >
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
+          <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="text__label__button text-white"
+          >
+            ذخیره
+          </Typography>
         </LoadingButton>
       </div>
     </div>

@@ -12,15 +12,19 @@ const useCreateFormVersion = () => {
       repoId: number;
       documentId: number;
       versionNumber: string;
+      formType: "GENERAL" | "EXAM";
+      formDisplay: "CLASSIC" | "CARD";
       isDirectAccess?: boolean;
       callBack?: () => void;
       onErrorHandler?: () => void;
     }) => {
-      const { repoId, documentId, versionNumber, isDirectAccess } = values;
+      const { repoId, documentId, versionNumber, isDirectAccess, formType, formDisplay } = values;
       const response = await createFormVersionAction(
         repoId,
         documentId,
         versionNumber,
+        formType,
+        formDisplay,
         isDirectAccess,
       );
       handleClientSideHookError(response as IActionError);
