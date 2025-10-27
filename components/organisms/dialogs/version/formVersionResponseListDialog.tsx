@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useRef, useState } from "react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody } from "@material-tailwind/react";
