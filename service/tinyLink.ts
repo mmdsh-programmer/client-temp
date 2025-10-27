@@ -2,6 +2,7 @@ import {
   AuthorizationError,
   DuplicateError,
   InputError,
+  NetworkError,
   ServerError,
 } from "@utils/error";
 import axios, { AxiosError } from "axios";
@@ -83,6 +84,27 @@ export const handleTinyLinkStatusError = (
   error: AxiosError<ITinyActionError> | ITinyActionError
 ) => {
   const message = error.message ?? "خطای نامشخصی رخ داد";
+  
+  // Handle network errors for AxiosError
+  if ('code' in error && typeof error.code === 'string') {
+    const networkErrorCodes = [
+      "ENOTFOUND",      // DNS resolution failed
+      "ECONNREFUSED",   // Connection refused
+      "ETIMEDOUT",      // Connection timeout
+      "ECONNRESET",     // Connection reset
+      "EHOSTUNREACH",   // Host unreachable
+      "ENETUNREACH",    // Network unreachable
+      "EAI_AGAIN",      // Temporary failure in name resolution
+      "EAI_NODATA",     // No address associated with hostname
+      "EAI_NONAME",     // Name or service not known
+    ];
+    
+    if (networkErrorCodes.includes(error.code)) {
+      const msg = "خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.";
+      throw new NetworkError([msg]);
+    }
+  }
+  
   switch (error.code) {
     case 401:
       throw new AuthorizationError([message]);

@@ -13,6 +13,7 @@ import {
   removePartyFromDomainParticipants,
   updateCustomPostByDomain,
   getDomainDocuments,
+  getDomainVersions,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { getDomainHost } from "@utils/getDomain";
@@ -247,6 +248,7 @@ export const removePartyFromDomainParticipantsAction = async (userNameList: stri
 export const getDomainDocumentsAction = async (
   title: string,
   tagIds: number | number[] | undefined,
+  creatorUserName: string | undefined,
   offset: number,
   size: number,
 ) => {
@@ -263,6 +265,48 @@ export const getDomainDocumentsAction = async (
       userInfo.access_token,
       title,
       tagIds,
+      creatorUserName,
+      offset,
+      size,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getDomainVersionsAction = async (
+  repoId: number | undefined,
+  docId: number | undefined,
+  title: string,
+  docTitle: string | undefined,
+  creatorUserName: string | undefined,
+  withTemplate: string | undefined,
+  isTemplate: string | undefined,
+  contentType: string | undefined,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const domain = await getDomainHost();
+
+    if (!domain) {
+      throw new Error("Domain is not found");
+    }
+
+    const response = await getDomainVersions(
+      domain,
+      userInfo.access_token,
+      repoId,
+      docId,
+      title,
+      docTitle,
+      creatorUserName,
+      withTemplate,
+      isTemplate,
+      contentType,
       offset,
       size,
     );

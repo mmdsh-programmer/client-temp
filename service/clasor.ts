@@ -76,7 +76,7 @@ const axiosClasorInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 20000,
+  timeout: 5000,
 });
 
 axiosClasorInstance.interceptors.request.use(
@@ -151,9 +151,23 @@ axiosClasorInstance.interceptors.response.use(
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   if (isAxiosError(error)) {
     const message = [error.response?.data?.messages?.[0] || error.message];
-    if (error.code === "ENOTFOUND") {
+
+    // Handle various network error codes
+    const networkErrorCodes = [
+      "ENOTFOUND", // DNS resolution failed
+      "ECONNREFUSED", // Connection refused
+      "ETIMEDOUT", // Connection timeout
+      "ECONNRESET", // Connection reset
+      "EHOSTUNREACH", // Host unreachable
+      "ENETUNREACH", // Network unreachable
+      "EAI_AGAIN", // Temporary failure in name resolution
+      "EAI_NODATA", // No address associated with hostname
+      "EAI_NONAME", // Name or service not known
+    ];
+
+    if (networkErrorCodes.includes(error.code || "")) {
       const msg = "خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.";
-      throw new NetworkError(message, error as IOriginalError);
+      throw new NetworkError([msg], error as IOriginalError);
     }
     switch (error.response?.status) {
       case 400:
@@ -822,6 +836,32 @@ export const getRepositorySubscription = async (accessToken: string, repoId: num
   }
 };
 
+export const getRepoWhiteListRequest = async (
+  accessToken: string,
+  ssoId: number,
+  repoId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<IDocumentWhiteListRequest>>
+    >(`repositories/${repoId}/whiteList/requests`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        ssoid: ssoId,
+        offset,
+        size,
+      },
+    });
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
 /// /////////////////////// USERS ///////////////////////
 export const getRepositoryUsers = async (
   accessToken: string,
@@ -4876,6 +4916,7 @@ export const getDomainDocuments = async (
   accessToken: string,
   title: string,
   tagIds: number | number[] | undefined,
+  creatorUserName: string | undefined,
   offset: number,
   size: number,
 ) => {
@@ -4890,11 +4931,52 @@ export const getDomainDocuments = async (
         params: {
           title,
           tagIds,
+          creatorUserName,
           offset,
           size,
         },
       },
     );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDomainVersions = async (
+  domainUrl: string,
+  accessToken: string,
+  repoId: number | undefined,
+  docId: number | undefined,
+  title: string,
+  docTitle: string | undefined,
+  creatorUserName: string | undefined,
+  withTemplate: string | undefined,
+  isTemplate: string | undefined,
+  contentType: string | undefined,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<any>>("/domain/report/versions", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        domainUrl,
+      },
+      params: {
+        repoId,
+        docId,
+        title,
+        docTitle,
+        creatorUserName,
+        withTemplate,
+        isTemplate,
+        contentType,
+        offset,
+        size,
+      },
+    });
 
     return response.data.data;
   } catch (error) {

@@ -11,7 +11,7 @@ import VersionPublicDialog from "@components/organisms/dialogs/version/versionPu
 import ConfirmPublicDraftDialog from "@components/organisms/dialogs/version/confirmPublicDraftDialog";
 import AcceptDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftDialog";
 import AcceptVersionDialog from "@components/organisms/dialogs/versionRequest/acceptVersionDialog";
-import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/acceptDraftPublicDialog";
+import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/acceptPublicDraftDialog";
 import { useVersionStore } from "@store/version";
 import FormVersionResponseListDialog from "@components/organisms/dialogs/version/formVersionResponseListDialog";
 

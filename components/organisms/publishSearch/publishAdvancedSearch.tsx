@@ -50,19 +50,19 @@ const PublishAdvancedSearch = () => {
               className={`flex flex-col gap-2 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
             >
               <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
-                نام سند
+                عنوان
               </Typography>
               <FormInput
                 className="w-fit"
                 id="document-name"
-                placeholder="نام سند "
+                placeholder="عنوان"
                 register={{ ...register("searchText") }}
               />
             </div>
             {userInfo?.domainConfig.useDomainTag ? (
               <div className="flex flex-grow flex-col gap-2">
                 <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
-                  تگ‌ها
+                  انتخاب تگ
                 </Typography>
                 {isLoading ? (
                   <div className="flex h-12 flex-grow items-center justify-start">

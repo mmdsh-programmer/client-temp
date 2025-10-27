@@ -7,6 +7,9 @@ import useSearchPublishContent from "@hooks/publish/useSearchPublishContent";
 import { Spinner } from "@components/atoms/spinner";
 import useGetDomainDocuments from "@hooks/domain/useGetDomainDocuments";
 import PublishAdvancedSearchResultItem from "./publishAdvancedSearchResultItem";
+import useGetDomainVersions from "@hooks/domain/useGetDomainVersions";
+import { useParams } from "next/navigation";
+import { toEnglishDigit } from "@utils/index";
 
 export interface ISearchResultItem {
   versionId: number;
@@ -25,30 +28,61 @@ interface IProps {
 
 const PublishAdvancedSearchResult = ({ searchText, tags }: IProps) => {
   const [disableItems, setDisableItems] = useState(false);
+
+  const params = useParams();
+  const idParam = params?.id;
+  const repoId = toEnglishDigit(
+    decodeURIComponent(Array.isArray(idParam) ? idParam[0] : (idParam ?? "")),
+  );
+
   const {
-    data: searchData,
-    isLoading,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    isError,
-    error,
-    refetch,
-  } = useGetDomainDocuments(searchText, tags, 20);
+    data: domainDocuments,
+    isLoading: domainDocumentsIsLoading,
+    hasNextPage: domainDocumentsHasNextPage,
+    fetchNextPage: domainDocumentsFetchNextPage,
+    isFetchingNextPage: domainDocumentsIsFetchingNextPage,
+    isError: domainDocumentsIsError,
+    error: domainDocumentsError,
+    refetch: domainDocumentsRefetch,
+  } = useGetDomainDocuments(searchText, tags, undefined, 20);
+
+  const {
+    data: domainVersions,
+    isLoading: domainVersionsIsLoading,
+    hasNextPage: domainVersionsHasNextPage,
+    fetchNextPage: domainVersionsFetchNextPage,
+    isFetchingNextPage: domainVersionsIsFetchingNextPage,
+    isError: domainVersionsIsError,
+    error: domainVersionsError,
+    refetch: domainVersionsRefetch,
+  } = useGetDomainVersions(
+    +repoId || undefined,
+    undefined,
+    searchText,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    20,
+  );
 
   const onResultItemClick = (value: boolean) => {
     setDisableItems(value);
   };
 
-  if (isError) {
+  if (domainDocumentsIsError || domainVersionsIsError) {
     return (
       <div className="flex max-h-72 w-full items-center justify-center overflow-auto">
-        <Error error={error} retry={refetch} />
+        <Error
+          error={domainDocumentsError! || domainVersionsError!}
+          retry={domainDocumentsRefetch}
+        />
       </div>
     );
   }
 
-  if (isLoading) {
+  if (domainVersionsIsLoading || domainDocumentsIsLoading) {
     return (
       <div className="flex w-full items-center justify-center">
         <Spinner className="h-8 w-8 text-primary" />
@@ -56,7 +90,7 @@ const PublishAdvancedSearchResult = ({ searchText, tags }: IProps) => {
     );
   }
 
-  const total = searchData?.pages[0].total;
+  const total = domainDocuments?.pages[0].total;
 
   return (
     <List
@@ -64,7 +98,7 @@ const PublishAdvancedSearchResult = ({ searchText, tags }: IProps) => {
       className="list max-h-72 w-full overflow-auto"
     >
       {total ? (
-        searchData?.pages.map((page) => {
+        domainDocuments?.pages.map((page) => {
           return page.list.map((searchResult) => {
             return (
               <PublishAdvancedSearchResultItem
@@ -84,9 +118,9 @@ const PublishAdvancedSearchResult = ({ searchText, tags }: IProps) => {
           موردی برای نمایش وجود ندارد
         </ListItem>
       )}
-      {hasNextPage ? (
+      {/* {hasNextPage ? (
         <LoadMore fetchNextPage={fetchNextPage} isFetchingNextPage={isFetchingNextPage} />
-      ) : null}
+      ) : null} */}
     </List>
   );
 };

@@ -17,7 +17,7 @@ import { usePathname } from "next/navigation";
 import AcceptDraftDialog from "../dialogs/draftRequest/acceptDraftDialog";
 import VersionCancelPublicDialog from "../dialogs/version/versionCancelPublicDialog";
 import AcceptVersionDialog from "../dialogs/versionRequest/acceptVersionDialog";
-import AcceptPublicDraftDialog from "../dialogs/draftRequest/acceptDraftPublicDialog";
+import AcceptPublicDraftDialog from "../dialogs/draftRequest/acceptPublicDraftDialog";
 import ConfirmPublicDraftDialog from "../dialogs/version/confirmPublicDraftDialog";
 import { ERoles, EDocumentTypes } from "@interface/enums";
 import DownloadPDF from "@components/molecules/downloadPDF";

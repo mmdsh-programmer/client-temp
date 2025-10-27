@@ -17,6 +17,7 @@ import {
   KeyIcon,
   LastVersionIcon,
   LeaveRepoIcon,
+  LockIcon,
   PublishIcon,
   RepoActivityIcon,
   RestoreIcon,
@@ -141,6 +142,14 @@ const getOwnerDestructiveActions = (repo: IRepo, setModal: (modal: string) => vo
     ];
   }
   return [
+    createItem(
+      "درخواست‌های دسترسی سند",
+      <LockIcon className="h-4 w-4" />,
+      () => {
+        return setModal("documentWhiteList");
+      },
+      "repo-menu__document-white-list",
+    ),
     createItem(
       "بایگانی",
       <ArchiveActionIcon className="h-4 w-4 fill-icon-active" />,

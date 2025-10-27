@@ -31,6 +31,7 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
         onClick={(e) => {
           return e.stopPropagation();
         }}
+        className="version-menu"
       >
         <MenuTemplate
           menuList={menuList}

@@ -175,7 +175,7 @@ const useVersionMenu = (
       createAction("publicDraft"),
       {
         className: "confirmPublic-draft",
-        disabled: !isAdminOrOwner(),
+        disabled: isWriterOrViewer(),
       },
     ),
     createItem(

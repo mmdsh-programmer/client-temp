@@ -10,7 +10,7 @@ import RejectDraftDialog from "../draftRequest/rejectDraftDialog";
 import AcceptVersionDialog from "../versionRequest/acceptVersionDialog";
 import RejectVersionDialog from "../versionRequest/rejectVersionDialog";
 import { EDraftStatus } from "@interface/enums";
-import AcceptPublicDraftDialog from "../draftRequest/acceptDraftPublicDialog";
+import AcceptPublicDraftDialog from "../draftRequest/acceptPublicDraftDialog";
 import { useRepositoryStore } from "@store/repository";
 import { useVersionStore } from "@store/version";
 import { useEditorStore } from "@store/editor";
@@ -50,6 +50,20 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
     },
   ];
 
+  if (
+    selectedRequest?.state === "draft" &&
+    acceptVersion &&
+    selectedRequest.status === EDraftStatus.waitForDirectPublic
+  ) {
+    return (
+      <AcceptPublicDraftDialog
+        setOpen={() => {
+          return setAcceptVersion(false);
+        }}
+      />
+    );
+  }
+
   if (selectedRequest?.state === "draft" && acceptVersion) {
     return (
       <AcceptDraftDialog
@@ -85,20 +99,6 @@ const RepoVersionRequestsDialog = ({ setOpen }: IProps) => {
       <RejectVersionDialog
         setOpen={() => {
           return setRejectVersion(false);
-        }}
-      />
-    );
-  }
-
-  if (
-    selectedRequest?.state === "draft" &&
-    acceptVersion &&
-    selectedRequest.status === EDraftStatus.waitForDirectPublic
-  ) {
-    return (
-      <AcceptPublicDraftDialog
-        setOpen={() => {
-          return setAcceptVersion(false);
         }}
       />
     );

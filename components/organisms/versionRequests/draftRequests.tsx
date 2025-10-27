@@ -96,7 +96,7 @@ const DraftRequests = () => {
                             <div className="flex flex-wrap items-center gap-2">
                               <div className="flex flex-wrap gap-1">
                                 <div
-                                  className={`${
+                                  className={`!p-[6px] !rounded-lg ${
                                     translateVersionStatus(request.status, request.state).className
                                   }`}
                                 >

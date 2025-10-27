@@ -16,6 +16,7 @@ import {
   getMyInfo,
   getMyRepositories,
   getPublishRepoList,
+  getRepoWhiteListRequest,
   getRepository,
   getRepositoryKeys,
   getRepositorySubscription,
@@ -365,10 +366,7 @@ export const getRepoSubscriptionAction = async (repoId: number) => {
   }
 };
 
-export const getPublishRepositoriesAction = async (
-  offset: number,
-  size: number
-) => {
+export const getPublishRepositoriesAction = async (offset: number, size: number) => {
   const domain = await getDomainHost();
   if (!domain) {
     throw new Error("Domain is not found");
@@ -376,4 +374,24 @@ export const getPublishRepositoriesAction = async (
   const { types } = await getCustomPostByDomain(domain);
   const response = await getPublishRepoList(domain, offset, size, types); // TODO: it should not be array
   return response;
+};
+
+export const getRepoWhiteListRequestAction = async (
+  repoId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const userInfo = await getMe();
+    const response = await getRepoWhiteListRequest(
+      userInfo.access_token,
+      userInfo.ssoId,
+      repoId,
+      offset,
+      size,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
 };

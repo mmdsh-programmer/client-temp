@@ -55,7 +55,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
       tabTitle: ETabs.LINK,
       tabContent: activeTab === ETabs.LINK ? <PublicLink /> : null,
     } : null,
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin" ? {
+    getRepo?.roleName === "owner" ? {
       tabTitle: ETabs.PUBLISH,
       tabContent: activeTab === ETabs.PUBLISH ? <PublishLink /> : null,
     } : null,

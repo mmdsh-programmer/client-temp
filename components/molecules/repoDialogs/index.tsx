@@ -11,6 +11,7 @@ import Files from "@components/organisms/fileManagement";
 import RepoVersionRequestsDialog from "@components/organisms/dialogs/repository/repoVersionRequestsDialog";
 import { useRepositoryStore } from "@store/repository";
 import PrivateFeedCreateDialog from "@components/organisms/dialogs/privateFeed/privateFeedCreateDialog";
+import RepoWhiteListRequestsDialog from "@components/organisms/dialogs/repository/repoWhiteListRequestsDialog";
 
 interface IRepoDialogsProps {
   activeModal: string | null;
@@ -51,6 +52,9 @@ const RepoDialogs = ({ activeModal, closeModal }: IRepoDialogsProps) => {
         <RepoVersionRequestsDialog setOpen={handleClose} />
       ) : null}
       {activeModal === "privateFeed" ? <PrivateFeedCreateDialog setOpen={handleClose} /> : null}
+      {activeModal === "documentWhiteList" ? (
+        <RepoWhiteListRequestsDialog setOpen={handleClose} />
+      ) : null}
     </>
   );
 };

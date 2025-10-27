@@ -153,48 +153,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     }
   };
 
-  const handleSave = useDebouncedCallback((data: any) => {
-    setIsLoading(true);
-    let encryptedContent: string | null = null;
-    const content: string =
-      selectedDocument?.contentType === EDocumentTypes.classic ? data?.content : data;
-
-    if (selectedDocument?.publicKeyId) {
-      encryptedContent = encryptData(content) as string;
-    }
-
-    if (getVersionData && selectedDocument && repoId) {
-      saveEditorHook.mutate({
-        content: selectedDocument?.publicKeyId ? (encryptedContent as string) : content,
-        outline: selectedDocument?.contentType === EDocumentTypes.classic ? data?.outline : "[]",
-        repoId,
-        documentId: selectedDocument.id,
-        versionId: getVersionData.id,
-        versionNumber: getVersionData.versionNumber,
-        versionState: getVersionData.state,
-        isDirectAccess:
-          sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" &&
-            userInfo?.repository.id !== selectedDocument?.repoId),
-        successCallBack: () => {
-          toast.success("تغییرات با موفقیت ذخیره شد.");
-          setIsLoading(false);
-        },
-        errorCallback: () => {
-          setIsLoading(false);
-        },
-      });
-    } else {
-      setIsLoading(false);
-    }
-  }, 100);
-
-  const handleSaveData = useDebouncedCallback(async (data: any, serverAction = false) => {
-    if (serverAction) {
-      handleSave(data);
-      return;
-    }
+  const handleSaveData = useDebouncedCallback(async (data: any) => {
     setIsLoading(true);
     const userData = await getMe();
 
@@ -230,6 +189,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
             },
             maxContentLength: Infinity,
             maxBodyLength: Infinity,
+            timeout: 10000
           },
         );
         setIsLoading(false);
@@ -248,7 +208,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
         setIsLoading(false);
         if (error.code === "ECONNABORTED") {
           toast.error(
-            "در ارتباط با سرور مشکلی پیش آمد (تایم اوت). لطفا اتصال اینترنت خود را بررسی کنید.",
+            "در ارتباط با سرور مشکلی پیش آمد. لطفا اتصال اینترنت خود را بررسی کنید.",
           );
         } else if (error.message === "Network Error") {
           toast.error("خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.");
@@ -377,7 +337,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           className="editor-footer__save-button !hidden !h-12 !w-[50%] bg-primary-normal hover:bg-primary-normal active:bg-primary-normal md:!h-8 md:!w-[100px]"
           onClick={() => {
             editorRef.current?.on("getData", (data: string) => {
-              return handleSaveData(data, true);
+              return handleSaveData(data);
             });
             editorRef.current?.getData();
           }}

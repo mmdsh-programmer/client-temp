@@ -2,11 +2,22 @@ import { getDomainDocumentsAction } from "@actions/domain";
 import { IDomainDocuments } from "@interface/domain.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-const useGetDomainDocuments = (title: string, tagIds: number | number[] | undefined, size) => {
+const useGetDomainDocuments = (
+  title: string,
+  tagIds: number | number[] | undefined,
+  creatorUserName: string | undefined,
+  size,
+) => {
   return useInfiniteQuery({
     queryKey: ["getDomainDocuments"],
     queryFn: async ({ signal, pageParam }) => {
-      const response = await getDomainDocumentsAction(title, tagIds, (pageParam - 1) * size, size);
+      const response = await getDomainDocumentsAction(
+        title,
+        tagIds,
+        creatorUserName,
+        (pageParam - 1) * size,
+        size,
+      );
       return response as IDomainDocuments;
     },
     initialPageParam: 1,

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { usePublishStore } from "@store/publish";
 import { IDocumentItem } from "@interface/domain.interface";
 import { LockIcon } from "@components/atoms/icons";
-import useGetDocumentPublishLink from "@hooks/document/useGetDocumentPublishLink";
 import useCreateDocumentLink from "@hooks/document/useCreateDocumentLink";
 
 interface IProps {
@@ -16,7 +15,6 @@ interface IProps {
 
 const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems }: IProps) => {
   const router = useRouter();
-  const [repoId, setRepoId] = useState<number | null>(null);
   const createLink = useCreateDocumentLink();
 
   const setOpenSearch = usePublishStore((state) => {
