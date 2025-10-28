@@ -25,7 +25,7 @@ const SelectBox = ({
   singleSelect = false,
 }: IProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState(""); // اضافه شد
+  const [searchValue, setSearchValue] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {

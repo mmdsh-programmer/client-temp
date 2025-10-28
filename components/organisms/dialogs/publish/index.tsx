@@ -34,7 +34,7 @@ const PublishSearchContentDialog = () => {
       setOpen={() => {
         return setOpen(false);
       }}
-      className="publish-search-dialog flex w-full max-w-full flex-col rounded-none bg-primary xs:!min-w-[500px] xs:!max-w-[500px] xs:rounded-lg"
+      className="publish-search-dialog flex w-full max-w-full flex-col rounded-none bg-primary xs:!min-w-[600px] xs:!max-w-[600px] xs:rounded-lg"
     >
       <div className="px-5 py-4">
         <TabComponent

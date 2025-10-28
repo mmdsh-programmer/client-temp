@@ -19,6 +19,7 @@ import { getMe } from "./auth";
 import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
+import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
 
 export const getCustomPostByDomainAction = async () => {
   try {
@@ -249,6 +250,7 @@ export const getDomainDocumentsAction = async (
   title: string,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
+  sortParams: ISearchSortParams,
   offset: number,
   size: number,
 ) => {
@@ -266,6 +268,7 @@ export const getDomainDocumentsAction = async (
       title,
       tagIds,
       creatorUserName,
+      sortParams,
       offset,
       size,
     );
@@ -282,6 +285,7 @@ export const getDomainVersionsAction = async (
   title: string,
   docTitle: string | undefined,
   creatorUserName: string | undefined,
+  sortParams: ISearchSortParams,
   withTemplate: string | undefined,
   isTemplate: string | undefined,
   contentType: string | undefined,
@@ -304,6 +308,7 @@ export const getDomainVersionsAction = async (
       title,
       docTitle,
       creatorUserName,
+      sortParams,
       withTemplate,
       isTemplate,
       contentType,

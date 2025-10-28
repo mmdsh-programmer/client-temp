@@ -31,7 +31,7 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
         onClick={(e) => {
           return e.stopPropagation();
         }}
-        className="version-menu"
+        className=""
       >
         <MenuTemplate
           menuList={menuList}
@@ -39,6 +39,7 @@ const VersionMenu = ({ version, lastVersion }: IProps) => {
             setVersionDrawer(true);
             setSelectedVersion(version);
           }}
+          className="version-menu"
           icon={
             <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">
               <MoreDotIcon className="h-4 w-4" />

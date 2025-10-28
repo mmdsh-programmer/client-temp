@@ -6,7 +6,6 @@ import {
   ForbiddenError,
   IOriginalError,
   InputError,
-  NetworkError,
   NotFoundError,
   ServerError,
   UnprocessableError,
@@ -47,6 +46,7 @@ import {
   IDomainSubscriptionList,
   IDomainTag,
   IDomainTagList,
+  IDomainVersions,
 } from "@interface/domain.interface";
 import { IFile, IPodspaceResult, IPublishAttachmentList } from "@interface/file.interface";
 import {
@@ -70,6 +70,7 @@ import { ITag } from "@interface/tags.interface";
 import { decryptKey } from "@utils/crypto";
 import qs from "qs";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
+import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -151,24 +152,6 @@ axiosClasorInstance.interceptors.response.use(
 export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
   if (isAxiosError(error)) {
     const message = [error.response?.data?.messages?.[0] || error.message];
-
-    // Handle various network error codes
-    const networkErrorCodes = [
-      "ENOTFOUND", // DNS resolution failed
-      "ECONNREFUSED", // Connection refused
-      "ETIMEDOUT", // Connection timeout
-      "ECONNRESET", // Connection reset
-      "EHOSTUNREACH", // Host unreachable
-      "ENETUNREACH", // Network unreachable
-      "EAI_AGAIN", // Temporary failure in name resolution
-      "EAI_NODATA", // No address associated with hostname
-      "EAI_NONAME", // Name or service not known
-    ];
-
-    if (networkErrorCodes.includes(error.code || "")) {
-      const msg = "خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.";
-      throw new NetworkError([msg], error as IOriginalError);
-    }
     switch (error.response?.status) {
       case 400:
         throw new InputError(message, error as IOriginalError);
@@ -4917,9 +4900,27 @@ export const getDomainDocuments = async (
   title: string,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
+  sortParams: ISearchSortParams,
   offset: number,
   size: number,
 ) => {
+  const searchSortParams = [
+    {
+      field: "createdAt",
+      order: sortParams.createdAt,
+    },
+
+    {
+      field: "updatedAt",
+      order: sortParams.updatedAt,
+    },
+    {
+      field: "creatorSSOID",
+      order: sortParams.creatorSSOID,
+    },
+    { field: "repoId", order: sortParams.repoId },
+  ];
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<IDomainDocuments>>(
       "/domain/report/documents",
@@ -4932,6 +4933,7 @@ export const getDomainDocuments = async (
           title,
           tagIds,
           creatorUserName,
+          searchSortParams,
           offset,
           size,
         },
@@ -4952,31 +4954,52 @@ export const getDomainVersions = async (
   title: string,
   docTitle: string | undefined,
   creatorUserName: string | undefined,
+  sortParams: ISearchSortParams,
   withTemplate: string | undefined,
   isTemplate: string | undefined,
   contentType: string | undefined,
   offset: number,
   size: number,
 ) => {
+  const searchSortParams = [
+    {
+      field: "createdAt",
+      order: sortParams.createdAt,
+    },
+
+    {
+      field: "updatedAt",
+      order: sortParams.updatedAt,
+    },
+    {
+      field: "creatorSSOID",
+      order: sortParams.creatorSSOID,
+    },
+    { field: "repoId", order: sortParams.repoId },
+  ];
   try {
-    const response = await axiosClasorInstance.get<IServerResult<any>>("/domain/report/versions", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        domainUrl,
+    const response = await axiosClasorInstance.get<IServerResult<IDomainVersions>>(
+      "/domain/report/versions",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          domainUrl,
+        },
+        params: {
+          repoId,
+          docId,
+          title,
+          docTitle,
+          creatorUserName,
+          withTemplate,
+          isTemplate,
+          contentType,
+          searchSortParams,
+          offset,
+          size,
+        },
       },
-      params: {
-        repoId,
-        docId,
-        title,
-        docTitle,
-        creatorUserName,
-        withTemplate,
-        isTemplate,
-        contentType,
-        offset,
-        size,
-      },
-    });
+    );
 
     return response.data.data;
   } catch (error) {

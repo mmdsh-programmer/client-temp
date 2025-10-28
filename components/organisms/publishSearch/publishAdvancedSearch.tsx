@@ -12,15 +12,32 @@ import SelectBox from "@components/molecules/selectBox";
 import PublishAdvancedSearchResult from "./publishAdvancedSearchResult";
 import { Spinner } from "@components/atoms/spinner";
 import SelectAtom from "@components/molecules/select";
+import Sort from "@components/molecules/sort";
+
+export interface ISearchSortParams {
+  createdAt?: "asc" | "desc";
+  updatedAt?: "asc" | "desc";
+  creatorSSOID?: "asc" | "desc";
+  repoId?: "asc" | "desc";
+}
 
 interface IForm {
   searchText: string;
+  creatorName?: string;
 }
 
 const PublishAdvancedSearch = () => {
   const [showResult, setShowResult] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [creatorName, setCreatorName] = useState<string | undefined>();
   const [tags, setTags] = useState<number[]>([]);
+  const [sortParams, setSortParams] = useState<ISearchSortParams>({
+    createdAt: "asc",
+    updatedAt: "asc",
+    creatorSSOID: "asc",
+    repoId: "asc",
+  });
+
   const { data: userInfo } = useGetUser();
   const { data: tagList, isLoading } = useGetDomainTags(30, !!userInfo?.domainConfig.useDomainTag);
 
@@ -38,6 +55,7 @@ const PublishAdvancedSearch = () => {
 
   const onSubmit = (formData: IForm) => {
     setSearchText(formData.searchText);
+    setCreatorName(formData.creatorName);
     setShowResult(true);
   };
 
@@ -47,17 +65,50 @@ const PublishAdvancedSearch = () => {
         <form className="flex w-full flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex items-end gap-2">
             <div
-              className={`flex flex-col gap-2 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
+              className={`flex max-w-[150px] flex-col gap-2 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
             >
               <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
                 عنوان
               </Typography>
-              <FormInput
-                className="w-fit"
-                id="document-name"
-                placeholder="عنوان"
-                register={{ ...register("searchText") }}
-              />
+              <div className="flex items-center rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2">
+                <FormInput
+                  className="!min-w-full !max-w-full !border-none !bg-transparent"
+                  id="document-name"
+                  placeholder="عنوان"
+                  register={{ ...register("searchText") }}
+                />
+                <Sort
+                  onClick={() => {
+                    setSortParams({
+                      ...sortParams,
+                      createdAt: sortParams.createdAt === "asc" ? "desc" : "asc",
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            <div
+              className={`flex max-w-[150px] flex-col gap-2 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
+            >
+              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
+                نام سازنده
+              </Typography>
+              <div className="flex items-center rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2">
+                <FormInput
+                  className="!min-w-full !max-w-full !border-none !bg-transparent"
+                  id="creator-name"
+                  placeholder="نام کاربری"
+                  register={{ ...register("creatorName") }}
+                />
+                <Sort
+                  onClick={() => {
+                    setSortParams({
+                      ...sortParams,
+                      creatorSSOID: sortParams.creatorSSOID === "asc" ? "desc" : "asc",
+                    });
+                  }}
+                />
+              </div>
             </div>
             {userInfo?.domainConfig.useDomainTag ? (
               <div className="flex flex-grow flex-col gap-2">
@@ -108,7 +159,14 @@ const PublishAdvancedSearch = () => {
             </Typography>
           ) : null}
         </form>
-        {showResult ? <PublishAdvancedSearchResult searchText={searchText} tags={tags} /> : null}
+        {showResult ? (
+          <PublishAdvancedSearchResult
+            searchText={searchText}
+            tags={tags}
+            creatorName={creatorName}
+            sortParams={sortParams}
+          />
+        ) : null}
       </div>
     </div>
   );

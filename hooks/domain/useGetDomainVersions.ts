@@ -1,4 +1,6 @@
 import { getDomainVersionsAction } from "@actions/domain";
+import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
+import { IDomainVersions } from "@interface/domain.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetDomainVersions = (
@@ -7,6 +9,7 @@ const useGetDomainVersions = (
   title: string,
   docTitle: string | undefined,
   creatorUserName: string | undefined,
+  sortParams: ISearchSortParams,
   withTemplate: string | undefined,
   isTemplate: string | undefined,
   contentType: string | undefined,
@@ -21,13 +24,14 @@ const useGetDomainVersions = (
         title,
         docTitle,
         creatorUserName,
+        sortParams,
         withTemplate,
         isTemplate,
         contentType,
         (pageParam - 1) * size,
         size,
       );
-      return response as any;
+      return response as IDomainVersions;
     },
     initialPageParam: 1,
     retry: false,

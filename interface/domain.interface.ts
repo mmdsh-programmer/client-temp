@@ -172,3 +172,41 @@ export interface IDomainDocuments {
   size: number;
   total: number;
 }
+
+export interface IVersionItem {
+  id: number;
+  documentId: number;
+  draftId: number | null;
+  repoId: number;
+  repoName: string;
+  repoTypeId: number;
+  contentId: number;
+  postId: number | null;
+  chatThreadId: number | null;
+  documentTitle: string;
+  number: string;
+  documentContentType: string;
+  status: string;
+  creator: {
+    name: string;
+    ssoId: number;
+    userName: string;
+  };
+  creatorSSOID: number;
+  userFullName: string;
+  isTemplate: boolean;
+  deprecated: boolean;
+  extraDetails: string | null;
+  readTime: number | null;
+  dbId: number | null;
+  deletedAt: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+}
+
+export interface IDomainVersions {
+  list: IVersionItem[];
+  offset: number;
+  size: number;
+  total: number;
+}

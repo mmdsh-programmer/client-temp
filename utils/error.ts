@@ -127,8 +127,6 @@ export class NetworkError extends BasicError {
 }
 
 export const handleActionError = (errorObject: IActionError) => {
-  console.log("#######################################################################");
-  console.log("------------------------ handleClientSideHookError ------------------", errorObject);
   const messages = [...(errorObject?.errorList ?? "خطای ناشناخته ای رخ داده است")];
 
   switch (errorObject?.errorCode) {

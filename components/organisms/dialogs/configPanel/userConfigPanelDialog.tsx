@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Spinner, Switch, Typography } from "@material-tailwind/react";
+import { Switch, Typography } from "@material-tailwind/react";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -10,12 +10,15 @@ import UserItem from "@components/organisms/users/userItem";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRepositoryStore } from "@store/repository";
 import { useUserStore } from "@store/user";
+import InputAtom from "@components/atoms/input";
+import { Spinner } from "@components/atoms/spinner";
 
 const UserConfigPanelDialog = () => {
   const { repo: getRepo } = useRepositoryStore();
   const { data: userInfo } = useGetUser();
   const { selectedUser: getSelectedUser, setSelectedUser } = useUserStore();
 
+  const [searchValue, setSearchValue] = useState("");
   const [blockServices, setBlockServices] = useState<string[]>([]);
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
@@ -25,42 +28,31 @@ const UserConfigPanelDialog = () => {
       : getSelectedUser!.userInfo.ssoId,
   );
   const updateUserConfigPanel = useUpdateUserConfigPanel();
-
   const { handleSubmit } = useForm();
 
   const handleClose = () => {
-    setSelectedUser(null);
+    return setSelectedUser(null);
   };
 
   const handleChange = (serviceName: string) => {
-    if (blockServices.includes(serviceName) && getUserConfigPanel) {
-      const filteredServices = blockServices.filter((service) => {
-        return service !== serviceName;
-      });
-      setBlockServices(filteredServices);
-    } else {
-      setBlockServices([...blockServices, serviceName]);
-    }
-    if (blockServices.includes(serviceName) && getUserConfigPanel) {
-      const filteredServices = blockServices.filter((service) => {
-        return service !== serviceName;
-      });
-      setBlockServices(filteredServices);
-    } else {
-      setBlockServices([...blockServices, serviceName]);
-    }
+    setBlockServices((prev) => {
+      return prev.includes(serviceName)
+        ? prev.filter((s) => {
+            return s !== serviceName;
+          })
+        : [...prev, serviceName];
+    });
   };
 
   const onSubmit = () => {
-    if (!getRepo || !getSelectedUser) {
-      return;
-    }
+    if (!getRepo || !getSelectedUser) return;
+
     updateUserConfigPanel.mutate({
       repoId: getRepo.id,
       ssoId: getSelectedUser.userInfo.ssoId,
       blockedServices: blockServices,
       callBack: () => {
-        toast.success("تنطیمات دسترسی برای کاربر به روز شد.");
+        return toast.success("تنظیمات دسترسی برای کاربر به‌روز شد.");
       },
     });
   };
@@ -78,10 +70,14 @@ const UserConfigPanelDialog = () => {
     }
   }, [getUserConfigPanel]);
 
+  const filteredOptions = getUserConfigPanel?.filter((config) => {
+    return config.title.toLowerCase().includes(searchValue.toLowerCase());
+  });
+
   return (
     <ConfirmFullHeightDialog
       isPending={updateUserConfigPanel.isPending}
-      dialogHeader="محدودسازی دسترسی های کاربر"
+      dialogHeader="محدودسازی دسترسی‌های کاربر"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="user-limitation-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
@@ -89,53 +85,78 @@ const UserConfigPanelDialog = () => {
     >
       {isLoading ? (
         <div className="flex w-full justify-center">
-          <Spinner
-            className="text-primary h-6 w-6"
-            {...({} as  Omit<React.ComponentProps<typeof Spinner>, "className">)}
-          />
+          <Spinner className="h-6 w-6 text-primary" />
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {getSelectedUser ? <UserItem user={getSelectedUser} /> : null}
-          <div className="border-b-[1px] border-b-normal" />
-          <div className="flex h-[calc(100vh-210px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-300px)]">
-            {getUserConfigPanel?.map((userConfig) => {
-              return (
-                <div
-                  key={`notif-access-${userConfig.serviceName}`}
-                  className="hover:border-primary mb-1 flex w-full justify-between rounded-md border p-2"
-                >
-                  <Typography
-                    placeholder=""
-                    className="title_t2 !text-primary_normal"
-                    {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+          {getSelectedUser && <UserItem user={getSelectedUser} />}
+          <div className="border-b border-b-normal" />
+          <InputAtom
+            type="text"
+            value={searchValue}
+            onChange={(e) => {
+              return setSearchValue(e.target.value);
+            }}
+            placeholder="جستجو..."
+            className="!border-normal !bg-white"
+            dir="rtl"
+          />
+          <div className="flex h-[calc(100vh-280px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-500px)]">
+            {filteredOptions?.length ? (
+              filteredOptions.map((userConfig) => {
+                return (
+                  <div
+                    key={`notif-access-${userConfig.serviceName}`}
+                    className="hover:border-primary mb-1 flex w-full justify-between rounded-md border p-2 transition-colors"
                   >
-                    {userConfig.title}
-                  </Typography>
-                  <Switch
-                    color="green"
-                    defaultChecked={!userConfig.blocked}
-                    crossOrigin
-                    onChange={() => {
-                      return handleChange(userConfig.serviceName);
-                    }}
-                    readOnly={
-                      (getRepo?.roleName === ERoles.admin &&
-                        getSelectedUser?.userRole === ERoles.admin) ||
-                      getRepo?.roleName === ERoles.editor ||
-                      getRepo?.roleName === ERoles.writer ||
-                      getRepo?.roleName === ERoles.viewer
-                    }
-                    disabled={(getRepo?.roleName === ERoles.admin &&
-                      getSelectedUser?.userRole === ERoles.admin) ||
-                    getRepo?.roleName === ERoles.editor ||
-                    getRepo?.roleName === ERoles.writer ||
-                    getRepo?.roleName === ERoles.viewer}
-                    {...({} as  Omit<React.ComponentProps<typeof Switch>, "color" | "defaultChecked" | "crossOrigin" | "onChange" | "readOnly" | "disabled">)}
-                  />
-                </div>
-              );
-            })}
+                    <Typography
+                      placeholder=""
+                      className="title_t4 !text-primary_normal"
+                      {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                    >
+                      {userConfig.title}
+                    </Typography>
+                    <Switch
+                      color="green"
+                      defaultChecked={!userConfig.blocked}
+                      onChange={() => {
+                        return handleChange(userConfig.serviceName);
+                      }}
+                      readOnly={
+                        (getRepo?.roleName === ERoles.admin &&
+                          getSelectedUser?.userRole === ERoles.admin) ||
+                        getRepo?.roleName === ERoles.editor ||
+                        getRepo?.roleName === ERoles.writer ||
+                        getRepo?.roleName === ERoles.viewer
+                      }
+                      disabled={
+                        (getRepo?.roleName === ERoles.admin &&
+                          getSelectedUser?.userRole === ERoles.admin) ||
+                        getRepo?.roleName === ERoles.editor ||
+                        getRepo?.roleName === ERoles.writer ||
+                        getRepo?.roleName === ERoles.viewer
+                      }
+                      {...({} as Omit<
+                        React.ComponentProps<typeof Switch>,
+                        | "color"
+                        | "defaultChecked"
+                        | "onChange"
+                        | "readOnly"
+                        | "disabled"
+                      >)}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <Typography
+                placeholder=""
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                className="mt-6 text-center text-gray-500"
+              >
+                موردی یافت نشد
+              </Typography>
+            )}
           </div>
         </div>
       )}

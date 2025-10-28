@@ -12,7 +12,7 @@ const FormInput = ({ register, className, ...restProps }: IProps) => {
   return (
     <Input
       labelProps={{ className: "before:content-none after:content-none" }}
-      containerProps={{ className: "min-w-0 !h-12" }}
+      containerProps={{ className: "!min-w-0 !h-12" }}
       type="text"
       {...register}
       className={`${className || ""}
