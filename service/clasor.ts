@@ -77,7 +77,7 @@ const axiosClasorInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 5000,
+  timeout: 20000,
 });
 
 axiosClasorInstance.interceptors.request.use(
@@ -459,7 +459,7 @@ export const getMyRepositories = async (
           offset,
           size,
           archived,
-          title: name,
+          title: name || "",
           isPublish,
           repoTypes,
         },
