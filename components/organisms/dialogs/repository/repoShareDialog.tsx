@@ -16,6 +16,8 @@ import { useRepositoryStore } from "@store/repository";
 import { useGroupStore } from "@store/group";
 import { usePublicStore } from "@store/public";
 import { useUserStore } from "@store/user";
+import useGetUser from "@hooks/auth/useGetUser";
+import SelfConfigPanelDialog from "../configPanel/selfConfigPanelDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +40,8 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   const { openShareAccess, setOpenShareAccess } = usePublicStore();
   const { selectedUser } = useUserStore();
 
+  const { data: userInfo } = useGetUser();
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -51,14 +55,18 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
       tabTitle: ETabs.GROUPS,
       tabContent: activeTab === ETabs.GROUPS ? <Groups /> : null,
     },
-    getRepo?.roleName === "owner" || getRepo?.roleName === "admin" ? {
-      tabTitle: ETabs.LINK,
-      tabContent: activeTab === ETabs.LINK ? <PublicLink /> : null,
-    } : null,
-    getRepo?.roleName === "owner" ? {
-      tabTitle: ETabs.PUBLISH,
-      tabContent: activeTab === ETabs.PUBLISH ? <PublishLink /> : null,
-    } : null,
+    getRepo?.roleName === "owner" || getRepo?.roleName === "admin"
+      ? {
+          tabTitle: ETabs.LINK,
+          tabContent: activeTab === ETabs.LINK ? <PublicLink /> : null,
+        }
+      : null,
+    getRepo?.roleName === "owner"
+      ? {
+          tabTitle: ETabs.PUBLISH,
+          tabContent: activeTab === ETabs.PUBLISH ? <PublishLink /> : null,
+        }
+      : null,
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;
@@ -76,23 +84,23 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   if (deleteGroup) {
     return <GroupDeleteDialog setOpen={setDeleteGroup} />;
   }
-  if (selectedUser?.userInfo) {
+  if (selectedUser && selectedUser?.userInfo.userName !== userInfo?.username) {
     return <UserConfigPanelDialog />;
+  }
+
+  if (selectedUser && selectedUser?.userInfo.userName === userInfo?.username) {
+    return <SelfConfigPanelDialog />;
   }
 
   return (
     <InfoDialog
       dialogHeader="اشتراک گذاری"
       setOpen={handleClose}
-      className="repo-share-dialog xs:!min-w-[450px] xs:!max-w-[450px] flex flex-col !h-full w-full max-w-full xs:!h-[600px] bg-primary rounded-none xs:rounded-lg "
+      className="repo-share-dialog flex !h-full w-full max-w-full flex-col rounded-none bg-primary xs:!h-[600px] xs:!min-w-[450px] xs:!max-w-[450px] xs:rounded-lg"
     >
-      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="p-0 h-full">
+      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="h-full p-0">
         <div className="flex flex-col gap-4 p-4 xs:p-6">
-          <TabComponent
-            tabList={tabList}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+          <TabComponent tabList={tabList} activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
       </DialogBody>
       <GroupMenu showDrawer />

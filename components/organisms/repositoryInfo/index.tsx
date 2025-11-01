@@ -29,7 +29,7 @@ const RepositoryInfo = async ({ repository }: { repository: IRepo }) => {
     }
     return (
       <ImageComponent
-        className="h-48 w-48 rounded-md border-[3px] border-gray-200 mx-auto shadow-md bg-primary-normal"
+        className="h-48 w-48 rounded-md border-[1px] border-gray-100 mx-auto shadow-md"
         src={`${process.env.NEXT_PUBLIC_PODSPACE_API}/files/${repository.imageFileHash}`}
         alt={repository.name}
       />

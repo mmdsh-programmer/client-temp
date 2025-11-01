@@ -37,7 +37,6 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
         setDisableItems?.(false);
       },
       errorCallback: () => {
-        setOpenSearch(false);
         setDisableItems?.(false);
       },
     });
@@ -46,7 +45,7 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
   return (
     <ListItem
       onClick={handleResultItemClick}
-      className="flex min-h-10 gap-1 py-0 px-3"
+      className="flex min-h-10 gap-1 px-3 py-0"
       itemProp="!p-0"
       ripple
       disabled={disabled}

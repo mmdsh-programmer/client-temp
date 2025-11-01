@@ -20,7 +20,7 @@ export interface IProps {
   className?: string;
   disabled?: boolean;
   backToMain?: boolean;
-  bodyClassName?: string
+  bodyClassName?: string;
 }
 
 const ConfirmFullHeightDialog = ({
@@ -32,7 +32,7 @@ const ConfirmFullHeightDialog = ({
   className,
   disabled,
   backToMain,
-  bodyClassName
+  bodyClassName,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -68,10 +68,9 @@ const ConfirmFullHeightDialog = ({
               />
             </div>
           ) : null}
-          <Typography 
-            {...({} as React.ComponentProps<typeof Typography>)}
-            className="form__title"
-          >{dialogHeader}</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">
+            {dialogHeader}
+          </Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
@@ -99,10 +98,12 @@ const ConfirmFullHeightDialog = ({
           loading={isPending}
           disabled={disabled}
         >
-          <Typography 
+          <Typography
             className="text__label__button text-white"
             {...({} as React.ComponentProps<typeof Typography>)}
-          >تایید</Typography>
+          >
+            تایید
+          </Typography>
         </LoadingButton>
       </DialogFooter>
     </Dialog>

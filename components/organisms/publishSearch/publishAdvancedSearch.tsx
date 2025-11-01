@@ -118,7 +118,7 @@ const PublishAdvancedSearch = () => {
           </div>
           <div className="flex items-end gap-2">
             <div
-              className={`flex max-w-[150px] flex-col gap-1 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
+              className={`flex flex-col gap-1 ${userInfo?.domainConfig.useDomainTag ? "max-w-[150px]" : "flex-grow"}`}
             >
               <Typography
                 {...({} as React.ComponentProps<typeof Typography>)}
@@ -138,7 +138,7 @@ const PublishAdvancedSearch = () => {
               />
             </div>
             <div
-              className={`flex max-w-[150px] flex-col gap-1 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
+              className={`flex flex-col gap-1 ${userInfo?.domainConfig.useDomainTag ? "max-w-[150px] " : "flex-grow"}`}
             >
               <Typography
                 {...({} as React.ComponentProps<typeof Typography>)}

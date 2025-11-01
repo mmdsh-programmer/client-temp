@@ -5305,3 +5305,27 @@ export const updateUserConfigPanel = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
+
+export const updateSelfConfigPanel = async (
+  accessToken: string,
+  repoId: number,
+  notificationServices?: string[],
+) => {
+  try {
+    const response = await axiosClasorInstance.put<any>(
+      `repositories/${repoId}/userConfigPanel/notificationAccess/remove`,
+      {
+        notificationServices,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+

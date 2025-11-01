@@ -33,7 +33,6 @@ const PublishAdvancedSearchVersionItem = ({ resultItem, disabled, setDisableItem
         const redirectLink = `${window.location.origin}/publish/${url}`;
 
         router.replace(redirectLink);
-        setOpenSearch(false);
         setDisableItems?.(false);
       },
     });

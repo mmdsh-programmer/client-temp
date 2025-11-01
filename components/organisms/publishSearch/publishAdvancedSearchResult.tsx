@@ -164,7 +164,7 @@ const PublishAdvancedSearchResult = ({ searchText, tags, creatorName, sortParams
           )}
           {domainDocumentsHasNextPage ? (
             <Button
-              className="label cursor-pointer self-end bg-transparent !p-0 !text-[11px] text-[#0369CD]"
+              className="label cursor-pointer self-end bg-transparent !py-1 !px-0 !text-[11px] text-[#0369CD]"
               onClick={(e) => {
                 e.stopPropagation();
                 setDocumentsLoadMore(true);
@@ -212,7 +212,7 @@ const PublishAdvancedSearchResult = ({ searchText, tags, creatorName, sortParams
           {domainVersionsHasNextPage ? (
             <Button
               {...({} as React.ComponentProps<typeof Button>)}
-              className="label cursor-pointer bg-transparent !p-0 !text-[11px] text-[#0369CD]"
+              className="label cursor-pointer bg-transparent !py-1 !px-0 !text-[11px] text-[#0369CD]"
               onClick={(e) => {
                 e.stopPropagation();
                 setVersionsLoadMore(true);

@@ -15,7 +15,7 @@ const useGetAllPublishChildren = (
 ) => {
   return useInfiniteQuery({
     queryKey: [
-      `publish-category-${categoryId || "root"}${title ? `-${title}` : ""}-children`,
+      `publish-repoId-${repoId}-category-${categoryId || "root"}${title ? `-${title}` : ""}-children`,
     ],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getAllPublishChildrenAction(
@@ -31,7 +31,7 @@ const useGetAllPublishChildren = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled,
+    enabled: !!repoId,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

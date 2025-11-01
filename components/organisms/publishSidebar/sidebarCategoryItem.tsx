@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { ICategoryMetadata } from "@interface/category.interface";
 import SidebarCollapse from "./sidebarCollapse";
 import SidebarDocumentItem from "./sidebarDocumentItem";
@@ -26,14 +26,9 @@ const SidebarCategoryItem = ({ repoId, repoName, category, parentUrl, categoryId
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-    refetch,
   } = useGetPublishChildren(repoId, 10, category.id);
 
   const total = categoryChildren?.pages[0].total;
-
-  useEffect(() => {
-    refetch();
-  }, [repoId]);
 
   if (!isLoading && !total) {
     return (
