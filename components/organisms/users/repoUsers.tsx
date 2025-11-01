@@ -39,7 +39,7 @@ const RepoUsers = ({ createRepoDialog }: IProps) => {
         </div>
       ) : (
         <div
-          className={`repo-users__list flex flex-col overflow-y-auto overflow-x-hidden
+          className={`repo-users__list flex flex-col gap-1 overflow-y-auto overflow-x-hidden
         ${createRepoDialog ? "!h-[250px] xs:!h-[168px]" : "!h-[370px] xs:!h-[250px]"}`}
         >
           {getRepoUsers?.pages.map((page) => {

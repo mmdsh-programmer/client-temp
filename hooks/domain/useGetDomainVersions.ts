@@ -16,7 +16,16 @@ const useGetDomainVersions = (
   size: number,
 ) => {
   return useInfiniteQuery({
-    queryKey: ["getDomainVersions"],
+    queryKey: [
+      "getDomainVersions",
+      repoId,
+      docId,
+      title,
+      docTitle,
+      creatorUserName,
+      sortParams,
+      size,
+    ],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getDomainVersionsAction(
         repoId,

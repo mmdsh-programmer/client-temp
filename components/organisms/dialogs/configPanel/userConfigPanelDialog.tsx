@@ -81,6 +81,7 @@ const UserConfigPanelDialog = () => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="user-limitation-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
+      bodyClassName="!pt-1"
       backToMain
     >
       {isLoading ? (
@@ -88,7 +89,7 @@ const UserConfigPanelDialog = () => {
           <Spinner className="h-6 w-6 text-primary" />
         </div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           {getSelectedUser && <UserItem user={getSelectedUser} />}
           <div className="border-b border-b-normal" />
           <InputAtom
@@ -98,7 +99,7 @@ const UserConfigPanelDialog = () => {
               return setSearchValue(e.target.value);
             }}
             placeholder="جستجو..."
-            className="!border-normal !bg-white"
+            className="!border-normal !bg-white !h-8"
             dir="rtl"
           />
           <div className="flex h-[calc(100vh-280px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-500px)]">
@@ -152,7 +153,7 @@ const UserConfigPanelDialog = () => {
               <Typography
                 placeholder=""
                 {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-                className="mt-6 text-center text-gray-500"
+                className="label mt-6 text-center text-gray-500"
               >
                 موردی یافت نشد
               </Typography>

@@ -42,13 +42,13 @@ const PublishAdvancedSearchVersionItem = ({ resultItem, disabled, setDisableItem
   return (
     <ListItem
       onClick={handleResultItemClick}
-      className="flex min-h-12 gap-2"
+      className="flex min-h-8 gap-1 py-0 px-3"
       disabled={disabled}
       {...({} as React.ComponentProps<typeof ListItem>)}
     >
       <div className="max-w-[90%] flex items-center gap-2">
         <div
-          className="body_b3 flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
+          className="label flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
           title={resultItem.number}
         >
           {resultItem.number}

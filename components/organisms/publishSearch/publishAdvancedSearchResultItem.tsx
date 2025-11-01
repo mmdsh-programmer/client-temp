@@ -32,8 +32,11 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
           `/${removeSpecialCharacters(res.repoName)}/${resultItem.repoId}/${removeSpecialCharacters(resultItem.name)}/${resultItem.id}`,
         );
         const redirectLink = `${window.location.origin}/publish/${url}`;
-
         router.replace(redirectLink);
+        setOpenSearch(false);
+        setDisableItems?.(false);
+      },
+      errorCallback: () => {
         setOpenSearch(false);
         setDisableItems?.(false);
       },
@@ -43,7 +46,9 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
   return (
     <ListItem
       onClick={handleResultItemClick}
-      className="flex min-h-12 gap-2"
+      className="flex min-h-10 gap-1 py-0 px-3"
+      itemProp="!p-0"
+      ripple
       disabled={disabled}
       {...({} as React.ComponentProps<typeof ListItem>)}
     >
@@ -52,10 +57,10 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
           <LockIcon className="h-6 w-6" />
         ) : null}
         <div
-          className="body_b3 flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
+          className="label flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
           title={resultItem.name}
         >
-          {resultItem.name} 
+          {resultItem.name}
         </div>
       </div>
     </ListItem>

@@ -26,7 +26,7 @@ const DomainManagementPage = () => {
     setVersionModalList(false);
   }, []);
 
-  if (userInfo?.domainRole !== null) {
+  if (userInfo?.domainRole === null) {
     return <NotFoundTemplate />;
   }
 

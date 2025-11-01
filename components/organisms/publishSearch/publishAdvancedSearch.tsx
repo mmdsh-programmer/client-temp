@@ -3,16 +3,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { publishSearchContentSchema } from "./validation.yup";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button, Input, Typography } from "@material-tailwind/react";
 import { SearchIcon } from "@components/atoms/icons";
-import FormInput from "@components/atoms/input/formInput";
 import useGetUser from "@hooks/auth/useGetUser";
 import useGetDomainTags from "@hooks/domainTags/useGetDomainTags";
 import SelectBox from "@components/molecules/selectBox";
 import PublishAdvancedSearchResult from "./publishAdvancedSearchResult";
 import { Spinner } from "@components/atoms/spinner";
 import SelectAtom from "@components/molecules/select";
-import Sort from "@components/molecules/sort";
 
 export interface ISearchSortParams {
   createdAt?: "asc" | "desc";
@@ -62,67 +60,119 @@ const PublishAdvancedSearch = () => {
   return (
     <div className="flex h-full w-full flex-wrap justify-between xs:h-auto">
       <div className="flex w-full flex-wrap items-start gap-5 py-4">
-        <form className="flex w-full flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex w-full flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex justify-end gap-6">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
+              مرتب سازی براساس
+            </Typography>
+            <div className="flex gap-3">
+              <Button
+                {...({} as React.ComponentProps<typeof Button>)}
+                className="label cursor-pointer bg-transparent !text-[11px] text-[#0369CD]"
+                onClick={() => {
+                  setSortParams({
+                    ...sortParams,
+                    repoId: sortParams.repoId === "asc" ? "desc" : "asc",
+                  });
+                }}
+              >
+                مخزن
+              </Button>
+              <Button
+                {...({} as React.ComponentProps<typeof Button>)}
+                className="label cursor-pointer bg-transparent !text-[11px] text-[#0369CD]"
+                onClick={() => {
+                  setSortParams({
+                    ...sortParams,
+                    creatorSSOID: sortParams.creatorSSOID === "asc" ? "desc" : "asc",
+                  });
+                }}
+              >
+                نام سازنده
+              </Button>
+              <Button
+                {...({} as React.ComponentProps<typeof Button>)}
+                className="label cursor-pointer bg-transparent !text-[11px] text-[#0369CD]"
+                onClick={() => {
+                  setSortParams({
+                    ...sortParams,
+                    createdAt: sortParams.createdAt === "asc" ? "desc" : "asc",
+                  });
+                }}
+              >
+                تاریخ ایجاد
+              </Button>
+              <Button
+                {...({} as React.ComponentProps<typeof Button>)}
+                className="label cursor-pointer bg-transparent !text-[11px] text-[#0369CD]"
+                onClick={() => {
+                  setSortParams({
+                    ...sortParams,
+                    updatedAt: sortParams.updatedAt === "asc" ? "desc" : "asc",
+                  });
+                }}
+              >
+                تاریخ ویرایش
+              </Button>
+            </div>
+          </div>
           <div className="flex items-end gap-2">
             <div
-              className={`flex max-w-[150px] flex-col gap-2 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
+              className={`flex max-w-[150px] flex-col gap-1 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
             >
-              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="label !text-[11px]"
+              >
                 عنوان
               </Typography>
-              <div className="flex items-center rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2">
-                <FormInput
-                  className="!min-w-full !max-w-full !border-none !bg-transparent"
-                  id="document-name"
-                  placeholder="عنوان"
-                  register={{ ...register("searchText") }}
-                />
-                <Sort
-                  onClick={() => {
-                    setSortParams({
-                      ...sortParams,
-                      createdAt: sortParams.createdAt === "asc" ? "desc" : "asc",
-                    });
-                  }}
-                />
-              </div>
+              <Input
+                labelProps={{ className: "before:content-none after:content-none" }}
+                containerProps={{ className: "!min-w-0 !h-8" }}
+                className="flex !h-full !min-w-full !max-w-full items-center gap-2 border-[1px] !border-none !border-normal !bg-gray-50 !py-0 pl-2 pr-3 text-right !font-iranYekan text-[11px] font-normal text-primary_normal placeholder:font-iranYekan placeholder:text-[11px] placeholder:!text-placeholder placeholder:!opacity-100 focus:!border-normal focus:font-iranYekan"
+                {...({} as React.ComponentProps<typeof Input>)}
+                type="text"
+                id="document-name"
+                placeholder="عنوان"
+                {...register("searchText")}
+              />
             </div>
             <div
-              className={`flex max-w-[150px] flex-col gap-2 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
+              className={`flex max-w-[150px] flex-col gap-1 ${userInfo?.domainConfig.useDomainTag ? "" : "flex-grow"}`}
             >
-              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="label !text-[11px]"
+              >
                 نام سازنده
               </Typography>
-              <div className="flex items-center rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2">
-                <FormInput
-                  className="!min-w-full !max-w-full !border-none !bg-transparent"
-                  id="creator-name"
-                  placeholder="نام کاربری"
-                  register={{ ...register("creatorName") }}
-                />
-                <Sort
-                  onClick={() => {
-                    setSortParams({
-                      ...sortParams,
-                      creatorSSOID: sortParams.creatorSSOID === "asc" ? "desc" : "asc",
-                    });
-                  }}
-                />
-              </div>
+              <Input
+                labelProps={{ className: "before:content-none after:content-none" }}
+                containerProps={{ className: "!min-w-0 !h-8" }}
+                className="flex !h-full !min-w-full !max-w-full items-center gap-2 border-[1px] !border-none !border-normal !bg-gray-50 !py-0 pl-2 pr-3 text-right !font-iranYekan text-[11px] font-normal text-primary_normal placeholder:font-iranYekan placeholder:text-[11px] placeholder:!text-placeholder placeholder:!opacity-100 focus:!border-normal focus:font-iranYekan"
+                {...({} as React.ComponentProps<typeof Input>)}
+                type="text"
+                id="creator-name"
+                placeholder="نام کاربری"
+                {...register("creatorName")}
+              />
             </div>
             {userInfo?.domainConfig.useDomainTag ? (
-              <div className="flex flex-grow flex-col gap-2">
-                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
+              <div className="flex flex-grow flex-col gap-1">
+                <Typography
+                  {...({} as React.ComponentProps<typeof Typography>)}
+                  className="label !text-[11px]"
+                >
                   انتخاب تگ
                 </Typography>
                 {isLoading ? (
-                  <div className="flex h-12 flex-grow items-center justify-start">
+                  <div className="flex h-8 flex-grow items-center justify-start">
                     <Spinner className="h-6 w-6" />
                   </div>
                 ) : tagList?.pages[0].total ? (
                   <SelectBox
                     options={tagOptions}
-                    className="!h-12 !bg-gray-50"
+                    className="!h-8 !bg-gray-50 !text-[11px]"
                     selectedOptions={tags}
                     setSelectedOptions={setTags}
                     defaultOption="تگ‌ها"
@@ -130,7 +180,7 @@ const PublishAdvancedSearch = () => {
                 ) : (
                   <SelectAtom
                     options={[{ label: "تگی وجود ندارد", value: "none" }]}
-                    className="h-12 !w-full justify-between border-[2px] border-normal bg-white pl-1 pr-2 xs:!h-10"
+                    className="h-8 !w-full justify-between border-[2px] border-normal bg-white pl-1 pr-2 xs:!h-8"
                     setSelectedOption={() => {
                       return setTags([]);
                     }}
@@ -143,7 +193,7 @@ const PublishAdvancedSearch = () => {
             <Button
               {...({} as React.ComponentProps<typeof Button>)}
               disabled={!isDirty || !isValid}
-              className="max-h-12 border-2 !border-normal px-3 focus:!border-normal"
+              className="max-h-8 border-2 !border-normal px-1 focus:!border-normal"
               variant="outlined"
               type="submit"
             >

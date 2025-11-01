@@ -8,10 +8,10 @@ const useGetDomainDocuments = (
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
   sortParams: ISearchSortParams,
-  size,
+  size: number,
 ) => {
   return useInfiniteQuery({
-    queryKey: ["getDomainDocuments"],
+    queryKey: ["getDomainDocuments", title, tagIds, creatorUserName, sortParams, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getDomainDocumentsAction(
         title,

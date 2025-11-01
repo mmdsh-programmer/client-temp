@@ -5,7 +5,6 @@ import {
   DialogHeader,
   Typography,
 } from "@material-tailwind/react";
-
 import BackButton from "@components/atoms/button/backButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
@@ -21,6 +20,7 @@ export interface IProps {
   className?: string;
   disabled?: boolean;
   backToMain?: boolean;
+  bodyClassName?: string
 }
 
 const ConfirmFullHeightDialog = ({
@@ -32,6 +32,7 @@ const ConfirmFullHeightDialog = ({
   className,
   disabled,
   backToMain,
+  bodyClassName
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -79,7 +80,7 @@ const ConfirmFullHeightDialog = ({
       <div className="block h-2 w-full bg-secondary xs:hidden" />
       <DialogBody
         placeholder="dialog body"
-        className="dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6"
+        className={`${bodyClassName || ""} dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6`}
         {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         {children}

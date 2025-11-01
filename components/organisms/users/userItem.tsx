@@ -153,7 +153,7 @@ const UserItem = ({ user }: IProps) => {
 
   return (
     <div
-      className="repo-user-item flex h-[50px] min-h-[50px] cursor-pointer items-center gap-x-[10px]"
+      className="repo-user-item flex h-[45px] min-h-[45px] cursor-pointer items-center gap-x-[10px]"
       title={user.userInfo.userName}
     >
       <div className="h-8 w-8">
