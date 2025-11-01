@@ -27,7 +27,7 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
     <Button
       ref={ref}
       placeholder="load more"
-      className={`${className} load-more__button mt-2 bg-transparent p-0 shadow-none hover:shadow-none`}
+      className={`${className} w-full load-more__button mt-2 bg-transparent p-0 shadow-none hover:shadow-none`}
       onClick={() => {
         fetchNextPage();
       }}
@@ -39,7 +39,7 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
       ) : (
         <Typography
           placeholder=""
-          className="font-iranYekan text-gray-600 text-xs"
+          className="font-iranYekan text-[#0369CD] text-xs"
           {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
         >
           نمایش موارد بیشتر

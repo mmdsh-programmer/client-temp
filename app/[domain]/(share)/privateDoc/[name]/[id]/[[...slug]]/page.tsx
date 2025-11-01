@@ -2,7 +2,6 @@ import BasicError, { AuthorizationError, ServerError } from "@utils/error";
 import {
   getCustomPostByDomain,
   getDocumentPublishLink,
-  getPublishDocumentUserList,
   getPublishedDocumentLastVersion,
   getPublishedDocumentVersion,
 } from "@service/clasor";
@@ -19,6 +18,7 @@ import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
 import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
+import { IDocumentMetadata } from "@interface/document.interface";
 
 export const generateStaticParams = async () => {
   return [];
@@ -52,6 +52,8 @@ async function fetchDocumentVersion(
 }
 
 export default async function PrivateSharePage({ params }: PublishContentPageProps) {
+  let documentInfo: IDocumentMetadata;
+
   try {
     const awaitedParams = await params;
     const { id, name, slug, domain } = awaitedParams;
@@ -91,7 +93,7 @@ export default async function PrivateSharePage({ params }: PublishContentPagePro
       return notFound();
     }
 
-    const documentInfo = await getDocumentPublishLink(undefined, +documentId!, false);
+    documentInfo = await getDocumentPublishLink(undefined, +documentId!, false);
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
     if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
@@ -117,21 +119,6 @@ export default async function PrivateSharePage({ params }: PublishContentPagePro
     } else if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken) {
       const userInfo = await getMe();
       accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
-      
-      const documentUserList = await getPublishDocumentUserList(
-        accessToken,
-        repoId,
-        documentId,
-      );
-      const documentWhiteList = documentUserList.whiteList;
-
-      const isUserInWhiteList = documentWhiteList.some((user) => {
-        return user.preferred_username === userInfo.username;
-      });
-
-      if (!isUserInWhiteList) {
-        return <PublishDocumentAccessWrapper repoId={repoId} docId={documentId} />;
-      }
     }
 
     if (documentInfo?.hasPassword && !documentPassword) {
@@ -218,6 +205,10 @@ export default async function PrivateSharePage({ params }: PublishContentPagePro
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     const errorMsg = typeof message === "string" ? message : message.message;
+
+    if (documentInfo! && documentInfo.hasWhiteList && errorCode === 403) {
+      return <PublishDocumentAccessWrapper repoId={documentInfo.repoId} docId={documentInfo.id} />;
+    }
 
     if ((error as unknown as IActionError).errorCode === 401) {
       return (

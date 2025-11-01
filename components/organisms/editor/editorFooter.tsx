@@ -189,7 +189,6 @@ const EditorFooter = ({ editorRef }: IProps) => {
             },
             maxContentLength: Infinity,
             maxBodyLength: Infinity,
-            timeout: 10000
           },
         );
         setIsLoading(false);

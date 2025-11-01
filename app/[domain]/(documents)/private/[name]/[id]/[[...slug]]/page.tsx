@@ -5,7 +5,6 @@ import {
   getCustomPostByDomain,
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
-  getPublishDocumentUserList,
   getPublishDocumentVersion,
   getPublishRepositoryInfo,
 } from "@service/clasor";
@@ -26,6 +25,7 @@ import { cookies } from "next/headers";
 import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
 import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
+import { IDocumentMetadata } from "@interface/document.interface";
 
 type PublishContentPageProps = {
   params: Promise<{ domain: string; name: string; id: string; slug?: string[] }>;
@@ -72,6 +72,8 @@ async function fetchDocumentVersion(
 export default async function PublishContentPage({
   params,
 }: PublishContentPageProps): Promise<any> {
+  let documentInfo: IDocumentMetadata;
+
   try {
     const awaitedParams = await params;
     const { id, name, slug, domain } = awaitedParams;
@@ -124,7 +126,7 @@ export default async function PublishContentPage({
       return notFound();
     }
 
-    const documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
+    documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
     const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
     if (documentInfo.isHidden || documentInfoName !== documentName) {
@@ -149,21 +151,6 @@ export default async function PublishContentPage({
     } else if ((documentInfo?.hasWhiteList || documentInfo?.hasBlackList) && encodedToken) {
       const userInfo = await getMe();
       accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
-
-      const documentUserList = await getPublishDocumentUserList(
-        accessToken,
-        repository.id,
-        documentId,
-      );
-      const documentWhiteList = documentUserList.whiteList;
-
-      const isUserInWhiteList = documentWhiteList.some((user) => {
-        return user.preferred_username === userInfo.username;
-      });
-
-      if (!isUserInWhiteList) {
-        return <PublishDocumentAccessWrapper repoId={repository.id} docId={documentId} />;
-      }
     }
 
     if (documentInfo?.hasPassword && !documentPassword) {
@@ -249,6 +236,9 @@ export default async function PublishContentPage({
 
     const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
     const errorMsg = typeof message === "string" ? message : message.message;
+    if (documentInfo! && documentInfo.hasWhiteList && errorCode === 403) {
+      return <PublishDocumentAccessWrapper repoId={documentInfo.repoId} docId={documentInfo.id} />;
+    }
 
     if ((error as unknown as IActionError).errorCode === 401) {
       return (
