@@ -57,6 +57,10 @@ const nextConfig = {
           source: "/blog/:path*",
           destination: `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_BOX_ID}/:path*`,
         },
+        {
+          source: "/faq/:path*",
+          destination: `${process.env.BLOG_BOX_URL}/faq/${process.env.BLOG_BOX_ID}/:path*`,
+        },
       ];
     }
     console.warn("⚠️ No BLOG_BOX_URL or BLOG_BOX_ID provided, no rewrites applied.");
