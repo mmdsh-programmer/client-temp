@@ -820,7 +820,6 @@ export const getRepositorySubscription = async (accessToken: string, repoId: num
 
 export const getRepoWhiteListRequest = async (
   accessToken: string,
-  ssoId: number,
   repoId: number,
   offset: number,
   size: number,
@@ -833,7 +832,6 @@ export const getRepoWhiteListRequest = async (
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        ssoid: ssoId,
         offset,
         size,
       },

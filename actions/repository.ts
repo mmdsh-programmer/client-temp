@@ -385,7 +385,6 @@ export const getRepoWhiteListRequestAction = async (
     const userInfo = await getMe();
     const response = await getRepoWhiteListRequest(
       userInfo.access_token,
-      userInfo.ssoId,
       repoId,
       offset,
       size,
