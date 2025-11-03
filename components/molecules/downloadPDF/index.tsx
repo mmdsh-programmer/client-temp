@@ -41,7 +41,6 @@ const DownloadPDF = () => {
     const result = await fetch(link, {
       method: "GET",
       headers: {
-        "Content-Type": "application/pdf",
         Authorization: `Bearer ${userInfo!.access_token}`,
       },
     });
@@ -69,7 +68,7 @@ const DownloadPDF = () => {
         title="دانلود pdf"
         onClick={handleDownloadFile}
         disabled={loading || !getSelectedDocument}
-        {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+        {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
         {loading ? <div className="spinner" /> : <PDFIcon className="h-5 w-5 fill-white" />}
       </Button>
