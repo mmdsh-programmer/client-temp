@@ -14,6 +14,7 @@ import useAddUserToFeedbackGroupHash from "@hooks/feedback/useAddUserToFeedbackG
 import { useForm } from "react-hook-form";
 import useSendFeedback from "@hooks/feedback/useSendFeedback";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { extractFileFromUnknown, validateBeforeUpload } from "@utils/uploadGuards";
 
 export interface IFileDetail {
   errorMessage?: string;
@@ -133,9 +134,25 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     });
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const newFile = event.target?.files?.[0];
-    if (newFile) {
+    
+    let fileToUpload = newFile;
+    const file = await extractFileFromUnknown(newFile);
+    if (file) {
+      const { valid, message, sanitizedFile } = await validateBeforeUpload(
+        file
+      );
+      if (!valid) {
+        toast.error(message || "آپلود این فایل مجاز نیست");
+        return;
+      }
+      if (sanitizedFile) {
+        fileToUpload = sanitizedFile;
+      }
+    }
+    
+    if (fileToUpload) {
       fileIndex.current += 1;
       if (fileInfo) {
         setFileInfo([
@@ -143,7 +160,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
           {
             inputFile: null,
             id: `${Date.now()}`,
-            file: newFile,
+            file: fileToUpload,
           },
         ]);
       } else {
@@ -151,7 +168,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
           {
             inputFile: null,
             id: `${Date.now()}`,
-            file: newFile,
+            file: fileToUpload,
           },
         ]);
       }

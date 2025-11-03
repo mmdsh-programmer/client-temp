@@ -66,35 +66,12 @@ axiosAccountsInstance.interceptors.response.use(
 // TODO: proper handler for error
 
 export const handleAccountStatusError = (error: AxiosError<unknown>) => {
-  console.log("#######################################################################");
   if (isAxiosError(error)) {
-    console.log("------------------ account error ----------------------", error);
-
     const message = [
       (error as { response?: { data?: { messages?: string[] } } }).response?.data?.messages?.[0] ||
         error.message,
     ];
 
-    console.log("------------------ message ----------------------", message);
-    
-    // Handle various network error codes
-    const networkErrorCodes = [
-      "ENOTFOUND",      // DNS resolution failed
-      "ECONNREFUSED",   // Connection refused
-      "ETIMEDOUT",      // Connection timeout
-      "ECONNRESET",     // Connection reset
-      "EHOSTUNREACH",   // Host unreachable
-      "ENETUNREACH",    // Network unreachable
-      "EAI_AGAIN",      // Temporary failure in name resolution
-      "EAI_NODATA",     // No address associated with hostname
-      "EAI_NONAME",     // Name or service not known
-    ];
-    
-    if (networkErrorCodes.includes(error.code || "")) {
-      const msg = "خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.";
-      throw new NetworkError([msg], error as IOriginalError);
-    }
-    
     switch (error.response?.status) {
       case 400:
         throw new InputError(message, error as IOriginalError);
@@ -266,7 +243,6 @@ export const initiateAutoLogin = async (
 
     return result.data;
   } catch (error) {
-    console.log("--------------- error ---------------------", (error as any).response.data);
     return handleAccountStatusError(error as AxiosError<unknown>);
   }
 };
