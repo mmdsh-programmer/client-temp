@@ -6,6 +6,8 @@ import useGetDomainDocuments from "@hooks/domain/useGetDomainDocuments";
 import { Typography } from "@material-tailwind/react";
 import BackButton from "@components/atoms/button/backButton";
 import { Spinner } from "@components/atoms/spinner";
+import { useParams } from "next/navigation";
+import { toEnglishDigit } from "@utils/index";
 
 interface IProps {
   searchText: string;
@@ -24,6 +26,13 @@ const DomainDocumentsLoadMore = ({
 }: IProps) => {
   const [disableItems, setDisableItems] = useState(false);
 
+  const params = useParams();
+  const idParam = params?.id;
+  const repoId = toEnglishDigit(
+    decodeURIComponent(Array.isArray(idParam) ? idParam[0] : (idParam ?? "")),
+  );
+
+
   const {
     data: domainDocuments,
     isLoading,
@@ -33,7 +42,7 @@ const DomainDocumentsLoadMore = ({
     isError,
     error,
     refetch,
-  } = useGetDomainDocuments(searchText, tags, creatorName, sortParams, 20);
+  } = useGetDomainDocuments(+repoId, searchText, tags, creatorName, sortParams, 20);
 
   const onResultItemClick = (value: boolean) => {
     setDisableItems(value);

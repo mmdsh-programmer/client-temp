@@ -47,7 +47,7 @@ const PublishAdvancedSearchResult = ({ searchText, tags, creatorName, sortParams
     isError: domainDocumentsIsError,
     error: domainDocumentsError,
     refetch: domainDocumentsRefetch,
-  } = useGetDomainDocuments(searchText, tags, creatorName, sortParams, 3);
+  } = useGetDomainDocuments(+repoId, searchText, tags, creatorName, sortParams, 3);
 
   const {
     data: domainVersions,

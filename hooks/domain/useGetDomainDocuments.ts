@@ -4,6 +4,7 @@ import { IDomainDocuments } from "@interface/domain.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetDomainDocuments = (
+  repoId: number | undefined,
   title: string,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
@@ -11,9 +12,10 @@ const useGetDomainDocuments = (
   size: number,
 ) => {
   return useInfiniteQuery({
-    queryKey: ["getDomainDocuments", title, tagIds, creatorUserName, sortParams, size],
+    queryKey: ["getDomainDocuments",repoId, title, tagIds, creatorUserName, sortParams, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getDomainDocumentsAction(
+        repoId,
         title,
         tagIds,
         creatorUserName,

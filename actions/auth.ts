@@ -3,7 +3,7 @@
 import { cookies, headers } from "next/headers";
 import { getDomainHost } from "@utils/getDomain";
 import { decryptKey, encryptKey } from "@utils/crypto";
-import { editSocialProfile, getMySocialProfile } from "@service/social";
+import { editSocialProfile } from "@service/social";
 import { getCustomPostByDomain, userInfo, userMetadata } from "@service/clasor";
 import { getPodAccessToken, refreshPodAccessToken, revokePodToken } from "@service/account";
 import { IActionError } from "@interface/app.interface";
@@ -44,10 +44,10 @@ const refreshCookieHeader = async (rToken: string, clientId: string, clientSecre
   });
 
   const userData = await userInfo(access_token, domain, expires_in - 60);
-  const mySocialProfile = await getMySocialProfile(access_token, expires_in - 60);
+  // const mySocialProfile = await getMySocialProfile(access_token, expires_in - 60);
   return {
     ...userData,
-    private: mySocialProfile.result.private,
+    private: false,
     access_token,
     refresh_token,
   };
@@ -83,10 +83,10 @@ export const getMe = async () => {
 
     const expiresAt = Math.floor((tokenInfo.expiresAt - +new Date()) / 1000);
     const userData = await userInfo(tokenInfo.access_token, domain, expiresAt);
-    const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, expiresAt);
+    // const mySocialProfile = await getMySocialProfile(tokenInfo.access_token, expiresAt);
     const userDataWithPrivate = {
       ...userData,
-      private: mySocialProfile.result.private,
+      private: false,
       access_token: tokenInfo.access_token,
       refresh_token: tokenInfo.refresh_token,
     };

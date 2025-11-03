@@ -247,6 +247,7 @@ export const removePartyFromDomainParticipantsAction = async (userNameList: stri
 };
 
 export const getDomainDocumentsAction = async (
+  repoId: number | undefined,
   title: string,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
@@ -265,6 +266,7 @@ export const getDomainDocumentsAction = async (
     const response = await getDomainDocuments(
       domain,
       userInfo.access_token,
+      repoId,
       title,
       tagIds,
       creatorUserName,

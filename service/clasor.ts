@@ -77,7 +77,6 @@ const axiosClasorInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 20000,
 });
 
 axiosClasorInstance.interceptors.request.use(
@@ -4897,6 +4896,7 @@ export const updateCustomPostByDomain = async (
 export const getDomainDocuments = async (
   domainUrl: string,
   accessToken: string,
+  repoId: number | undefined,
   title: string,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
@@ -4930,6 +4930,7 @@ export const getDomainDocuments = async (
           domainUrl,
         },
         params: {
+          repoId,
           title,
           tagIds,
           creatorUserName,

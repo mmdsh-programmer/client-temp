@@ -1,7 +1,6 @@
 import {
   AuthorizationError,
   InputError,
-  NetworkError,
   ServerError,
 } from "@utils/error";
 import {
@@ -92,32 +91,6 @@ axiosSocialInstance.interceptors.response.use(
 export const handleSocialStatusError = (
   error: AxiosError<ISocialError> | ISocialResponse<unknown>
 ) => {
-  console.log("#######################################################################");
-  console.log(
-    "--------------------- social service error ---------------------",
-    error
-  );
-  
-  // Handle network errors for AxiosError
-  if ('code' in error && typeof error.code === 'string') {
-    const networkErrorCodes = [
-      "ENOTFOUND",      // DNS resolution failed
-      "ECONNREFUSED",   // Connection refused
-      "ETIMEDOUT",      // Connection timeout
-      "ECONNRESET",     // Connection reset
-      "EHOSTUNREACH",   // Host unreachable
-      "ENETUNREACH",    // Network unreachable
-      "EAI_AGAIN",      // Temporary failure in name resolution
-      "EAI_NODATA",     // No address associated with hostname
-      "EAI_NONAME",     // Name or service not known
-    ];
-    
-    if (networkErrorCodes.includes(error.code)) {
-      const msg = "خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.";
-      throw new NetworkError([msg]);
-    }
-  }
-  
   if ("hasError" in error) {
     const message = error.message ?? "خطای نامشخصی رخ داد";
     switch (error.errorCode) {
