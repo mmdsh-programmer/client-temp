@@ -7,6 +7,7 @@ import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { useFeedStore } from "@store/feed";
 import { useRepoActivityStore } from "@store/repository";
 import {
+  AlertIcon,
   ArchiveActionIcon,
   BookmarkRepoIcon,
   DeleteIcon,
@@ -84,7 +85,7 @@ const getEditorMenuItems = (repo: IRepo, setModal: (modal: string) => void): Men
     ),
     createItem(
       "اعلانات من",
-      <KeyIcon className="h-4 w-4 stroke-1" />,
+      <AlertIcon className="h-4 w-4 stroke-1" />,
       () => {
         setModal("myNotif");
       },

@@ -30,7 +30,7 @@
     "@types/react-dom": "19.1.9",
     "autoprefixer": "^10.4.20",
     "axios": "^1.6.8",
-    "clasor-content-preview": "^1.17.39",
+    "clasor-content-preview": "^1.17.36",
     "clasor-remote-editor": "^1.5.6",
     "cls-file-management": "^0.7.6",
     "compressorjs": "^1.2.1",
