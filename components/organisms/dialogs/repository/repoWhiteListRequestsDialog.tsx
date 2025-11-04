@@ -63,10 +63,10 @@ const RepoWhiteListRequestsDialog = ({ setOpen }: IProps) => {
                         <Typography
                           placeholder=""
                           className="label_l2 w-auto cursor-pointer truncate text-primary_normal"
-                          title={request.userFullName}
+                          title={`${request.userFullName}-${request.documentName}`}
                           {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                         >
-                          {request.userFullName}
+                          {request.userFullName} _ {request.documentName}
                         </Typography>
                       </div>
                       <DocumentWhiteListMenu request={request} />

@@ -82,7 +82,7 @@ const DocumentWhiteList = ({
         لیست سفید سند
       </Typography>
       {isLoading ? (
-        <div className="flex justify-center mt-4">
+        <div className="w-full flex justify-center mt-4">
           <Spinner className="h-4 w-4 text-primary" />
         </div>
       ) : (

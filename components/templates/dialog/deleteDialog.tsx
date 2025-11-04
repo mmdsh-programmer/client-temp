@@ -9,6 +9,7 @@ import {
 import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
+import BackButton from "@components/atoms/button/backButton";
 
 export interface IProps {
   isPending: boolean;
@@ -18,6 +19,7 @@ export interface IProps {
   onSubmit: () => void;
   className?: string;
   isArchive?: boolean;
+  backToMain?: boolean;
 }
 
 const DeleteDialog = ({
@@ -28,6 +30,7 @@ const DeleteDialog = ({
   onSubmit,
   className,
   isArchive,
+  backToMain,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -39,7 +42,7 @@ const DeleteDialog = ({
       size="sm"
       open
       handler={handleClose}
-      className={`${className} delete-dialog rounded-lg flex flex-col bg-white w-auto min-w-[90%] max-w-[90%] xs:min-w-[400px] xs:max-w-[400px] -mb-[60dvh] xs:mb-0`}
+      className={`${className} delete-dialog -mb-[60dvh] flex w-auto min-w-[90%] max-w-[90%] flex-col rounded-lg bg-white xs:mb-0 xs:min-w-[400px] xs:max-w-[400px]`}
       dismiss={{
         enabled: false,
       }}
@@ -47,14 +50,26 @@ const DeleteDialog = ({
     >
       <DialogHeader
         placeholder="dialog header"
-        className="dialog-header flex items-center justify-between px-5 pt-5 pb-4 xs:py-5 xs:px-6 border-b-none xs:border-b-[0.5px] border-normal"
+        className="dialog-header border-b-none flex items-center justify-between border-normal px-5 pb-4 pt-5 xs:border-b-[0.5px] xs:px-6 xs:py-5"
         {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
       >
-        <Typography 
-          {...({} as React.ComponentProps<typeof Typography>)}
-          className="form__title"
-        >{dialogHeader}</Typography>
-        <CloseButton onClose={handleClose} disabled={isPending} />
+        <div className="flex items-center">
+          {backToMain ? (
+            <div className="dialog-header__back-button">
+              <BackButton
+                className="!py-0 !pl-2 !pr-0"
+                onClick={handleClose}
+                disabled={isPending}
+              />
+            </div>
+          ) : null}
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">
+            {dialogHeader}
+          </Typography>
+        </div>
+        <div className="hidden xs:block">
+          <CloseButton onClose={handleClose} disabled={isPending} />
+        </div>
       </DialogHeader>
       <DialogBody
         placeholder="dialog body"
@@ -65,7 +80,7 @@ const DeleteDialog = ({
       </DialogBody>
       <DialogFooter
         placeholder="dialog footer"
-        className="dialog-footer p-5 xs:px-6 xs:py-4 flex gap-2 xs:gap-3 border-t-none xs:border-t-[0.5px] border-normal"
+        className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
         {...({} as Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
       >
         <CancelButton onClick={handleClose} disabled={isPending}>
@@ -77,7 +92,7 @@ const DeleteDialog = ({
           loading={isPending}
           isPrimary={false}
         >
-          <Typography  
+          <Typography
             className="text__label__button text-white"
             {...({} as React.ComponentProps<typeof Typography>)}
           >

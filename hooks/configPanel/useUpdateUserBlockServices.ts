@@ -2,29 +2,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { updateUserConfigPanelAction } from "@actions/configPanel";
+import { updateUserBlockServicesAction } from "@actions/configPanel";
 
-const useUpdateUserConfigPanel = () => {
+const useUpdateUserBlockServices = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["update-user-config"],
+    mutationKey: ["update-user-block-services"],
     mutationFn: async (values: {
       repoId: number;
       ssoId: number;
-      blockedServices?: string[];
-      notificationServices?: string[];
-      allowedServices?: string[];
+      blockedServices: string[];
       callBack?: () => void;
     }) => {
-      const { repoId, ssoId, allowedServices, blockedServices, notificationServices } = values;
-      const response = await updateUserConfigPanelAction(
-        repoId,
-        ssoId,
-        blockedServices,
-        notificationServices,
-        allowedServices,
-      );
+      const { repoId, ssoId, blockedServices } = values;
+      const response = await updateUserBlockServicesAction(repoId, ssoId, blockedServices);
       handleClientSideHookError(response as IActionError);
       return response;
     },
@@ -39,4 +31,4 @@ const useUpdateUserConfigPanel = () => {
   });
 };
 
-export default useUpdateUserConfigPanel;
+export default useUpdateUserBlockServices;

@@ -201,7 +201,8 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
     createDocFromTemplateHook.isPending ||
     createDocumentHook.isPending ||
     createVersionHook.isPending ||
-    createFileVersionHook.isPending;
+    createFileVersionHook.isPending ||
+    createFormVersionHook.isPending;
 
   return (
     <>

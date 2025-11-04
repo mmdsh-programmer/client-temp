@@ -4,22 +4,26 @@ import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHei
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUserConfigPanel from "@hooks/configPanel/useGetUserConfigPanel";
-import useUpdateUserConfigPanel from "@hooks/configPanel/useUpdateUserConfigPanel";
-import { ERoles } from "@interface/enums";
 import UserItem from "@components/organisms/users/userItem";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRepositoryStore } from "@store/repository";
 import { useUserStore } from "@store/user";
 import InputAtom from "@components/atoms/input";
 import { Spinner } from "@components/atoms/spinner";
+import useUpdateUserNotificationServices from "@hooks/configPanel/useUpdateUserNotificationServices";
 
-const UserConfigPanelDialog = () => {
+const UserConfigPanelNotifServiceDialog = () => {
   const { repo: getRepo } = useRepositoryStore();
   const { data: userInfo } = useGetUser();
-  const { selectedUser: getSelectedUser, setSelectedUser } = useUserStore();
+  const {
+    selectedUser: getSelectedUser,
+    setSelectedUser,
+    setNotifService,
+    setUserDrawer,
+  } = useUserStore();
 
   const [searchValue, setSearchValue] = useState("");
-  const [blockServices, setBlockServices] = useState<string[]>([]);
+  const [notifServices, setNotifServices] = useState<string[]>([]);
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
     getRepo!.id,
@@ -27,15 +31,17 @@ const UserConfigPanelDialog = () => {
       ? undefined
       : getSelectedUser!.userInfo.ssoId,
   );
-  const updateUserConfigPanel = useUpdateUserConfigPanel();
+  const updateUserNotifService = useUpdateUserNotificationServices();
   const { handleSubmit } = useForm();
 
   const handleClose = () => {
-    return setSelectedUser(null);
+    setSelectedUser(null);
+    setNotifService(false);
+    setUserDrawer(false);
   };
 
   const handleChange = (serviceName: string) => {
-    setBlockServices((prev) => {
+    setNotifServices((prev) => {
       return prev.includes(serviceName)
         ? prev.filter((s) => {
             return s !== serviceName;
@@ -47,12 +53,12 @@ const UserConfigPanelDialog = () => {
   const onSubmit = () => {
     if (!getRepo || !getSelectedUser) return;
 
-    updateUserConfigPanel.mutate({
+    updateUserNotifService.mutate({
       repoId: getRepo.id,
       ssoId: getSelectedUser.userInfo.ssoId,
-      blockedServices: blockServices,
+      notificationServices: notifServices,
       callBack: () => {
-        return toast.success("تنظیمات دسترسی برای کاربر به‌روز شد.");
+        return toast.success("تنظیمات دسترسی اعلانات برای کاربر به‌روز شد.");
       },
     });
   };
@@ -61,12 +67,12 @@ const UserConfigPanelDialog = () => {
     if (getUserConfigPanel) {
       const services = getUserConfigPanel
         .filter((userConfig) => {
-          return userConfig.blocked;
+          return userConfig.notificationAccess;
         })
         .map((userConfig) => {
           return userConfig.serviceName;
         });
-      setBlockServices(services);
+      setNotifServices(services);
     }
   }, [getUserConfigPanel]);
 
@@ -76,8 +82,8 @@ const UserConfigPanelDialog = () => {
 
   return (
     <ConfirmFullHeightDialog
-      isPending={updateUserConfigPanel.isPending}
-      dialogHeader="محدودسازی دسترسی‌های کاربر"
+      isPending={updateUserNotifService.isPending}
+      dialogHeader="دسترسی اعلانات"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="user-limitation-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
@@ -99,7 +105,7 @@ const UserConfigPanelDialog = () => {
               return setSearchValue(e.target.value);
             }}
             placeholder="جستجو..."
-            className="!border-normal !bg-white !h-8"
+            className="!h-8 !border-normal !bg-white"
             dir="rtl"
           />
           <div className="flex h-[calc(100vh-280px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-500px)]">
@@ -119,31 +125,13 @@ const UserConfigPanelDialog = () => {
                     </Typography>
                     <Switch
                       color="green"
-                      defaultChecked={!userConfig.blocked}
+                      defaultChecked={userConfig.notificationAccess}
                       onChange={() => {
                         return handleChange(userConfig.serviceName);
                       }}
-                      readOnly={
-                        (getRepo?.roleName === ERoles.admin &&
-                          getSelectedUser?.userRole === ERoles.admin) ||
-                        getRepo?.roleName === ERoles.editor ||
-                        getRepo?.roleName === ERoles.writer ||
-                        getRepo?.roleName === ERoles.viewer
-                      }
-                      disabled={
-                        (getRepo?.roleName === ERoles.admin &&
-                          getSelectedUser?.userRole === ERoles.admin) ||
-                        getRepo?.roleName === ERoles.editor ||
-                        getRepo?.roleName === ERoles.writer ||
-                        getRepo?.roleName === ERoles.viewer
-                      }
                       {...({} as Omit<
                         React.ComponentProps<typeof Switch>,
-                        | "color"
-                        | "defaultChecked"
-                        | "onChange"
-                        | "readOnly"
-                        | "disabled"
+                        "color" | "defaultChecked" | "onChange" | "readOnly" | "disabled"
                       >)}
                     />
                   </div>
@@ -165,4 +153,4 @@ const UserConfigPanelDialog = () => {
   );
 };
 
-export default UserConfigPanelDialog;
+export default UserConfigPanelNotifServiceDialog;

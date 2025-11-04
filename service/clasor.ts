@@ -5277,20 +5277,16 @@ export const getUserConfigPanel = async (accessToken: string, repoId: number, ss
   }
 };
 
-export const updateUserConfigPanel = async (
+export const updateUserBlockServices = async (
   accessToken: string,
   repoId: number,
   ssoId: number,
-  blockedServices?: string[],
-  notificationServices?: string[],
-  allowedServices?: string[],
+  blockedServices: string[],
 ) => {
   try {
     const response = await axiosClasorInstance.put<any>(
-      `repositories/${repoId}/userConfigPanel/${ssoId}`,
+      `repositories/${repoId}/userConfigPanel/${ssoId}/blockAccesses`,
       {
-        notificationServices,
-        allowedServices,
         blockedServices,
       },
       {
@@ -5305,7 +5301,31 @@ export const updateUserConfigPanel = async (
   }
 };
 
-export const updateSelfConfigPanel = async (
+export const updateUserNotificationServices = async (
+  accessToken: string,
+  repoId: number,
+  ssoId: number,
+  notificationServices: string[],
+) => {
+  try {
+    const response = await axiosClasorInstance.put<any>(
+      `repositories/${repoId}/userConfigPanel/${ssoId}/notificationAccess`,
+      {
+        notificationServices,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateMyNotifServices = async (
   accessToken: string,
   repoId: number,
   notificationServices?: string[],

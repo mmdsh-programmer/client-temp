@@ -3,7 +3,12 @@
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { IActionError } from "@interface/app.interface";
-import { getUserConfigPanel, updateSelfConfigPanel, updateUserConfigPanel } from "@service/clasor";
+import {
+  getUserConfigPanel,
+  updateMyNotifServices,
+  updateUserBlockServices,
+  updateUserNotificationServices,
+} from "@service/clasor";
 
 export const getUserConfigPanelAction = async (repoId: number, ssoId?: number) => {
   const userInfo = await getMe();
@@ -15,22 +20,18 @@ export const getUserConfigPanelAction = async (repoId: number, ssoId?: number) =
   }
 };
 
-export const updateUserConfigPanelAction = async (
+export const updateUserBlockServicesAction = async (
   repoId: number,
   ssoId: number,
-  blockedServices?: string[],
-  notificationServices?: string[],
-  allowedServices?: string[],
+  blockedServices: string[],
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await updateUserConfigPanel(
+    const response = await updateUserBlockServices(
       userInfo.access_token,
       repoId,
       ssoId,
       blockedServices,
-      notificationServices,
-      allowedServices,
     );
     return response;
   } catch (error) {
@@ -38,13 +39,32 @@ export const updateUserConfigPanelAction = async (
   }
 };
 
-export const updateSelfConfigPanelAction = async (
+export const updateUserNotificationServicesAction = async (
+  repoId: number,
+  ssoId: number,
+  notificationServices: string[],
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await updateUserNotificationServices(
+      userInfo.access_token,
+      repoId,
+      ssoId,
+      notificationServices,
+    );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const updateMyNotifServicesAction = async (
   repoId: number,
   notificationServices?: string[],
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await updateSelfConfigPanel(
+    const response = await updateMyNotifServices(
       userInfo.access_token,
       repoId,
       notificationServices,

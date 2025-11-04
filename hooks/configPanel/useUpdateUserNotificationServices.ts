@@ -2,23 +2,23 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { updateSelfConfigPanelAction } from "@actions/configPanel";
+import { updateUserNotificationServicesAction } from "@actions/configPanel";
 
-const useUpdateSelfConfigPanel = () => {
+const useUpdateUserNotificationServices = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["update-self-config"],
+    mutationKey: ["update-user-notification-services"],
     mutationFn: async (values: {
       repoId: number;
       ssoId: number;
-      notificationServices?: string[];
-
+      notificationServices: string[];
       callBack?: () => void;
     }) => {
-      const { repoId, notificationServices } = values;
-      const response = await updateSelfConfigPanelAction(
+      const { repoId, ssoId, notificationServices } = values;
+      const response = await updateUserNotificationServicesAction(
         repoId,
+        ssoId,
         notificationServices,
       );
       handleClientSideHookError(response as IActionError);
@@ -35,4 +35,4 @@ const useUpdateSelfConfigPanel = () => {
   });
 };
 
-export default useUpdateSelfConfigPanel;
+export default useUpdateUserNotificationServices;
