@@ -1,6 +1,4 @@
-import { Spinner } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import DocumentBlackList from "@components/organisms/document/documentBlackList";
 import DocumentWhiteList from "@components/organisms/document/documentWhiteList";
@@ -12,6 +10,7 @@ import useGetWhiteBlackList from "@hooks/document/useGetWhiteBlackList";
 import Radio from "@components/atoms/radio";
 import { useRepositoryStore } from "@store/repository";
 import { useDocumentStore } from "@store/document";
+import { Spinner } from "@components/atoms/spinner";
 
 export interface IUserList {
   username: string;
@@ -144,12 +143,12 @@ const DocumentAccessPublishingDialog = ({ setOpen }: IProps) => {
           />
         </div>
         {isLoading ? (
-          <Spinner
-            className="h-6 w-6"
-            color="deep-purple"
-            {...({} as  Omit<React.ComponentProps<typeof Spinner>, "className" | "color">)}
-          />
-        ) : renderList()}
+          <div className="w-full flex justify-center mt-4">
+            <Spinner className="h-8 w-8" />
+          </div>
+        ) : (
+          renderList()
+        )}
       </div>
     </ConfirmFullHeightDialog>
   );

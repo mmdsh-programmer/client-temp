@@ -11,13 +11,15 @@ import PublicLink from "@components/organisms/publicLink";
 import PublishLink from "@components/organisms/publishLink";
 import TabComponent from "@components/molecules/tab";
 import Users from "@components/organisms/users";
-import UserConfigPanelDialog from "../configPanel/userConfigPanelDialog";
 import { useRepositoryStore } from "@store/repository";
 import { useGroupStore } from "@store/group";
 import { usePublicStore } from "@store/public";
 import { useUserStore } from "@store/user";
-import useGetUser from "@hooks/auth/useGetUser";
-import SelfConfigPanelDialog from "../configPanel/selfConfigPanelDialog";
+import UserMenu from "@components/molecules/userMenu";
+import UserConfigPanelBlockServiceDialog from "../configPanel/userConfigPanelBlockServiceDialog";
+import UserConfigPanelNotifServiceDialog from "../configPanel/userConfigPanelNotifServiceDialog";
+import UserTransferOwnershipDialog from "../configPanel/userTransferOwnershipDialog";
+import UserDeleteDialog from "../configPanel/userDeleteDialog";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,12 +37,15 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
 
   const { repo: getRepo } = useRepositoryStore();
   const { createGroup, setCreateGroup } = useGroupStore();
-  const { editGroup, setEditGroup } = useGroupStore();
-  const { deleteGroup, setDeleteGroup } = useGroupStore();
+  const { editGroup, setEditGroup, deleteGroup, setDeleteGroup } = useGroupStore();
   const { openShareAccess, setOpenShareAccess } = usePublicStore();
-  const { selectedUser } = useUserStore();
-
-  const { data: userInfo } = useGetUser();
+  const {
+    blockService,
+    notifService,
+    deleteUser,
+    transferOwnership,
+    selectedUser,
+  } = useUserStore();
 
   const handleClose = () => {
     setOpen(false);
@@ -84,12 +89,20 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
   if (deleteGroup) {
     return <GroupDeleteDialog setOpen={setDeleteGroup} />;
   }
-  if (selectedUser && selectedUser?.userInfo.userName !== userInfo?.username) {
-    return <UserConfigPanelDialog />;
+  if (selectedUser && blockService) {
+    return <UserConfigPanelBlockServiceDialog />;
   }
-
-  if (selectedUser && selectedUser?.userInfo.userName === userInfo?.username) {
-    return <SelfConfigPanelDialog />;
+  if (selectedUser && notifService) {
+    return <UserConfigPanelNotifServiceDialog />;
+  }
+  if (selectedUser && notifService) {
+    return <UserConfigPanelNotifServiceDialog />;
+  }
+  if (selectedUser && deleteUser) {
+    return <UserDeleteDialog />;
+  }
+  if (selectedUser && transferOwnership) {
+    return <UserTransferOwnershipDialog />;
   }
 
   return (
@@ -104,6 +117,7 @@ const RepoShareDialog = ({ setOpen }: IProps) => {
         </div>
       </DialogBody>
       <GroupMenu showDrawer />
+      <UserMenu showDrawer />
     </InfoDialog>
   );
 };

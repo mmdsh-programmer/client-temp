@@ -1,25 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Typography } from "@material-tailwind/react";
+import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUserConfigPanel from "@hooks/configPanel/useGetUserConfigPanel";
+import { ERoles } from "@interface/enums";
 import UserItem from "@components/organisms/users/userItem";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useRepositoryStore } from "@store/repository";
 import { useUserStore } from "@store/user";
 import InputAtom from "@components/atoms/input";
 import { Spinner } from "@components/atoms/spinner";
-import LoadingButton from "@components/molecules/loadingButton";
-import CancelButton from "@components/atoms/button/cancelButton";
-import useUpdateSelfConfigPanel from "@hooks/configPanel/useUpdateSelfConfigPanel";
+import useUpdateUserBlockServices from "@hooks/configPanel/useUpdateUserBlockServices";
 
-const SelfNotifServices = () => {
+const UserConfigPanelBlockServiceDialog = () => {
   const { repo: getRepo } = useRepositoryStore();
   const { data: userInfo } = useGetUser();
-  const { selectedUser: getSelectedUser, setSelectedUser } = useUserStore();
+  const {
+    selectedUser: getSelectedUser,
+    setSelectedUser,
+    setBlockService,
+    setUserDrawer,
+  } = useUserStore();
 
   const [searchValue, setSearchValue] = useState("");
-  const [notifServices, setNotifServices] = useState<string[]>([]);
+  const [blockServices, setBlockServices] = useState<string[]>([]);
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
     getRepo!.id,
@@ -27,15 +32,17 @@ const SelfNotifServices = () => {
       ? undefined
       : getSelectedUser!.userInfo.ssoId,
   );
-  const { mutate: updateUserConfigPanel, isPending } = useUpdateSelfConfigPanel();
+  const updateUserBlockServices = useUpdateUserBlockServices();
   const { handleSubmit } = useForm();
 
   const handleClose = () => {
-    return setSelectedUser(null);
+    setSelectedUser(null);
+    setBlockService(false);
+    setUserDrawer(false);
   };
 
   const handleChange = (serviceName: string) => {
-    setNotifServices((prev) => {
+    setBlockServices((prev) => {
       return prev.includes(serviceName)
         ? prev.filter((s) => {
             return s !== serviceName;
@@ -47,10 +54,10 @@ const SelfNotifServices = () => {
   const onSubmit = () => {
     if (!getRepo || !getSelectedUser) return;
 
-    updateUserConfigPanel({
+    updateUserBlockServices.mutate({
       repoId: getRepo.id,
       ssoId: getSelectedUser.userInfo.ssoId,
-      notificationServices: notifServices,
+      blockedServices: blockServices,
       callBack: () => {
         return toast.success("تنظیمات دسترسی برای کاربر به‌روز شد.");
       },
@@ -61,12 +68,12 @@ const SelfNotifServices = () => {
     if (getUserConfigPanel) {
       const services = getUserConfigPanel
         .filter((userConfig) => {
-          return userConfig.notificationAccess;
+          return userConfig.blocked;
         })
         .map((userConfig) => {
           return userConfig.serviceName;
         });
-      setNotifServices(services);
+      setBlockServices(services);
     }
   }, [getUserConfigPanel]);
 
@@ -75,13 +82,27 @@ const SelfNotifServices = () => {
   });
 
   return (
-    <div className="flex flex-col gap-2">
+    <ConfirmFullHeightDialog
+      isPending={updateUserBlockServices.isPending}
+      dialogHeader="محدودسازی دسترسی‌های کاربر"
+      onSubmit={handleSubmit(onSubmit)}
+      setOpen={handleClose}
+      className="user-limitation-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
+      bodyClassName="!pt-1"
+      backToMain
+      disabled={
+        (getRepo?.roleName === ERoles.admin && getSelectedUser?.userRole === ERoles.admin) ||
+        getRepo?.roleName === ERoles.editor ||
+        getRepo?.roleName === ERoles.writer ||
+        getRepo?.roleName === ERoles.viewer
+      }
+    >
       {isLoading ? (
         <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
         </div>
       ) : (
-        <div className="mt-3 flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           {getSelectedUser && <UserItem user={getSelectedUser} />}
           <div className="border-b border-b-normal" />
           <InputAtom
@@ -94,7 +115,7 @@ const SelfNotifServices = () => {
             className="!h-8 !border-normal !bg-white"
             dir="rtl"
           />
-          <div className="flex h-[calc(100vh-330px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-420px)]">
+          <div className="flex h-[calc(100vh-280px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-500px)]">
             {filteredOptions?.length ? (
               filteredOptions.map((userConfig) => {
                 return (
@@ -111,10 +132,24 @@ const SelfNotifServices = () => {
                     </Typography>
                     <Switch
                       color="green"
-                      defaultChecked={userConfig.notificationAccess}
+                      defaultChecked={!userConfig.blocked}
                       onChange={() => {
                         return handleChange(userConfig.serviceName);
                       }}
+                      readOnly={
+                        (getRepo?.roleName === ERoles.admin &&
+                          getSelectedUser?.userRole === ERoles.admin) ||
+                        getRepo?.roleName === ERoles.editor ||
+                        getRepo?.roleName === ERoles.writer ||
+                        getRepo?.roleName === ERoles.viewer
+                      }
+                      disabled={
+                        (getRepo?.roleName === ERoles.admin &&
+                          getSelectedUser?.userRole === ERoles.admin) ||
+                        getRepo?.roleName === ERoles.editor ||
+                        getRepo?.roleName === ERoles.writer ||
+                        getRepo?.roleName === ERoles.viewer
+                      }
                       {...({} as Omit<
                         React.ComponentProps<typeof Switch>,
                         "color" | "defaultChecked" | "onChange" | "readOnly" | "disabled"
@@ -135,27 +170,8 @@ const SelfNotifServices = () => {
           </div>
         </div>
       )}
-      <div className="dialog-footer border-t-none flex gap-2 border-normal xs:gap-3 xs:border-t-[0.5px]" />
-      <div className="flex gap-2 justify-end">
-        <CancelButton onClick={handleClose} disabled={isPending}>
-          انصراف
-        </CancelButton>
-        <LoadingButton
-          className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
-          onClick={handleSubmit(onSubmit)}
-          loading={isPending}
-          disabled={isPending}
-        >
-          <Typography
-            className="text__label__button text-white"
-            {...({} as React.ComponentProps<typeof Typography>)}
-          >
-            تایید
-          </Typography>
-        </LoadingButton>
-      </div>
-    </div>
+    </ConfirmFullHeightDialog>
   );
 };
 
-export default SelfNotifServices;
+export default UserConfigPanelBlockServiceDialog;

@@ -7,7 +7,7 @@ import { getRepoWhiteListRequestAction } from "@actions/repository";
 
 const useGetRepoWhiteListRequests = (repoId: number, size: number) => {
   return useInfiniteQuery({
-    queryKey: [`repo-${repoId}-documents-white-list-requests`],
+    queryKey: [`repo-${repoId}-white-list-requests`, undefined],
     queryFn: async ({ pageParam }) => {
       const response = await getRepoWhiteListRequestAction(
         repoId,

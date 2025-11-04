@@ -23,6 +23,8 @@ import {
   RestoreIcon,
   ShareIcon,
 } from "@components/atoms/icons";
+import { useUserStore } from "@store/user";
+import { IUser } from "@interface/users.interface";
 
 export interface MenuItem {
   text: string;
@@ -79,6 +81,14 @@ const getEditorMenuItems = (repo: IRepo, setModal: (modal: string) => void): Men
         return setModal("leave");
       },
       "repo-menu__item--leave",
+    ),
+    createItem(
+      "اعلانات من",
+      <KeyIcon className="h-4 w-4 stroke-1" />,
+      () => {
+        setModal("myNotif");
+      },
+      "repo-menu__item--my-notif",
     ),
   ];
 };
@@ -232,8 +242,8 @@ const useRepoMenuList = (
         <PublishIcon className="h-4 w-4 fill-icon-active stroke-0" />,
         () => {
           const url = toPersianDigit(
-              `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
-            );
+            `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
+          );
           window.open(url, "_blank");
         },
       ),

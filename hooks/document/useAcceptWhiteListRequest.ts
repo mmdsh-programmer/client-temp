@@ -24,6 +24,9 @@ const useAcceptWhiteListRequest = () => {
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-document-${documentId}-white-list-requests`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`repo-${repoId}-white-list-requests`],
+      });
       callBack?.();
     },
     onError: (error) => {

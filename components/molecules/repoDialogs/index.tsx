@@ -12,6 +12,7 @@ import RepoVersionRequestsDialog from "@components/organisms/dialogs/repository/
 import { useRepositoryStore } from "@store/repository";
 import PrivateFeedCreateDialog from "@components/organisms/dialogs/privateFeed/privateFeedCreateDialog";
 import RepoWhiteListRequestsDialog from "@components/organisms/dialogs/repository/repoWhiteListRequestsDialog";
+import MyNotificationSettingDialog from "@components/organisms/dialogs/repository/myNotificationSettingDialog";
 
 interface IRepoDialogsProps {
   activeModal: string | null;
@@ -55,6 +56,7 @@ const RepoDialogs = ({ activeModal, closeModal }: IRepoDialogsProps) => {
       {activeModal === "documentWhiteList" ? (
         <RepoWhiteListRequestsDialog setOpen={handleClose} />
       ) : null}
+      {activeModal === "myNotif" ? <MyNotificationSettingDialog setOpen={handleClose} /> : null}
     </>
   );
 };
