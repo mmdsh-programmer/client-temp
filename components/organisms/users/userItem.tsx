@@ -132,9 +132,11 @@ const UserItem = ({ user }: IProps) => {
             {getRepo?.roleName === ERoles.owner ||
             userInfo?.username === user.userInfo.userName ||
             (getRepo?.roleName === ERoles.admin &&
-              user?.userRole !== ERoles.admin &&
               user.userRole !== ERoles.owner &&
-              userInfo?.username !== user.userInfo.userName) ? (
+              getRepo?.roleName === ERoles.admin &&
+              !(
+                user.userRole === ERoles.admin && userInfo?.username !== user.userInfo.userName
+              )) ? (
               <UserMenu user={user} />
             ) : null}
           </div>
