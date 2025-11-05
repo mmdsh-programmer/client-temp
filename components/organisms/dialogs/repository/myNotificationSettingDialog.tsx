@@ -9,6 +9,8 @@ import InputAtom from "@components/atoms/input";
 import { Spinner } from "@components/atoms/spinner";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
 import useUpdateMyNotifServices from "@hooks/configPanel/useUpdateMyNotifServices";
+import { ERoles } from "@interface/enums";
+import useUpdateUserNotificationServices from "@hooks/configPanel/useUpdateUserNotificationServices";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -22,7 +24,9 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
   const [notifServices, setNotifServices] = useState<string[]>([]);
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(getRepo!.id, undefined);
-  const { mutate: updateUserConfigPanel, isPending } = useUpdateMyNotifServices();
+  const updateUserNotifService = useUpdateUserNotificationServices();
+
+  const { mutate: updateMyNotifServices, isPending } = useUpdateMyNotifServices();
   const { handleSubmit } = useForm();
 
   const handleClose = () => {
@@ -41,15 +45,25 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
 
   const onSubmit = () => {
     if (!getRepo || !userInfo) return;
-
-    updateUserConfigPanel({
-      repoId: getRepo.id,
-      ssoId: userInfo.ssoId,
-      notificationServices: notifServices,
-      callBack: () => {
-        return toast.success("تنظیمات اعلانات به‌روز شد.");
-      },
-    });
+    if (getRepo?.roleName !== ERoles.owner && getRepo?.roleName !== ERoles.admin) {
+      updateMyNotifServices({
+        repoId: getRepo.id,
+        ssoId: userInfo.ssoId,
+        notificationServices: notifServices,
+        callBack: () => {
+          return toast.success("تنظیمات اعلانات به‌روز شد.");
+        },
+      });
+    } else {
+      updateUserNotifService.mutate({
+        repoId: getRepo.id,
+        ssoId: userInfo.ssoId,
+        notificationServices: notifServices,
+        callBack: () => {
+          return toast.success("تنظیمات اعلانات به‌روز شد.");
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -71,7 +85,7 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
 
   return (
     <ConfirmFullHeightDialog
-      isPending={isPending}
+      isPending={isPending || updateUserNotifService.isPending}
       dialogHeader=" اعلانات من"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
@@ -96,6 +110,16 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
             className="!h-8 !border-normal !bg-white"
             dir="rtl"
           />
+          {getRepo?.roleName !== ERoles.owner && getRepo?.roleName !== ERoles.admin ? (
+            <Typography
+              placeholder=""
+              className="label my-4 !text-error"
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              شما تنها مجاز به غیرفعالسازی اعلانات هستید. در صورت نیاز، لطفاً با مدیر یا مالک مخزن
+              هماهنگ کنید.
+            </Typography>
+          ) : null}
           <div className="flex h-[calc(100vh-280px)] w-full flex-col gap-2 overflow-y-auto overflow-x-hidden px-2 xs:h-[calc(100vh-500px)]">
             {filteredOptions?.length ? (
               filteredOptions.map((userConfig) => {
@@ -117,6 +141,16 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
                       onChange={() => {
                         return handleChange(userConfig.serviceName);
                       }}
+                      disabled={
+                        getRepo?.roleName !== ERoles.owner &&
+                        getRepo?.roleName !== ERoles.admin &&
+                        !userConfig.notificationAccess
+                      }
+                      readOnly={
+                        getRepo?.roleName !== ERoles.owner &&
+                        getRepo?.roleName !== ERoles.admin &&
+                        !userConfig.notificationAccess
+                      }
                       {...({} as Omit<
                         React.ComponentProps<typeof Switch>,
                         "color" | "defaultChecked" | "onChange" | "readOnly" | "disabled"

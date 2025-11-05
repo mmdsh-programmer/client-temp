@@ -17,7 +17,7 @@ const useGetLastVersion = (
       handleClientSideHookError(response as IActionError);
       return response as IVersion;
     },
-    enabled: !!documentId && !!repoId && !!enabled,
+    enabled:  !!enabled && !!repoId,
     retry: false,
     refetchOnWindowFocus: false,
   });

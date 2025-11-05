@@ -13,9 +13,9 @@ import { useCategoryStore } from "@store/category";
 import { EDocumentTypes } from "@interface/enums";
 import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
 import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
-import useGetLastVersion from "@hooks/version/useGetLastVersion";
 import useRepoId from "@hooks/custom/useRepoId";
 import { useRepositoryStore } from "@store/repository";
+import useCreateLastVersionLink from "@hooks/version/useCreateLastVersionLink";
 
 interface IProps {
   document: IDocumentMetadata;
@@ -26,20 +26,11 @@ const DocumentTableRow = ({ document }: IProps) => {
   const { repo: getRepo } = useRepositoryStore();
   const { setBulkItems, bulkItems: getBulkItems } = useBulkStore();
   const { category: selectedCat } = useCategoryStore();
+
   const repoId = useRepoId();
 
   const { data: userInfo } = useGetUser();
-  const {
-    data: getLastVersion,
-    isSuccess: lastVersionIsSuccess,
-    error: lastVersionError,
-  } = useGetLastVersion(
-    repoId!,
-    document!.id,
-    currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
-    document.contentType === EDocumentTypes.form && !!repoId,
-  );
+  const createLastVersionLink = useCreateLastVersionLink();
   const collaborateFrom = useCollaborateFormVersion();
   const autoLogin = useAutoLoginCode();
 
@@ -51,19 +42,32 @@ const DocumentTableRow = ({ document }: IProps) => {
 
   const handleRowClick = () => {
     if (document.contentType === EDocumentTypes.form) {
-      if (!repoId || !getLastVersion) {
+      if (!repoId) {
         console.error("شناسه مخزن وجود ندارد.");
         return;
       }
-      collaborateFrom.mutate({
+      createLastVersionLink.mutate({
         repoId,
-        documentId: document!.id,
-        versionId: getLastVersion.id,
-        callBack: () => {
-          autoLogin.mutate({
-            callBack: (code) => {
-              const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/app/auto-login?form_Id=${getLastVersion!.formId}&auto_login_code=${code}&embed=false`;
-              window.open(url);
+        documentId: document.id,
+        isDirectAccess:
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
+        callBack: (lastVersion) => {
+          if (!lastVersion) {
+            toast.error("این سند فاقد آخرین نسخه است.");
+            return;
+          }
+          collaborateFrom.mutate({
+            repoId,
+            documentId: document!.id,
+            versionId: lastVersion!.id,
+            callBack: () => {
+              autoLogin.mutate({
+                callBack: (code) => {
+                  const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/app/auto-login?form_Id=${lastVersion!.formId}&auto_login_code=${code}&embed=false`;
+                  window.open(url);
+                },
+              });
             },
           });
         },
