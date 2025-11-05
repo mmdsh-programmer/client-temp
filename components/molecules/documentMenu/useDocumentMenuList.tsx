@@ -52,7 +52,7 @@ const createItem = (
 };
 
 const useDocumentMenuList = (
-  document: IDocumentMetadata,
+  document: IDocumentMetadata | null,
   setModal: (modalName: string) => void,
 ): MenuItem[] => {
   const { setSelectedDocument, setDocumentShow } = useDocumentStore();
