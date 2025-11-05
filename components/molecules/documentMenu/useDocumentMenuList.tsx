@@ -18,7 +18,7 @@ import {
   PublishedLimitationIcon,
   VisibleIcon,
 } from "@components/atoms/icons";
-import { ERoles } from "@interface/enums";
+import { EDocumentTypes, ERoles } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { toPersianDigit } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
@@ -29,6 +29,11 @@ import { useDocumentDrawerStore, useDocumentStore } from "@store/document";
 import { useVersionStore } from "@store/version";
 import { useEditorStore } from "@store/editor";
 import { MenuItem } from "@components/templates/menuTemplate";
+import useCollaborateFormVersion from "@hooks/formVersion/useCollaborateFormVersion";
+import useAutoLoginCode from "@hooks/autoLogin/useAutoLoginCode";
+import useRepoId from "@hooks/custom/useRepoId";
+import useCreateLastVersionLink from "@hooks/version/useCreateLastVersionLink";
+import { toast } from "react-toastify";
 
 const createItem = (
   text: string,
@@ -47,7 +52,7 @@ const createItem = (
 };
 
 const useDocumentMenuList = (
-  document: IDocumentMetadata | null,
+  document: IDocumentMetadata,
   setModal: (modalName: string) => void,
 ): MenuItem[] => {
   const { setSelectedDocument, setDocumentShow } = useDocumentStore();
@@ -55,9 +60,14 @@ const useDocumentMenuList = (
   const { setVersionModalList } = useVersionStore();
   const { setEditorMode, setEditorModal } = useEditorStore();
   const { repo, setRepositoryId } = useRepositoryStore();
+  const repoId = useRepoId();
+
   const pathname = usePathname();
   const { data: userInfo } = useGetUser();
   const { data: getDomainInfo } = useGetDomainInfo();
+  const createLastVersionLink = useCreateLastVersionLink();
+  const collaborateFrom = useCollaborateFormVersion();
+  const autoLogin = useAutoLoginCode();
 
   if (!document) return [];
 
@@ -87,6 +97,39 @@ const useDocumentMenuList = (
     return role === "admin" || role === "owner";
   };
 
+  const handleOpenFormEditor = () => {
+    if (!repoId) {
+      console.error("شناسه مخزن وجود ندارد.");
+      return;
+    }
+    createLastVersionLink.mutate({
+      repoId,
+      documentId: document.id,
+      isDirectAccess:
+        pathname === "/admin/sharedDocuments" ||
+        (pathname === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId),
+      callBack: (lastVersion) => {
+        if (!lastVersion) {
+          toast.error("این سند فاقد آخرین نسخه است.");
+          return;
+        }
+        collaborateFrom.mutate({
+          repoId,
+          documentId: document!.id,
+          versionId: lastVersion!.id,
+          callBack: () => {
+            autoLogin.mutate({
+              callBack: (code) => {
+                const url = `${process.env.NEXT_PUBLIC_PODFORM_URL}/app/auto-login?form_Id=${lastVersion!.formId}&auto_login_code=${code}&embed=false`;
+                window.open(url);
+              },
+            });
+          },
+        });
+      },
+    });
+  };
+
   const restrictedRoles = [ERoles.writer, ERoles.viewer, ERoles.editor];
 
   const editSubMenuItems: MenuItem[] = [
@@ -94,6 +137,9 @@ const useDocumentMenuList = (
       "ویرایش محتوا",
       <EditContentIcon className="h-4 w-4" />,
       () => {
+        if (document.contentType === EDocumentTypes.form) {
+          return handleOpenFormEditor();
+        }
         setEditorMode("edit");
         setEditorModal(true);
         setVersionModalList(false);

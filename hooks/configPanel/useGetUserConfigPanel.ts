@@ -6,7 +6,7 @@ import { IUserConfigPanel } from "@interface/users.interface";
 
 const useGetUserConfigPanel = (repoId: number, ssoId?: number) => {
   return useQuery({
-    queryKey: [`getUserConfig-${ssoId}`, repoId],
+    queryKey: [`getUserConfig-ssoId${ssoId}-repoId-${repoId}`],
     queryFn: async () => {
       const response = await getUserConfigPanelAction(repoId, ssoId);
       handleClientSideHookError(response as IActionError);

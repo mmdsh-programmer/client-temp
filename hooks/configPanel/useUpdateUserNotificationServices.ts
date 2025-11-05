@@ -26,7 +26,7 @@ const useUpdateUserNotificationServices = () => {
     },
     onSuccess: (_, values) => {
       const { callBack, repoId, ssoId } = values;
-      queryClient.invalidateQueries({ queryKey: [`getUserConfig-${ssoId}`, repoId] });
+      queryClient.invalidateQueries({ queryKey: [`getUserConfig-${ssoId}-repoId-${repoId}`] });
       callBack?.();
     },
     onError: (error) => {
