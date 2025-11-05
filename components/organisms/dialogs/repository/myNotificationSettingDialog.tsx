@@ -116,7 +116,7 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
               className="label my-4 !text-error"
               {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
-              شما تنها مجاز به غیرفعالسازی اعلانات هستید. در صورت نیاز، لطفاً با مدیر یا مالک مخزن
+              شما تنها مجاز به غیرفعالسازی اعلانات هستید. در صورت نیاز به فعالسازی، لطفاً با مدیر یا مالک مخزن
               هماهنگ کنید.
             </Typography>
           ) : null}
