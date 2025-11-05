@@ -4,17 +4,15 @@ import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useBookmarkDocument from "@hooks/document/useBookmarkDocument";
 import { useForm } from "react-hook-form";
-import { useRepositoryStore } from "@store/repository";
 import { useDocumentStore } from "@store/document";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
+  const repoId = useRepoId();
   const document = useDocumentStore((state) => {
     return state.selectedDocument;
   });
@@ -30,10 +28,10 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async () => {
-    if (!getRepo || !document) return;
+    if (!repoId || !document) return;
     if (!document.isBookmarked) {
       bookmarkDocument.mutate({
-        repoId: getRepo.id,
+        repoId,
         documentId: document.id,
         categoryId: document.categoryId,
         callBack: () => {
@@ -43,7 +41,7 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
       });
     } else {
       bookmarkDocument.mutate({
-        repoId: getRepo.id,
+        repoId,
         documentId: document.id,
         categoryId: document.categoryId,
         detach: true,
@@ -66,7 +64,7 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
       <Typography
         placeholder=""
         className="text-center"
-        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
       >
         {document?.isBookmarked
           ? "آیا از حذف نشان‌گذاری این سند اطمینان دارید؟"
