@@ -23,6 +23,7 @@ import useSaveEditor from "@hooks/editor/useSaveEditor";
 import { getMe } from "@actions/auth";
 import axios from "axios";
 import { IServerResult } from "@interface/app.interface";
+import DOMPurify from "dompurify";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -158,8 +159,14 @@ const EditorFooter = ({ editorRef }: IProps) => {
     const userData = await getMe();
 
     let encryptedContent: string | null = null;
-    const content: string =
+
+    const dirtyContent: string =
       selectedDocument?.contentType === EDocumentTypes.classic ? data?.content : data;
+
+    const content =
+      selectedDocument?.contentType === EDocumentTypes.classic
+        ? DOMPurify.sanitize(dirtyContent)
+        : dirtyContent;
 
     if (selectedDocument?.publicKeyId) {
       encryptedContent = encryptData(content) as string;
@@ -206,9 +213,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
       } catch (error: any) {
         setIsLoading(false);
         if (error.code === "ECONNABORTED") {
-          toast.error(
-            "در ارتباط با سرور مشکلی پیش آمد. لطفا اتصال اینترنت خود را بررسی کنید.",
-          );
+          toast.error("در ارتباط با سرور مشکلی پیش آمد. لطفا اتصال اینترنت خود را بررسی کنید.");
         } else if (error.message === "Network Error") {
           toast.error("خطا در اتصال اینترنت. لطفا اینترنت خود را بررسی کنید.");
         } else {
