@@ -17,6 +17,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import RemoteEditorWithLoader from "./remoteEditorWithLoader";
+import DOMPurify from "dompurify";
 
 interface IProps {
   getEditorConfig: () => {
@@ -48,6 +49,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const setUserMetadataHook = useSetUserMetadata();
 
   const content = selectedDocument?.publicKeyId ? decryptedContent : version?.content || " ";
+  const cleanContent =
+    selectedDocument?.contentType === EDocumentTypes.classic
+      ? DOMPurify.sanitize(content || "")
+      : content;
 
   const handleChange = (value: { content: string; outline: string }) => {
     const { content: newContent, outline } = value;
@@ -85,7 +90,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     switch (selectedDocument?.contentType) {
       case EDocumentTypes.classic:
         return {
-          content: content || " ",
+          content: cleanContent || " ",
           outline: version?.outline || [],
           auth: {
             accessToken: userInfo?.access_token,

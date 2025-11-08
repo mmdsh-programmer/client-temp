@@ -35,7 +35,7 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
         documentId: document.id,
         categoryId: document.categoryId,
         callBack: () => {
-          toast.success("سند مورد نظر به نشان شده ها اضافه شد.");
+          toast.success("سند مورد نظر به نشان شده‌ها اضافه شد.");
           handleClose();
         },
       });
@@ -46,7 +46,7 @@ const DocumentBookmarkDialog = ({ setOpen }: IProps) => {
         categoryId: document.categoryId,
         detach: true,
         callBack: () => {
-          toast.success("سند مورد نظر از نشان شده ها حذف شد.");
+          toast.success("سند مورد نظر از نشان شده‌ها حذف شد.");
           handleClose();
         },
       });
