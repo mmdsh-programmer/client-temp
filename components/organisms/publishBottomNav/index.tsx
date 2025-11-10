@@ -55,16 +55,18 @@ const PublishBottomNav = () => {
         >
           <MoreLineIcon className="block h-6 w-6 stroke-white" />
         </Button>
-        <Button
-          {...({} as React.ComponentProps<typeof Button>)}
-          className="w-fit min-w-fit border-none p-3"
-          onClick={() => {
-            return setOpenPublishFilesDrawer(true);
-          }}
-          variant="outlined"
-        >
-          <AttachIcon className="block h-6 w-6 fill-white" />
-        </Button>
+        {getPublishVersion && userData ? (
+          <Button
+            {...({} as React.ComponentProps<typeof Button>)}
+            className="w-fit min-w-fit border-none p-3"
+            onClick={() => {
+              return setOpenPublishFilesDrawer(true);
+            }}
+            variant="outlined"
+          >
+            <AttachIcon className="block h-6 w-6 fill-white" />
+          </Button>
+        ) : null}
         <div className="h-5 w-[1px] bg-white bg-opacity-15" />
 
         {getPublishVersion && userData && getDomainInfo?.hasLikes ? (
