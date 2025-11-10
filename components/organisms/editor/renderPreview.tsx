@@ -4,15 +4,25 @@ import { IFile } from "cls-file-management";
 import useGetUser from "@hooks/auth/useGetUser";
 import ImageComponent from "@components/atoms/image";
 import FileLabel from "@components/atoms/fileLabel";
-import PdfPreview from "@components/molecules/PdfPreview";
 import VideoPlayer from "@components/atoms/videoPlayer";
 import AudioPlayer from "@components/atoms/audioPlayer";
 import FileIconAtom from "@components/atoms/fileIcon";
+import dynamic from "next/dynamic";
+
+const PdfPreview = dynamic(
+  () => {
+    return import("@components/molecules/PdfPreview");
+  },
+  {
+    ssr: false,
+    loading: () => {
+      return <p>در حال بارگذاری پیش‌نمایش...</p>;
+    },
+  },
+);
 
 interface IProps {
-  file:
-    | IFile
-    | { name: string; extension: string; hash: string; size?: number };
+  file: IFile | { name: string; extension: string; hash: string; size?: number };
   isPublic: boolean;
   displayLabel?: boolean;
 }
@@ -34,11 +44,9 @@ const RenderPreview = ({ file, isPublic, displayLabel = true }: IProps) => {
           <ImageComponent
             src={fileLink}
             alt={file.name}
-            className="object-contain !h-full !w-full"
+            className="!h-full !w-full object-contain"
           />
-          {displayLabel && (
-            <FileLabel name={file.name} extension={file.extension} />
-          )}
+          {displayLabel && <FileLabel name={file.name} extension={file.extension} />}
         </>
       );
     case "pdf":
@@ -46,27 +54,15 @@ const RenderPreview = ({ file, isPublic, displayLabel = true }: IProps) => {
     case "video":
       return (
         <>
-          <VideoPlayer
-            src={fileLink}
-            name={file.name}
-            extension={file.extension}
-          />
-          {displayLabel && (
-            <FileLabel name={file.name} extension={file.extension} />
-          )}
+          <VideoPlayer src={fileLink} name={file.name} extension={file.extension} />
+          {displayLabel && <FileLabel name={file.name} extension={file.extension} />}
         </>
       );
     case "audio":
       return (
         <>
-          <AudioPlayer
-            src={fileLink}
-            name={file.name}
-            extension={file.extension}
-          />
-          {displayLabel && (
-            <FileLabel name={file.name} extension={file.extension} />
-          )}
+          <AudioPlayer src={fileLink} name={file.name} extension={file.extension} />
+          {displayLabel && <FileLabel name={file.name} extension={file.extension} />}
         </>
       );
     default:
