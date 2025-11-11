@@ -186,7 +186,12 @@ const useVersionMenu = (
         <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
       ),
       createAction(version.status === "editing" ? "confirm" : "cancelConfirm"),
-      { className: version.status === "editing" ? "confirm-version" : "cancel-confirm-version" },
+      { 
+        className: version.status === "editing" ? "confirm-version" : "cancel-confirm-version",
+        disabled:
+          getDocument.contentType === EDocumentTypes.form ||
+          (isWriterOrViewer() && version.creator?.userName !== userInfo?.username),
+       },
     ),
     ...(version.status === EDraftStatus.pending && isAdminOrOwner()
       ? [
