@@ -489,7 +489,7 @@ export const getMySocialProfile = async (accessToken: string, expiresAt: number)
     },
   });
 
-  const redisClient = await global.RedisClientPromise;
+  const redisClient = await global.redisClient;
   const cacheData = await redisClient?.get(`user-social:${accessToken}`);
   if (cacheData) {
     const cacheResult = JSON.parse(cacheData);
@@ -531,7 +531,7 @@ export const editSocialProfile = async (
     }
   );
 
-  const redisClient = await global.RedisClientPromise;
+  const redisClient = await global.redisClient;
   await redisClient?.del(`user-social:${accessToken}`);
 
   if (response.data.hasError) {

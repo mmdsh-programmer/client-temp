@@ -18,7 +18,7 @@ export async function GET() {
       );
     }
     
-    const client = await global.client;
+    const client = await global.redisClient;
 
     const environment = {
       redisNode: process.env.REDIS_NODE,
