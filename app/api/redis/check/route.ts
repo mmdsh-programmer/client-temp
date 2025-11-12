@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const headersList = await headers();  
+    const headersList = await headers();
     const Authorization = headersList.get("Authorization");
     if (
       !Authorization ||
@@ -17,7 +17,7 @@ export async function GET() {
         { status: 401 }
       );
     }
-    
+
     const client = await global.redisClient;
 
     const environment = {
@@ -33,83 +33,92 @@ export async function GET() {
     }
 
     // Check if connection is alive
+    // These commands are key-based, so they work on both
+    // standalone and cluster clients.
     await client.set("ping", "pong");
     const ping = await client.get("ping");
-    
-    // Get basic server info
-    const serverInfo = await client.sendCommand(["INFO", "server"]);
-    const replicationInfo = await client.sendCommand(["INFO", "replication"]);
-    const statsInfo = await client.sendCommand(["INFO", "stats"]);
-    const memoryInfo = await client.sendCommand(["INFO", "memory"]);
-    
-    // Parse server info to determine Redis mode
-    const redisMode = serverInfo.match(/redis_mode:(\w+)/)?.[1] || "standalone";
-    
+
     let redisDetails: Record<string, unknown> = {
       status: "connected",
       ping,
-      mode: redisMode,
       environment,
     };
 
-    // Check if it's a cluster
+    // --- RESTRUCTURED LOGIC ---
+
     try {
+      // 1. FIRST, ATTEMPT A CLUSTER-ONLY COMMAND
       const clusterInfo = await client.sendCommand(["CLUSTER", "INFO"]);
-      if (clusterInfo) {
-        const clusterEnabled = clusterInfo.match(/cluster_state:(\w+)/)?.[1];
-        
-        if (clusterEnabled) {
-          // Get cluster nodes information
-          const clusterNodes = await client.sendCommand(["CLUSTER", "NODES"]);
-          const clusterSlots = await client.sendCommand(["CLUSTER", "SLOTS"]);
-          
-          // Parse cluster info
-          const clusterSize = clusterInfo.match(/cluster_size:(\d+)/)?.[1];
-          const clusterKnownNodes = clusterInfo.match(/cluster_known_nodes:(\d+)/)?.[1];
-          const clusterState = clusterInfo.match(/cluster_state:(\w+)/)?.[1];
-          
-          redisDetails = {
-            ...redisDetails,
-            type: "cluster",
-            cluster: {
-              state: clusterState,
-              size: clusterSize,
-              knownNodes: clusterKnownNodes,
-              info: clusterInfo,
-              nodes: clusterNodes,
-              slots: clusterSlots,
-            },
-          };
-        }
-      }
-    } catch (clusterError) {
-      // Not a cluster, it's a standalone or replica instance
       
+      // If the command succeeded, it's a cluster.
+      // Now we parse the cluster info.
+      const clusterState = clusterInfo.match(/cluster_state:(\w+)/)?.[1];
+
+      // Make sure cluster is actually enabled and healthy
+      if (clusterState === "ok") {
+        const clusterNodes = await client.sendCommand(["CLUSTER", "NODES"]);
+        const clusterSlots = await client.sendCommand(["CLUSTER", "SLOTS"]);
+
+        const clusterSize = clusterInfo.match(/cluster_size:(\d+)/)?.[1];
+        const clusterKnownNodes = clusterInfo.match(/cluster_known_nodes:(\d+)/)?.[1];
+
+        redisDetails = {
+          ...redisDetails,
+          mode: "cluster", // Added mode here
+          type: "cluster",
+          cluster: {
+            state: clusterState,
+            size: clusterSize,
+            knownNodes: clusterKnownNodes,
+            info: clusterInfo,
+            nodes: clusterNodes,
+            slots: clusterSlots,
+          },
+        };
+      } else {
+        // It's a single node with cluster-mode enabled but not bootstrapped.
+        // Throw an error to force it into the standalone logic path.
+        throw new Error("Node is in cluster mode but not part of a healthy cluster.");
+      }
+
+    } catch (clusterError) {
+      // 2. IF IT FAILS, IT'S A STANDALONE INSTANCE
+      // NOW it is safe to run INFO commands.
+      
+      const serverInfo = await client.sendCommand(["INFO", "server"]);
+      const replicationInfo = await client.sendCommand(["INFO", "replication"]);
+      const statsInfo = await client.sendCommand(["INFO", "stats"]);
+      const memoryInfo = await client.sendCommand(["INFO", "memory"]);
+
+      // Parse server info to determine Redis mode
+      const redisMode = serverInfo.match(/redis_mode:(\w+)/)?.[1] || "standalone";
+
       // Parse replication info
       const role = replicationInfo.match(/role:(\w+)/)?.[1] || "unknown";
       const connectedSlaves = replicationInfo.match(/connected_slaves:(\d+)/)?.[1] || "0";
       const masterHost = replicationInfo.match(/master_host:([^\r\n]+)/)?.[1];
       const masterPort = replicationInfo.match(/master_port:(\d+)/)?.[1];
       const masterLinkStatus = replicationInfo.match(/master_link_status:(\w+)/)?.[1];
-      
+
       // Parse server info
       const redisVersion = serverInfo.match(/redis_version:([^\r\n]+)/)?.[1];
       const os = serverInfo.match(/os:([^\r\n]+)/)?.[1];
       const arch = serverInfo.match(/arch_bits:(\d+)/)?.[1];
       const uptimeInSeconds = serverInfo.match(/uptime_in_seconds:(\d+)/)?.[1];
-      
+
       // Parse memory info
       const usedMemory = memoryInfo.match(/used_memory_human:([^\r\n]+)/)?.[1];
       const usedMemoryPeak = memoryInfo.match(/used_memory_peak_human:([^\r\n]+)/)?.[1];
       const maxMemory = memoryInfo.match(/maxmemory_human:([^\r\n]+)/)?.[1];
-      
+
       // Parse stats info
       const totalConnectionsReceived = statsInfo.match(/total_connections_received:(\d+)/)?.[1];
       const totalCommandsProcessed = statsInfo.match(/total_commands_processed:(\d+)/)?.[1];
       const opsPerSec = statsInfo.match(/instantaneous_ops_per_sec:(\d+)/)?.[1];
-      
+
       redisDetails = {
         ...redisDetails,
+        mode: redisMode, // Added mode here
         type: role === "master" ? "standalone-master" : "standalone-replica",
         server: {
           version: redisVersion,
@@ -142,6 +151,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ data: redisDetails });
+
   } catch (error) {
     console.error("Redis GET Error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
