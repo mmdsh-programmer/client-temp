@@ -56,7 +56,7 @@ const VersionDialogView = () => {
           setOpenDrawer={setVersionDrawer}
           menuList={drawerMenuList}
         />
-        <VersionDialogs activeModal={activeModal} closeModal={closeModal} />{" "}
+        <VersionDialogs activeModal={activeModal} closeModal={closeModal} />
       </div>
     </InfoDialog>
   );

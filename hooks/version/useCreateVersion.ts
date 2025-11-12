@@ -23,11 +23,20 @@ const useCreateVersion = () => {
       content: string;
       outline: string;
       isDirectAccess?: boolean;
+      username?: string;
       onSuccessHandler?: () => void;
       onErrorHandler?: () => void;
     }) => {
-      const { accessToken, repoId, documentId, versionNumber, content, outline, isDirectAccess } =
-        values;
+      const {
+        accessToken,
+        repoId,
+        documentId,
+        versionNumber,
+        content,
+        outline,
+        isDirectAccess,
+        username,
+      } = values;
       if (!accessToken) {
         const response = await createVersionAction(
           repoId,
@@ -58,7 +67,7 @@ const useCreateVersion = () => {
       return response.data.data;
     },
     onSuccess: async (response, values) => {
-      const { onSuccessHandler, repoId, documentId } = values;
+      const { onSuccessHandler, repoId, documentId, username } = values;
       const queryKey = [`version-list-${repoId}-${documentId}`];
       const cachedData = await queryClient.getQueriesData({ queryKey });
       const cachePages = cachedData?.[0]?.[1] as {
@@ -76,6 +85,7 @@ const useCreateVersion = () => {
           state: "draft",
           status: "editing",
           newOne: true,
+          creator: { userName: username },
         };
 
         const newData = {

@@ -49,10 +49,6 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
   const setUserMetadataHook = useSetUserMetadata();
 
   const content = selectedDocument?.publicKeyId ? decryptedContent : version?.content || " ";
-  const cleanContent =
-    selectedDocument?.contentType === EDocumentTypes.classic
-      ? DOMPurify.sanitize(content || "")
-      : content;
 
   const handleChange = (value: { content: string; outline: string }) => {
     const { content: newContent, outline } = value;
@@ -90,7 +86,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     switch (selectedDocument?.contentType) {
       case EDocumentTypes.classic:
         return {
-          content: cleanContent || " ",
+          content: content || " ",
           outline: version?.outline || [],
           auth: {
             accessToken: userInfo?.access_token,

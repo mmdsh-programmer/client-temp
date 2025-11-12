@@ -205,7 +205,7 @@ export default async function PublishContentPage({
         </div>
       );
     } catch (error) {
-      if (error instanceof BasicError && error.errorCode === 400) {
+      if (error instanceof BasicError && (error.errorCode === 400 || error.errorCode === 422)) {
         return (
           <PublishDocumentPassword
             documentPassword={documentPassword || undefined}

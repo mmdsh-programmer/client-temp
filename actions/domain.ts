@@ -256,7 +256,6 @@ export const getDomainDocumentsAction = async (
   size: number,
 ) => {
   try {
-    const userInfo = await getMe();
     const domain = await getDomainHost();
 
     if (!domain) {
@@ -265,7 +264,6 @@ export const getDomainDocumentsAction = async (
 
     const response = await getDomainDocuments(
       domain,
-      userInfo.access_token,
       repoId,
       title,
       tagIds,
@@ -295,7 +293,6 @@ export const getDomainVersionsAction = async (
   size: number,
 ) => {
   try {
-    const userInfo = await getMe();
     const domain = await getDomainHost();
 
     if (!domain) {
@@ -304,7 +301,6 @@ export const getDomainVersionsAction = async (
 
     const response = await getDomainVersions(
       domain,
-      userInfo.access_token,
       repoId,
       docId,
       title,

@@ -2,10 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export const saveDocumentPasswordInCookieAction = async (
-  documentId: number,
-  password: string
-) => {
+export const saveDocumentPasswordInCookieAction = async (documentId: number, password: string) => {
   const { SECURE } = process.env;
   (await cookies()).set(`document-${documentId}-password`, password, {
     httpOnly: true,
@@ -16,8 +13,11 @@ export const saveDocumentPasswordInCookieAction = async (
   });
 };
 
-export const removeAllCookiesAction = async () => {
-  for (const cookie of (await cookies()).getAll()) {
-    (await cookies()).delete(cookie.name);
+export const removeDocumentPasswordCookiesAction = async (documentId: number) => {
+  const cookieStore = await cookies();
+  const cookie = cookieStore.get(`document-${documentId}-password`);
+  if (cookie) {
+    cookieStore.delete(`document-${documentId}-password`);
   }
 };
+

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
 import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import { Typography } from "@material-tailwind/react";
@@ -10,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import useSetPublishDocumentPassword from "@hooks/publish/useSetPublishDocumentPassword";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import useRemoveDocumentPasswordCookies from "@hooks/auth/useRemoveAllCookies";
 
 interface IProps {
   documentId: number;
@@ -31,6 +32,7 @@ const PublishDocumentPassword = ({ documentId, documentPassword, errorMessage }:
   const { errors } = formState;
 
   const saveDocumentPasswordHook = useSetPublishDocumentPassword();
+  const deleteDocumentPasswordHook = useRemoveDocumentPasswordCookies(documentId);
 
   const onSubmit = (dataForm: IDataForm) => {
     setLoading(true);
@@ -49,7 +51,12 @@ const PublishDocumentPassword = ({ documentId, documentPassword, errorMessage }:
   useEffect(() => {
     if (errorMessage) {
       reset({ password: documentPassword });
-      setError("password", { message: errorMessage });
+      toast.error(errorMessage);
+      deleteDocumentPasswordHook.mutate({
+        callBack: () => {
+          setLoading(false);
+        },
+      });
     }
     return () => {
       setLoading(false);

@@ -1,12 +1,12 @@
+import { removeDocumentPasswordCookiesAction } from "@actions/cookies";
 import { useMutation } from "@tanstack/react-query";
-import { removeAllCookiesAction } from "@actions/cookies";
 
-const useRemoveAllCookies = () => {
+const useRemoveDocumentPasswordCookies = (documentId: number) => {
   return useMutation({
-    mutationKey: ["remove-all-cookies"],
+    mutationKey: [`remove-document-${documentId}-password`],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mutationFn: async (values: { callBack?: () => void }) => {
-      await removeAllCookiesAction();
+      await removeDocumentPasswordCookiesAction(documentId);
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
@@ -15,4 +15,4 @@ const useRemoveAllCookies = () => {
   });
 };
 
-export default useRemoveAllCookies;
+export default useRemoveDocumentPasswordCookies;
