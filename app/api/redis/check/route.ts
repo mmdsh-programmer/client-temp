@@ -33,7 +33,8 @@ export async function GET() {
     }
 
     // Check if connection is alive
-    const pong = await client.ping();
+    await client.set("ping", "pong");
+    const ping = await client.get("ping");
     
     // Get basic server info
     const serverInfo = await client.info("server");
@@ -46,7 +47,7 @@ export async function GET() {
     
     let redisDetails: Record<string, unknown> = {
       status: "connected",
-      ping: pong,
+      ping,
       mode: redisMode,
       environment,
     };
