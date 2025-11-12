@@ -44,74 +44,69 @@ export async function GET() {
       environment,
     };
 
-    // --- RESTRUCTURED LOGIC ---
-
-    try {
-      // 1. FIRST, ATTEMPT A CLUSTER-ONLY COMMAND
-      const clusterInfo = await client.sendCommand(["CLUSTER", "INFO"]);
+    if (typeof client.getMasters === "function") {
+      // --- CLUSTER CLIENT LOGIC ---
       
-      // If the command succeeded, it's a cluster.
-      // Now we parse the cluster info.
-      const clusterState = clusterInfo.match(/cluster_state:(\w+)/)?.[1];
-
-      // Make sure cluster is actually enabled and healthy
-      if (clusterState === "ok") {
-        const clusterNodes = await client.sendCommand(["CLUSTER", "NODES"]);
-        const clusterSlots = await client.sendCommand(["CLUSTER", "SLOTS"]);
-
-        const clusterSize = clusterInfo.match(/cluster_size:(\d+)/)?.[1];
-        const clusterKnownNodes = clusterInfo.match(/cluster_known_nodes:(\d+)/)?.[1];
-
-        redisDetails = {
-          ...redisDetails,
-          mode: "cluster", // Added mode here
-          type: "cluster",
-          cluster: {
-            state: clusterState,
-            size: clusterSize,
-            knownNodes: clusterKnownNodes,
-            info: clusterInfo,
-            nodes: clusterNodes,
-            slots: clusterSlots,
-          },
-        };
-      } else {
-        // It's a single node with cluster-mode enabled but not bootstrapped.
-        // Throw an error to force it into the standalone logic path.
-        throw new Error("Node is in cluster mode but not part of a healthy cluster.");
+      // Get the list of master nodes
+      const masters = client.getMasters();
+      if (!masters || masters.length === 0) {
+        throw new Error("Redis cluster client is connected but has no master nodes.");
       }
 
-    } catch (clusterError) {
-      // 2. IF IT FAILS, IT'S A STANDALONE INSTANCE
-      // NOW it is safe to run INFO commands.
+      // Pick one master node to run admin commands on.
+      // We must use its underlying .client object.
+      const adminClient = masters[0].client;
+
+      // Now, run admin commands on that specific node's client
+      const clusterInfo = await adminClient.sendCommand(["CLUSTER", "INFO"]);
+      const clusterNodes = await adminClient.sendCommand(["CLUSTER", "NODES"]);
+      const clusterSlots = await adminClient.sendCommand(["CLUSTER", "SLOTS"]);
       
+      // Parse cluster info
+      const clusterState = clusterInfo.match(/cluster_state:(\w+)/)?.[1];
+      const clusterSize = clusterInfo.match(/cluster_size:(\d+)/)?.[1];
+      const clusterKnownNodes = clusterInfo.match(/cluster_known_nodes:(\d+)/)?.[1];
+
+      redisDetails = {
+        ...redisDetails,
+        mode: "cluster",
+        type: "cluster",
+        cluster: {
+          state: clusterState,
+          size: clusterSize,
+          knownNodes: clusterKnownNodes,
+          info: clusterInfo.toString(), // Convert buffer to string if needed
+          nodes: clusterNodes.toString(),
+          slots: clusterSlots.toString(),
+        },
+      };
+
+    } else {
+      // --- STANDALONE CLIENT LOGIC ---
+      
+      // It's a standard client, so we can safely run INFO commands
       const serverInfo = await client.sendCommand(["INFO", "server"]);
       const replicationInfo = await client.sendCommand(["INFO", "replication"]);
       const statsInfo = await client.sendCommand(["INFO", "stats"]);
       const memoryInfo = await client.sendCommand(["INFO", "memory"]);
 
-      // Parse server info to determine Redis mode
+      // (Your original parsing logic for standalone is perfect)
       const redisMode = serverInfo.match(/redis_mode:(\w+)/)?.[1] || "standalone";
-
-      // Parse replication info
       const role = replicationInfo.match(/role:(\w+)/)?.[1] || "unknown";
+      // ... (rest of your parsing logic) ...
+
+      // (Pasting the rest of your parsing for completeness)
       const connectedSlaves = replicationInfo.match(/connected_slaves:(\d+)/)?.[1] || "0";
       const masterHost = replicationInfo.match(/master_host:([^\r\n]+)/)?.[1];
       const masterPort = replicationInfo.match(/master_port:(\d+)/)?.[1];
       const masterLinkStatus = replicationInfo.match(/master_link_status:(\w+)/)?.[1];
-
-      // Parse server info
       const redisVersion = serverInfo.match(/redis_version:([^\r\n]+)/)?.[1];
       const os = serverInfo.match(/os:([^\r\n]+)/)?.[1];
       const arch = serverInfo.match(/arch_bits:(\d+)/)?.[1];
       const uptimeInSeconds = serverInfo.match(/uptime_in_seconds:(\d+)/)?.[1];
-
-      // Parse memory info
       const usedMemory = memoryInfo.match(/used_memory_human:([^\r\n]+)/)?.[1];
       const usedMemoryPeak = memoryInfo.match(/used_memory_peak_human:([^\r\n]+)/)?.[1];
       const maxMemory = memoryInfo.match(/maxmemory_human:([^\r\n]+)/)?.[1];
-
-      // Parse stats info
       const totalConnectionsReceived = statsInfo.match(/total_connections_received:(\d+)/)?.[1];
       const totalCommandsProcessed = statsInfo.match(/total_commands_processed:(\d+)/)?.[1];
       const opsPerSec = statsInfo.match(/instantaneous_ops_per_sec:(\d+)/)?.[1];
