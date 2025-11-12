@@ -18,11 +18,16 @@ export async function GET() {
       );
     }
     
-    const client = await global.redisClientPromise;
+    const client = await global.client;
 
+    const environment = {
+      redisNode: process.env.REDIS_NODE,
+      redisUser: process.env.REDIS_USER,
+      redisPass: process.env.REDIS_PASS,
+    };
     if (!client) {
       return NextResponse.json(
-        { error: "Redis is not connected" },
+        { error: "Redis is not connected", environment },
         { status: 500 }
       );
     }
@@ -43,11 +48,7 @@ export async function GET() {
       status: "connected",
       ping: pong,
       mode: redisMode,
-      environment: {
-        redisNode: process.env.REDIS_NODE,
-        redisUser: process.env.REDIS_USER,
-        redisPass: process.env.REDIS_PASS ? "***" : undefined,
-      },
+      environment,
     };
 
     // Check if it's a cluster
