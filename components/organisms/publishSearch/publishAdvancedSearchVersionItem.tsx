@@ -25,14 +25,18 @@ const PublishAdvancedSearchVersionItem = ({ resultItem, disabled, setDisableItem
 
     createLink.mutate({
       repoId: resultItem.repoId,
-      documentId: resultItem.id,
+      documentId: resultItem.documentId,
       callBack: (res) => {
         const url = toPersianDigit(
-          `/${removeSpecialCharacters(res.repoName)}/${resultItem.repoId}/${removeSpecialCharacters(resultItem.number)}/${resultItem.id}`,
+          `/${removeSpecialCharacters(res.repoName)}/${resultItem.repoId}/${removeSpecialCharacters(res.name)}/${res.id}/${removeSpecialCharacters(resultItem.number)}/v-${resultItem.id}`,
         );
         const redirectLink = `${window.location.origin}/publish/${url}`;
 
         router.replace(redirectLink);
+        setOpenSearch(false);
+        setDisableItems?.(false);
+      },
+      errorCallback: () => {
         setDisableItems?.(false);
       },
     });
@@ -41,11 +45,11 @@ const PublishAdvancedSearchVersionItem = ({ resultItem, disabled, setDisableItem
   return (
     <ListItem
       onClick={handleResultItemClick}
-      className="flex min-h-8 gap-1 py-0 px-3"
+      className="flex min-h-8 gap-1 px-3 py-0"
       disabled={disabled}
       {...({} as React.ComponentProps<typeof ListItem>)}
     >
-      <div className="max-w-[90%] flex items-center gap-2">
+      <div className="flex max-w-[90%] items-center gap-2">
         <div
           className="label flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
           title={resultItem.number}

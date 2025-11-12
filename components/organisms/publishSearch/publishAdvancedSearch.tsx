@@ -157,7 +157,7 @@ const PublishAdvancedSearch = () => {
                 {...register("creatorName")}
               />
             </div>
-            {userInfo?.domainConfig.useDomainTag ? (
+            {userInfo && userInfo.domainConfig.useDomainTag ? (
               <div className="flex flex-grow flex-col gap-1">
                 <Typography
                   {...({} as React.ComponentProps<typeof Typography>)}

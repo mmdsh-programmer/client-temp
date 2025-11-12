@@ -27,9 +27,9 @@ const PublishVersionContent = async ({ version, document }: IProps) => {
       : version;
 
   const cleanVersion =
-    version.contentType === EDocumentTypes.classic
-      ? { ...version, content: versionForRender }
-      : version;
+  version.contentType === EDocumentTypes.classic
+    ? { ...version, content: versionForRender }
+    :version;
 
   return (
     <>
