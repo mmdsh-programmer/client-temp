@@ -20,7 +20,7 @@ export async function GET() {
     
     const client = await global.redisClientPromise;
 
-    if (!client || !client.isReady) {
+    if (!client) {
       return NextResponse.json(
         { error: "Redis is not connected" },
         { status: 500 }
