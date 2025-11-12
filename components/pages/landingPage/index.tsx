@@ -1,6 +1,6 @@
 import ClientSideProvider from "provider/clientSideProvider";
 import LandingAdvantages from "@components/molecules/landingAdvantages";
-import LandingAttributeWrapper from "@components/organisms/@landingAttributeWrapper";
+import LandingAttributeWrapper from "@components/organisms/landingAttributeWrapper";
 import LandingFooter from "@components/molecules/landingFooter";
 import LandingHero from "../../molecules/landingHero";
 import LandingSupporters from "@components/molecules/landingSupporters";

@@ -4,7 +4,7 @@ import RepoAddUser from "@components/organisms/dialogs/repository/repoCreateDial
 import RepoCreate from "./repoCreate";
 import RepoImage from "@components/organisms/dialogs/repository/repoCreateDialogStepper/repoImage";
 import StepperDialog from "@components/templates/dialog/stepperDialog";
-import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/@tags";
+import Tags from "@components/organisms/dialogs/repository/repoCreateDialogStepper/tags";
 import { useRepoStepperStore } from "@store/stepper";
 import { useRepositoryStore } from "@store/repository";
 
