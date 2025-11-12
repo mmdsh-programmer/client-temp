@@ -37,10 +37,10 @@ export async function GET() {
     const ping = await client.get("ping");
     
     // Get basic server info
-    const serverInfo = await client.info("server");
-    const replicationInfo = await client.info("replication");
-    const statsInfo = await client.info("stats");
-    const memoryInfo = await client.info("memory");
+    const serverInfo = await client.sendCommand(["INFO", "server"]);
+    const replicationInfo = await client.sendCommand(["INFO", "replication"]);
+    const statsInfo = await client.sendCommand(["INFO", "stats"]);
+    const memoryInfo = await client.sendCommand(["INFO", "memory"]);
     
     // Parse server info to determine Redis mode
     const redisMode = serverInfo.match(/redis_mode:(\w+)/)?.[1] || "standalone";
