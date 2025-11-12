@@ -4893,7 +4893,6 @@ export const updateCustomPostByDomain = async (
 
 export const getDomainDocuments = async (
   domainUrl: string,
-  accessToken: string,
   repoId: number | undefined,
   title: string,
   tagIds: number | number[] | undefined,
@@ -4924,7 +4923,6 @@ export const getDomainDocuments = async (
       "/domain/report/documents",
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
         params: {
@@ -4947,7 +4945,6 @@ export const getDomainDocuments = async (
 
 export const getDomainVersions = async (
   domainUrl: string,
-  accessToken: string,
   repoId: number | undefined,
   docId: number | undefined,
   title: string,
@@ -4981,7 +4978,6 @@ export const getDomainVersions = async (
       "/domain/report/versions",
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
           domainUrl,
         },
         params: {

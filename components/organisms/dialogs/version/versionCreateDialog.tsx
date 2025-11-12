@@ -96,6 +96,7 @@ const VersionCreateDialog = ({ close }: IProps) => {
           (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
             ? true
             : undefined,
+        username: userInfo?.username,
         onSuccessHandler: () => {
           toast.success(" نسخه با موفقیت ایجاد شد.");
           handleClose();

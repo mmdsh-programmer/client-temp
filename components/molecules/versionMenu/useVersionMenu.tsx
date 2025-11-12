@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
-import { EDocumentTypes, EDraftStatus, EVersionStatus } from "@interface/enums";
+import { EDocumentTypes, EDraftStatus, ERoles, EVersionStatus } from "@interface/enums";
 import { useEditorStore } from "@store/editor";
 import { useRepositoryStore } from "@store/repository";
 import { useDocumentStore } from "@store/document";
@@ -65,7 +65,7 @@ const useRoles = () => {
     )
       return ["viewer", "writer"].includes(getDocument?.accesses?.[0] ?? "");
 
-    return ["viewer", "writer"].includes(getRepo?.roleName ?? "");
+    return getRepo?.roleName === ERoles.viewer || getRepo?.roleName === ERoles.writer;
   };
 
   return { isAdminOrOwner, isWriterOrViewer };
@@ -131,12 +131,13 @@ const useVersionMenu = (
       () => {
         if (getDocument.contentType === EDocumentTypes.form) {
           handleOpenFormEditor();
+        } else {
+          setSelectedVersion(version);
+          setEditorMode("edit");
+          setEditorModal(true);
+          setVersionModalList(false);
+          setVersionData(null);
         }
-        setSelectedVersion(version);
-        setEditorMode("edit");
-        setEditorModal(true);
-        setVersionModalList(false);
-        setVersionData(null);
       },
       {
         className: "edit-version",

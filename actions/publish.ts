@@ -7,6 +7,7 @@ import {
   deletePublishLink,
   getAllPublishChildren,
   getPublishChildren,
+  getPublishDocumentInfo,
   getPublishDocumentLastVersion,
   getPublishDocumentVersions,
   searchPublishContent,
@@ -183,6 +184,16 @@ export const getPublishDocumentLastVersionAction = async (
       password,
       userInfo.access_token,
     );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishDocumentInfoAction = async (repoId: number, documentId: number) => {
+  try {
+    const response = await getPublishDocumentInfo(repoId, documentId);
 
     return response;
   } catch (error) {

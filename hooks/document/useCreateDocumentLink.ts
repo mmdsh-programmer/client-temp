@@ -1,9 +1,9 @@
-import { getDocumentAction } from "@actions/document";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { IDocumentMetadata } from "@interface/document.interface";
+import { getPublishDocumentInfoAction } from "@actions/publish";
 
 const useCreateDocumentLink = () => {
   return useMutation({
@@ -15,7 +15,7 @@ const useCreateDocumentLink = () => {
       errorCallback?: () => void;
     }) => {
       const { repoId, documentId } = values;
-      const response = await getDocumentAction(repoId, documentId);
+      const response = await getPublishDocumentInfoAction(repoId, documentId);
       handleClientSideHookError(response as IActionError);
       return response as IDocumentMetadata;
     },

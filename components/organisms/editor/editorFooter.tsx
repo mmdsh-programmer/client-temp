@@ -23,7 +23,6 @@ import useSaveEditor from "@hooks/editor/useSaveEditor";
 import { getMe } from "@actions/auth";
 import axios from "axios";
 import { IServerResult } from "@interface/app.interface";
-import DOMPurify from "dompurify";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
@@ -163,10 +162,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
     const dirtyContent: string =
       selectedDocument?.contentType === EDocumentTypes.classic ? data?.content : data;
 
-    const content =
-      selectedDocument?.contentType === EDocumentTypes.classic
-        ? DOMPurify.sanitize(dirtyContent)
-        : dirtyContent;
+    const content = dirtyContent;
 
     if (selectedDocument?.publicKeyId) {
       encryptedContent = encryptData(content) as string;
