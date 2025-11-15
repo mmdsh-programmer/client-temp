@@ -4,7 +4,7 @@ import { UserIcon, XIcon } from "@components/atoms/icons";
 import { Spinner } from "@components/atoms/spinner";
 import ChipMolecule from "@components/molecules/chip";
 import ImageComponent from "@components/atoms/image";
-import React from "react";
+import React, { Fragment } from "react";
 import { useCategoryStore } from "@store/category";
 import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
@@ -82,7 +82,9 @@ const CategoryBlockList = () => {
                   );
                 })
               ) : (
-                <EmptyList type={EEmptyList.BLOCKLIST} />
+                <Fragment key={page.offset}>
+                  <EmptyList type={EEmptyList.BLOCKLIST} />
+                </Fragment>
               );
             })}
           </div>

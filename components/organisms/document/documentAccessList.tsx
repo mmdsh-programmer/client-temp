@@ -1,6 +1,6 @@
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
 import ChipMolecule from "@components/molecules/chip";
 import { IResourceUser } from "@interface/access.interface";
@@ -18,7 +18,7 @@ const DocumentAccessList = () => {
     return state.selectedDocument;
   });
 
-  const { data: getAccessList, isFetching, isLoading } = useGetResourceUsers(document!.id, 30);
+  const { data: getAccessList, isFetching, isLoading, error } = useGetResourceUsers(document!.id, 30);
 
   const deleteAccess = useDeleteAccessOfResource();
 
@@ -36,9 +36,13 @@ const DocumentAccessList = () => {
     });
   };
 
+  useEffect(() => {
+    if(error){
+       toast.error(error?.message ?? "خطا در دریافت لیست دسترسی");
+    }
+  }, [error]);
+
   return (
-    <>
-      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary">لیست کاربران مجاز در سند</Typography>
       <div className="flex w-full flex-col">
         {isLoading || isFetching ? (
           <div className="flex w-full items-center justify-center">
@@ -87,13 +91,14 @@ const DocumentAccessList = () => {
                   );
                 })
               ) : (
-                <EmptyList type={EEmptyList.ACCESS_LIST} />
+                <Fragment key={page.offset}>
+                  <EmptyList type={EEmptyList.ACCESS_LIST} />
+                </Fragment>
               );
             })}
           </div>
         )}
       </div>
-    </>
   );
 };
 
