@@ -40,6 +40,7 @@ export enum EEmptyList {
   SHARED_DOCUMENTS = "shared_documents",
   ATTACHMENT = "attachment",
   FORM_OUTPUT = "form_output",
+  VERSION_HISTORY = "version_history",
 }
 
 interface IProps {
@@ -482,6 +483,18 @@ const EmptyList = ({ type }: IProps) => {
               {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               هنوز هیچ پاسخی برای این فرم ثبت نشده است.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.VERSION_HISTORY:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+             تا این لحظه هیچ ویرایشی برای این نسخه انجام نشده است.
             </Typography>
           </div>
         );

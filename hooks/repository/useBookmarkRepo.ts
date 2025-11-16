@@ -23,7 +23,6 @@ const useBookmarkRepo = () => {
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
-      queryClient.invalidateQueries({ queryKey: [`getRepo-${repoId}`], });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"], });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"], });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"], });

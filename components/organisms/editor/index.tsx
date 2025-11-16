@@ -17,7 +17,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import RemoteEditorWithLoader from "./remoteEditorWithLoader";
-import DOMPurify from "dompurify";
+import VersionInfoDialog from "../reversion/versionInfoDialog";
 
 interface IProps {
   getEditorConfig: () => {
@@ -42,6 +42,8 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
     editorMode,
     editorDecryptedContent: decryptedContent,
     editorListDrawer: listDrawer,
+    versionInfoDialog,
+    setVersionInfoDialog,
   } = useEditorStore();
 
   const repoId = useRepoId();
@@ -160,6 +162,13 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       </div>
       {openTemplateDialog ? (
         <TemplateContentDialog setOpen={setOpenTemplateDialog} editorRef={getEditorConfig().ref} />
+      ) : null}
+      {versionInfoDialog ? (
+        <VersionInfoDialog
+          setOpen={() => {
+            return setVersionInfoDialog(false);
+          }}
+        />
       ) : null}
     </div>
   );

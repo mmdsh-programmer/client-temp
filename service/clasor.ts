@@ -14,10 +14,13 @@ import { IAccessRequest, IAccessRequestResponse } from "@interface/accessRequest
 import {
   IAddVersion,
   IComment,
+  IContentVersion,
+  IContentVersionData,
   IFileVersion,
   IFormVersionResponseList,
   ILikeList,
   IVersion,
+  IVersionsSummary,
 } from "@interface/version.interface";
 import { IBranchList, IBranchUserList } from "@interface/branch.interface";
 import { ICategory, ICategoryMetadata } from "@interface/category.interface";
@@ -2756,6 +2759,116 @@ export const getResponseListFormVersion = async (
           offset,
           size,
         },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getVersionHistory = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  transaction?: boolean,
+) => {
+  try {
+  
+    const response = await axiosClasorInstance.get<IServerResult<IContentVersionData>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/history`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          transaction,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getVersionSummary = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  transaction?: boolean,
+) => {
+  try {
+  
+    const response = await axiosClasorInstance.get<IServerResult<IVersionsSummary>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/summary`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          transaction,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getVersionInfo = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionIndex: number,
+  transaction?: boolean,
+) => {
+  try {
+  
+    const response = await axiosClasorInstance.get<IServerResult<IContentVersion>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/${versionIndex}/info`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          transaction,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const revertVersion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionIndex: number,
+  transaction?: boolean,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<IServerResult<any>>(
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/${versionIndex}/revert`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params:{
+          transaction
+        }
       },
     );
 

@@ -17,6 +17,10 @@ export const useEditorStore = create<{
   setEditorPublicKey: (key: string | null) => void;
   postId: number | null;
   setPostId: (id: number | null) => void;
+  versionInfoDialog: boolean;
+  setVersionInfoDialog: (open: boolean) => void;
+  versionIndex: number | null;
+  setVersionIndex: (id: number | null) => void;
 }>((set) => {
   return {
     editorModal: false,
@@ -46,6 +50,14 @@ export const useEditorStore = create<{
     postId: null,
     setPostId: (id) => {
       return set({ postId: id });
+    },
+    versionInfoDialog: false,
+    setVersionInfoDialog: (open) => {
+      return set({ versionInfoDialog: open });
+    },
+    versionIndex: null,
+    setVersionIndex: (id) => {
+      return set({ versionIndex: id });
     },
   };
 });
