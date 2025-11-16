@@ -23,12 +23,15 @@ import useSaveEditor from "@hooks/editor/useSaveEditor";
 import { getMe } from "@actions/auth";
 import axios from "axios";
 import { IServerResult } from "@interface/app.interface";
+import { useQueryClient } from "@tanstack/react-query";
 
 export interface IProps {
   editorRef: React.RefObject<IRemoteEditorRef>;
 }
 
 const EditorFooter = ({ editorRef }: IProps) => {
+  const queryClient = useQueryClient();
+
   const { repo: getRepo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
   const {
@@ -205,6 +208,9 @@ const EditorFooter = ({ editorRef }: IProps) => {
           setVersionData(item);
           setVersion(item);
         }
+        queryClient.invalidateQueries({
+          queryKey: [`document-${selectedDocument.id}-version-${getVersionData.id}-history`],
+        });
         return response.data;
       } catch (error: any) {
         setIsLoading(false);

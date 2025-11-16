@@ -25,6 +25,7 @@ const UserTransferOwnershipDialog = () => {
           ...getRepo,
           roleName: ERoles.admin,
         });
+        handleClose();
         toast.success("انتقال مالکیت با موفقیت انجام شد.");
       },
     });

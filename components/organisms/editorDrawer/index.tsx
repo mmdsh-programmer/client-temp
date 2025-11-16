@@ -10,6 +10,7 @@ import TabComponent from "@components/molecules/tab";
 import DocumentEnableUserGroup from "./documentEnableUserGroup";
 import { useEditorStore } from "@store/editor";
 import { useDocumentStore } from "@store/document";
+import VersionHistoryList from "../reversion/versionHistoryList";
 // import ChatBox from "../chatBox";
 
 export enum ETabs {
@@ -17,6 +18,7 @@ export enum ETabs {
   TAGS = "تگ‌ها",
   ATTACH_FILE = "پیوست",
   COMMENTS = "نظرات",
+  REVERSION = "تاریخچه",
 }
 
 interface IProps {
@@ -32,19 +34,28 @@ const EditorDrawer = ({ version }: IProps) => {
     getDocument?.contentType === EDocumentTypes.classic
       ? {
           tabTitle: ETabs.TAGS,
-          tabContent: <EditorTags />,
+          tabContent: activeTab === ETabs.TAGS ? <EditorTags /> : null,
         }
       : null,
     getDocument?.contentType === EDocumentTypes.classic && getDocument.attachmentUserGroup
       ? {
           tabTitle: ETabs.ATTACH_FILE,
-          tabContent: <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />,
+          tabContent:
+            activeTab === ETabs.ATTACH_FILE ? (
+              <AttachFile attachmentUserGroup={getDocument.attachmentUserGroup} />
+            ) : null,
         }
       : null,
     version?.state !== "draft" && version?.status === "accepted" && editorMode === "preview"
       ? {
           tabTitle: ETabs.COMMENTS,
-          tabContent: <Comments version={version} />,
+          tabContent: activeTab === ETabs.COMMENTS ? <Comments version={version} /> : null,
+        }
+      : null,
+    getDocument?.contentType === EDocumentTypes.classic && version?.state === "draft"
+      ? {
+          tabTitle: ETabs.REVERSION,
+          tabContent: activeTab === ETabs.REVERSION ? <VersionHistoryList /> : null,
         }
       : null,
     // {

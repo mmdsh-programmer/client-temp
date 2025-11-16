@@ -12,7 +12,11 @@ import {
   getFormVersionExport,
   getLastVersion,
   getVersion,
+  getVersionHistory,
+  getVersionInfo,
+  getVersionSummary,
   publicVersion,
+  revertVersion,
   setLastVersion,
 } from "@service/clasor";
 import { IActionError } from "@interface/app.interface";
@@ -264,6 +268,100 @@ export const cancelConfirmVersionAction = async (
       documentId,
       versionId,
       isDirectAccess,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getVersionHistoryAction = async (
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  transaction?: boolean,
+  isDirectAccess?: boolean,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getVersionHistory(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId,
+      transaction,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getVersionSummaryAction = async (
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  transaction?: boolean,
+  isDirectAccess?: boolean,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getVersionSummary(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId,
+      transaction,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getVersionInfoAction = async (
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionIndex: number,
+  transaction?: boolean,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getVersionInfo(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId,
+      versionIndex,
+      transaction,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const revertVersionAction = async (
+  repoId: number,
+  documentId: number,
+  versionId: number,
+  versionIndex: number,
+  transaction?: boolean,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await revertVersion(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      versionId,
+      versionIndex,
+      transaction,
     );
 
     return response;

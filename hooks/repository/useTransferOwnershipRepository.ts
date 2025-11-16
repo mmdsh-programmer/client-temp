@@ -23,7 +23,6 @@ const useTranferOwnershipRepository = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
-      queryClient.invalidateQueries({queryKey: [`getRepo-${repoId}`]});
       queryClient.invalidateQueries({queryKey: ["allRepoList"],});
       queryClient.invalidateQueries({queryKey: ["bookmarkRepoList"],});
       queryClient.invalidateQueries({queryKey: ["myRepoList-false"],});

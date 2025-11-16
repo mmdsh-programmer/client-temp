@@ -49,7 +49,7 @@ export interface IVersion {
   repoName?: string;
   newOne?: boolean;
   formId: number | null;
-  formHash: string | null
+  formHash: string | null;
 }
 
 export interface IComment {
@@ -154,12 +154,9 @@ export interface IVersionView {
   getVersionList?: IVersion[][];
   hasNextPage: boolean;
   fetchNextPage: (
-    options?: FetchNextPageOptions
+    options?: FetchNextPageOptions,
   ) => Promise<
-    InfiniteQueryObserverResult<
-      InfiniteData<IVersionMetadata | undefined, unknown>,
-      Error
-    >
+    InfiniteQueryObserverResult<InfiniteData<IVersionMetadata | undefined, unknown>, Error>
   >;
   isFetchingNextPage: boolean;
   lastVersion?: IVersion;
@@ -182,3 +179,37 @@ export interface IFormVersionResponseList {
   size: number;
   total: number;
 }
+
+export interface IVersionHistoryItem {
+  versionIndex: number;
+  userId: string;
+  username: string;
+  timestamp: number;
+  date: string;
+}
+
+export interface IContentVersionData {
+  contentId: number;
+  versionHistory: IVersionHistoryItem[];
+}
+
+export interface IContentMetadata {
+  userId: string;
+  username: string;
+  timestamp: number;
+  date: string;
+}
+
+export interface IContentVersion {
+  contentId: number;
+  versionIndex: number;
+  content: string;
+  metadata: IContentMetadata;
+}
+
+export interface IVersionsSummary {
+  contentId: number;
+  availableVersions: number[];
+  totalVersions: number;
+}
+
