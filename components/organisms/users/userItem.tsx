@@ -60,6 +60,10 @@ const UserItem = ({ user }: IProps) => {
     });
   };
 
+  console.log("----------------- user ----------------", user);
+  console.log("---------------------- repo user --------------", getRepo?.roleName);
+  console.log("------------------------- userinfo ---------------------", userInfo);
+
   const renderUserRole = () => {
     if (
       user.userRole === ERoles.owner ||
@@ -130,12 +134,14 @@ const UserItem = ({ user }: IProps) => {
         {!notifService && !blockService ? (
           <div className="h-6 w-6">
             {getRepo?.roleName === ERoles.owner ||
-            userInfo?.username === user.userInfo.userName ||
+            userInfo?.username.toLocaleLowerCase() === user.userInfo.userName.toLocaleLowerCase() ||
             (getRepo?.roleName === ERoles.admin &&
               user.userRole !== ERoles.owner &&
               getRepo?.roleName === ERoles.admin &&
               !(
-                user.userRole === ERoles.admin && userInfo?.username !== user.userInfo.userName
+                user.userRole === ERoles.admin &&
+                userInfo?.username.toLocaleLowerCase() !==
+                  user.userInfo.userName.toLocaleLowerCase()
               )) ? (
               <UserMenu user={user} />
             ) : null}
