@@ -117,7 +117,7 @@ export const getPodAccessToken = async (
     const expiresAt = result.data.expires_in;
     const userData = await userInfo(result.data.access_token, domain, expiresAt);
     if (userData) {
-      const redisClient = await global.redisClientPromise;
+      const redisClient = await global.redisClient;
       await redisClient?.set(`user:${result.data.access_token}`, JSON.stringify(userData), {
         EX: expiresAt,
       });

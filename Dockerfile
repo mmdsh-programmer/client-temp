@@ -1,4 +1,4 @@
-FROM nrp.devpod.ir:8138/repository/applicationplatform-docker-hosted/node:20.10.0 as builder
+FROM nrp.devpod.ir:8138/repository/applicationplatform-docker-hosted/node:22.14 as builder
 COPY .env package.json package-lock.json .npmrc /app/
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN npm install --only=production --force --frozen-lockfile --verbose --no-audit
 COPY . /app/
 RUN set -ex && npm run build
 
-FROM nrp.devpod.ir:8138/repository/applicationplatform-docker-hosted/node:20.10.0 as production
+FROM nrp.devpod.ir:8138/repository/applicationplatform-docker-hosted/node:22.14 as production
 WORKDIR /app
 
 COPY --from=builder /app/package.json .
