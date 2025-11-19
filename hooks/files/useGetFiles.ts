@@ -9,11 +9,11 @@ const useGetFiles = (
   userGroupHash: string,
   size: number,
   name?: string,
-  order?: string,
-  dataType?: string
+  order?: "NAME" | "CREATED" | "UPDATED" | "SIZE" | "TYPE" | null,
+  isDesc?:boolean
 ) => {
   return useInfiniteQuery({
-    queryKey: [`getFiles-${userGroupHash}`, name],
+    queryKey: [`getFiles-${userGroupHash}`, name, order, isDesc],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getFileAction(
         resourceId,
@@ -22,7 +22,7 @@ const useGetFiles = (
         size,
         name,
         order,
-        dataType
+        isDesc
       );
 
       handleClientSideHookError(response as IActionError);

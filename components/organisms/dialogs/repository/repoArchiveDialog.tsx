@@ -26,14 +26,13 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
+        if (currentPath.includes("/admin/repositories")) {
+          router.push("/admin/myRepoList");
+        }
         toast.success("مخزن با موفقیت بایگانی شد.");
         handleClose();
-        router.push("/admin/dashboard");
-
-        if (currentPath === "/admin/dashboard") {
-          setRepo(null);
-          localStorage.removeItem("CLASOR:SELECTED_REPO");
-        }
+        setRepo(null);
+        localStorage.removeItem("CLASOR:SELECTED_REPO");
       },
     });
   };
@@ -48,11 +47,11 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
       isArchive
     >
       <form className="archive-repo-dialog__form flex flex-col gap-5">
-        <div className="flex text-primary_normal font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px]">
+        <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
           آیا از آرشیو"
           <span
             title={getRepo?.name}
-            className="body_b3 text-primary_normal max-w-[100px] truncate flex items-center px-[2px]"
+            className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
           >
             {getRepo?.name}
           </span>

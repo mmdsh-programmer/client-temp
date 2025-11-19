@@ -1,17 +1,12 @@
-import type { Metadata } from "next";
 import React from "react";
+import CheckUserInfo from "@components/templates/checkUserInfo";
 
 interface IProps {
   children: React.ReactNode;
 }
 
-export const metadata: Metadata = {
-  title: "ویرایش",
-  description: "ویرایش محتوا",
-};
-
 const EditLayout = ({ children }: IProps) => {
-  return children;
+  return <CheckUserInfo>{children}</CheckUserInfo>;
 };
 
 export default EditLayout;

@@ -19,8 +19,8 @@ export const getFileAction = async (
   offset: number,
   size: number,
   name?: string,
-  order?: string,
-  dataType?: string,
+  order?: "NAME" | "CREATED" | "UPDATED" | "SIZE" | "TYPE" | null,
+  isDesc?:boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -32,7 +32,7 @@ export const getFileAction = async (
       size,
       name,
       order,
-      dataType,
+      isDesc
     );
 
     return response;

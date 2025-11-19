@@ -4,12 +4,14 @@ import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useRestoreRepo from "@hooks/repository/useRestoreRepo";
 import { useRepositoryStore } from "@store/repository";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const RepoRestoreDialog = ({ setOpen }: IProps) => {
+  const router = useRouter();
   const { repo: getRepo } = useRepositoryStore();
 
   const { isPending, mutate } = useRestoreRepo();
@@ -22,6 +24,7 @@ const RepoRestoreDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
+        router.push(`/admin/repositories?repoId=${getRepo.id}`);
         toast.success("مخزن با موفقیت بازگردانی شد.");
         handleClose();
       },
