@@ -5,8 +5,17 @@ import { Metadata } from "next/types";
 import { getMe } from "@actions/auth";
 import { getDocument } from "@service/clasor";
 
+interface IProps {
+  searchParams: {
+    repoId: number;
+    documentId: number;
+    sharedDocuments: boolean;
+  };
+}
+
 export async function generateMetadata({ searchParams }): Promise<Metadata> {
   const { repoId, documentId, sharedDocuments } = searchParams;
+
   try {
     const userInfo = await getMe();
     const documentInfo = await getDocument(
@@ -19,7 +28,7 @@ export async function generateMetadata({ searchParams }): Promise<Metadata> {
       true,
     );
     return {
-      title: `سند ${documentInfo.name}`,
+      title: `ویرایش سند ${documentInfo.name}`,
       description: "ویرایش آخرین نسخه",
     };
   } catch {
@@ -30,13 +39,13 @@ export async function generateMetadata({ searchParams }): Promise<Metadata> {
   }
 }
 
-const Edit = (searchParams) => {
+const Edit = ({ searchParams }: IProps) => {
   const { sharedDocuments } = searchParams;
 
   return (
     <Suspense>
       <div className="h-screen">
-        {sharedDocuments === "true" ? (
+        {sharedDocuments ? (
           <EditPage />
         ) : (
           <CheckRepoInfo>
