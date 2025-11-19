@@ -2887,10 +2887,8 @@ export const getResourceFiles = async (
   offset: number,
   size: number,
   name?: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _order?: string,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _dataType?: string,
+  order?: "NAME" | "CREATED" | "UPDATED" | "SIZE" | "TYPE" | null,
+  isDesc?:boolean
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2908,6 +2906,8 @@ export const getResourceFiles = async (
         offset,
         size,
         name,
+        order,
+        isDesc
       },
     });
 

@@ -24,8 +24,6 @@ import {
   RestoreIcon,
   ShareIcon,
 } from "@components/atoms/icons";
-import { useUserStore } from "@store/user";
-import { IUser } from "@interface/users.interface";
 
 export interface MenuItem {
   text: string;
@@ -62,28 +60,6 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "repo-menu__item--share",
     ),
     createItem(
-      "کلید های مخزن",
-      <KeyIcon className="h-4 w-4 stroke-1" />,
-      () => {
-        return setModal("key");
-      },
-      "repo-menu__item--keys",
-    ),
-  ];
-};
-
-const getEditorMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuItem[] => {
-  return [
-    ...getBaseMenuItems(repo, setModal),
-    createItem(
-      "ترک مخزن",
-      <LeaveRepoIcon className="h-4 w-4 stroke-icon-active" />,
-      () => {
-        return setModal("leave");
-      },
-      "repo-menu__item--leave",
-    ),
-    createItem(
       "اعلانات من",
       <AlertIcon className="h-4 w-4 stroke-1" />,
       () => {
@@ -91,6 +67,28 @@ const getEditorMenuItems = (repo: IRepo, setModal: (modal: string) => void): Men
       },
       "repo-menu__item--my-notif",
     ),
+    createItem(
+      "کلید های مخزن",
+      <KeyIcon className="h-4 w-4 stroke-1" />,
+      () => {
+        return setModal("key");
+      },
+      "repo-menu__item--keys",
+    ),
+    ...(repo.isPublish
+      ? [
+          createItem(
+            "مخزن منتشرشده",
+            <PublishIcon className="h-4 w-4 fill-icon-active stroke-0" />,
+            () => {
+              const url = toPersianDigit(
+                `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
+              );
+              window.open(url, "_blank");
+            },
+          ),
+        ]
+      : []),
   ];
 };
 
@@ -104,7 +102,6 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       },
       "repo-menu__item--edit",
     ),
-    ...getEditorMenuItems(repo, setModal),
     createItem(
       "مدیریت فایل",
       <FileManagementIcon className="h-4 w-4 fill-icon-active" />,
@@ -121,38 +118,13 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       },
       "repo-menu__item--version-requests",
     ),
+    ...getBaseMenuItems(repo, setModal),
   ];
 };
 
 const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuItem[] => {
-  const items = getAdminMenuItems(repo, setModal).filter((item) => {
-    return item.text !== "ترک مخزن";
-  });
-  return items;
-};
-
-const getOwnerDestructiveActions = (repo: IRepo, setModal: (modal: string) => void): MenuItem[] => {
-  if (repo.isArchived) {
-    return [
-      createItem(
-        "بازگردانی",
-        <RestoreIcon className="h-4 w-4" />,
-        () => {
-          return setModal("restore");
-        },
-        "repo-menu__item--restore",
-      ),
-      createItem(
-        "حذف",
-        <DeleteIcon className="h-4 w-4" />,
-        () => {
-          return setModal("delete");
-        },
-        "repo-menu__item--delete",
-      ),
-    ];
-  }
   return [
+    ...getAdminMenuItems(repo, setModal),
     createItem(
       "درخواست‌های دسترسی سند",
       <LockIcon className="h-4 w-4" />,
@@ -168,6 +140,29 @@ const getOwnerDestructiveActions = (repo: IRepo, setModal: (modal: string) => vo
         return setModal("archive");
       },
       "repo-menu__item--archive",
+    ),
+    createItem(
+      "حذف",
+      <DeleteIcon className="h-4 w-4" />,
+      () => {
+        return setModal("delete");
+      },
+      "repo-menu__item--delete",
+    ),
+  ].filter((item) => {
+    return item.text !== "ترک مخزن";
+  });
+};
+
+const getOwnerDestructiveActions = (setModal: (modal: string) => void): MenuItem[] => {
+  return [
+    createItem(
+      "بازگردانی",
+      <RestoreIcon className="h-4 w-4" />,
+      () => {
+        return setModal("restore");
+      },
+      "repo-menu__item--restore",
     ),
     createItem(
       "حذف",
@@ -203,16 +198,18 @@ const useRepoMenuList = (
 
   switch (repo.roleName) {
     case ERoles.owner:
-      menuItems = getOwnerMenuItems(repo, setModal);
+      if (repo.isArchived) {
+        menuItems = getOwnerDestructiveActions(setModal);
+      } else menuItems = getOwnerMenuItems(repo, setModal);
       break;
     case ERoles.admin:
       menuItems = getAdminMenuItems(repo, setModal);
       break;
     default:
-      menuItems = getEditorMenuItems(repo, setModal);
+      menuItems = getBaseMenuItems(repo, setModal);
   }
 
-  if (!pathname?.includes("/admin/repositories") && onInfoClick) {
+  if (!pathname?.includes("/admin/repositories") && onInfoClick && !repo.isArchived) {
     menuItems.unshift(
       createItem(
         "اطلاعات مخزن",
@@ -223,7 +220,7 @@ const useRepoMenuList = (
     );
   }
 
-  if (showLog) {
+  if (showLog && !repo.isArchived) {
     menuItems.push(
       createItem(
         "فعالیت های مخزن",
@@ -232,21 +229,6 @@ const useRepoMenuList = (
           setShowRepoActivity(!showRepoActivity);
         },
         "repo-menu__item--repo-activity",
-      ),
-    );
-  }
-
-  if (repo.isPublish) {
-    menuItems.push(
-      createItem(
-        "مخزن منتشرشده",
-        <PublishIcon className="h-4 w-4 fill-icon-active stroke-0" />,
-        () => {
-          const url = toPersianDigit(
-            `/publish/${toPersianDigit(`${repo.name.replaceAll(/\s+/g, "-")}`)}/${repo.id}`,
-          );
-          window.open(url, "_blank");
-        },
       ),
     );
   }
@@ -265,9 +247,17 @@ const useRepoMenuList = (
     );
   }
 
-  if (repo.roleName === ERoles.owner) {
-    const destructiveActions = getOwnerDestructiveActions(repo, setModal);
-    menuItems.push(...destructiveActions);
+  if (repo.roleName !== ERoles.owner && !repo.isArchived) {
+    menuItems.push(
+      createItem(
+        "ترک مخزن",
+        <LeaveRepoIcon className="h-4 w-4 stroke-icon-active" />,
+        () => {
+          return setModal("leave");
+        },
+        "repo-menu__item--leave",
+      ),
+    );
   }
 
   return menuItems;

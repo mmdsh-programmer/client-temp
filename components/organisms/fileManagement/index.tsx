@@ -40,7 +40,10 @@ const Files = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [name, setName] = useState<string>();
-  const [dataType, setDataType] = useState<string>();
+  const [dataType, setDataType] = useState<{
+    order: "NAME" | "CREATED" | "UPDATED" | "SIZE" | "TYPE" | null;
+    isDesc: boolean;
+  }>({ order: "CREATED", isDesc: true });
   const [selectedImage, setSelectedImage] = useState<IFile | null>(null);
 
   const queryClient = useQueryClient();
@@ -54,16 +57,30 @@ const Files = ({
     isFetching,
     refetch,
     fetchNextPage,
-  } = useGetFiles(resourceId, userGroupHash, fileTablePageSize, name, dataType);
+  } = useGetFiles(
+    resourceId,
+    userGroupHash,
+    fileTablePageSize,
+    name,
+    dataType.order,
+    dataType.isDesc,
+  );
 
   const createUploadLink = useCreateUploadLink();
   const renameHook = useRenameFile();
   const deleteFile = useDeleteFile();
   const repoPublicFile = useRepoPublicFile();
 
-  const handleDataType = useCallback((dtype: string) => {
-    return setDataType(dtype);
-  }, []);
+  const handleDataType = useCallback(
+    (params: {
+      order: "NAME" | "CREATED" | "UPDATED" | "SIZE" | "TYPE" | null;
+      isDesc: boolean;
+    }) => {
+      const { isDesc, order } = params;
+      return setDataType({ order, isDesc });
+    },
+    [],
+  );
 
   const handlePublicFile = useCallback(
     (file: IFile) => {
@@ -190,7 +207,7 @@ const Files = ({
         await uploadFile(item);
       } else {
         const formData = new FormData();
-        formData.append("file", item, encodeURIComponent(item.name));
+        formData.append("file", item, item.name);
         await uploadFile(formData);
       }
     } catch (error: any) {

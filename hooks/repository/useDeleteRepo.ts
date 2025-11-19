@@ -20,8 +20,9 @@ const useDeleteRepo = () => {
         queryKey: ["getMyInfo"],
       });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-true"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
-      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },

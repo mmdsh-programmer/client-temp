@@ -19,6 +19,7 @@ const useRestoreRepo = () => {
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-true"] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
