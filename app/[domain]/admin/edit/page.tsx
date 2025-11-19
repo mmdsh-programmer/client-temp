@@ -6,11 +6,11 @@ import { getMe } from "@actions/auth";
 import { getDocument } from "@service/clasor";
 
 interface IProps {
-  searchParams: {
+  searchParams: Promise<{
     repoId: number;
     documentId: number;
     sharedDocuments: boolean;
-  };
+  }>;
 }
 
 export async function generateMetadata({ searchParams }): Promise<Metadata> {
@@ -39,8 +39,8 @@ export async function generateMetadata({ searchParams }): Promise<Metadata> {
   }
 }
 
-const Edit = ({ searchParams }: IProps) => {
-  const { sharedDocuments } = searchParams;
+const Edit = async ({ searchParams }: IProps) => {
+  const { sharedDocuments } = await searchParams;
 
   return (
     <Suspense>
