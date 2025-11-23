@@ -58,7 +58,6 @@ import {
 } from "@interface/repo.interface";
 import { IRoles, IUser, IUserConfigPanel } from "@interface/users.interface";
 import axios, { AxiosError, isAxiosError } from "axios";
-
 import { EDocumentTypes } from "@interface/enums";
 import { IBLockDocument } from "@interface/editor.interface";
 import { IFeedItem, IFollowingRepo } from "@interface/feeds.interface";
@@ -71,6 +70,7 @@ import { decryptKey } from "@utils/crypto";
 import qs from "qs";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
 import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
+import { getDomainHost } from "@utils/getDomain";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -80,7 +80,17 @@ const axiosClasorInstance = axios.create({
 });
 
 axiosClasorInstance.interceptors.request.use(
-  (request) => {
+  async (request) => {
+    try {
+      const domain = await getDomainHost();
+
+      if (domain) {
+        request.headers.domainUrl = domain;
+      }
+    } catch (error: any) {
+      console.warn("Could not set dynamic Host header:", error.message);
+    }
+
     const { headers, baseURL, method, url, data } = request;
     const log = {
       type: "REQUEST",
@@ -5347,4 +5357,3 @@ export const updateMyNotifServices = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
