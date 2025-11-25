@@ -85,7 +85,7 @@ export default async function PublishContentPage({ params }: PublishContentPageP
 
     let versionData: IVersion;
     if (!documentId || Number.isNaN(documentId)) {
-      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`]);
+      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
       return notFound();
     }
 
@@ -93,7 +93,7 @@ export default async function PublishContentPage({ params }: PublishContentPageP
 
     const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
     if (documentInfo.isHidden || documentInfoName !== documentName) {
-      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`]);
+      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
       return notFound();
     }
 
@@ -109,7 +109,7 @@ export default async function PublishContentPage({ params }: PublishContentPageP
       const lastVersionInfo = await getPublishDocumentLastVersion(repository.id, documentId);
 
       if (!lastVersionInfo) {
-        await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`]);
+        await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
         throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
       }
 
