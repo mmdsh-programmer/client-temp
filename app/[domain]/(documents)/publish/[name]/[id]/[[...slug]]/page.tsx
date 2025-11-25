@@ -109,10 +109,7 @@ export default async function PublishContentPage({ params }: PublishContentPageP
       const lastVersionInfo = await getPublishDocumentLastVersion(repository.id, documentId);
 
       if (!lastVersionInfo) {
-        await generateCachePageTag(
-          [`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`],
-          60,
-        );
+        await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
         throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
       }
 
@@ -167,17 +164,13 @@ export default async function PublishContentPage({ params }: PublishContentPageP
 
     const getRevalidateTimestamp = unstableCache(
       async () => {
-        const now = Date.now();
-        console.log(`[CACHE MISS] Generating new timestamp: ${now} for doc: ${documentId}`);
-        console.log("----------------- cache tag -------------------", cacheTags);
-        return now;
+        return Date.now();
       },
       cacheTags,
       { tags: cacheTags, revalidate: 24 * 3600 },
     );
 
     const revalidateTimestamp = await getRevalidateTimestamp();
-    console.log(`[RENDER] Component Rendered with timestamp: ${revalidateTimestamp}`);
 
     return (
       <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
