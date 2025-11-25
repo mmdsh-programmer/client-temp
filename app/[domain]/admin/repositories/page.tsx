@@ -22,7 +22,7 @@ export async function generateMetadata({ searchParams }): Promise<Metadata> {
   }
 }
 
-const Repositories = () => {
+const Repositories = async () => {
   return <RepoPage />;
 };
 

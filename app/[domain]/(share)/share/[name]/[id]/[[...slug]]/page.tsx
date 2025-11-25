@@ -62,7 +62,7 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
     const versionId = hasVersion ? parseInt(lastSlug.replace("v-", ""), 10) : undefined;
 
     if (!documentId || Number.isNaN(documentId)) {
-      await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`]);
+      await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`], 60);
       return notFound();
     }
 
@@ -70,7 +70,7 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
     if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
-      await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`]);
+      await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`], 60);
       return notFound();
     }
 
@@ -86,7 +86,7 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
     } else {
       const lastVersionInfo = await getPublishedDocumentLastVersion(undefined, +documentId!);
       if (!lastVersionInfo) {
-        await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`]);
+        await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`], 60);
         throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
       }
       versionData = await getPublishedDocumentVersion(undefined, +documentId!, lastVersionInfo!.id);

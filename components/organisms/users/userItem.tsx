@@ -18,6 +18,7 @@ import UserMenu from "@components/molecules/userMenu";
 interface IProps {
   user: IUser;
 }
+
 interface IUserOption {
   label: string;
   value: string;
@@ -59,10 +60,6 @@ const UserItem = ({ user }: IProps) => {
       },
     });
   };
-
-  console.log("----------------- user ----------------", user);
-  console.log("---------------------- repo user --------------", getRepo?.roleName);
-  console.log("------------------------- userinfo ---------------------", userInfo);
 
   const renderUserRole = () => {
     if (
