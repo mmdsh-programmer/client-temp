@@ -112,7 +112,10 @@ export default async function PublishContentPage({ params }: PublishContentPageP
       const lastVersionInfo = await getPublishDocumentLastVersion(repository.id, documentId);
 
       if (!lastVersionInfo) {
-        await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
+        await generateCachePageTag(
+          [`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`],
+          60,
+        );
         throw new ServerError(["این سند فاقد نسخه ی عمومی می باشد."]);
       }
 
@@ -180,7 +183,6 @@ export default async function PublishContentPage({ params }: PublishContentPageP
     }
     return (
       <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
-        {/* <PublishVersionContent document={documentInfo} version={versionData} /> */}
         <PublishEncryptedWrapper documentInfo={documentInfo} version={versionData}>
           <PublishVersionContent document={documentInfo} version={versionData} />
         </PublishEncryptedWrapper>
@@ -211,10 +213,14 @@ export default async function PublishContentPage({ params }: PublishContentPageP
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
-    const errorMsg = typeof message === "string" ? message : message.message;
+    let errorMsg = typeof message === "string" ? message : message.message;
 
-    if (errorMsg === "NEXT_NOT_FOUND") {
-      return notFound();
+    if (
+      errorMsg === "NEXT_NOT_FOUND" ||
+      errorMsg.includes("NEXT_HTTP_ERROR_FALLBACK") ||
+      errorMsg.includes("404")
+    ) {
+      errorMsg = "آدرس وارد شده صحیح نیست.";
     }
     return (
       <section className="main bg-slate-50 grid h-[calc(100vh-81px)] w-full place-items-center justify-items-center text-center">

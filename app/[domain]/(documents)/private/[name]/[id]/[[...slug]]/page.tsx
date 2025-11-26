@@ -26,6 +26,11 @@ import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
 import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
 import { IDocumentMetadata } from "@interface/document.interface";
+import { unstable_cache as unstableCache } from "next/cache";
+import { EDocumentTypes } from "@interface/enums";
+import { sanitizeHtmlOnServer } from "@utils/sanitizeHtml";
+import PublishEncryptedWrapper from "@components/pages/publish/publishEncryptedWrapper";
+import { generateCachePageTag } from "@utils/generateCachePageTag";
 
 type PublishContentPageProps = {
   params: Promise<{ domain: string; name: string; id: string; slug?: string[] }>;
@@ -166,6 +171,13 @@ export default async function PublishContentPage({
         accessToken,
       );
 
+      await generateCachePageTag([
+        `vr-${version.id}`,
+        `dc-${documentId}`,
+        `rp-ph-${repository.id}`,
+        `i-${domain}`,
+      ]);
+
       const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
       const originalVersionNumber = removeSpecialCharacters(toPersianDigit(version.versionNumber));
 
@@ -199,9 +211,37 @@ export default async function PublishContentPage({
         version.content = finalString;
       }
 
+      const cacheTags = [
+        `vr-${version.id}`,
+        `dc-${documentId}`,
+        `rp-ph-${repository.id}`,
+        `i-${domain}`,
+      ];
+
+      const getRevalidateTimestamp = unstableCache(
+        async () => {
+          return Date.now();
+        },
+        cacheTags,
+        { tags: cacheTags, revalidate: 24 * 3600 },
+      );
+
+      const revalidateTimestamp = await getRevalidateTimestamp();
+
+      if (version.contentType === EDocumentTypes.classic && version.content) {
+        version.content = sanitizeHtmlOnServer(version.content);
+      }
+
       return (
         <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
-          <PublishVersionContent document={documentInfo} version={version} />
+          <PublishEncryptedWrapper documentInfo={documentInfo} version={version}>
+            <PublishVersionContent document={documentInfo} version={version} />
+          </PublishEncryptedWrapper>
+          <input
+            type="hidden"
+            data-testid="revalidate-timestamp"
+            value={String(revalidateTimestamp)}
+          />
         </div>
       );
     } catch (error) {
@@ -235,7 +275,16 @@ export default async function PublishContentPage({
     );
 
     const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
-    const errorMsg = typeof message === "string" ? message : message.message;
+    let errorMsg = typeof message === "string" ? message : message.message;
+
+    if (
+      errorMsg === "NEXT_NOT_FOUND" ||
+      errorMsg.includes("NEXT_HTTP_ERROR_FALLBACK") ||
+      errorMsg.includes("404")
+    ) {
+      errorMsg = "آدرس وارد شده صحیح نیست.";
+    }
+
     if (documentInfo! && documentInfo.hasWhiteList && errorCode === 403) {
       return <PublishDocumentAccessWrapper repoId={documentInfo.repoId} docId={documentInfo.id} />;
     }
@@ -247,9 +296,6 @@ export default async function PublishContentPage({
           description="برای دسترسی به سند لطفا با استفاده از درگاه پاد لاگین کنید."
         />
       );
-    }
-    if (errorMsg === "NEXT_NOT_FOUND") {
-      return notFound();
     }
     return (
       <section className="main bg-slate-50 grid h-[calc(100vh-156px)] w-full place-items-center justify-items-center text-center">
