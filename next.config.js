@@ -14,7 +14,7 @@ const nextConfig = {
       },
     ],
   },
-  cacheMaxMemorySize: 0,
+  cacheMaxMemorySize:  process.env.NODE_ENV === "production" ? 0 : undefined,
   cacheHandler:
     process.env.NODE_ENV === "production" ? require.resolve("./cacheHandler.mjs") : undefined,
   webpack: (config, { isServer }) => {
