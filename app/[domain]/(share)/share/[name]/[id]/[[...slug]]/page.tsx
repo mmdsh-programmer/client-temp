@@ -15,6 +15,7 @@ import { ServerError } from "@utils/error";
 import { notFound } from "next/navigation";
 import { ICustomPostData } from "@interface/app.interface";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
+import PublishEncryptedWrapper from "@components/pages/publish/publishEncryptedWrapper";
 
 export const generateStaticParams = async () => {
   return [];
@@ -126,7 +127,9 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
 
     return (
       <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
-        <PublishVersionContent document={documentInfo} version={versionData} />
+        <PublishEncryptedWrapper documentInfo={documentInfo} version={versionData}>
+          <PublishVersionContent document={documentInfo} version={versionData} />
+        </PublishEncryptedWrapper>
       </div>
     );
   } catch (error) {
