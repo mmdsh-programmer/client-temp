@@ -24,6 +24,9 @@ import { ServerError } from "@utils/error";
 import { notFound } from "next/navigation";
 import { unstable_cache as unstableCache } from "next/cache";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
+import PublishEncryptedWrapper from "@components/pages/publish/publishEncryptedWrapper";
+import { EDocumentTypes } from "@interface/enums";
+import { sanitizeHtmlOnServer } from "@utils/sanitizeHtml";
 
 export const generateStaticParams = async () => {
   return [];
@@ -179,9 +182,15 @@ export default async function PublishContentPage({ params }: PublishContentPageP
     const revalidateTimestamp = await getRevalidateTimestamp();
     console.log(`[RENDER] Component Rendered with timestamp: ${revalidateTimestamp}`);
 
+    if (versionData.contentType === EDocumentTypes.classic && versionData.content) {
+      versionData.content = sanitizeHtmlOnServer(versionData.content);
+    }
     return (
       <div className={enableDefaultFontFamily ? "default-font-family" : undefined}>
-        <PublishVersionContent document={documentInfo} version={versionData} />
+        {/* <PublishVersionContent document={documentInfo} version={versionData} /> */}
+        <PublishEncryptedWrapper documentInfo={documentInfo} version={versionData}>
+          <PublishVersionContent document={documentInfo} version={versionData} />
+        </PublishEncryptedWrapper>
         <input
           type="hidden"
           data-testid="revalidate-timestamp"

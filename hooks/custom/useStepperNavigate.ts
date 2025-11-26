@@ -26,10 +26,15 @@ const useStepperNavigate = () => {
   const handleNextStep = () => {
     return setActiveStep((cur) => {
       if (
-        (cur === 1 && !getDocumentType?.includes(EDocumentTypes.classic)) &&
+        cur === 1 &&
+        !getDocumentType?.includes(EDocumentTypes.classic) &&
         !getDocumentType?.includes(EDocumentTypes.form)
-      )
+      ) {
+        return cur + 3;
+      }
+      if (cur === 2 && getDocumentType?.includes(EDocumentTypes.form)) {
         return cur + 2;
+      }
       return cur + 1;
     });
   };
@@ -37,10 +42,15 @@ const useStepperNavigate = () => {
   const handlePrevStep = () => {
     return setActiveStep((cur) => {
       if (
-        (cur === 3 && !getDocumentType?.includes(EDocumentTypes.classic)) &&
+        cur === 4 &&
+        !getDocumentType?.includes(EDocumentTypes.classic) &&
         !getDocumentType?.includes(EDocumentTypes.form)
-      )
+      ) {
+        return cur - 3;
+      }
+      if (cur === 4 && getDocumentType?.includes(EDocumentTypes.form)) {
         return cur - 2;
+      }
       return cur - 1;
     });
   };

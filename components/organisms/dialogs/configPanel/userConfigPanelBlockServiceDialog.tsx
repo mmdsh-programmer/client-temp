@@ -28,9 +28,7 @@ const UserConfigPanelBlockServiceDialog = () => {
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
     getRepo!.id,
-    +userInfo!.ssoId === +getSelectedUser!.userInfo.ssoId
-      ? undefined
-      : getSelectedUser!.userInfo.ssoId,
+    getSelectedUser!.userInfo.ssoId,
   );
   const updateUserBlockServices = useUpdateUserBlockServices();
   const { handleSubmit } = useForm();
@@ -56,7 +54,7 @@ const UserConfigPanelBlockServiceDialog = () => {
 
     updateUserBlockServices.mutate({
       repoId: getRepo.id,
-      ssoId: getSelectedUser.userInfo.ssoId,
+      ssoId: getSelectedUser.userInfo.ssoId || userInfo!.ssoId,
       blockedServices: blockServices,
       callBack: () => {
         return toast.success("تنظیمات دسترسی برای کاربر به‌روز شد.");

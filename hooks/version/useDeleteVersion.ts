@@ -27,10 +27,11 @@ const useDeleteVersion = () => {
 
       if (response.error) {
         const { error, errorCode, errorList, referenceNumber } = response;
+
         const errorResponse = {
           error,
           errorCode,
-          errorList: errorList[0].messages,
+          errorList,
           originalError: {
             response: {
               data: { error: errorList[0].error, message: errorList[0].messages, referenceNumber },

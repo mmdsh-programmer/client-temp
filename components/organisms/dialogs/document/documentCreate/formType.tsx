@@ -5,13 +5,9 @@ import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
 import { useDocumentStore } from "@store/document";
 
-interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const FormType = ({ setOpen }: IProps) => {
+const FormType = () => {
   const { setDocumentFormContentInfo } = useDocumentStore();
-  const { handleNextStep } = useStepperNavigate();
+  const { handleNextStep, handlePrevStep } = useStepperNavigate();
   const [type, setType] = useState<IOption>({
     label: "فرم معمولی",
     value: "GENERAL",
@@ -84,11 +80,9 @@ const FormType = ({ setOpen }: IProps) => {
       </DialogBody>
       <DialogStepperFooter
         hasNextStep
-        hasPreviousStep={false}
+        hasPreviousStep
         handleNextStep={handleSelectType}
-        handlePreviousStep={() => {
-          return setOpen(false);
-        }}
+        handlePreviousStep={handlePrevStep}
       />
     </>
   );

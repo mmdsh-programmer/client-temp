@@ -4047,6 +4047,7 @@ export const deleteAccessOfResource = async (
   accessNames: string[],
   username: string,
   validate: boolean,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(`acl/${resourceId}`, {
@@ -4057,6 +4058,7 @@ export const deleteAccessOfResource = async (
         accessNames,
         username,
         validate,
+        isDirectAccess
       },
     });
     return response.data.data;
