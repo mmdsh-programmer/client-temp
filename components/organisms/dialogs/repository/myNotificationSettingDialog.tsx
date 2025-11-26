@@ -23,7 +23,7 @@ const MyNotificationSettingDialog = ({ setOpen }: IProps) => {
   const [searchValue, setSearchValue] = useState("");
   const [notifServices, setNotifServices] = useState<string[]>([]);
 
-  const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(getRepo!.id, undefined);
+  const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(getRepo!.id, userInfo!.ssoId);
   const updateUserNotifService = useUpdateUserNotificationServices();
 
   const { mutate: updateMyNotifServices, isPending } = useUpdateMyNotifServices();

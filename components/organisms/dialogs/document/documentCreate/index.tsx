@@ -54,7 +54,7 @@ const DocumentCreate = ({ isTemplate, setOpen }: IProps) => {
         if (documentType === EDocumentTypes.classic) {
           return <DocumentTemplate />;
         }
-        return <FormType setOpen={setOpen} />;
+        return <FormType />;
       case 3:
         return isTemplate ? (
           <DocumentVersion isTemplate={isTemplate} setOpen={setOpen} />

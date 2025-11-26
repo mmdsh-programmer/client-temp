@@ -13,14 +13,16 @@ const useDeleteAccessOfResource = () => {
       accessNames: string[];
       username: string;
       validate: boolean;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { resourceId, accessNames, username, validate } = values;
+      const { resourceId, accessNames, username, validate, isDirectAccess } = values;
       const response = await deleteAccessOfResourceAction(
         resourceId,
         accessNames,
         username,
-        validate
+        validate,
+        isDirectAccess
       );
 
       handleClientSideHookError(response as IActionError);

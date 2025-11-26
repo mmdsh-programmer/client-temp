@@ -13,24 +13,14 @@ import RenderClientContent from "@components/organisms/publish/renderClientConte
 import { RenderServerSideContent } from "clasor-content-preview";
 import PublishFilePreview from "@components/organisms/publish/publishFilePreview";
 import PublishFilesDrawer from "@components/organisms/publishBottomNav/publishFilesDrawer";
-import { sanitizeHtmlOnServer } from "@utils/sanitizeHtml";
 
 interface IProps {
   version: IVersion;
   document: IDocumentMetadata;
 }
 
-const PublishVersionContent = async ({ version, document }: IProps) => {
-  const versionForRender =
-    version.contentType === EDocumentTypes.classic
-      ? sanitizeHtmlOnServer(version.content || "")
-      : version;
-
-  const cleanVersion =
-  version.contentType === EDocumentTypes.classic
-    ? { ...version, content: versionForRender }
-    :version;
-
+const PublishVersionContent = ({ version, document }: IProps) => {
+  
   return (
     <>
       <section className="scroller relative grid min-h-full w-full gap-2 overflow-y-auto">
@@ -40,10 +30,10 @@ const PublishVersionContent = async ({ version, document }: IProps) => {
             case EDocumentTypes.classic:
               return (
                 <>
-                  <RenderClientContent versionData={cleanVersion as IVersion} />
+                  <RenderClientContent versionData={version} />
                   <RenderServerSideContent
                     className="min-h-full"
-                    versionData={cleanVersion as IGetSpecificVersion}
+                    versionData={version as IGetSpecificVersion}
                   />
                 </>
               );

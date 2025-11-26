@@ -27,9 +27,7 @@ const UserConfigPanelNotifServiceDialog = () => {
 
   const { data: getUserConfigPanel, isLoading } = useGetUserConfigPanel(
     getRepo!.id,
-    +userInfo!.ssoId === +getSelectedUser!.userInfo.ssoId
-      ? undefined
-      : getSelectedUser!.userInfo.ssoId,
+    getSelectedUser!.userInfo.ssoId,
   );
   const updateUserNotifService = useUpdateUserNotificationServices();
   const { handleSubmit } = useForm();
@@ -55,7 +53,7 @@ const UserConfigPanelNotifServiceDialog = () => {
 
     updateUserNotifService.mutate({
       repoId: getRepo.id,
-      ssoId: getSelectedUser.userInfo.ssoId,
+      ssoId: getSelectedUser.userInfo.ssoId || +userInfo!.ssoId,
       notificationServices: notifServices,
       callBack: () => {
         return toast.success("تنظیمات دسترسی اعلانات برای کاربر به‌روز شد.");

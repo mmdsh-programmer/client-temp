@@ -11,13 +11,20 @@ import useDeleteAccessOfResource from "@hooks/accessManagement/useDeleteAccessOf
 import useGetResourceUsers from "@hooks/accessManagement/useGetResourceUsers";
 import { Spinner } from "@components/atoms/spinner";
 import { useDocumentStore } from "@store/document";
+import { usePathname, useSearchParams } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const DocumentAccessList = () => {
+  const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const sharedDocuments = searchParams?.get("sharedDocuments");
+  
   const [selectedUser, setSelectedUser] = useState("");
   const document = useDocumentStore((state) => {
     return state.selectedDocument;
   });
 
+  const { data: userInfo } = useGetUser();
   const { data: getAccessList, isFetching, isLoading, error } = useGetResourceUsers(document!.id, 30);
 
   const deleteAccess = useDeleteAccessOfResource();
@@ -30,8 +37,14 @@ const DocumentAccessList = () => {
       username: user.userName,
       accessNames: [user.userRole],
       validate: false,
+      isDirectAccess:
+      sharedDocuments === "true" ||
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== document?.repoId)
+        ? true
+        : undefined,
       callBack: () => {
-        toast.success(`دسترسی کاربر ${user.userName} .از سند حذف شد`);
+        toast.success(`دسترسی کاربر ${user.userName} از سند حذف شد.`);
       },
     });
   };

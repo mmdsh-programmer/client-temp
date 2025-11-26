@@ -53,7 +53,8 @@ export const deleteAccessOfResourceAction = async (
   resourceId: number,
   accessNames: string[],
   username: string,
-  validate: boolean
+  validate: boolean,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -62,7 +63,8 @@ export const deleteAccessOfResourceAction = async (
       resourceId,
       accessNames,
       username,
-      validate
+      validate,
+      isDirectAccess
     );
     return response;
   } catch (error) {
