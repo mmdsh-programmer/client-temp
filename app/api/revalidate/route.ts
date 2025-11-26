@@ -65,7 +65,7 @@ export async function POST(req: Request) {
 
   try {
     const body = (await req.json()) as BuildTagsInput;
-    const client = await global.redisClientPromise;
+    const client = await global.redisClient;
 
     if (
       body.domain &&

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { UserIcon, XIcon } from "@components/atoms/icons";
@@ -39,11 +39,9 @@ const DocumentBlockList = () => {
   };
 
   return (
-    <>
-      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t4 text-secondary">لیست کاربران مسدودشده</Typography>
       <div className="flex flex-col">
         {isLoading || isFetching ? (
-          <Spinner className="h-6 w-6 text-primary" />
+          <div className="w-full flex justify-center"><Spinner className="h-6 w-6 text-primary" /></div>
         ) : (
           <div className="document-block-list flex flex-wrap gap-2">
             {getDocumentBlockList?.pages.map((page) => {
@@ -84,13 +82,14 @@ const DocumentBlockList = () => {
                   );
                 })
               ) : (
-                <EmptyList type={EEmptyList.BLOCKLIST} />
+                <Fragment key={page.offset}>
+                  <EmptyList type={EEmptyList.BLOCKLIST} />
+                </Fragment>
               );
             })}
           </div>
         )}
       </div>
-    </>
   );
 };
 

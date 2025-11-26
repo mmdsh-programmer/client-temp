@@ -198,7 +198,7 @@ export const getToken = async (code: string, redirectUrl: string) => {
 };
 
 export const userInfo = async (accessToken: string, domainUrl: string, expiresAt: number) => {
-  const redisClient = await global.redisClientPromise;
+  const redisClient = await global.redisClient;
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
   if (cachedUser) {
     console.log(
@@ -4909,7 +4909,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
       throw new NotFoundError(["دامنه ارسال شده خالی می باشد."]);
     }
 
-    const redisClient = await global.redisClientPromise;
+    const redisClient = await global.redisClient;
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
       const cacheResult = JSON.parse(cachedDomain);
@@ -4977,7 +4977,7 @@ export const updateCustomPostByDomain = async (
       throw new NotFoundError(["ریسورس مورد نظر پیدا نشد."]);
     }
 
-    const redisClient = await global.redisClientPromise;
+    const redisClient = await global.redisClient;
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
@@ -5313,7 +5313,7 @@ export const addPartyToDomainParticipants = async (
   accessToken: string,
   userNameList: string,
 ) => {
-  const redisClient = await global.redisClientPromise;
+  const redisClient = await global.redisClient;
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 
@@ -5348,7 +5348,7 @@ export const removePartyFromDomainParticipants = async (
   accessToken: string,
   userNameList: string[],
 ) => {
-  const redisClient = await global.redisClientPromise;
+  const redisClient = await global.redisClient;
   const cachedDomain = await redisClient?.get(`domain:${domainUrl}`);
   const cachedUser = await redisClient?.get(`user:${accessToken}`);
 

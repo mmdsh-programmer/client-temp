@@ -14,7 +14,7 @@ const nextConfig = {
       },
     ],
   },
-  cacheMaxMemorySize: 0,
+  cacheMaxMemorySize:  process.env.NODE_ENV === "production" ? 0 : undefined,
   cacheHandler:
     process.env.NODE_ENV === "production" ? require.resolve("./cacheHandler.mjs") : undefined,
   webpack: (config, { isServer }) => {
@@ -56,6 +56,10 @@ const nextConfig = {
         {
           source: "/blog/:path*",
           destination: `${process.env.BLOG_BOX_URL}/blog/${process.env.BLOG_BOX_ID}/:path*`,
+        },
+        {
+          source: "/faq/:path*",
+          destination: `${process.env.BLOG_BOX_URL}/faq/${process.env.BLOG_BOX_ID}/:path*`,
         },
       ];
     }

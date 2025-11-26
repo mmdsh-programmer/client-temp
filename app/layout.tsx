@@ -42,6 +42,7 @@ const RootLayout = async ({ children }: IProps) => {
       </head>
       <body className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}>
         {children}
+        <p className="absolute top-0 -z-50 opacity-0">Clasor client is up and running</p>
       </body>
     </html>
   );

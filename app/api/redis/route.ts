@@ -17,8 +17,8 @@ export async function GET(req) {
         { status: 401 }
       );
     }
-    const redisHandler = await global.redisClientPromise;
-    if(!redisHandler || !redisHandler.isReady){
+    const redisHandler = await global.redisClient;
+    if(!redisHandler){
       return NextResponse.json({ error: "Redis is not ready" }, { status: 400 });
     }
     const key = req.nextUrl.searchParams?.get("key");
