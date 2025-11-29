@@ -20,6 +20,8 @@ import { notFound } from "next/navigation";
 import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
 import { IDocumentMetadata } from "@interface/document.interface";
 import PublishEncryptedWrapper from "@components/pages/publish/publishEncryptedWrapper";
+import { EDocumentTypes } from "@interface/enums";
+import { sanitizeHtmlOnServer } from "@utils/sanitizeHtml";
 
 export const generateStaticParams = async () => {
   return [];
@@ -166,6 +168,10 @@ export default async function PrivateSharePage({ params }: PublishContentPagePro
         const finalString = tempString.replaceAll(placeholder, "&quot;");
 
         version.content = finalString;
+      }
+
+      if (version.contentType === EDocumentTypes.classic && version.content) {
+        version.content = sanitizeHtmlOnServer(version.content);
       }
 
       return (

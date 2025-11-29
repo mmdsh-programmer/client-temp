@@ -16,6 +16,8 @@ import { notFound } from "next/navigation";
 import { ICustomPostData } from "@interface/app.interface";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
 import PublishEncryptedWrapper from "@components/pages/publish/publishEncryptedWrapper";
+import { EDocumentTypes } from "@interface/enums";
+import { sanitizeHtmlOnServer } from "@utils/sanitizeHtml";
 
 export const generateStaticParams = async () => {
   return [];
@@ -123,6 +125,10 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
       const finalString = tempString.replaceAll(placeholder, "&quot;");
 
       versionData.content = finalString;
+    }
+
+    if (versionData.contentType === EDocumentTypes.classic && versionData.content) {
+      versionData.content = sanitizeHtmlOnServer(versionData.content);
     }
 
     return (

@@ -26,11 +26,9 @@ import { getMe } from "@actions/auth";
 import { notFound } from "next/navigation";
 import PublishDocumentAccessWrapper from "@components/pages/publish/publishDocumentAccessWrapper";
 import { IDocumentMetadata } from "@interface/document.interface";
-import { unstable_cache as unstableCache } from "next/cache";
 import { EDocumentTypes } from "@interface/enums";
 import { sanitizeHtmlOnServer } from "@utils/sanitizeHtml";
 import PublishEncryptedWrapper from "@components/pages/publish/publishEncryptedWrapper";
-import { generateCachePageTag } from "@utils/generateCachePageTag";
 
 type PublishContentPageProps = {
   params: Promise<{ domain: string; name: string; id: string; slug?: string[] }>;
@@ -171,13 +169,6 @@ export default async function PublishContentPage({
         accessToken,
       );
 
-      await generateCachePageTag([
-        `vr-${version.id}`,
-        `dc-${documentId}`,
-        `rp-ph-${repository.id}`,
-        `i-${domain}`,
-      ]);
-
       const versionNumber = removeSpecialCharacters(toPersianDigit(enSlug[enSlug.length - 2]));
       const originalVersionNumber = removeSpecialCharacters(toPersianDigit(version.versionNumber));
 
@@ -211,23 +202,6 @@ export default async function PublishContentPage({
         version.content = finalString;
       }
 
-      const cacheTags = [
-        `vr-${version.id}`,
-        `dc-${documentId}`,
-        `rp-ph-${repository.id}`,
-        `i-${domain}`,
-      ];
-
-      const getRevalidateTimestamp = unstableCache(
-        async () => {
-          return Date.now();
-        },
-        cacheTags,
-        { tags: cacheTags, revalidate: 24 * 3600 },
-      );
-
-      const revalidateTimestamp = await getRevalidateTimestamp();
-
       if (version.contentType === EDocumentTypes.classic && version.content) {
         version.content = sanitizeHtmlOnServer(version.content);
       }
@@ -237,11 +211,6 @@ export default async function PublishContentPage({
           <PublishEncryptedWrapper documentInfo={documentInfo} version={version}>
             <PublishVersionContent document={documentInfo} version={version} />
           </PublishEncryptedWrapper>
-          <input
-            type="hidden"
-            data-testid="revalidate-timestamp"
-            value={String(revalidateTimestamp)}
-          />
         </div>
       );
     } catch (error) {
