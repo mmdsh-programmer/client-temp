@@ -7,8 +7,6 @@ import PublicFeedsButton from "@components/molecules/publicFeedsButton";
 import PublishSearchButton from "@components/molecules/publishSearchButton";
 import React from "react";
 
-// import PublicFeedsButton from "@components/molecules/publicFeedsButton";
-
 interface IProps {
   projectName?: string;
   logo?: string;
@@ -38,7 +36,7 @@ const PublishHeader = ({ projectName, logo, domain }: IProps) => {
             </div>
 
             {projectName ? (
-              <h1 className="font-bold mr-2 text-white">{projectName}</h1>
+              <h1 className="font-bold mr-2 text-color-primary">{projectName}</h1>
             ) : null}
           </Link>
           <div className="flex items-center gap-1 xs:gap-4 xs:mr-auto">

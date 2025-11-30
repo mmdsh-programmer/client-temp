@@ -128,16 +128,16 @@ export interface IDocumentMetadata {
   createdAt: string;
   updatedAt: string | null;
   deletedAt: string | null;
-  creatorSSOID: number;
+  creatorSSOID?: number;
   isHidden: boolean;
   isBookmarked: boolean;
   hasPassword: boolean;
   creator: {
     img: string;
     name: string;
-    ssoId: number;
-    userName: string;
-    contactId: string | null;
+    ssoId?: number;
+    userName?: string;
+    contactId?: string | null;
   } | null;
   order?: number | null;
   tags:

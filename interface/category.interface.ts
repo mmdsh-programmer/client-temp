@@ -34,9 +34,9 @@ export interface ICategoryMetadata {
   creator: {
     img: string;
     name: string;
-    ssoId: number;
-    userName: string;
-    contactId: string | null;
+    ssoId?: number;
+    userName?: string;
+    contactId?: string | null;
   } | null;
   order?: number | null;
   createdAt: string | null;
