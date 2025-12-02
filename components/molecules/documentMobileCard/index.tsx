@@ -20,26 +20,15 @@ interface IProps {
 
 const DocumentMobileCard = ({ document }: IProps) => {
   const currentPath = usePathname();
-  const getBulkItems = useBulkStore((state) => {
-    return state.bulkItems;
-  });
-  const setBulkItems = useBulkStore((state) => {
-    return state.setBulkItems;
-  });
-  const getRepo = useRepositoryStore((state) => {
-    return state.repo;
-  });
-  const selectedCat = useCategoryStore((state) => {
-    return state.category;
-  });
-  const setDocument = useDocumentStore((state) => {
-    return state.setSelectedDocument;
-  });
-  const setEditorMode = useEditorStore((state) => {
-    return state.setEditorMode;
-  });
+  const { repo: getRepo } = useRepositoryStore();
+  const { bulkItems: getBulkItems, setBulkItems } = useBulkStore();
+  const { category: selectedCat } = useCategoryStore();
+  const { setSelectedDocument: setDocument } = useDocumentStore();
+  const { setEditorMode } = useEditorStore();
 
   const handleCardClick = () => {
+    window.metrics.track("select-document");
+    window.metrics.track("select-document-new-tab");
     if (document.contentType === "file") {
       setDocument(document);
       setEditorMode("preview");
@@ -63,10 +52,11 @@ const DocumentMobileCard = ({ document }: IProps) => {
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    window.metrics.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && getBulkItems.length + 1 > 10) {
       e.target.checked = false;
-      toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
+      toast.error("نمی‌توانید بیش از 10 آیتم را انتخاب کنید");
       return;
     }
     if (isChecked) {
@@ -98,13 +88,13 @@ const DocumentMobileCard = ({ document }: IProps) => {
               })}
             />
           )}
-          <div className="flex items-center max-w-full gap-2">
+          <div className="flex max-w-full items-center gap-2">
             <DocumentIcon document={document} />
             <Typography
               placeholder=""
-              className="flex text-primary_normal max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
+              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis text-primary_normal"
               title={document.name}
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {document.name}
             </Typography>

@@ -23,7 +23,7 @@ const CategoryBulk = () => {
             <Typography
               placeholder=""
               className="label_l2 whitespace-nowrap !text-white"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {getBulkItems.length} مورد انتخاب شده
             </Typography>
@@ -33,9 +33,10 @@ const CategoryBulk = () => {
             placeholder=""
             className="move label_l2 h-full px-4"
             onClick={() => {
+              window.metrics.track("move-bulk-items");
               setOpenMoveDialog(true);
             }}
-            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             انتقال
           </Button>
@@ -44,9 +45,10 @@ const CategoryBulk = () => {
             placeholder=""
             className="delete label_l2 h-full px-4"
             onClick={() => {
+              window.metrics.track("delete-bulk-items");
               setOpenDeleteDialog(true);
             }}
-            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             حذف
           </Button>
@@ -55,9 +57,10 @@ const CategoryBulk = () => {
             placeholder=""
             className="cancel label_l2 h-full px-2"
             onClick={() => {
+              window.metrics.track("cancel-bulk-items");
               setBulkItems([]);
             }}
-            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <XIcon className="h-5 w-5 fill-gray-50" />
           </Button>
@@ -67,6 +70,7 @@ const CategoryBulk = () => {
         <div
           className="move flex cursor-pointer flex-col items-center"
           onClick={() => {
+            window.metrics.track("move-bulk-items");
             setOpenMoveDialog(true);
           }}
         >
@@ -76,6 +80,7 @@ const CategoryBulk = () => {
         <div
           className="delete flex cursor-pointer flex-col items-center"
           onClick={() => {
+            window.metrics.track("delete-bulk-items");
             setOpenDeleteDialog(true);
           }}
         >
@@ -85,6 +90,7 @@ const CategoryBulk = () => {
         <div
           className="cancel flex cursor-pointer flex-col items-center"
           onClick={() => {
+            window.metrics.track("cancel-bulk-items");
             setBulkItems([]);
           }}
         >

@@ -22,6 +22,7 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
   const { bulkItems: getBulkItems, setBulkItems } = useBulkStore();
 
   const handleRowClick = (selectedCategory: ICategoryMetadata) => {
+    window.metrics.track("select-category");
     setCategoryShow(selectedCategory);
     setBulkItems([]);
     if (currentPath !== "/admin/repositories") {
@@ -30,10 +31,11 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    window.metrics.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && (getBulkItems as ICategoryMetadata[]).length + 1 > 10) {
       e.target.checked = false;
-      toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
+      toast.error("نمی‌توانید بیش از 10 آیتم را انتخاب کنید");
       return;
     }
     setBulkItems(

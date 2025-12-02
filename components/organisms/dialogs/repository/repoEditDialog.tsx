@@ -71,6 +71,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       toast.error("تغییری در مخزن وجود ندارد");
       return;
     }
+    window.metrics.track(`repo-${getRepo?.id}-submit-edit`);
 
     mutate({
       repoId: getRepo.id,
@@ -82,6 +83,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
           name: dataForm.name,
           description: dataForm.description || "",
         });
+        window.metrics.track(`repo-${getRepo?.id}-success-edit`);
         toast.success("مخزن با موفقیت به روز رسانی شد.");
         handleClose();
       },
@@ -104,6 +106,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
             ...getRepo,
             imageFileHash: imageHash || "",
           });
+          window.metrics.track(`repo-${getRepo?.id}-success-edit-image`);
           toast.success("عکس با موفقیت به مخزن اضافه شد.");
           handleClose();
         },
@@ -136,15 +139,26 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
     >
       <form className="repo-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">عنوان مخزن</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            عنوان مخزن
+          </Typography>
           <FormInput
             placeholder="عنوان"
             register={{ ...register("name", { value: getRepo?.name }) }}
           />
-          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
+          {errors.name && (
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.name?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات مخزن</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            توضیحات مخزن
+          </Typography>
           <TextareaAtom
             placeholder="توضیحات"
             register={{
@@ -152,7 +166,12 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
             }}
           />
           {errors.name && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.description?.message}</Typography>
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.description?.message}
+            </Typography>
           )}
         </div>
         <RepoAttachCustomImage

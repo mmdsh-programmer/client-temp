@@ -41,6 +41,8 @@ const DocumentTableRow = ({ document }: IProps) => {
       : getRepo?.userGroupHash;
 
   const handleRowClick = () => {
+    window.metrics.track("select-document");
+    window.metrics.track("select-document-new-tab");
     if (document.contentType === EDocumentTypes.form) {
       if (!repoId) {
         console.error("شناسه مخزن وجود ندارد.");
@@ -96,10 +98,11 @@ const DocumentTableRow = ({ document }: IProps) => {
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    window.metrics.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && (getBulkItems as IDocumentMetadata[]).length + 1 > 10) {
       e.target.checked = false;
-      toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
+      toast.error("نمی‌توانید بیش از 10 آیتم را انتخاب کنید");
       return;
     }
     setBulkItems(

@@ -37,7 +37,7 @@ const MyDocumentsPage = () => {
           }}
         />
       ) : null}
-      {getBulkItems.length ? <CategoryBulk /> : null}{" "}
+      {getBulkItems.length ? <CategoryBulk /> : null}
     </div>
   );
 };

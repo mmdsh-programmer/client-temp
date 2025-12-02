@@ -11,3 +11,12 @@ export interface TypeAnimationProps {
 declare const TypeAnimation: FunctionComponent<TypeAnimationProps>;
 
 export default TypeAnimation;
+
+declare global {
+    interface Window {
+      metrics: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        [key: string]: any;
+      };
+    }
+  }

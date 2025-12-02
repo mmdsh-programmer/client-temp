@@ -8,11 +8,7 @@ const useBookmarkRepo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["bookmarkRepo"],
-    mutationFn: async (values: {
-      repoId: number;
-      detach?: boolean;
-      callBack?: () => void;
-    }) => {
+    mutationFn: async (values: { repoId: number; detach?: boolean; callBack?: () => void }) => {
       const { detach, repoId } = values;
       const response = await bookmarkRepoAction(repoId, detach);
       handleClientSideHookError(response as IActionError);
@@ -23,14 +19,19 @@ const useBookmarkRepo = () => {
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
-      queryClient.invalidateQueries({ queryKey: ["allRepoList"], });
-      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"], });
-      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"], });
-      queryClient.invalidateQueries({ queryKey: ["accessRepoList"], });
+      queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
+      queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
+      queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      const { repoId } = values;
+      window.metrics.crach({
+        message: error.message,
+        stack: `repo-${repoId}-bookmark`,
+      });
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

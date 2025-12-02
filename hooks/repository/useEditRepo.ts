@@ -28,7 +28,13 @@ const useEditRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
-    onError: (error) => {
+    onError: (error, values) => {
+      const { repoId } = values;
+
+      window.metrics.crach({
+        message: error.message,
+        stack: `repo-${repoId}-edit`,
+      });
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

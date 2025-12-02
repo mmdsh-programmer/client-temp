@@ -47,7 +47,8 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       repo.bookmark ? "حذف بوکمارک" : "بوکمارک کردن",
       <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
       () => {
-        return setModal("bookmark");
+        window.metrics.track(`repo-bookmark-${repo.id}`);
+        setModal("bookmark");
       },
       repo.bookmark ? "repo-menu__item--bookmark" : "repo-menu__item--bookmark-remove",
     ),
@@ -55,7 +56,8 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "اشتراک گذاری",
       <ShareIcon className="h-4 w-4 stroke-icon-active" />,
       () => {
-        return setModal("share");
+        window.metrics.track(`repo-share-${repo.id}`);
+        setModal("share");
       },
       "repo-menu__item--share",
     ),
@@ -63,6 +65,7 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "اعلانات من",
       <AlertIcon className="h-4 w-4 stroke-1" />,
       () => {
+        window.metrics.track(`repo-my-notif-${repo.id}`);
         setModal("myNotif");
       },
       "repo-menu__item--my-notif",
@@ -71,7 +74,8 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "کلید های مخزن",
       <KeyIcon className="h-4 w-4 stroke-1" />,
       () => {
-        return setModal("key");
+        window.metrics.track(`repo-key-${repo.id}`);
+        setModal("key");
       },
       "repo-menu__item--keys",
     ),
@@ -98,6 +102,7 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "ویرایش",
       <EditIcon className="h-4 w-4" />,
       () => {
+        window.metrics.track(`repo-edit-${repo.id}`);
         setModal("edit");
       },
       "repo-menu__item--edit",
@@ -106,7 +111,8 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "مدیریت فایل",
       <FileManagementIcon className="h-4 w-4 fill-icon-active" />,
       () => {
-        return setModal("fileManagement");
+        window.metrics.track(`repo-file-management-${repo.id}`);
+        setModal("fileManagement");
       },
       "repo-menu__item--file-management",
     ),
@@ -114,7 +120,8 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "درخواست‌ها",
       <LastVersionIcon className="h-4 w-4" />,
       () => {
-        return setModal("versionRequests");
+        window.metrics.track(`repo-version-requests-${repo.id}`);
+        setModal("versionRequests");
       },
       "repo-menu__item--version-requests",
     ),
@@ -129,7 +136,8 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "درخواست‌های دسترسی سند",
       <LockIcon className="h-4 w-4" />,
       () => {
-        return setModal("documentWhiteList");
+        window.metrics.track(`repo-documentWhiteList-${repo.id}`);
+        setModal("documentWhiteList");
       },
       "repo-menu__document-white-list",
     ),
@@ -137,7 +145,8 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "بایگانی",
       <ArchiveActionIcon className="h-4 w-4 fill-icon-active" />,
       () => {
-        return setModal("archive");
+        window.metrics.track(`repo-archive-${repo.id}`);
+        setModal("archive");
       },
       "repo-menu__item--archive",
     ),
@@ -145,7 +154,8 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "حذف",
       <DeleteIcon className="h-4 w-4" />,
       () => {
-        return setModal("delete");
+        window.metrics.track(`repo-delete-${repo.id}`);
+        setModal("delete");
       },
       "repo-menu__item--delete",
     ),
@@ -154,13 +164,14 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
   });
 };
 
-const getOwnerDestructiveActions = (setModal: (modal: string) => void): MenuItem[] => {
+const getOwnerDestructiveActions = (repo: IRepo, setModal: (modal: string) => void): MenuItem[] => {
   return [
     createItem(
       "بازگردانی",
       <RestoreIcon className="h-4 w-4" />,
       () => {
-        return setModal("restore");
+        window.metrics.track(`repo-restore-${repo.id}`);
+        setModal("restore");
       },
       "repo-menu__item--restore",
     ),
@@ -168,7 +179,8 @@ const getOwnerDestructiveActions = (setModal: (modal: string) => void): MenuItem
       "حذف",
       <DeleteIcon className="h-4 w-4" />,
       () => {
-        return setModal("delete");
+        window.metrics.track(`repo-delete-${repo.id}`);
+        setModal("delete");
       },
       "repo-menu__item--delete",
     ),
@@ -199,7 +211,7 @@ const useRepoMenuList = (
   switch (repo.roleName) {
     case ERoles.owner:
       if (repo.isArchived) {
-        menuItems = getOwnerDestructiveActions(setModal);
+        menuItems = getOwnerDestructiveActions(repo, setModal);
       } else menuItems = getOwnerMenuItems(repo, setModal);
       break;
     case ERoles.admin:
@@ -214,7 +226,10 @@ const useRepoMenuList = (
       createItem(
         "اطلاعات مخزن",
         <FolderInfoIcon className="h-4 w-4" />,
-        onInfoClick,
+        () => {
+          window.metrics.track(`repo-info-${repo.id}`);
+          onInfoClick();
+        },
         "repo-menu__item--folder-info",
       ),
     );
@@ -226,6 +241,7 @@ const useRepoMenuList = (
         "فعالیت های مخزن",
         <RepoActivityIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
+          window.metrics.track(`repo-activity-${repo.id}`);
           setShowRepoActivity(!showRepoActivity);
         },
         "repo-menu__item--repo-activity",
@@ -239,6 +255,7 @@ const useRepoMenuList = (
         "ایجاد خبرنامه خصوصی",
         <FeedIcon className="h-4 w-4" />,
         () => {
+          window.metrics.track(`repo-private-feed-${repo.id}`);
           setRepoFeed({ label: repo.name, value: repo.id });
           setModal("privateFeed");
         },
@@ -253,7 +270,8 @@ const useRepoMenuList = (
         "ترک مخزن",
         <LeaveRepoIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
-          return setModal("leave");
+          window.metrics.track(`repo-leave-${repo.id}`);
+          setModal("leave");
         },
         "repo-menu__item--leave",
       ),
