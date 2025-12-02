@@ -4,7 +4,7 @@ import { ICustomPostData } from "@interface/app.interface";
 import React from "react";
 import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
-import PushNotification from "@components/organisms/pushNotification";
+// import PushNotification from "@components/organisms/pushNotification";
 
 interface IProps {
   children: React.ReactNode;
@@ -35,7 +35,7 @@ const AdminLayout = async ({ children, params }: IProps) => {
 
   return (
     <ErrorBoundary>
-      <PushNotification />
+      {/* <PushNotification /> */}
       <BaseTemplate domainInfo={domainInfo}>{children}</BaseTemplate>
     </ErrorBoundary>
   );
