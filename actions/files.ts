@@ -115,10 +115,8 @@ export const getPublishAttachmentAction = async (
   offset: number,
   size: number,
 ) => {
-  const userInfo = await getMe();
   try {
     const response = await getPublishAttachment(
-      userInfo.access_token,
       docId,
       offset,
       size,

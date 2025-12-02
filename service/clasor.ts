@@ -3047,7 +3047,6 @@ export const repoPublicHashList = async (
 };
 
 export const getPublishAttachment = async (
-  accessToken: string,
   docId: number,
   offset: number,
   size: number,
@@ -3056,9 +3055,6 @@ export const getPublishAttachment = async (
     const response = await axiosClasorInstance.get<{ data: IPublishAttachmentList }>(
       `publish/document/${docId}/attachments`,
       {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
         params: {
           offset,
           size,

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IRemoteEditorRef } from "clasor-remote-editor";
 import { usePathname, useSearchParams } from "next/navigation";
 import DocumentEnableUserGroup from "../editorDrawer/documentEnableUserGroup";
@@ -123,9 +123,14 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       return <FileEditor />;
     }
 
+    const editorKey = version?.id 
+      ? `${version.id}-${version?.updateDate || version?.content?.length}` 
+      : "editor-default";
+
     return (
       <RemoteEditorWithLoader
         url={`${getEditorConfig().url}?timestamp=${timestampRef.current}`}
+        key={editorKey}
         editorMode={editorMode}
         refObj={getEditorConfig().ref}
         loadData={getLoadData() as IClassicData}
@@ -137,6 +142,10 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       />
     );
   };
+
+  useEffect(() => {
+    setVersionData(version);
+  }, [version]);
 
   if (isLoading) {
     return (

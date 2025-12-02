@@ -17,6 +17,7 @@ import PublicKeyInfo from "./publicKeyInfo";
 import { useEditorVersion } from "./useEditorVersion";
 import { Spinner } from "@components/atoms/spinner";
 import { IVersion } from "@interface/version.interface";
+import { useIsMutating } from "@tanstack/react-query";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -51,6 +52,8 @@ const Editor = ({ setOpen }: IProps) => {
   } = useVersionStore();
 
   const [showKey, setShowKey] = useState(!!getSelectedDocument?.publicKeyId);
+
+  const revertVersion = useIsMutating({ mutationKey: ["revertVersion"] });
 
   const isEncryptedContent = useMemo(() => {
     const content = getVersionData?.content;
@@ -131,6 +134,13 @@ const Editor = ({ setOpen }: IProps) => {
     setVersionModalList,
   ]);
 
+  
+  useEffect(() => {
+    if (revertVersion) {
+      refetch();
+    }
+  }, [revertVersion]);
+    
   useEffect(() => {
     if (!version) return;
 

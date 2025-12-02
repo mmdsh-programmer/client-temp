@@ -26,7 +26,7 @@ const VersionHistoryList = () => {
   const renderList = () => {
     if (historyLength) {
       return (
-        <div className="flex h-[calc(100vh-320px)] flex-col gap-2 overflow-auto">
+        <div className="flex h-[calc(100vh-260px)] flex-col gap-2 overflow-auto">
           {versionHistory.versionHistory.map((item) => {
             return (
               <div
