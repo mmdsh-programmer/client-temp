@@ -21,16 +21,18 @@ const QuestionAnswerEditor = forwardRef<IQaEditorRef, IProps>(({ defaultValue },
 
   const { data: userInfo } = useGetUser();
 
-  const getData = async () => {
-    if (classicEditorRef.current) {
-      const data = classicEditorRef.current.getData() as unknown as IEditorValue;
-      return data;
-    }
+  const getData = async (): Promise<IEditorValue> => {
+    return new Promise((resolve) => {
+      if (!classicEditorRef.current) {
+        resolve({ content: "", outline: "" });
+        return;
+      }
+      classicEditorRef.current.on("getData", (data: any) => {
+        resolve(data);
+      });
 
-    return {
-      content: "",
-      outline: "",
-    };
+      classicEditorRef.current.getData();
+    });
   };
 
   const setData = (value: string) => {
@@ -39,17 +41,17 @@ const QuestionAnswerEditor = forwardRef<IQaEditorRef, IProps>(({ defaultValue },
     }
   };
 
-  useImperativeHandle(ref, () => 
-{return {
-    getData,
-    setData,
-    on: async (event: "getData", callback) => {
-      await classicEditorRef.current?.on(event, (editorData) => {
-        console.log("-------------------- editor data ------------------", editorData);
-        return callback(JSON.stringify(editorData));
-      });
-    },
-  };});
+  useImperativeHandle(ref, () => {
+    return {
+      getData,
+      setData,
+      on: async (event: "getData", callback) => {
+        await classicEditorRef.current?.on(event, (editorData) => {
+          return callback(JSON.stringify(editorData));
+        });
+      },
+    };
+  });
 
   return (
     <RemoteEditor

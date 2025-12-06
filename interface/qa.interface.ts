@@ -220,3 +220,63 @@ export interface IQuestionDetailsProps extends IQAList {
   docPostId: number;
   docName: string;
 }
+
+export interface IPostRate {
+  myRate: number;
+  rate: number;
+  rateCount: number;
+}
+
+export interface IUserPostInfo {
+  disliked: boolean;
+  favorite: boolean;
+  liked: boolean;
+  postId: number;
+  saved: boolean;
+}
+
+export interface IUserSrv {
+  id: number;
+  name: string;
+  ssoId: string;
+  ssoIssuerCode: number;
+}
+
+export interface IQuestion {
+  id: number;
+  entityId: number;
+  timelineId: number;
+  content: string; 
+  metadata: string;
+  name: string;
+  timestamp: number;
+  version: number;
+  
+  canComment: boolean;
+  canLike: boolean;
+  canRate: boolean;
+  enable: boolean;
+  hide: boolean;
+  pin: boolean;
+  replyPostConfirmation: boolean;
+  
+  numOfComments: number;
+  numOfDisLikes: number;
+  numOfFavorites: number;
+  numOfLikes: number;
+  numOfSaved: number;
+  numOfShare: number;
+  
+  latitude: number;
+  longitude: number;
+  
+  forwardedId: number;
+  repliedPostId: number;
+  
+  rate: IPostRate;
+  userPostInfo: IUserPostInfo;
+  userSrv: IUserSrv;
+  
+  tags: any[]; 
+  tagTrees: any[]; 
+}

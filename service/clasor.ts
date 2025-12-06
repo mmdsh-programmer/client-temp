@@ -74,6 +74,7 @@ import qs from "qs";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
 import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
 import { getDomainHost } from "@utils/getDomain";
+import { IQuestion } from "@interface/qa.interface";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -2786,7 +2787,6 @@ export const getVersionHistory = async (
   transaction?: boolean,
 ) => {
   try {
-  
     const response = await axiosClasorInstance.get<IServerResult<IContentVersionData>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/history`,
       {
@@ -2813,7 +2813,6 @@ export const getVersionSummary = async (
   transaction?: boolean,
 ) => {
   try {
-  
     const response = await axiosClasorInstance.get<IServerResult<IVersionsSummary>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/summary`,
       {
@@ -2841,7 +2840,6 @@ export const getVersionInfo = async (
   transaction?: boolean,
 ) => {
   try {
-  
     const response = await axiosClasorInstance.get<IServerResult<IContentVersion>>(
       `repositories/${repoId}/documents/${documentId}/versions/${versionId}/reversion/${versionIndex}/info`,
       {
@@ -2876,9 +2874,9 @@ export const revertVersion = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-        params:{
-          transaction
-        }
+        params: {
+          transaction,
+        },
       },
     );
 
@@ -2898,7 +2896,7 @@ export const getResourceFiles = async (
   size: number,
   name?: string,
   order?: "NAME" | "CREATED" | "UPDATED" | "SIZE" | "TYPE" | null,
-  isDesc?:boolean
+  isDesc?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<
@@ -2917,7 +2915,7 @@ export const getResourceFiles = async (
         size,
         name,
         order,
-        isDesc
+        isDesc,
       },
     });
 
@@ -4047,7 +4045,7 @@ export const deleteAccessOfResource = async (
   accessNames: string[],
   username: string,
   validate: boolean,
-  isDirectAccess?: boolean
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(`acl/${resourceId}`, {
@@ -4058,7 +4056,7 @@ export const deleteAccessOfResource = async (
         accessNames,
         username,
         validate,
-        isDirectAccess
+        isDirectAccess,
       },
     });
     return response.data.data;
@@ -5460,6 +5458,363 @@ export const updateMyNotifServices = async (
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+/// /////////////////////// QUESTION ANSWER //////////////////////////
+
+export const getQuestionList = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IQuestion>>>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/confirmed`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createQuestion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  title: string,
+  content: string,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions`,
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateQuestion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  entityId: number,
+  title: string,
+  content: string,
+) => {
+  try {
+    const response = await axiosClasorInstance.put<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${entityId}/update`,
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteQuestion = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  entityId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${entityId}/remove`,
+      {
+        data: {
+          entityId,
+        },
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getAnswerList = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  questionId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<any>>>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}/answers/confirmed`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createAnswer = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  questionId: number,
+  title: string,
+  content: string,
+) => {
+  try {
+    const response = await axiosClasorInstance.post<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}/answers`,
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const updateAnswer = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  entityId: number,
+  title: string,
+  content: string,
+) => {
+  try {
+    const response = await axiosClasorInstance.put<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/answers/${entityId}/update`,
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deleteAnswer = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  entityId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/answers/${entityId}/remove`,
+      {
+        data: {
+          entityId,
+        },
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+// /////////////////////////// COMMENT ///////////////////////
+
+// export const getCommentList = async (
+//   accessToken: string,
+//   repoId: number,
+//   documentId: number,
+//   offset: number,
+//   size: number,
+// ) => {
+//   try {
+//     const response = await axiosClasorInstance.get<IServerResult<IListResponse<any>>>(
+//       `repositories/${repoId}/documents/${documentId}/comments`,
+
+//       {
+//         headers: {
+//           Authorization: `Bearer ${accessToken}`,
+//         },
+//         params: {
+//           offset,
+//           size,
+//         },
+//       },
+//     );
+//     return response.data.data;
+//   } catch (error) {
+//     return handleClasorStatusError(error as AxiosError<IClasorError>);
+//   }
+// };
+
+// export const createAnswer = async (
+//   accessToken: string,
+//   repoId: number,
+//   documentId: number,
+//   questionId: number,
+//   title: string,
+//   content: string,
+// ) => {
+//   try {
+//     const response = await axiosClasorInstance.post<any>(
+//       `repositories/${repoId}/documents/${documentId}/comments`,
+//       {
+//         title,
+//         content,
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${accessToken}`,
+//         },
+//       },
+//     );
+//     return response.data;
+//   } catch (error) {
+//     return handleClasorStatusError(error as AxiosError<IClasorError>);
+//   }
+// };
+
+// ////////////////////////// LIKE & DISLIKE /////////////////////////
+
+export const getLikePostList = async (
+  accessToken: string,
+  postId: number,
+  hasUser: boolean,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<any>(`core/content/${postId}/like`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        hasUser,
+        offset,
+        size,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getDislikePostList = async (
+  accessToken: string,
+  postId: number,
+  hasUser: boolean,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<any>(`core/content/${postId}/dislike`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        hasUser,
+        offset,
+        size,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const likePost = async (accessToken: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `core/content/${postId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const dislikePost = async (accessToken: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `core/content/${postId}/dislike`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          undo: false,
         },
       },
     );

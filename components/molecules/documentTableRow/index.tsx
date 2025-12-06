@@ -41,7 +41,6 @@ const DocumentTableRow = ({ document }: IProps) => {
       : getRepo?.userGroupHash;
 
   const handleRowClick = () => {
-    window.metrics.track("select-document");
     window.metrics.track("select-document-new-tab");
     if (document.contentType === EDocumentTypes.form) {
       if (!repoId) {

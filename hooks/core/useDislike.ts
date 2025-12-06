@@ -1,26 +1,21 @@
-import { dislikeAction } from "@actions/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { dislikePostAction } from "@actions/like&dislike";
 
 const useDislike = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["dislike"],
-    mutationFn: async (values: {
-      postId: number;
-      dislike: boolean;
-      parentPostId?: number;
-      callBack?: () => void;
-    }) => {
-      const { postId, dislike } = values;
-      const response = await dislikeAction(postId, dislike);
+    mutationFn: async (values: { postId: number; callBack?: () => void }) => {
+      const { postId } = values;
+      const response = await dislikePostAction(postId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId, parentPostId } = values;
+      const { callBack, postId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getDislike-${postId}`],
       });
@@ -29,11 +24,6 @@ const useDislike = () => {
       });
       queryClient.invalidateQueries({
         queryKey: [`post-${postId}-info`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [
-          `question-answer-list${parentPostId ? `-${parentPostId}` : ""}`,
-        ],
       });
 
       callBack?.();

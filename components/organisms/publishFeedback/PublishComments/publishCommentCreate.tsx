@@ -73,7 +73,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
         <input
           id="commentText"
           {...register("text")}
-          className="!w-full font-iranYekan border-2 border-solid border-gray-200 text-xs text-gray-800 outline-none focus:outline-none py-2.5 px-2 rounded-lg"
+          className="!w-full font-iranYekan border-2 border-solid bg-gray-100  border-gray-200 text-xs text-gray-800 outline-none focus:outline-none py-2.5 px-2 rounded-lg"
         />
         {errors.text && (
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">

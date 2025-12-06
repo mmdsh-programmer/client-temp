@@ -1,12 +1,11 @@
 import React from "react";
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
-import { IQAList } from "@interface/qa.interface";
 import useLike from "@hooks/core/useLike";
 import useDislike from "@hooks/core/useDislike";
+import { IQuestion } from "@interface/qa.interface";
 
 interface IProps {
-  postInfo: IQAList;
-  parentPostId: number;
+  item: IQuestion;
   likeButtonClassName?: string;
   dislikeButtonClassName?: string;
   wrapperClassName?: string;
@@ -16,40 +15,35 @@ interface IProps {
 }
 
 const QuestionAnswerLikeAndDislike = ({
-  postInfo,
+  item,
   likeButtonClassName,
   dislikeButtonClassName,
   wrapperClassName,
   iconClassName,
   showCounter,
   counterClassName,
-  parentPostId,
 }: IProps) => {
   const likeHook = useLike();
   const disLikeHook = useDislike();
 
   const handleLike = () => {
     likeHook.mutate({
-      postId: postInfo.id,
-      like: !postInfo.userPostInfo.liked,
-      parentPostId,
+      postId: item.id,
     });
   };
 
   const handleDisLike = () => {
     disLikeHook.mutate({
-      postId: postInfo.id,
-      dislike: !postInfo.userPostInfo.disliked,
-      parentPostId,
+      postId: item.id,
     });
   };
 
   return (
     <LikeDislikeButtons
-      likeCount={postInfo.numOfLikes}
-      dislikeCount={postInfo.numOfDisLikes}
       likePending={likeHook.isPending}
       dislikePending={disLikeHook.isPending}
+      likeCount={item.numOfLikes}
+      dislikeCount={item.numOfDisLikes}
       onLike={handleLike}
       onDislike={handleDisLike}
       wrapperClassName={wrapperClassName}
@@ -58,8 +52,8 @@ const QuestionAnswerLikeAndDislike = ({
       iconClassName={iconClassName}
       showCounter={showCounter}
       counterClassName={counterClassName}
-      isLiked={postInfo.userPostInfo.liked}
-      isDisliked={postInfo.userPostInfo.disliked}
+      isLiked={item.userPostInfo.liked}
+      isDisliked={item.userPostInfo.disliked}
     />
   );
 };

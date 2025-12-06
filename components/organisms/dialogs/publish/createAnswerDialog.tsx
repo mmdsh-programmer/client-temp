@@ -5,21 +5,23 @@ import QuestionAnswerEditor, {
   IQaEditorRef,
 } from "@components/organisms/publishFeedback/PublishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
-import useCreateQuestionAnswer from "@hooks/questionAnswer/useCreateQuestionAnswer";
 import { config } from "@utils/clasorEditor";
 import useGetUser from "@hooks/auth/useGetUser";
 import PublishForcePublicProfile from "@components/organisms/publishFeedback/publishForcePublicProfile";
+import useCreateAnswer from "@hooks/questionAnswer/useCreateAnswer";
 
 interface IProps {
-  postId: number;
+  repoId: number;
+  documentId: number;
+  questionId: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const AnswerDialog = ({ postId, setOpen }: IProps) => {
+const CreateAnswerDialog = ({ repoId, documentId, questionId, setOpen }: IProps) => {
   const { data: userInfo } = useGetUser();
   const editorRef = useRef<IQaEditorRef | null>(null);
 
-  const createAnswerHook = useCreateQuestionAnswer();
+  const createAnswerHook = useCreateAnswer();
 
   const handleClose = () => {
     setOpen(false);
@@ -41,10 +43,11 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
     }
 
     createAnswerHook.mutate({
-      name: `post-${postId}-answer`,
+      repoId,
+      documentId,
+      questionId,
+      title: `answer-to-question-${questionId}`,
       content: editorData.content,
-      repliedPostId: postId,
-      metadata: JSON.stringify({ isQuestion: false }),
       callBack: () => {
         toast.success("پاسخ شما با موفقیت اضافه شد");
         setOpen(false);
@@ -73,7 +76,10 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
         <PublishForcePublicProfile customText="برای نوشتن پاسخ باید پروفایل کاربری شما عمومی باشد" />
       ) : (
         <form className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs text-gray-800 mb-2">
+          <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="mb-2 text-xs text-gray-800"
+          >
             پاسخ خود را بنویسید
           </Typography>
 
@@ -86,4 +92,4 @@ const AnswerDialog = ({ postId, setOpen }: IProps) => {
   );
 };
 
-export default AnswerDialog;
+export default CreateAnswerDialog;

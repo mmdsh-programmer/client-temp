@@ -2,34 +2,35 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError, ISocialResponse } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { createQuestionAnswerAction } from "@actions/questionAnswer";
+import { updateAnswerAction } from "@actions/questionAnswer";
 import { IQAResponse } from "@interface/qa.interface";
 
-const useCreateQuestionAnswer = () => {
+const useUpdateAnswer = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["create-question-answer"],
+    mutationKey: ["update-answer"],
     mutationFn: async (values: {
-      name: string;
+      repoId: number;
+      documentId: number;
+      questionId: number;
+      entityId: number;
+      title: string;
       content: string;
-      repliedPostId?: number;
-      metadata?: string;
       callBack?: () => void;
     }) => {
-      const { name, content, repliedPostId, metadata } = values;
-      const response = await createQuestionAnswerAction(
-        name,
-        content,
-        repliedPostId,
-        metadata
-      );
+      const { repoId, documentId, entityId, title, content } = values;
+
+      const response = await updateAnswerAction(repoId, documentId, entityId, title, content);
+
       handleClientSideHookError(response as IActionError);
       return response as ISocialResponse<IQAResponse>;
     },
     onSuccess: (response, values) => {
-      const { callBack, repliedPostId } = values;
+      const { callBack, repoId, documentId, questionId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`question-answer-list${repliedPostId ? `-${repliedPostId}` : ""}`],
+        queryKey: [
+          `answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`,
+        ],
       });
 
       callBack?.();
@@ -40,4 +41,4 @@ const useCreateQuestionAnswer = () => {
   });
 };
 
-export default useCreateQuestionAnswer;
+export default useUpdateAnswer;
