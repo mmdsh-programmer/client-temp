@@ -159,10 +159,14 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const message: any = error instanceof Error ? error.message : "خطای نامشخصی رخ داد";
-    const errorMsg = typeof message === "string" ? message : message.message;
+    let errorMsg = typeof message === "string" ? message : message.message;
 
-    if (errorMsg === "NEXT_NOT_FOUND") {
-      return notFound();
+    if (
+      errorMsg === "NEXT_NOT_FOUND" ||
+      errorMsg.includes("NEXT_HTTP_ERROR_FALLBACK") ||
+      errorMsg.includes("404")
+    ) {
+      errorMsg = "آدرس وارد شده صحیح نیست.";
     }
     return (
       <section className="main bg-slate-50 grid h-[calc(100vh-81px)] w-full place-items-center justify-items-center text-center">

@@ -1,65 +1,30 @@
 "use server";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { IActionError } from "@interface/app.interface";
-import {
-  archivePost,
-  createQuestionAnswer,
-  getQuestionAnswer,
-  updateQuestionAnswer,
-} from "@service/social";
 import { normalizeError } from "@utils/normalizeActionError";
-import { getMe, userInfoAction } from "./auth";
+import { getMe } from "./auth";
+import {
+  createAnswer,
+  createQuestion,
+  deleteAnswer,
+  deleteQuestion,
+  getAnswerList,
+  getQuestionList,
+  updateAnswer,
+  updateQuestion,
+} from "@service/clasor";
 
-const { API_TOKEN } = process.env;
-
-export const getQuestionAnswerAction = async (
+export const getQuestionListAction = async (
+  repoId: number,
+  documentId: number,
   offset: number,
   size: number,
-  parentPostId?: number,
-  id?: number[],
-  uniqueId?: number[],
-  userId?: number,
-  firstId?: number,
-  lastId?: number,
-  fromDate?: number,
-  toDate?: number,
-  tags?: string[],
-  tagTrees?: any,
-  tagTreeCategoryName?: string[],
-  mentionedUserList?: string[],
-  activityInfo?: string,
-  q?: string,
-  relatedToIssuerClient?: string
 ) => {
-  const userInfo = await userInfoAction();
+  const userInfo = await getMe();
 
   try {
-    const accessToken =
-      userInfo && !("error" in userInfo)
-        ? userInfo.access_token
-        : (API_TOKEN as string);
-    const response = await getQuestionAnswer(
-      accessToken,
-      offset,
-      size,
-      parentPostId,
-      id,
-      uniqueId,
-      userId,
-      firstId,
-      lastId,
-      fromDate,
-      toDate,
-      tags,
-      tagTrees,
-      tagTreeCategoryName,
-      mentionedUserList,
-      activityInfo,
-      q,
-      relatedToIssuerClient
-    );
+    const accessToken = userInfo.access_token;
+    const response = await getQuestionList(accessToken, repoId, documentId, offset, size);
 
     return response;
   } catch (error) {
@@ -67,44 +32,20 @@ export const getQuestionAnswerAction = async (
   }
 };
 
-export const createQuestionAnswerAction = async (
-  name: string,
+export const createQuestionAction = async (
+  repoId: number,
+  documentId: number,
+  title: string,
   content: string,
-  repliedPostId?: number,
-  metadata?: string,
-  replyPostConfirmation?: boolean,
-  lgContent?: string,
-  lat?: number,
-  lng?: number,
-  tags?: string[],
-  tagTrees?: any,
-  tagTreeCategoryName?: string[],
-  mentionedUserList?: string[],
-  canComment: boolean = true,
-  canLike: boolean = true,
-  canRate: boolean = true,
-  enable: boolean = true
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await createQuestionAnswer(
+    const response = await createQuestion(
       userInfo.access_token,
-      name,
+      repoId,
+      documentId,
+      title,
       content,
-      repliedPostId,
-      metadata,
-      replyPostConfirmation,
-      lgContent,
-      lat,
-      lng,
-      tags,
-      tagTrees,
-      tagTreeCategoryName,
-      mentionedUserList,
-      canComment,
-      canLike,
-      canRate,
-      enable
     );
 
     return response;
@@ -113,46 +54,22 @@ export const createQuestionAnswerAction = async (
   }
 };
 
-export const updateQuestionAnswerAction = async (
+export const updateQuestionAction = async (
+  repoId: number,
+  documentId: number,
   entityId: number,
-  name: string,
+  title: string,
   content: string,
-  repliedPostId?: number,
-  metadata?: string,
-  canComment?: boolean,
-  canLike?: boolean,
-  enable?: boolean,
-  canRate?: boolean,
-  replyPostConfirmation?: boolean,
-  lgContent?: string,
-  lat?: number,
-  lng?: number,
-  tags?: string[],
-  tagTrees?: any,
-  tagTreeCategoryName?: string[],
-  mentionedUserList?: string[]
 ) => {
   const userInfo = await getMe();
   try {
-    const response = await updateQuestionAnswer(
+    const response = await updateQuestion(
       userInfo.access_token,
+      repoId,
+      documentId,
       entityId,
-      name,
+      title,
       content,
-      repliedPostId,
-      metadata,
-      canComment,
-      canLike,
-      enable,
-      canRate,
-      replyPostConfirmation,
-      lgContent,
-      lat,
-      lng,
-      tags,
-      tagTrees,
-      tagTreeCategoryName,
-      mentionedUserList
     );
 
     return response;
@@ -161,10 +78,92 @@ export const updateQuestionAnswerAction = async (
   }
 };
 
-export const delteQuestionAnswerAction = async (postIds: number[]) => {
+export const deleteQuestionAction = async (
+  repoId: number,
+  documentId: number,
+  entityId: number,
+) => {
   const userInfo = await getMe();
   try {
-    const response = await archivePost(userInfo.access_token, postIds);
+    const response = await deleteQuestion(userInfo.access_token, repoId, documentId, entityId);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getAnswerListAction = async (
+  repoId: number,
+  documentId: number,
+  questionId: number,
+  offset: number,
+  size: number,
+) => {
+  const userInfo = await getMe();
+
+  try {
+    const accessToken = userInfo.access_token;
+    const response = await getAnswerList(accessToken, repoId, documentId, questionId, offset, size);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const createAnswerAction = async (
+  repoId: number,
+  documentId: number,
+  questionId: number,
+  title: string,
+  content: string,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await createAnswer(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      questionId,
+      title,
+      content,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const updateAnswerAction = async (
+  repoId: number,
+  documentId: number,
+  entityId: number,
+  title: string,
+  content: string,
+) => {
+  const userInfo = await getMe();
+  try {
+    const response = await updateAnswer(
+      userInfo.access_token,
+      repoId,
+      documentId,
+      entityId,
+      title,
+      content,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const deleteAnswerAction = async (repoId: number, documentId: number, entityId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await deleteAnswer(userInfo.access_token, repoId, documentId, entityId);
 
     return response;
   } catch (error) {

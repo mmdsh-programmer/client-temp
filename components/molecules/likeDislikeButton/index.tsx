@@ -3,10 +3,10 @@ import DislikeButton from "@components/atoms/button/dislikeButton";
 import LikeButton from "@components/atoms/button/likeButton";
 
 interface IProps {
-  likeCount: number;
-  dislikeCount: number;
   isLiked?: boolean;
   isDisliked?: boolean;
+  likeCount: number;
+  dislikeCount: number;
   onLike: () => void;
   onDislike: () => void;
   likePending: boolean;
@@ -20,10 +20,10 @@ interface IProps {
 }
 
 const LikeDislikeButtons = ({
-  likeCount,
-  dislikeCount,
   isLiked,
   isDisliked,
+  likeCount,
+  dislikeCount,
   onLike,
   onDislike,
   likePending,
@@ -34,7 +34,7 @@ const LikeDislikeButtons = ({
   iconClassName,
   showCounter,
   counterClassName,
-}: IProps) => {
+}: IProps) => {  
   return (
     <div className={`flex ${wrapperClassName}`}>
       <LikeButton

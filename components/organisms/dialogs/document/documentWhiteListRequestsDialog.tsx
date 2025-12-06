@@ -63,7 +63,7 @@ const DocumentWhiteListRequestsDialog = ({ setOpen }: IProps) => {
                       <div className="flex flex-grow gap-1">
                         <Typography
                           placeholder=""
-                          className="label_l2 w-auto cursor-pointer truncate text-primary_normal"
+                          className="label_l2 w-auto max-w-[50px] cursor-pointer truncate text-primary_normal xs:max-w-[90px]"
                           title={request.userFullName}
                           {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                         >

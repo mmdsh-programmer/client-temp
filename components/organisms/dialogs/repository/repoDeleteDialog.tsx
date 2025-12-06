@@ -41,6 +41,8 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
+    window.metrics.track(`repo-${getRepo?.id}-submit-delete`);
+
     if (!getRepo) return;
     if (dataForm.name !== getRepo.name) {
       return toast.error("نام وارد شده با نام مخزن مغایرت دارد.");
@@ -51,6 +53,7 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
         if (currentPath.includes("/admin/repositories")) {
           router.push("/admin/myRepoList");
         }
+        window.metrics.track(`repo-${getRepo?.id}-success-delete`);
         setRepo(null);
         localStorage.removeItem("CLASOR:SELECTED_REPO");
         toast.success("مخزن با موفقیت حذف شد.");

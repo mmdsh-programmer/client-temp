@@ -9,22 +9,20 @@ const useDeleteComment = () => {
   return useMutation({
     mutationKey: ["deleteComment"],
     mutationFn: async (values: {
-      postId: number;
+      repoId: number;
+      docId: number;
       commentId: number;
       callBack?: () => void;
     }) => {
-      const { commentId } = values;
-      const response = await deleteCommentAction(commentId);
+      const { repoId, docId, commentId } = values;
+      const response = await deleteCommentAction(repoId, docId, commentId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId } = values;
+      const { callBack, repoId, docId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getComments-${postId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`get-publish-${postId}-comments`],
+        queryKey: [`getComments-repoId-${repoId}-docId-${docId}`],
       });
       callBack?.();
     },

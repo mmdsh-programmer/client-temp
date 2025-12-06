@@ -9,20 +9,21 @@ const useLikeComment = () => {
   return useMutation({
     mutationKey: ["like-comment"],
     mutationFn: async (values: {
+      repoId: number;
+      documentId: number;
       commentId: number;
       postId: number;
-      dislike: boolean;
       callBack?: () => void;
     }) => {
-      const { commentId, dislike } = values;
-      const response = await likeCommentAction(commentId, dislike);
+      const { commentId } = values;
+      const response = await likeCommentAction(commentId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId } = values;
+      const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`get-publish-${postId}-comments`],
+        queryKey: [`getComments-repoId-${repoId}-docId-${documentId}`],
       });
 
       callBack?.();

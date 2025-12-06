@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-// Zustand store for public management (replaces public atoms)
 export const usePublicStore = create<{
   openShareAccess: boolean | null;
   setOpenShareAccess: (open: boolean | null) => void;

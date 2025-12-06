@@ -26,8 +26,7 @@ interface ITableHead {
   className?: string;
 }
 
-const 
-TableView = ({
+const TableView = ({
   isLoading,
   getCategoryList,
   hasNextPage,
@@ -37,31 +36,14 @@ TableView = ({
 }: ICategoryView) => {
   const currentPath = usePathname();
   const [openFilter, setOpenFilter] = useState(false);
-  const [getFilterChildren, setFilterChildren] = [
-    useFilterStore((state) => {
-      return state.filterChildren;
-    }),
-    useFilterStore((state) => {
-      return state.setFilterChildren;
-    }),
-  ];
-  
-  const [getFilterReport, setFilterReport] = [
-    useFilterStore((state) => {
-      return state.filterReport;
-    }),
-    useFilterStore((state) => {
-      return state.setFilterReport;
-    }),
-  ];
-  const [getSortParams, setSortParams] = [
-    useSortStore((state) => {
-      return state.sort;
-    }),
-    useSortStore((state) => {
-      return state.setSort;
-    }),
-  ];
+  const {
+    filterChildren: getFilterChildren,
+    setFilterChildren,
+    filterReport: getFilterReport,
+    setFilterReport,
+  } = useFilterStore();
+
+  const { sort: getSortParams, setSort: setSortParams } = useSortStore();
 
   const listLength = getCategoryList?.pages[0].total;
 
@@ -201,13 +183,13 @@ TableView = ({
               setFilterReport(null);
             }}
             placeholder=""
-            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <DeleteIcon className="h-4 w-4 fill-white" />
             <Typography
               placeholder=""
               className="label text-white"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               حذف فیلتر
             </Typography>

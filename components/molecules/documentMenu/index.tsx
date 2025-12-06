@@ -47,6 +47,7 @@ const DocumentMenu = ({ document }: IProps) => {
         <MenuTemplate
           menuList={menuList}
           onMobileClick={() => {
+            window.metrics.track("document-menu");
             setSelectedDocument(document || null);
             setDocumentDrawer(true);
           }}

@@ -17,25 +17,21 @@ interface IProps {
 
 const CategoryMobileCard = ({ category }: IProps) => {
   const currentPath = usePathname();
-  const setCategoryParent = useCategoryStore((state) => {
-    return state.setCategoryShow;
-  });
-  const getBulkItems = useBulkStore((state) => {
-    return state.bulkItems;
-  });
-  const setBulkItems = useBulkStore((state) => {
-    return state.setBulkItems;
-  });
+  const { setCategoryShow: setCategoryParent } = useCategoryStore();
+  const { bulkItems: getBulkItems, setBulkItems } = useBulkStore();
+
   const handleCardClick = (selectedCategory: ICategoryMetadata) => {
+    window.metrics.track("select-category");
     setCategoryParent(selectedCategory);
     setBulkItems([]);
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    window.metrics.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && getBulkItems.length + 1 > 10) {
       e.target.checked = false;
-      toast.error("نمی‌توانید بیش از 10 ایتم را انتخاب کنید");
+      toast.error("نمی‌توانید بیش از 10 آیتم را انتخاب کنید");
       return;
     }
     setBulkItems(
@@ -65,13 +61,13 @@ const CategoryMobileCard = ({ category }: IProps) => {
               })}
             />
           )}
-          <div className="flex items-center max-w-full gap-2">
+          <div className="flex max-w-full items-center gap-2">
             <FolderIcon className="h-5 min-h-5 w-5 min-w-5 stroke-blue-gray-600" />
             <Typography
               placeholder=""
-              className="flex text-primary_normal max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis"
+              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis text-primary_normal"
               title={category.name}
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {category.name}
             </Typography>

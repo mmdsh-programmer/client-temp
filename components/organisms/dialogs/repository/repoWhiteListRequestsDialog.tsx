@@ -3,7 +3,6 @@ import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import { Spinner } from "@components/atoms/spinner";
 import { useRepositoryStore } from "@store/repository";
-import { useDocumentStore } from "@store/document";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import { DialogBody, Typography } from "@material-tailwind/react";
 import DocumentWhiteListMenu from "@components/molecules/documentWhiteListMenu";
@@ -62,7 +61,7 @@ const RepoWhiteListRequestsDialog = ({ setOpen }: IProps) => {
                       <div className="flex flex-grow gap-1">
                         <Typography
                           placeholder=""
-                          className="label_l2 w-auto cursor-pointer truncate text-primary_normal"
+                          className="label_l2 w-auto max-w-[50px] cursor-pointer truncate text-primary_normal xs:max-w-[90px]"
                           title={`${request.userFullName}-${request.documentName}`}
                           {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                         >

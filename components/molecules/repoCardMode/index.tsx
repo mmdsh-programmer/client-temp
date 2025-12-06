@@ -25,9 +25,15 @@ const RepoCardMode = ({ repo }: IProps) => {
         e.stopPropagation();
         if (!repo.isArchived) {
           router.push(`/admin/repositories?repoId=${repo.id}`);
+          window.metrics.track(`select-repo-${repo.name}-${repo.id}`);
+          window.metrics.identy({
+            event: "select-repo",
+            repoName: repo.name,
+            repoId: repo.id,
+          });
         }
       }}
-      {...({} as  Omit<React.ComponentProps<typeof Card>, "placeholder">)}
+      {...({} as Omit<React.ComponentProps<typeof Card>, "placeholder">)}
     >
       <div className="flex items-center justify-between p-4">
         <div className="flex max-w-[70%] items-center gap-3">
@@ -38,7 +44,7 @@ const RepoCardMode = ({ repo }: IProps) => {
             <Typography
               placeholder=""
               className="repo__name title_t1 max-w-full truncate font-[450] !text-primary_normal"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {repo.name}
             </Typography>
@@ -46,7 +52,7 @@ const RepoCardMode = ({ repo }: IProps) => {
               <Typography
                 placeholder=""
                 className="repo__info-details-date caption_c2 text-hint"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {repo ? FaDateFromTimestamp(+new Date(repo.createDate)) : null}
               </Typography>
@@ -54,7 +60,7 @@ const RepoCardMode = ({ repo }: IProps) => {
               <Typography
                 placeholder=""
                 className="repo__info-details-role caption_c2 text-hint"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {translateRoles(repo?.roleName)}
               </Typography>
@@ -62,7 +68,7 @@ const RepoCardMode = ({ repo }: IProps) => {
               <Typography
                 placeholder=""
                 className="repo__info-details-status caption_c2 text-hint"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {repo.isArchived ? "غیرفعال" : "فعال"}
               </Typography>

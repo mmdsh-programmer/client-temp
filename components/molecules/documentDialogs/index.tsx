@@ -17,6 +17,7 @@ import DocumentDeletePublishLinkDialog from "@components/organisms/dialogs/docum
 import DocumentPublicVersionDialog from "@components/organisms/dialogs/document/documentPublicVersionDialog";
 import DocumentWhiteListRequestsDialog from "@components/organisms/dialogs/document/documentWhiteListRequestsDialog";
 import { useDocumentStore } from "@store/document";
+import DocumentQaDialog from "@components/organisms/dialogs/document/documentQaDialog";
 
 interface IDocumentDialogsProps {
   activeModal: string | null;
@@ -63,6 +64,9 @@ const DocumentDialogs = ({ activeModal, closeModal }: IDocumentDialogsProps) => 
       ) : null}
       {activeModal === "documentWhiteListRequests" ? (
         <DocumentWhiteListRequestsDialog setOpen={closeModal} />
+      ) : null}
+      {activeModal === "documentQA" ? (
+        <DocumentQaDialog setOpen={closeModal} />
       ) : null}
     </>
   );

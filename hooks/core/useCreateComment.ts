@@ -9,22 +9,20 @@ const useCreateComment = () => {
   return useMutation({
     mutationKey: ["createComment"],
     mutationFn: async (values: {
-      postId: number;
+      repoId: number;
+      docId: number;
       text: string;
       callBack?: () => void;
     }) => {
-      const { postId, text } = values;
-      const response = await createCommentAction(postId, text);
+      const { repoId, docId, text } = values;
+      const response = await createCommentAction(repoId, docId, text);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId } = values;
+      const { callBack, repoId, docId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getComments-${postId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`get-publish-${postId}-comments`],
+        queryKey: [`getComments-repoId-${repoId}-docId-${docId}`],
       });
       callBack?.();
     },

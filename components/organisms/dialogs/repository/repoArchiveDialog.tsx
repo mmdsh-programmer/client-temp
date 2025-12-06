@@ -26,6 +26,8 @@ const RepoArchiveDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
+        window.metrics.track(`repo-${getRepo.id}-success-archive`);
+
         if (currentPath.includes("/admin/repositories")) {
           router.push("/admin/myRepoList");
         }
