@@ -5,8 +5,6 @@ import { XIcon } from "@components/atoms/icons";
 import { Drawer, IconButton } from "@material-tailwind/react";
 import { usePublishStore } from "@store/publish";
 import { IVersion } from "@interface/version.interface";
-import useGetUser from "@hooks/auth/useGetUser";
-import PublishForceLogin from "../publishFeedback/publishForceLogin";
 import PublishFileList from "./publishFileList";
 
 interface IProps {
@@ -14,16 +12,11 @@ interface IProps {
 }
 
 const PublishFilesDrawer = ({ version }: IProps) => {
-  const { data: userInfo } = useGetUser();
   const { openPublishFilesDrawer, setOpenPublishFilesDrawer } = usePublishStore();
 
   const closeDrawer = () => {
     setOpenPublishFilesDrawer(false);
   };
-
-  if (!userInfo) {
-    return <PublishForceLogin />;
-  }
 
   return (
     <Drawer
