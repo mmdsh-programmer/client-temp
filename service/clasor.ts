@@ -3616,13 +3616,14 @@ export const getAdminPanelFeedback = async (accessToken: string, top: number, sk
 /// /////////////////////////////// CORE //////////////////////
 export const getCommentList = async (
   access_token: string,
-  postId: number,
+  repoId: number,
+  docId: number,
   offset: number,
   size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
-      `core/content/${postId}/comment`,
+      `repositories/${repoId}/documents/${docId}/comments`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -3640,10 +3641,15 @@ export const getCommentList = async (
   }
 };
 
-export const deleteComment = async (access_token: string, commentId: number) => {
+export const deleteComment = async (
+  access_token: string,
+  repoId: number,
+  docId: number,
+  commentId: number,
+) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `core/comment/${commentId}`,
+      `repositories/${repoId}/documents/${docId}/comments/${commentId}/remove`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -3656,12 +3662,16 @@ export const deleteComment = async (access_token: string, commentId: number) => 
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
 };
-
-export const createComment = async (access_token: string, postId: number, text: string) => {
+export const createComment = async (
+  access_token: string,
+  repoId: number,
+  docId: number,
+  content: string,
+) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
-      `core/content/${postId}/comment`,
-      { text },
+      `repositories/${repoId}/documents/${docId}/comments`,
+      { content },
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -5808,6 +5818,43 @@ export const dislikePost = async (accessToken: string, postId: number) => {
   try {
     const response = await axiosClasorInstance.patch<any>(
       `core/content/${postId}/dislike`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          undo: false,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const likeComment = async (accessToken: string, commentId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `core/comment/${commentId}/like`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const dislikeComment = async (accessToken: string, commentId: number) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `core/comment/${commentId}/dislike`,
       {},
       {
         headers: {

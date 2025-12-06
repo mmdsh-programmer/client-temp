@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Typography } from "@material-tailwind/react";
 import QuestionAnswerEditor, {
   IQaEditorRef,
-} from "@components/organisms/publishFeedback/PublishQuestionAnswer/questionAnswerEditor";
+} from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
 import { config } from "@utils/clasorEditor";
 import EditDialog from "@components/templates/dialog/editDialog";
@@ -59,6 +59,7 @@ const AnswerEditDialog = ({ repoId, documentId, answer, setOpen }: IProps) => {
           ...config,
         });
         editorData.current = null;
+        handleClose();
       },
     });
   };
@@ -73,6 +74,7 @@ const AnswerEditDialog = ({ repoId, documentId, answer, setOpen }: IProps) => {
       setOpen={handleClose}
       className="!max-w-[unset] xs:!max-w-[unset]"
       customSize="lg"
+      backToMain
     >
       <form className="flex flex-col gap-2">
         <Typography

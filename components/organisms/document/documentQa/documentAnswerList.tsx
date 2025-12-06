@@ -5,7 +5,7 @@ import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
 import useGetAnswerList from "@hooks/questionAnswer/useGetAnswerList";
 import { IQuestion } from "@interface/qa.interface";
-import AnswerItem from "./answerItem";
+import DocumentAnswerItem from "./documentAnswerItem";
 
 interface IProps {
   repoId: number;
@@ -13,7 +13,7 @@ interface IProps {
   questionItem: IQuestion;
 }
 
-const AnswerList = ({ repoId, documentId, questionItem }: IProps) => {
+const DocumentAnswerList = ({ repoId, documentId, questionItem }: IProps) => {
   const {
     data: answerList,
     isLoading,
@@ -40,11 +40,9 @@ const AnswerList = ({ repoId, documentId, questionItem }: IProps) => {
         {answerList?.pages.map((page) => {
           return page.list.map((answerItem) => {
             return (
-              <AnswerItem
+              <DocumentAnswerItem
                 key={`answer-${answerItem.id}`}
                 answerItem={answerItem}
-                repoId={repoId}
-                documentId={documentId}
               />
             );
           });
@@ -66,4 +64,4 @@ const AnswerList = ({ repoId, documentId, questionItem }: IProps) => {
   );
 };
 
-export default AnswerList;
+export default DocumentAnswerList;

@@ -29,7 +29,8 @@ const CommentCreate = ({ version }: IProps) => {
     } else {
       if (!version) return;
       createComment.mutate({
-        postId: version.postId,
+        repoId: version.repoId,
+        docId: version.documentId,
         ...dataForm,
         callBack: () => {
           toast.success("نظر شما با موفقیت ارسال شد.");
@@ -42,30 +43,36 @@ const CommentCreate = ({ version }: IProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="comment-create gap-2 justify-center items-center rounded-lg !w-[300px] left-0 bg-white shadow-lg md:shadow-none z-[9999]"
+      className="comment-create left-0 z-[9999] !w-[300px] items-center justify-center gap-2 rounded-lg bg-white shadow-lg md:shadow-none"
     >
-      <div className="flex flex-col h-full">
-        <div className="px-4 py-3 flex flex-grow flex-col gap-4 justify-end">
+      <div className="flex h-full flex-col">
+        <div className="flex flex-grow flex-col justify-end gap-4 px-4 py-3">
           <div className="border-b-[1px] border-normal" />
-          <div className="flex items-center gap-2 !h-12 pr-3 pl-2 !bg-gray-50 border-[1px] !border-normal rounded-lg">
+          <div className="flex !h-12 items-center gap-2 rounded-lg border-[1px] !border-normal !bg-gray-50 pl-2 pr-3">
             <InputAtom
               id="username"
               register={{ ...register("text") }}
-              className="!w-auto h-auto overflow-hidden !p-0 border-none"
+              className="h-auto !w-auto overflow-hidden border-none !p-0"
               placeholder="نظر خود را بنویسید."
             />
             {errors.text && (
-              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="warning_text"
+              >
                 {errors.text?.message}
               </Typography>
             )}
             <LoadingButton
               loading={createComment.isPending}
               onClick={handleSubmit(onSubmit)}
-              className="!h-8 !bg-white !w-[70px] !rounded-sm shadow-none hover:shadow-none hover:bg-white"
+              className="!h-8 !w-[70px] !rounded-sm !bg-white shadow-none hover:bg-white hover:shadow-none"
               isPrimary
             >
-              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button !text-primary_normal px-3 font-medium">
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="text__label__button px-3 font-medium !text-primary_normal"
+              >
                 ارسال
               </Typography>
             </LoadingButton>

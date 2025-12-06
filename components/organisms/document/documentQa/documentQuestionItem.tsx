@@ -20,46 +20,27 @@ import {
 } from "@material-tailwind/react";
 import { FaDateFromTimestamp } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
-import QuestionAnswerContentPreview from "./questionAnswerContentPreview";
-import CommentDialog from "@components/organisms/dialogs/publish/commentDialog";
 import QuestionAnswerLikeAndDislike from "@components/organisms/questionAnswerLike&Dislike";
-import QuestionDeleteDialog from "@components/organisms/dialogs/publish/questionDeleteDialog";
-import QuestionEditDialog from "@components/organisms/dialogs/publish/questionEditDialog";
-import CreateAnswerDialog from "@components/organisms/dialogs/publish/createAnswerDialog";
+import QuestionAnswerContentPreview from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerContentPreview";
+import { useQaStore } from "@store/qa";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   questionItem: IQuestion;
   children?: React.JSX.Element;
-  repoId: number;
-  documentId: number;
 }
 
-const QuestionItem = ({ questionItem, children, repoId, documentId }: IProps) => {
-  const { data: userInfo } = useGetUser();
+const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
   const [openCollapse, setOpenCollapse] = useState(false);
-  const [openAnswer, setOpenAnswer] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [openCommentsDialog, setOpenCommentsDialog] = useState(false);
+
+  const { selectedDocument } = useDocumentStore();
+  const { setOpenAnswer, setOpenEdit, setOpenDelete, setOpenComment, setSelectedQuestion } =
+    useQaStore();
+
+  const { data: userInfo } = useGetUser();
 
   const handleOpenCollapse = () => {
     setOpenCollapse(!openCollapse);
-  };
-
-  const handleOpenAnswer = () => {
-    setOpenAnswer(true);
-  };
-
-  const handleOpenEdit = () => {
-    setOpenEdit(true);
-  };
-
-  const handleOpenDelete = () => {
-    setOpenDelete(true);
-  };
-
-  const handleOpenCommentsDialog = () => {
-    setOpenCommentsDialog(true);
   };
 
   return (
@@ -79,7 +60,7 @@ const QuestionItem = ({ questionItem, children, repoId, documentId }: IProps) =>
           <Typography className="text-sm" {...({} as React.ComponentProps<typeof Typography>)}>
             {questionItem.name}
           </Typography>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
               <UserIcon className="h-4 w-4" />
             </div>
@@ -109,65 +90,75 @@ const QuestionItem = ({ questionItem, children, repoId, documentId }: IProps) =>
               onClick={handleOpenCollapse}
               {...({} as React.ComponentProps<typeof Button>)}
             >
-              <span className="text-[13px] leading-5 text-gray-500">مشاهده بیشتر</span>
-
+              <span className="form_label !text-gray-500">مشاهده بیشتر</span>
               <ChevronLeftIcon
                 className={`h-2.5 w-2.5 stroke-gray-500 align-middle transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
               />
             </Button>
             <Button
               variant="text"
-              className="bullet border-none !p-0 text-[13px] leading-5 text-link"
-              onClick={handleOpenCommentsDialog}
+              className="bullet form_label border-none !p-0 !text-gray-500"
+              onClick={() => {
+                setSelectedQuestion(questionItem);
+                setOpenComment(true);
+              }}
               {...({} as React.ComponentProps<typeof Button>)}
+              title="مشاهده دیدگاه‌ها"
             >
-              <span className="hidden sm:block">مشاهده دیدگاه‌ها</span>
-              <ChatIcon className="block h-4 w-4 scale-125 !fill-gray-500 sm:hidden" />
+              <ChatIcon className="block h-4 w-4 scale-125 !fill-gray-500" />
             </Button>
             <RenderIf isTrue={!!userInfo}>
               <Button
                 variant="text"
-                className="bullet border-none !p-0 text-[13px] leading-5 text-link"
-                onClick={handleOpenAnswer}
+                className="bullet form_label border-none !p-0 !text-gray-500"
+                onClick={() => {
+                  setSelectedQuestion(questionItem);
+                  setOpenAnswer(true);
+                }}
                 {...({} as React.ComponentProps<typeof Button>)}
+                title="پاسخ به پرسش"
               >
-                <span className="hidden sm:block">پاسخ به پرسش</span>
-                <TickIcon className="block h-4 w-4 !fill-gray-500 sm:hidden" />
+                <TickIcon className="block h-4 w-4 !fill-gray-500" />
               </Button>
             </RenderIf>
           </div>
-
           <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +questionItem.userSrv.ssoId}>
             <Button
               variant="text"
-              className="bullet border-none !p-0 text-[13px] leading-5 text-link"
-              onClick={handleOpenEdit}
+              className="bullet form_label border-none !p-0 !text-gray-500"
+              onClick={() => {
+                setSelectedQuestion(questionItem);
+                setOpenEdit(true);
+              }}
               {...({} as React.ComponentProps<typeof Button>)}
+              title="ویرایش پرسش"
             >
-              <span className="hidden sm:block">ویرایش پرسش</span>
-              <EditIcon className="block h-4 w-4 !stroke-gray-500 sm:hidden" />
+              <EditIcon className="block h-4 w-4 !stroke-gray-500" />
             </Button>
           </RenderIf>
           <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +questionItem.userSrv.ssoId}>
             <Button
               variant="text"
-              className="bullet border-none !p-0 text-[13px] leading-5 text-link"
-              onClick={handleOpenDelete}
+              className="bullet form_label border-none !p-0 !text-gray-500"
+              onClick={() => {
+                setSelectedQuestion(questionItem);
+                setOpenDelete(true);
+              }}
               {...({} as React.ComponentProps<typeof Button>)}
+              title="حذف پرسش"
             >
-              <span className="hidden sm:block">حذف پرسش</span>
-              <DeleteIcon className="block h-4 w-4 !stroke-gray-500 sm:hidden" />
+              <DeleteIcon className="block h-4 w-4 !stroke-gray-500" />
             </Button>
           </RenderIf>
           <RenderIf isTrue={!!userInfo}>
             <QuestionAnswerLikeAndDislike
-              repoId={repoId}
-              documentId={documentId}
+              repoId={selectedDocument!.repoId}
+              documentId={selectedDocument!.id}
               item={questionItem}
               wrapperClassName="gap-3 sm:gap-5 mr-auto"
               likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
               dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
-              iconClassName="w-4 h-4 sm:w-6 sm:h-6 !stroke-gray-500"
+              iconClassName="w-4 h-4 !stroke-gray-500"
               counterClassName="ml-1 text-base text-gray-500"
               showCounter
             />
@@ -177,47 +168,8 @@ const QuestionItem = ({ questionItem, children, repoId, documentId }: IProps) =>
       <Collapse open={openCollapse}>
         <div className="pr-3 sm:pr-12">{openCollapse ? children : null}</div>
       </Collapse>
-      <RenderIf isTrue={openAnswer}>
-        <CreateAnswerDialog
-          repoId={repoId}
-          documentId={documentId}
-          questionId={questionItem.id}
-          setOpen={() => {
-            return setOpenAnswer(!openAnswer);
-          }}
-        />
-      </RenderIf>
-      <RenderIf isTrue={openEdit}>
-        <QuestionEditDialog
-          repoId={repoId}
-          documentId={documentId}
-          question={questionItem}
-          setOpen={() => {
-            return setOpenEdit(!openEdit);
-          }}
-        />
-      </RenderIf>
-      <RenderIf isTrue={openDelete}>
-        <QuestionDeleteDialog
-          repoId={repoId}
-          documentId={documentId}
-          question={questionItem}
-          setOpen={() => {
-            return setOpenDelete(!openDelete);
-          }}
-        />
-      </RenderIf>
-      <RenderIf isTrue={openCommentsDialog}>
-        <CommentDialog
-          repoId={repoId}
-          documentId={documentId}
-          setOpen={() => {
-            return setOpenCommentsDialog(!openCommentsDialog);
-          }}
-        />
-      </RenderIf>
     </>
   );
 };
 
-export default QuestionItem;
+export default DocumentQuestionItem;

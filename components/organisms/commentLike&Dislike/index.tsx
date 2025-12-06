@@ -3,10 +3,11 @@ import useLikeComment from "@hooks/core/useLikeComment";
 import useDislikeComment from "@hooks/core/useDislikeComment";
 import { IComment } from "@interface/version.interface";
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
+import { usePublishStore } from "@store/publish";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
   commentItem: IComment;
-  postId: number;
   likeButtonClassName?: string;
   dislikeButtonClassName?: string;
   wrapperClassName?: string;
@@ -17,7 +18,6 @@ interface IProps {
 
 const CommentLikeAndDislike = ({
   commentItem,
-  postId,
   likeButtonClassName,
   dislikeButtonClassName,
   wrapperClassName,
@@ -25,22 +25,39 @@ const CommentLikeAndDislike = ({
   showCounter,
   counterClassName,
 }: IProps) => {
+  const { publishPageSelectedDocument } = usePublishStore();
+  const { selectedDocument } = useDocumentStore();
+
   const likeHook = useLikeComment();
   const disLikeHook = useDislikeComment();
 
   const handleLike = () => {
     likeHook.mutate({
+      repoId: publishPageSelectedDocument
+        ? publishPageSelectedDocument!.repoId
+        : selectedDocument!.repoId,
+      documentId: publishPageSelectedDocument
+        ? publishPageSelectedDocument!.id
+        : selectedDocument!.id,
       commentId: commentItem.id,
-      postId,
-      dislike: commentItem.liked,
+      postId: publishPageSelectedDocument
+        ? publishPageSelectedDocument!.customPostId
+        : selectedDocument!.customPostId,
     });
   };
 
   const handleDisLike = () => {
     disLikeHook.mutate({
+      repoId: publishPageSelectedDocument
+        ? publishPageSelectedDocument!.repoId
+        : selectedDocument!.repoId,
+      documentId: publishPageSelectedDocument
+        ? publishPageSelectedDocument!.id
+        : selectedDocument!.id,
       commentId: commentItem.id,
-      postId,
-      dislike: !commentItem.disliked,
+      postId: publishPageSelectedDocument
+        ? publishPageSelectedDocument!.customPostId
+        : selectedDocument!.customPostId,
     });
   };
 

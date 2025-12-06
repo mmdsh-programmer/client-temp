@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DeleteIcon, EditIcon } from "@components/atoms/icons";
+import { DeleteIcon, EditIcon, UserIcon } from "@components/atoms/icons";
 import RenderIf from "@components/atoms/renderIf";
 import { IQuestion } from "@interface/qa.interface";
 import { Button, Card, CardBody, CardFooter, CardHeader } from "@material-tailwind/react";
@@ -44,11 +44,14 @@ const AnswerItem = ({ answerItem, repoId, documentId }: IProps) => {
           {...({} as React.ComponentProps<typeof CardHeader>)}
         >
           <div className="flex items-center gap-2">
-            <h6 className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-800 sm:max-w-fit">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
+              <UserIcon className="h-4 w-4" />
+            </div>
+            <h6 className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-800 sm:max-w-fit">
               {answerItem.userSrv.name}
             </h6>
             <time
-              className="bullet block max-w-16 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-500 sm:max-w-fit"
+              className="bullet block h-5 overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-500 sm:max-w-fit"
               dateTime={String(answerItem.timestamp)}
             >
               {FaDateFromTimestamp(answerItem.timestamp)}
@@ -86,11 +89,13 @@ const AnswerItem = ({ answerItem, repoId, documentId }: IProps) => {
           </RenderIf>
           <RenderIf isTrue={!!userInfo}>
             <QuestionAnswerLikeAndDislike
+              repoId={repoId}
+              documentId={documentId}
               item={answerItem}
               wrapperClassName="gap-3 sm:gap-5 mr-auto"
               likeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
               dislikeButtonClassName="flex items-center bg-transparent hover:bg-transparent rounded-none p-0 !w-fit"
-              iconClassName="w-4 h-4 sm:w-7 sm:h-7 !stroke-gray-500"
+              iconClassName="w-4 h-4 sm:w-6 sm:h-6 !stroke-gray-500"
               counterClassName="ml-1 text-base text-gray-500"
               showCounter
             />

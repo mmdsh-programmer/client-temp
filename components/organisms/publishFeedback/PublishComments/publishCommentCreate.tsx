@@ -1,28 +1,27 @@
+import React from "react";
 import LoadingButton from "@components/molecules/loadingButton";
 import PublishForceLogin from "../publishForceLogin";
 import PublishForcePublicProfile from "../publishForcePublicProfile";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { publishCreateCommentSchema } from "../validation.yup";
 import { toast } from "react-toastify";
-import useCreatePublishComment from "@hooks/publish/useCreatePublishComment";
 import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useCreateComment from "@hooks/core/useCreateComment";
 
 interface IForm {
   text: string;
 }
 
 interface IProps {
-  postId: number;
-  isQuestionAnswerComments?: boolean;
+  repoId: number;
+  documentId: number;
 }
 
-const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
+const PublishCommentCreate = ({ repoId, documentId }: IProps) => {
   const { data: userInfo } = useGetUser();
-
-  const createComment = useCreatePublishComment();
+  const createComment = useCreateComment();
 
   const form = useForm<IForm>({
     resolver: yupResolver(publishCreateCommentSchema),
@@ -35,11 +34,10 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
     if (stringByteLength > 5900) {
       toast.error("تعداد کاراکتر وارد شده بیش از حد مجاز است.");
     } else {
-      if (!postId) return;
       createComment.mutate({
-        postId,
+        repoId,
+        docId: documentId,
         text: dataForm.text,
-        shouldConfirm: !isQuestionAnswerComments,
         callBack: () => {
           toast.success("نظر شما با موفقیت ارسال شد.");
           reset();
@@ -49,31 +47,27 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
   };
 
   if (!userInfo) {
-    return (
-      <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />
-    );
+    return <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />;
   }
 
   if (userInfo.private) {
-    return (
-      <PublishForcePublicProfile customText="برای نوشتن دیدگاه باید پروفایل شما عمومی باشد" />
-    );
+    return <PublishForcePublicProfile customText="برای نوشتن دیدگاه باید پروفایل شما عمومی باشد" />;
   }
 
   return (
     <div>
-      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs text-gray-800 mb-2">
+      <Typography
+        {...({} as React.ComponentProps<typeof Typography>)}
+        className="mb-2 text-xs text-gray-800"
+      >
         نظر خود را بنویسید
       </Typography>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-center items-center"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center justify-center">
         <input
           id="commentText"
           {...register("text")}
-          className="!w-full font-iranYekan border-2 border-solid bg-gray-100  border-gray-200 text-xs text-gray-800 outline-none focus:outline-none py-2.5 px-2 rounded-lg"
+          className="!w-full rounded-lg border-2 border-solid border-gray-200 bg-gray-100 px-2 py-2.5 font-iranYekan text-xs text-gray-800 outline-none focus:outline-none"
         />
         {errors.text && (
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
@@ -82,7 +76,7 @@ const PublishCommentCreate = ({ postId, isQuestionAnswerComments }: IProps) => {
         )}
 
         <LoadingButton
-          className="block !w-fit !mt-5 mr-auto justify-center items-center !px-3 py-5 rounded-lg lg:mt-0 bg-primary-normal text-white font-iranYekan !max-h-[unset]"
+          className="!mt-5 mr-auto block !max-h-[unset] !w-fit items-center justify-center rounded-lg bg-primary-normal !px-3 py-5 font-iranYekan text-white lg:mt-0"
           onClick={handleSubmit(onSubmit)}
           disabled={createComment.isPending}
           loading={createComment.isPending}

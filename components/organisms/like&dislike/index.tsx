@@ -6,6 +6,7 @@ import useGetDislikeList from "@hooks/core/useGetDislikeList";
 import useGetLikeList from "@hooks/core/useGetLikeList";
 import useGetPostInfo from "@hooks/core/useGetPostInfo";
 import useLike from "@hooks/core/useLike";
+import { useVersionStore } from "@store/version";
 
 interface IProps {
   postId: number;
@@ -31,9 +32,10 @@ const LikeAndDislike = ({
   counterClassName,
 }: IProps) => {
   const [enable, setEnable] = useState(
-    typeof initLikeCount === "undefined" &&
-      typeof initDislikeCount === "undefined"
+    typeof initLikeCount === "undefined" && typeof initDislikeCount === "undefined",
   );
+
+  const { selectedVersion } = useVersionStore();
 
   const {
     data: getLikes,
@@ -53,27 +55,24 @@ const LikeAndDislike = ({
     isFetching: isFetchingPostInfo,
   } = useGetPostInfo(postId, enable);
 
-  const isLoading =
-    isLoadingLikeList || isLoadingDislikeList || isLoadingPostInfo;
+  const isLoading = isLoadingLikeList || isLoadingDislikeList || isLoadingPostInfo;
 
-  const isFetcing =
-    isFetchingLikeList || isFetchingDislikeList || isFetchingPostInfo;
+  const isFetcing = isFetchingLikeList || isFetchingDislikeList || isFetchingPostInfo;
 
   const postInfo = getPostInfo?.[0];
 
   const likeCount = enable ? getLikes?.pages[0].total || 0 : initLikeCount || 0;
-  const dislikeCount = enable
-    ? getDislikes?.pages[0].total || 0
-    : initDislikeCount || 0;
+  const dislikeCount = enable ? getDislikes?.pages[0].total || 0 : initDislikeCount || 0;
 
   const likeHook = useLike();
   const disLikeHook = useDislike();
 
   const handleLike = () => {
-    if (!postId) return;
+    if (!postId || !selectedVersion) return;
     likeHook.mutate({
+      repoId: selectedVersion.repoId,
+      documentId: selectedVersion.documentId,
       postId,
-      like: !postInfo?.liked,
       callBack: () => {
         if (!enable) {
           setEnable(true);
@@ -83,10 +82,11 @@ const LikeAndDislike = ({
   };
 
   const handleDisLike = () => {
-    if (!postId) return;
+    if (!postId || !selectedVersion) return;
     disLikeHook.mutate({
+      repoId: selectedVersion.repoId,
+      documentId: selectedVersion.documentId,
       postId,
-      dislike: !postInfo?.disliked,
       callBack: () => {
         if (!enable) {
           setEnable(true);
@@ -97,7 +97,7 @@ const LikeAndDislike = ({
 
   if (isLoading) {
     return (
-      <div className={`flex items-center w-fit ${wrapperClassName}`}>
+      <div className={`flex w-fit items-center ${wrapperClassName}`}>
         <Spinner className="h-5 w-5 text-primary" />
       </div>
     );

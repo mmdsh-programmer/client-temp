@@ -29,6 +29,9 @@ const useDeleteQuestion = () => {
           `answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`,
         ],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`question-list-${repoId}-documentId-${documentId}`],
+      });
 
       callBack?.();
     },

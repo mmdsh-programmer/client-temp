@@ -1,23 +1,20 @@
+import React from "react";
 import PublishCommentCreate from "./publishCommentCreate";
 import PublishCommentList from "./publishCommentList";
-import React from "react";
 
 interface IProps {
-  postId: number;
-  isQuestionAnswerComments?: boolean;
+  repoId: number;
+  documentId: number;
 }
 
-const PublishComments = ({ postId, isQuestionAnswerComments }: IProps) => {
+const PublishComments = ({ repoId, documentId }: IProps) => {
   return (
     <>
-      <div className="px-5 xs:px-8 py-10 sticky top-0 z-50 bg-white">
-        <PublishCommentCreate
-          isQuestionAnswerComments={isQuestionAnswerComments}
-          postId={postId}
-        />
+      <div className="sticky top-0 z-50 bg-white px-5 py-10 xs:px-8">
+        <PublishCommentCreate repoId={repoId} documentId={documentId} />
       </div>
-      <hr className="w-full h-[2px] bg-blue-gray-50" />
-      <PublishCommentList postId={postId} />
+      <hr className="h-[2px] w-full bg-blue-gray-50" />
+      <PublishCommentList repoId={repoId} documentId={documentId} />
     </>
   );
 };

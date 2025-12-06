@@ -2,22 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import PublishTab from "@components/molecules/publishTab";
-import PublishQuestionAnswer from "./PublishQuestionAnswer";
-import PublishComments from "./PublishComments";
+import PublishQuestionAnswer from "./publishQuestionAnswer";
+import PublishComments from "./publishComments";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
-
-interface IProps {
-  postId: number;
-}
+import { usePublishStore } from "@store/publish";
 
 enum ETabs {
   QUESTION_ANSWER = "پرسش و پاسخ",
   COMMENTS = "نظرات کاربران",
 }
 
-const PublishFeeback = ({ postId }: IProps) => {
+const PublishFeeback = () => {
   const { data: getDomainInfo } = useGetDomainInfo();
   const [activeTab, setActiveTab] = useState<string>(ETabs.QUESTION_ANSWER);
+
+  const { publishVersion } = usePublishStore();
 
   useEffect(() => {
     if (getDomainInfo) {
@@ -36,10 +35,15 @@ const PublishFeeback = ({ postId }: IProps) => {
           tabContent: <PublishQuestionAnswer />,
         }
       : null,
-    getDomainInfo?.hasComments
+    getDomainInfo?.hasComments && publishVersion
       ? {
           tabTitle: ETabs.COMMENTS,
-          tabContent: <PublishComments postId={postId} />,
+          tabContent: (
+            <PublishComments
+              repoId={publishVersion.repoId}
+              documentId={publishVersion.documentId}
+            />
+          ),
         }
       : null,
   ].filter(Boolean) as {

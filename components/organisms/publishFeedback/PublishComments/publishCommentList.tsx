@@ -1,31 +1,31 @@
+import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
 import LoadMore from "@components/molecules/loadMore";
 import PublishCommentItem from "./publishCommentItem";
-import React from "react";
 import RenderIf from "@components/atoms/renderIf";
-import useGetPublishCommentList from "@hooks/publish/useGetPublishCommentList";
 import { Spinner } from "@components/atoms/spinner";
+import useGetCommentList from "@hooks/core/useGetCommentList";
 
 interface IProps {
-  postId: number;
+  repoId: number;
+  documentId: number;
 }
 
-const PublishCommentList = ({ postId }: IProps) => {
+const PublishCommentList = ({ repoId, documentId }: IProps) => {
   const {
     isLoading,
     data: commentList,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetPublishCommentList(postId, 10);
+  } = useGetCommentList(repoId, documentId, 10);
 
-  const total = commentList?.pages[0].count || 0;
+  const total = commentList?.pages[0].total || 0;
 
   if (isLoading) {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
-        <div className="w-full flex justify-center">
+        <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
         </div>
       </div>
@@ -36,11 +36,12 @@ const PublishCommentList = ({ postId }: IProps) => {
     return (
       <>
         {commentList.pages.map((commentListPage) => {
-          return commentListPage.result.map((commentItem) => {
+          return commentListPage.list.map((commentItem) => {
             return (
               <PublishCommentItem
-                postId={postId}
                 key={`publish-comment-${commentItem.id}`}
+                repoId={repoId}
+                documentId={documentId}
                 commentItem={commentItem}
               />
             );
@@ -48,11 +49,8 @@ const PublishCommentList = ({ postId }: IProps) => {
         })}
 
         <RenderIf isTrue={!!hasNextPage}>
-          <div className="w-full flex justify-center pb-2 bg-white">
-            <LoadMore
-              isFetchingNextPage={isFetchingNextPage}
-              fetchNextPage={fetchNextPage}
-            />
+          <div className="flex w-full justify-center bg-white pb-2">
+            <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
           </div>
         </RenderIf>
       </>
@@ -60,7 +58,7 @@ const PublishCommentList = ({ postId }: IProps) => {
   }
 
   return (
-    <div className="py-8 bg-white">
+    <div className="bg-white py-8">
       <EmptyList type={EEmptyList.COMMENTS} />
     </div>
   );

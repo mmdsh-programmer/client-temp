@@ -1,16 +1,17 @@
 import React, { useRef } from "react";
-import QuestionAnswerEditor, { IQaEditorRef } from "./questionAnswerEditor";
 import LoadingButton from "@components/molecules/loadingButton";
-import PublishForceLogin from "../publishForceLogin";
-import { DialogBody, Typography } from "@material-tailwind/react";
-import { config } from "@utils/clasorEditor";
+import { Button, Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
-import useGetUser from "@hooks/auth/useGetUser";
 import useCreateQuestion from "@hooks/questionAnswer/useCreateQuestion";
-import { usePublishStore } from "@store/publish";
-import InfoDialog from "@components/templates/dialog/infoDialog";
+import { useDocumentStore } from "@store/document";
+import QuestionAnswerEditor, {
+  IQaEditorRef,
+} from "../../publishFeedback/publishQuestionAnswer/questionAnswerEditor";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { documentCreateQuestionSchema } from "./validation.yup";
 import FormInput from "@components/atoms/input/formInput";
+import { BackIcon } from "@components/atoms/icons";
 
 interface IForm {
   title: string;
@@ -20,25 +21,26 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateQuestion = ({ setOpen }: IProps) => {
+const DocumentCreateQuestion = ({ setOpen }: IProps) => {
   const editorRef = useRef<IQaEditorRef | null>(null);
   const editorData = useRef<{ content: string; outline: string } | null>(null);
 
-  const { publishVersion: getPublishVersion } = usePublishStore();
-  const { repoId } = getPublishVersion!;
-  const { documentId } = getPublishVersion!;
-
+  const { selectedDocument } = useDocumentStore();
+  const createQuestionHook = useCreateQuestion();
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IForm>();
+  } = useForm<IForm>({
+    resolver: yupResolver(documentCreateQuestionSchema),
+  });
 
-  const { data: userInfo } = useGetUser();
-  const createQuestionHook = useCreateQuestion();
 
   const saveQuestion = async (dataForm: IForm) => {
     const data = await editorRef.current?.getData();
+
+    if (!selectedDocument) return;
 
     if (!data) {
       return toast.error("خطا در دریافت متن سوال");
@@ -56,8 +58,8 @@ const CreateQuestion = ({ setOpen }: IProps) => {
     }
 
     createQuestionHook.mutate({
-      repoId,
-      documentId,
+      repoId: selectedDocument.repoId,
+      documentId: selectedDocument.id,
       title: dataForm.title,
       content: editorData.current?.content || "",
       callBack: () => {
@@ -65,7 +67,6 @@ const CreateQuestion = ({ setOpen }: IProps) => {
         editorRef.current?.setData({
           content: "",
           outline: [],
-          ...config,
         });
         editorData.current = null;
         setOpen(false);
@@ -73,22 +74,25 @@ const CreateQuestion = ({ setOpen }: IProps) => {
     });
   };
 
-  if (!userInfo) {
-    return <PublishForceLogin />;
-  }
-
   return (
-    <InfoDialog
-      dialogHeader="پرسش"
-      setOpen={() => {
-        setOpen(false);
-      }}
-      className="document-Qa-dialog flex !h-full w-full max-w-full flex-col !overflow-auto rounded-none bg-primary xs:!h-[550px] xs:!min-w-[750px] xs:!max-w-[750px] xs:rounded-lg"
-    >
-      <DialogBody
-        placeholder="flex flex-col gap-10"
-        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+    <div className="flex flex-col gap-6">
+      <Button
+        placeholder="button"
+        className="justify-start gap-2 bg-transparent p-0"
+        onClick={() => {
+          setOpen(false);
+        }}
+        {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
       >
+        <BackIcon className="h-5 w-5 fill-icon-hover" />
+        <Typography
+          className="text-xs text-primary_normal"
+          {...({} as React.ComponentProps<typeof Typography>)}
+        >
+          لیست سوالات
+        </Typography>
+      </Button>
+      <div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Typography
@@ -136,9 +140,9 @@ const CreateQuestion = ({ setOpen }: IProps) => {
         >
           ارسال پرسش
         </LoadingButton>
-      </DialogBody>
-    </InfoDialog>
+      </div>
+    </div>
   );
 };
 
-export default CreateQuestion;
+export default DocumentCreateQuestion;

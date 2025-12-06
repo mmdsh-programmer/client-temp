@@ -381,6 +381,18 @@ const useDocumentMenuList = (
 
   menuItems.push(
     createItem(
+      "پرسش و پاسخ روی سند",
+      <LastVersionIcon className="h-4 w-4" />,
+      () => {
+        setModal("documentQA");
+        setDocumentDrawer(false);
+      },
+      { className: "document-question-answer" },
+    ),
+  );
+
+  menuItems.push(
+    createItem(
       "حذف سند",
       <DeleteIcon className="h-4 w-4" />,
       () => {

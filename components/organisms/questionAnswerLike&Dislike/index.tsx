@@ -5,6 +5,8 @@ import useDislike from "@hooks/core/useDislike";
 import { IQuestion } from "@interface/qa.interface";
 
 interface IProps {
+  repoId: number;
+  documentId: number;
   item: IQuestion;
   likeButtonClassName?: string;
   dislikeButtonClassName?: string;
@@ -15,6 +17,8 @@ interface IProps {
 }
 
 const QuestionAnswerLikeAndDislike = ({
+  repoId,
+  documentId,
   item,
   likeButtonClassName,
   dislikeButtonClassName,
@@ -28,12 +32,16 @@ const QuestionAnswerLikeAndDislike = ({
 
   const handleLike = () => {
     likeHook.mutate({
+      repoId,
+      documentId,
       postId: item.id,
     });
   };
 
   const handleDisLike = () => {
     disLikeHook.mutate({
+      repoId,
+      documentId,
       postId: item.id,
     });
   };

@@ -71,7 +71,6 @@ const CreateAnswerDialog = ({ repoId, documentId, questionId, setOpen }: IProps)
       className="!max-w-[unset] xs:!max-w-[unset]"
       customSize="lg"
       showFooter={!userInfo?.private}
-      backToMain
     >
       {userInfo?.private ? (
         <PublishForcePublicProfile customText="برای نوشتن پاسخ باید پروفایل کاربری شما عمومی باشد" />

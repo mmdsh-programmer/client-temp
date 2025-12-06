@@ -1,5 +1,4 @@
 export const config = {
-  showOutline: false,
   padding: 0,
   innerPadding: 10,
   includeItems: [
@@ -20,4 +19,5 @@ export const config = {
     "undo",
     "redo",
   ],
+  hideOutline: true
 };

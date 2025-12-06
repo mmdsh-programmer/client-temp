@@ -26,6 +26,7 @@ const QuestionDeleteDialog = ({ repoId, documentId, answer, setOpen }: IProps) =
       entityId: answer.entityId,
       callBack: () => {
         toast.success("پاسخ شما با موفقیت حذف شد");
+        handleClose();
       },
     });
   };
@@ -37,6 +38,7 @@ const QuestionDeleteDialog = ({ repoId, documentId, answer, setOpen }: IProps) =
       onSubmit={onSubmit}
       setOpen={handleClose}
       className="category-delete-dialog"
+      backToMain
     >
       <form className="flex flex-col gap-5">
         <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">

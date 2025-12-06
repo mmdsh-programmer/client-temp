@@ -47,7 +47,7 @@ const PublishVersionContent = ({ version, document }: IProps) => {
               );
           }
         })()}
-        <PublishFeeback postId={version.postId} />
+        <PublishFeeback />
         <PublishBottomNav />
       </section>
       <PublishOutlineDrawer outline={version.outline || "[]"} />

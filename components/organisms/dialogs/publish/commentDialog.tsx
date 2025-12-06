@@ -1,16 +1,16 @@
+import React from "react";
 import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
-
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
-import PublishComments from "@components/organisms/publishFeedback/PublishComments";
-import React from "react";
+import PublishComments from "@components/organisms/publishFeedback/publishComments";
 
 interface IProps {
-  postId: number;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
+  repoId: number;
+  documentId: number;
 }
 
-const CommentDialog = ({ postId, setOpen }: IProps) => {
+const CommentDialog = ({ repoId, documentId, setOpen }: IProps) => {
   const handleClose = () => {
     setOpen(false);
   };
@@ -19,19 +19,21 @@ const CommentDialog = ({ postId, setOpen }: IProps) => {
     <Dialog {...({} as React.ComponentProps<typeof Dialog>)} size="lg" open handler={handleClose}>
       <DialogHeader
         {...({} as React.ComponentProps<typeof DialogHeader>)}
-        className="bg-white flex items-center justify-between gap-[10px] xs:gap-0 pr-1 pl-4 xs:px-6 py-[6px] xs:py-5 border-b-none xs:border-b-[0.5px] border-normal"
+        className="border-b-none flex items-center justify-between gap-[10px] border-normal bg-white py-[6px] pl-4 pr-1 xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
       >
         <div className="flex items-center">
           <div className="block xs:hidden">
             <BackButton onClick={handleClose} />
           </div>
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">دیدگاه کاربران</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">
+            دیدگاه کاربران
+          </Typography>
         </div>
         <CloseButton onClose={handleClose} />
       </DialogHeader>
-      <div className="block xs:hidden h-2 w-full bg-secondary" />
+      <div className="block h-2 w-full bg-secondary xs:hidden" />
       <div className="max-h-[500px] overflow-y-auto">
-        <PublishComments isQuestionAnswerComments postId={postId} />
+        <PublishComments repoId={repoId} documentId={documentId} />
       </div>
     </Dialog>
   );
