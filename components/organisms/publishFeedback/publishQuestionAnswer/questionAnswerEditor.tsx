@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
-import { config } from "@utils/clasorEditor";
+import { editorConfig } from "@utils/clasorEditor";
 import { IEditorValue } from "@interface/app.interface";
 import useGetUser from "@hooks/auth/useGetUser";
 
@@ -67,7 +67,7 @@ const QuestionAnswerEditor = forwardRef<IQaEditorRef, IProps>(({ defaultValue },
             refreshToken: userInfo?.refresh_token,
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/renewToken`,
           },
-          config: { ...config },
+          config: { ...editorConfig },
         } as any
       }
     />

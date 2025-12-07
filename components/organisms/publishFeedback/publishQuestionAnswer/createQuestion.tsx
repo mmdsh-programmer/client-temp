@@ -3,7 +3,7 @@ import QuestionAnswerEditor, { IQaEditorRef } from "./questionAnswerEditor";
 import LoadingButton from "@components/molecules/loadingButton";
 import PublishForceLogin from "../publishForceLogin";
 import { DialogBody, Typography } from "@material-tailwind/react";
-import { config } from "@utils/clasorEditor";
+import { editorConfig } from "@utils/clasorEditor";
 import { toast } from "react-toastify";
 import useGetUser from "@hooks/auth/useGetUser";
 import useCreateQuestion from "@hooks/questionAnswer/useCreateQuestion";
@@ -65,7 +65,7 @@ const CreateQuestion = ({ setOpen }: IProps) => {
         editorRef.current?.setData({
           content: "",
           outline: [],
-          ...config,
+          ...editorConfig,
         });
         editorData.current = null;
         setOpen(false);
