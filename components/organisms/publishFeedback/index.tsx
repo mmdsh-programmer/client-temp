@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import PublishTab from "@components/molecules/publishTab";
-import PublishQuestionAnswer from "./@publishQuestionAnswer";
-import PublishComments from "./@publishComments";
+import PublishQuestionAnswer from "./publishQuestionAnswer";
+import PublishComments from "./publishComments";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { usePublishStore } from "@store/publish";
 

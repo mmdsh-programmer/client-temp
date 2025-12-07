@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Typography } from "@material-tailwind/react";
 import QuestionAnswerEditor, {
   IQaEditorRef,
-} from "@components/organisms/publishFeedback/@publishQuestionAnswer/questionAnswerEditor";
+} from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
 import { config } from "@utils/clasorEditor";
 import EditDialog from "@components/templates/dialog/editDialog";

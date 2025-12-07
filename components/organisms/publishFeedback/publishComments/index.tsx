@@ -1,6 +1,6 @@
 import React from "react";
-import PublishCommentCreate from "@components/organisms/publishFeedback/@publishComments/publishCommentCreate";
-import PublishCommentList from "@components/organisms/publishFeedback/@publishComments/publishCommentList";
+import PublishCommentCreate from "@components/organisms/publishFeedback/publishComments/publishCommentCreate";
+import PublishCommentList from "@components/organisms/publishFeedback/publishComments/publishCommentList";
 
 interface IProps {
   repoId: number;
