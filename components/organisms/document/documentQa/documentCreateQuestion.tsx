@@ -6,7 +6,7 @@ import useCreateQuestion from "@hooks/questionAnswer/useCreateQuestion";
 import { useDocumentStore } from "@store/document";
 import QuestionAnswerEditor, {
   IQaEditorRef,
-} from "../../publishFeedback/publishQuestionAnswer/questionAnswerEditor";
+} from "../../publishFeedback/@publishQuestionAnswer/questionAnswerEditor";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { documentCreateQuestionSchema } from "./validation.yup";

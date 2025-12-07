@@ -3,7 +3,7 @@ import CreateDialog from "@components/templates/dialog/createDialog";
 import { Typography } from "@material-tailwind/react";
 import QuestionAnswerEditor, {
   IQaEditorRef,
-} from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerEditor";
+} from "@components/organisms/publishFeedback/@publishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
 import { config } from "@utils/clasorEditor";
 import useGetUser from "@hooks/auth/useGetUser";

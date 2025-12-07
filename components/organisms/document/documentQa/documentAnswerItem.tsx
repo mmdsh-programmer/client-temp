@@ -6,7 +6,7 @@ import { Button, Card, CardBody, CardFooter, CardHeader } from "@material-tailwi
 import { FaDateFromTimestamp } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import QuestionAnswerLikeAndDislike from "@components/organisms/questionAnswerLike&Dislike";
-import QuestionAnswerContentPreview from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerContentPreview";
+import QuestionAnswerContentPreview from "@components/organisms/publishFeedback/@publishQuestionAnswer/questionAnswerContentPreview";
 import { useQaStore } from "@store/qa";
 import { useDocumentStore } from "@store/document";
 

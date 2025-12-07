@@ -2,7 +2,7 @@ import React from "react";
 import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
-import PublishComments from "@components/organisms/publishFeedback/publishComments";
+import PublishComments from "@components/organisms/publishFeedback/@publishComments";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
