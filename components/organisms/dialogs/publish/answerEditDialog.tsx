@@ -4,7 +4,7 @@ import QuestionAnswerEditor, {
   IQaEditorRef,
 } from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
-import { config } from "@utils/clasorEditor";
+import { editorConfig } from "@utils/clasorEditor";
 import EditDialog from "@components/templates/dialog/editDialog";
 import { IQuestion } from "@interface/qa.interface";
 import useUpdateAnswer from "@hooks/questionAnswer/useUpdateAnswer";
@@ -56,7 +56,7 @@ const AnswerEditDialog = ({ repoId, documentId, answer, setOpen }: IProps) => {
         editorRef.current?.setData({
           content: "",
           outline: [],
-          ...config,
+          ...editorConfig,
         });
         editorData.current = null;
         handleClose();

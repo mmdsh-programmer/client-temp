@@ -1,8 +1,8 @@
 import React from "react";
-import PublishCommentCreate from "./publishCommentCreate";
-import PublishCommentList from "./publishCommentList";
 import useGetUser from "@hooks/auth/useGetUser";
 import PublishForceLogin from "../publishForceLogin";
+import PublishCommentCreate from "./publishCommentCreate";
+import PublishCommentList from "./publishCommentList";
 
 interface IProps {
   repoId: number;

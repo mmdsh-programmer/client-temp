@@ -6,10 +6,10 @@ import useCreateQuestion from "@hooks/questionAnswer/useCreateQuestion";
 import { useDocumentStore } from "@store/document";
 import QuestionAnswerEditor, {
   IQaEditorRef,
-} from "../../publishFeedback/publishQuestionAnswer/questionAnswerEditor";
+} from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerEditor";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { documentCreateQuestionSchema } from "./validation.yup";
+import { documentCreateQuestionSchema } from "@components/organisms/document/documentQa/validation.yup";
 import FormInput from "@components/atoms/input/formInput";
 import { BackIcon } from "@components/atoms/icons";
 

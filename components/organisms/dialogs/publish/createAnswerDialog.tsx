@@ -5,7 +5,7 @@ import QuestionAnswerEditor, {
   IQaEditorRef,
 } from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerEditor";
 import { toast } from "react-toastify";
-import { config } from "@utils/clasorEditor";
+import { editorConfig } from "@utils/clasorEditor";
 import useGetUser from "@hooks/auth/useGetUser";
 import PublishForcePublicProfile from "@components/organisms/publishFeedback/publishForcePublicProfile";
 import useCreateAnswer from "@hooks/questionAnswer/useCreateAnswer";
@@ -54,7 +54,7 @@ const CreateAnswerDialog = ({ repoId, documentId, questionId, setOpen }: IProps)
         editorRef.current?.setData({
           content: "",
           outline: [],
-          ...config,
+          ...editorConfig,
         });
       },
     });

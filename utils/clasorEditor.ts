@@ -1,4 +1,4 @@
-export const config = {
+export const editorConfig = {
   padding: 0,
   innerPadding: 10,
   includeItems: [
