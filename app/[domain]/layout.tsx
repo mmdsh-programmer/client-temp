@@ -64,7 +64,7 @@ const DomainLayout = async ({ children, params }: IProps) => {
     return (
       <ThemeLoaderProvider theme={theme}>
         <MainProvider>{children}</MainProvider>
-        <p className="absolute -z-50 hidden">3.20.12.14-v3</p>
+        <p className="absolute -z-50 hidden">3.20.13.19-v3</p>
       </ThemeLoaderProvider>
     );
   } catch (error) {
