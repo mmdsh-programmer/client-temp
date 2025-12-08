@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Document, Page, pdfjs } from 'react-pdf';
+import { Document, Page, pdfjs } from "react-pdf";
 
 interface IProps {
   fileLink: string;
@@ -12,16 +12,18 @@ const LoadPdf = ({ fileLink }: IProps) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [workerLoaded, setWorkerLoaded] = useState(false);
 
-  const onDocumentLoadSuccess = ({ numPages: documentNumPages }: any) => {
+  const onDocumentLoadSuccess = ({ numPages: documentNumPages }: {
+    numPages: number
+  }) => {
     setNumPages(documentNumPages);
   };
 
   useEffect(() => {
     // Only run on client
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Set workerSrc only once
       if (!pdfjs.GlobalWorkerOptions?.workerSrc) {
-        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+        pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
       }
       setWorkerLoaded(true);
     }

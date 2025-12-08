@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { Spinner } from "@components/atoms/spinner";
 import dynamic from "next/dynamic";
 
@@ -8,12 +9,14 @@ interface IProps {
 }
 
 const LoadPdfDynamic = dynamic(
-  () => import('./loadPdf'),
+  () => 
+{return import("./loadPdf");},
   {
     ssr: false, // ⬅️ This is the critical line that fixes the DOMMatrix error
-    loading: () => <div className="w-full h-full flex items-center justify-center">
+    loading: () => 
+{return <div className="w-full h-full flex items-center justify-center">
          <Spinner className="h-4 w-4 text-primary" />
-    </div>,
+    </div>;},
   }
 );
 
