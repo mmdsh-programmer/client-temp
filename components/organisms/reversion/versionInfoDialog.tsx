@@ -4,24 +4,24 @@ import { DialogBody } from "@material-tailwind/react";
 import useGetVersionInfo from "@hooks/version/reversion/useGetVersionInfo";
 import { useVersionStore } from "@store/version";
 import { useDocumentStore } from "@store/document";
-import { useRepositoryStore } from "@store/repository";
 import { useEditorStore } from "@store/editor";
 import { RenderClientSideContent, RenderServerSideContent } from "clasor-content-preview";
 import { IGetSpecificVersion } from "clasor-content-preview/dist/interface/contentPreview.interface";
 import { Spinner } from "@components/atoms/spinner";
+import useRepoId from "@hooks/custom/useRepoId";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const VersionInfoDialog = ({ setOpen }: IProps) => {
-  const { repo } = useRepositoryStore();
+  const repoId = useRepoId();
   const { selectedDocument } = useDocumentStore();
   const { selectedVersion } = useVersionStore();
   const { versionIndex } = useEditorStore();
 
   const { data: getVersionInfo, isLoading } = useGetVersionInfo(
-    repo!.id,
+    repoId!,
     selectedDocument!.id,
     selectedVersion!.id,
     versionIndex!,

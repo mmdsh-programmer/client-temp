@@ -334,7 +334,7 @@ const EditorFooter = ({ editorRef }: IProps) => {
           className="editor-footer__change-mode-button !h-12 !w-[50%] md:!h-8 md:!w-[100px]"
           disabled={
             saveEditorHook.isPending ||
-            (writerRole() && getVersionData?.creator?.userName !== userInfo?.username)
+            (writerRole() && getVersionData?.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase())
           }
         >
           {editorMode === "temporaryPreview" ? "ویرایش" : "پیش نمایش"}

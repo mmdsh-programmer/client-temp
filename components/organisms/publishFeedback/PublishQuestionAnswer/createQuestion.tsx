@@ -1,11 +1,9 @@
 import React, { useRef } from "react";
 import QuestionAnswerEditor, { IQaEditorRef } from "./questionAnswerEditor";
 import LoadingButton from "@components/molecules/loadingButton";
-import PublishForceLogin from "../publishForceLogin";
 import { DialogBody, Typography } from "@material-tailwind/react";
 import { config } from "@utils/clasorEditor";
 import { toast } from "react-toastify";
-import useGetUser from "@hooks/auth/useGetUser";
 import useCreateQuestion from "@hooks/questionAnswer/useCreateQuestion";
 import { usePublishStore } from "@store/publish";
 import InfoDialog from "@components/templates/dialog/infoDialog";
@@ -34,7 +32,6 @@ const CreateQuestion = ({ setOpen }: IProps) => {
     formState: { errors },
   } = useForm<IForm>();
 
-  const { data: userInfo } = useGetUser();
   const createQuestionHook = useCreateQuestion();
 
   const saveQuestion = async (dataForm: IForm) => {
@@ -72,10 +69,6 @@ const CreateQuestion = ({ setOpen }: IProps) => {
       },
     });
   };
-
-  if (!userInfo) {
-    return <PublishForceLogin />;
-  }
 
   return (
     <InfoDialog

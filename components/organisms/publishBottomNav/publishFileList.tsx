@@ -2,14 +2,13 @@
 
 import React from "react";
 import { DownloadIcon } from "@components/atoms/icons";
-import {  Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { IVersion } from "@interface/version.interface";
 import useGetPublishAttachment from "@hooks/files/useGetPublishAttachment";
 import { Spinner } from "@components/atoms/spinner";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-
 
 interface IProps {
   version: IVersion;
@@ -31,7 +30,7 @@ const PublishFileList = ({ version }: IProps) => {
           const fileSizeInKB = file.size / 1000;
           const fileSizeInMB = fileSizeInKB / 1000;
           return (
-            <div className="flex max-w-[80%] flex-grow flex-col items-start">
+            <div className="flex max-w-[80%] flex-grow flex-col items-start" key={file.hash}>
               <Typography
                 placeholder=""
                 className="title_t2 max-w-full truncate text-primary_normal"

@@ -7,6 +7,7 @@ import useGetLikeList from "@hooks/core/useGetLikeList";
 import useGetPostInfo from "@hooks/core/useGetPostInfo";
 import useLike from "@hooks/core/useLike";
 import { useVersionStore } from "@store/version";
+import { usePublishStore } from "@store/publish";
 
 interface IProps {
   postId: number;
@@ -36,6 +37,7 @@ const LikeAndDislike = ({
   );
 
   const { selectedVersion } = useVersionStore();
+  const { publishVersion } = usePublishStore();
 
   const {
     data: getLikes,
@@ -68,10 +70,10 @@ const LikeAndDislike = ({
   const disLikeHook = useDislike();
 
   const handleLike = () => {
-    if (!postId || !selectedVersion) return;
+    if (!postId) return;
     likeHook.mutate({
-      repoId: selectedVersion.repoId,
-      documentId: selectedVersion.documentId,
+      repoId: selectedVersion ? selectedVersion.repoId : publishVersion!.repoId,
+      documentId: selectedVersion ? selectedVersion.documentId : publishVersion!.documentId,
       postId,
       callBack: () => {
         if (!enable) {
@@ -82,10 +84,10 @@ const LikeAndDislike = ({
   };
 
   const handleDisLike = () => {
-    if (!postId || !selectedVersion) return;
+    if (!postId) return;
     disLikeHook.mutate({
-      repoId: selectedVersion.repoId,
-      documentId: selectedVersion.documentId,
+      repoId: selectedVersion ? selectedVersion.repoId : publishVersion!.repoId,
+      documentId: selectedVersion ? selectedVersion.documentId : publishVersion!.documentId,
       postId,
       callBack: () => {
         if (!enable) {

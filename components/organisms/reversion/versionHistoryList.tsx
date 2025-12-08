@@ -4,24 +4,25 @@ import useGetVersionHistory from "@hooks/version/reversion/useGetVersionHistory"
 import { Typography } from "@material-tailwind/react";
 import { useDocumentStore } from "@store/document";
 import { useEditorStore } from "@store/editor";
-import { useRepositoryStore } from "@store/repository";
 import { useVersionStore } from "@store/version";
 import { FaDate } from "@utils/index";
 import RevertVersion from "./revertVersion";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import useRepoId from "@hooks/custom/useRepoId";
 
 const VersionHistoryList = () => {
-  const { repo } = useRepositoryStore();
+  const repoId = useRepoId();
   const { selectedDocument } = useDocumentStore();
   const { selectedVersion } = useVersionStore();
   const { setVersionInfoDialog, setVersionIndex } = useEditorStore();
+
   const { data: versionHistory, isLoading } = useGetVersionHistory(
-    repo!.id,
+    repoId!,
     selectedDocument!.id,
     selectedVersion!.id,
   );
 
-  const historyLength = versionHistory?.versionHistory;
+  const historyLength = versionHistory?.versionHistory.length;
 
   const renderList = () => {
     if (historyLength) {

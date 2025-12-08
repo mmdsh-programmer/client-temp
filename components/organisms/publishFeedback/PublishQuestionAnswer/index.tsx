@@ -4,6 +4,8 @@ import { usePublishStore } from "@store/publish";
 import QuestionList from "./questionList";
 import { Button, Typography } from "@material-tailwind/react";
 import { AddIcon } from "@components/atoms/icons";
+import PublishForceLogin from "../publishForceLogin";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const PublishQuestionAnswer = () => {
   const [createQuestion, setCreateQuestion] = useState(false);
@@ -11,6 +13,16 @@ const PublishQuestionAnswer = () => {
   const getPublishVersion = usePublishStore((state) => {
     return state.publishVersion;
   });
+
+  const { data: userInfo } = useGetUser();
+
+  if (!userInfo) {
+    return (
+      <div className="mt-8">
+        <PublishForceLogin />
+      </div>
+    );
+  }
 
   return getPublishVersion ? (
     <div className="mt-4 flex flex-col gap-4">

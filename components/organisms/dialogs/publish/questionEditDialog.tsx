@@ -122,7 +122,7 @@ const QuestionEditDialog = ({ repoId, documentId, question, setOpen }: IProps) =
               متن خود را وارد نمایید
             </Typography>
             <div className="h-52">
-              <QuestionAnswerEditor ref={editorRef} />
+              <QuestionAnswerEditor defaultValue={question.content} ref={editorRef} />
             </div>
           </div>
         </div>

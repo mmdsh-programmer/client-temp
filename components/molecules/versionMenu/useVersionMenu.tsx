@@ -122,7 +122,8 @@ const useVersionMenu = (
         className: "clone-version",
         disabled:
           getDocument.contentType === EDocumentTypes.form ||
-          (isWriterOrViewer() && version.creator?.userName !== userInfo?.username),
+          (isWriterOrViewer() &&
+            version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase()),
       },
     ),
     createItem(
@@ -141,7 +142,9 @@ const useVersionMenu = (
       },
       {
         className: "edit-version",
-        disabled: isWriterOrViewer() && version.creator?.userName !== userInfo?.username,
+        disabled:
+          isWriterOrViewer() &&
+          version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase(),
       },
     ),
     createItem(
@@ -187,12 +190,13 @@ const useVersionMenu = (
         <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
       ),
       createAction(version.status === "editing" ? "confirm" : "cancelConfirm"),
-      { 
+      {
         className: version.status === "editing" ? "confirm-version" : "cancel-confirm-version",
         disabled:
           getDocument.contentType === EDocumentTypes.form ||
-          (isWriterOrViewer() && version.creator?.userName !== userInfo?.username),
-       },
+          (isWriterOrViewer() &&
+            version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase()),
+      },
     ),
     ...(version.status === EDraftStatus.pending && isAdminOrOwner()
       ? [
@@ -311,10 +315,9 @@ const useVersionMenu = (
                 toast.success("هش مربوط به پیش نویس کپی شد.");
               }
             },
-            { className: "copy-version-hash" }
+            { className: "copy-version-hash" },
           ),
-        ]
-    ),
+        ]),
     createItem(
       "کپی آدرس اشتراک‌ گذاری",
       <ShareIcon className="h-4 w-4 stroke-icon-active" />,
@@ -330,7 +333,9 @@ const useVersionMenu = (
       createAction("delete"),
       {
         className: "delete-version",
-        disabled: isWriterOrViewer() && version.creator?.userName !== userInfo?.username,
+        disabled:
+          isWriterOrViewer() &&
+          version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase(),
       },
     ),
   ];

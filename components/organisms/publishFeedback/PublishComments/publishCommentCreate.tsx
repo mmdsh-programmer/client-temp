@@ -46,11 +46,7 @@ const PublishCommentCreate = ({ repoId, documentId }: IProps) => {
     }
   };
 
-  if (!userInfo) {
-    return <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />;
-  }
-
-  if (userInfo.private) {
+  if (userInfo?.private) {
     return <PublishForcePublicProfile customText="برای نوشتن دیدگاه باید پروفایل شما عمومی باشد" />;
   }
 
