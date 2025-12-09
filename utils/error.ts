@@ -120,7 +120,7 @@ export class UnprocessableError extends BasicError {
 
 export class NetworkError extends BasicError {
   constructor(errorList?: string[], originalError?: IOriginalError) {
-    const defaultMessage = "خطا در اتصال به اینترنت" ?? (ERRORS[599].MSG as string);
+    const defaultMessage = (ERRORS[599].MSG as string) ?? "خطا در اتصال به اینترنت";
     const referenceNumber = originalError?.data?.referenceNumber;
     super(599, defaultMessage, ["خطا در اتصال به اینترنت"], referenceNumber, originalError);
   }
