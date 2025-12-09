@@ -17,7 +17,21 @@ import useGetUser from "@hooks/auth/useGetUser";
 import useRepoId from "@hooks/custom/useRepoId";
 import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import RemoteEditorWithLoader from "./remoteEditorWithLoader";
-import VersionInfoDialog from "../reversion/versionInfoDialog";
+import dynamic from "next/dynamic";
+
+
+
+const VersionInfoDialogComponent = dynamic(
+  () => {
+    return import("@components/organisms/reversion/versionInfoDialog");
+  },
+  {
+    loading: () => {
+      return <p className="w-full text-center">در حال بارگذاری...</p>;
+    },
+    ssr: false,
+  },
+);
 
 interface IProps {
   getEditorConfig: () => {
@@ -173,7 +187,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
         <TemplateContentDialog setOpen={setOpenTemplateDialog} editorRef={getEditorConfig().ref} />
       ) : null}
       {versionInfoDialog ? (
-        <VersionInfoDialog
+        <VersionInfoDialogComponent
           setOpen={() => {
             return setVersionInfoDialog(false);
           }}
