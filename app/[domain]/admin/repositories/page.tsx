@@ -6,8 +6,8 @@ import { getRepository } from "@service/clasor";
 
 export async function generateMetadata({ searchParams }): Promise<Metadata> {
   const { repoId } = await searchParams;
+  const userInfo = await getMe();
   try {
-    const userInfo = await getMe();
     const response = await getRepository(userInfo.access_token, repoId);
 
     return {
