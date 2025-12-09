@@ -32,14 +32,14 @@ const iranYekanFont = localFont({
 const RootLayout = async ({ children }: IProps) => {
   return (
     <html lang="fa">
-      <head>
+      {/* <head>
         <Script
           src="https://podlytics.sandpod.ir/tracker.js"
-          data-website-id={process.env.PODLYTICS_ID}
+          data-website-id={process.env.NEXT_PUBLIC_PODLYTICS_ID}
           strategy="afterInteractive"
           defer
         />
-      </head>
+      </head> */}
       <body className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}>
         {children}
         <p className="absolute top-0 -z-50 opacity-0">Clasor client is up and running</p>
