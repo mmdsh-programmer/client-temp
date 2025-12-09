@@ -26,7 +26,7 @@ const RepoCardMode = ({ repo }: IProps) => {
         if (!repo.isArchived) {
           router.push(`/admin/repositories?repoId=${repo.id}`);
           window.metrics?.track(`select-repo-${repo.name}-${repo.id}`);
-          window.metrics?.identy({
+          window.metrics?.identify({
             event: "select-repo",
             repoName: repo.name,
             repoId: repo.id,

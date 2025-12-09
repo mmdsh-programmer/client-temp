@@ -6,6 +6,7 @@ import {
   ForbiddenError,
   IOriginalError,
   InputError,
+  NetworkError,
   NotFoundError,
   ServerError,
   UnprocessableError,
@@ -162,9 +163,31 @@ axiosClasorInstance.interceptors.response.use(
   },
 );
 
-export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
+export const handleClasorStatusError = (error: AxiosError<IClasorError>, method: string) => {
   if (isAxiosError(error)) {
-    const message = [error.response?.data?.messages?.[0] || error.message];
+    // Handle network errors that don't have a response status
+    if (error.code && typeof error.code === "string") {
+      const networkErrorCodes = [
+        "ENOTFOUND", // DNS resolution failed
+        "ECONNREFUSED", // Connection refused
+        "ETIMEDOUT", // Connection timeout
+        "ECONNRESET", // Connection reset
+        "EHOSTUNREACH", // Host unreachable
+        "ENETUNREACH", // Network unreachable
+        "EAI_AGAIN", // Temporary failure in name resolution
+        "EAI_NODATA", // No address associated with hostname
+        "EAI_NONAME", // Name or service not known
+      ];
+
+      if (networkErrorCodes.includes(error.code)) {
+        throw new NetworkError(
+          [`خطا در اتصال اینترنت - method: ${method}`],
+          error as IOriginalError,
+        );
+      }
+    }
+
+    const message = [`${error.response?.data?.messages?.[0] || error.message} - method: ${method}`];
     switch (error.response?.status) {
       case 400:
         throw new InputError(message, error as IOriginalError);
@@ -174,15 +197,39 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>) => {
         throw new ForbiddenError(message, error as IOriginalError);
       case 404:
         throw new NotFoundError(message, error as IOriginalError);
+      case 408:
+        throw new NetworkError([`درخواست منقضی شد - method: ${method}`], error as IOriginalError);
       case 409:
         throw new DuplicateError(message, error as IOriginalError);
       case 422:
         throw new UnprocessableError(message, error as IOriginalError);
+      case 429:
+        throw new ServerError(
+          [`تعداد درخواست‌ها بیش از حد مجاز است - method: ${method}`],
+          error as IOriginalError,
+        );
+      case 500:
+        throw new ServerError(
+          [`خطای داخلی سرور - method: ${method}`],
+          error as IOriginalError,
+        );
+      case 502:
+        throw new NetworkError([`خطا در ارتباط با سرور - method: ${method}`], error as IOriginalError);
+      case 503:
+        throw new ServerError(
+          [`سرویس در حال حاضر در دسترس نیست - method: ${method}`],
+          error as IOriginalError,
+        );
+      case 504:
+        throw new NetworkError(
+          [`زمان انتظار برای دریافت پاسخ به پایان رسید - method: ${method}`],
+          error as IOriginalError,
+        );
       default:
-        throw new ServerError(["خطا در ارتباط با سرویس خارجی"], error as IOriginalError);
+        throw new ServerError([`خطا در ارتباط با سرویس خارجی - method: ${method}`], error as IOriginalError);
     }
   } else {
-    throw new ServerError(["خطای نامشخصی رخ داد"]);
+    throw new ServerError([`خطای نامشخصی رخ داد - method: ${method}`]);
   }
 };
 
@@ -194,7 +241,7 @@ export const getToken = async (code: string, redirectUrl: string) => {
     });
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getToken");
   }
 };
 
@@ -226,7 +273,7 @@ export const userInfo = async (accessToken: string, domainUrl: string, expiresAt
     });
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "userInfo");
   }
 };
 
@@ -246,7 +293,7 @@ export const logout = async (access_token: string, refresh_token: string) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "logout");
   }
 };
 
@@ -266,7 +313,7 @@ export const userMetadata = async (access_token: string, data: object) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "userMetadata");
   }
 };
 
@@ -289,7 +336,7 @@ export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getMyInfo");
   }
 };
 
@@ -307,7 +354,7 @@ export const getReport = async (accessToken: string, repoId: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getReport");
   }
 };
 
@@ -342,7 +389,7 @@ export const getAllRepositories = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAllRepositories");
   }
 };
 
@@ -354,7 +401,7 @@ export const getPublishRepositoryInfo = async (repoId: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishRepositoryInfo");
   }
 };
 
@@ -380,7 +427,7 @@ export const getRepositoryKeys = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteRepositoryKey");
   }
 };
 
@@ -397,7 +444,7 @@ export const deleteRepositoryKey = async (accessToken: string, repoId: number, k
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRepositoryKey");
   }
 };
 
@@ -423,7 +470,7 @@ export const createRepositoryKey = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getKey");
   }
 };
 
@@ -448,7 +495,7 @@ export const getKey = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getMyRepositories");
   }
 };
 
@@ -486,7 +533,7 @@ export const getMyRepositories = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getMyRepositories");
   }
 };
 
@@ -500,7 +547,7 @@ export const getRepository = async (accessToken: string, repoId: number | null) 
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepository");
   }
 };
 
@@ -534,7 +581,7 @@ export const getAccessRepositories = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAccessRepositories");
   }
 };
 
@@ -568,7 +615,7 @@ export const getBookmarkRepositories = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getBookmarkRepositories");
   }
 };
 
@@ -594,7 +641,7 @@ export const editRepo = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "editRepo");
   }
 };
 
@@ -614,7 +661,7 @@ export const deleteRepository = async (accessToken: string, repoId: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteRepository");
   }
 };
 
@@ -632,7 +679,7 @@ export const archiveRepository = async (accessToken: string, repoId: number) => 
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "archiveRepository");
   }
 };
 
@@ -650,7 +697,7 @@ export const restoreRepository = async (accessToken: string, repoId: number) => 
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "restoreRepository");
   }
 };
 
@@ -677,7 +724,7 @@ export const createRepo = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRepo");
   }
 };
 
@@ -694,7 +741,7 @@ export const leaveRepository = async (accessToken: string, repoId: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "leaveRepository");
   }
 };
 
@@ -715,7 +762,7 @@ export const bookmarkRepository = async (accessToken: string, repoId: number, de
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "bookmarkRepository");
   }
 };
 
@@ -739,7 +786,7 @@ export const imageRepository = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "imageRepository");
   }
 };
 
@@ -761,7 +808,7 @@ export const transferOwnershipRepository = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "transferOwnershipRepository");
   }
 };
 
@@ -788,7 +835,7 @@ export const subscribeToRepository = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "subscribeToRepository");
   }
 };
 
@@ -811,7 +858,7 @@ export const unsubscribeFromRepository = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "unsubscribeFromRepository");
   }
 };
 
@@ -828,7 +875,7 @@ export const getRepositorySubscription = async (accessToken: string, repoId: num
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepositorySubscription");
   }
 };
 
@@ -853,7 +900,7 @@ export const getRepoWhiteListRequest = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepoWhiteListRequest");
   }
 };
 /// /////////////////////// USERS ///////////////////////
@@ -879,7 +926,7 @@ export const getRepositoryUsers = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepositoryUsers");
   }
 };
 
@@ -905,7 +952,7 @@ export const getRepositoryInviteRequestsByOwner = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepositoryInviteRequestsByOwner");
   }
 };
 
@@ -919,7 +966,7 @@ export const getRoles = async (accessToken: string) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRoles");
   }
 };
 
@@ -945,7 +992,7 @@ export const addUserToRepo = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addUserToRepo");
   }
 };
 
@@ -968,7 +1015,7 @@ export const editUserRole = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "editUserRole");
   }
 };
 
@@ -988,7 +1035,7 @@ export const deleteUser = async (accessToken: string, repoId: number, userName: 
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteUser");
   }
 };
 
@@ -1005,7 +1052,7 @@ export const deleteInviteRequest = async (accessToken: string, repoId: number, u
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteInviteRequest");
   }
 };
 
@@ -1032,7 +1079,7 @@ export const getRepositoryGroups = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepositoryGroups");
   }
 };
 
@@ -1049,7 +1096,7 @@ export const getGroupInfo = async (accessToken: string, repoId: number, title: s
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getGroupInfo");
   }
 };
 
@@ -1073,7 +1120,7 @@ export const createGroup = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createGroup");
   }
 };
 
@@ -1098,7 +1145,7 @@ export const updateGroup = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateGroup");
   }
 };
 
@@ -1115,7 +1162,7 @@ export const deleteGroup = async (accessToken: string, repoId: number, title: st
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteGroup");
   }
 };
 
@@ -1144,7 +1191,7 @@ export const getRepositoryTags = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepositoryTags");
   }
 };
 
@@ -1170,7 +1217,7 @@ export const createTag = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createTag");
   }
 };
 
@@ -1197,7 +1244,7 @@ export const editTag = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "editTag");
   }
 };
 
@@ -1222,7 +1269,7 @@ export const deleteTag = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteTag");
   }
 };
 
@@ -1300,7 +1347,7 @@ export const getChildren = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getChildren");
   }
 };
 
@@ -1317,7 +1364,7 @@ export const getCategory = async (accessToken: string, repoId: number, categoryI
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getCategory");
   }
 };
 
@@ -1347,7 +1394,7 @@ export const createCategory = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createCategory");
   }
 };
 
@@ -1380,7 +1427,7 @@ export const editCategory = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "editCategory");
   }
 };
 
@@ -1405,7 +1452,7 @@ export const deleteCategory = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteCategory");
   }
 };
 
@@ -1432,7 +1479,7 @@ export const getCategoryBlocklist = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getCategoryBlocklist");
   }
 };
 
@@ -1456,7 +1503,7 @@ export const addUserToCategoryBlocklist = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addUserToCategoryBlocklist");
   }
 };
 
@@ -1485,7 +1532,7 @@ export const getContent = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getContent");
   }
 };
 
@@ -1569,7 +1616,7 @@ export const getUserDocument = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getUserDocument");
   }
 };
 
@@ -1596,7 +1643,7 @@ export const moveBulk = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "moveBulk");
   }
 };
 
@@ -1622,7 +1669,7 @@ export const deleteBulk = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteBulk");
   }
 };
 
@@ -1653,7 +1700,7 @@ export const getDocument = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDocument");
   }
 };
 
@@ -1688,7 +1735,7 @@ export const getPublishDocumentVersion = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishDocumentVersion");
   }
 };
 
@@ -1722,7 +1769,7 @@ export const getPublishDocumentLastVersion = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishDocumentLastVersion");
   }
 };
 
@@ -1746,7 +1793,7 @@ export const getPublishDocumentVersions = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishDocumentVersions");
   }
 };
 
@@ -1776,7 +1823,7 @@ export const getPublishDocumentInfo = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishDocumentInfo");
   }
 };
 
@@ -1796,7 +1843,7 @@ export const getPublishDocumentUserList = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishDocumentUserList");
   }
 };
 
@@ -1824,7 +1871,7 @@ export const searchPublishContent = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "searchPublishContent");
   }
 };
 
@@ -1838,7 +1885,7 @@ export const getClasorField = async (accessToken: string) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getClasorField");
   }
 };
 
@@ -1876,7 +1923,7 @@ export const createDocument = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createDocument");
   }
 };
 
@@ -1914,7 +1961,7 @@ export const createDocumentTemplate = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createDocumentTemplate");
   }
 };
 
@@ -1955,7 +2002,7 @@ export const editDocument = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "editDocument");
   }
 };
 
@@ -1972,7 +2019,7 @@ export const deleteDocument = async (accessToken: string, repoId: number, docume
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteDocument");
   }
 };
 
@@ -1998,7 +2045,7 @@ export const bookmarkDocument = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "bookmarkDocument");
   }
 };
 
@@ -2025,7 +2072,7 @@ export const getDocumentBlocklist = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDocumentBlocklist");
   }
 };
 
@@ -2048,7 +2095,7 @@ export const addUserToDocumentBlocklist = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addUserToDocumentBlocklist");
   }
 };
 
@@ -2069,7 +2116,7 @@ export const getDocumentWhiteBlackList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDocumentWhiteBlackList");
   }
 };
 
@@ -2092,7 +2139,7 @@ export const addToDocumentBlackList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addToDocumentBlackList");
   }
 };
 
@@ -2115,7 +2162,7 @@ export const addToDocumentWhiteList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addToDocumentWhiteList");
   }
 };
 
@@ -2140,7 +2187,7 @@ export const createDocumentPassword = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createDocumentPassword");
   }
 };
 
@@ -2167,7 +2214,7 @@ export const updateDocumentPassword = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateDocumentPassword");
   }
 };
 
@@ -2192,7 +2239,7 @@ export const deleteDocumentPassword = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteDocumentPassword");
   }
 };
 
@@ -2218,7 +2265,7 @@ export const documentEnableUserGroupHash = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "documentEnableUserGroupHash");
   }
 };
 
@@ -2243,7 +2290,7 @@ export const createDocumentPublishLink = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createDocumentPublishLink");
   }
 };
 
@@ -2271,7 +2318,7 @@ export const getDocumentPublishLink = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDocumentPublishLink");
   }
 };
 
@@ -2292,7 +2339,7 @@ export const deleteDocumentPublishLink = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteDocumentPublishLink");
   }
 };
 
@@ -2316,7 +2363,7 @@ export const getPublishedDocumentLastVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishedDocumentLastVersion");
   }
 };
 
@@ -2340,7 +2387,7 @@ export const getPublishedDocumentVersion = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishedDocumentVersion");
   }
 };
 
@@ -2381,7 +2428,7 @@ export const publicLastVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "publicLastVersion");
   }
 };
 
@@ -2419,7 +2466,7 @@ export const getVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getVersion");
   }
 };
 
@@ -2448,7 +2495,7 @@ export const createVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createVersion");
   }
 };
 
@@ -2476,7 +2523,7 @@ export const createFileVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createFileVersion");
   }
 };
 
@@ -2505,7 +2552,7 @@ export const createFormVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createFormVersion");
   }
 };
 
@@ -2534,7 +2581,7 @@ export const deleteVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteVersion");
   }
 };
 
@@ -2558,7 +2605,7 @@ export const getLastVersion = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getLastVersion");
   }
 };
 
@@ -2585,7 +2632,7 @@ export const setLastVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "setLastVersion");
   }
 };
 
@@ -2611,7 +2658,7 @@ export const publicVersion = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "publicVersion");
   }
 };
 
@@ -2638,7 +2685,7 @@ export const cancelPublicVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cancelPublicVersion");
   }
 };
 
@@ -2664,7 +2711,7 @@ export const confirmVersion = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "confirmVersion");
   }
 };
 
@@ -2691,7 +2738,7 @@ export const cancelConfirmVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cancelConfirmVersion");
   }
 };
 
@@ -2724,7 +2771,7 @@ export const getFormVersionExport = async (
     );
     return response.data as Blob;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getFormVersionExport");
   }
 };
 
@@ -2747,7 +2794,7 @@ export const collaborateFormVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "collaborateFormVersion");
   }
 };
 
@@ -2775,7 +2822,7 @@ export const getResponseListFormVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getResponseListFormVersion");
   }
 };
 
@@ -2803,7 +2850,7 @@ export const getVersionHistory = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getVersionHistory");
   }
 };
 
@@ -2831,7 +2878,7 @@ export const getVersionSummary = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getVersionSummary");
   }
 };
 
@@ -2860,7 +2907,7 @@ export const getVersionInfo = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getVersionInfo");
   }
 };
 
@@ -2890,7 +2937,7 @@ export const revertVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "revertVersion");
   }
 };
 
@@ -2929,7 +2976,7 @@ export const getResourceFiles = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getResourceFiles");
   }
 };
 export const editFile = async (
@@ -2953,7 +3000,7 @@ export const editFile = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "editFile");
   }
 };
 
@@ -2979,7 +3026,7 @@ export const deleteFile = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteFile");
   }
 };
 
@@ -3006,7 +3053,7 @@ export const createUploadLink = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createUploadLink");
   }
 };
 
@@ -3024,7 +3071,7 @@ export const publicHash = async (accessToken: string, resourceId: number, hash: 
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "publicHash");
   }
 };
 
@@ -3048,7 +3095,7 @@ export const repoPublicHashList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "repoPublicHashList");
   }
 };
 
@@ -3070,7 +3117,7 @@ export const getPublishAttachment = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishAttachment");
   }
 };
 
@@ -3098,7 +3145,7 @@ export const getPendingDrafts = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPendingDrafts");
   }
 };
 
@@ -3124,7 +3171,7 @@ export const getPendingVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPendingVersion");
   }
 };
 
@@ -3146,7 +3193,7 @@ export const acceptDraft = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptDraft");
   }
 };
 
@@ -3163,7 +3210,7 @@ export const acceptVersion = async (accessToken: string, repoId: number, version
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptVersion");
   }
 };
 
@@ -3185,7 +3232,7 @@ export const rejectDraft = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "rejectDraft");
   }
 };
 
@@ -3202,7 +3249,7 @@ export const rejectVersion = async (accessToken: string, repoId: number, version
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "rejectVersion");
   }
 };
 
@@ -3224,7 +3271,7 @@ export const acceptPublicDraft = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptPublicDraft");
   }
 };
 
@@ -3252,7 +3299,7 @@ export const createRepoPublicLink = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRepoPublicLink");
   }
 };
 
@@ -3272,7 +3319,7 @@ export const deletePublicLink = async (accessToken: string, repoId: number, role
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deletePublicLink");
   }
 };
 
@@ -3292,7 +3339,7 @@ export const subscribeRepo = async (accessToken: string, hash: string, password?
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "subscribeRepo");
   }
 };
 /// //////////////////////// PUBLISH /////////////////////
@@ -3317,7 +3364,7 @@ export const createRepoPublishLink = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRepoPublishLink");
   }
 };
 
@@ -3333,7 +3380,7 @@ export const deletePublishLink = async (accessToken: string, repoId: number) => 
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deletePublishLink");
   }
 };
 
@@ -3361,7 +3408,7 @@ export const getUserToRepoRequests = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getUserToRepoRequests");
   }
 };
 
@@ -3382,7 +3429,7 @@ export const acceptUserToRepoRequest = async (accessToken: string, requestId: nu
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptUserToRepoRequest");
   }
 };
 
@@ -3403,7 +3450,7 @@ export const rejectUserToRepoRequest = async (accessToken: string, requestId: nu
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "rejectUserToRepoRequest");
   }
 };
 
@@ -3441,7 +3488,7 @@ export const saveVersion = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "saveVersion");
   }
 };
 
@@ -3474,7 +3521,7 @@ export const saveFileVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "saveFileVersion");
   }
 };
 
@@ -3504,7 +3551,7 @@ export const freeDraftVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "freeDraftVersion");
   }
 };
 
@@ -3531,7 +3578,7 @@ export const createBlockVersion = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createBlockVersion");
   }
 };
 
@@ -3555,7 +3602,7 @@ export const sendFeedback = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "sendFeedback");
   }
 };
 
@@ -3573,7 +3620,7 @@ export const addUserToFeedbackGroupHash = async (accessToken: string) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addUserToFeedbackGroupHash");
   }
 };
 
@@ -3592,7 +3639,7 @@ export const getAdminPanelReport = async (accessToken: string) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAdminPanelReport");
   }
 };
 
@@ -3613,7 +3660,7 @@ export const getAdminPanelFeedback = async (accessToken: string, top: number, sk
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAdminPanelFeedback");
   }
 };
 
@@ -3641,7 +3688,7 @@ export const getCommentList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getCommentList");
   }
 };
 
@@ -3663,7 +3710,7 @@ export const deleteComment = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteComment");
   }
 };
 export const createComment = async (
@@ -3685,7 +3732,7 @@ export const createComment = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createComment");
   }
 };
 
@@ -3712,7 +3759,7 @@ export const getLike = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getLike");
   }
 };
 
@@ -3739,7 +3786,7 @@ export const getDislike = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDislike");
   }
 };
 
@@ -3774,7 +3821,7 @@ export const getPublishRepoList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishRepoList");
   }
 };
 
@@ -3824,7 +3871,7 @@ export const getPublishChildren = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPublishChildren");
   }
 };
 
@@ -3877,7 +3924,7 @@ export const getAllPublishChildren = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAllPublishChildren");
   }
 };
 
@@ -3904,7 +3951,7 @@ export const getDomainPublishRepoList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainPublishRepoList");
   }
 };
 
@@ -3922,7 +3969,7 @@ export const addToWhiteListRequest = async (accessToken: string, repoId: number,
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addToWhiteListRequest");
   }
 };
 
@@ -3948,7 +3995,7 @@ export const getWhiteListRequest = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getWhiteListRequest");
   }
 };
 
@@ -3971,7 +4018,7 @@ export const acceptWhiteListRequest = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptWhiteListRequest");
   }
 };
 
@@ -3994,7 +4041,7 @@ export const rejectWhiteListRequest = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "rejectWhiteListRequest");
   }
 };
 
@@ -4021,7 +4068,7 @@ export const getUsersOfResource = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getUsersOfResource");
   }
 };
 
@@ -4049,7 +4096,7 @@ export const addAccessToResource = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addAccessToResource");
   }
 };
 
@@ -4075,7 +4122,7 @@ export const deleteAccessOfResource = async (
     });
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteAccessOfResource");
   }
 };
 
@@ -4098,7 +4145,7 @@ export const getDomainPublicFeeds = async (domain: string, offset: number, size:
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainPublicFeeds");
   }
 };
 
@@ -4125,7 +4172,7 @@ export const getDomainPrivateFeeds = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainPrivateFeeds");
   }
 };
 
@@ -4152,7 +4199,7 @@ export const getFollowingRepos = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getFollowingRepos");
   }
 };
 
@@ -4178,7 +4225,7 @@ export const getFollowingRepoFeeds = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getFollowingRepoFeeds");
   }
 };
 
@@ -4206,7 +4253,7 @@ export const getBranchList = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getBranchList");
   }
 };
 
@@ -4220,7 +4267,7 @@ export const getBranchInfo = async (accessToken: string, branchId: number | unde
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getBranchInfo");
   }
 };
 
@@ -4243,7 +4290,7 @@ export const createRootBranch = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRootBranch");
   }
 };
 
@@ -4267,7 +4314,7 @@ export const createSubBranch = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createSubBranch");
   }
 };
 
@@ -4285,7 +4332,7 @@ export const updateRootBranch = async (accessToken: string, name: string, userna
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateRootBranch");
   }
 };
 
@@ -4308,7 +4355,7 @@ export const updateSubBranch = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateSubBranch");
   }
 };
 
@@ -4322,7 +4369,7 @@ export const deleteBranch = async (accessToken: string, branchId: number) => {
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteBranch");
   }
 };
 
@@ -4350,7 +4397,7 @@ export const getPositionOfBranch = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPositionOfBranch");
   }
 };
 
@@ -4371,7 +4418,7 @@ export const getPositionInfo = async (
 
     return response.data.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getPositionInfo");
   }
 };
 
@@ -4394,7 +4441,7 @@ export const setPositionForBranch = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "setPositionForBranch");
   }
 };
 
@@ -4417,7 +4464,7 @@ export const addMembersToPosition = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addMembersToPosition");
   }
 };
 
@@ -4440,7 +4487,7 @@ export const setGrantsForPosition = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "setGrantsForPosition");
   }
 };
 
@@ -4462,7 +4509,7 @@ export const assignPositionForSubBranch = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "assignPositionForSubBranch");
   }
 };
 
@@ -4486,7 +4533,7 @@ export const updatePosition = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updatePosition");
   }
 };
 
@@ -4511,7 +4558,7 @@ export const deleteMembersFromPosition = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteMembersFromPosition");
   }
 };
 
@@ -4532,7 +4579,7 @@ export const deletePosition = async (
 
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deletePosition");
   }
 };
 
@@ -4558,7 +4605,7 @@ export const getBranchUsers = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deletePosition");
   }
 };
 
@@ -4574,7 +4621,7 @@ export const getRepoTypes = async (accessToken: string) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getRepoTypes");
   }
 };
 
@@ -4592,7 +4639,7 @@ export const createRepoTypes = async (accessToken: string, name: string, usernam
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRepoTypes");
   }
 };
 
@@ -4606,7 +4653,7 @@ export const deleteRepoType = async (accessToken: string, id: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createRepoTypes");
   }
 };
 
@@ -4635,7 +4682,7 @@ export const getDomainFeeds = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainFeeds");
   }
 };
 
@@ -4672,7 +4719,7 @@ export const createDomainFeed = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createDomainFeed");
   }
 };
 
@@ -4710,7 +4757,7 @@ export const updateDomainFeed = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateDomainFeed");
   }
 };
 
@@ -4728,7 +4775,7 @@ export const deleteDomainFeed = async (accessToken: string, domainUrl: string, f
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteDomainFeed");
   }
 };
 
@@ -4744,7 +4791,7 @@ export const getFeedImages = async (offset: number, size: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getFeedImages");
   }
 };
 
@@ -4782,7 +4829,7 @@ export const createPrivateFeed = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createPrivateFeed");
   }
 };
 
@@ -4819,7 +4866,7 @@ export const updatePrivateFeed = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updatePrivateFeed");
   }
 };
 
@@ -4836,7 +4883,7 @@ export const deletePrivateFeed = async (accessToken: string, repoId: number, fee
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainSubscription");
   }
 };
 
@@ -4865,7 +4912,7 @@ export const getDomainSubscription = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "rejectSubscription");
   }
 };
 
@@ -4888,7 +4935,7 @@ export const rejectSubscription = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptSubscription");
   }
 };
 
@@ -4911,16 +4958,17 @@ export const acceptSubscription = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "acceptSubscription");
   }
 };
 
 export const getCustomPostByDomain = async (domain: string): Promise<IDomainMetadata> => {
   try {
+    console.log(1);
     if (domain === "") {
       throw new NotFoundError(["دامنه ارسال شده خالی می باشد."]);
     }
-
+    console.log(2);
     const redisClient = await global.redisClient;
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
     if (cachedDomain) {
@@ -4937,6 +4985,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
       );
       return cacheResult;
     }
+    console.log(3);
     const { data } = await axiosClasorInstance.get<IClasorResult<IClasorDomainResult>>(
       "domain/info",
       {
@@ -4946,27 +4995,32 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
       },
     );
 
+    console.log(4);
     const sensitiveStringData = await decryptKey(
       data.data.sensitiveData,
       process.env.CRYPTO_SECRET_KEY!,
       process.env.CRYPTO_INIT_VECTOR_KEY!,
     );
+    console.log(5);
     const sensitiveData = JSON.parse(sensitiveStringData);
-
+    console.log(6);
     const domainInfo = {
       ...data.data,
       ...sensitiveData,
     };
-
+    console.log(7);
     if (domainInfo) {
       await redisClient?.set(`domain:${domain}`, JSON.stringify(domainInfo), {
         EX: 60 * 60,
       });
     }
-
+    console.log(8);
     return domainInfo as IDomainMetadata;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>");
+    console.log(JSON.stringify(error, null, 0));
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>");
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getCustomPostByDomain");
   }
 };
 
@@ -5024,7 +5078,7 @@ export const updateCustomPostByDomain = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateCustomPostByDomain");
   }
 };
 
@@ -5076,7 +5130,7 @@ export const getDomainDocuments = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainDocuments");
   }
 };
 
@@ -5135,7 +5189,7 @@ export const getDomainVersions = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainVersions");
   }
 };
 
@@ -5159,7 +5213,7 @@ export const enableDocChat = async (accessToken: string, repoId: number, docId: 
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "enableDocChat");
   }
 };
 
@@ -5181,7 +5235,7 @@ export const enableRepoChat = async (accessToken: string, repoId: number) => {
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "enableRepoChat");
   }
 };
 
@@ -5211,7 +5265,7 @@ export const createDomainTag = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createDomainTag");
   }
 };
 
@@ -5234,7 +5288,7 @@ export const getAllDomainTags = async (
     });
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAllDomainTags");
   }
 };
 
@@ -5248,7 +5302,7 @@ export const getDomainTagById = async (domainUrl: string, accessToken: string, t
     });
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDomainTagById");
   }
 };
 
@@ -5272,7 +5326,7 @@ export const updateDomainTag = async (
     });
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateDomainTag");
   }
 };
 
@@ -5286,7 +5340,7 @@ export const deleteDomainTag = async (domainUrl: string, accessToken: string, ta
     });
     return true;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteDomainTag");
   }
 };
 
@@ -5316,7 +5370,7 @@ export const setDocumentDomainTags = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "setDocumentDomainTags");
   }
 };
 
@@ -5351,7 +5405,7 @@ export const addPartyToDomainParticipants = async (
     }
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "addPartyToDomainParticipants");
   }
 };
 
@@ -5385,7 +5439,7 @@ export const removePartyFromDomainParticipants = async (
     }
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "removePartyFromDomainParticipants");
   }
 };
 
@@ -5406,7 +5460,7 @@ export const getUserConfigPanel = async (accessToken: string, repoId: number, ss
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getUserConfigPanel");
   }
 };
 
@@ -5430,7 +5484,7 @@ export const updateUserBlockServices = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateUserBlockServices");
   }
 };
 
@@ -5454,7 +5508,7 @@ export const updateUserNotificationServices = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateUserNotificationServices");
   }
 };
 
@@ -5477,7 +5531,7 @@ export const updateMyNotifServices = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateMyNotifServices");
   }
 };
 
@@ -5506,7 +5560,7 @@ export const getQuestionList = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getQuestionList");
   }
 };
 
@@ -5532,7 +5586,7 @@ export const createQuestion = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createQuestion");
   }
 };
 
@@ -5559,7 +5613,7 @@ export const updateQuestion = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateQuestion");
   }
 };
 
@@ -5584,7 +5638,7 @@ export const deleteQuestion = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteQuestion");
   }
 };
 
@@ -5612,7 +5666,7 @@ export const getAnswerList = async (
     );
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getAnswerList");
   }
 };
 
@@ -5639,7 +5693,7 @@ export const createAnswer = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "createAnswer");
   }
 };
 
@@ -5666,7 +5720,7 @@ export const updateAnswer = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "updateAnswer");
   }
 };
 
@@ -5691,7 +5745,7 @@ export const deleteAnswer = async (
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "deleteAnswer");
   }
 };
 
@@ -5773,7 +5827,7 @@ export const getLikePostList = async (
     });
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getLikePostList");
   }
 };
 
@@ -5797,7 +5851,7 @@ export const getDislikePostList = async (
     });
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "getDislikePostList");
   }
 };
 
@@ -5814,7 +5868,7 @@ export const likePost = async (accessToken: string, postId: number) => {
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "likePost");
   }
 };
 
@@ -5834,7 +5888,7 @@ export const dislikePost = async (accessToken: string, postId: number) => {
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "dislikePost");
   }
 };
 
@@ -5851,7 +5905,7 @@ export const likeComment = async (accessToken: string, commentId: number) => {
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "likeComment");
   }
 };
 
@@ -5871,6 +5925,6 @@ export const dislikeComment = async (accessToken: string, commentId: number) => 
     );
     return response.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "dislikeComment");
   }
 };
