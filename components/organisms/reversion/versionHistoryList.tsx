@@ -9,17 +9,25 @@ import { FaDate } from "@utils/index";
 import RevertVersion from "./revertVersion";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import useRepoId from "@hooks/custom/useRepoId";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 const VersionHistoryList = () => {
+  const currentPath = usePathname();
   const repoId = useRepoId();
   const { selectedDocument } = useDocumentStore();
   const { selectedVersion } = useVersionStore();
   const { setVersionInfoDialog, setVersionIndex } = useEditorStore();
 
+  const { data: userInfo } = useGetUser();
+
   const { data: versionHistory, isLoading } = useGetVersionHistory(
     repoId!,
     selectedDocument!.id,
     selectedVersion!.id,
+    false,
+    currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== selectedDocument?.repoId),
   );
 
   const historyLength = versionHistory?.versionHistory.length;

@@ -10,6 +10,7 @@ const useGetVersionInfo = (
   versionId: number,
   versionIndex: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
   enabled?: boolean,
 ) => {
   return useQuery({
@@ -21,6 +22,7 @@ const useGetVersionInfo = (
         versionId,
         versionIndex,
         transaction,
+        isDirectAccess,
       );
       handleClientSideHookError(response as IActionError);
       return response as IContentVersion;

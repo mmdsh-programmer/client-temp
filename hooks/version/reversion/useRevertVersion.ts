@@ -16,16 +16,18 @@ const useRevertVersion = () => {
       transaction?: boolean;
       innerDocument: boolean;
       innerOutline: boolean;
+      isDirectAccess?: boolean,
       callBack?: () => void;
       onErrorHandler?: () => void;
     }) => {
-      const { repoId, documentId, versionId, versionIndex, transaction } = values;
+      const { repoId, documentId, versionId, versionIndex, transaction, isDirectAccess } = values;
       const response = await revertVersionAction(
         repoId,
         documentId,
         versionId,
         versionIndex,
         transaction,
+        isDirectAccess
       );
       handleClientSideHookError(response as IActionError);
       return response;

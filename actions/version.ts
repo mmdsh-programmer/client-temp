@@ -291,6 +291,7 @@ export const getVersionHistoryAction = async (
       documentId,
       versionId,
       transaction,
+      isDirectAccess
     );
 
     return response;
@@ -314,6 +315,7 @@ export const getVersionSummaryAction = async (
       documentId,
       versionId,
       transaction,
+      isDirectAccess
     );
 
     return response;
@@ -328,6 +330,7 @@ export const getVersionInfoAction = async (
   versionId: number,
   versionIndex: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -338,6 +341,7 @@ export const getVersionInfoAction = async (
       versionId,
       versionIndex,
       transaction,
+      isDirectAccess
     );
 
     return response;
@@ -352,6 +356,7 @@ export const revertVersionAction = async (
   versionId: number,
   versionIndex: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -362,6 +367,7 @@ export const revertVersionAction = async (
       versionId,
       versionIndex,
       transaction,
+      isDirectAccess
     );
 
     return response;

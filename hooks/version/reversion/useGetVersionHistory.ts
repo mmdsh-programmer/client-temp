@@ -9,12 +9,13 @@ const useGetVersionHistory = (
   documentId: number,
   versionId: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
   enabled?: boolean,
 ) => {
   return useQuery({
     queryKey: [`document-${documentId}-version-${versionId}-history`],
     queryFn: async () => {
-      const response = await getVersionHistoryAction(repoId, documentId, versionId, transaction);
+      const response = await getVersionHistoryAction(repoId, documentId, versionId, transaction, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response as IContentVersionData;
     },

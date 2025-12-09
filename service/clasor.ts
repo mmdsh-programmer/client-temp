@@ -2785,6 +2785,7 @@ export const getVersionHistory = async (
   documentId: number,
   versionId: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IContentVersionData>>(
@@ -2795,6 +2796,7 @@ export const getVersionHistory = async (
         },
         params: {
           transaction,
+          isDirectAccess
         },
       },
     );
@@ -2811,6 +2813,7 @@ export const getVersionSummary = async (
   documentId: number,
   versionId: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IVersionsSummary>>(
@@ -2821,6 +2824,7 @@ export const getVersionSummary = async (
         },
         params: {
           transaction,
+          isDirectAccess
         },
       },
     );
@@ -2838,6 +2842,7 @@ export const getVersionInfo = async (
   versionId: number,
   versionIndex: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IContentVersion>>(
@@ -2848,6 +2853,7 @@ export const getVersionInfo = async (
         },
         params: {
           transaction,
+          isDirectAccess
         },
       },
     );
@@ -2865,6 +2871,7 @@ export const revertVersion = async (
   versionId: number,
   versionIndex: number,
   transaction?: boolean,
+  isDirectAccess?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -2876,6 +2883,7 @@ export const revertVersion = async (
         },
         params: {
           transaction,
+          isDirectAccess
         },
       },
     );

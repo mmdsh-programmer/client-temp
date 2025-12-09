@@ -51,6 +51,10 @@ const RevertVersion = ({ versionIndex }: IProps) => {
       transaction: false,
       innerDocument: editorMode === "preview",
       innerOutline: editorMode === "preview",
+      isDirectAccess:
+        currentPath === "/admin/sharedDocuments" ||
+        (currentPath === "/admin/dashboard" &&
+          userInfo?.repository.id !== selectedDocument?.repoId),
       callBack: () => {
         toast.success(`نسخه با موفقیت به نسخه شماره ${versionIndex} بازگردانده شد.`);
       },

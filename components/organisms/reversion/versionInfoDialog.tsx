@@ -9,22 +9,29 @@ import { RenderClientSideContent, RenderServerSideContent } from "clasor-content
 import { IGetSpecificVersion } from "clasor-content-preview/dist/interface/contentPreview.interface";
 import { Spinner } from "@components/atoms/spinner";
 import useRepoId from "@hooks/custom/useRepoId";
+import { usePathname } from "next/navigation";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const VersionInfoDialog = ({ setOpen }: IProps) => {
+  const currentPath = usePathname();
   const repoId = useRepoId();
   const { selectedDocument } = useDocumentStore();
   const { selectedVersion } = useVersionStore();
   const { versionIndex } = useEditorStore();
 
+  const { data: userInfo } = useGetUser();
   const { data: getVersionInfo, isLoading } = useGetVersionInfo(
     repoId!,
     selectedDocument!.id,
     selectedVersion!.id,
     versionIndex!,
+    false,
+    currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== selectedDocument?.repoId),
   );
 
   const handleClose = () => {
