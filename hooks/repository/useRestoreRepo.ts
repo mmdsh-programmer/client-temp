@@ -27,7 +27,7 @@ const useRestoreRepo = () => {
     },
     onError: (error, values) => {
       const { repoId } = values;
-      window.metrics.crach({
+      window.metrics?.crach({
         message: error.message,
         stack: `repo-${repoId}-restore`,
       });

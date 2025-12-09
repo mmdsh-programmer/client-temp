@@ -59,7 +59,7 @@ const RepoMenu = ({ repo, showLog = false, setRepoInfo }: IProps) => {
             className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none"
             onClick={() => {
               setActiveTour(ETourSection.REPO);
-              window.metrics.track("repo-tour");
+              window.metrics?.track("repo-tour");
             }}
             {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
@@ -80,7 +80,7 @@ const RepoMenu = ({ repo, showLog = false, setRepoInfo }: IProps) => {
             onMobileClick={() => {
               setOpenRepoActionDrawer(true);
               setRepo(repo || getRepo);
-              window.metrics.track("repo-menu");
+              window.metrics?.track("repo-menu");
             }}
             icon={
               <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none">

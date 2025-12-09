@@ -44,7 +44,7 @@ const Repository = () => {
       {getEditorModal ? (
         <Editor
           setOpen={() => {
-            window.metrics.track("close-editor-dialog");
+            window.metrics?.track("close-editor-dialog");
             setEditorModal(false);
           }}
         />

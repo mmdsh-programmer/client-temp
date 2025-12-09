@@ -37,7 +37,7 @@ const CategoryMenu = ({ category }: IProps) => {
         <MenuTemplate
           menuList={menuList}
           onMobileClick={() => {
-            window.metrics.track("category-menu");
+            window.metrics?.track("category-menu");
             setCategoryDrawer(true);
             setCategory(category);
           }}

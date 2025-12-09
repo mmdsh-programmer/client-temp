@@ -24,7 +24,7 @@ const RepoRestoreDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
-        window.metrics.track(`repo-${getRepo.id}-success-restore`);
+        window.metrics?.track(`repo-${getRepo.id}-success-restore`);
 
         router.push(`/admin/repositories?repoId=${getRepo.id}`);
         toast.success("مخزن با موفقیت بازگردانی شد.");

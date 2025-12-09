@@ -33,7 +33,7 @@ const CategoryBulk = () => {
             placeholder=""
             className="move label_l2 h-full px-4"
             onClick={() => {
-              window.metrics.track("move-bulk-items");
+              window.metrics?.track("move-bulk-items");
               setOpenMoveDialog(true);
             }}
             {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
@@ -45,7 +45,7 @@ const CategoryBulk = () => {
             placeholder=""
             className="delete label_l2 h-full px-4"
             onClick={() => {
-              window.metrics.track("delete-bulk-items");
+              window.metrics?.track("delete-bulk-items");
               setOpenDeleteDialog(true);
             }}
             {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
@@ -57,7 +57,7 @@ const CategoryBulk = () => {
             placeholder=""
             className="cancel label_l2 h-full px-2"
             onClick={() => {
-              window.metrics.track("cancel-bulk-items");
+              window.metrics?.track("cancel-bulk-items");
               setBulkItems([]);
             }}
             {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
@@ -70,7 +70,7 @@ const CategoryBulk = () => {
         <div
           className="move flex cursor-pointer flex-col items-center"
           onClick={() => {
-            window.metrics.track("move-bulk-items");
+            window.metrics?.track("move-bulk-items");
             setOpenMoveDialog(true);
           }}
         >
@@ -80,7 +80,7 @@ const CategoryBulk = () => {
         <div
           className="delete flex cursor-pointer flex-col items-center"
           onClick={() => {
-            window.metrics.track("delete-bulk-items");
+            window.metrics?.track("delete-bulk-items");
             setOpenDeleteDialog(true);
           }}
         >
@@ -90,7 +90,7 @@ const CategoryBulk = () => {
         <div
           className="cancel flex cursor-pointer flex-col items-center"
           onClick={() => {
-            window.metrics.track("cancel-bulk-items");
+            window.metrics?.track("cancel-bulk-items");
             setBulkItems([]);
           }}
         >

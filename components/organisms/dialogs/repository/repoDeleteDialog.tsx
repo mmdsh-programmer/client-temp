@@ -41,7 +41,7 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    window.metrics.track(`repo-${getRepo?.id}-submit-delete`);
+    window.metrics?.track(`repo-${getRepo?.id}-submit-delete`);
 
     if (!getRepo) return;
     if (dataForm.name !== getRepo.name) {
@@ -53,7 +53,7 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
         if (currentPath.includes("/admin/repositories")) {
           router.push("/admin/myRepoList");
         }
-        window.metrics.track(`repo-${getRepo?.id}-success-delete`);
+        window.metrics?.track(`repo-${getRepo?.id}-success-delete`);
         setRepo(null);
         localStorage.removeItem("CLASOR:SELECTED_REPO");
         toast.success("مخزن با موفقیت حذف شد.");

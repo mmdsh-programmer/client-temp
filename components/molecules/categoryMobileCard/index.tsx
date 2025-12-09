@@ -21,13 +21,13 @@ const CategoryMobileCard = ({ category }: IProps) => {
   const { bulkItems: getBulkItems, setBulkItems } = useBulkStore();
 
   const handleCardClick = (selectedCategory: ICategoryMetadata) => {
-    window.metrics.track("select-category");
+    window.metrics?.track("select-category");
     setCategoryParent(selectedCategory);
     setBulkItems([]);
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-    window.metrics.track("select-bulk-item");
+    window.metrics?.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && getBulkItems.length + 1 > 10) {
       e.target.checked = false;

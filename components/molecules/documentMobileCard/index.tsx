@@ -27,8 +27,8 @@ const DocumentMobileCard = ({ document }: IProps) => {
   const { setEditorMode } = useEditorStore();
 
   const handleCardClick = () => {
-    window.metrics.track("select-document");
-    window.metrics.track("select-document-new-tab");
+    window.metrics?.track("select-document");
+    window.metrics?.track("select-document-new-tab");
     if (document.contentType === "file") {
       setDocument(document);
       setEditorMode("preview");
@@ -52,7 +52,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-    window.metrics.track("select-bulk-item");
+    window.metrics?.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && getBulkItems.length + 1 > 10) {
       e.target.checked = false;

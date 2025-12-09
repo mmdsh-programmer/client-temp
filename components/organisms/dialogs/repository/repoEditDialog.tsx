@@ -71,7 +71,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       toast.error("تغییری در مخزن وجود ندارد");
       return;
     }
-    window.metrics.track(`repo-${getRepo?.id}-submit-edit`);
+    window.metrics?.track(`repo-${getRepo?.id}-submit-edit`);
 
     mutate({
       repoId: getRepo.id,
@@ -83,7 +83,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
           name: dataForm.name,
           description: dataForm.description || "",
         });
-        window.metrics.track(`repo-${getRepo?.id}-success-edit`);
+        window.metrics?.track(`repo-${getRepo?.id}-success-edit`);
         toast.success("مخزن با موفقیت به روز رسانی شد.");
         handleClose();
       },
@@ -106,7 +106,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
             ...getRepo,
             imageFileHash: imageHash || "",
           });
-          window.metrics.track(`repo-${getRepo?.id}-success-edit-image`);
+          window.metrics?.track(`repo-${getRepo?.id}-success-edit-image`);
           toast.success("عکس با موفقیت به مخزن اضافه شد.");
           handleClose();
         },
