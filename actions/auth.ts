@@ -129,7 +129,8 @@ export const login = async () => {
   const url =
     `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
       `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domainUrl}/signin`,
-    )}&scope=login`.replace("http:", "https:");
+    )}&scope=login`
+    // .replace("http:", "https:");
   redirect(url);
 };
 
@@ -181,7 +182,12 @@ export const logoutAction = async () => {
   (await cookies()).delete("token");
 
   try {
-    const payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
+    let payload: string | null = null;
+    try {
+      payload = jwt.verify(encodedToken, process.env.JWT_SECRET_KEY as string) as string;
+    } catch (error) {
+      return;
+    }
 
     const domain = await getDomainHost();
     if (!domain) {
