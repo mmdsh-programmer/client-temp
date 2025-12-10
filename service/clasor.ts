@@ -5763,17 +5763,20 @@ export const rejectQuestionByDomainAdmin = async (
   }
 };
 
-export const deleteQuestionsByDomainAdmin = async (
+export const deleteQuestionByDomainAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
   questionId: number,
+  postIds: number[],
 ) => {
   try {
-    const response = await axiosClasorInstance.patch<any>(
+    const response = await axiosClasorInstance.delete<any>(
       `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}`,
-      {},
       {
+        data: {
+          postIds,
+        },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -5861,12 +5864,15 @@ export const deleteAnswerByDomainAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
+  postIds: number[]
 ) => {
   try {
-    const response = await axiosClasorInstance.patch<any>(
+    const response = await axiosClasorInstance.delete<any>(
       `repositories/${repoId}/documents/${documentId}/questionnaire/answers/removeList`,
-      {},
       {
+        data: {
+          postIds,
+        },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
