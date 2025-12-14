@@ -77,6 +77,8 @@ const ALLOWED_ATTRIBUTES = {
     "dir",
     "width",
     "height",
+    "rowspan",
+    "colspan",
     "preload",
     "controls",
     "controlslist",

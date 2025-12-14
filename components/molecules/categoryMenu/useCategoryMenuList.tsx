@@ -52,7 +52,7 @@ const useCategoryMenuList = (
       "ساخت زیر دسته بندی",
       <CategoryAddIcon className="h-4 w-4" />,
       () => {
-        return setModal("createCategory");
+        setModal("createCategory");
       },
       "create-category",
       { disabled: role === ERoles.writer || role === ERoles.viewer },
@@ -61,7 +61,7 @@ const useCategoryMenuList = (
       "ساخت سند",
       <DocumentAddIcon className="h-4 w-4" />,
       () => {
-        return setModal("createDocument");
+        setModal("createDocument");
       },
       "create-document",
       { disabled: role === ERoles.viewer },
@@ -70,7 +70,7 @@ const useCategoryMenuList = (
       "ساخت نمونه سند",
       <TemplateAddIcon className="h-4 w-4" />,
       () => {
-        return setModal("createTemplate");
+        setModal("createTemplate");
       },
       "create-template",
       { disabled: role === ERoles.writer || role === ERoles.viewer || role === ERoles.editor },
@@ -85,7 +85,8 @@ const useCategoryMenuList = (
       "ویرایش دسته بندی",
       <EditIcon className="h-4 w-4" />,
       () => {
-        return setModal("editCategory");
+        window.metrics?.track("category:edit_dialog");
+        setModal("editCategory");
       },
       "edit-category",
       { disabled: role === ERoles.writer || role === ERoles.viewer },
@@ -94,7 +95,8 @@ const useCategoryMenuList = (
       "انتقال",
       <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
       () => {
-        return setModal("move");
+        window.metrics?.track("category:move_dialog");
+        setModal("move");
       },
       "move-category",
       { disabled: role === ERoles.writer || role === ERoles.viewer },
@@ -103,7 +105,10 @@ const useCategoryMenuList = (
       category.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
       category.isHidden ? <VisibleIcon className="h-4 w-4" /> : <HiddenIcon className="h-4 w-4" />,
       () => {
-        return setModal(category.isHidden ? "visible" : "hide");
+        window.metrics?.track(
+          category.isHidden ? "category:visible_dialog" : "category:hide_dialog",
+        );
+        setModal(category.isHidden ? "visible" : "hide");
       },
       `${category?.isHidden ? "hide-category" : "visible-category"}`,
       {
@@ -118,7 +123,8 @@ const useCategoryMenuList = (
       "محدودیت دسترسی روی پنل",
       <LockIcon className="h-4 w-4" />,
       () => {
-        return setModal("accessCategory");
+        window.metrics?.track("category:accessRestriction_dialog");
+        setModal("accessCategory");
       },
       "category-access",
       {
@@ -137,7 +143,8 @@ const useCategoryMenuList = (
       "حذف دسته بندی",
       <DeleteIcon className="h-4 w-4" />,
       () => {
-        return setModal("deleteCategory");
+        window.metrics?.track("category:delete_dialog");
+        setModal("deleteCategory");
       },
       "delete-category",
       { disabled: role === ERoles.writer || role === ERoles.viewer },

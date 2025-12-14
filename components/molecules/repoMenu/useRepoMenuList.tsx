@@ -47,7 +47,7 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       repo.bookmark ? "حذف بوکمارک" : "بوکمارک کردن",
       <BookmarkRepoIcon className="h-4 w-4 fill-icon-active stroke-0" />,
       () => {
-        window.metrics?.track("repo-bookmark");
+        window.metrics?.track(repo.bookmark ? "repo:unbookmark_dialog": "repo:bookmark_dialog");
         setModal("bookmark");
       },
       repo.bookmark ? "repo-menu__item--bookmark" : "repo-menu__item--bookmark-remove",
@@ -56,7 +56,7 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "اشتراک گذاری",
       <ShareIcon className="h-4 w-4 stroke-icon-active" />,
       () => {
-        window.metrics?.track("repo-share");
+        window.metrics?.track("repo:share_dialog");
         setModal("share");
       },
       "repo-menu__item--share",
@@ -65,7 +65,7 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "اعلانات من",
       <AlertIcon className="h-4 w-4 stroke-1" />,
       () => {
-        window.metrics?.track("repo-my-notif");
+        window.metrics?.track("repo:myNotif_dialog");
         setModal("myNotif");
       },
       "repo-menu__item--my-notif",
@@ -74,7 +74,7 @@ const getBaseMenuItems = (repo: IRepo, setModal: (modal: string) => void): MenuI
       "کلید های مخزن",
       <KeyIcon className="h-4 w-4 stroke-1" />,
       () => {
-        window.metrics?.track("repo-key");
+        window.metrics?.track("repo:key_dialog");
         setModal("key");
       },
       "repo-menu__item--keys",
@@ -102,7 +102,7 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "ویرایش",
       <EditIcon className="h-4 w-4" />,
       () => {
-        window.metrics?.track("repo-edit");
+        window.metrics?.track("repo:edit_dialog");
         setModal("edit");
       },
       "repo-menu__item--edit",
@@ -111,7 +111,7 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "مدیریت فایل",
       <FileManagementIcon className="h-4 w-4 fill-icon-active" />,
       () => {
-        window.metrics?.track("repo-file-management");
+        window.metrics?.track("repo:fileManagement_dialog");
         setModal("fileManagement");
       },
       "repo-menu__item--file-management",
@@ -120,7 +120,7 @@ const getAdminMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "درخواست‌ها",
       <LastVersionIcon className="h-4 w-4" />,
       () => {
-        window.metrics?.track("repo-version-requests");
+        window.metrics?.track("repo:versionRequests_dialog");
         setModal("versionRequests");
       },
       "repo-menu__item--version-requests",
@@ -136,7 +136,7 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "درخواست‌های دسترسی سند",
       <LockIcon className="h-4 w-4" />,
       () => {
-        window.metrics?.track("repo-documentWhiteList");
+        window.metrics?.track("repo:documentWhiteList_dialog");
         setModal("documentWhiteList");
       },
       "repo-menu__document-white-list",
@@ -145,7 +145,7 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "بایگانی",
       <ArchiveActionIcon className="h-4 w-4 fill-icon-active" />,
       () => {
-        window.metrics?.track("repo-archive");
+        window.metrics?.track("repo:archive_dialog");
         setModal("archive");
       },
       "repo-menu__item--archive",
@@ -154,7 +154,7 @@ const getOwnerMenuItems = (repo: IRepo, setModal: (modal: string) => void): Menu
       "حذف",
       <DeleteIcon className="h-4 w-4" />,
       () => {
-        window.metrics?.track("repo-delete");
+        window.metrics?.track("repo:delete_dialog");
         setModal("delete");
       },
       "repo-menu__item--delete",
@@ -170,7 +170,7 @@ const getOwnerDestructiveActions = (repo: IRepo, setModal: (modal: string) => vo
       "بازگردانی",
       <RestoreIcon className="h-4 w-4" />,
       () => {
-        window.metrics?.track("repo-restore");
+        window.metrics?.track("repo:restore_dialog");
         setModal("restore");
       },
       "repo-menu__item--restore",
@@ -179,7 +179,7 @@ const getOwnerDestructiveActions = (repo: IRepo, setModal: (modal: string) => vo
       "حذف",
       <DeleteIcon className="h-4 w-4" />,
       () => {
-        window.metrics?.track("repo-delete");
+        window.metrics?.track("repo:delete_dialog");
         setModal("delete");
       },
       "repo-menu__item--delete",
@@ -227,7 +227,7 @@ const useRepoMenuList = (
         "اطلاعات مخزن",
         <FolderInfoIcon className="h-4 w-4" />,
         () => {
-          window.metrics?.track("repo-info");
+          window.metrics?.track("repo:info_dialog");
           onInfoClick();
         },
         "repo-menu__item--folder-info",
@@ -241,7 +241,7 @@ const useRepoMenuList = (
         "فعالیت های مخزن",
         <RepoActivityIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
-          window.metrics?.track("repo-activity");
+          window.metrics?.track("repo:activity_drawer");
           setShowRepoActivity(!showRepoActivity);
         },
         "repo-menu__item--repo-activity",
@@ -255,7 +255,7 @@ const useRepoMenuList = (
         "ایجاد خبرنامه خصوصی",
         <FeedIcon className="h-4 w-4" />,
         () => {
-          window.metrics?.track("repo-private-feed");
+          window.metrics?.track("repo:privateFeed_dialog");
           setRepoFeed({ label: repo.name, value: repo.id });
           setModal("privateFeed");
         },
@@ -270,7 +270,7 @@ const useRepoMenuList = (
         "ترک مخزن",
         <LeaveRepoIcon className="h-4 w-4 stroke-icon-active" />,
         () => {
-          window.metrics?.track("repo-leave");
+          window.metrics?.track("repo:leave_dialog");
           setModal("leave");
         },
         "repo-menu__item--leave",
