@@ -208,6 +208,19 @@ export interface IReportFilter {
   };
 }
 
+export interface IRepoResourceFilter {
+  title: string;
+  tagIds: number[];
+  contentTypes: EDocumentTypes[];
+  isTemplate: boolean;
+  bookmarked: boolean;
+  slug?: string;
+  type: {
+    document: boolean;
+    category: boolean;
+  };
+}
+
 export interface IClasorError {
   cacheResponse: boolean;
   messages: string[];

@@ -1,7 +1,4 @@
-import {
- Button,
- Typography
-} from "@material-tailwind/react";
+import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import CreateDialog from "@components/templates/dialog/createDialog";
@@ -26,17 +23,12 @@ interface IForm {
   privateKey?: string;
 }
 
-const RepoKeyCreateDialog = ({
- setOpen, repoId 
-}: IProps) => {
+const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const createRepoKeyHook = useCreateRepoPublicKey();
 
-  const form = useForm<IForm>({resolver: yupResolver(repoCreateKeySchema),});
-  const {
- register, handleSubmit, formState, reset, clearErrors, setValue 
-} =
-    form;
+  const form = useForm<IForm>({ resolver: yupResolver(repoCreateKeySchema) });
+  const { register, handleSubmit, formState, reset, clearErrors, setValue } = form;
   const { errors } = formState;
   const handleClose = () => {
     reset();
@@ -44,28 +36,25 @@ const RepoKeyCreateDialog = ({
     setOpen(false);
   };
 
-  const generateKey = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+  const generateKey = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
-    const {rsa} = forge.pki;
+    const { rsa } = forge.pki;
     const keypair = rsa.generateKeyPair({
- bits: 2048, workers: -1 
-});
+      bits: 2048,
+      workers: -1,
+    });
 
     setShowPrivateKey(true);
     const publicKeyPem = forge.pki.publicKeyToPem(keypair.publicKey);
     const privateKeyPem = forge.pki.privateKeyToPem(keypair.privateKey);
     setValue("publicKey", publicKeyPem);
     setValue("privateKey", privateKeyPem);
-  
+
     copy(privateKeyPem);
     toast.success("کلید خصوصی با موفقیت کپی شد");
   };
 
-  const clearKeys = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+  const clearKeys = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
     reset({
       privateKey: "",
@@ -92,10 +81,12 @@ const RepoKeyCreateDialog = ({
       dialogHeader="ساخت کلید"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
-      className="repo-key-create-dialog h-full xs:h-auto max-w-full w-full !rounded-lg xs:max-w-auto xs:w-auto xs:mb-4"
+      className="repo-key-create-dialog xs:max-w-auto h-full w-full max-w-full !rounded-lg xs:mb-4 xs:h-auto xs:w-auto"
     >
       <form className="repo-key-create-dialog__form flex flex-col gap-2">
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">نام کلید</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">
+          نام کلید
+        </Typography>
         <FormInput
           id="repo-key-name"
           placeholder="نام کلید"
@@ -108,7 +99,9 @@ const RepoKeyCreateDialog = ({
           </Typography>
         ) : null}
 
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label mt-2">کلید عمومی</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label mt-2">
+          کلید عمومی
+        </Typography>
         <TextareaAtom
           id="repo-public-key"
           placeholder="کلید عمومی..."
@@ -123,7 +116,9 @@ const RepoKeyCreateDialog = ({
 
         {showPrivateKey ? (
           <>
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label mt-2">کلید خصوصی</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label mt-2">
+              کلید خصوصی
+            </Typography>
             <TextareaAtom
               id="repo-private-key"
               placeholder="کلید خصوصی..."
@@ -131,17 +126,20 @@ const RepoKeyCreateDialog = ({
               register={{ ...register("privateKey") }}
               className="repo-private-key__textarea"
             />
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-xs mt-1">
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="mt-1 text-xs"
+            >
               *کلید خصوصی را کپی کنید. کلید خصوصی ذخیره نخواهد شد*
             </Typography>
           </>
         ) : null}
 
-        <div className="flex justify-end gap-2 mt-2">
+        <div className="mt-2 flex justify-end gap-2">
           {showPrivateKey ? (
             <Button
               {...({} as React.ComponentProps<typeof Button>)}
-              className="repo-private-key__delete-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !p-2 !px-3"
+              className="repo-private-key__delete-button bg-primary-normal !p-2 !px-3 hover:bg-primary-normal active:bg-primary-normal"
               onClick={clearKeys}
             >
               حذف کلید ها
@@ -149,7 +147,7 @@ const RepoKeyCreateDialog = ({
           ) : null}
           <Button
             {...({} as React.ComponentProps<typeof Button>)}
-            className="repo-key__generate-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal !p-2 !px-3"
+            className="repo-key__generate-button bg-primary-normal !p-2 !px-3 hover:bg-primary-normal active:bg-primary-normal"
             onClick={generateKey}
           >
             تولید کلید

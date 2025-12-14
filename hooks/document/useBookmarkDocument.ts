@@ -22,6 +22,7 @@ const useBookmarkDocument = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:bookmaked");
       const { callBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],

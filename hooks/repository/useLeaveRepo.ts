@@ -16,17 +16,13 @@ const useLeaveRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
+      window.metrics?.track("repo:leaved");
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["accessRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });
       callBack?.();
     },
-    onError: (error, values) => {
-      const { repoId } = values;
-      window.metrics?.crach({
-        message: error.message,
-        stack: `repo-${repoId}-leave`,
-      });
+    onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

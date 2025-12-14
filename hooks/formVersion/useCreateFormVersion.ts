@@ -31,6 +31,8 @@ const useCreateFormVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:created_podform");
+
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`version-list-${repoId}-${documentId}`],

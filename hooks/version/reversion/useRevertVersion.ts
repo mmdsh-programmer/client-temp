@@ -33,6 +33,8 @@ const useRevertVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:reverted");
+
       const { callBack, versionId, documentId, innerDocument, innerOutline } = values;
       queryClient.invalidateQueries({
         queryKey: [`document-${documentId}-version-${versionId}-history`],

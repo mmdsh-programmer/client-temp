@@ -22,6 +22,7 @@ const useTranferOwnershipRepository = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:transfer_ownership");
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({queryKey: ["allRepoList"],});
       queryClient.invalidateQueries({queryKey: ["bookmarkRepoList"],});

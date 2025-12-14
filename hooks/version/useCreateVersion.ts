@@ -67,6 +67,8 @@ const useCreateVersion = () => {
       return response.data.data;
     },
     onSuccess: async (response, values) => {
+      window.metrics?.track("version:created");
+
       const { onSuccessHandler, repoId, documentId, username } = values;
       const queryKey = [`version-list-${repoId}-${documentId}`];
       const cachedData = await queryClient.getQueriesData({ queryKey });

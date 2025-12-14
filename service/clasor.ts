@@ -30,6 +30,7 @@ import {
   IDomainMetadata,
   IGetToken,
   IMyInfo,
+  IRepoResourceFilter,
   IReportFilter,
   IServerResult,
   IUserInfo,
@@ -1564,6 +1565,57 @@ export const getUserDocument = async (
             indexes: false,
           });
         },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getRepoDocuments = async (
+  accessToken: string,
+  repoId: number | undefined,
+  title: string,
+  offset: number,
+  size: number,
+  filters: IRepoResourceFilter | null | undefined,
+  reportType: "myResource" | "myAccessResource" | null,
+) => {
+  let finalType: string | null = null;
+
+  if (
+    (filters?.type.category && filters.type.document) ||
+    (!filters?.type.category && !filters?.type.document)
+  ) {
+    finalType = null;
+  } else if (filters?.type.category && !filters.type.document) {
+    finalType = "category";
+  } else if (!filters?.type.category && filters?.type.document) {
+    finalType = "document";
+  }
+
+  try {
+    const response = await axiosClasorInstance.get<
+      IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
+    >(
+      `repositories/${repoId}/search/${title}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          repoId,
+          reportType,
+          title,
+          isTemplate: filters?.isTemplate,
+          withTemplate: !filters?.isTemplate,
+          resourceType: finalType || undefined,
+        },
+       
       },
     );
 

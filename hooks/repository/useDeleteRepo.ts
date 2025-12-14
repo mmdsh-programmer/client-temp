@@ -16,6 +16,7 @@ const useDeleteRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
+      window.metrics?.track("repo:deleted");
       queryClient.refetchQueries({
         queryKey: ["getMyInfo"],
       });
@@ -26,13 +27,7 @@ const useDeleteRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
-    onError: (error, values) => {
-      const { repoId } = values;
-
-      window.metrics?.crach({
-        message: error.message,
-        stack: `repo-${repoId}-delete`
-      });
+    onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

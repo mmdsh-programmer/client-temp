@@ -24,6 +24,7 @@ const useEnableGroupHash = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:enable_groupHash");
       const { callBack } = values;
       callBack?.(response);
     },

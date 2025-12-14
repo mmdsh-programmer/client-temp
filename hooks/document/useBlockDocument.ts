@@ -26,6 +26,7 @@ const useBlockDocument = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:added_user_to__blocklist");
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-document-${documentId}-block-list`],

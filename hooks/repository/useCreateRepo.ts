@@ -21,6 +21,7 @@ const useCreateRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:created");
       const { callBack } = values;
       queryClient.invalidateQueries({
         queryKey: ["myRepoList-false"],

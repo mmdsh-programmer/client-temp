@@ -21,6 +21,7 @@ const useCreateDocumentPublishLink = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:created_publish_link");
       const { repoId, categoryId, callBack } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],

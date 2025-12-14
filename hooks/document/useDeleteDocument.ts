@@ -21,6 +21,7 @@ const useDeleteDocument = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:deleted");
       const { callBack, repoId, parentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${parentId || "root"}-children`],

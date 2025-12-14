@@ -19,6 +19,7 @@ const useUnsubscribeRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:unsubscribed");
       const { callBack, repoId, ssoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-user-${ssoId}-subscription-status`],

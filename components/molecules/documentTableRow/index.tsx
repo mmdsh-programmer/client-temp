@@ -41,7 +41,7 @@ const DocumentTableRow = ({ document }: IProps) => {
       : getRepo?.userGroupHash;
 
   const handleRowClick = () => {
-    window.metrics?.track("select-document-new-tab");
+    window.metrics?.track("document:open_in_new_tab");
     if (document.contentType === EDocumentTypes.form) {
       if (!repoId) {
         console.error("شناسه مخزن وجود ندارد.");
@@ -97,7 +97,6 @@ const DocumentTableRow = ({ document }: IProps) => {
   };
 
   const handleCheckItem = (e: React.ChangeEvent<HTMLInputElement>) => {
-    window.metrics?.track("select-bulk-item");
     const isChecked = e.target.checked;
     if (isChecked && (getBulkItems as IDocumentMetadata[]).length + 1 > 10) {
       e.target.checked = false;

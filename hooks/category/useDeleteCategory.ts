@@ -34,6 +34,8 @@ const useDeleteCategory = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("category:deleted");
+
       const { callBack, parentId, repoId } = values;
       queryClient.refetchQueries({
         queryKey: [`repo-${repoId}-category-${parentId || "root"}-children`],

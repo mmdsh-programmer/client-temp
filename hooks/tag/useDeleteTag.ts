@@ -20,6 +20,7 @@ const useDeleteTag = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("tag:deleted");
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getTags-${repoId}`],

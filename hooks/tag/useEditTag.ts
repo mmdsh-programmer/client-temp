@@ -21,6 +21,7 @@ const useEditTag = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("tag:edited");
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getTags-${repoId}`],

@@ -24,6 +24,8 @@ const useCreateCategory = () => {
       return response as ICategory;
     },
     onSuccess: async (response, values) => {
+      window.metrics?.track("category:created");
+
       const { onSuccessHandler, parentId, order, repoId } = values;
       const queryKey = [`repo-${repoId}-category-${parentId || "root"}-children`];
       const cachedData = await queryClient.getQueriesData({ queryKey });

@@ -27,6 +27,8 @@ const useCancelPublicVersion = () => {
       return response as IAddVersion;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:canceled_public");
+
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],

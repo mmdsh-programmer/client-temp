@@ -24,8 +24,6 @@ const RepoRestoreDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
-        window.metrics?.track(`repo-${getRepo.id}-success-restore`);
-
         router.push(`/admin/repositories?repoId=${getRepo.id}`);
         toast.success("مخزن با موفقیت بازگردانی شد.");
         handleClose();
@@ -45,7 +43,7 @@ const RepoRestoreDialog = ({ setOpen }: IProps) => {
       <Typography
         {...({} as React.ComponentProps<typeof Typography>)}
         title={getRepo?.name}
-        className="text-primary_normal max-w-[100px] truncate font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] flex items-center px-[2px]"
+        className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal"
       >
         {getRepo?.name}
       </Typography>
