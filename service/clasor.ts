@@ -1668,7 +1668,7 @@ export const getRepoDocuments = async (
 
     return response.data.data;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>);
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-53");
   }
 };
 
