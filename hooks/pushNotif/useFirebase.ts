@@ -1,93 +1,114 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { getMessaging, getToken } from "firebase/messaging";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { firebaseInstance } from "@utils/firebase";
 
-let timeout: number = 0;
+interface DeviceConfig {
+  isSubscriptionRequest: boolean;
+  platform: string;
+  appId: string | undefined;
+  deviceId: string;
+  ssoId: number;
+  data: never[];
+  registrationToken: string;
+  accessToken: string;
+}
 
 const getBrowserType = () => {
+  if (typeof navigator === "undefined") return "_no";
   const { userAgent } = navigator;
-  let browserName;
 
-  if (/chrome|chromium|crios/i.test(userAgent)) {
-    browserName = "1_ch";
-  } else if (/firefox|fxios/i.test(userAgent)) {
-    browserName = "_fi";
-  } else if (/safari/i.test(userAgent)) {
-    browserName = "_sa";
-  } else if (/opr\//i.test(userAgent)) {
-    browserName = "_op";
-  } else if (/edg/i.test(userAgent)) {
-    browserName = "_ed";
-  } else {
-    browserName = "_no";
-  }
+  if (/chrome|chromium|crios/i.test(userAgent)) return "1_ch";
+  if (/firefox|fxios/i.test(userAgent)) return "_fi";
+  if (/safari/i.test(userAgent)) return "_sa";
+  if (/opr\//i.test(userAgent)) return "_op";
+  if (/edg/i.test(userAgent)) return "_ed";
 
-  return browserName;
+  return "_no";
 };
 
 const createHash = async () => {
-  const fp = await FingerprintJS.load();
-  const { visitorId } = await fp.get();
-  return visitorId + getBrowserType();
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const registerDevice = (config: any) => {
-  const url = "https://api.sandpod.ir/srv/notif-sandbox/push/device/subscribe";
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", url);
-
-  xhr.setRequestHeader("Accept", "application/json");
-  xhr.setRequestHeader("Content-Type", "application/json");
-  if (config.accessToken) {
-    xhr.setRequestHeader("Apitoken", config.accessToken);
+  try {
+    const fp = await FingerprintJS.load();
+    const { visitorId } = await fp.get();
+    return visitorId + getBrowserType();
+  } catch (e) {
+    console.error("notification: Error creating hash:", e);
+    return null;
   }
-  xhr.send(JSON.stringify(config));
 };
 
-export default function useFirebase(ssoId, accessToken) {
+const registerDevice = async (config: DeviceConfig) => {
+  console.log("notification: Sending API Request...", {
+    ssoId: config.ssoId,
+    deviceId: config.deviceId,
+  });
+
+  const url = "https://api.sandpod.ir/srv/notif-sandbox/push/device/subscribe";
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...(config.accessToken && { Apitoken: config.accessToken }),
+      },
+      body: JSON.stringify(config),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    console.log("notification:  Device registered successfully.");
+  } catch (error) {
+    console.error("notification:  API Error:", error);
+  }
+};
+
+export default function useFirebase(ssoId?: number, accessToken?: string) {
   const [token, setToken] = useState<string | null>(null);
   const [permissionStatus, setPermissionStatus] = useState<NotificationPermission | null>(null);
-  const retry = useRef(0);
 
-  const registerNewServiceWorker = async () => {
+  const timerRef = useRef<number | null>(null);
+  const retryRef = useRef(0);
+
+  const handleRegisterServiceWorker = useCallback(async () => {
     try {
-      if (retry.current === 3) {
-        return;
-      }
-      retry.current += 1;
+      if (retryRef.current >= 3) return;
+      retryRef.current += 1;
+
       if (typeof window !== "undefined" && "serviceWorker" in navigator) {
         const registration = await navigator.serviceWorker.register("/firebase-messaging-sw.js");
-        if (registration) {
-          registration.update();
-        }
-        console.log("Service Worker registration successful:", registration);
+        if (registration) registration.update();
 
         const messaging = getMessaging(firebaseInstance);
-
-        // Retrieve the notification permission status
         const permission = await Notification.requestPermission();
         setPermissionStatus(permission);
 
-        // Check if permission is granted before retrieving the token
-        if (permission !== "granted") {
-          return;
-        }
+        if (permission !== "granted") return;
+
         const fcmToken = await getToken(messaging, {
           vapidKey: process.env.NEXT_PUBLIC_VAPIDKEY,
         });
 
-        if (!fcmToken) {
+        if (!fcmToken) return;
+
+        console.log("notification:  FCM Token retrieved.", fcmToken);
+
+        if (!ssoId || !accessToken) {
+          console.error("notification:  ssoId is missing, aborting.");
           return;
         }
 
         const hash = await createHash();
-        if (!hash || !ssoId) {
-          return;
-        }
-        registerDevice({
+        if (!hash) return;
+
+        console.log("notification: Hash created:", hash);
+
+        await registerDevice({
           isSubscriptionRequest: true,
           platform: "WEB",
           appId: process.env.NEXT_PUBLIC_APPID,
@@ -97,44 +118,30 @@ export default function useFirebase(ssoId, accessToken) {
           registrationToken: fcmToken,
           accessToken,
         });
-        setToken(fcmToken);
-        console.log("Registration token available.");
-      } else {
-        console.log("No registration token available. Request permission to generate one.");
-      }
-    } catch (error) {
-      console.log("An error occurred while retrieving token:", error);
-      registerNewServiceWorker();
-    }
-  };
 
-  const unregisterServiceWorkers = async () => {
-    try {
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      for (const registration of registrations) {
-        await registration.unregister();
+        setToken(fcmToken);
       }
-      registerNewServiceWorker();
     } catch (error) {
-      console.log("Unhandle error in unregister service worker", JSON.stringify(error));
+      console.error("notification: Error in flow:", error);
+      setTimeout(() => {
+        return handleRegisterServiceWorker();
+      }, 1000);
     }
-  };
+  }, [ssoId, accessToken]);
 
   useEffect(() => {
-    if (!ssoId || !accessToken) {
-      return;
-    }
-    clearTimeout(timeout);
+    if (!ssoId || !accessToken) return;
 
-    timeout = window.setTimeout(() => {
-      if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-        unregisterServiceWorkers();
-      }
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+
+    timerRef.current = window.setTimeout(() => {
+      handleRegisterServiceWorker();
     }, 100);
+
     return () => {
-      return clearTimeout(timeout);
+      if (timerRef.current) window.clearTimeout(timerRef.current);
     };
-  }, [ssoId, accessToken]);
+  }, [ssoId, accessToken, handleRegisterServiceWorker]);
 
   return {
     fcmToken: token,
