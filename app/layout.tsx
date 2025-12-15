@@ -34,9 +34,9 @@ const RootLayout = async ({ children }: IProps) => {
     <html lang="fa">
       <head>
         {
-          process.env.NEXT_PUBLIC_PODLYTICS_ID ?
+          process.env.NEXT_PUBLIC_PODLYTICS_ID && process.env.NEXT_PUBLIC_PODLYTICS_ADDRESS ?
             <Script
-              src="https://podlytics.sandpod.ir/tracker.js"
+              src={process.env.NEXT_PUBLIC_PODLYTICS_ADDRESS}
               data-website-id={process.env.NEXT_PUBLIC_PODLYTICS_ID}
               strategy="afterInteractive"
               defer
