@@ -121,6 +121,9 @@ export default function useFirebase(ssoId, accessToken) {
   };
 
   useEffect(() => {
+    if (!ssoId || !accessToken) {
+      return;
+    }
     clearTimeout(timeout);
 
     timeout = window.setTimeout(() => {
@@ -128,7 +131,10 @@ export default function useFirebase(ssoId, accessToken) {
         unregisterServiceWorkers();
       }
     }, 100);
-  }, []);
+    return () => {
+      return clearTimeout(timeout);
+    };
+  }, [ssoId, accessToken]);
 
   return {
     fcmToken: token,
