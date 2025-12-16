@@ -117,7 +117,10 @@ const useVersionMenu = (
     createItem(
       "ایجاد نسخه جدید",
       <DuplicateIcon className="h-4 w-4 stroke-icon-active" />,
-      createAction("clone"),
+      () => {
+        window.metrics?.track("version:clone_dialog");
+        createAction("clone")();
+      },
       {
         className: "clone-version",
         disabled:
@@ -130,6 +133,7 @@ const useVersionMenu = (
       "ویرایش",
       <EditIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track("version:edit_dialog");
         if (getDocument.contentType === EDocumentTypes.form) {
           handleOpenFormEditor();
         } else {
@@ -151,6 +155,7 @@ const useVersionMenu = (
       compareVersion?.version ? "مقایسه با نسخه مورد نظر" : "مقایسه",
       <ComparisionIcon className="h-4 w-4 stroke-icon-active" />,
       () => {
+        window.metrics?.track("version:comparision_dialog");
         setSelectedVersion(version);
         if (repoId && getDocument && compareVersion?.version) {
           setCompareVersion({
@@ -178,7 +183,7 @@ const useVersionMenu = (
       <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       () => {
         window.metrics?.track("version:publicDraft_dialog");
-        createAction("publicDraft");
+        createAction("publicDraft")();
       },
       {
         className: "confirmPublic-draft",
@@ -196,7 +201,7 @@ const useVersionMenu = (
         window.metrics?.track(
           version.status === "editing" ? "version:confirm_dialog" : "version:cancelConfirm_dialog",
         );
-        createAction(version.status === "editing" ? "confirm" : "cancelConfirm");
+        createAction(version.status === "editing" ? "confirm" : "cancelConfirm")();
       },
       {
         className: version.status === "editing" ? "confirm-version" : "cancel-confirm-version",
@@ -213,7 +218,7 @@ const useVersionMenu = (
             <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
             () => {
               window.metrics?.track("version:acceptConfirmDraft_dialog");
-              createAction("acceptConfirmDraft");
+              createAction("acceptConfirmDraft")();
             },
           ),
         ]
@@ -236,7 +241,7 @@ const useVersionMenu = (
                   ? "version:public_dialog"
                   : "version:cancelPublic_dialog",
               );
-              createAction(version.status === "private" ? "public" : "cancelPublic");
+              createAction(version.status === "private" ? "public" : "cancelPublic")();
             },
             {
               className: version.status === "private" ? "public-version" : "cancel-public-version",
@@ -251,7 +256,7 @@ const useVersionMenu = (
             <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
             () => {
               window.metrics?.track("version:setLastVersion_dialog");
-              createAction("lastVersion");
+              createAction("lastVersion")();
             },
             {
               className: "set-last-version",
@@ -266,7 +271,7 @@ const useVersionMenu = (
             <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
             () => {
               window.metrics?.track("version:acceptPublicVersion_dialog");
-              createAction("acceptPublicVersion");
+              createAction("acceptPublicVersion")();
             },
           ),
         ]
@@ -281,7 +286,7 @@ const useVersionMenu = (
             <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
             () => {
               window.metrics?.track("version:setLastVersion_dialog");
-              createAction("lastVersion");
+              createAction("lastVersion")();
             },
             {
               className: "set-last-version",
@@ -296,7 +301,7 @@ const useVersionMenu = (
             <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
             () => {
               window.metrics?.track("version:acceptPublicDraft_dialog");
-              createAction("acceptPublicDraft");
+              createAction("acceptPublicDraft")();
             },
           ),
           createItem(
@@ -304,7 +309,7 @@ const useVersionMenu = (
             <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />,
             () => {
               window.metrics?.track("version:rejectPublicDraft_dialog");
-              createAction("rejectPublicDraft");
+              createAction("rejectPublicDraft")();
             },
           ),
         ]
@@ -313,7 +318,7 @@ const useVersionMenu = (
       ? [
           createItem("خروجی‌های نسخه", <PublishIcon className="h-4 w-4 fill-icon-active" />, () => {
             window.metrics?.track("version:podformExport_dialog");
-            createAction("formVersionExport");
+            createAction("formVersionExport")();
           }),
         ]
       : []),
@@ -367,7 +372,7 @@ const useVersionMenu = (
       <DeleteIcon className="h-4 w-4" />,
       () => {
         window.metrics?.track("version:delete_dialog");
-        createAction("delete");
+        return createAction("delete")();
       },
       {
         className: "delete-version",
