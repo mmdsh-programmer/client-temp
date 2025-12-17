@@ -41,7 +41,6 @@ const createHash = async () => {
 
 const registerDevice = async (config: DeviceConfig) => {
   console.log("notification: Sending API Request...", {
-    ssoId: config.ssoId,
     deviceId: config.deviceId,
   });
 
@@ -96,7 +95,7 @@ export default function useFirebase(ssoId?: number, accessToken?: string) {
 
         if (!fcmToken) return;
 
-        console.log("notification:  FCM Token retrieved.", fcmToken);
+        console.log("notification:  FCM Token retrieved.");
 
         if (!ssoId || !accessToken) {
           console.error("notification:  ssoId is missing, aborting.");
@@ -106,7 +105,7 @@ export default function useFirebase(ssoId?: number, accessToken?: string) {
         const hash = await createHash();
         if (!hash) return;
 
-        console.log("notification: Hash created:", hash);
+        console.log("notification: Hash created");
 
         await registerDevice({
           isSubscriptionRequest: true,

@@ -353,6 +353,7 @@ export interface ICustomPostData {
   theme?: IThemeInfo;
   enablePublishPage?: boolean;
   enableDefaultFontFamily?: boolean;
+  podlyticsHash?: string
 }
 export interface IThemeInfo {
   primaryColor?: string;
