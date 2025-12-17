@@ -92,6 +92,7 @@ export interface IDomainTheme {
   accessToCreateRepo: boolean;
   enableDefaultFontFamily: boolean;
   enablePrivateFeed: boolean;
+  podlyticsHash: string | null;
 }
 
 export interface ContentType {
@@ -102,6 +103,7 @@ export interface ContentType {
   enableDefaultFontFamily?: boolean;
   enableBranch?: boolean;
   enablePrivateFeed?: boolean;
+  podlyticsHash?: string | null;
   theme?: string;
   settings?: {
     hasLikes?: boolean;
