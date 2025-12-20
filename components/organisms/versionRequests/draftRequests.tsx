@@ -43,7 +43,7 @@ const DraftRequests = () => {
     getSelectedVersion ? getSelectedVersion!.documentId : undefined,
     !!getSelectedVersion?.id,
     true,
-    undefined,
+    true,
   );
 
   const listLength = getDraftRequest?.pages[0].total;
