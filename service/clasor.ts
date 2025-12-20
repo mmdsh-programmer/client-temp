@@ -1733,11 +1733,10 @@ export const getDocument = async (
   isDirectAccess?: boolean,
   offset?: number,
   size?: number,
-  disableVersions?: boolean,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IDocumentMetadata>>(
-      `repositories/${repoId}/documents/${documentId}/info?type=document&disableVersions=${disableVersions}`,
+      `repositories/${repoId}/documents/${documentId}/info?type=document`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

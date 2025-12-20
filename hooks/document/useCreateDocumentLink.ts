@@ -15,7 +15,7 @@ const useCreateDocumentLink = () => {
       errorCallback?: () => void;
     }) => {
       const { repoId, documentId } = values;
-      const response = await getPublishDocumentInfoAction(repoId, documentId);
+      const response = await getPublishDocumentInfoAction(repoId, documentId, false);
       handleClientSideHookError(response as IActionError);
       return response as IDocumentMetadata;
     },

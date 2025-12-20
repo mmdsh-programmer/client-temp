@@ -191,9 +191,13 @@ export const getPublishDocumentLastVersionAction = async (
   }
 };
 
-export const getPublishDocumentInfoAction = async (repoId: number, documentId: number) => {
+export const getPublishDocumentInfoAction = async (
+  repoId: number,
+  documentId: number,
+  disableVersions?: boolean,
+) => {
   try {
-    const response = await getPublishDocumentInfo(repoId, documentId);
+    const response = await getPublishDocumentInfo(repoId, documentId, disableVersions);
 
     return response;
   } catch (error) {

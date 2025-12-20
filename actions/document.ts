@@ -54,7 +54,6 @@ export const getDocumentAction = async (
   isDirectAccess?: boolean,
   offset?: number,
   size?: number,
-  disableVersions?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -65,7 +64,6 @@ export const getDocumentAction = async (
       isDirectAccess,
       offset,
       size,
-      disableVersions,
     );
 
     return response;

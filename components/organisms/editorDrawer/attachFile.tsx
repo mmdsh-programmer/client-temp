@@ -56,6 +56,7 @@ const AttachFile = ({ attachmentUserGroup }: { attachmentUserGroup: string }) =>
       createUploadLink.mutate({
         resourceId: getDocument!.id,
         userGroupHash: getDocument.attachmentUserGroup,
+        isPublic: false,
         successCallBack: async (uploadHash) => {
           try {
             const result = await axios.post(
