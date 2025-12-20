@@ -27,6 +27,7 @@ const useCreateGroup = () => {
       return response as ICreateGroup;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:create_group");
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoGroups-${repoId}`],

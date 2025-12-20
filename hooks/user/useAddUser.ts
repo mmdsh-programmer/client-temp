@@ -20,6 +20,8 @@ const useAddUser = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:invite_user_by_owner");
+
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({queryKey: [`getRepoInviteRequestsByOwner-${repoId}`],});
       callBack?.();

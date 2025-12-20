@@ -21,6 +21,8 @@ const useEditUserRole = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:edit_user_role");
+
       const { callBack, repoId, ssoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoUsers-${repoId}`],

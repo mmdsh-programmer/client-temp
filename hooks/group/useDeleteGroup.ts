@@ -19,6 +19,8 @@ const useDeleteGroup = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:delete_group");
+
       const { callBack, repoId, title } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoGroups-${repoId}`],

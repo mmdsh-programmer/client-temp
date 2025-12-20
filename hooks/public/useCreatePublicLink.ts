@@ -15,20 +15,15 @@ const useCreatePublicLink = () => {
       password?: string;
       callBack?: (result) => void;
     }) => {
-      const {
- repoId, roleId, expireTime, password 
-} = values;
-      const response = await createRepoPublicLinkAction(
-        repoId,
-        roleId,
-        expireTime,
-        password
-      );
+      const { repoId, roleId, expireTime, password } = values;
+      const response = await createRepoPublicLinkAction(repoId, roleId, expireTime, password);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: async (response, values) => {
       const { callBack } = values;
+      window.metrics?.track("repo:create_public_link");
+
       // TODO: check these invalidate queries
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });

@@ -21,6 +21,8 @@ const useDeletePublicLink = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, roleId } = values;
+      window.metrics?.track("repo:delete_public_link");
+
       const allRoles = queryClient.getQueryData(["getRoles"]) as IRoles[];
 
       const findRole = allRoles.find((role) => {

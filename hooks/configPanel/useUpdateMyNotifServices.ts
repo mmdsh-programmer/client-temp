@@ -24,6 +24,8 @@ const useUpdateMyNotifServices = () => {
       return response;
     },
     onSuccess: (_, values) => {
+      window.metrics?.track("repo:update_myNotification_config");
+
       const { callBack, repoId, ssoId } = values;
       queryClient.invalidateQueries({ queryKey: [`getUserConfig-ssoId-${ssoId}-repoId-${repoId}`] });
       callBack?.();
