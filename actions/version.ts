@@ -3,14 +3,12 @@
 import {
   cancelConfirmVersion,
   cancelPublicVersion,
-  collaborateFormVersion,
   confirmVersion,
   createFileVersion,
-  createFormVersion,
   createVersion,
   deleteVersion,
-  getFormVersionExport,
   getLastVersion,
+  getPublicHashInfo,
   getVersion,
   getVersionHistory,
   getVersionInfo,
@@ -291,7 +289,7 @@ export const getVersionHistoryAction = async (
       documentId,
       versionId,
       transaction,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -315,7 +313,7 @@ export const getVersionSummaryAction = async (
       documentId,
       versionId,
       transaction,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -341,7 +339,7 @@ export const getVersionInfoAction = async (
       versionId,
       versionIndex,
       transaction,
-      isDirectAccess
+      isDirectAccess,
     );
 
     return response;
@@ -367,8 +365,19 @@ export const revertVersionAction = async (
       versionId,
       versionIndex,
       transaction,
-      isDirectAccess
+      isDirectAccess,
     );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublicHashInfoAction = async (publicHash: string) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getPublicHashInfo(userInfo.access_token, publicHash);
 
     return response;
   } catch (error) {

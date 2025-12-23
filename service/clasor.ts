@@ -181,10 +181,7 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>, method:
       ];
 
       if (networkErrorCodes.includes(error.code)) {
-        throw new NetworkError(
-          [`خطا در اتصال اینترنت - ${method}`],
-          error as IOriginalError,
-        );
+        throw new NetworkError([`خطا در اتصال اینترنت - ${method}`], error as IOriginalError);
       }
     }
 
@@ -210,10 +207,7 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>, method:
           error as IOriginalError,
         );
       case 500:
-        throw new ServerError(
-          [`خطای داخلی سرور - ${method}`],
-          error as IOriginalError,
-        );
+        throw new ServerError([`خطای داخلی سرور - ${method}`], error as IOriginalError);
       case 502:
         throw new NetworkError([`خطا در ارتباط با سرور - ${method}`], error as IOriginalError);
       case 503:
@@ -227,7 +221,10 @@ export const handleClasorStatusError = (error: AxiosError<IClasorError>, method:
           error as IOriginalError,
         );
       default:
-        throw new ServerError([`خطا در ارتباط با سرویس خارجی - ${method}`], error as IOriginalError);
+        throw new ServerError(
+          [`خطا در ارتباط با سرویس خارجی - ${method}`],
+          error as IOriginalError,
+        );
     }
   } else {
     throw new ServerError([`خطای نامشخصی رخ داد - ${method}`]);
@@ -534,7 +531,7 @@ export const getMyRepositories = async (
 
     return response.data.data;
   } catch (error) {
-      return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-13");
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-13");
   }
 };
 
@@ -1646,25 +1643,21 @@ export const getRepoDocuments = async (
   try {
     const response = await axiosClasorInstance.get<
       IServerResult<IListResponse<ICategoryMetadata | IDocumentMetadata>>
-    >(
-      `repositories/${repoId}/search/${title}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          offset,
-          size,
-          repoId,
-          reportType,
-          title,
-          isTemplate: filters?.isTemplate,
-          withTemplate: !filters?.isTemplate,
-          resourceType: finalType || undefined,
-        },
-       
+    >(`repositories/${repoId}/search/${title}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
       },
-    );
+      params: {
+        offset,
+        size,
+        repoId,
+        reportType,
+        title,
+        isTemplate: filters?.isTemplate,
+        withTemplate: !filters?.isTemplate,
+        resourceType: finalType || undefined,
+      },
+    });
 
     return response.data.data;
   } catch (error) {
@@ -2895,7 +2888,7 @@ export const getVersionHistory = async (
         },
         params: {
           transaction,
-          isDirectAccess
+          isDirectAccess,
         },
       },
     );
@@ -2923,7 +2916,7 @@ export const getVersionSummary = async (
         },
         params: {
           transaction,
-          isDirectAccess
+          isDirectAccess,
         },
       },
     );
@@ -2952,7 +2945,7 @@ export const getVersionInfo = async (
         },
         params: {
           transaction,
-          isDirectAccess
+          isDirectAccess,
         },
       },
     );
@@ -2982,7 +2975,7 @@ export const revertVersion = async (
         },
         params: {
           transaction,
-          isDirectAccess
+          isDirectAccess,
         },
       },
     );
@@ -2990,6 +2983,35 @@ export const revertVersion = async (
     return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-170");
+  }
+};
+
+export const getPublicHashInfo = async (
+  accessToken: string | undefined,
+  publicHash: string,
+) => {
+  const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
+
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IVersion>>(
+      `versions/publicVersion/${publicHash}?innerDocument=true&innerOutline=true`,
+      {
+        headers,
+      },
+    );
+    console.log(
+      JSON.stringify(
+        {
+          type: "getPublishInnerDocumentVersion",
+          data: response.data.data,
+        },
+        null,
+        0,
+      ),
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-126");
   }
 };
 
@@ -3151,11 +3173,7 @@ export const repoPublicHashList = async (
   }
 };
 
-export const getPublishAttachment = async (
-  docId: number,
-  offset: number,
-  size: number,
-) => {
+export const getPublishAttachment = async (docId: number, offset: number, size: number) => {
   try {
     const response = await axiosClasorInstance.get<{ data: IPublishAttachmentList }>(
       `publish/document/${docId}/attachments`,
