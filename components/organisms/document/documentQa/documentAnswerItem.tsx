@@ -9,6 +9,9 @@ import QuestionAnswerLikeAndDislike from "@components/organisms/questionAnswerLi
 import { useQaStore } from "@store/qa";
 import { useDocumentStore } from "@store/document";
 import QuestionAnswerContentPreview from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerContentPreview";
+import { ERoles } from "@interface/enums";
+import { useRepositoryStore } from "@store/repository";
+import DocumentAnswerConfirmReject from "./documentAnswerConfirmReject";
 
 interface IProps {
   answerItem: IQuestion;
@@ -17,8 +20,11 @@ interface IProps {
 const DocumentAnswerItem = ({ answerItem }: IProps) => {
   const { data: userInfo } = useGetUser();
 
+  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
   const { setSelectedAnswer, setOpenEditAnswer, setOpenDeleteAnswer } = useQaStore();
+
+  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   return (
     <Card
@@ -55,35 +61,37 @@ const DocumentAnswerItem = ({ answerItem }: IProps) => {
         {...({} as React.ComponentProps<typeof CardFooter>)}
         className="flex items-center justify-between gap-2 p-0"
       >
-        <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +answerItem.userSrv.ssoId}>
-          <Button
-            variant="text"
-            className="bullet border-none !p-0 text-[13px] leading-5 text-link"
-            onClick={() => {
-              setSelectedAnswer(answerItem);
-              setOpenEditAnswer(true);
-            }}
-            {...({} as React.ComponentProps<typeof Button>)}
-            title="ویرایش پاسخ"
-          >
-            <EditIcon className="block h-4 w-4 !stroke-gray-500" />
-          </Button>
-        </RenderIf>
-        <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +answerItem.userSrv.ssoId}>
-          <Button
-            variant="text"
-            className="bullet border-none !p-0 text-[13px] leading-5 text-link"
-            onClick={() => {
-              setSelectedAnswer(answerItem);
-              setOpenDeleteAnswer(true);
-            }}
-            {...({} as React.ComponentProps<typeof Button>)}
-            title="حذف پاسخ"
-          >
-            <DeleteIcon className="block h-4 w-4 !stroke-gray-500" />
-          </Button>
-        </RenderIf>
-        <RenderIf isTrue={!!userInfo}>
+        <div className="flex items-center gap-2">
+          <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +answerItem.userSrv.ssoId}>
+            <Button
+              variant="text"
+              className="bullet border-none !p-0 text-[13px] leading-5 text-link"
+              onClick={() => {
+                setSelectedAnswer(answerItem);
+                setOpenEditAnswer(true);
+              }}
+              {...({} as React.ComponentProps<typeof Button>)}
+              title="ویرایش پاسخ"
+            >
+              <EditIcon className="block h-4 w-4 !stroke-gray-500" />
+            </Button>
+          </RenderIf>
+          <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +answerItem.userSrv.ssoId}>
+            <Button
+              variant="text"
+              className="bullet border-none !p-0 text-[13px] leading-5 text-link"
+              onClick={() => {
+                setSelectedAnswer(answerItem);
+                setOpenDeleteAnswer(true);
+              }}
+              {...({} as React.ComponentProps<typeof Button>)}
+              title="حذف پاسخ"
+            >
+              <DeleteIcon className="block h-4 w-4 !stroke-gray-500" />
+            </Button>
+          </RenderIf>
+        </div>
+        <RenderIf isTrue={!!userInfo && answerItem.enable}>
           <QuestionAnswerLikeAndDislike
             repoId={selectedDocument!.repoId}
             documentId={selectedDocument!.id}
@@ -95,6 +103,9 @@ const DocumentAnswerItem = ({ answerItem }: IProps) => {
             counterClassName="ml-1 text-base text-gray-500"
             showCounter
           />
+        </RenderIf>
+        <RenderIf isTrue={adminOwnerRole && !answerItem.enable}>
+          <DocumentAnswerConfirmReject answerItem={answerItem} />
         </RenderIf>
       </CardFooter>
     </Card>

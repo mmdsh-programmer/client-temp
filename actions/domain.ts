@@ -14,14 +14,6 @@ import {
   updateCustomPostByDomain,
   getDomainDocuments,
   getDomainVersions,
-  getDomainQuestionList,
-  confirmQuestionByDomainAdmin,
-  rejectQuestionByDomainAdmin,
-  getDomainAnswerList,
-  deleteQuestionByDomainAdmin,
-  confirmAnswerByDomainAdmin,
-  deleteAnswerByDomainAdmin,
-  rejectAnswerByDomainAdmin,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { getDomainHost } from "@utils/getDomain";
@@ -256,10 +248,10 @@ export const removePartyFromDomainParticipantsAction = async (userNameList: stri
 
 export const getDomainDocumentsAction = async (
   repoId: number | undefined,
-  title: string,
+  title: string | undefined,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
-  sortParams: ISearchSortParams,
+  sortParams: ISearchSortParams | undefined,
   offset: number,
   size: number,
 ) => {
@@ -320,172 +312,6 @@ export const getDomainVersionsAction = async (
       contentType,
       offset,
       size,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const getDomainQuestionListAction = async (
-  repoId: number,
-  documentId: number,
-  offset: number,
-  size: number,
-) => {
-  const userInfo = await getMe();
-
-  try {
-    const accessToken = userInfo.access_token;
-    const response = await getDomainQuestionList(accessToken, repoId, documentId, offset, size);
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const confirmQuestionByDomainAdminAction = async (
-  repoId: number,
-  documentId: number,
-  questionId: number,
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await confirmQuestionByDomainAdmin(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      questionId,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const rejectQuestionByDomainAdminAction = async (
-  repoId: number,
-  documentId: number,
-  questionId: number,
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await rejectQuestionByDomainAdmin(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      questionId,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const deleteQuestionByDomainAdminAction = async (
-  repoId: number,
-  documentId: number,
-  questionId: number,
-  postIds: number[],
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await deleteQuestionByDomainAdmin(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      questionId,
-      postIds,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const getDomainAnswerListAction = async (
-  repoId: number,
-  documentId: number,
-  questionId: number,
-  offset: number,
-  size: number,
-) => {
-  const userInfo = await getMe();
-
-  try {
-    const accessToken = userInfo.access_token;
-    const response = await getDomainAnswerList(
-      accessToken,
-      repoId,
-      documentId,
-      questionId,
-      offset,
-      size,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const confirmAnswerByDomainAdminAction = async (
-  repoId: number,
-  documentId: number,
-  entityId: number,
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await confirmAnswerByDomainAdmin(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      entityId,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const rejectAnswerByDomainAdminAction = async (
-  repoId: number,
-  documentId: number,
-  entityId: number,
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await rejectAnswerByDomainAdmin(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      entityId,
-    );
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const deleteAnswerByDomainAdminAction = async (
-  repoId: number,
-  documentId: number,
-  postIds: number[],
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await deleteAnswerByDomainAdmin(
-      userInfo.access_token,
-      repoId,
-      documentId,
-      postIds,
     );
 
     return response;

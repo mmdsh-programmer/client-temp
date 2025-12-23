@@ -7,9 +7,15 @@ import useGetQuestionList from "@hooks/questionAnswer/useGetQuestionList";
 import { useDocumentStore } from "@store/document";
 import DocumentQuestionItem from "./documentQuestionItem";
 import DocumentAnswerList from "./documentAnswerList";
+import { useRepositoryStore } from "@store/repository";
+import { ERoles } from "@interface/enums";
+import useGetQuestionListByAdmin from "@hooks/questionAnswer/useGetQuestionListByAdmin";
 
 const DocumentQuestionList = () => {
+  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
+
+  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   const {
     data: questionList,
@@ -17,9 +23,17 @@ const DocumentQuestionList = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetQuestionList(selectedDocument!.repoId, selectedDocument!.id, 10);
+  } = useGetQuestionList(selectedDocument!.repoId, selectedDocument!.id, 10, !adminOwnerRole);
 
-  if (isLoading) {
+  const {
+    data: questionListByAdmin,
+    isLoading: adminListIsLoading,
+    hasNextPage: adminListHasNextPage,
+    isFetchingNextPage: adminListIsFetchingNextPage,
+    fetchNextPage: adminListFetchNextPage,
+  } = useGetQuestionListByAdmin(selectedDocument!.repoId, selectedDocument!.id, 10, adminOwnerRole);
+
+  if (adminListIsLoading || isLoading) {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="flex w-full justify-center">
@@ -29,31 +43,37 @@ const DocumentQuestionList = () => {
     );
   }
 
-  const total = questionList?.pages[0]?.total || 0;
+  const total = adminOwnerRole
+    ? questionListByAdmin?.pages[0]?.total
+    : questionList?.pages[0]?.total;
 
-  if (total && questionList) {
+  const list = adminOwnerRole ? questionListByAdmin : questionList;
+
+  if (total) {
     return (
       <>
-        {questionList?.pages.map((questionListPage) => {
+        {list?.pages.map((questionListPage) => {
           return questionListPage.list.map((questionItem) => {
             return (
-              <DocumentQuestionItem
-                key={`question-${questionItem.id}`}
-                questionItem={questionItem}
-              >
+              <DocumentQuestionItem key={`question-${questionItem.id}`} questionItem={questionItem}>
                 <DocumentAnswerList
-                  repoId={selectedDocument!.repoId}
-                  documentId={selectedDocument!.id}
                   questionItem={questionItem}
                 />
               </DocumentQuestionItem>
             );
           });
         })}
-
         <RenderIf isTrue={!!hasNextPage}>
           <div className="flex w-full justify-center bg-white pb-2">
             <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
+          </div>
+        </RenderIf>
+        <RenderIf isTrue={!!adminListHasNextPage}>
+          <div className="flex w-full justify-center bg-white pb-2">
+            <LoadMore
+              isFetchingNextPage={adminListIsFetchingNextPage}
+              fetchNextPage={adminListFetchNextPage}
+            />
           </div>
         </RenderIf>
       </>

@@ -5,10 +5,10 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 const useGetDomainDocuments = (
   repoId: number | undefined,
-  title: string,
+  title: string | undefined,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
-  sortParams: ISearchSortParams,
+  sortParams: ISearchSortParams | undefined,
   size: number,
 ) => {
   return useInfiniteQuery({

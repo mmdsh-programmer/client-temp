@@ -4,7 +4,7 @@ import {
   ChevronLeftIcon,
   DeleteIcon,
   EditIcon,
-  TickIcon,
+  RevertIcon,
   UserIcon,
 } from "@components/atoms/icons";
 import RenderIf from "@components/atoms/renderIf";
@@ -132,7 +132,7 @@ const QuestionItem = ({ questionItem, children, repoId, documentId }: IProps) =>
                 {...({} as React.ComponentProps<typeof Button>)}
               >
                 <span className="hidden sm:block">پاسخ به پرسش</span>
-                <TickIcon className="block h-4 w-4 !fill-gray-500 sm:hidden" />
+                <RevertIcon className="block h-4 w-4 !fill-gray-500 sm:hidden" />
               </Button>
             </RenderIf>
           </div>

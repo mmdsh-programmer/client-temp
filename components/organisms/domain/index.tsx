@@ -8,8 +8,6 @@ import Settings from "../settings";
 import PublicFeed from "../domainPublicFeed";
 import PrivateFeed from "../domainPrivateFeed";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
-import DomainQa from "../domainQa";
-import DomainComments from "../domainComments";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -59,11 +57,25 @@ const DomainConfig = () => {
       : null,
     {
       tabTitle: ETabs.COMMENTS,
-      tabContent: activeTab === ETabs.COMMENTS ? <DomainComments /> : null,
+      tabContent:
+        activeTab === ETabs.COMMENTS ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+              اطلاعاتی در دست نیست
+            </Typography>
+          </div>
+        ) : null,
     },
     {
       tabTitle: ETabs.QUESTIONS,
-      tabContent: activeTab === ETabs.QUESTIONS ? <DomainQa /> : null,
+      tabContent:
+        activeTab === ETabs.QUESTIONS ? (
+          <div className="flex h-full w-full items-center justify-center">
+            <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+              اطلاعاتی در دست نیست
+            </Typography>
+          </div>
+        ) : null,
     },
     {
       tabTitle: ETabs.VIOLATION_REPORT,

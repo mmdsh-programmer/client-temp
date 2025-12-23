@@ -14,6 +14,7 @@ import { IAccessRequest, IAccessRequestResponse } from "@interface/accessRequest
 import {
   IAddVersion,
   IComment,
+  ICommentItem,
   IContentVersion,
   IContentVersionData,
   IFileVersion,
@@ -5027,28 +5028,28 @@ export const updateCustomPostByDomain = async (
 export const getDomainDocuments = async (
   domainUrl: string,
   repoId: number | undefined,
-  title: string,
+  title: string | undefined,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
-  sortParams: ISearchSortParams,
+  sortParams: ISearchSortParams | undefined,
   offset: number,
   size: number,
 ) => {
   const searchSortParams = [
     {
       field: "createdAt",
-      order: sortParams.createdAt,
+      order: sortParams?.createdAt,
     },
 
     {
       field: "updatedAt",
-      order: sortParams.updatedAt,
+      order: sortParams?.updatedAt,
     },
     {
       field: "creatorSSOID",
-      order: sortParams.creatorSSOID,
+      order: sortParams?.creatorSSOID,
     },
-    { field: "repoId", order: sortParams.repoId },
+    { field: "repoId", order: sortParams?.repoId },
   ];
 
   try {
@@ -5691,7 +5692,7 @@ export const deleteAnswer = async (
   }
 };
 
-export const getDomainQuestionList = async (
+export const getQuestionListByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5709,7 +5710,6 @@ export const getDomainQuestionList = async (
         params: {
           offset,
           size,
-          enable: true,
         },
       },
     );
@@ -5719,7 +5719,7 @@ export const getDomainQuestionList = async (
   }
 };
 
-export const confirmQuestionByDomainAdmin = async (
+export const confirmQuestionByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5741,7 +5741,7 @@ export const confirmQuestionByDomainAdmin = async (
   }
 };
 
-export const rejectQuestionByDomainAdmin = async (
+export const rejectQuestionByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5763,7 +5763,7 @@ export const rejectQuestionByDomainAdmin = async (
   }
 };
 
-export const deleteQuestionByDomainAdmin = async (
+export const deleteQuestionByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5788,7 +5788,7 @@ export const deleteQuestionByDomainAdmin = async (
   }
 };
 
-export const getDomainAnswerList = async (
+export const getAnswerListByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5816,7 +5816,7 @@ export const getDomainAnswerList = async (
   }
 };
 
-export const confirmAnswerByDomainAdmin = async (
+export const confirmAnswerByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5838,7 +5838,7 @@ export const confirmAnswerByDomainAdmin = async (
   }
 };
 
-export const rejectAnswerByDomainAdmin = async (
+export const rejectAnswerByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5860,11 +5860,11 @@ export const rejectAnswerByDomainAdmin = async (
   }
 };
 
-export const deleteAnswerByDomainAdmin = async (
+export const deleteAnswerByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
-  postIds: number[]
+  postIds: number[],
 ) => {
   try {
     const response = await axiosClasorInstance.delete<any>(
@@ -5884,7 +5884,7 @@ export const deleteAnswerByDomainAdmin = async (
   }
 };
 
-export const getDomainCommentList = async (
+export const getCommentListByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5892,7 +5892,7 @@ export const getDomainCommentList = async (
   size: number,
 ) => {
   try {
-    const response = await axiosClasorInstance.get<IServerResult<IListResponse<any>>>(
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ICommentItem>>>(
       `repositories/${repoId}/documents/${documentId}/comments/unConfirmedList`,
 
       {
@@ -5912,7 +5912,7 @@ export const getDomainCommentList = async (
   }
 };
 
-export const confirmCommentByDomainAdmin = async (
+export const confirmCommentByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -5934,7 +5934,7 @@ export const confirmCommentByDomainAdmin = async (
   }
 };
 
-export const rejectCommentByDomainAdmin = async (
+export const rejectCommentByAdmin = async (
   accessToken: string,
   repoId: number,
   documentId: number,
@@ -6072,6 +6072,61 @@ export const dislikeComment = async (accessToken: string, commentId: number) => 
         },
       },
     );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const getPostIdCommentList = async (
+  accessToken: string,
+  postId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
+      `core/content/${postId}/comment`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const createPostIdComment = async (accessToken: string, text: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.post<any>(
+      `core/content/${postId}/comment`,
+      { text },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>);
+  }
+};
+
+export const deletePostIdComment = async (accessToken: string, commentId: number) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(`core/content/comment/${commentId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);

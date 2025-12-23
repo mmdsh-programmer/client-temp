@@ -2,35 +2,27 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError, ISocialResponse } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { deleteAnswerAction } from "@actions/questionAnswer";
+import { confirmCommentByAdminAction } from "@actions/questionAnswer";
 
-const useDeleteAnswer = () => {
+const useConfirmComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["delete-answer"],
+    mutationKey: ["confirm-comment"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
-      questionId: number;
-      entityId: number;
+      commentId: number;
       callBack?: () => void;
     }) => {
-      const { repoId, documentId, entityId } = values;
-
-      const response = await deleteAnswerAction(repoId, documentId, entityId);
-
+      const { repoId, documentId, commentId } = values;
+      const response = await confirmCommentByAdminAction(repoId, documentId, commentId);
       handleClientSideHookError(response as IActionError);
       return response as ISocialResponse<boolean>;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId, documentId, questionId } = values;
+      const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [
-          `answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`,
-        ],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`question-list-${repoId}-documentId-${documentId}`],
+        queryKey: [`comment-list-${repoId}-documentId-${documentId}-by-admin`],
       });
 
       callBack?.();
@@ -41,4 +33,4 @@ const useDeleteAnswer = () => {
   });
 };
 
-export default useDeleteAnswer;
+export default useConfirmComment;
