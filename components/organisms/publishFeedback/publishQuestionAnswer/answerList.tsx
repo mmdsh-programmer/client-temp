@@ -4,23 +4,24 @@ import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
 import useGetAnswerList from "@hooks/questionAnswer/useGetAnswerList";
-import { IQuestion } from "@interface/qa.interface";
+import { IQuestion, IQuestionMetadata } from "@interface/qa.interface";
 import AnswerItem from "./answerItem";
 
 interface IProps {
-  repoId: number;
-  documentId: number;
   questionItem: IQuestion;
 }
 
-const AnswerList = ({ repoId, documentId, questionItem }: IProps) => {
+const AnswerList = ({ questionItem }: IProps) => {
+  const questionMetadata = JSON.parse(questionItem.metadata) as IQuestionMetadata;
+  const { repoId, documentId } = questionMetadata;
+
   const {
     data: answerList,
     isLoading,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetAnswerList(repoId, documentId, questionItem.id, 10);
+  } = useGetAnswerList(repoId, documentId, questionItem.id, 10, true);
 
   if (isLoading) {
     return (
@@ -39,14 +40,7 @@ const AnswerList = ({ repoId, documentId, questionItem }: IProps) => {
       <>
         {answerList?.pages.map((page) => {
           return page.list.map((answerItem) => {
-            return (
-              <AnswerItem
-                key={`answer-${answerItem.id}`}
-                answerItem={answerItem}
-                repoId={repoId}
-                documentId={documentId}
-              />
-            );
+            return <AnswerItem key={`answer-${answerItem.id}`} answerItem={answerItem} />;
           });
         })}
 

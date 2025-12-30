@@ -27,6 +27,7 @@ import { useDocumentStore } from "@store/document";
 import { ERoles } from "@interface/enums";
 import { useRepositoryStore } from "@store/repository";
 import DocumentQuestionConfirmReject from "./documentQuestionConfirmReject";
+import Image from "next/image";
 
 interface IProps {
   questionItem: IQuestion;
@@ -79,13 +80,22 @@ const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
           </div>
           <div className="flex items-center gap-1">
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
-              <UserIcon className="h-4 w-4" />
+              {questionItem.userSrv.profileImage ? (
+                <Image
+                  src={questionItem.userSrv.profileImage}
+                  alt={questionItem.userSrv.name}
+                  height={100}
+                  width={100}
+                />
+              ) : (
+                <UserIcon className="h-4 w-4" />
+              )}
             </div>
             <h6 className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-800 sm:max-w-fit">
               {questionItem.userSrv.name}
             </h6>
             <time
-              className="bullet block h-5 overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-500 sm:max-w-fit"
+              className="bullet block overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-500 sm:max-w-fit"
               dateTime={String(questionItem.timestamp)}
             >
               {FaDateFromTimestamp(questionItem.timestamp)}
@@ -112,18 +122,20 @@ const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
                 className={`h-2.5 w-2.5 stroke-gray-500 align-middle transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
               />
             </Button>
-            <Button
-              variant="text"
-              className="bullet form_label border-none !p-0 !text-gray-500"
-              onClick={() => {
-                setSelectedQuestion(questionItem);
-                setOpenComment(true);
-              }}
-              {...({} as React.ComponentProps<typeof Button>)}
-              title="مشاهده دیدگاه‌ها"
-            >
-              <ChatIcon className="block h-4 w-4 scale-125 !fill-gray-500" />
-            </Button>
+            <RenderIf isTrue={!!userInfo && questionItem.enable}>
+              <Button
+                variant="text"
+                className="bullet form_label border-none !p-0 !text-gray-500"
+                onClick={() => {
+                  setSelectedQuestion(questionItem);
+                  setOpenComment(true);
+                }}
+                {...({} as React.ComponentProps<typeof Button>)}
+                title="مشاهده دیدگاه‌ها"
+              >
+                <ChatIcon className="block h-4 w-4 scale-125 !fill-gray-500" />
+              </Button>
+            </RenderIf>
             <RenderIf isTrue={!!userInfo && questionItem.enable}>
               <Button
                 variant="text"
@@ -138,7 +150,6 @@ const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
                 <RevertIcon className="block h-4 w-4 !fill-gray-500" />
               </Button>
             </RenderIf>
-
             <RenderIf isTrue={!!userInfo && +userInfo.ssoId === +questionItem.userSrv.ssoId}>
               <Button
                 variant="text"

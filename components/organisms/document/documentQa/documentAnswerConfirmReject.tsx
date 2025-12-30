@@ -1,6 +1,6 @@
 import React from "react";
 import { TickIcon, XIcon } from "@components/atoms/icons";
-import { IQuestion, IQuestionMetadata } from "@interface/qa.interface";
+import { IAnswerMetadata, IQuestion } from "@interface/qa.interface";
 import { Button } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useConfirmAnswer from "@hooks/questionAnswer/useConfirmAnswer";
@@ -14,14 +14,14 @@ const DocumentAnswerConfirmReject = ({ answerItem }: IProps) => {
   const confirmAnswer = useConfirmAnswer();
   const rejectAnswer = useRejectAnswer();
 
-  const answerMetadata = JSON.parse(answerItem.metadata) as IQuestionMetadata;
+  const answerMetadata = JSON.parse(answerItem.metadata) as IAnswerMetadata;
 
   const handleConfirm = () => {
     confirmAnswer.mutate({
       repoId: answerMetadata.repoId,
       documentId: answerMetadata.documentId,
-      questionId: answerItem.id,
-      entityId: answerItem.entityId,
+      questionId: answerMetadata.questionPostId,
+      entityId: answerItem.id,
       callBack: () => {
         toast.success("پاسخ تایید شد.");
       },
@@ -32,8 +32,8 @@ const DocumentAnswerConfirmReject = ({ answerItem }: IProps) => {
     rejectAnswer.mutate({
       repoId: answerMetadata.repoId,
       documentId: answerMetadata.documentId,
-      questionId: answerItem.id,
-      entityId: answerItem.entityId,
+      questionId: answerMetadata.questionPostId,
+      entityId: answerItem.id,
       callBack: () => {
         toast.error("پاسخ حذف شد.");
       },

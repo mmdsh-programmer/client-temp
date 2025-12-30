@@ -240,6 +240,7 @@ export interface IUserSrv {
   name: string;
   ssoId: string;
   ssoIssuerCode: number;
+  profileImage?: string
 }
 
 export interface IQuestion {
@@ -293,6 +294,7 @@ export interface IQuestionMetadata {
   content: string;
   parentPostId: number;
 }
+
 export interface IAnswerMetadata {
   type: string;
   status: string;

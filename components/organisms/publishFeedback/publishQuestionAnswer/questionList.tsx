@@ -6,20 +6,19 @@ import { Spinner } from "@components/atoms/spinner";
 import useGetQuestionList from "@hooks/questionAnswer/useGetQuestionList";
 import QuestionItem from "./questionItem";
 import AnswerList from "./answerList";
+import { usePublishStore } from "@store/publish";
 
-interface IProps {
-  repoId: number;
-  documentId: number;
-}
+const QuestionList = () => {
+  const { publishVersion } = usePublishStore();
+  const { repoId, documentId } = publishVersion!;
 
-const QuestionList = ({ repoId, documentId }: IProps) => {
   const {
     data: questionList,
     isLoading,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetQuestionList(repoId, documentId, 10);
+  } = useGetQuestionList(repoId, documentId, 10, true);
 
   if (isLoading) {
     return (
@@ -39,13 +38,8 @@ const QuestionList = ({ repoId, documentId }: IProps) => {
         {questionList?.pages.map((questionListPage) => {
           return questionListPage.list.map((questionItem) => {
             return (
-              <QuestionItem
-                key={`question-${questionItem.id}`}
-                questionItem={questionItem}
-                repoId={repoId}
-                documentId={documentId}
-              >
-                <AnswerList repoId={repoId} documentId={documentId} questionItem={questionItem} />
+              <QuestionItem key={`question-${questionItem.id}`} questionItem={questionItem}>
+                <AnswerList questionItem={questionItem} />
               </QuestionItem>
             );
           });

@@ -24,6 +24,9 @@ const useRejectComment = () => {
       queryClient.invalidateQueries({
         queryKey: [`comment-list-${repoId}-documentId-${documentId}-by-admin`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`comment-list-${repoId}-documentId-${documentId}`],
+      });
 
       callBack?.();
     },

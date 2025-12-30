@@ -5,7 +5,7 @@ import { normalizeError } from "@utils/normalizeActionError";
 import { getMe } from "./auth";
 import { createPostIdComment, deletePostIdComment, getPostIdCommentList } from "@service/clasor";
 
-export const getPostICommentListAction = async (postId: number, offset: number, size: number) => {
+export const getPostIdCommentListAction = async (postId: number, offset: number, size: number) => {
   const userInfo = await getMe();
   try {
     const response = await getPostIdCommentList(userInfo.access_token, postId, offset, size);

@@ -76,7 +76,7 @@ export interface IComment {
     name: string;
     ssoId: string;
     ssoIssuerCode: number;
-    profileImage: string;
+    profileImage?: string;
   };
   confirmed: boolean;
   numOfLikes: number;

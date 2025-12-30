@@ -29,6 +29,11 @@ const useConfirmAnswer = () => {
           `answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}-by-admin`,
         ],
       });
+      queryClient.invalidateQueries({
+        queryKey: [
+          `answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`,
+        ],
+      });
 
       callBack?.();
     },

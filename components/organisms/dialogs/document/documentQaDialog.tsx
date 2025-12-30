@@ -6,12 +6,12 @@ import DocumentQuestionList from "@components/organisms/document/documentQa/docu
 import { AddIcon } from "@components/atoms/icons";
 import { useQaStore } from "@store/qa";
 import { useDocumentStore } from "@store/document";
-import CreateAnswerDialog from "../publish/createAnswerDialog";
-import QuestionEditDialog from "../publish/questionEditDialog";
-import QuestionDeleteDialog from "../publish/questionDeleteDialog";
-import CommentDialog from "../publish/commentDialog";
-import AnswerDeleteDialog from "../publish/answerDeleteDialog";
-import AnswerEditDialog from "../publish/answerEditDialog";
+import CreateAnswerDialog from "../questionAnswer/createAnswerDialog";
+import QuestionEditDialog from "../questionAnswer/questionEditDialog";
+import QuestionDeleteDialog from "../questionAnswer/questionDeleteDialog";
+import AnswerDeleteDialog from "../questionAnswer/answerDeleteDialog";
+import AnswerEditDialog from "../questionAnswer/answerEditDialog";
+import PostComment from "@components/organisms/postComment";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -54,9 +54,7 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openAnswer && selectedQuestion) {
     return (
       <CreateAnswerDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
-        questionId={selectedQuestion.id}
+        questionItem={selectedQuestion}
         setOpen={() => {
           return setOpenAnswer(!openAnswer);
         }}
@@ -67,8 +65,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openEdit && selectedQuestion) {
     return (
       <QuestionEditDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         question={selectedQuestion}
         setOpen={() => {
           return setOpenEdit(!openEdit);
@@ -80,8 +76,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openDelete && selectedQuestion) {
     return (
       <QuestionDeleteDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         question={selectedQuestion}
         setOpen={() => {
           return setOpenDelete(!openDelete);
@@ -92,9 +86,7 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
 
   if (openComment) {
     return (
-      <CommentDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
+      <PostComment
         setOpen={() => {
           return setOpenComment(!openComment);
         }}
@@ -105,8 +97,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openDeleteAnswer && selectedAnswer) {
     return (
       <AnswerDeleteDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         answer={selectedAnswer}
         setOpen={() => {
           return setOpenDeleteAnswer(!openDeleteAnswer);
@@ -118,8 +108,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openEditAnswer && selectedAnswer) {
     return (
       <AnswerEditDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         answer={selectedAnswer}
         setOpen={() => {
           return setOpenEditAnswer(!openEditAnswer);

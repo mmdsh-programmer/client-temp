@@ -6097,7 +6097,7 @@ export const getPostIdCommentList = async (
         },
       },
     );
-    return response.data;
+    return response.data.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>);
   }
@@ -6122,7 +6122,7 @@ export const createPostIdComment = async (accessToken: string, text: string, pos
 
 export const deletePostIdComment = async (accessToken: string, commentId: number) => {
   try {
-    const response = await axiosClasorInstance.delete<any>(`core/content/comment/${commentId}`, {
+    const response = await axiosClasorInstance.delete<any>(`core/comment/${commentId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

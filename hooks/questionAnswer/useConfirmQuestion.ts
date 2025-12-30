@@ -24,6 +24,9 @@ const useConfirmQuestion = () => {
       queryClient.invalidateQueries({
         queryKey: [`question-list-${repoId}-documentId-${documentId}-by-admin`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`question-list-${repoId}-documentId-${documentId}`],
+      });
 
       callBack?.();
     },

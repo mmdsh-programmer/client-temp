@@ -6,19 +6,20 @@ import QuestionAnswerEditor, {
 import { toast } from "react-toastify";
 import { editorConfig } from "@utils/clasorEditor";
 import EditDialog from "@components/templates/dialog/editDialog";
-import { IQuestion } from "@interface/qa.interface";
+import { IAnswerMetadata, IQuestion } from "@interface/qa.interface";
 import useUpdateAnswer from "@hooks/questionAnswer/useUpdateAnswer";
 
 interface IProps {
-  repoId: number;
-  documentId: number;
   answer: IQuestion;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const AnswerEditDialog = ({ repoId, documentId, answer, setOpen }: IProps) => {
+const AnswerEditDialog = ({ answer, setOpen }: IProps) => {
   const editorRef = useRef<IQaEditorRef | null>(null);
   const editorData = useRef<{ content: string; outline: string } | null>(null);
+
+  const answerMetadata = JSON.parse(answer.metadata) as IAnswerMetadata;
+  const { repoId, documentId } = answerMetadata;
 
   const updateAnswer = useUpdateAnswer();
 
