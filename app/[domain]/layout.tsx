@@ -6,6 +6,7 @@ import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
 import { ICustomPostData } from "@interface/app.interface";
 import ThemeLoaderProvider from "provider/themeLoaderProvider";
+import Script from "next/script";
 
 interface IProps {
   children: React.ReactNode;
@@ -59,12 +60,20 @@ const DomainLayout = async ({ children, params }: IProps) => {
       domainHash = decodeKey(domain);
     }
     const { content } = await getCustomPostByDomain(domainHash);
-    const { theme } = JSON.parse(content ?? "{}") as ICustomPostData;
+    const { theme, podlyticsHash } = JSON.parse(content ?? "{}") as ICustomPostData;
 
     return (
       <ThemeLoaderProvider theme={theme}>
+        {podlyticsHash && process.env.NEXT_PUBLIC_PODLYTICS_ADDRESS ? (
+          <Script
+            src={process.env.NEXT_PUBLIC_PODLYTICS_ADDRESS}
+            data-website-id={podlyticsHash}
+            strategy="afterInteractive"
+            defer
+          />
+        ) : null}
         <MainProvider>{children}</MainProvider>
-        <p className="absolute -z-50 hidden">3.20.13.19-v3</p>
+        <p className="absolute -z-50 hidden">3.20.14.25-v3</p>
       </ThemeLoaderProvider>
     );
   } catch (error) {

@@ -10,6 +10,7 @@ import LogoUploader from "./logoUploader";
 import BasicInfo from "./basicInfo";
 import LoadingButton from "@components/molecules/loadingButton";
 import { Spinner } from "@components/atoms/spinner";
+import PodlyticsHash from "./podlyticsHash";
 
 const Settings = () => {
   const { data: getDomainInfo, isLoading } = useGetDomainInfo();
@@ -73,6 +74,7 @@ const Settings = () => {
       accessToCreateRepo: false,
       enablePublishPage: false,
       enablePrivateFeed: false,
+      podlyticsHash: null,
     },
   });
 
@@ -98,6 +100,7 @@ const Settings = () => {
           enableDefaultFontFamily,
           enableBranch,
           enablePrivateFeed,
+          podlyticsHash,
           theme = {},
         } = content;
 
@@ -120,6 +123,7 @@ const Settings = () => {
           enableDefaultFontFamily,
           enableBranch,
           enablePrivateFeed,
+          podlyticsHash: podlyticsHash || null,
           // colors
           mainColor: themeColors?.["--primary-normal"] || "#7F46BF",
           primaryLight: themeColors?.["--primary-light"] || "#EFE9F8",
@@ -209,6 +213,7 @@ const Settings = () => {
         enableDefaultFontFamily: data.enableDefaultFontFamily,
         enableBranch: data.enableBranch,
         enablePrivateFeed: data.enablePrivateFeed,
+        podlyticsHash: data.podlyticsHash,
         theme: {
           ...originalTheme,
           // colors
@@ -273,9 +278,14 @@ const Settings = () => {
   if (isLoading || uploadLoading) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">
-        <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="h-8 w-8 text-primary" />
+        <Spinner
+          {...({} as React.ComponentProps<typeof Spinner>)}
+          className="h-8 w-8 text-primary"
+        />
         {uploadLoading && (
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="mt-2">در حال آپلود لوگو... {uploadProgress}%</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="mt-2">
+            در حال آپلود لوگو... {uploadProgress}%
+          </Typography>
         )}
       </div>
     );
@@ -286,7 +296,9 @@ const Settings = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           <div className="flex flex-col gap-5">
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2">تنظیمات پایه</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2">
+              تنظیمات پایه
+            </Typography>
             <div className="flex flex-col gap-5">
               <BasicInfo
                 domain={formValues}
@@ -298,11 +310,18 @@ const Settings = () => {
                 register={register}
                 logoHash={formValues.logo}
               />
+              <PodlyticsHash
+                onInputChange={handleInputChange}
+                register={register}
+                podlyticsHash={formValues.podlyticsHash}
+              />
               <ColorsSettings domain={formValues} onColorChange={handleColorChange} />
             </div>
           </div>
           <div className="flex flex-col gap-5">
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2">تنظیمات پیشرفته</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t2">
+              تنظیمات پیشرفته
+            </Typography>
             <AdvancedSettings domain={formValues} onCheckboxChange={handleCheckboxChange} />
           </div>
         </div>
@@ -312,7 +331,12 @@ const Settings = () => {
             onClick={handleSubmit(onSubmit)}
             loading={updateDomain.isPending || uploadLoading}
           >
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">ذخیره</Typography>
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="text__label__button text-white"
+            >
+              ذخیره
+            </Typography>
           </LoadingButton>
         </div>
       </form>

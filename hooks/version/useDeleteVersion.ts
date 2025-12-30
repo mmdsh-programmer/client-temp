@@ -44,6 +44,8 @@ const useDeleteVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:deleted");
+
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`get-last-version-document-${documentId}`],

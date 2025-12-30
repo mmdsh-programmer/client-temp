@@ -15,9 +15,8 @@ interface IProps {
 
 export async function generateMetadata({ searchParams }): Promise<Metadata> {
   const { repoId, documentId, sharedDocuments } = await searchParams;
-
+  const userInfo = await getMe();
   try {
-    const userInfo = await getMe();
     const documentInfo = await getDocument(
       userInfo.access_token,
       repoId,

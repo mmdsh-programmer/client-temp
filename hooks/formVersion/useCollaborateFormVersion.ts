@@ -21,6 +21,8 @@ const useCollaborateFormVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:collaborated_podform");
+
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`version-list-${repoId}-${documentId}`],

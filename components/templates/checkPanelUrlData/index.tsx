@@ -45,6 +45,7 @@ const CheckPanelUrlData = () => {
     +documentId!,
     !!documentId,
     !!repositoryId,
+    true
   );
 
   useEffect(() => {

@@ -30,7 +30,7 @@ const PublishVersionContent = ({ version, document }: IProps) => {
             case EDocumentTypes.classic:
               return (
                 <>
-                  <RenderClientContent versionData={version} />
+                  <RenderClientContent />
                   <RenderServerSideContent
                     className="min-h-full"
                     versionData={version as IGetSpecificVersion}

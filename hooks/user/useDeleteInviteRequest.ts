@@ -19,6 +19,8 @@ const useDeleteInviteRequest = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:delete_invite_request_by_owner");
+
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoInviteRequestsByOwner-${repoId}`],

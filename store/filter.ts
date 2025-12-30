@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { IChildrenFilter, IReportFilter } from "@interface/app.interface";
+import { IChildrenFilter, IRepoResourceFilter } from "@interface/app.interface";
 
 interface FilterState {
   filterChildren: IChildrenFilter | null;
   setFilterChildren: (filter: IChildrenFilter | null) => void;
-  filterReport: IReportFilter | null;
-  setFilterReport: (filter: IReportFilter | null) => void;
+  filterReport: IRepoResourceFilter | null;
+  setFilterReport: (filter: IRepoResourceFilter | null) => void;
 }
 
 export const useFilterStore = create<FilterState>((set) => {

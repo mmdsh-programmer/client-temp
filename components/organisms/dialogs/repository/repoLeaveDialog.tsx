@@ -36,8 +36,6 @@ const RepoLeaveDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo.id,
       callBack: () => {
-        window.metrics.track(`repo-${getRepo.id}-success-leave`);
-
         if (currentPath === "/admin/repositories") {
           if (isNavigating) return;
           setIsNavigating(true);

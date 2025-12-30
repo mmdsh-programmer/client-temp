@@ -19,6 +19,8 @@ const useDeleteUser = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:delete_user");
+
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoUsers-${repoId}`],

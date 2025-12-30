@@ -82,6 +82,8 @@ const EditorTags = () => {
       tagIds: getTempDocTag.map((tag) => {
         return tag.id;
       }),
+      order: document.order,
+      isHidden: document.isHidden,
       isDirectAccess:
         sharedDocuments === "true" ||
         currentPath === "/admin/sharedDocuments" ||

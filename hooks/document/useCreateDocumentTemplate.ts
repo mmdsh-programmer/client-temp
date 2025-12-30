@@ -52,6 +52,7 @@ const useCreateDocumentTemplate = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:created_template");
       const { callBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],

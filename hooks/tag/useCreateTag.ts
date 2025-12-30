@@ -20,6 +20,7 @@ const useCreateTag = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("tag:created");
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`getTags-${repoId}`],

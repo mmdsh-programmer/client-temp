@@ -22,7 +22,6 @@ const RepoBookmarkDialog = ({ setOpen }: IProps) => {
       mutate({
         repoId: repo.id,
         callBack: () => {
-          window.metrics.track(`repo-${repo.id}-success-bookmark`);
           toast.success("مخزن مورد نظر به نشان شده ها اضافه شد.");
           setRepo({
             ...repo,
@@ -36,7 +35,6 @@ const RepoBookmarkDialog = ({ setOpen }: IProps) => {
         repoId: repo.id,
         detach: true,
         callBack: () => {
-          window.metrics.track(`repo-${repo.id}-success-unbookmark`);
           toast.success("مخزن مورد نظر از نشان شده ها حذف شد.");
           setRepo({
             ...repo,

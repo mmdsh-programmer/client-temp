@@ -14,10 +14,10 @@ const PdfPreview = dynamic(
     return import("@components/molecules/PdfPreview");
   },
   {
-    ssr: false,
     loading: () => {
-      return <p>در حال بارگذاری پیش‌نمایش...</p>;
+      return <p className="w-full text-center">در حال بارگذاری پیش‌ نمایش...</p>;
     },
+    ssr: false,
   },
 );
 

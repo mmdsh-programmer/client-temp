@@ -19,7 +19,8 @@ const useGetVersionList = (
         documentId,
         isDirectAccess,
         (pageParam - 1) * size,
-        size
+        size,
+        false
       );
       handleClientSideHookError(response as IActionError);
       return (response as IDocumentMetadata).versions as IVersionMetadata;

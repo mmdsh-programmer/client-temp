@@ -1,6 +1,5 @@
 import { Button, Typography } from "@material-tailwind/react";
 import { ERoles } from "@interface/enums";
-
 import { AddIcon } from "@components/atoms/icons";
 import InfoDialog from "@components/templates/dialog/infoDialog";
 import React from "react";

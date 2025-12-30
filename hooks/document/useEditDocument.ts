@@ -54,6 +54,7 @@ const useEditDocument = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:edited");
       const { callBack, repoId, categoryId, currentParentId, documentId } = values;
       
       queryClient.invalidateQueries({

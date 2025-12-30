@@ -26,6 +26,8 @@ const useSetLastVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:created_last_version");
+
       const { callBack, documentId, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],

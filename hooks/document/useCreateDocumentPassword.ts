@@ -28,6 +28,7 @@ const useCreateDocumentPassword = () => {
       return response as IDocument;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:created_password");
       const { successCallBack, categoryId, documentId, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],

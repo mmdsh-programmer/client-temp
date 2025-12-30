@@ -27,6 +27,8 @@ const useCancelConfirmVersion = () => {
       return response as IAddVersion;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:canceled_confirm");
+
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],

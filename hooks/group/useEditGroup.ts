@@ -28,6 +28,8 @@ const useEditGroup = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:edit_group");
+
       const { callBack, repoId, title } = values;
       queryClient.invalidateQueries({
         queryKey: [`getRepoGroups-${repoId}`],

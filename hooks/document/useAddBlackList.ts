@@ -24,6 +24,7 @@ const useAddBlackList = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:added_user_to_blacklist");
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-document-${documentId}-white-list`],

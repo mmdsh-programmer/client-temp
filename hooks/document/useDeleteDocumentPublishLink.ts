@@ -19,6 +19,7 @@ const useDeleteDocumentPublishLink = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:deleted_publish_link");
       const { repoId, categoryId, callBack } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${categoryId || "root"}-children`],

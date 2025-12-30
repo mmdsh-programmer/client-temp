@@ -21,6 +21,8 @@ const usePublicLastVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("document:make_public_last_version");
+
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-document-${documentId}`],

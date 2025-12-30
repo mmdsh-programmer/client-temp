@@ -22,6 +22,7 @@ const useCreateRepoPublicKey = () => {
     },
     onSuccess: (response, values) => {
       const { callBack, repoId } = values;
+      window.metrics?.track("repo:create_public_key");
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-public-keys`],
       });

@@ -1,6 +1,6 @@
 "use server";
 
-import { IActionError, IReportFilter } from "@interface/app.interface";
+import { IActionError, IRepoResourceFilter, IReportFilter } from "@interface/app.interface";
 import {
   acceptWhiteListRequest,
   addToDocumentBlackList,
@@ -22,6 +22,7 @@ import {
   getDocumentBlocklist,
   getDocumentPublishLink,
   getDocumentWhiteBlackList,
+  getRepoDocuments,
   getUserDocument,
   getWhiteListRequest,
   publicLastVersion,
@@ -53,7 +54,7 @@ export const getDocumentAction = async (
   isDirectAccess?: boolean,
   offset?: number,
   size?: number,
-  disableVersions?: boolean,
+  disableVersions?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -64,7 +65,7 @@ export const getDocumentAction = async (
       isDirectAccess,
       offset,
       size,
-      disableVersions,
+      disableVersions
     );
 
     return response;
@@ -224,6 +225,33 @@ export const getUserDocumentAction = async (
       filters,
       reportType,
       domainInfo.types,
+    );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getRepoDocumentsAction = async (
+  repoId: number,
+  title: string,
+  offset: number,
+  size: number,
+  filters: IRepoResourceFilter | null | undefined,
+  reportType: "myResource" | "myAccessResource" | null,
+) => {
+  const userInfo = await getMe();
+
+  try {
+    const response = await getRepoDocuments(
+      userInfo.access_token,
+      repoId,
+      title,
+      offset,
+      size,
+      filters,
+      reportType,
     );
 
     return response;

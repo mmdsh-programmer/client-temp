@@ -1,6 +1,4 @@
-import {
- Typography
-} from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { Spinner } from "@components/atoms/spinner";
 import { IRoles } from "@interface/users.interface";
 import ImageComponent from "@components/atoms/image";
@@ -21,29 +19,23 @@ interface IForm {
 const RepoUsers = () => {
   const { repo: getRepo } = useRepositoryStore();
   const repoId = getRepo!.id;
-  const {data: getRoles} = useGetRoles();
+  const { data: getRoles } = useGetRoles();
 
-  const {
- data: getInviteRequests, isFetching: isFetchingInviteRequests 
-} =
-    useGetInviteRequests(repoId, 10);
-
-  const {
- data: getRepoUsers, isFetching: isFetchingUsers 
-} = useGetUsers(
+  const { data: getInviteRequests, isFetching: isFetchingInviteRequests } = useGetInviteRequests(
     repoId,
     10,
-    true,
   );
 
-  const {register,} = useForm<IForm>();
+  const { data: getRepoUsers, isFetching: isFetchingUsers } = useGetUsers(repoId, 10, true);
+
+  const { register } = useForm<IForm>();
 
   return (
-    <div className="repo-users flex flex-col w-full">
+    <div className="repo-users flex w-full flex-col">
       <div className="h-2 border-b-2 border-gray-300" />
       {isFetchingInviteRequests || isFetchingUsers ? (
-        <div className="h-full w-full flex justify-center items-center">
-          <Spinner className="text-primary h-6 w-6" />
+        <div className="flex h-full w-full items-center justify-center">
+          <Spinner className="h-6 w-6 text-primary" />
         </div>
       ) : (
         <div className="repo-users__list">
@@ -54,8 +46,7 @@ const RepoUsers = () => {
                   <div
                     key={user.userInfo.ssoId}
                     title={user.userInfo.userName || ""}
-                    className={` w-8 h-8 cursor-pointer
-                     `}
+                    className="h-8 w-8 cursor-pointer"
                   >
                     {user.userInfo.img ? (
                       <ImageComponent
@@ -64,24 +55,22 @@ const RepoUsers = () => {
                         className="h-full w-full rounded-full border-[3px] border-white"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-full border-[3px] border-white">
+                      <div className="flex h-full w-full items-center justify-center rounded-full border-[3px] border-white bg-gray-50">
                         <UserIcon className="h-5 w-5 fill-gray-400" />
                       </div>
                     )}
                   </div>
-                  <Typography {...({} as React.ComponentProps<typeof Typography>)}> {user.userInfo.userName}</Typography>
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+                    {user.userInfo.userName}
+                  </Typography>
                   <select
                     id="user-create-role"
-                    className="repo-users__select-role text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"
+                    className="repo-users__select-role bg-transparent font-iranYekan text-[14px] text-primary_normal outline-none"
                     {...register("roleName")}
                   >
                     {getRoles?.map((item: IRoles) => {
                       return item.name !== "owner" ? (
-                        <option
-                          key={item.name}
-                          value={item.name}
-                          className="text-primary_normal"
-                        >
+                        <option key={item.name} value={item.name} className="text-primary_normal">
                           {translateRoles(item.name)}
                         </option>
                       ) : null;
@@ -98,8 +87,7 @@ const RepoUsers = () => {
                   <div
                     key={user.userSSOID}
                     title={user.user.preferred_username || ""}
-                    className={` w-8 h-8 cursor-pointer
-                     `}
+                    className="h-8 w-8 cursor-pointer"
                   >
                     {user.user.picture ? (
                       <ImageComponent
@@ -108,24 +96,22 @@ const RepoUsers = () => {
                         className="h-full w-full rounded-full border-[3px] border-white"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center bg-gray-50 rounded-full border-[3px] border-white">
+                      <div className="flex h-full w-full items-center justify-center rounded-full border-[3px] border-white bg-gray-50">
                         <UserIcon className="h-5 w-5 fill-gray-400" />
                       </div>
                     )}
                   </div>
-                  <Typography {...({} as React.ComponentProps<typeof Typography>)}> {user.user.preferred_username}</Typography>
+                  <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+                    {user.user.preferred_username}
+                  </Typography>
                   <select
                     id="user-create-role"
-                    className="text-[14px] font-iranYekan outline-none bg-transparent text-primary_normal"
-                    {...register("roleName", {value: user.role,})}
+                    className="bg-transparent font-iranYekan text-[14px] text-primary_normal outline-none"
+                    {...register("roleName", { value: user.role })}
                   >
                     {getRoles?.map((item: IRoles) => {
                       return (
-                        <option
-                          key={item.name}
-                          value={item.name}
-                          className="text-primary_normal"
-                        >
+                        <option key={item.name} value={item.name} className="text-primary_normal">
                           {translateRoles(item.name)}
                         </option>
                       );

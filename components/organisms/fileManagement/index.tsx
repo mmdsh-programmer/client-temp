@@ -165,6 +165,7 @@ const Files = ({
       createUploadLink.mutate({
         resourceId,
         userGroupHash,
+        isPublic: false,
         successCallBack: async (uploadHash) => {
           try {
             const result = await axios.post(

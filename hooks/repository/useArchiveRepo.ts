@@ -16,6 +16,7 @@ const useArchiveRepo = () => {
     },
     onSuccess: (response, values) => {
       const { callBack } = values;
+      window.metrics?.track("repo:archiveed");
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
@@ -26,12 +27,7 @@ const useArchiveRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
-    onError: (error, values) => {
-      const { repoId } = values;
-      window.metrics.crach({
-        message: error.message,
-        stack: `repo-${repoId}-archive`,
-      });
+    onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

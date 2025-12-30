@@ -43,7 +43,7 @@ const VersionRequests = () => {
     getSelectedVersion ? getSelectedVersion!.documentId : undefined,
     !!getSelectedVersion?.id,
     true,
-    undefined,
+    true,
   );
 
   const listLength = getVersionRequest?.pages[0].total;

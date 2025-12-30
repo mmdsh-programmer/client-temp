@@ -27,6 +27,8 @@ const useConfirmVersion = () => {
       return response as IAddVersion;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:confirmed");
+
       const { callBack, repoId, documentId, versionId } = values;
       queryClient.invalidateQueries({
         queryKey: [`get-last-version-document-${documentId}-repo-${repoId}`],

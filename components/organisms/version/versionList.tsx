@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { EEmptyList } from "@components/molecules/emptyList";
 import HeaderListTemplate from "@components/templates/headerListTemplate";
 import { IVersionView } from "@interface/version.interface";
@@ -12,6 +12,7 @@ import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useDocumentStore } from "@store/document";
 import { EDocumentTypes } from "@interface/enums";
+import { toast } from "react-toastify";
 
 const VersionList = () => {
   const repoId = useRepoId();
@@ -29,6 +30,7 @@ const VersionList = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    error,
   } = useGetVersionList(
     repoId!,
     getSelectedDocument!.id,
@@ -86,6 +88,14 @@ const VersionList = () => {
     type: EEmptyList.VERSION,
   };
 
+  useEffect(() => {
+    if (error) {
+      toast.error("خطا در دریافت لیست نسخه‌ها", {
+        toastId: "version-list-error",
+      });
+    }
+  }, [error]);
+
   return (
     <div className="version-list flex flex-col gap-4 p-4 xs:gap-6 xs:p-0">
       <HeaderListTemplate
@@ -95,7 +105,9 @@ const VersionList = () => {
           return <VersionCreateDialog close={close} />;
         }}
         className="version-list-header"
-        disabled={getSelectedDocument?.contentType === EDocumentTypes.form && !!sortedVersion?.[0].length}
+        disabled={
+          getSelectedDocument?.contentType === EDocumentTypes.form && !!sortedVersion?.[0].length
+        }
       />
       <div className="hidden h-full min-h-[calc(100vh-200px)] overflow-y-auto xs:block">
         <VersionTableView {...commonProps} />

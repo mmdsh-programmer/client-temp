@@ -157,6 +157,8 @@ export interface IDocumentMetadata {
   publicKeyId?: string;
   userGroupHash: string | null;
   attachmentUserGroup: string | null;
+  podspaceAttachmentHash: string | null;
+  podspaceAttachmentFolderHash: string | null;
   hasWhiteList: boolean;
   hasBlackList: boolean;
   hasDirectAccess: boolean;

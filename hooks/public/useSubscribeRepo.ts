@@ -37,6 +37,8 @@ const useSubscribeRepo = () => {
       });
     },
     onError: (error, values) => {
+      window.metrics?.track("repo:subscribe");
+
       const { errorCallBack } = values;
 
       const { message } = error as CustomError;

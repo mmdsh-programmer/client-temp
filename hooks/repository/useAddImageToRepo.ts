@@ -19,7 +19,8 @@ const useAddImageToRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack } = values;
+      window.metrics?.track("repo:image_added");
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false"] });
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       queryClient.invalidateQueries({ queryKey: ["bookmarkRepoList"] });

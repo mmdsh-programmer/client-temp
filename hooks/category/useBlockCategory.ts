@@ -25,6 +25,8 @@ const useBlockCategory = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("category:added_user_to_blocklist");
+
       const { callBack, repoId, categoryId } = values;
       queryClient.invalidateQueries({queryKey: [`repo-${repoId}-category-${categoryId}-block-list`],});
       callBack?.();

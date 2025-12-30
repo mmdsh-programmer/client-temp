@@ -50,6 +50,7 @@ const useCreateDocument = () => {
       return response as IDocument;
     },
     onSuccess: async (response, values) => {
+      window.metrics?.track("document:created");
       const { successCallBack, repoId, categoryId } = values;
       const queryKey = [`repo-${repoId}-category-${categoryId || "root"}-children`];
 

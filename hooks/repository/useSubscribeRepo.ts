@@ -19,6 +19,7 @@ const useSubscribeRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:subscribed");
       const { callBack, repoId, ssoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-user-${ssoId}-subscription-status`],

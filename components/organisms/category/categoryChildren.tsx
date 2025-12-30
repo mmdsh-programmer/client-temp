@@ -10,9 +10,9 @@ import TableView from "../categoryView/categoryTableView";
 import { useAppStore } from "@store/app";
 import { useSortStore } from "@store/sortParam";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
-import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
 import { usePathname } from "next/navigation";
 import useRepoId from "@hooks/custom/useRepoId";
+import useGetRepoDocuments from "@hooks/document/useGetRepoDocuments";
 
 const CategoryChildren = () => {
   const currentPath = usePathname();
@@ -54,9 +54,8 @@ const CategoryChildren = () => {
     isLoading: reportIsLoading,
     isFetching: reportIsFetching,
     refetch: refetchReport,
-  } = useGetUserDocuments(
+  } = useGetRepoDocuments(
     repoId!,
-    getSortParams,
     queryParams.limit,
     getFilterReport,
     null,

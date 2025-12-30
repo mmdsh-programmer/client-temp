@@ -13,6 +13,8 @@ const useAutoLoginCode = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("version:podform_autoLogin");
+
       const { callBack } = values;
       callBack?.(response as string);
     },

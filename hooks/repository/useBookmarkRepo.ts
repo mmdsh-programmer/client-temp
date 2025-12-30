@@ -15,7 +15,8 @@ const useBookmarkRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack } = values;
+      window.metrics?.track("repo:bookmarked");
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
       });
@@ -26,12 +27,7 @@ const useBookmarkRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["myRepoList-false-isPublished"] });
       callBack?.();
     },
-    onError: (error, values) => {
-      const { repoId } = values;
-      window.metrics.crach({
-        message: error.message,
-        stack: `repo-${repoId}-bookmark`,
-      });
+    onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });

@@ -44,6 +44,8 @@ const useEditCategory = () => {
       return response as ICategory;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("category:edited");
+
       const { callBack, parentId, currentParentId, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-category-${currentParentId || "root"}-children`],

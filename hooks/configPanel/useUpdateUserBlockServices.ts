@@ -21,6 +21,8 @@ const useUpdateUserBlockServices = () => {
       return response;
     },
     onSuccess: (_, values) => {
+      window.metrics?.track("repo:update_user_block_services");
+
       const { callBack, repoId, ssoId } = values;
       queryClient.invalidateQueries({ queryKey: [`getUserConfig-ssoId-${ssoId}-repoId-${repoId}`] });
       callBack?.();

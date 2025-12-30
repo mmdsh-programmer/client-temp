@@ -137,6 +137,7 @@ const useDocumentMenuList = (
       "ویرایش محتوا",
       <EditContentIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track("document:editContent_dialog");
         if (document.contentType === EDocumentTypes.form) {
           return handleOpenFormEditor();
         }
@@ -151,7 +152,8 @@ const useDocumentMenuList = (
       "ویرایش سند",
       <EditDocumentIcon className="h-4 w-4" />,
       () => {
-        return setModal("editDocument");
+        window.metrics?.track("document:edit_dialog");
+        setModal("editDocument");
       },
       {
         className: "document-edit",
@@ -162,7 +164,8 @@ const useDocumentMenuList = (
       "تگ های سند",
       <DocumentTagsIcon className="h-4 w-4" />,
       () => {
-        return setModal("documentTags");
+        window.metrics?.track("document:tagList_dialog");
+        setModal("documentTags");
       },
       {
         className: "document-edit-tags",
@@ -175,6 +178,9 @@ const useDocumentMenuList = (
       document.isHidden ? "عدم مخفی سازی" : "مخفی سازی",
       document.isHidden ? <VisibleIcon className="h-4 w-4" /> : <HiddenIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track(
+          document.isHidden ? "document:visible_dialog" : "document:hide_dialog",
+        );
         setModal(document.isHidden ? "visible" : "hide");
         setDocumentDrawer(false);
       },
@@ -187,7 +193,8 @@ const useDocumentMenuList = (
       "محدودیت کاربران",
       <LimitationIcon className="h-4 w-4" />,
       () => {
-        return setModal("documentAccessPublishing");
+        window.metrics?.track("document:accessOnPublishPage_dialog");
+        setModal("documentAccessPublishing");
       },
       {
         className: "document-limitation",
@@ -200,7 +207,8 @@ const useDocumentMenuList = (
             "ویرایش رمز عبور",
             <PasswordIcon className="h-4 w-4" />,
             () => {
-              return setModal("updatePassword");
+              window.metrics?.track("document:editPassword_dialog");
+              setModal("updatePassword");
             },
             {
               className: "document-edit-password",
@@ -211,7 +219,8 @@ const useDocumentMenuList = (
             "حذف رمز عبور",
             <PasswordIcon className="h-4 w-4" />,
             () => {
-              return setModal("deletePassword");
+              window.metrics?.track("document:deletePassword_dialog");
+              setModal("deletePassword");
             },
             {
               className: "document-delete-password",
@@ -224,7 +233,8 @@ const useDocumentMenuList = (
             "اعمال رمز عبور",
             <PasswordIcon className="h-4 w-4" />,
             () => {
-              return setModal("createPassword");
+              window.metrics?.track("document:createPassword_dialog");
+              setModal("createPassword");
             },
             {
               className: "document-create-password",
@@ -250,6 +260,7 @@ const useDocumentMenuList = (
       "حذف لینک انتشار",
       <DeleteIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track("document:deletePublishLink_dialog");
         setModal("deletePublishLink");
         setDocumentDrawer(false);
       },
@@ -266,6 +277,9 @@ const useDocumentMenuList = (
       document.isBookmarked ? "حذف بوکمارک" : "بوکمارک کردن",
       <DocumentBookmarkIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track(
+          document.isBookmarked ? "document:unbookmark_dialog" : "document:bookmark_dialog",
+        );
         setModal("bookmarkDocument");
         setDocumentDrawer(false);
       },
@@ -281,7 +295,8 @@ const useDocumentMenuList = (
       "انتقال",
       <ArrowLeftRectangleIcon className="h-4 w-4 fill-icon-active" />,
       () => {
-        return setModal("move");
+        window.metrics?.track("document:move_dialog");
+        setModal("move");
       },
       {
         className: "document-move",
@@ -296,6 +311,7 @@ const useDocumentMenuList = (
       "نسخه های سند",
       <LastVersionIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track("document:versionList_dialog");
         setVersionModalList(true);
         setDocumentShow(document);
         setSelectedDocument(document);
@@ -309,6 +325,7 @@ const useDocumentMenuList = (
       "عمومی سازی آخرین نسخه",
       <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       () => {
+        window.metrics?.track("document:publicLastVersion_dialog");
         setModal("documentPublicVersion");
         setDocumentDrawer(false);
       },
@@ -318,7 +335,8 @@ const useDocumentMenuList = (
       "دسترسی مستقیم به سند",
       <LockIcon className="h-4 w-4" />,
       () => {
-        return setModal("documentDirectAccess");
+        window.metrics?.track("document:directAccess_dialog");
+        setModal("documentDirectAccess");
       },
       { className: "document-direct-access", disabled: !!enablePersonalDocs && !isAdminOrOwner() },
     ),
@@ -326,7 +344,8 @@ const useDocumentMenuList = (
       "محدودیت دسترسی در پنل",
       <LockIcon className="h-4 w-4" />,
       () => {
-        return setModal("documentAccess");
+        window.metrics?.track("document:accessRestriction_dialog");
+        setModal("documentAccess");
       },
       {
         className: "document-access",
@@ -341,7 +360,8 @@ const useDocumentMenuList = (
         "درخواست‌های دسترسی به سند",
         <LockIcon className="h-4 w-4" />,
         () => {
-          return setModal("documentWhiteListRequests");
+          window.metrics?.track("document:whiteListRequests_dialog");
+          setModal("documentWhiteListRequests");
         },
         {
           className: "document-white-list-requests",
@@ -363,7 +383,8 @@ const useDocumentMenuList = (
         "ایجاد لینک انتشار",
         <GlobeIcon className="h-4 w-4 fill-icon-active" />,
         () => {
-          return setModal("createPublishLink");
+          window.metrics?.track("document:createPublishLink_dialog");
+          setModal("createPublishLink");
         },
         {
           className: "document-create-publish-link",
@@ -385,6 +406,7 @@ const useDocumentMenuList = (
         "پرسش و پاسخ روی سند",
         <LastVersionIcon className="h-4 w-4" />,
         () => {
+          window.metrics?.track("document:questionAnswer_dialog");
           setModal("documentQA");
           setDocumentDrawer(false);
         },
@@ -398,6 +420,7 @@ const useDocumentMenuList = (
       "حذف سند",
       <DeleteIcon className="h-4 w-4" />,
       () => {
+        window.metrics?.track("document:delete_dialog");
         setModal("deleteDocument");
         setDocumentDrawer(false);
       },

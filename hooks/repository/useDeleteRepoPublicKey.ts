@@ -19,6 +19,7 @@ const useDeleteRepoPublicKey = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:delete_public_key");
       const { callBack, repoId } = values;
       queryClient.invalidateQueries({
         queryKey: [`repo-${repoId}-public-keys`],

@@ -15,6 +15,7 @@ const useRestoreRepo = () => {
       return response;
     },
     onSuccess: (response, values) => {
+      window.metrics?.track("repo:restored");
       const { callBack } = values;
       queryClient.invalidateQueries({
         queryKey: ["getMyInfo"],
@@ -25,12 +26,7 @@ const useRestoreRepo = () => {
       queryClient.invalidateQueries({ queryKey: ["allRepoList"] });
       callBack?.();
     },
-    onError: (error, values) => {
-      const { repoId } = values;
-      window.metrics.crach({
-        message: error.message,
-        stack: `repo-${repoId}-restore`,
-      });
+    onError: (error) => {
       toast.error(error.message || "خطای نامشخصی رخ داد");
     },
   });
