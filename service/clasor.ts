@@ -15,6 +15,7 @@ import { IAccessRequest, IAccessRequestResponse } from "@interface/accessRequest
 import {
   IAddVersion,
   IComment,
+  ICommentItem,
   IContentVersion,
   IContentVersionData,
   IFileVersion,
@@ -275,7 +276,7 @@ export const userInfo = async (accessToken: string, domainUrl: string, expiresAt
   }
 };
 
-export const logout = async (access_token: string, refresh_token: string) => {
+export const logout = async (accessToken: string, refresh_token: string) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IGetToken>>(
       "auth/logout",
@@ -284,7 +285,7 @@ export const logout = async (access_token: string, refresh_token: string) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
@@ -295,7 +296,7 @@ export const logout = async (access_token: string, refresh_token: string) => {
   }
 };
 
-export const userMetadata = async (access_token: string, data: object) => {
+export const userMetadata = async (accessToken: string, data: object) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       "auth/setUserMetadata",
@@ -304,7 +305,7 @@ export const userMetadata = async (access_token: string, data: object) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
@@ -316,11 +317,11 @@ export const userMetadata = async (access_token: string, data: object) => {
 };
 
 /// /////////////////////// INFO /////////////////////////
-export const getMyInfo = async (access_token: string, repoTypes?: string[]) => {
+export const getMyInfo = async (accessToken: string, repoTypes?: string[]) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IMyInfo>>("myInfo", {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       params: {
         repoTypes,
@@ -2986,10 +2987,7 @@ export const revertVersion = async (
   }
 };
 
-export const getPublicHashInfo = async (
-  accessToken: string | undefined,
-  publicHash: string,
-) => {
+export const getPublicHashInfo = async (accessToken: string | undefined, publicHash: string) => {
   const headers = accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined;
 
   try {
@@ -3114,7 +3112,7 @@ export const createUploadLink = async (
     const response = await axiosClasorInstance.post(
       `fileManagement/resource/${resourceId}/uploadLink`,
       {
-        expireTime: (Date.now() + 3600 * 1000).toString(),
+        expireTime: (Date.now() + 300 * 1000).toString(),
         userGroupHash,
         isPublic: isPublic ?? false,
       },
@@ -3736,18 +3734,20 @@ export const getAdminPanelFeedback = async (accessToken: string, top: number, sk
 
 /// /////////////////////////////// CORE //////////////////////
 export const getCommentList = async (
-  access_token: string,
+  accessToken: string | undefined,
   repoId: number,
   docId: number,
   offset: number,
   size: number,
 ) => {
+  const token = accessToken || process.env.API_TOKEN;
+
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
       `repositories/${repoId}/documents/${docId}/comments`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${token}`,
         },
         params: {
           offset,
@@ -3763,7 +3763,7 @@ export const getCommentList = async (
 };
 
 export const deleteComment = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   docId: number,
   commentId: number,
@@ -3773,7 +3773,7 @@ export const deleteComment = async (
       `repositories/${repoId}/documents/${docId}/comments/${commentId}/remove`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
@@ -3783,8 +3783,9 @@ export const deleteComment = async (
     return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-192");
   }
 };
+
 export const createComment = async (
-  access_token: string,
+  accessToken: string,
   repoId: number,
   docId: number,
   content: string,
@@ -3795,7 +3796,7 @@ export const createComment = async (
       { content },
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       },
     );
@@ -3806,18 +3807,18 @@ export const createComment = async (
   }
 };
 
-export const getLike = async (
-  access_token: string,
-  postId: number,
+export const getCommentLike = async (
+  accessToken: string,
+  commentId: number,
   offset: number,
   size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
-      `core/content/${postId}/like`,
+      `core/comment/${commentId}/like`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -3833,18 +3834,18 @@ export const getLike = async (
   }
 };
 
-export const getDislike = async (
-  access_token: string,
-  postId: number,
+export const getCommentDislike = async (
+  accessToken: string,
+  commentId: number,
   offset: number,
   size: number,
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<ILikeList>>>(
-      `core/content/${postId}/dislike`,
+      `core/comment/${commentId}/like`,
       {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         params: {
           offset,
@@ -5144,28 +5145,28 @@ export const updateCustomPostByDomain = async (
 export const getDomainDocuments = async (
   domainUrl: string,
   repoId: number | undefined,
-  title: string,
+  title: string | undefined,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
-  sortParams: ISearchSortParams,
+  sortParams: ISearchSortParams | undefined,
   offset: number,
   size: number,
 ) => {
   const searchSortParams = [
     {
       field: "createdAt",
-      order: sortParams.createdAt,
+      order: sortParams?.createdAt,
     },
 
     {
       field: "updatedAt",
-      order: sortParams.updatedAt,
+      order: sortParams?.updatedAt,
     },
     {
       field: "creatorSSOID",
-      order: sortParams.creatorSSOID,
+      order: sortParams?.creatorSSOID,
     },
-    { field: "repoId", order: sortParams.repoId },
+    { field: "repoId", order: sortParams?.repoId },
   ];
 
   try {
@@ -5808,68 +5809,275 @@ export const deleteAnswer = async (
   }
 };
 
-// /////////////////////////// COMMENT ///////////////////////
+export const getQuestionListByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  enable: boolean,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IQuestion>>>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions`,
 
-// export const getCommentList = async (
-//   accessToken: string,
-//   repoId: number,
-//   documentId: number,
-//   offset: number,
-//   size: number,
-// ) => {
-//   try {
-//     const response = await axiosClasorInstance.get<IServerResult<IListResponse<any>>>(
-//       `repositories/${repoId}/documents/${documentId}/comments`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          enable,
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
 
-//       {
-//         headers: {
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//         params: {
-//           offset,
-//           size,
-//         },
-//       },
-//     );
-//     return response.data.data;
-//   } catch (error) {
-//     return handleClasorStatusError(error as AxiosError<IClasorError>);
-//   }
-// };
+export const confirmQuestionByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  questionId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}/confirm`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
 
-// export const createAnswer = async (
-//   accessToken: string,
-//   repoId: number,
-//   documentId: number,
-//   questionId: number,
-//   title: string,
-//   content: string,
-// ) => {
-//   try {
-//     const response = await axiosClasorInstance.post<any>(
-//       `repositories/${repoId}/documents/${documentId}/comments`,
-//       {
-//         title,
-//         content,
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//       },
-//     );
-//     return response.data;
-//   } catch (error) {
-//     return handleClasorStatusError(error as AxiosError<IClasorError>);
-//   }
-// };
+export const rejectQuestionByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  questionId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
 
-// ////////////////////////// LIKE & DISLIKE /////////////////////////
+export const deleteQuestionByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  questionId: number,
+  postIds: number[],
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}`,
+      {
+        data: {
+          postIds,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getAnswerListByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  questionId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IQuestion>>>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/questions/${questionId}/answers`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const confirmAnswerByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  entityId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/answers/${entityId}/confirm`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const rejectAnswerByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  entityId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/answers/${entityId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const deleteAnswerByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  postIds: number[],
+) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(
+      `repositories/${repoId}/documents/${documentId}/questionnaire/answers/removeList`,
+      {
+        data: {
+          postIds,
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getCommentListByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<ICommentItem>>>(
+      `repositories/${repoId}/documents/${documentId}/comments/unConfirmedList`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+          enable: true,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const confirmCommentByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  commentId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `repositories/${repoId}/documents/${documentId}/comments/unConfirmedList/${commentId}/approve`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const rejectCommentByAdmin = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+  commentId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.patch<any>(
+      `repositories/${repoId}/documents/${documentId}/comments/unConfirmedList/${commentId}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
 
 export const getLikePostList = async (
   accessToken: string,
   postId: number,
-  hasUser: boolean,
   offset: number,
   size: number,
 ) => {
@@ -5879,7 +6087,7 @@ export const getLikePostList = async (
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        hasUser,
+        hasUser: true,
         offset,
         size,
       },
@@ -5893,7 +6101,6 @@ export const getLikePostList = async (
 export const getDislikePostList = async (
   accessToken: string,
   postId: number,
-  hasUser: boolean,
   offset: number,
   size: number,
 ) => {
@@ -5903,7 +6110,7 @@ export const getDislikePostList = async (
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        hasUser,
+        hasUser: true,
         offset,
         size,
       },
@@ -5982,6 +6189,61 @@ export const dislikeComment = async (accessToken: string, commentId: number) => 
         },
       },
     );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getPostIdCommentList = async (
+  accessToken: string,
+  postId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
+      `core/content/${postId}/comment`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const createPostIdComment = async (accessToken: string, text: string, postId: number) => {
+  try {
+    const response = await axiosClasorInstance.post<any>(
+      `core/content/${postId}/comment`,
+      { text },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const deletePostIdComment = async (accessToken: string, commentId: number) => {
+  try {
+    const response = await axiosClasorInstance.delete<any>(`core/comment/${commentId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response.data;
   } catch (error) {
     return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");

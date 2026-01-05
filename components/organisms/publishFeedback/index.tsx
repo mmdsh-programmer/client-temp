@@ -32,18 +32,19 @@ const PublishFeeback = () => {
     getDomainInfo?.hasQuestions
       ? {
           tabTitle: ETabs.QUESTION_ANSWER,
-          tabContent: <PublishQuestionAnswer />,
+          tabContent: activeTab === ETabs.QUESTION_ANSWER ? <PublishQuestionAnswer /> : null,
         }
       : null,
     getDomainInfo?.hasComments && publishVersion
       ? {
           tabTitle: ETabs.COMMENTS,
-          tabContent: (
-            <PublishComments
-              repoId={publishVersion.repoId}
-              documentId={publishVersion.documentId}
-            />
-          ),
+          tabContent:
+            activeTab === ETabs.COMMENTS ? (
+              <PublishComments
+                repoId={publishVersion.repoId}
+                documentId={publishVersion.documentId}
+              />
+            ) : null,
         }
       : null,
   ].filter(Boolean) as {

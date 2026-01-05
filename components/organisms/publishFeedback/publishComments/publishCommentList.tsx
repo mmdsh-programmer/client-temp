@@ -4,7 +4,7 @@ import LoadMore from "@components/molecules/loadMore";
 import PublishCommentItem from "./publishCommentItem";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
-import useGetCommentList from "@hooks/core/useGetCommentList";
+import useGetCommentList from "@hooks/comment/useGetCommentList";
 
 interface IProps {
   repoId: number;

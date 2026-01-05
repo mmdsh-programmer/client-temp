@@ -1,29 +1,31 @@
-import { likeCommentAction } from "@actions/core";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { IActionError } from "@interface/app.interface";
+import { IActionError, ISocialResponse } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { rejectCommentByAdminAction } from "@actions/questionAnswer";
 
-const useLikeComment = () => {
+const useRejectComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["like-comment"],
+    mutationKey: ["reject-comment"],
     mutationFn: async (values: {
       repoId: number;
       documentId: number;
       commentId: number;
-      postId: number;
       callBack?: () => void;
     }) => {
-      const { commentId } = values;
-      const response = await likeCommentAction(commentId);
+      const { repoId, documentId, commentId } = values;
+      const response = await rejectCommentByAdminAction(repoId, documentId, commentId);
       handleClientSideHookError(response as IActionError);
-      return response;
+      return response as ISocialResponse<boolean>;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, documentId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getComments-repoId-${repoId}-docId-${documentId}`],
+        queryKey: [`comment-list-${repoId}-documentId-${documentId}-by-admin`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`comment-list-${repoId}-documentId-${documentId}`],
       });
 
       callBack?.();
@@ -34,4 +36,4 @@ const useLikeComment = () => {
   });
 };
 
-export default useLikeComment;
+export default useRejectComment;

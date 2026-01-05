@@ -9,19 +9,21 @@ import { editorConfig } from "@utils/clasorEditor";
 import useGetUser from "@hooks/auth/useGetUser";
 import PublishForcePublicProfile from "@components/organisms/publishFeedback/publishForcePublicProfile";
 import useCreateAnswer from "@hooks/questionAnswer/useCreateAnswer";
+import { IQuestion, IQuestionMetadata } from "@interface/qa.interface";
 
 interface IProps {
-  repoId: number;
-  documentId: number;
-  questionId: number;
+  questionItem: IQuestion;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const CreateAnswerDialog = ({ repoId, documentId, questionId, setOpen }: IProps) => {
+const CreateAnswerDialog = ({ questionItem, setOpen }: IProps) => {
   const { data: userInfo } = useGetUser();
   const editorRef = useRef<IQaEditorRef | null>(null);
 
   const createAnswerHook = useCreateAnswer();
+
+  const questionMetadata = JSON.parse(questionItem.metadata) as IQuestionMetadata;
+  const { repoId, documentId } = questionMetadata;
 
   const handleClose = () => {
     setOpen(false);
@@ -45,8 +47,8 @@ const CreateAnswerDialog = ({ repoId, documentId, questionId, setOpen }: IProps)
     createAnswerHook.mutate({
       repoId,
       documentId,
-      questionId,
-      title: `answer-to-question-${questionId}`,
+      questionId: questionItem.id,
+      title: `answer-to-question-${questionItem.id}`,
       content: editorData.content,
       callBack: () => {
         toast.success("پاسخ شما با موفقیت اضافه شد");

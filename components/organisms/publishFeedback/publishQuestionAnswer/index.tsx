@@ -10,9 +10,7 @@ import useGetUser from "@hooks/auth/useGetUser";
 const PublishQuestionAnswer = () => {
   const [createQuestion, setCreateQuestion] = useState(false);
 
-  const getPublishVersion = usePublishStore((state) => {
-    return state.publishVersion;
-  });
+  const getPublishVersion = usePublishStore();
 
   const { data: userInfo } = useGetUser();
 
@@ -45,7 +43,7 @@ const PublishQuestionAnswer = () => {
       </div>
 
       <hr className="h-[2px] w-full bg-blue-gray-50" />
-      <QuestionList repoId={getPublishVersion.repoId} documentId={getPublishVersion.documentId} />
+      <QuestionList />
       {createQuestion ? <CreateQuestion setOpen={setCreateQuestion} /> : null}
     </div>
   ) : null;

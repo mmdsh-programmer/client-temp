@@ -6,7 +6,7 @@ import QuestionAnswerEditor, {
 import { toast } from "react-toastify";
 import { editorConfig } from "@utils/clasorEditor";
 import EditDialog from "@components/templates/dialog/editDialog";
-import { IQuestion } from "@interface/qa.interface";
+import { IQuestion, IQuestionMetadata } from "@interface/qa.interface";
 import useUpdateQuestion from "@hooks/questionAnswer/useUpdateQuestion";
 import { useForm } from "react-hook-form";
 import FormInput from "@components/atoms/input/formInput";
@@ -15,17 +15,18 @@ interface IForm {
   title: string;
 }
 interface IProps {
-  repoId: number;
-  documentId: number;
   question: IQuestion;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const QuestionEditDialog = ({ repoId, documentId, question, setOpen }: IProps) => {
+const QuestionEditDialog = ({ question, setOpen }: IProps) => {
   const editorRef = useRef<IQaEditorRef | null>(null);
   const editorData = useRef<{ content: string; outline: string } | null>(null);
 
   const updateQuestion = useUpdateQuestion();
+
+  const questionMetadata = JSON.parse(question.metadata) as IQuestionMetadata;
+  const { repoId, documentId } = questionMetadata;
 
   const {
     register,

@@ -1,22 +1,22 @@
-import { getCommentListAction } from "@actions/core";
 import { IListResponse } from "@interface/repo.interface";
-import { IComment } from "@interface/version.interface";
+import { ILikeList } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { getPostDislikeListAction } from "@actions/like&dislike";
 
-const useGetCommentList = (repoId: number, docId: number, size: number) => {
+const useGetDislikeList = (postId: number, size: number, enabled?: boolean) => {
   return useInfiniteQuery({
-    queryKey: [`getComments-repoId-${repoId}-docId-${docId}`, size],
+    queryKey: [`getDislike-${postId}`, size],
     queryFn: async ({ pageParam }) => {
-      const response = await getCommentListAction(repoId, docId, (pageParam - 1) * size, size);
+      const response = await getPostDislikeListAction(postId, (pageParam - 1) * size, size);
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<IComment>;
+      return response as IListResponse<ILikeList>;
     },
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled: !!repoId && !!docId,
+    enabled: !!postId && enabled,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;
@@ -25,4 +25,4 @@ const useGetCommentList = (repoId: number, docId: number, size: number) => {
   });
 };
 
-export default useGetCommentList;
+export default useGetDislikeList;

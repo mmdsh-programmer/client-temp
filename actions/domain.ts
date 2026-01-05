@@ -248,10 +248,10 @@ export const removePartyFromDomainParticipantsAction = async (userNameList: stri
 
 export const getDomainDocumentsAction = async (
   repoId: number | undefined,
-  title: string,
+  title: string | undefined,
   tagIds: number | number[] | undefined,
   creatorUserName: string | undefined,
-  sortParams: ISearchSortParams,
+  sortParams: ISearchSortParams | undefined,
   offset: number,
   size: number,
 ) => {

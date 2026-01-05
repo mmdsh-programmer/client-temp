@@ -41,6 +41,7 @@ export enum EEmptyList {
   ATTACHMENT = "attachment",
   FORM_OUTPUT = "form_output",
   VERSION_HISTORY = "version_history",
+  DOMAIN_DOCUMENTS = "domain-documents",
 }
 
 interface IProps {
@@ -494,7 +495,19 @@ const EmptyList = ({ type }: IProps) => {
               className="title_t3 text-primary_normal"
               {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
-             تا این لحظه هیچ ویرایشی برای این نسخه انجام نشده است.
+              تا این لحظه هیچ ویرایشی برای این نسخه انجام نشده است.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.DOMAIN_DOCUMENTS:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              سندی در این مخزن وجود ندارد.
             </Typography>
           </div>
         );

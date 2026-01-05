@@ -1,6 +1,5 @@
 "use server";
 
-import { confirmComment, createComment, getPublishCommentList } from "@service/social";
 import {
   addToWhiteListRequest,
   createRepoPublishLink,
@@ -121,38 +120,6 @@ export const searchPublishContentAction = async (
   }
   try {
     const response = await searchPublishContent(domain, repoId, searchText, offset, size);
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const getPublishCommentListAction = async (postId: number, offset: number, size: number) => {
-  const userInfo = await userInfoAction();
-  try {
-    const accessToken =
-      userInfo && !("error" in userInfo) ? userInfo.access_token : (API_TOKEN as string);
-
-    const response = await getPublishCommentList(accessToken, postId, offset, size);
-
-    return response;
-  } catch (error) {
-    return normalizeError(error as IActionError);
-  }
-};
-
-export const createPublishCommentAction = async (
-  postId: number,
-  text: string,
-  shouldConfirm = true,
-) => {
-  const userInfo = await getMe();
-  try {
-    const response = await createComment(userInfo.access_token, text, postId);
-    if (shouldConfirm) {
-      await confirmComment(response.result);
-    }
 
     return response;
   } catch (error) {

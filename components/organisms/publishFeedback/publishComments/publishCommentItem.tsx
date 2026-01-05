@@ -4,10 +4,11 @@ import { Card, CardBody, CardFooter, CardHeader, Typography } from "@material-ta
 import { FaDateFromTimestamp } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import { IComment } from "@interface/version.interface";
-import useDeleteComment from "@hooks/core/useDeleteComment";
+import useDeleteComment from "@hooks/comment/useDeleteComment";
 import LoadingButton from "@components/molecules/loadingButton";
 import CommentLikeAndDislike from "@components/organisms/commentLike&Dislike";
 import { DeleteIcon } from "@components/atoms/icons";
+import useGetPublishDocumentInfo from "@hooks/publish/useGetPublishDocumentInfo";
 
 interface IProps {
   repoId: number;
@@ -17,6 +18,8 @@ interface IProps {
 
 const PublishCommentItem = ({ repoId, documentId, commentItem }: IProps) => {
   const { data: userInfo } = useGetUser();
+
+  const { data: documentInfo } = useGetPublishDocumentInfo(repoId, documentId);
 
   const deleteComment = useDeleteComment();
 
@@ -76,7 +79,7 @@ const PublishCommentItem = ({ repoId, documentId, commentItem }: IProps) => {
             <DeleteIcon className="block h-4 w-4 !fill-gray-500 sm:hidden" />
           </LoadingButton>
         </RenderIf>
-        <RenderIf isTrue={!!userInfo}>
+        <RenderIf isTrue={!!userInfo && commentItem.confirmed}>
           <CommentLikeAndDislike
             commentItem={commentItem}
             wrapperClassName="gap-3 sm:gap-5 mr-auto"
@@ -85,6 +88,9 @@ const PublishCommentItem = ({ repoId, documentId, commentItem }: IProps) => {
             iconClassName="w-4 h-4 !stroke-gray-500"
             counterClassName="ml-1 text-base text-gray-500"
             showCounter
+            postId={documentInfo!.customPostId}
+            repoId={repoId}
+            docId={documentId}
           />
         </RenderIf>
       </CardFooter>

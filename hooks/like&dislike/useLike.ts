@@ -28,9 +28,6 @@ const useLike = () => {
         queryKey: [`getLike-${postId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`post-${postId}-info`],
-      });
-      queryClient.invalidateQueries({
         queryKey: [`question-list-${repoId}-documentId-${documentId}`],
       });
       queryClient.invalidateQueries({

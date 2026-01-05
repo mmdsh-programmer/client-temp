@@ -6,23 +6,54 @@ import { Spinner } from "@components/atoms/spinner";
 import useGetAnswerList from "@hooks/questionAnswer/useGetAnswerList";
 import { IQuestion } from "@interface/qa.interface";
 import DocumentAnswerItem from "./documentAnswerItem";
+import { useRepositoryStore } from "@store/repository";
+import { ERoles } from "@interface/enums";
+import useGetAnswerListByAdmin from "@hooks/questionAnswer/useGetAnswerListByAdmin";
+import { useDocumentStore } from "@store/document";
 
 interface IProps {
-  repoId: number;
-  documentId: number;
   questionItem: IQuestion;
 }
 
-const DocumentAnswerList = ({ repoId, documentId, questionItem }: IProps) => {
+const DocumentAnswerList = ({ questionItem }: IProps) => {
+  const { repo } = useRepositoryStore();
+  const { selectedDocument } = useDocumentStore();
+
+  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
+
   const {
     data: answerList,
     isLoading,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetAnswerList(repoId, documentId, questionItem.id, 10);
+  } = useGetAnswerList(
+    selectedDocument!.repoId,
+    selectedDocument!.id,
+    questionItem.id,
+    10,
+    !adminOwnerRole,
+  );
 
-  if (isLoading) {
+  const {
+    data: answerListByAdmin,
+    isLoading: adminListIsLoading,
+    hasNextPage: adminListHasNextPage,
+    isFetchingNextPage: adminListIsFetchingNextPage,
+    fetchNextPage: adminListFetchNextPage,
+  } = useGetAnswerListByAdmin(
+    selectedDocument!.repoId,
+    selectedDocument!.id,
+    questionItem.id,
+    10,
+    adminOwnerRole,
+  );
+
+  const total = adminOwnerRole ? answerListByAdmin?.pages[0]?.total : answerList?.pages[0]?.total;
+
+  const list = adminOwnerRole ? answerListByAdmin : answerList;
+
+  if (isLoading || adminListIsLoading) {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="flex w-full justify-center">
@@ -32,25 +63,26 @@ const DocumentAnswerList = ({ repoId, documentId, questionItem }: IProps) => {
     );
   }
 
-  const total = answerList?.pages[0]?.total || 0;
-
-  if (total && answerList) {
+  if (total) {
     return (
       <>
-        {answerList?.pages.map((page) => {
+        {list?.pages.map((page) => {
           return page.list.map((answerItem) => {
-            return (
-              <DocumentAnswerItem
-                key={`answer-${answerItem.id}`}
-                answerItem={answerItem}
-              />
-            );
+            return <DocumentAnswerItem key={`answer-${answerItem.id}`} answerItem={answerItem} />;
           });
         })}
 
         <RenderIf isTrue={!!hasNextPage}>
           <div className="flex w-full justify-center border-r-4 border-r-gray-200 bg-secondary pb-2">
             <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
+          </div>
+        </RenderIf>
+        <RenderIf isTrue={!!adminListHasNextPage}>
+          <div className="flex w-full justify-center bg-white pb-2">
+            <LoadMore
+              isFetchingNextPage={adminListIsFetchingNextPage}
+              fetchNextPage={adminListFetchNextPage}
+            />
           </div>
         </RenderIf>
       </>

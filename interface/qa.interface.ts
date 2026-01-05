@@ -240,18 +240,19 @@ export interface IUserSrv {
   name: string;
   ssoId: string;
   ssoIssuerCode: number;
+  profileImage?: string
 }
 
 export interface IQuestion {
   id: number;
   entityId: number;
   timelineId: number;
-  content: string; 
+  content: string;
   metadata: string;
   name: string;
   timestamp: number;
   version: number;
-  
+
   canComment: boolean;
   canLike: boolean;
   canRate: boolean;
@@ -259,24 +260,51 @@ export interface IQuestion {
   hide: boolean;
   pin: boolean;
   replyPostConfirmation: boolean;
-  
+
   numOfComments: number;
   numOfDisLikes: number;
   numOfFavorites: number;
   numOfLikes: number;
   numOfSaved: number;
   numOfShare: number;
-  
+
   latitude: number;
   longitude: number;
-  
+
   forwardedId: number;
   repliedPostId: number;
-  
+
   rate: IPostRate;
   userPostInfo: IUserPostInfo;
   userSrv: IUserSrv;
-  
-  tags: any[]; 
-  tagTrees: any[]; 
+
+  tags: any[];
+  tagTrees: any[];
+}
+
+export interface IQuestionMetadata {
+  type: string;
+  status: string;
+  repoId: number;
+  documentId: number;
+  creatorSSOID: string;
+  creatorUserName: string;
+  creatorUserId: number;
+  title: string;
+  content: string;
+  parentPostId: number;
+}
+
+export interface IAnswerMetadata {
+  type: string;
+  status: string;
+  repoId: number;
+  documentId: number;
+  creatorSSOID: string;
+  creatorUserName: string;
+  creatorUserId: number;
+  title: string;
+  content: string;
+  parentPostId: number;
+  questionPostId: number
 }

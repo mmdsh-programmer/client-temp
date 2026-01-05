@@ -60,7 +60,9 @@ const DomainConfig = () => {
       tabContent:
         activeTab === ETabs.COMMENTS ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Typography {...({} as React.ComponentProps<typeof Typography>)}>اطلاعاتی در دست نیست</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+              اطلاعاتی در دست نیست
+            </Typography>
           </div>
         ) : null,
     },
@@ -69,7 +71,9 @@ const DomainConfig = () => {
       tabContent:
         activeTab === ETabs.QUESTIONS ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Typography {...({} as React.ComponentProps<typeof Typography>)}>اطلاعاتی در دست نیست</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+              اطلاعاتی در دست نیست
+            </Typography>
           </div>
         ) : null,
     },
@@ -78,7 +82,9 @@ const DomainConfig = () => {
       tabContent:
         activeTab === ETabs.VIOLATION_REPORT ? (
           <div className="flex h-full w-full items-center justify-center">
-            <Typography {...({} as React.ComponentProps<typeof Typography>)}>اطلاعاتی در دست نیست</Typography>
+            <Typography {...({} as React.ComponentProps<typeof Typography>)}>
+              اطلاعاتی در دست نیست
+            </Typography>
           </div>
         ) : null,
     },

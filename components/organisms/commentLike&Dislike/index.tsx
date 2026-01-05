@@ -1,10 +1,8 @@
-import React from "react";
-import useLikeComment from "@hooks/core/useLikeComment";
-import useDislikeComment from "@hooks/core/useDislikeComment";
+import React, { useEffect, useState } from "react";
+import useDislikeComment from "@hooks/like&dislike/useDislikeComment";
 import { IComment } from "@interface/version.interface";
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
-import { usePublishStore } from "@store/publish";
-import { useDocumentStore } from "@store/document";
+import useLikeComment from "@hooks/like&dislike/useLikeComment";
 
 interface IProps {
   commentItem: IComment;
@@ -14,6 +12,9 @@ interface IProps {
   iconClassName?: string;
   showCounter?: boolean;
   counterClassName?: string;
+  postId: number;
+  repoId: number;
+  docId: number;
 }
 
 const CommentLikeAndDislike = ({
@@ -24,47 +25,63 @@ const CommentLikeAndDislike = ({
   iconClassName,
   showCounter,
   counterClassName,
+  postId,
+  repoId,
+  docId,
 }: IProps) => {
-  const { publishPageSelectedDocument } = usePublishStore();
-  const { selectedDocument } = useDocumentStore();
+  const [localItem, setLocalItem] = useState<IComment>(commentItem);
 
   const likeHook = useLikeComment();
   const disLikeHook = useDislikeComment();
 
   const handleLike = () => {
     likeHook.mutate({
-      repoId: publishPageSelectedDocument
-        ? publishPageSelectedDocument!.repoId
-        : selectedDocument!.repoId,
-      documentId: publishPageSelectedDocument
-        ? publishPageSelectedDocument!.id
-        : selectedDocument!.id,
       commentId: commentItem.id,
-      postId: publishPageSelectedDocument
-        ? publishPageSelectedDocument!.customPostId
-        : selectedDocument!.customPostId,
+      postId,
+      repoId,
+      docId,
+      callBack: () => {
+        if (!localItem.liked) {
+          setLocalItem({
+            ...localItem,
+            liked: !localItem.liked,
+            disliked: false,
+            numOfLikes: localItem.numOfLikes + 1,
+            numOfDislikes: localItem.numOfDislikes > 0 ? localItem.numOfDislikes - 1 : 0,
+          });
+        }
+      },
     });
   };
 
   const handleDisLike = () => {
     disLikeHook.mutate({
-      repoId: publishPageSelectedDocument
-        ? publishPageSelectedDocument!.repoId
-        : selectedDocument!.repoId,
-      documentId: publishPageSelectedDocument
-        ? publishPageSelectedDocument!.id
-        : selectedDocument!.id,
       commentId: commentItem.id,
-      postId: publishPageSelectedDocument
-        ? publishPageSelectedDocument!.customPostId
-        : selectedDocument!.customPostId,
+      repoId,
+      docId,
+      postId,
+      callBack: () => {
+        if (!localItem.disliked) {
+          setLocalItem({
+            ...localItem,
+            disliked: !localItem.disliked,
+            liked: false,
+            numOfDislikes: localItem.numOfDislikes + 1,
+            numOfLikes: localItem.numOfLikes > 0 ? localItem.numOfLikes - 1 : 0,
+          });
+        }
+      },
     });
   };
 
+  useEffect(() => {
+    setLocalItem(commentItem);
+  }, []);
+
   return (
     <LikeDislikeButtons
-      likeCount={commentItem.numOfLikes}
-      dislikeCount={commentItem.numOfDislikes}
+      likeCount={localItem.numOfLikes}
+      dislikeCount={localItem.numOfDislikes}
       likePending={likeHook.isPending}
       dislikePending={disLikeHook.isPending}
       onLike={handleLike}
@@ -75,8 +92,8 @@ const CommentLikeAndDislike = ({
       iconClassName={iconClassName}
       showCounter={showCounter}
       counterClassName={counterClassName}
-      isLiked={commentItem.liked}
-      isDisliked={commentItem.disliked}
+      isLiked={localItem.liked}
+      isDisliked={localItem.disliked}
     />
   );
 };

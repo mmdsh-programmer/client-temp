@@ -1,30 +1,32 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { IQuestion } from "@interface/qa.interface";
+import { IAnswerMetadata, IQuestion } from "@interface/qa.interface";
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
-import useDeleteQuestion from "@hooks/questionAnswer/useDeleteQuestion";
+import useDeleteAnswer from "@hooks/questionAnswer/useDeleteAnswer";
 
 interface IProps {
-  repoId: number;
-  documentId: number;
-  question: IQuestion;
+  answer: IQuestion;
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const QuestionDeleteDialog = ({ repoId, documentId, question, setOpen }: IProps) => {
-  const deleteQuestion = useDeleteQuestion();
+const QuestionDeleteDialog = ({ answer, setOpen }: IProps) => {
+  const answerMetadata = JSON.parse(answer.metadata) as IAnswerMetadata;
+  const { repoId, documentId } = answerMetadata;
+  
+  const deleteAnswer = useDeleteAnswer();
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const onSubmit = async () => {
-    deleteQuestion.mutate({
+    deleteAnswer.mutate({
       repoId,
       documentId,
-      entityId: question.entityId,
+      questionId: answer.id,
+      entityId: answer.entityId,
       callBack: () => {
-        toast.success("پرسش شما با موفقیت حذف شد");
+        toast.success("پاسخ شما با موفقیت حذف شد");
         handleClose();
       },
     });
@@ -32,8 +34,8 @@ const QuestionDeleteDialog = ({ repoId, documentId, question, setOpen }: IProps)
 
   return (
     <DeleteDialog
-      isPending={deleteQuestion.isPending}
-      dialogHeader="حذف پرسش"
+      isPending={deleteAnswer.isPending}
+      dialogHeader="حذف پاسخ"
       onSubmit={onSubmit}
       setOpen={handleClose}
       className="category-delete-dialog"
@@ -41,7 +43,7 @@ const QuestionDeleteDialog = ({ repoId, documentId, question, setOpen }: IProps)
     >
       <form className="flex flex-col gap-5">
         <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
-          آیا از حذف این پرسش اطمینان دارید؟
+          آیا از حذف این پاسخ اطمینان دارید؟
         </div>
       </form>
     </DeleteDialog>

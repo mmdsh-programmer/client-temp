@@ -12,7 +12,7 @@ const useGetQuestionList = (
   enabled?: boolean
 ) => {
   return useInfiniteQuery({
-    queryKey: [`question-list-${repoId}-documentId-${documentId}`],
+    queryKey: [`question-list-${repoId}-documentId-${documentId}`,size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getQuestionListAction(
         repoId,
@@ -26,7 +26,7 @@ const useGetQuestionList = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled,
+    enabled: !!enabled,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

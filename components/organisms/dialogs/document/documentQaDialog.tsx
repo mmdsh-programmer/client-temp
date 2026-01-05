@@ -5,13 +5,18 @@ import DocumentCreateQuestion from "@components/organisms/document/documentQa/do
 import DocumentQuestionList from "@components/organisms/document/documentQa/documentQuestionList";
 import { AddIcon } from "@components/atoms/icons";
 import { useQaStore } from "@store/qa";
+import CreateAnswerDialog from "../questionAnswer/createAnswerDialog";
+import QuestionEditDialog from "../questionAnswer/questionEditDialog";
+import QuestionDeleteDialog from "../questionAnswer/questionDeleteDialog";
+import AnswerDeleteDialog from "../questionAnswer/answerDeleteDialog";
+import AnswerEditDialog from "../questionAnswer/answerEditDialog";
+import PostComment from "@components/organisms/postComment";
+import DocumentUnconfirmedQuestionList from "@components/organisms/document/documentQa/documentUnconfirmedQuestionList";
+import TabComponent from "@components/molecules/tab";
+import { useRepositoryStore } from "@store/repository";
 import { useDocumentStore } from "@store/document";
-import CreateAnswerDialog from "../publish/createAnswerDialog";
-import QuestionEditDialog from "../publish/questionEditDialog";
-import QuestionDeleteDialog from "../publish/questionDeleteDialog";
-import CommentDialog from "../publish/commentDialog";
-import AnswerDeleteDialog from "../publish/answerDeleteDialog";
-import AnswerEditDialog from "../publish/answerEditDialog";
+import { ERoles } from "@interface/enums";
+import RenderIf from "@components/atoms/renderIf";
 
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -19,8 +24,16 @@ interface IProps {
 
 const DocumentQaDialog = ({ setOpen }: IProps) => {
   const [createQuestion, setCreateQuestion] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("تاییدشده‌ها");
 
+  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
+
+  const adminOwnerRole =
+    repo?.roleName === ERoles.admin ||
+    repo?.roleName === ERoles.owner ||
+    selectedDocument?.accesses?.[0] === "admin";
+
   const {
     selectedQuestion,
     selectedAnswer,
@@ -54,9 +67,7 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openAnswer && selectedQuestion) {
     return (
       <CreateAnswerDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
-        questionId={selectedQuestion.id}
+        questionItem={selectedQuestion}
         setOpen={() => {
           return setOpenAnswer(!openAnswer);
         }}
@@ -67,8 +78,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openEdit && selectedQuestion) {
     return (
       <QuestionEditDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         question={selectedQuestion}
         setOpen={() => {
           return setOpenEdit(!openEdit);
@@ -80,8 +89,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openDelete && selectedQuestion) {
     return (
       <QuestionDeleteDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         question={selectedQuestion}
         setOpen={() => {
           return setOpenDelete(!openDelete);
@@ -92,9 +99,7 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
 
   if (openComment) {
     return (
-      <CommentDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
+      <PostComment
         setOpen={() => {
           return setOpenComment(!openComment);
         }}
@@ -105,8 +110,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openDeleteAnswer && selectedAnswer) {
     return (
       <AnswerDeleteDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         answer={selectedAnswer}
         setOpen={() => {
           return setOpenDeleteAnswer(!openDeleteAnswer);
@@ -118,8 +121,6 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   if (openEditAnswer && selectedAnswer) {
     return (
       <AnswerEditDialog
-        repoId={selectedDocument!.repoId}
-        documentId={selectedDocument!.id}
         answer={selectedAnswer}
         setOpen={() => {
           return setOpenEditAnswer(!openEditAnswer);
@@ -127,6 +128,46 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
       />
     );
   }
+
+  const tabList = [
+    {
+      tabTitle: "تاییدشده‌ها",
+      tabContent: createQuestion ? (
+        <DocumentCreateQuestion setOpen={setCreateQuestion} />
+      ) : (
+        <>
+          <div className="flex w-full justify-end">
+            <Button
+              className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
+              onClick={() => {
+                return setCreateQuestion(true);
+              }}
+              {...({} as React.ComponentProps<typeof Button>)}
+            >
+              <AddIcon className="h-5 w-5 stroke-white" />
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="text-xs text-white"
+              >
+                ایجاد پرسش جدید
+              </Typography>
+            </Button>
+          </div>
+          <div className="mt-8 h-full xs:h-[calc(100%-200px)]">
+            <DocumentQuestionList />
+          </div>
+        </>
+      ),
+    },
+    {
+      tabTitle: "تاییدنشده‌ها",
+      tabContent: (
+        <div className="mt-8 h-full">
+          <DocumentUnconfirmedQuestionList />
+        </div>
+      ),
+    },
+  ];
 
   return (
     <InfoDialog
@@ -138,32 +179,43 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
         placeholder="flex flex-col gap-10"
         {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
-        {createQuestion ? (
-          <DocumentCreateQuestion setOpen={setCreateQuestion} />
-        ) : (
-          <>
-            <div className="flex w-full justify-end">
-              <Button
-                className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
-                onClick={() => {
-                  setCreateQuestion(true);
-                }}
-                {...({} as React.ComponentProps<typeof Button>)}
-              >
-                <AddIcon className="h-5 w-5 stroke-white" />
-                <Typography
-                  {...({} as React.ComponentProps<typeof Typography>)}
-                  className="text-xs text-gray-800 text-white"
+        <RenderIf isTrue={adminOwnerRole}>
+          <TabComponent
+            tabList={tabList}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabContentClassName=""
+            headerClassName="mb-4 h-full"
+          />
+        </RenderIf>
+        <RenderIf isTrue={!adminOwnerRole}>
+          {createQuestion ? (
+            <DocumentCreateQuestion setOpen={setCreateQuestion} />
+          ) : (
+            <>
+              <div className="flex w-full justify-end">
+                <Button
+                  className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
+                  onClick={() => {
+                    return setCreateQuestion(true);
+                  }}
+                  {...({} as React.ComponentProps<typeof Button>)}
                 >
-                  ایجاد پرسش جدید
-                </Typography>
-              </Button>
-            </div>
-            <div className="h-ful mt-8 xs:h-[calc(100%-200px)]">
-              <DocumentQuestionList />
-            </div>
-          </>
-        )}
+                  <AddIcon className="h-5 w-5 stroke-white" />
+                  <Typography
+                    {...({} as React.ComponentProps<typeof Typography>)}
+                    className="text-xs text-white"
+                  >
+                    ایجاد پرسش جدید
+                  </Typography>
+                </Button>
+              </div>
+              <div className="mt-8 h-full xs:h-[calc(100%-200px)]">
+                <DocumentQuestionList />
+              </div>
+            </>
+          )}
+        </RenderIf>
       </DialogBody>
     </InfoDialog>
   );

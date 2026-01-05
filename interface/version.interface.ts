@@ -52,6 +52,21 @@ export interface IVersion {
   formHash: string | null;
 }
 
+export interface ICommentItem {
+  id: number;
+  type: "comment" | string;
+  content: string;
+  repoId: number;
+  documentId: number;
+  repoTypeId: number;
+  repoTypeName: string;
+  creatorUserName: string;
+  creatorUserSSOID: number;
+  createdAt: string;
+  postId: number;
+  commentId: number;
+}
+
 export interface IComment {
   id: number;
   text: string;
@@ -61,7 +76,7 @@ export interface IComment {
     name: string;
     ssoId: string;
     ssoIssuerCode: number;
-    profileImage: string;
+    profileImage?: string;
   };
   confirmed: boolean;
   numOfLikes: number;

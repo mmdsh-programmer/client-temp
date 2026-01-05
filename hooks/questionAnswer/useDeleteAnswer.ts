@@ -4,7 +4,7 @@ import { IActionError, ISocialResponse } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { deleteAnswerAction } from "@actions/questionAnswer";
 
-const useDeleteQuestion = () => {
+const useDeleteAnswer = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["delete-answer"],
@@ -41,4 +41,4 @@ const useDeleteQuestion = () => {
   });
 };
 
-export default useDeleteQuestion;
+export default useDeleteAnswer;

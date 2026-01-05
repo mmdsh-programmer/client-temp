@@ -23,8 +23,7 @@ const CreateQuestion = ({ setOpen }: IProps) => {
   const editorData = useRef<{ content: string; outline: string } | null>(null);
 
   const { publishVersion: getPublishVersion } = usePublishStore();
-  const { repoId } = getPublishVersion!;
-  const { documentId } = getPublishVersion!;
+  const { repoId, documentId } = getPublishVersion!;
 
   const {
     register,

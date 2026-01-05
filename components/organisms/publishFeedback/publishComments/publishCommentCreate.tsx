@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetUser from "@hooks/auth/useGetUser";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useCreateComment from "@hooks/core/useCreateComment";
+import useCreateComment from "@hooks/comment/useCreateComment";
 
 interface IForm {
   text: string;
@@ -48,6 +48,14 @@ const PublishCommentCreate = ({ repoId, documentId }: IProps) => {
 
   if (userInfo?.private) {
     return <PublishForcePublicProfile customText="برای نوشتن دیدگاه باید پروفایل شما عمومی باشد" />;
+  }
+
+  if (!userInfo) {
+    return (
+      <div className="mt-8">
+        <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />
+      </div>
+    );
   }
 
   return (

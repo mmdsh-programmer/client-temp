@@ -12,7 +12,7 @@ const useGetAnswerList = (
   enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`],
+    queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getAnswerListAction(
         repoId,
@@ -27,7 +27,7 @@ const useGetAnswerList = (
     initialPageParam: 1,
     retry: false,
     refetchOnWindowFocus: false,
-    enabled,
+    enabled: !!enabled,
     getNextPageParam: (lastPage, pages) => {
       if (pages.length < Math.ceil(lastPage.total / size)) {
         return pages.length + 1;

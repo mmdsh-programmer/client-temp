@@ -3,7 +3,7 @@ import { IComment, IVersion } from "@interface/version.interface";
 import { Spinner } from "@components/atoms/spinner";
 import { DeleteIcon } from "@components/atoms/icons";
 import React from "react";
-import useDeleteComment from "@hooks/core/useDeleteComment";
+import useDeleteComment from "@hooks/comment/useDeleteComment";
 
 interface IProps {
   version?: IVersion;

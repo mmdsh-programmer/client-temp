@@ -7,9 +7,14 @@ import useGetQuestionList from "@hooks/questionAnswer/useGetQuestionList";
 import { useDocumentStore } from "@store/document";
 import DocumentQuestionItem from "./documentQuestionItem";
 import DocumentAnswerList from "./documentAnswerList";
+import { useRepositoryStore } from "@store/repository";
+import { ERoles } from "@interface/enums";
 
 const DocumentQuestionList = () => {
+  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
+
+  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   const {
     data: questionList,
@@ -17,7 +22,7 @@ const DocumentQuestionList = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetQuestionList(selectedDocument!.repoId, selectedDocument!.id, 10);
+  } = useGetQuestionList(selectedDocument!.repoId, selectedDocument!.id, 10, true);
 
   if (isLoading) {
     return (
@@ -29,28 +34,22 @@ const DocumentQuestionList = () => {
     );
   }
 
-  const total = questionList?.pages[0]?.total || 0;
+  const total = questionList?.pages[0]?.total;
 
-  if (total && questionList) {
+  const list = questionList;
+
+  if (total) {
     return (
       <>
-        {questionList?.pages.map((questionListPage) => {
+        {list?.pages.map((questionListPage) => {
           return questionListPage.list.map((questionItem) => {
             return (
-              <DocumentQuestionItem
-                key={`question-${questionItem.id}`}
-                questionItem={questionItem}
-              >
-                <DocumentAnswerList
-                  repoId={selectedDocument!.repoId}
-                  documentId={selectedDocument!.id}
-                  questionItem={questionItem}
-                />
+              <DocumentQuestionItem key={`question-${questionItem.id}`} questionItem={questionItem}>
+                <DocumentAnswerList questionItem={questionItem} />
               </DocumentQuestionItem>
             );
           });
         })}
-
         <RenderIf isTrue={!!hasNextPage}>
           <div className="flex w-full justify-center bg-white pb-2">
             <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
