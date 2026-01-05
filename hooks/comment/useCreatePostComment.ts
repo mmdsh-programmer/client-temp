@@ -4,7 +4,7 @@ import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { createPostIdCommentAction } from "@actions/comment";
 
-const useCreateComment = () => {
+const useCreatePostComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["createPostComment"],
@@ -27,4 +27,4 @@ const useCreateComment = () => {
   });
 };
 
-export default useCreateComment;
+export default useCreatePostComment;

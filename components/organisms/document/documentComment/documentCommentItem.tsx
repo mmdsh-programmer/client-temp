@@ -12,28 +12,27 @@ import { FaDateFromTimestamp } from "@utils/index";
 import useGetUser from "@hooks/auth/useGetUser";
 import { IComment } from "@interface/version.interface";
 import CommentLikeAndDislike from "@components/organisms/commentLike&Dislike";
-import { DeleteIcon } from "@components/atoms/icons";
-import useDeletePostComment from "@hooks/comment/useDeletePostComment";
+import { DeleteIcon, UserIcon } from "@components/atoms/icons";
 import { toast } from "react-toastify";
-import { useQaStore } from "@store/qa";
-import { IQuestionMetadata } from "@interface/qa.interface";
+import useDeleteComment from "@hooks/comment/useDeleteComment";
+import { useDocumentStore } from "@store/document";
+import ImageComponent from "@components/atoms/image";
 import { Spinner } from "@components/atoms/spinner";
 
 interface IProps {
   commentItem: IComment;
 }
 
-const PostCommentItem = ({ commentItem }: IProps) => {
-  const { selectedQuestion } = useQaStore();
+const DocumentCommentItem = ({ commentItem }: IProps) => {
+  const { selectedDocument } = useDocumentStore();
 
   const { data: userInfo } = useGetUser();
-  const deleteComment = useDeletePostComment();
-
-  const questionMetadata = JSON.parse(selectedQuestion!.metadata) as IQuestionMetadata;
+  const deleteComment = useDeleteComment();
 
   const handleDeleteComment = () => {
     deleteComment.mutate({
-      postId: selectedQuestion!.id,
+      repoId: selectedDocument!.repoId,
+      docId: selectedDocument!.id,
       commentId: commentItem.id,
       callBack: () => {
         toast.success("دیدگاه حذف شد.");
@@ -55,11 +54,32 @@ const PostCommentItem = ({ commentItem }: IProps) => {
         className="mx-0 mt-0 flex items-center justify-between gap-2 pt-0"
       >
         <div className="flex items-center gap-2">
-          <h6 className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-800 sm:max-w-fit">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
+            {commentItem.user.profileImage ? (
+              <ImageComponent
+                className="h-6 w-6 rounded-full"
+                src={commentItem.user.profileImage}
+                alt={commentItem.user.name}
+              />
+            ) : (
+              <UserIcon className="h-4 w-4" />
+            )}
+          </div>
+          <h6 className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-800 sm:max-w-fit">
             {commentItem.user.name}
           </h6>
+          {!commentItem.confirmed ? (
+            <Typography
+              className="text-xs text-error"
+              {...({} as React.ComponentProps<typeof Typography>)}
+            >
+              (تایید نشده)
+            </Typography>
+          ) : null}
+        </div>
+        <div className="flex items-center gap-1">
           <time
-            className="bullet max-w-16 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-500 sm:max-w-fit"
+            className="block overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-500 sm:max-w-fit"
             dateTime={String(commentItem.timestamp)}
           >
             {FaDateFromTimestamp(commentItem.timestamp)}
@@ -83,18 +103,18 @@ const PostCommentItem = ({ commentItem }: IProps) => {
             <Spinner className="h-4 w-4" />
           ) : (
             <Button
-              className="!h-fit !w-fit border-none !p-0 text-[13px] leading-5 text-link bg-transparent"
+              className="!h-fit !w-fit border-none bg-transparent !p-0 text-[13px] leading-5 text-link"
               onClick={handleDeleteComment}
               loading={deleteComment.isPending}
               disabled={deleteComment.isPending}
               title="حذف نظر"
               {...({} as React.ComponentProps<typeof Button>)}
             >
-              <DeleteIcon className="h-4 w-4 !fill-icon-hover" />
+              <DeleteIcon className="block h-4 w-4 !fill-icon-hover" />
             </Button>
           )}
         </RenderIf>
-        <RenderIf isTrue={!!userInfo}>
+        <RenderIf isTrue={!!userInfo && commentItem.confirmed}>
           <CommentLikeAndDislike
             commentItem={commentItem}
             wrapperClassName="gap-3 sm:gap-5 mr-auto"
@@ -103,9 +123,9 @@ const PostCommentItem = ({ commentItem }: IProps) => {
             iconClassName="w-4 h-4 !stroke-gray-500"
             counterClassName="ml-1 text-base text-gray-500"
             showCounter
-            postId={selectedQuestion!.id}
-            repoId={questionMetadata.repoId}
-            docId={questionMetadata.documentId}
+            postId={selectedDocument!.customPostId}
+            repoId={selectedDocument!.repoId}
+            docId={selectedDocument!.id}
           />
         </RenderIf>
       </CardFooter>
@@ -113,4 +133,4 @@ const PostCommentItem = ({ commentItem }: IProps) => {
   );
 };
 
-export default PostCommentItem;
+export default DocumentCommentItem;

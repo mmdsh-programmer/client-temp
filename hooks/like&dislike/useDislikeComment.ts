@@ -1,42 +1,33 @@
+import { dislikeCommentAction } from "@actions/like&dislike";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
-import { likePostAction } from "@actions/like&dislike";
 
-const useLike = () => {
+const useDislikeComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["like"],
+    mutationKey: ["dislike-comment"],
     mutationFn: async (values: {
       repoId: number;
-      documentId: number;
+      docId: number;
+      commentId: number;
       postId: number;
       callBack?: () => void;
     }) => {
-      const { postId } = values;
-      const response = await likePostAction(postId);
+      const { commentId } = values;
+      const response = await dislikeCommentAction(commentId);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, postId, repoId, documentId } = values;
+      const { callBack, postId, repoId, docId } = values;
+
       queryClient.invalidateQueries({
-        queryKey: [`getDislike-${postId}`],
+        queryKey: [`get-post-comments-postId-${postId}`],
       });
       queryClient.invalidateQueries({
-        queryKey: [`getLike-${postId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`post-${postId}-info`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`question-list-${repoId}-documentId-${documentId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [
-          `answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${postId}`,
-        ],
+        queryKey: [`comment-list-${repoId}-documentId-${docId}`],
       });
 
       callBack?.();
@@ -47,4 +38,4 @@ const useLike = () => {
   });
 };
 
-export default useLike;
+export default useDislikeComment;

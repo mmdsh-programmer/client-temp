@@ -18,6 +18,7 @@ import DocumentPublicVersionDialog from "@components/organisms/dialogs/document/
 import DocumentWhiteListRequestsDialog from "@components/organisms/dialogs/document/documentWhiteListRequestsDialog";
 import { useDocumentStore } from "@store/document";
 import DocumentQaDialog from "@components/organisms/dialogs/document/documentQaDialog";
+import DocumentCommentsDialog from "@components/organisms/dialogs/document/documentCommentsDialog";
 
 interface IDocumentDialogsProps {
   activeModal: string | null;
@@ -65,9 +66,8 @@ const DocumentDialogs = ({ activeModal, closeModal }: IDocumentDialogsProps) => 
       {activeModal === "documentWhiteListRequests" ? (
         <DocumentWhiteListRequestsDialog setOpen={closeModal} />
       ) : null}
-      {activeModal === "documentQA" ? (
-        <DocumentQaDialog setOpen={closeModal} />
-      ) : null}
+      {activeModal === "documentQA" ? <DocumentQaDialog setOpen={closeModal} /> : null}
+      {activeModal === "documentComments" ? <DocumentCommentsDialog setOpen={closeModal} /> : null}
     </>
   );
 };

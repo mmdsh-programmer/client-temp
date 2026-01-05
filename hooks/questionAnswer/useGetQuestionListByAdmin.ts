@@ -8,15 +8,17 @@ import { getQuestionListByAdminAction } from "@actions/questionAnswer";
 const useGetQuestionListByAdmin = (
   repoId: number,
   documentId: number,
+  enable: boolean,
   size: number,
   enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`question-list-${repoId}-documentId-${documentId}-by-admin`],
+    queryKey: [`question-list-${repoId}-documentId-${documentId}-by-admin`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getQuestionListByAdminAction(
         repoId,
         documentId,
+        enable,
         (pageParam - 1) * size,
         size,
       );

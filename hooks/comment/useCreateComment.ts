@@ -1,28 +1,31 @@
-import { deleteCommentAction } from "@actions/core";
+import { createCommentAction } from "@actions/comment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 
-const useDeleteComment = () => {
+const useCreateComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["deleteComment"],
+    mutationKey: ["createComment"],
     mutationFn: async (values: {
       repoId: number;
       docId: number;
-      commentId: number;
+      text: string;
       callBack?: () => void;
     }) => {
-      const { repoId, docId, commentId } = values;
-      const response = await deleteCommentAction(repoId, docId, commentId);
+      const { repoId, docId, text } = values;
+      const response = await createCommentAction(repoId, docId, text);
       handleClientSideHookError(response as IActionError);
       return response;
     },
     onSuccess: (response, values) => {
       const { callBack, repoId, docId } = values;
       queryClient.invalidateQueries({
-        queryKey: [`getComments-repoId-${repoId}-docId-${docId}`],
+        queryKey: [`comment-list-${repoId}-documentId-${docId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`comment-list-${repoId}-documentId-${docId}-by-admin`],
       });
       callBack?.();
     },
@@ -32,4 +35,4 @@ const useDeleteComment = () => {
   });
 };
 
-export default useDeleteComment;
+export default useCreateComment;

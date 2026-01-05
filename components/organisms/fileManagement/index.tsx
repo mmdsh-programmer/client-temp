@@ -174,9 +174,6 @@ const Files = ({
               {
                 headers: {
                   "Content-Type": "multipart/form-data;",
-                  Authorization: `Bearer ${token}`,
-                  _token_: token || "",
-                  _token_issuer_: "1",
                 },
                 onUploadProgress(progressEvent: any) {
                   const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -191,9 +188,6 @@ const Files = ({
               });
             }
           } catch (error: any) {
-            if (error?.result?.status === 401) {
-              refetchUser();
-            }
             setIsError(true);
             toast.error("خطا در بارگذاری فایل");
           } finally {

@@ -1,24 +1,24 @@
-import React from "react";
 import LoadingButton from "@components/molecules/loadingButton";
-import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
-import useGetUser from "@hooks/auth/useGetUser";
+import { CreateCommentSchema } from "@components/organisms/postComment/validation.yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useCreateComment from "@hooks/comment/useCreateComment";
 import { Typography } from "@material-tailwind/react";
-import { CreateCommentSchema } from "./validation.yup";
-import PublishForcePublicProfile from "../publishFeedback/publishForcePublicProfile";
-import useCreatePostComment from "@hooks/comment/useCreatePostComment";
-import { useQaStore } from "@store/qa";
+import { useDocumentStore } from "@store/document";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 interface IForm {
   text: string;
 }
 
-const PostCommentCreate = () => {
-  const { selectedQuestion } = useQaStore();
+interface IProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  const { data: userInfo } = useGetUser();
-  const createComment = useCreatePostComment();
+const DocumentCreateComment = ({ setOpen }: IProps) => {
+  const createComment = useCreateComment();
+  const { selectedDocument } = useDocumentStore();
 
   const form = useForm<IForm>({
     resolver: yupResolver(CreateCommentSchema),
@@ -32,19 +32,17 @@ const PostCommentCreate = () => {
       toast.error("تعداد کاراکتر وارد شده بیش از حد مجاز است.");
     } else {
       createComment.mutate({
-        postId: selectedQuestion!.id,
+        repoId: selectedDocument!.repoId,
+        docId: selectedDocument!.id,
         text: dataForm.text,
         callBack: () => {
           toast.success("نظر شما با موفقیت ارسال شد.");
           reset();
+          setOpen(false);
         },
       });
     }
   };
-
-  if (userInfo?.private) {
-    return <PublishForcePublicProfile customText="برای نوشتن دیدگاه باید پروفایل شما عمومی باشد" />;
-  }
 
   return (
     <div>
@@ -80,4 +78,4 @@ const PostCommentCreate = () => {
   );
 };
 
-export default PostCommentCreate;
+export default DocumentCreateComment;

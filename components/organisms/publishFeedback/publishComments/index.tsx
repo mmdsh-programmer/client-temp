@@ -1,6 +1,4 @@
 import React from "react";
-import useGetUser from "@hooks/auth/useGetUser";
-import PublishForceLogin from "../publishForceLogin";
 import PublishCommentCreate from "./publishCommentCreate";
 import PublishCommentList from "./publishCommentList";
 
@@ -10,16 +8,6 @@ interface IProps {
 }
 
 const PublishComments = ({ repoId, documentId }: IProps) => {
-  const { data: userInfo } = useGetUser();
-
-  if (!userInfo) {
-    return (
-      <div className="mt-8">
-        <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />
-      </div>
-    );
-  }
-
   return (
     <>
       <div className="sticky top-0 z-50 bg-white px-5 py-10 xs:px-8">

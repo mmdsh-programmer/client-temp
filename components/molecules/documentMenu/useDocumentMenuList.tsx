@@ -400,20 +400,34 @@ const useDocumentMenuList = (
     }),
   );
 
-  if (getDomainInfo?.hasQuestions) {
-    menuItems.push(
-      createItem(
-        "پرسش و پاسخ روی سند",
-        <LastVersionIcon className="h-4 w-4" />,
-        () => {
-          window.metrics?.track("document:questionAnswer_dialog");
-          setModal("documentQA");
-          setDocumentDrawer(false);
-        },
-        { className: "document-question-answer" },
-      ),
-    );
-  }
+  const documentActivitySubMenuItems: MenuItem[] = [
+    createItem(
+      "پرسش و پاسخ روی سند",
+      <LastVersionIcon className="h-4 w-4" />,
+      () => {
+        window.metrics?.track("document:questionAnswer_dialog");
+        setModal("documentQA");
+        setDocumentDrawer(false);
+      },
+      { className: "document-question-answer", disabled: !getDomainInfo?.hasQuestions },
+    ),
+    createItem(
+      "نظرات روی سند",
+      <LastVersionIcon className="h-4 w-4" />,
+      () => {
+        window.metrics?.track("document:comments_dialog");
+        setModal("documentComments");
+        setDocumentDrawer(false);
+      },
+      { className: "document-comments", disabled: !getDomainInfo?.hasComments },
+    ),
+  ];
+
+  menuItems.push(
+    createItem("فعالیت های سند", <LastVersionIcon className="h-4 w-4" />, () => {}, {
+      subMenu: documentActivitySubMenuItems,
+    }),
+  );
 
   menuItems.push(
     createItem(

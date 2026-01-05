@@ -3,28 +3,35 @@ import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
-import useGetQuestionList from "@hooks/questionAnswer/useGetQuestionList";
 import { useDocumentStore } from "@store/document";
 import DocumentQuestionItem from "./documentQuestionItem";
 import DocumentAnswerList from "./documentAnswerList";
 import { useRepositoryStore } from "@store/repository";
 import { ERoles } from "@interface/enums";
+import useGetQuestionListByAdmin from "@hooks/questionAnswer/useGetQuestionListByAdmin";
+import DocumentUnconfirmedQuestionItem from "./documentUnconfirmedQuestionItem";
 
-const DocumentQuestionList = () => {
+const DocumentUnconfirmedQuestionList = () => {
   const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
 
   const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   const {
-    data: questionList,
-    isLoading,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useGetQuestionList(selectedDocument!.repoId, selectedDocument!.id, 10, true);
+    data: questionListByAdmin,
+    isLoading: adminListIsLoading,
+    hasNextPage: adminListHasNextPage,
+    isFetchingNextPage: adminListIsFetchingNextPage,
+    fetchNextPage: adminListFetchNextPage,
+  } = useGetQuestionListByAdmin(
+    selectedDocument!.repoId,
+    selectedDocument!.id,
+    false,
+    10,
+    adminOwnerRole,
+  );
 
-  if (isLoading) {
+  if (adminListIsLoading) {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="flex w-full justify-center">
@@ -34,25 +41,27 @@ const DocumentQuestionList = () => {
     );
   }
 
-  const total = questionList?.pages[0]?.total;
+  const totalUnconfirmed = questionListByAdmin?.pages[0]?.total || 0;
 
-  const list = questionList;
-
-  if (total) {
+  if (totalUnconfirmed > 0) {
     return (
       <>
-        {list?.pages.map((questionListPage) => {
-          return questionListPage.list.map((questionItem) => {
+        {questionListByAdmin?.pages.map((page) => {
+          return page.list.map((questionItem) => {
             return (
-              <DocumentQuestionItem key={`question-${questionItem.id}`} questionItem={questionItem}>
-                <DocumentAnswerList questionItem={questionItem} />
-              </DocumentQuestionItem>
+              <DocumentUnconfirmedQuestionItem
+                key={`question-${questionItem.id}`}
+                questionItem={questionItem}
+              />
             );
           });
         })}
-        <RenderIf isTrue={!!hasNextPage}>
+        <RenderIf isTrue={!!adminListHasNextPage}>
           <div className="flex w-full justify-center bg-white pb-2">
-            <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
+            <LoadMore
+              isFetchingNextPage={adminListIsFetchingNextPage}
+              fetchNextPage={adminListFetchNextPage}
+            />
           </div>
         </RenderIf>
       </>
@@ -66,4 +75,4 @@ const DocumentQuestionList = () => {
   );
 };
 
-export default DocumentQuestionList;
+export default DocumentUnconfirmedQuestionList;

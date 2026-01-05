@@ -27,6 +27,7 @@ import QuestionEditDialog from "@components/organisms/dialogs/questionAnswer/que
 import CreateAnswerDialog from "@components/organisms/dialogs/questionAnswer/createAnswerDialog";
 import PostComment from "@components/organisms/postComment";
 import { useQaStore } from "@store/qa";
+import ImageComponent from "@components/atoms/image";
 
 interface IProps {
   questionItem: IQuestion;
@@ -80,18 +81,37 @@ const QuestionItem = ({ questionItem, children }: IProps) => {
           className="mx-0 mt-0 flex items-center justify-between rounded-none pt-0"
           {...({} as React.ComponentProps<typeof CardHeader>)}
         >
-          <Typography className="text-sm" {...({} as React.ComponentProps<typeof Typography>)}>
-            {questionItem.name}
-          </Typography>
           <div className="flex items-center gap-2">
+            <Typography className="text-sm" {...({} as React.ComponentProps<typeof Typography>)}>
+              {questionItem.name}
+            </Typography>
+            {!questionItem.enable ? (
+              <Typography
+                className="text-xs text-error"
+                {...({} as React.ComponentProps<typeof Typography>)}
+              >
+                (تایید نشده)
+              </Typography>
+            ) : null}
+          </div>
+          <div className="flex items-center gap-1">
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100">
-              <UserIcon className="h-4 w-4" />
+              {questionItem.userSrv.profileImage ? (
+                <ImageComponent
+                  src={questionItem.userSrv.profileImage}
+                  alt={questionItem.userSrv.name}
+                  height={100}
+                  width={100}
+                />
+              ) : (
+                <UserIcon className="h-4 w-4" />
+              )}
             </div>
             <h6 className="max-w-44 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-gray-800 sm:max-w-fit">
               {questionItem.userSrv.name}
             </h6>
             <time
-              className="bullet block h-5 overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-500 sm:max-w-fit"
+              className="bullet block overflow-hidden text-ellipsis whitespace-nowrap text-[10px] text-gray-500 sm:max-w-fit"
               dateTime={String(questionItem.timestamp)}
             >
               {FaDateFromTimestamp(questionItem.timestamp)}
@@ -106,19 +126,21 @@ const QuestionItem = ({ questionItem, children }: IProps) => {
           className="flex items-center justify-between gap-2 p-0"
         >
           <div className="flex items-center gap-2">
-            <Button
-              ripple={false}
-              variant="text"
-              className="flex items-center gap-1 border-none !p-0"
-              onClick={handleOpenCollapse}
-              {...({} as React.ComponentProps<typeof Button>)}
-            >
-              <span className="text-[13px] leading-5 text-gray-500">مشاهده بیشتر</span>
+            <RenderIf isTrue={questionItem.enable}>
+              <Button
+                ripple={false}
+                variant="text"
+                className="flex items-center gap-1 border-none !p-0"
+                onClick={handleOpenCollapse}
+                {...({} as React.ComponentProps<typeof Button>)}
+              >
+                <span className="text-[13px] leading-5 text-gray-500">مشاهده بیشتر</span>
 
-              <ChevronLeftIcon
-                className={`h-2.5 w-2.5 stroke-gray-500 align-middle transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
-              />
-            </Button>
+                <ChevronLeftIcon
+                  className={`h-2.5 w-2.5 stroke-gray-500 align-middle transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
+                />
+              </Button>
+            </RenderIf>
             <RenderIf isTrue={!!userInfo && questionItem.enable}>
               <Button
                 variant="text"

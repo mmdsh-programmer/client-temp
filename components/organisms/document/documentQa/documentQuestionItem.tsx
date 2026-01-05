@@ -24,9 +24,6 @@ import QuestionAnswerLikeAndDislike from "@components/organisms/questionAnswerLi
 import QuestionAnswerContentPreview from "@components/organisms/publishFeedback/publishQuestionAnswer/questionAnswerContentPreview";
 import { useQaStore } from "@store/qa";
 import { useDocumentStore } from "@store/document";
-import { ERoles } from "@interface/enums";
-import { useRepositoryStore } from "@store/repository";
-import DocumentQuestionConfirmReject from "./documentQuestionConfirmReject";
 import Image from "next/image";
 
 interface IProps {
@@ -37,7 +34,6 @@ interface IProps {
 const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
   const [openCollapse, setOpenCollapse] = useState(false);
 
-  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
 
   const { setOpenAnswer, setOpenEdit, setOpenDelete, setOpenComment, setSelectedQuestion } =
@@ -48,8 +44,6 @@ const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
   const handleOpenCollapse = () => {
     setOpenCollapse(!openCollapse);
   };
-
-  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   return (
     <>
@@ -110,18 +104,20 @@ const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
           className="flex items-center justify-between gap-2 p-0"
         >
           <div className="flex items-center gap-2">
-            <Button
-              ripple={false}
-              variant="text"
-              className="flex items-center gap-1 border-none !p-0"
-              onClick={handleOpenCollapse}
-              {...({} as React.ComponentProps<typeof Button>)}
-            >
-              <span className="form_label !text-gray-500">مشاهده بیشتر</span>
-              <ChevronLeftIcon
-                className={`h-2.5 w-2.5 stroke-gray-500 align-middle transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
-              />
-            </Button>
+            <RenderIf isTrue={questionItem.enable}>
+              <Button
+                ripple={false}
+                variant="text"
+                className="flex items-center gap-1 border-none !p-0"
+                onClick={handleOpenCollapse}
+                {...({} as React.ComponentProps<typeof Button>)}
+              >
+                <span className="form_label !text-gray-500">مشاهده بیشتر</span>
+                <ChevronLeftIcon
+                  className={`h-2.5 w-2.5 stroke-gray-500 align-middle transition-all duration-200 ${openCollapse ? "rotate-90" : "-rotate-90"}`}
+                />
+              </Button>
+            </RenderIf>
             <RenderIf isTrue={!!userInfo && questionItem.enable}>
               <Button
                 variant="text"
@@ -191,9 +187,6 @@ const DocumentQuestionItem = ({ questionItem, children }: IProps) => {
               counterClassName="ml-1 text-base text-gray-500"
               showCounter
             />
-          </RenderIf>
-          <RenderIf isTrue={adminOwnerRole && !questionItem.enable}>
-            <DocumentQuestionConfirmReject questionItem={questionItem} />
           </RenderIf>
         </CardFooter>
       </Card>

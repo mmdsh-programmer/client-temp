@@ -185,6 +185,7 @@ export const deleteAnswerAction = async (repoId: number, documentId: number, ent
 export const getQuestionListByAdminAction = async (
   repoId: number,
   documentId: number,
+  enable: boolean,
   offset: number,
   size: number,
 ) => {
@@ -192,7 +193,14 @@ export const getQuestionListByAdminAction = async (
 
   try {
     const accessToken = userInfo.access_token;
-    const response = await getQuestionListByAdmin(accessToken, repoId, documentId, offset, size);
+    const response = await getQuestionListByAdmin(
+      accessToken,
+      repoId,
+      documentId,
+      enable,
+      offset,
+      size,
+    );
 
     return response;
   } catch (error) {

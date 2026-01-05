@@ -4,7 +4,7 @@ import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
-import useCreateComment from "@hooks/core/useCreateComment";
+import useCreateComment from "@hooks/comment/useCreateComment";
 import { useForm } from "react-hook-form";
 
 interface IForm {

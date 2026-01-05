@@ -1,15 +1,15 @@
-import { getLikeAction } from "@actions/core";
 import { IListResponse } from "@interface/repo.interface";
 import { ILikeList } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { getPostLikeListAction } from "@actions/like&dislike";
 
 const useGetLikeList = (postId: number, size: number, enabled?: boolean) => {
   return useInfiniteQuery({
     queryKey: [`getLike-${postId}`, size],
     queryFn: async ({ pageParam }) => {
-      const response = await getLikeAction(
+      const response = await getPostLikeListAction(
         postId,
         (pageParam - 1) * size,
         size

@@ -13,7 +13,7 @@ const useGetAnswerListByAdmin = (
   enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}-by-admin`],
+    queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}-by-admin`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getAnswerListByAdminAction(
         repoId,

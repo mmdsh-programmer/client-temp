@@ -1,26 +1,22 @@
 import React from "react";
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import LoadMore from "@components/molecules/loadMore";
-import PublishCommentItem from "./publishCommentItem";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import LoadMore from "@components/molecules/loadMore";
 import useGetCommentList from "@hooks/comment/useGetCommentList";
+import { useDocumentStore } from "@store/document";
+import DocumentCommentItem from "./documentCommentItem";
 
-interface IProps {
-  repoId: number;
-  documentId: number;
-}
+const DocumentCommentList = () => {
+  const { selectedDocument } = useDocumentStore();
 
-const PublishCommentList = ({ repoId, documentId }: IProps) => {
   const {
-    isLoading,
     data: commentList,
+    isLoading,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetCommentList(repoId, documentId, 10);
-
-  const total = commentList?.pages[0].total || 0;
+  } = useGetCommentList(selectedDocument!.repoId, selectedDocument!.id, 10);
 
   if (isLoading) {
     return (
@@ -32,22 +28,18 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
     );
   }
 
-  if (total && commentList) {
+  const total = commentList?.pages[0]?.total;
+
+  if (total) {
     return (
       <>
-        {commentList.pages.map((commentListPage) => {
+        {commentList?.pages.map((commentListPage) => {
           return commentListPage.list.map((commentItem) => {
             return (
-              <PublishCommentItem
-                key={`publish-comment-${commentItem.id}`}
-                repoId={repoId}
-                documentId={documentId}
-                commentItem={commentItem}
-              />
+              <DocumentCommentItem key={`comment-${commentItem.id}`} commentItem={commentItem} />
             );
           });
         })}
-
         <RenderIf isTrue={!!hasNextPage}>
           <div className="flex w-full justify-center bg-white pb-2">
             <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
@@ -64,4 +56,4 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
   );
 };
 
-export default PublishCommentList;
+export default DocumentCommentList;

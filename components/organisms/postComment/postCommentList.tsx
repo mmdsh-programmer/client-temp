@@ -4,7 +4,7 @@ import { Spinner } from "@components/atoms/spinner";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import LoadMore from "@components/molecules/loadMore";
 import PostCommentItem from "./postCommentItem";
-import useGetPostCommentList from "@hooks/core/useGetPostCommentList";
+import useGetPostCommentList from "@hooks/comment/useGetPostCommentList";
 import { useQaStore } from "@store/qa";
 
 const PostCommentList = () => {

@@ -12,7 +12,7 @@ const useGetAnswerList = (
   enabled?: boolean,
 ) => {
   return useInfiniteQuery({
-    queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`],
+    queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${questionId}`, size],
     queryFn: async ({ signal, pageParam }) => {
       const response = await getAnswerListAction(
         repoId,

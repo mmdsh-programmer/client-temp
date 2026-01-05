@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Spinner } from "@components/atoms/spinner";
 import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
-import useDislike from "@hooks/core/useDislike";
-import useGetDislikeList from "@hooks/core/useGetDislikeList";
-import useGetLikeList from "@hooks/core/useGetLikeList";
+import useDislike from "@hooks/like&dislike/useDislike";
+import useGetDislikeList from "@hooks/like&dislike/useGetDislikeList";
+import useGetLikeList from "@hooks/like&dislike/useGetLikeList";
 import useGetPostInfo from "@hooks/core/useGetPostInfo";
-import useLike from "@hooks/core/useLike";
+import useLike from "@hooks/like&dislike/useLike";
 import { useVersionStore } from "@store/version";
 import { usePublishStore } from "@store/publish";
 
