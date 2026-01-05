@@ -51,17 +51,9 @@ const LikeAndDislike = ({
     isFetching: isFetchingDislikeList,
   } = useGetDislikeList(postId, 30, enable);
 
-  const {
-    data: getPostInfo,
-    isLoading: isLoadingPostInfo,
-    isFetching: isFetchingPostInfo,
-  } = useGetPostInfo(postId, enable);
+  const isLoading = isLoadingLikeList || isLoadingDislikeList;
 
-  const isLoading = isLoadingLikeList || isLoadingDislikeList || isLoadingPostInfo;
-
-  const isFetcing = isFetchingLikeList || isFetchingDislikeList || isFetchingPostInfo;
-
-  const postInfo = getPostInfo?.[0];
+  const isFetcing = isFetchingLikeList || isFetchingDislikeList;
 
   const likeCount = enable ? getLikes?.pages[0].total || 0 : initLikeCount || 0;
   const dislikeCount = enable ? getDislikes?.pages[0].total || 0 : initDislikeCount || 0;
@@ -119,8 +111,8 @@ const LikeAndDislike = ({
       iconClassName={iconClassName}
       showCounter={showCounter}
       counterClassName={counterClassName}
-      isLiked={postInfo?.liked}
-      isDisliked={postInfo?.disliked}
+      isLiked={false}
+      isDisliked={false}
     />
   );
 };
