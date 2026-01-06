@@ -1,17 +1,17 @@
-import { getCommentListAction } from "@actions/comment";
 import { IListResponse } from "@interface/repo.interface";
-import { IComment } from "@interface/version.interface";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
+import { getPublishQuestionListAction } from "@actions/publish";
+import { IQuestion } from "@interface/qa.interface";
 
-const useGetCommentList = (repoId: number, docId: number, size: number, enabled?: boolean) => {
+const useGetPublishQuestionList = (documentId: number, size: number, enabled: boolean) => {
   return useInfiniteQuery({
-    queryKey: [`comment-list-${repoId}-documentId-${docId}`, size],
+    queryKey: [`publish-question-list-documentId-${documentId}`, size],
     queryFn: async ({ pageParam }) => {
-      const response = await getCommentListAction(repoId, docId, (pageParam - 1) * size, size);
+      const response = await getPublishQuestionListAction(documentId, (pageParam - 1) * size, size);
       handleClientSideHookError(response as IActionError);
-      return response as IListResponse<IComment>;
+      return response as IListResponse<IQuestion>;
     },
     initialPageParam: 1,
     retry: false,
@@ -25,4 +25,4 @@ const useGetCommentList = (repoId: number, docId: number, size: number, enabled?
   });
 };
 
-export default useGetCommentList;
+export default useGetPublishQuestionList;

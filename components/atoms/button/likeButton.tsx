@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@material-tailwind/react";
 import { LikeIcon } from "@components/atoms/icons";
 import RenderIf from "../renderIf";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   onClick: () => void;
@@ -24,13 +25,14 @@ const LikeButton = ({
   showCounter,
   isLiked,
 }: IProps) => {
+  const {data: userInfo} = useGetUser();
   return (
     <Button
       placeholder=""
       onClick={onClick}
-      className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 ${likeButtonClassName}`}
+      className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 ${likeButtonClassName} disabled:opacity-80`}
       title={likeCount.toString()}
-      disabled={likePending}
+      disabled={likePending || !userInfo}
       {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <RenderIf isTrue={!!showCounter}>

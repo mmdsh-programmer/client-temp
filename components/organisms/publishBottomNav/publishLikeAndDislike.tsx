@@ -4,7 +4,7 @@ import LikeDislikeButtons from "@components/molecules/likeDislikeButton";
 import useDislike from "@hooks/like&dislike/useDislike";
 import useLike from "@hooks/like&dislike/useLike";
 import { IDocumentMetadata } from "@interface/document.interface";
-import useGetDocumentSocial from "@hooks/document/useGetDocumentSocial";
+import useGetPublishDocumentSocial from "@hooks/publish/useGetPublishDocumentSocial";
 
 interface IProps {
   document: IDocumentMetadata | null;
@@ -18,7 +18,7 @@ interface IProps {
   counterClassName?: string;
 }
 
-const LikeAndDislike = ({
+const PublishLikeAndDislike = ({
   document,
   initLikeCount,
   initDislikeCount,
@@ -33,10 +33,7 @@ const LikeAndDislike = ({
     typeof initLikeCount === "undefined" && typeof initDislikeCount === "undefined",
   );
 
-  const { data: getDocumentSocial, isLoading } = useGetDocumentSocial(
-    document!.repoId,
-    document!.id,
-  );
+  const { data: getDocumentSocial, isLoading } = useGetPublishDocumentSocial(document!.id);
 
   const likeHook = useLike();
   const disLikeHook = useDislike();
@@ -97,4 +94,4 @@ const LikeAndDislike = ({
   );
 };
 
-export default LikeAndDislike;
+export default PublishLikeAndDislike;

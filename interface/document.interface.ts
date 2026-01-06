@@ -208,3 +208,67 @@ export interface IDocumentWhiteListRequest {
   userSSOID: number;
   username: string;
 }
+
+export interface IPostRate {
+  myRate?: number;
+  rate: number;
+  rateCount: number;
+}
+
+export interface IBusinessInfo {
+  id: number;
+  name: string;
+  numOfProducts: number;
+  rate: IPostRate;
+  ssoId: string;
+}
+
+export interface IDocumentSocialInfoRate {
+  rate: number;
+  rateCount: number;
+}
+
+export interface IUserPostInfo {
+  postId: number;
+  liked: boolean;
+  disliked: boolean;
+  favorite: boolean;
+  saved: boolean;
+}
+
+export interface IDocumentSocialInfo {
+  id: number;
+  version: number;
+  timelineId: number;
+  entityId: number;
+  forwardedId: number;
+  numOfLikes: number;
+  numOfDisLikes: number;
+  numOfSaved: number;
+  numOfShare: number;
+  numOfFavorites: number;
+  numOfComments: number;
+  timestamp: number;
+  enable: boolean;
+  hide: boolean;
+  replyPostConfirmation: boolean;
+  business: IBusinessInfo;
+  rate: IDocumentSocialInfoRate;
+  metadata: string;
+  latitude: number;
+  longitude: number;
+  canComment: boolean;
+  canLike: boolean;
+  canRate: boolean;
+  tags: any[];
+  tagTrees: any[];
+  name: string;
+  categoryList: any[];
+  pin: boolean;
+  userPostInfo?: IUserPostInfo;
+}
+
+export interface IDocumentSocialInfoResponse {
+  content: string | null;
+  info: IDocumentSocialInfo;
+}

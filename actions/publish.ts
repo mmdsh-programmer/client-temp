@@ -5,10 +5,14 @@ import {
   createRepoPublishLink,
   deletePublishLink,
   getAllPublishChildren,
+  getPublishAnswerList,
   getPublishChildren,
+  getPublishCommentList,
   getPublishDocumentInfo,
   getPublishDocumentLastVersion,
+  getPublishDocumentSocialInfo,
   getPublishDocumentVersions,
+  getPublishQuestionList,
   searchPublishContent,
 } from "@service/clasor";
 import { getMe, userInfoAction } from "./auth";
@@ -165,6 +169,61 @@ export const getPublishDocumentInfoAction = async (
 ) => {
   try {
     const response = await getPublishDocumentInfo(repoId, documentId, disableVersions);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishDocumentSocialInfoAction = async (documentId: number) => {
+  const userInfo = await userInfoAction();
+  try {
+    const accessToken = userInfo && !("error" in userInfo) ? userInfo.access_token : undefined;
+
+    const response = await getPublishDocumentSocialInfo(accessToken, documentId);
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishQuestionListAction = async (
+  documentId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await getPublishQuestionList(documentId, offset, size);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishAnswerListAction = async (
+  documentId: number,
+  questionId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await getPublishAnswerList(documentId, questionId, offset, size);
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getPublishCommentListAction = async (
+  documentId: number,
+  offset: number,
+  size: number,
+) => {
+  try {
+    const response = await getPublishCommentList(documentId, offset, size);
 
     return response;
   } catch (error) {

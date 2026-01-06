@@ -25,7 +25,7 @@ const Comments = ({ version }: IProps) => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetCommentList(version!.repoId, version!.documentId, 10);
+  } = useGetCommentList(version!.repoId, version!.documentId, 10, true);
 
   const listLength = getComments?.pages[0].total;
 

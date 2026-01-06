@@ -8,7 +8,7 @@ import useDeleteComment from "@hooks/comment/useDeleteComment";
 import LoadingButton from "@components/molecules/loadingButton";
 import CommentLikeAndDislike from "@components/organisms/commentLike&Dislike";
 import { DeleteIcon } from "@components/atoms/icons";
-import useGetPublishDocumentInfo from "@hooks/publish/useGetPublishDocumentInfo";
+import { usePublishStore } from "@store/publish";
 
 interface IProps {
   repoId: number;
@@ -19,7 +19,7 @@ interface IProps {
 const PublishCommentItem = ({ repoId, documentId, commentItem }: IProps) => {
   const { data: userInfo } = useGetUser();
 
-  const { data: documentInfo } = useGetPublishDocumentInfo(repoId, documentId);
+  const { publishPageSelectedDocument } = usePublishStore();
 
   const deleteComment = useDeleteComment();
 
@@ -79,7 +79,7 @@ const PublishCommentItem = ({ repoId, documentId, commentItem }: IProps) => {
             <DeleteIcon className="block h-4 w-4 !fill-gray-500 sm:hidden" />
           </LoadingButton>
         </RenderIf>
-        <RenderIf isTrue={!!userInfo && commentItem.confirmed}>
+        <RenderIf isTrue={commentItem.confirmed}>
           <CommentLikeAndDislike
             commentItem={commentItem}
             wrapperClassName="gap-3 sm:gap-5 mr-auto"
@@ -88,7 +88,7 @@ const PublishCommentItem = ({ repoId, documentId, commentItem }: IProps) => {
             iconClassName="w-4 h-4 !stroke-gray-500"
             counterClassName="ml-1 text-base text-gray-500"
             showCounter
-            postId={documentInfo!.customPostId}
+            postId={publishPageSelectedDocument!.customPostId}
             repoId={repoId}
             docId={documentId}
           />

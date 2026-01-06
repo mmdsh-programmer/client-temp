@@ -2,14 +2,13 @@
 
 import React, { useState } from "react";
 import PublishChangeVersion from "./publishChangeVersion";
-import LikeAndDislike from "../like&dislike";
 import PublishNextAndPrev from "./publishNextAndPrev";
-import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import { Button } from "@material-tailwind/react";
 import { AttachIcon, MoreLineIcon, SpeedDialIcon } from "@components/atoms/icons";
 import PublishTinyLink from "./publishTinyLink";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
 import { usePublishStore } from "@store/publish";
+import PublishLikeAndDislike from "./publishLikeAndDislike";
 
 const PublishBottomNav = () => {
   const [openSpeedDial, setOpenSpeedDial] = useState(false);
@@ -19,7 +18,6 @@ const PublishBottomNav = () => {
     setOpenPublishOutlineDrawer,
     setOpenPublishFilesDrawer,
   } = usePublishStore();
-  const { data: userData } = useGetOptionalUser();
   const { data: getDomainInfo } = useGetDomainInfo();
 
   const openOutlineDrawer = () => {
@@ -67,13 +65,13 @@ const PublishBottomNav = () => {
         </Button>
         <div className="h-5 w-[1px] bg-white bg-opacity-15" />
 
-        {getPublishVersion && userData && getDomainInfo?.hasLikes ? (
-          <LikeAndDislike
+        {getPublishVersion && getDomainInfo?.hasLikes ? (
+          <PublishLikeAndDislike
+            document={getPublishPageSelectedDocument}
             wrapperClassName="gap-[inherit]"
             likeButtonClassName="hover:bg-transparent"
             dislikeButtonClassName="hover:bg-transparent"
             iconClassName="w-6 h-6"
-            postId={getPublishPageSelectedDocument!.customPostId}
           />
         ) : null}
 

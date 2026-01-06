@@ -5,6 +5,8 @@ import PublishCommentItem from "./publishCommentItem";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
 import useGetCommentList from "@hooks/comment/useGetCommentList";
+import useGetUser from "@hooks/auth/useGetUser";
+import useGetPublishCommentList from "@hooks/publish/useGetPublishCommentList";
 
 interface IProps {
   repoId: number;
@@ -12,17 +14,27 @@ interface IProps {
 }
 
 const PublishCommentList = ({ repoId, documentId }: IProps) => {
+  const { data: userInfo } = useGetUser();
   const {
-    isLoading,
     data: commentList,
+    isLoading,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetCommentList(repoId, documentId, 10);
+  } = useGetCommentList(repoId, documentId, 10, !!userInfo);
 
-  const total = commentList?.pages[0].total || 0;
+  const {
+    data: publishCommentList,
+    isLoading: publishCommentIsLoading,
+    hasNextPage: publishCommentHasNextPage,
+    isFetchingNextPage: publishCommentIsFetchingNextPage,
+    fetchNextPage: publishCommentFetchNextPage,
+  } = useGetPublishCommentList(documentId, 10, !userInfo);
 
-  if (isLoading) {
+  const total = commentList?.pages[0].total || publishCommentList?.pages[0].total || 0;
+  const list = commentList || publishCommentList;
+
+  if (isLoading || publishCommentIsLoading) {
     return (
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="flex w-full justify-center">
@@ -32,10 +44,10 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
     );
   }
 
-  if (total && commentList) {
+  if (total && list) {
     return (
       <>
-        {commentList.pages.map((commentListPage) => {
+        {list.pages.map((commentListPage) => {
           return commentListPage.list.map((commentItem) => {
             return (
               <PublishCommentItem
@@ -47,10 +59,17 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
             );
           });
         })}
-
         <RenderIf isTrue={!!hasNextPage}>
           <div className="flex w-full justify-center bg-white pb-2">
             <LoadMore isFetchingNextPage={isFetchingNextPage} fetchNextPage={fetchNextPage} />
+          </div>
+        </RenderIf>
+        <RenderIf isTrue={!!publishCommentHasNextPage}>
+          <div className="flex w-full justify-center bg-white pb-2">
+            <LoadMore
+              isFetchingNextPage={publishCommentIsFetchingNextPage}
+              fetchNextPage={publishCommentFetchNextPage}
+            />
           </div>
         </RenderIf>
       </>

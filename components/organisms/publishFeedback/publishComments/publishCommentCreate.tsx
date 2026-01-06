@@ -52,7 +52,7 @@ const PublishCommentCreate = ({ repoId, documentId }: IProps) => {
 
   if (!userInfo) {
     return (
-      <div className="mt-8">
+      <div className="">
         <PublishForceLogin customText="برای نوشتن دیدگاه باید وارد پنل کاربری خود شوید" />
       </div>
     );
