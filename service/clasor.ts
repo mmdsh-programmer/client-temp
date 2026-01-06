@@ -42,6 +42,7 @@ import {
   IClasorField,
   IDocument,
   IDocumentMetadata,
+  IDocumentSocialInfoResponse,
   IDocumentWhiteListRequest,
   IWhiteList,
 } from "@interface/document.interface";
@@ -6249,3 +6250,92 @@ export const deletePostIdComment = async (accessToken: string, commentId: number
     return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
   }
 };
+
+export const getDocumentSocialInfo = async (
+  accessToken: string,
+  repoId: number,
+  documentId: number,
+) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IDocumentSocialInfoResponse>>(
+      `repositories/${repoId}/documents/${documentId}/socialContent`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getPublishDocumentSocialInfo = async (accessToken: string, documentId: number) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IDocumentSocialInfoResponse>>(
+      `publish/document/${documentId}/socialContent`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getPublishQuestionList = async (documentId: number, offset: number, size: number) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IQuestion>>>(
+      `publish/document/${documentId}/questions`,
+      {
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getPublishAnswerList = async (documentId: number, questionId: number, offset: number, size: number) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IQuestion>>>(
+      `publish/document/${documentId}/questions/${questionId}/answers?`,
+      {
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+
+export const getPublishCommentList = async (documentId: number, offset: number, size: number) => {
+  try {
+    const response = await axiosClasorInstance.get<IServerResult<IListResponse<IComment>>>(
+      `publish/document/${documentId}/comments`,
+      {
+        params: {
+          offset,
+          size,
+        },
+      },
+    );
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
+  }
+};
+

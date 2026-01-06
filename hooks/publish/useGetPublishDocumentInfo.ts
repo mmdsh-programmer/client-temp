@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import { IActionError } from "@interface/app.interface";
 import { handleClientSideHookError } from "@utils/error";
 import { getPublishDocumentInfoAction } from "@actions/publish";
-import { IVersion } from "@interface/version.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 
 const useGetPublishDocumentInfo = (repoId: number, documentId: number) => {

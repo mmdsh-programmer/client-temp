@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@material-tailwind/react";
 import { DislikeIcon } from "@components/atoms/icons";
 import RenderIf from "../renderIf";
+import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {
   onClick: () => void;
@@ -24,13 +25,14 @@ const DislikeButton = ({
   showCounter,
   isDisliked
 }: IProps) => {
+  const {data: userInfo} = useGetUser();
   return (
     <Button
       placeholder=""
       onClick={onClick}
-      className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 ${dislikeButtonClassName}`}
+      className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 disabled:opacity-80 ${dislikeButtonClassName}`}
       title={dislikeCount.toString()}
-      disabled={dislikePending}
+      disabled={dislikePending || !userInfo}
       {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <RenderIf isTrue={!!showCounter}>

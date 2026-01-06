@@ -21,6 +21,7 @@ import {
   getDocument,
   getDocumentBlocklist,
   getDocumentPublishLink,
+  getDocumentSocialInfo,
   getDocumentWhiteBlackList,
   getRepoDocuments,
   getUserDocument,
@@ -54,7 +55,7 @@ export const getDocumentAction = async (
   isDirectAccess?: boolean,
   offset?: number,
   size?: number,
-  disableVersions?: boolean
+  disableVersions?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -65,7 +66,7 @@ export const getDocumentAction = async (
       isDirectAccess,
       offset,
       size,
-      disableVersions
+      disableVersions,
     );
 
     return response;
@@ -599,6 +600,16 @@ export const rejectWhiteListRequestAction = async (
       documentId,
       requestId,
     );
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const getDocumentSocialInfoAction = async (repoId: number, documentId: number) => {
+  const userInfo = await getMe();
+  try {
+    const response = await getDocumentSocialInfo(userInfo.access_token, repoId, documentId);
     return response;
   } catch (error) {
     return normalizeError(error as IActionError);

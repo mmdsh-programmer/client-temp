@@ -36,7 +36,11 @@ const useDislike = () => {
       queryClient.invalidateQueries({
         queryKey: [`answer-list-repoId-${repoId}-documentId-${documentId}-questionId-${postId}`],
       });
-
+      queryClient.invalidateQueries({
+        queryKey: [
+          `get-document-social-documentId-${documentId}`,
+        ],
+      });
       callBack?.();
     },
     onError: (error) => {

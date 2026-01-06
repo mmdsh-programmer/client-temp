@@ -9,37 +9,36 @@ import useGetUser from "@hooks/auth/useGetUser";
 
 const PublishQuestionAnswer = () => {
   const [createQuestion, setCreateQuestion] = useState(false);
-
   const getPublishVersion = usePublishStore();
 
   const { data: userInfo } = useGetUser();
 
-  if (!userInfo) {
-    return (
-      <div className="mt-8">
-        <PublishForceLogin />
-      </div>
-    );
-  }
-
   return getPublishVersion ? (
     <div className="mt-4 flex flex-col gap-4">
-      <div className="flex w-full justify-end px-4">
-        <Button
-          className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
-          onClick={() => {
-            setCreateQuestion(true);
-          }}
-          {...({} as React.ComponentProps<typeof Button>)}
-        >
-          <AddIcon className="h-5 w-5 stroke-white" />
-          <Typography
-            {...({} as React.ComponentProps<typeof Typography>)}
-            className="text-xs text-gray-800 text-white"
-          >
-            ایجاد پرسش جدید
-          </Typography>
-        </Button>
+      <div>
+        {userInfo ? (
+          <div className="flex w-full justify-end px-4">
+            <Button
+              className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
+              onClick={() => {
+                setCreateQuestion(true);
+              }}
+              {...({} as React.ComponentProps<typeof Button>)}
+            >
+              <AddIcon className="h-5 w-5 stroke-white" />
+              <Typography
+                {...({} as React.ComponentProps<typeof Typography>)}
+                className="text-xs text-gray-800 text-white"
+              >
+                ایجاد پرسش جدید
+              </Typography>
+            </Button>
+          </div>
+        ) : (
+          <div className="my-2">
+            <PublishForceLogin customText="برای ایجاد پرسش جدید باید وارد پنل کاربری خود شوید" />
+          </div>
+        )}
       </div>
 
       <hr className="h-[2px] w-full bg-blue-gray-50" />

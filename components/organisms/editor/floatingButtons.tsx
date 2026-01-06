@@ -250,7 +250,7 @@ const FloatingButtons = ({ editorRef }: IProps) => {
               </>
             </RenderIf>
             <RenderIf isTrue={renderLike}>
-              <LikeAndDislike postId={getDocument!.customPostId} />
+              <LikeAndDislike document={getDocument} />
             </RenderIf>
           </>
         ) : null}
