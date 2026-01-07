@@ -10,6 +10,7 @@ import { useRepositoryStore } from "@store/repository";
 import { ERoles } from "@interface/enums";
 import useGetAnswerListByAdmin from "@hooks/questionAnswer/useGetAnswerListByAdmin";
 import { useDocumentStore } from "@store/document";
+import Error from "@components/organisms/error";
 
 interface IProps {
   questionItem: IQuestion;
@@ -24,6 +25,8 @@ const DocumentAnswerList = ({ questionItem }: IProps) => {
   const {
     data: answerList,
     isLoading,
+    error,
+    refetch,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
@@ -38,6 +41,8 @@ const DocumentAnswerList = ({ questionItem }: IProps) => {
   const {
     data: answerListByAdmin,
     isLoading: adminListIsLoading,
+    error: adminListError,
+    refetch: adminListRefetch,
     hasNextPage: adminListHasNextPage,
     isFetchingNextPage: adminListIsFetchingNextPage,
     fetchNextPage: adminListFetchNextPage,
@@ -58,6 +63,27 @@ const DocumentAnswerList = ({ questionItem }: IProps) => {
       <div className="flex items-center gap-4 bg-white py-8">
         <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || adminListError) {
+    return (
+      <div className="flex items-center gap-4 bg-secondary  py-8">
+        <div className="flex w-full justify-center">
+          <Error
+            error={{
+              message: error?.message || adminListError?.message || "خطا در دریافت اطلاعات",
+            }}
+            retry={() => {
+              if (error) {
+                refetch();
+              } else {
+                adminListRefetch();
+              }
+            }}
+          />
         </div>
       </div>
     );

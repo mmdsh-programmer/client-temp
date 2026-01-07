@@ -47,7 +47,10 @@ const QuestionAnswerLikeAndDislike = ({
               disliked: false,
             },
             numOfLikes: localItem.numOfLikes + 1,
-            numOfDisLikes: localItem.numOfDisLikes > 0 ? localItem.numOfDisLikes - 1 : 0,
+            numOfDisLikes:
+              localItem.userPostInfo.disliked && localItem.numOfDisLikes > 0
+                ? localItem.numOfDisLikes - 1
+                : localItem.numOfDisLikes,
           });
         }
       },
@@ -69,7 +72,10 @@ const QuestionAnswerLikeAndDislike = ({
               liked: false,
             },
             numOfDisLikes: localItem.numOfDisLikes + 1,
-            numOfLikes: localItem.numOfLikes > 0 ? localItem.numOfLikes - 1 : 0,
+            numOfLikes:
+              localItem.userPostInfo.liked && localItem.numOfLikes > 0
+                ? localItem.numOfLikes - 1
+                : localItem.numOfLikes,
           });
         }
       },

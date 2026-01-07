@@ -47,7 +47,10 @@ const CommentLikeAndDislike = ({
             liked: !localItem.liked,
             disliked: false,
             numOfLikes: localItem.numOfLikes + 1,
-            numOfDislikes: localItem.numOfDislikes > 0 ? localItem.numOfDislikes - 1 : 0,
+            numOfDislikes:
+              localItem.disliked && localItem.numOfDislikes > 0
+                ? localItem.numOfDislikes - 1
+                : localItem.numOfDislikes,
           });
         }
       },
@@ -67,7 +70,10 @@ const CommentLikeAndDislike = ({
             disliked: !localItem.disliked,
             liked: false,
             numOfDislikes: localItem.numOfDislikes + 1,
-            numOfLikes: localItem.numOfLikes > 0 ? localItem.numOfLikes - 1 : 0,
+            numOfLikes:
+              localItem.liked && localItem.numOfLikes > 0
+                ? localItem.numOfLikes - 1
+                : localItem.numOfLikes,
           });
         }
       },

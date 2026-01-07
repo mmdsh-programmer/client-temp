@@ -9,28 +9,37 @@ import AnswerList from "./answerList";
 import { usePublishStore } from "@store/publish";
 import useGetUser from "@hooks/auth/useGetUser";
 import useGetPublishQuestionList from "@hooks/publish/useGetPublishQuestionList";
+import Error from "@components/organisms/error";
 
 const QuestionList = () => {
   const { data: userInfo } = useGetUser();
 
-  const { publishVersion } = usePublishStore();
-  const { repoId, documentId } = publishVersion!;
+  const { publishPageSelectedDocument } = usePublishStore();
 
   const {
     data: questionList,
     isLoading,
+    error,
+    refetch,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetQuestionList(repoId, documentId, 10, !!userInfo);
+  } = useGetQuestionList(
+    publishPageSelectedDocument!.repoId,
+    publishPageSelectedDocument!.id,
+    10,
+    !!userInfo,
+  );
 
   const {
     data: publishQuestionList,
     isLoading: publishQuestionIsLoading,
+    error: publishQuestionError,
+    refetch: publishQuestionRefetch,
     hasNextPage: publishQuestionHasNextPage,
     isFetchingNextPage: publishQuestionIsFetchingNextPage,
     fetchNextPage: publishQuestionFetchNextPage,
-  } = useGetPublishQuestionList(documentId, 10, !userInfo);
+  } = useGetPublishQuestionList(publishPageSelectedDocument!.id, 10, !userInfo);
 
   if (isLoading || publishQuestionIsLoading) {
     return (
@@ -38,6 +47,25 @@ const QuestionList = () => {
         <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
         </div>
+      </div>
+    );
+  }
+
+  if (error || publishQuestionError) {
+    return (
+      <div className="flex items-center gap-4 bg-secondary py-8">
+        <Error
+          error={{
+            message: error?.message || publishQuestionError?.message || "خطا در دریافت اطلاعات",
+          }}
+          retry={() => {
+            if (error) {
+              refetch();
+            } else {
+              publishQuestionRefetch();
+            }
+          }}
+        />
       </div>
     );
   }

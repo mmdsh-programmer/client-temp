@@ -35,40 +35,45 @@ const DocumentCommentsDialog = ({ setOpen }: IProps) => {
   const tabList = [
     {
       tabTitle: "تایید شده‌ها",
-      tabContent: createComment ? (
-        <DocumentCreateComment setOpen={setCreateComment} />
-      ) : (
-        <>
-          <div className="flex w-full justify-end">
-            <Button
-              className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
-              onClick={() => {
-                return setCreateComment(true);
-              }}
-              {...({} as React.ComponentProps<typeof Button>)}
-            >
-              <AddIcon className="h-5 w-5 stroke-white" />
-              <Typography
-                {...({} as React.ComponentProps<typeof Typography>)}
-                className="text-xs text-white"
-              >
-                ایجاد نظر جدید
-              </Typography>
-            </Button>
-          </div>
-          <div className="h-full xs:h-[calc(100%-200px)]">
-            <DocumentCommentList />
-          </div>
-        </>
-      ),
+      tabContent:
+        // eslint-disable-next-line no-nested-ternary
+        activeTab === "تایید شده‌ها" ? (
+          createComment ? (
+            <DocumentCreateComment setOpen={setCreateComment} />
+          ) : (
+            <>
+              <div className="flex w-full justify-end">
+                <Button
+                  className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
+                  onClick={() => {
+                    return setCreateComment(true);
+                  }}
+                  {...({} as React.ComponentProps<typeof Button>)}
+                >
+                  <AddIcon className="h-5 w-5 stroke-white" />
+                  <Typography
+                    {...({} as React.ComponentProps<typeof Typography>)}
+                    className="text-xs text-white"
+                  >
+                    ایجاد نظر جدید
+                  </Typography>
+                </Button>
+              </div>
+              <div className="h-full xs:h-[calc(100%-200px)]">
+                <DocumentCommentList />
+              </div>
+            </>
+          )
+        ) : null,
     },
     {
       tabTitle: "تاییدنشده‌ها",
-      tabContent: (
-        <div className="h-full">
-          <DocumentUnconfirmedCommentList />
-        </div>
-      ),
+      tabContent:
+        activeTab === "تاییدنشده‌ها" ? (
+          <div className="h-full">
+            <DocumentUnconfirmedCommentList />
+          </div>
+        ) : null,
     },
   ];
 
