@@ -193,7 +193,7 @@ const QuestionItem = ({ questionItem, children }: IProps) => {
               </Button>
             </RenderIf>
           </div>
-          <RenderIf isTrue={!!userInfo && questionItem.enable}>
+          <RenderIf isTrue={questionItem.enable}>
             <QuestionAnswerLikeAndDislike
               repoId={repoId}
               documentId={documentId}

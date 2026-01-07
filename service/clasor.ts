@@ -6294,6 +6294,7 @@ export const getPublishQuestionList = async (documentId: number, offset: number,
       `publish/document/${documentId}/questions`,
       {
         params: {
+          enable: true,
           offset,
           size,
         },
@@ -6311,6 +6312,7 @@ export const getPublishAnswerList = async (documentId: number, questionId: numbe
       `publish/document/${documentId}/questions/${questionId}/answers?`,
       {
         params: {
+          enable: true,
           offset,
           size,
         },
@@ -6328,6 +6330,7 @@ export const getPublishCommentList = async (documentId: number, offset: number, 
       `publish/document/${documentId}/comments`,
       {
         params: {
+          enable: true,
           offset,
           size,
         },
