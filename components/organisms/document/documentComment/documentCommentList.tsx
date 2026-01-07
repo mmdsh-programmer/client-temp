@@ -16,7 +16,7 @@ const DocumentCommentList = () => {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetCommentList(selectedDocument!.repoId, selectedDocument!.id, 10);
+  } = useGetCommentList(selectedDocument!.repoId, selectedDocument!.id, 10, true);
 
   if (isLoading) {
     return (

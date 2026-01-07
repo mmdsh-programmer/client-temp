@@ -90,7 +90,7 @@ const AnswerItem = ({ answerItem }: IProps) => {
               </Button>
             </RenderIf>
           </div>
-          <RenderIf isTrue={!!userInfo && answerItem.enable}>
+          <RenderIf isTrue={answerItem.enable}>
             <QuestionAnswerLikeAndDislike
               repoId={repoId}
               documentId={documentId}
