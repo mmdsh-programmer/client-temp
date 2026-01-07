@@ -8,6 +8,7 @@ import { IQuestion, IQuestionMetadata } from "@interface/qa.interface";
 import AnswerItem from "./answerItem";
 import useGetUser from "@hooks/auth/useGetUser";
 import useGetPublishAnswerList from "@hooks/publish/useGetPublishAnswerList";
+import Error from "@components/organisms/error";
 
 interface IProps {
   questionItem: IQuestion;
@@ -22,6 +23,8 @@ const AnswerList = ({ questionItem }: IProps) => {
   const {
     data: answerList,
     isLoading,
+    error,
+    refetch,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
@@ -30,6 +33,8 @@ const AnswerList = ({ questionItem }: IProps) => {
   const {
     data: publishAnswerList,
     isLoading: publishAnswerIsLoading,
+    error: publishAnswerError,
+    refetch: publishAnswerRefetch,
     hasNextPage: publishAnswerHasNextPage,
     isFetchingNextPage: publishAnswerIsFetchingNextPage,
     fetchNextPage: publishAnswerFetchNextPage,
@@ -41,6 +46,25 @@ const AnswerList = ({ questionItem }: IProps) => {
         <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
         </div>
+      </div>
+    );
+  }
+
+  if (error || publishAnswerError) {
+    return (
+      <div className="flex items-center gap-4 bg-secondary py-8">
+        <Error
+          error={{
+            message: error?.message || publishAnswerError?.message || "خطا در دریافت اطلاعات",
+          }}
+          retry={() => {
+            if (error) {
+              refetch();
+            } else {
+              publishAnswerRefetch();
+            }
+          }}
+        />
       </div>
     );
   }
@@ -64,7 +88,10 @@ const AnswerList = ({ questionItem }: IProps) => {
         </RenderIf>
         <RenderIf isTrue={!!publishAnswerHasNextPage}>
           <div className="flex w-full justify-center bg-white pb-2">
-            <LoadMore isFetchingNextPage={publishAnswerIsFetchingNextPage} fetchNextPage={publishAnswerFetchNextPage} />
+            <LoadMore
+              isFetchingNextPage={publishAnswerIsFetchingNextPage}
+              fetchNextPage={publishAnswerFetchNextPage}
+            />
           </div>
         </RenderIf>
       </>

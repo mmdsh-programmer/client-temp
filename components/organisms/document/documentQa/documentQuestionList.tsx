@@ -7,18 +7,16 @@ import useGetQuestionList from "@hooks/questionAnswer/useGetQuestionList";
 import { useDocumentStore } from "@store/document";
 import DocumentQuestionItem from "./documentQuestionItem";
 import DocumentAnswerList from "./documentAnswerList";
-import { useRepositoryStore } from "@store/repository";
-import { ERoles } from "@interface/enums";
+import Error from "@components/organisms/error";
 
 const DocumentQuestionList = () => {
-  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
-
-  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   const {
     data: questionList,
     isLoading,
+    error,
+    refetch,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
@@ -34,6 +32,18 @@ const DocumentQuestionList = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex items-center gap-4 bg-white py-8">
+        <Error
+          error={{ message: error?.message || "خطا در دریافت اطلاعات" }}
+          retry={() => {
+            refetch();
+          }}
+        />
+      </div>
+    );
+  }
   const total = questionList?.pages[0]?.total;
 
   const list = questionList;

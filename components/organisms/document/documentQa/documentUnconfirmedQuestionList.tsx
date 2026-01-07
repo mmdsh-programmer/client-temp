@@ -4,32 +4,22 @@ import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import { Spinner } from "@components/atoms/spinner";
 import { useDocumentStore } from "@store/document";
-import DocumentQuestionItem from "./documentQuestionItem";
-import DocumentAnswerList from "./documentAnswerList";
-import { useRepositoryStore } from "@store/repository";
-import { ERoles } from "@interface/enums";
 import useGetQuestionListByAdmin from "@hooks/questionAnswer/useGetQuestionListByAdmin";
 import DocumentUnconfirmedQuestionItem from "./documentUnconfirmedQuestionItem";
+import Error from "@components/organisms/error";
 
 const DocumentUnconfirmedQuestionList = () => {
-  const { repo } = useRepositoryStore();
   const { selectedDocument } = useDocumentStore();
-
-  const adminOwnerRole = repo?.roleName === ERoles.admin || repo?.roleName === ERoles.owner;
 
   const {
     data: questionListByAdmin,
     isLoading: adminListIsLoading,
+    error: adminListError,
+    refetch: adminListRefetch,
     hasNextPage: adminListHasNextPage,
     isFetchingNextPage: adminListIsFetchingNextPage,
     fetchNextPage: adminListFetchNextPage,
-  } = useGetQuestionListByAdmin(
-    selectedDocument!.repoId,
-    selectedDocument!.id,
-    false,
-    10,
-    adminOwnerRole,
-  );
+  } = useGetQuestionListByAdmin(selectedDocument!.repoId, selectedDocument!.id, false, 10, true);
 
   if (adminListIsLoading) {
     return (
@@ -41,6 +31,18 @@ const DocumentUnconfirmedQuestionList = () => {
     );
   }
 
+  if (adminListError) {
+    return (
+      <div className="flex items-center gap-4 bg-white py-8">
+        <Error
+          error={{ message: adminListError?.message || "خطا در دریافت اطلاعات" }}
+          retry={() => {
+            adminListRefetch();
+          }}
+        />
+      </div>
+    );
+  }
   const totalUnconfirmed = questionListByAdmin?.pages[0]?.total || 0;
 
   if (totalUnconfirmed > 0) {

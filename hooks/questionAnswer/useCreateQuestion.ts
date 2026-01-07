@@ -26,6 +26,9 @@ const useCreateQuestion = () => {
       queryClient.invalidateQueries({
         queryKey: [`question-list-${repoId}-documentId-${documentId}`],
       });
+      queryClient.invalidateQueries({
+        queryKey: [`question-list-${repoId}-documentId-${documentId}-by-admin`],
+      });
 
       callBack?.();
     },

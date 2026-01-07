@@ -7,6 +7,7 @@ import { Spinner } from "@components/atoms/spinner";
 import useGetCommentList from "@hooks/comment/useGetCommentList";
 import useGetUser from "@hooks/auth/useGetUser";
 import useGetPublishCommentList from "@hooks/publish/useGetPublishCommentList";
+import Error from "@components/organisms/error";
 
 interface IProps {
   repoId: number;
@@ -18,6 +19,8 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
   const {
     data: commentList,
     isLoading,
+    error,
+    refetch,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
@@ -26,6 +29,8 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
   const {
     data: publishCommentList,
     isLoading: publishCommentIsLoading,
+    error: publishCommentError,
+    refetch: publishCommentRefetch,
     hasNextPage: publishCommentHasNextPage,
     isFetchingNextPage: publishCommentIsFetchingNextPage,
     fetchNextPage: publishCommentFetchNextPage,
@@ -40,6 +45,25 @@ const PublishCommentList = ({ repoId, documentId }: IProps) => {
         <div className="flex w-full justify-center">
           <Spinner className="h-6 w-6 text-primary" />
         </div>
+      </div>
+    );
+  }
+
+  if (error || publishCommentError) {
+    return (
+      <div className="flex items-center gap-4 bg-white py-8">
+        <Error
+          error={{
+            message: error?.message || publishCommentError?.message || "خطا در دریافت اطلاعات",
+          }}
+          retry={() => {
+            if (error) {
+              refetch();
+            } else {
+              publishCommentRefetch();
+            }
+          }}
+        />
       </div>
     );
   }

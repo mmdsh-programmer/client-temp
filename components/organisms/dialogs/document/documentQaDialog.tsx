@@ -132,40 +132,45 @@ const DocumentQaDialog = ({ setOpen }: IProps) => {
   const tabList = [
     {
       tabTitle: "تاییدشده‌ها",
-      tabContent: createQuestion ? (
-        <DocumentCreateQuestion setOpen={setCreateQuestion} />
-      ) : (
-        <>
-          <div className="flex w-full justify-end">
-            <Button
-              className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
-              onClick={() => {
-                return setCreateQuestion(true);
-              }}
-              {...({} as React.ComponentProps<typeof Button>)}
-            >
-              <AddIcon className="h-5 w-5 stroke-white" />
-              <Typography
-                {...({} as React.ComponentProps<typeof Typography>)}
-                className="text-xs text-white"
-              >
-                ایجاد پرسش جدید
-              </Typography>
-            </Button>
-          </div>
-          <div className="mt-8 h-full xs:h-[calc(100%-200px)]">
-            <DocumentQuestionList />
-          </div>
-        </>
-      ),
+      tabContent:
+        // eslint-disable-next-line no-nested-ternary
+        activeTab === "تاییدشده‌ها" ? (
+          createQuestion ? (
+            <DocumentCreateQuestion setOpen={setCreateQuestion} />
+          ) : (
+            <>
+              <div className="flex w-full justify-end">
+                <Button
+                  className="items-center gap-2 self-end rounded-lg bg-primary-normal px-4"
+                  onClick={() => {
+                    return setCreateQuestion(true);
+                  }}
+                  {...({} as React.ComponentProps<typeof Button>)}
+                >
+                  <AddIcon className="h-5 w-5 stroke-white" />
+                  <Typography
+                    {...({} as React.ComponentProps<typeof Typography>)}
+                    className="text-xs text-white"
+                  >
+                    ایجاد پرسش جدید
+                  </Typography>
+                </Button>
+              </div>
+              <div className="mt-8 h-full xs:h-[calc(100%-200px)]">
+                <DocumentQuestionList />
+              </div>
+            </>
+          )
+        ) : null,
     },
     {
       tabTitle: "تاییدنشده‌ها",
-      tabContent: (
-        <div className="mt-8 h-full">
-          <DocumentUnconfirmedQuestionList />
-        </div>
-      ),
+      tabContent:
+        activeTab === "تاییدنشده‌ها" ? (
+          <div className="mt-8 h-full">
+            <DocumentUnconfirmedQuestionList />
+          </div>
+        ) : null,
     },
   ];
 
