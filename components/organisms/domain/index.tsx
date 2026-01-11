@@ -8,6 +8,7 @@ import Settings from "../settings";
 import PublicFeed from "../domainPublicFeed";
 import PrivateFeed from "../domainPrivateFeed";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import DomainRepositoriesManagement from "../domainRepositories";
 
 export enum ETabs {
   SETTING = "تنظیمات",
@@ -18,6 +19,7 @@ export enum ETabs {
   QUESTIONS = "سوالات",
   VIOLATION_REPORT = "گزارش تخلف",
   TAGS = "تگ‌ها",
+  REPOSITORY = "مدیریت مخزن‌ها",
 }
 
 const DomainConfig = () => {
@@ -94,6 +96,10 @@ const DomainConfig = () => {
           tabContent: activeTab === ETabs.TAGS ? <DomainTags /> : null,
         }
       : null,
+    {
+      tabTitle: ETabs.REPOSITORY,
+      tabContent: activeTab === ETabs.REPOSITORY ? <DomainRepositoriesManagement /> : null,
+    },
   ].filter(Boolean) as {
     tabTitle: ETabs;
     tabContent: React.JSX.Element;

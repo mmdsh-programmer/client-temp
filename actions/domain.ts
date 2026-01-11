@@ -14,6 +14,7 @@ import {
   updateCustomPostByDomain,
   getDomainDocuments,
   getDomainVersions,
+  editRepoOrder,
 } from "@service/clasor";
 import { getMe } from "./auth";
 import { getDomainHost } from "@utils/getDomain";
@@ -313,6 +314,18 @@ export const getDomainVersionsAction = async (
       offset,
       size,
     );
+
+    return response;
+  } catch (error) {
+    return normalizeError(error as IActionError);
+  }
+};
+
+export const editRepoOrderAction = async (repoId: number, order: number | null) => {
+  try {
+    const userInfo = await getMe();
+
+    const response = await editRepoOrder(userInfo.access_token, repoId, order);
 
     return response;
   } catch (error) {

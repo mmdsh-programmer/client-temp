@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import { ETourSection } from "@atom/tour";
+
+export enum ETourSection {
+  REPO = "repo",
+  DOCUMENTS = "documents",
+  VERSION = "version",
+  DASHBOARD = "dashboard"
+}
 
 interface TourState {
   activeTour: ETourSection | null;

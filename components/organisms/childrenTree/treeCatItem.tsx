@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { ChevronLeftIcon, FolderIcon } from "@components/atoms/icons";
 import { Collapse, Typography } from "@material-tailwind/react";
-import type { ICategoryTreeItem, IDocumentTreeItem } from "@atom/category";
-import { useCategoryStore } from "@store/category";
+import { ICategoryTreeItem, IDocumentTreeItem, useCategoryStore } from "@store/category";
 import { useRepositoryStore } from "@store/repository";
 import { useSortStore } from "@store/sortParam";
 import CategoryMenu from "@components/molecules/categoryMenu/categoryMenu";

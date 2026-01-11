@@ -1,9 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create, StateCreator } from "zustand";
 import { ICategoryMetadata } from "@interface/category.interface";
-import { CategoryChildrenQueryParams } from "@atom/category";
 import { devtools } from "zustand/middleware";
 import { logger } from "./logger";
+import { IDocumentMetadata } from "@interface/document.interface";
+
+export interface ICategoryTreeItem extends ICategoryMetadata {
+  parent?: number;
+  droppable?: boolean;
+}
+
+export interface IDocumentTreeItem extends IDocumentMetadata {
+  parent?: number;
+  droppable?: boolean;
+}
+
+export interface CategoryChildrenQueryParams {
+  page: number;
+  limit: number;
+  total: number;
+}
 
 interface CategoryState {
   category: ICategoryMetadata | null;

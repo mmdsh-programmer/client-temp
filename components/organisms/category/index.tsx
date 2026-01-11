@@ -1,8 +1,7 @@
 "use client";
 
 import { Button, Typography } from "@material-tailwind/react";
-import { ETourSection } from "@atom/tour";
-import { useTourStore } from "@store/tour";
+import { ETourSection, useTourStore } from "@store/tour";
 import CategoryChildren from "./categoryChildren";
 import CategoryDocumentCreateMenu from "../../molecules/categoryDocumentCreateMenu";
 import CategoryListMode from "@components/molecules/categoryListMode";
