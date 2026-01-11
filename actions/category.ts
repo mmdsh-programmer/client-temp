@@ -10,11 +10,10 @@ import {
   getCategoryBlocklist,
   getChildren,
 } from "@service/clasor";
-
-import { ISortProps } from "@atom/sortParam";
 import { getMe } from "./auth";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
+import { ISortProps } from "@store/sortParam";
 
 export const getChildrenAction = async (
   repoId: number,

@@ -19,8 +19,6 @@ import useSetUserMetadata from "@hooks/auth/useSetUserMetadata";
 import RemoteEditorWithLoader from "./remoteEditorWithLoader";
 import dynamic from "next/dynamic";
 
-
-
 const VersionInfoDialogComponent = dynamic(
   () => {
     return import("@components/organisms/reversion/versionInfoDialog");
@@ -121,6 +119,7 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
           resourceId: selectedDocument.id || undefined,
           podspaceUrl: `${process.env.NEXT_PUBLIC_PODSPACE_API}/`,
           backendUrl: `${process.env.NEXT_PUBLIC_BACKEND_URL}/`,
+          config: { excludeItems: selectedDocument.publicKeyId ? "externalDocument" : "" },
         } as IClassicData;
       case EDocumentTypes.word:
         return {
@@ -137,8 +136,8 @@ const EditorComponent = ({ getEditorConfig, version }: IProps) => {
       return <FileEditor />;
     }
 
-    const editorKey = version?.id 
-      ? `${version.id}-${version?.updateDate || version?.content?.length}` 
+    const editorKey = version?.id
+      ? `${version.id}-${version?.updateDate || version?.content?.length}`
       : "editor-default";
 
     return (

@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useTourStore } from "@store/tour";
-import { ETourSection } from "@atom/tour";
+import { ETourSection, useTourStore } from "@store/tour";
 import RepoTour from "./repoTour";
 import DashboardTour from "./dashboardTour";
 import CategoryTour from "./categoryTour";

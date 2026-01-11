@@ -71,7 +71,6 @@ import { IFeedItem, IFollowingRepo } from "@interface/feeds.interface";
 import { IGetUserAccesses } from "@interface/access.interface";
 import { IOfferResponse } from "@interface/offer.interface";
 import { IPositionList } from "@interface/position.interface";
-import { ISortProps } from "@atom/sortParam";
 import { ITag } from "@interface/tags.interface";
 import { decryptKey } from "@utils/crypto";
 import qs from "qs";
@@ -79,6 +78,7 @@ import { generateCachePageTag } from "@utils/generateCachePageTag";
 import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
 import { getDomainHost } from "@utils/getDomain";
 import { IQuestion } from "@interface/qa.interface";
+import { ISortProps } from "@store/sortParam";
 
 const axiosClasorInstance = axios.create({
   baseURL: process.env.BACKEND_URL,
@@ -4008,7 +4008,16 @@ export const getDomainPublishRepoList = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
-      "repositories/publishRepoList",
+      `repositories/publishRepoList?${[
+        {
+          field: "domainPublishedRepoOrder",
+          order: "asc",
+        },
+      ]
+        .map((n) => {
+          return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
+        })
+        .join("&")}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -5254,6 +5263,24 @@ export const getDomainVersions = async (
   }
 };
 
+export const editRepoOrder = async (accessToken: string, repoId: number, order: number | null) => {
+  try {
+    const response = await axiosClasorInstance.patch(
+      `domain/repository/${repoId}`,
+      { domainPublishedRepoOrder: order },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+
+    return response.data.data;
+  } catch (error) {
+    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-88");
+  }
+};
+
 /// /////////////////////////////// CHAT //////////////////////
 
 export const enableDocChat = async (accessToken: string, repoId: number, docId: number) => {
@@ -6306,7 +6333,12 @@ export const getPublishQuestionList = async (documentId: number, offset: number,
   }
 };
 
-export const getPublishAnswerList = async (documentId: number, questionId: number, offset: number, size: number) => {
+export const getPublishAnswerList = async (
+  documentId: number,
+  questionId: number,
+  offset: number,
+  size: number,
+) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IQuestion>>>(
       `publish/document/${documentId}/questions/${questionId}/answers?`,
@@ -6341,4 +6373,3 @@ export const getPublishCommentList = async (documentId: number, offset: number, 
     return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-115");
   }
 };
-

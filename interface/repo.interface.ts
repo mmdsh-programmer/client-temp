@@ -33,6 +33,7 @@ export interface IRepo {
   writerPublicLink: IPublicLink | null;
   editorPublicLink: IPublicLink | null;
   metadata?: null;
+  domainPublishedRepoOrder?: number
 }
 
 export interface IPublicLink {
