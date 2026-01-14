@@ -67,7 +67,7 @@ export const isRateLimited = async (ip: string) => {
       console.log(
         JSON.stringify(
           {
-            type: EAction.RATE_LIMIT,
+            type: EAction.RateLimit,
             status: "BANNED",
             ip,
             message: "IP is currently banned",

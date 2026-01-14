@@ -10,6 +10,7 @@ export enum EAction {
   "SendResponse" = "SEND-response",
   "DbRequest" = "DB-request",
   "DbResponse" = "DB-response",
+  "RateLimit" = "RateLimit"
 }
 
 export enum ETeamName {
