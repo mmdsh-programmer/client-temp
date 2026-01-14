@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { AddIcon, InfoIcon } from "@components/atoms/icons";
 import { Button, Typography } from "@material-tailwind/react";
-import { ETourSection } from "@atom/tour";
 import IconTextButton from "@components/molecules/iconTextButton/iconTextButton";
-import { useTourStore } from "@store/tour";
+import { ETourSection, useTourStore } from "@store/tour";
 import useGetUser from "@hooks/auth/useGetUser";
 
 export interface IProps {

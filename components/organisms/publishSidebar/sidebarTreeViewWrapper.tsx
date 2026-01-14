@@ -3,12 +3,10 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { SearchIcon, XIcon } from "@components/atoms/icons";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import Error from "@components/organisms/error";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
-import { ISortProps } from "@atom/sortParam";
 import Link from "next/link";
 import SidebarCategoryItem from "./sidebarCategoryItem";
 import SidebarCollapse from "./sidebarCollapse";
@@ -19,6 +17,7 @@ import useDebounce from "@hooks/custom/useDebounce";
 import useGetAllPublishChildren from "@hooks/publish/useGetAllPublishChildren";
 import useGetPublishChildren from "@hooks/publish/useGetPublishChildren";
 import useGetUser from "@hooks/auth/useGetUser";
+import { ISortProps } from "@store/sortParam";
 
 interface IProps {
   repoId: number;
@@ -59,13 +58,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
     isFetchingNextPage: isFetchingSearchNextPage,
     hasNextPage: searchHasNextPage,
     fetchNextPage: fetchNextSearchPage,
-  } = useGetAllPublishChildren(
-    repoId,
-    20,
-    undefined,
-    manualSearch,
-    !!manualSearch
-  );
+  } = useGetAllPublishChildren(repoId, 20, undefined, manualSearch, !!manualSearch);
 
   const index = useRef(-1);
 
@@ -79,32 +72,23 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
     index.current = -1;
   };
 
-  const overalLoading =
-    searchInput && manualSearch ? isLoadingSearch : isLoadingChildren;
+  const overalLoading = searchInput && manualSearch ? isLoadingSearch : isLoadingChildren;
   const renderTree = searchInput && manualSearch ? searchList : categoryList;
   const fetchingNextPage =
-    searchInput && manualSearch
-      ? isFetchingSearchNextPage
-      : isFetchingChildrenNextPage;
-  const nextPageExist =
-    searchInput && manualSearch ? searchHasNextPage : childrenHasNextPage;
-
+    searchInput && manualSearch ? isFetchingSearchNextPage : isFetchingChildrenNextPage;
+  const nextPageExist = searchInput && manualSearch ? searchHasNextPage : childrenHasNextPage;
 
   const ids = searchParams.get("ids");
 
   const renderItems = (
     page: IListResponse<ICategoryMetadata | IDocumentMetadata>,
-    renderTreeIndex: number
+    renderTreeIndex: number,
   ) => {
     return (
       <Fragment key={`fragment-card-${renderTreeIndex}`}>
         {page.list?.length
           ? page.list.map((childItem) => {
-              if (
-                childItem &&
-                childItem.type === "category" &&
-                !childItem.isHidden
-              ) {
+              if (childItem && childItem.type === "category" && !childItem.isHidden) {
                 const catIds = [...categoryIds, childItem.id];
                 const defaultState = ids?.includes(toPersianDigit(childItem.id).toString());
                 return (
@@ -123,11 +107,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
                   </SidebarCollapse>
                 );
               }
-              if (
-                childItem &&
-                childItem.type === "document" &&
-                !childItem.isHidden
-              ) {
+              if (childItem && childItem.type === "document" && !childItem.isHidden) {
                 return (
                   <SidebarDocumentItem
                     key={`category-${childItem.categoryId}-document-${childItem.id}-tree-item`}
@@ -145,15 +125,19 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
   };
 
   return (
-    <div className="h-[calc(100vh-97px)] w-100">
-      <div className="text-xl font-bold text-[#3e4a4d] text-center mt-4 mb-4 pb-4 border-b border-solid border-[rgba(0,0,0,0.08)]">
-        <Link className="block whitespace-nowrap text-ellipsis overflow-hidden" prefetch={false} href={`/publish/${repoName}/${toPersianDigit(repoId)}`}>
-          {(repoName)?.replaceAll("-", " ") || ""}
+    <div className="w-100 h-[calc(100vh-97px)]">
+      <div className="mb-4 mt-4 border-b border-solid border-[rgba(0,0,0,0.08)] pb-4 text-center text-xl font-bold text-[#3e4a4d]">
+        <Link
+          className="block overflow-hidden text-ellipsis whitespace-nowrap"
+          prefetch={false}
+          href={`/publish/${repoName}/${toPersianDigit(repoId)}`}
+        >
+          {repoName?.replaceAll("-", " ") || ""}
         </Link>
-        <div className="search-input flex justify-center w-full group mt-2 border-spacing-1 border-2 rounded-lg text-xs h-9">
+        <div className="search-input group mt-2 flex h-9 w-full border-spacing-1 justify-center rounded-lg border-2 text-xs">
           <input
             type="text"
-            className="pr-2 w-full rounded-r-[5px] focus:outline-none placeholder:text-xs text-black text-xs"
+            className="w-full rounded-r-[5px] pr-2 text-xs text-black placeholder:text-xs focus:outline-none"
             placeholder="جست و جو نام سند یا دسته بندی ..."
             autoComplete="off"
             value={searchInput}
@@ -169,19 +153,19 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
               if (e.key === "Escape") handleClose();
             }}
           />
-          <div className="flex items-center justify-center p-1.5 bg-white rounded-l-[5px]">
+          <div className="flex items-center justify-center rounded-l-[5px] bg-white p-1.5">
             {searchInput && manualSearch ? (
               <div className="flex">
-                <div className="flex justify-center items-center mr-1">
-                  <div className="w-[1px] h-5 bg-gray-400" />
+                <div className="mr-1 flex items-center justify-center">
+                  <div className="h-5 w-[1px] bg-gray-400" />
                 </div>
-                <button className="p-1 rounded-[5px]" onClick={handleClose}>
-                  <XIcon className="w-4 h-4 fill-gray-400" />
+                <button className="rounded-[5px] p-1" onClick={handleClose}>
+                  <XIcon className="h-4 w-4 fill-gray-400" />
                 </button>
               </div>
             ) : (
-              <button className="p-1 rounded-[5px]" onClick={onSubmit}>
-                <SearchIcon className="w-4 h-4 stroke-gray-400" />
+              <button className="rounded-[5px] p-1" onClick={onSubmit}>
+                <SearchIcon className="h-4 w-4 stroke-gray-400" />
               </button>
             )}
           </div>
@@ -190,7 +174,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
 
       <div className="h-[calc(100vh-220px)] overflow-y-auto pl-2">
         {overalLoading ? (
-          <div className="w-full flex justify-center pt-4">
+          <div className="flex w-full justify-center pt-4">
             <Spinner className="h-5 w-5 text-primary" />
           </div>
         ) : (
@@ -201,7 +185,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
 
         {!searchInput && !!nextPageExist && !fetchingNextPage ? (
           <button
-            className="underline underline-offset-8 text-[8px] text-gray-70 mt-2 mx-auto"
+            className="text-gray-70 mx-auto mt-2 text-[8px] underline underline-offset-8"
             onClick={() => {
               return fetchNextPage();
             }}
@@ -214,7 +198,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
           !!nextPageExist &&
           !fetchingNextPage && (
             <button
-              className="underline underline-offset-8 text-[8px] text-gray-700 mx-auto mt-2"
+              className="mx-auto mt-2 text-[8px] text-gray-700 underline underline-offset-8"
               onClick={() => {
                 return fetchNextSearchPage();
               }}
@@ -226,7 +210,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
         )}
 
         {fetchingNextPage && (
-          <div className="w-full flex justify-center pt-4">
+          <div className="flex w-full justify-center pt-4">
             <Spinner className="h-5 w-5 text-primary" />
           </div>
         )}
@@ -235,13 +219,7 @@ const SidebarTreeView = ({ repoId, repoName, categoryIds }: IProps) => {
   );
 };
 
-const SidebarTreeViewWrapper = ({
-  repoId,
-  repoName,
-}: {
-  repoId: number;
-  repoName: string;
-}) => {
+const SidebarTreeViewWrapper = ({ repoId, repoName }: { repoId: number; repoName: string }) => {
   const authenticated = window.localStorage.getItem("AUTHENTICATED") === "true";
   const { data: userInfo, isFetching } = useGetUser();
   const router = useRouter();
@@ -254,7 +232,7 @@ const SidebarTreeViewWrapper = ({
   if (isFetching) {
     return (
       <div className="h-[calc(100vh-200px)]">
-        <div className="w-full flex justify-center pt-4">
+        <div className="flex w-full justify-center pt-4">
           <Spinner className="h-5 w-5 text-primary" />
         </div>
       </div>
@@ -269,9 +247,7 @@ const SidebarTreeViewWrapper = ({
       />
     );
   }
-  return (
-    <SidebarTreeView repoName={repoName} repoId={repoId} categoryIds={[]} />
-  );
+  return <SidebarTreeView repoName={repoName} repoId={repoId} categoryIds={[]} />;
 };
 
 export default SidebarTreeViewWrapper;

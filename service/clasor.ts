@@ -3872,7 +3872,17 @@ export const getPublishRepoList = async (
 ) => {
   try {
     const response = await axiosClasorInstance.get<IServerResult<IListResponse<IRepo>>>(
-      "repositories/publishRepoList",
+      `repositories/publishRepoList?${[
+        {
+          field: "domainPublishedRepoOrder",
+          order: "asc",
+        },
+        { repoTypes },
+      ]
+        .map((n) => {
+          return `sortParams=${encodeURIComponent(JSON.stringify(n))}`;
+        })
+        .join("&")}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -3881,12 +3891,6 @@ export const getPublishRepoList = async (
         params: {
           offset,
           size,
-          repoTypes,
-        },
-        paramsSerializer: (params) => {
-          return qs.stringify(params, {
-            indexes: false,
-          });
         },
       },
     );

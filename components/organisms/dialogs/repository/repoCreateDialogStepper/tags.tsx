@@ -31,7 +31,7 @@ const Tags = ({ handleClose }: IProps) => {
   const repoId = getRepo!.id;
 
   const { isPending, mutate } = useCreateTag();
-  const { data: tagList, isLoading } = useGetTags(repoId, undefined, 30, true);
+  const { data: tagList, isLoading } = useGetTags(repoId, false, 10, true);
 
   const { register, handleSubmit, clearErrors, reset } = useForm<IForm>({
     resolver: yupResolver(repoTagSchema),

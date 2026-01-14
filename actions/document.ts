@@ -30,13 +30,12 @@ import {
   rejectWhiteListRequest,
   updateDocumentPassword,
 } from "@service/clasor";
-
 import { EDocumentTypes } from "@interface/enums";
-import { ISortProps } from "@atom/sortParam";
 import { getMe, userInfoAction } from "./auth";
 import { getDomainHost } from "@utils/getDomain";
 import { normalizeError } from "@utils/normalizeActionError";
 import { revalidateTag } from "next/cache";
+import { ISortProps } from "@store/sortParam";
 
 export const getClasorFieldAction = async () => {
   const userInfo = await getMe();
