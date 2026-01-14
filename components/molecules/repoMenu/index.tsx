@@ -7,7 +7,6 @@ import MenuTemplate from "@components/templates/menuTemplate";
 import { usePathname } from "next/navigation";
 import { useRepoActionDrawerStore, useRepositoryStore } from "@store/repository";
 import { useTourStore } from "@store/tour";
-import { ETourSection } from "@atom/tour";
 import RepoDialogs from "../repoDialogs";
 
 interface IProps {
@@ -58,7 +57,7 @@ const RepoMenu = ({ repo, showLog = false, setRepoInfo }: IProps) => {
             placeholder="button"
             className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-gray-50 bg-white p-1 shadow-none"
             onClick={() => {
-              setActiveTour(ETourSection.REPO);
+              // setActiveTour(ETourSection.REPO);
               window.metrics?.track("repo-tour");
             }}
             {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}

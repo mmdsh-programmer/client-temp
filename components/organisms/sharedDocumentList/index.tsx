@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Typography } from "@material-tailwind/react";
-import { ETourSection } from "@atom/tour";
 import { EEmptyList } from "@components/molecules/emptyList";
 import FilterMobileView from "@components/organisms/advancedFilterView/filterMobileView";
 import { ICategoryView } from "@interface/category.interface";
@@ -8,7 +7,7 @@ import { InfoIcon } from "@components/atoms/icons";
 import MobileView from "@components/organisms/categoryView/categoryMobileView";
 import TableView from "@components/organisms/categoryView/categoryTableView";
 import useGetUserDocuments from "@hooks/document/useGetUserDocuments";
-import { useTourStore } from "@store/tour";
+import { ETourSection, useTourStore } from "@store/tour";
 import { useSortStore } from "@store/sortParam";
 import { useCategoryStore } from "@store/category";
 import { useFilterStore } from "@store/filter";
