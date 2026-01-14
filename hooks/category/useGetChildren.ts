@@ -1,12 +1,11 @@
 import { IActionError, IChildrenFilter } from "@interface/app.interface";
-
 import { ICategoryMetadata } from "@interface/category.interface";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IListResponse } from "@interface/repo.interface";
-import { ISortProps } from "@atom/sortParam";
 import { getChildrenAction } from "@actions/category";
 import { handleClientSideHookError } from "@utils/error";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { ISortProps } from "@store/sortParam";
 
 const useGetChildren = (
   repoId: number,
