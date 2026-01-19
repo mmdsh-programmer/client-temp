@@ -1,46 +1,57 @@
 import { EAction } from "lib/logging";
 
 export const defineIncrementAndExpire = async () => {
-  const redisConnection = await global.redisClient;
-  redisConnection.defineCommand("incrementAndExpire", {
-    numberOfKeys: 1,
-    lua: `
-      local current = redis.call('INCR', KEYS[1])
-      if current == 1 then
-        redis.call('EXPIRE', KEYS[1], ARGV[1])
-      end
-      return current
-    `,
-  });
+  try {
+    const redisConnection = await global.redisClient;
+    await redisConnection.defineCommand("incrementAndExpire", {
+      numberOfKeys: 1,
+      lua: `
+        local current = redis.call('INCR', KEYS[1])
+        if current == 1 then
+          redis.call('EXPIRE', KEYS[1], ARGV[1])
+        end
+        return current
+      `,
+    });
+  } catch (error) {
+    console.log(
+      JSON.stringify(
+        {
+          type: EAction.RateLimit,
+          status: "defineIncrementAndExpire",
+          message: JSON.stringify(error),
+        },
+        null,
+        0,
+      ),
+    );
+  }
 };
 
 export const setRateLimit = async (key: string, ttl: number = 100) => {
   const redisConnection = await global.redisClient;
   let currentRequests = 0;
-  if (process.env.NODE_ENV === "development" && redisConnection) {
-    const pipeline = redisConnection?.multi();
+  if(process.env.DEV_MODE === "development"){
+    const pipeline = redisConnection.multi();
     pipeline.incr(key);
     // Set expiry only if the key does not already have one ('NX' option)
     // This is efficient as it only runs on the first request in a new window.
     pipeline.expire(key, ttl, "NX");
-
+    
     // Execute the transaction
     const results = await pipeline.exec();
 
     // ioredis returns an array of [error, value] for each command in the transaction.
     // We only care about the result of the INCR command, which is the first one.
     const incrResult = results?.[0];
-    if (incrResult && incrResult[1]) {
-      currentRequests = incrResult[1] as number;
+    if (incrResult) {
+      currentRequests = incrResult as number;
     }
-  } else if(redisConnection) {
-    currentRequests = await (
-      redisConnection as unknown as {
-        incrementAndExpire: (key: string, ttlSeconds?: number | null) => Promise<number>;
-      }
-    ).incrementAndExpire(key, ttl);
+  } else {
+    currentRequests = await (redisConnection as unknown as { 
+      incrementAndExpire: (key: string, ttlSeconds?: number | null) => Promise<number>;
+    }).incrementAndExpire(key, ttl);
   }
-
   return currentRequests;
 };
 
@@ -49,20 +60,21 @@ export const isRateLimited = async (ip: string) => {
     if (!ip) {
       throw new Error("IP address cannot be null or empty.");
     }
-    const ttl = +(process.env.RATE_LIMIT_PERIOD_SECONDS ?? 60);
     const redisConnection = await global.redisClient;
+    if(process.env.NODE_ENV === "development" && !redisConnection.incrementAndExpire){
+     await defineIncrementAndExpire();
+    }
+    const ttl = +(process.env.RATE_LIMIT_PERIOD_SECONDS ?? 60);
+    
+    const isWhitelisted = await redisConnection.sendCommand(["SISMEMBER", "white-list-ip", ip]);
 
-    const isWhitelisted = await redisConnection?.sismember(
-      "white-list-ip",
-      ip,
-    );
     if (isWhitelisted) {
       return false;
     }
 
     // Check if IP is banned
     const banKey = `rate_limit:ban:${ip}`;
-    const isBanned = await redisConnection?.exists(banKey);
+    const isBanned = await redisConnection.exists(banKey);
     if (isBanned) {
       console.log(
         JSON.stringify(

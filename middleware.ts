@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { NextURL } from "next/dist/server/web/next-url";
 import { headers } from "next/headers";
-import { generateKey, removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "./utils";
+import { generateKey, 
+  getIpAddress, 
+  removeSpecialCharacters, toEnglishDigit, toPersianDigit } from "@utils/index";
 import { requestContext } from "lib/requestContext";
 import { logErrorResponse, logRequest, logResponse, logRewrite } from "lib/logging";
+import { isRateLimited } from "@utils/isRateLimited";
 
 const allowedOrigins = [process.env.NEXT_PUBLIC_BACKEND_URL];
 const corsOptions = {
@@ -135,6 +138,14 @@ export async function middleware(request: NextRequest) {
   reqHeaders.set("x-arn", arn);
   reqHeaders.set("x-reference-number", referenceNumber);
 
+  const headersObject = Object.fromEntries(request.headers.entries());
+
+  const ip = getIpAddress({ headers: headersObject });
+  const isRateLimitExceeded = await isRateLimited("1234");
+  if(isRateLimitExceeded){
+    return NextResponse.json({}, { status: 429 });
+  }
+  
   return requestContext.run({ arn, referenceNumber }, async () => {
     const response = NextResponse.next({ request: { headers: reqHeaders } });
 
