@@ -15,7 +15,7 @@ interface IProps {
 
 const AdminLayout = async ({ children, params }: IProps) => {
   const awaitedParams = await params;
-  const isDev = process.env.NODE_ENV === "development";
+  const isDev = process.env.DEV_MODE === "development";
   let domainUrl: string = "";
 
   if (isDev) {
