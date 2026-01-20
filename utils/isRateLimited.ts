@@ -61,7 +61,7 @@ export const isRateLimited = async (ip: string) => {
       throw new Error("IP address cannot be null or empty.");
     }
     const redisConnection = await global.redisClient;
-    if(process.env.NODE_ENV === "development" && !redisConnection.incrementAndExpire){
+    if(process.env.NODE_ENV === "production" && !redisConnection.incrementAndExpire){
      await defineIncrementAndExpire();
     }
     const ttl = +(process.env.RATE_LIMIT_PERIOD_SECONDS ?? 60);
@@ -97,7 +97,9 @@ export const isRateLimited = async (ip: string) => {
     if ((currentRequests > +(process.env.MAX_REQUESTS_PER_PERIOD ?? 100)) as unknown as number) {
       // Ban the IP for 5 minutes (300 seconds)
       const banDuration = 300; // 5 minutes in seconds
-      await redisConnection.set(banKey, currentRequests, "EX", banDuration);
+      await redisConnection.set(banKey, currentRequests, {
+        EX: banDuration,
+      });
       console.log(
         JSON.stringify(
           {
