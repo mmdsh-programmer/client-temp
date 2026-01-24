@@ -30,7 +30,7 @@ Build and Transfer Docker Image:
     - ls -la
   script:
     - sed -i 's+https:\/\/registry\.npmjs\.org+https:\/\/nrs.sandpod.ir\/repository\/nodejs-proxy+g' package-lock.json 
-    - docker build -t $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG .
+    - docker build -t $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG . --no-cache
     - docker login $SAND_REGISTRY -u $SAND_HARBOR_USER  -p $SAND_HARBOR_PASS
     - docker push $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG
     - docker rmi  $SAND_REGISTRY/$SAND_BUSINESS/$PROJECT_NAME:$IMAGE_TAG
