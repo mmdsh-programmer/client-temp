@@ -50,7 +50,7 @@ Update App Image:
     - kubectl config use-context "${SAND_GENERAL_K8S_USER}"@kubernetes
   script:
     - kubectl rollout restart deployment -n "${SAND_NAMESPACE}" "${SAND_DEPLOYMENT}" 
-  needs: ["Transfer Docker Image"]
+  needs: ["Build and Transfer Docker Image"]
   dependencies:
-    - Transfer Docker Image
+    - Build and Transfer Docker Image
 
