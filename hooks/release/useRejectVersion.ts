@@ -10,6 +10,7 @@ const useRejectVersion = () => {
     mutationKey: ["rejectVersion"],
     mutationFn: async (values: {
       repoId: number;
+      docId: number;
       versionId: number;
       callBack?: () => void;
     }) => {
@@ -19,9 +20,12 @@ const useRejectVersion = () => {
       return response;
     },
     onSuccess: (response, values) => {
-      const { callBack, repoId } = values;
+      const { callBack, repoId, docId } = values;
       queryClient.invalidateQueries({
         queryKey: [`pending-version-${repoId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`version-list-${repoId}-${docId}`],
       });
       callBack?.();
     },

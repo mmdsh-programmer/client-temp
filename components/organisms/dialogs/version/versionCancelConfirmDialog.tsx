@@ -53,7 +53,7 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
         currentPath === "/admin/sharedDocuments" ||
         (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
       callBack: () => {
-        toast.error(" .تایید نسخه لغو شد");
+        toast.success("درخواست تایید پیش‌نویس لغو شد.");
         handleClose();
       },
     });
@@ -61,12 +61,12 @@ const VersionCancelConfirmDialog = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={cancelConfirmVersion.isPending}
-      dialogHeader="لغو تایید نسخه"
+      dialogHeader="لغو درخواست تایید پیش‌نویس"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="version-cancel-confirm-dialog"
     >
-      آیا از لغو تایید نسخه "
+      آیا از لغو درخواست تایید پیش‌نویس "
       <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {getVersion?.versionNumber}
       </span>

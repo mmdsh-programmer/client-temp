@@ -54,7 +54,7 @@ const VersionCancelPublicDialog = ({ setOpen }: IProps) => {
         (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
 
       callBack: () => {
-        toast.error(" .عمومی سازی نسخه لغو شد");
+        toast.success(" .عمومی سازی نسخه لغو شد");
         handleClose();
       },
     });

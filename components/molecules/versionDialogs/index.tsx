@@ -14,6 +14,8 @@ import AcceptVersionDialog from "@components/organisms/dialogs/versionRequest/ac
 import AcceptPublicDraftDialog from "@components/organisms/dialogs/draftRequest/acceptPublicDraftDialog";
 import { useVersionStore } from "@store/version";
 import FormVersionResponseListDialog from "@components/organisms/dialogs/version/formVersionResponseListDialog";
+import RejectDraftDialog from "@components/organisms/dialogs/draftRequest/rejectDraftDialog";
+import RejectVarionDialog from "@components/organisms/dialogs/versionRequest/rejectVersionDialog";
 
 interface IVersionDialogsProps {
   activeModal: string | null;
@@ -46,14 +48,16 @@ const VersionDialogs = ({ activeModal, closeModal }: IVersionDialogsProps) => {
       {activeModal === "lastVersion" ? <LastVersionDialog setOpen={closeModal} /> : null}
       {activeModal === "publicDraft" ? <ConfirmPublicDraftDialog setOpen={closeModal} /> : null}
       {activeModal === "acceptConfirmDraft" ? <AcceptDraftDialog setOpen={closeModal} /> : null}
+      {activeModal === "rejectConfirmDraft" ? <RejectDraftDialog setOpen={closeModal} /> : null}
       {activeModal === "acceptPublicVersion" ? <AcceptVersionDialog setOpen={closeModal} /> : null}
+      {activeModal === "rejectPublicVersion" ? <RejectVarionDialog setOpen={closeModal} /> : null}
       {activeModal === "acceptPublicDraft" ? (
         <AcceptPublicDraftDialog setOpen={closeModal} />
       ) : null}
       {activeModal === "rejectPublicDraft" ? (
         <VersionCancelConfirmDialog setOpen={closeModal} />
       ) : null}
-      {compareVersion?.version && !compareVersion.compare ? <DiffVersionAlert /> : null}
+      {activeModal === "diffAlert" && compareVersion?.version && !compareVersion.compare ? <DiffVersionAlert /> : null}
       {activeModal === "formVersionExport" ? (
         <FormVersionResponseListDialog setOpen={closeModal} />
       ) : null}

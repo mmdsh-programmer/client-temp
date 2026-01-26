@@ -59,6 +59,11 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   const form = useForm();
   const { handleSubmit, reset, clearErrors } = form;
 
+  const isAdminOrOwner =
+    getRepo?.roleName === ERoles.owner ||
+    getRepo?.roleName === ERoles.admin ||
+    getDocument?.accesses?.includes("admin");
+
   const handleReset = () => {
     clearErrors();
     reset();
@@ -80,7 +85,7 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
         currentPath === "/admin/sharedDocuments" ||
         (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
       callBack: () => {
-        if (getRepo?.roleName === ERoles.owner || getRepo?.roleName === ERoles.admin) {
+        if (isAdminOrOwner) {
           toast.success("نسخه با موفقیت تایید شد.");
         } else {
           toast.success("درخواست تایید نسخه برای مدیر ارسال شد.");
@@ -101,18 +106,22 @@ const VersionConfirmDialog = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={confirmVersion.isPending}
-      dialogHeader="تایید پیش‌نویس"
+      dialogHeader={isAdminOrOwner ? "تایید پیش نویس" : "درخواست تایید پیش نویس"}
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="version-confirm-dialog"
     >
-      آیا از تایید پیش‌نویس "
+      آیا از
+      <span className="mr-1">{isAdminOrOwner ? "  تایید پیش نویس" : " ارسال درخواست تایید پیش نویس "}</span>
       <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {(getSelectedVersion || editorData)?.versionNumber}
       </span>
       " اطمینان دارید؟
       {!getVersionModalList ? (
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text mt-6">
+        <Typography
+          {...({} as React.ComponentProps<typeof Typography>)}
+          className="warning_text mt-6"
+        >
           لطفاً قبل از تایید، تغییرات خود را ذخیره کنید. پس از تایید، صفحه ویرایشگر بسته خواهد شد.
         </Typography>
       ) : null}

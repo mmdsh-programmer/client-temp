@@ -26,6 +26,7 @@ interface IProps {
   handleClose?: () => void;
   type: "private" | "public";
   dialogHeader?: string;
+  hasPreview?: boolean
 }
 
 const Files = ({
@@ -35,6 +36,7 @@ const Files = ({
   type,
   handleClose,
   dialogHeader,
+  hasPreview
 }: IProps) => {
   const [processCount, setProcessCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -247,7 +249,7 @@ const Files = ({
         isFetching={isFetching}
         isLoading={isLoading}
         isError={isError}
-        hasPreview={false}
+        hasPreview={hasPreview || false}
         processCount={processCount}
         onSelectFile={(file: IFile) => {
           setSelectedImage(file);

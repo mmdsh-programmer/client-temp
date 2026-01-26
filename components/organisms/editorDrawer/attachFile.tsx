@@ -12,6 +12,7 @@ import useCreateUploadLink from "@hooks/files/useCreateUploadLink";
 import { Spinner } from "@components/atoms/spinner";
 import { useDocumentStore } from "@store/document";
 import FileItem from "@components/molecules/fileItem";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 
 const fileTablePageSize = 20;
 
@@ -44,7 +45,6 @@ const AttachFile = ({ attachmentUserGroup }: { attachmentUserGroup: string }) =>
 
     const token = userInfo?.access_token;
     if (!isFetchingUserInfo && token) {
-
       const fileItem = file;
       const fileData = new FormData();
       fileData.append("file", fileItem, encodeURIComponent(fileItem.name));
@@ -106,9 +106,13 @@ const AttachFile = ({ attachmentUserGroup }: { attachmentUserGroup: string }) =>
         </div>
       ) : userInfo ? (
         <div className="flex h-[calc(100vh-320px)] flex-col gap-4 overflow-auto">
-          {fileList.map((file) => {
-            return <FileItem key={file.name} file={file} />;
-          })}
+          {fileList.length ? (
+            fileList.map((file) => {
+              return <FileItem key={file.name} file={file} />;
+            })
+          ) : (
+            <EmptyList type={EEmptyList.ATTACHMENT} />
+          )}
         </div>
       ) : null}
       {getDocument?.attachmentUserGroup ? (
