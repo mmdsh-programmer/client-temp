@@ -2,10 +2,11 @@ import { ERoles } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import moment from "moment-jalaali";
+import { getClientIp } from "request-ip";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const logger = (key: string, newValue: any, oldValue: any) => {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.DEV_MODE === "development") {
     console.log(
       `############################################################################  ${key}`,
     );
@@ -345,3 +346,12 @@ export const removeSpecialCharacters = (value: string) => {
  });
  return str.join("");
 };
+
+export function getIpAddress(req: {
+  headers: {
+    [k: string]: string
+  };
+}) {
+  const  result = getClientIp(req);
+  return result;
+}

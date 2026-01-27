@@ -58,6 +58,8 @@ async function getRegistrationToken() {
  */
 async function sendStatusToServer(statusInfo) {
   try {
+
+    console.log("----------------- status info ------------", statusInfo);
     const token = statusInfo.token || (await getRegistrationToken());
 
     // Construct the request body matching the server's expected format

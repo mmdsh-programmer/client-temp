@@ -20,7 +20,7 @@ const MainPage = async ({ params }: MainPageProps) => {
   try {
     const awaitedParams = await params;
 
-    const isDev = process.env.NODE_ENV === "development";
+    const isDev = process.env.DEV_MODE === "development";
     let domain: string = "";
 
     if (isDev) {
@@ -77,7 +77,5 @@ const MainPage = async ({ params }: MainPageProps) => {
     );
   }
 };
-
-
 
 export default MainPage;

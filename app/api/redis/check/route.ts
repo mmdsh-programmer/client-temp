@@ -8,14 +8,8 @@ export async function GET() {
   try {
     const headersList = await headers();
     const Authorization = headersList.get("Authorization");
-    if (
-      !Authorization ||
-      Authorization.replace("Bearer ", "") !== process.env.API_TOKEN
-    ) {
-      return NextResponse.json(
-        { message: "Client is not authorized" },
-        { status: 401 }
-      );
+    if (!Authorization || Authorization.replace("Bearer ", "") !== process.env.API_TOKEN) {
+      return NextResponse.json({}, { status: 404 });
     }
 
     const client = await global.redisClient;
@@ -26,10 +20,7 @@ export async function GET() {
       redisPass: process.env.REDIS_PASS,
     };
     if (!client) {
-      return NextResponse.json(
-        { error: "Redis is not connected", environment },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Redis is not connected", environment }, { status: 500 });
     }
 
     // Check if connection is alive
@@ -46,7 +37,7 @@ export async function GET() {
 
     if (typeof client.getMasters === "function") {
       // --- CLUSTER CLIENT LOGIC ---
-      
+
       // Get the list of master nodes
       const masters = client.getMasters();
       if (!masters || masters.length === 0) {
@@ -61,7 +52,7 @@ export async function GET() {
       const clusterInfo = await adminClient.sendCommand(["CLUSTER", "INFO"]);
       const clusterNodes = await adminClient.sendCommand(["CLUSTER", "NODES"]);
       const clusterSlots = await adminClient.sendCommand(["CLUSTER", "SLOTS"]);
-      
+
       // Parse cluster info
       const clusterState = clusterInfo.match(/cluster_state:(\w+)/)?.[1];
       const clusterSize = clusterInfo.match(/cluster_size:(\d+)/)?.[1];
@@ -80,10 +71,9 @@ export async function GET() {
           slots: clusterSlots.toString(),
         },
       };
-
     } else {
       // --- STANDALONE CLIENT LOGIC ---
-      
+
       // It's a standard client, so we can safely run INFO commands
       const serverInfo = await client.sendCommand(["INFO", "server"]);
       const replicationInfo = await client.sendCommand(["INFO", "replication"]);
@@ -111,6 +101,9 @@ export async function GET() {
       const totalCommandsProcessed = statsInfo.match(/total_commands_processed:(\d+)/)?.[1];
       const opsPerSec = statsInfo.match(/instantaneous_ops_per_sec:(\d+)/)?.[1];
 
+      // const isWhitelisted = await client.sismember("white-list-ip", "123");
+      const isWhitelisted = await client.sendCommand(["SISMEMBER", "white-list-ip", "123"]);
+      
       redisDetails = {
         ...redisDetails,
         mode: redisMode, // Added mode here
@@ -142,17 +135,17 @@ export async function GET() {
           totalCommands: totalCommandsProcessed,
           opsPerSecond: opsPerSec,
         },
+        isWhitelisted
       };
     }
 
     return NextResponse.json({ data: redisDetails });
-
   } catch (error) {
     console.error("Redis GET Error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return NextResponse.json(
       { error: "Failed to connect to Redis", message: errorMessage },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
