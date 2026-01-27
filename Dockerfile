@@ -16,7 +16,12 @@ COPY --from=builder /app/next.config.js .
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+# Copy dotenv for server-wrapper.js environment loading
+COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
+
+# Copy server-wrapper.js script
+COPY server-wrapper.js ./server-wrapper.js
 
 # Set the script as the default command to run on container start
-CMD ["node", "server.js"]
+CMD ["node", "server-wrapper.js"]
 RUN rm -rf .npmrc

@@ -13,8 +13,8 @@ export async function GET(req) {
       Authorization.replace("Bearer ", "") !== process.env.API_TOKEN
     ) {
       return NextResponse.json(
-        { message: "Client is not authorized" },
-        { status: 401 }
+        {},
+        { status: 404 }
       );
     }
     const redisHandler = await global.redisClient;

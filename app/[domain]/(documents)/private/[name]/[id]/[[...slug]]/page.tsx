@@ -180,7 +180,7 @@ export default async function PublishContentPage({
         return notFound();
       }
 
-      const isDev = process.env.NODE_ENV === "development";
+      const isDev = process.env.DEV_MODE === "development";
       let decodedDomain: string = "";
 
       if (isDev) {
