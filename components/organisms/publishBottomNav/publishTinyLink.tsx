@@ -36,11 +36,11 @@ const PublishTinyLink = () => {
   return (
     <Button
       {...({} as React.ComponentProps<typeof Button>)}
-      className="w-fit min-w-fit border-none p-3"
+      className="w-fit min-w-fit border-none p-1.5"
       onClick={handleCopyLink}
       variant="outlined"
     >
-      <ShareIcon className="block h-6 w-6 stroke-white" />
+      <ShareIcon className="block h-5 w-5 stroke-white" />
     </Button>
   );
 };

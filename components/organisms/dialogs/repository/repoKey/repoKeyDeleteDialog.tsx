@@ -10,9 +10,7 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<IPublicKey | null>>;
 }
 
-const RepoKeyDeleteDialog = ({
- setOpen, repoId 
-}: IProps) => {
+const RepoKeyDeleteDialog = ({ setOpen, repoId }: IProps) => {
   const { deleteRepoKey } = useDeleteRepoKeyStore();
 
   const deleteRepoKeyHook = useDeleteRepoPublicKey();
@@ -22,8 +20,7 @@ const RepoKeyDeleteDialog = ({
   };
 
   const handleDelete = async () => {
-    if (!deleteRepoKey)
-      return toast.error("مقادیر ورودی برای حذف کلید صحیح نیست");
+    if (!deleteRepoKey) return toast.error("مقادیر ورودی برای حذف کلید صحیح نیست");
 
     deleteRepoKeyHook.mutate({
       repoId,
@@ -43,7 +40,16 @@ const RepoKeyDeleteDialog = ({
       dialogHeader="حذف کلید"
       className="repo-key-delete-dialog"
     >
-      {deleteRepoKey?.name}
+      <div className="flex flex-wrap font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">
+        آیا از حذف"
+        <span
+          title={deleteRepoKey?.name}
+          className="body_b3 flex max-w-[100px] items-center truncate px-[2px] text-primary_normal"
+        >
+          {deleteRepoKey?.name}
+        </span>
+        " اطمینان دارید؟
+      </div>
     </DeleteDialog>
   );
 };

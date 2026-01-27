@@ -12,7 +12,7 @@ interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
-const RejectDraft = ({ setOpen }: IProps) => {
+const AcceptVersionDialog = ({ setOpen }: IProps) => {
   const getRepo = useRepositoryStore((s) => {
     return s.repo;
   });
@@ -52,12 +52,12 @@ const RejectDraft = ({ setOpen }: IProps) => {
   return (
     <ConfirmDialog
       isPending={acceptRequest.isPending}
-      dialogHeader=" عمومی سازی نسخه"
+      dialogHeader="تایید درخواست عمومی سازی نسخه"
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-accept-public-version-dialog"
     >
-      آیا از عمومی سازی نسخه "
+      آیا از تایید درخواست عمومی سازی نسخه "
       <span className="flex max-w-[100px] items-center truncate px-[2px] font-iranYekan text-[13px] font-medium leading-[19.5px] -tracking-[0.13px] text-primary_normal">
         {getRequest ? getRequest?.versionNumber : getVersion?.versionNumber}
       </span>
@@ -66,4 +66,4 @@ const RejectDraft = ({ setOpen }: IProps) => {
   );
 };
 
-export default RejectDraft;
+export default AcceptVersionDialog;

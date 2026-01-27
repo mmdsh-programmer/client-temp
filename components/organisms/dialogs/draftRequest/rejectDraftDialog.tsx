@@ -43,7 +43,7 @@ const RejectDraftDialog = ({ setOpen }: IProps) => {
       docId: getRequest ? getRequest?.documentId : getDocument!.id,
       draftId: getRequest ? getRequest.id : getVersion!.id,
       callBack: () => {
-        toast.error("تایید پیش‌نویس رد شد.");
+        toast.success("تایید پیش‌نویس رد شد.");
         handleClose();
       },
     });

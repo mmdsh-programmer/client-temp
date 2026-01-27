@@ -68,7 +68,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
           </span>
           " اطمینان دارید؟
         </div>
-        {errorMessage === "ریسورس دارای زیرمجموعه است" ? (
+        {errorMessage.includes("ریسورس دارای زیرمجموعه است") ? (
           <div className="flex items-center gap-1">
             <Checkbox
               onChange={() => {

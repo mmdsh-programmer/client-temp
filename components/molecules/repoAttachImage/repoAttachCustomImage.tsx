@@ -20,6 +20,7 @@ const RepoAttachCustomImage = ({
   setOpenFileManagement,
   imageHash,
 }: IProps) => {
+  const defaultImage = ["red", "blue", "yellow", "purple"];
   return (
     <div className="repo-attach-image flex flex-col gap-6">
       <div className="flex flex-col gap-4">
@@ -96,7 +97,7 @@ const RepoAttachCustomImage = ({
           disabled={imageType !== "custom"}
           {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
-          {imageHash ? (
+          {imageHash && !defaultImage.includes(imageHash) ? (
             <RepoDefaultImage imageHash={imageHash} />
           ) : (
             <AddImageIcon className="h-6 w-6" />

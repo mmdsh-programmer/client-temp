@@ -92,7 +92,7 @@ const DocumentMobileCard = ({ document }: IProps) => {
             <DocumentIcon document={document} />
             <Typography
               placeholder=""
-              className="flex max-w-[80%] flex-grow overflow-hidden truncate text-ellipsis text-primary_normal"
+              className="flex max-w-[80%] whitespace-nowrap flex-grow overflow-hidden truncate text-ellipsis text-primary_normal"
               title={document.name}
               {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >

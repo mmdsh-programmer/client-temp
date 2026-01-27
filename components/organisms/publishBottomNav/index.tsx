@@ -25,7 +25,7 @@ const PublishBottomNav = () => {
   };
 
   return getPublishVersion ? (
-    <div className="fixed bottom-12 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#222] p-2 shadow-xl">
+    <div className="fixed bottom-12 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#222] p-1.5 shadow-xl">
       <Button
         {...({} as React.ComponentProps<typeof Button>)}
         className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-gray-700"
@@ -33,13 +33,13 @@ const PublishBottomNav = () => {
           setOpenSpeedDial(!openSpeedDial);
         }}
       >
-        <SpeedDialIcon className="h-6 w-6" />
+        <SpeedDialIcon className="h-5 w-5" />
       </Button>
 
       {openSpeedDial ? <div className="h-5 w-[1px] bg-white bg-opacity-15" /> : null}
 
       <div
-        className={`max-w-56 items-center gap-2 overflow-x-auto xs:max-w-fit xs:overflow-x-visible ${openSpeedDial ? "flex" : "hidden"}`}
+        className={`max-w-56 items-center gap-1.5 overflow-x-auto xs:max-w-fit xs:overflow-x-visible ${openSpeedDial ? "flex" : "hidden"}`}
       >
         {getPublishPageSelectedDocument ? (
           <PublishNextAndPrev selectedDocument={getPublishPageSelectedDocument} />
@@ -47,21 +47,21 @@ const PublishBottomNav = () => {
         <PublishTinyLink />
         <Button
           {...({} as React.ComponentProps<typeof Button>)}
-          className="w-fit min-w-fit border-none p-3"
+          className="w-fit min-w-fit border-none p-1.5"
           onClick={openOutlineDrawer}
           variant="outlined"
         >
-          <MoreLineIcon className="block h-6 w-6 stroke-white" />
+          <MoreLineIcon className="block h-5 w-5 stroke-white" />
         </Button>
         <Button
           {...({} as React.ComponentProps<typeof Button>)}
-          className="w-fit min-w-fit border-none p-3"
+          className="w-fit min-w-fit border-none p-1.5"
           onClick={() => {
             return setOpenPublishFilesDrawer(true);
           }}
           variant="outlined"
         >
-          <AttachIcon className="block h-6 w-6 fill-white" />
+          <AttachIcon className="block h-5 w-5 fill-white" />
         </Button>
         <div className="h-5 w-[1px] bg-white bg-opacity-15" />
 
@@ -71,7 +71,7 @@ const PublishBottomNav = () => {
             wrapperClassName="gap-[inherit]"
             likeButtonClassName="hover:bg-transparent"
             dislikeButtonClassName="hover:bg-transparent"
-            iconClassName="w-6 h-6"
+            iconClassName="w-5 h-5"
           />
         ) : null}
 

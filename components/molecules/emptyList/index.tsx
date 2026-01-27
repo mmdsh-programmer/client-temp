@@ -42,6 +42,7 @@ export enum EEmptyList {
   FORM_OUTPUT = "form_output",
   VERSION_HISTORY = "version_history",
   DOMAIN_DOCUMENTS = "domain-documents",
+  ATTACHMENT_FILES = "attachment_files",
 }
 
 interface IProps {
@@ -508,6 +509,18 @@ const EmptyList = ({ type }: IProps) => {
               {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               سندی در این مخزن وجود ندارد.
+            </Typography>
+          </div>
+        );
+      case EEmptyList.ATTACHMENT_FILES:
+        return (
+          <div className="flex flex-col items-center justify-center">
+            <Typography
+              placeholder="empty-message"
+              className="title_t3 text-primary_normal"
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            >
+              فایل ضمیمه‌ای در این سند وجود ندارد.
             </Typography>
           </div>
         );

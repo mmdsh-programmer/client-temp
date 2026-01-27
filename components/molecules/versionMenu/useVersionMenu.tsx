@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from "react";
 import {
   CancelVersionIcon,
@@ -42,6 +43,26 @@ const useRoles = () => {
   const { data: userInfo } = useGetUser();
   const currentPath = usePathname();
 
+  const isOwner = () => {
+    if (
+      currentPath === "/admin/myDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id === getDocument?.repoId)
+    )
+      return true;
+
+    return getRepo?.roleName === "owner";
+  };
+
+  const isAdmin = () => {
+    if (
+      currentPath === "/admin/sharedDocuments" ||
+      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+    )
+      return getDocument?.accesses?.[0] === "admin";
+
+    return getRepo?.roleName === "admin";
+  };
+
   const isAdminOrOwner = () => {
     if (
       currentPath === "/admin/myDocuments" ||
@@ -68,7 +89,7 @@ const useRoles = () => {
     return getRepo?.roleName === ERoles.viewer || getRepo?.roleName === ERoles.writer;
   };
 
-  return { isAdminOrOwner, isWriterOrViewer };
+  return { isAdminOrOwner, isWriterOrViewer, isOwner, isAdmin };
 };
 
 const useVersionMenu = (
@@ -82,7 +103,7 @@ const useVersionMenu = (
     useVersionStore();
   const { setEditorMode, setEditorModal, setEditorData: setVersionData } = useEditorStore();
   const repoId = useRepoId();
-  const { isAdminOrOwner, isWriterOrViewer } = useRoles();
+  const { isAdminOrOwner, isWriterOrViewer, isOwner, isAdmin } = useRoles();
 
   const { data: userInfo } = useGetUser();
   const collaborateFrom = useCollaborateFormVersion();
@@ -157,6 +178,7 @@ const useVersionMenu = (
       () => {
         window.metrics?.track("version:comparision_dialog");
         setSelectedVersion(version);
+        setModal("diffAlert");
         if (repoId && getDocument && compareVersion?.version) {
           setCompareVersion({
             ...compareVersion,
@@ -179,7 +201,7 @@ const useVersionMenu = (
 
   const draftOptions: MenuItem[] = [
     createItem(
-      "تایید و عمومی‌سازی پیش‌نویس",
+      isAdminOrOwner() ? "تایید و عمومی‌سازی پیش‌نویس" : "درخواست تایید و عمومی‌سازی",
       <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
       () => {
         window.metrics?.track("version:publicDraft_dialog");
@@ -190,28 +212,37 @@ const useVersionMenu = (
         disabled: isWriterOrViewer(),
       },
     ),
-    createItem(
-      version.status === "editing" ? "تایید پیش نویس" : "عدم تایید پیش نویس",
-      version.status === "editing" ? (
-        <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />
-      ) : (
-        <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
-      ),
-      () => {
-        window.metrics?.track(
-          version.status === "editing" ? "version:confirm_dialog" : "version:cancelConfirm_dialog",
-        );
-        createAction(version.status === "editing" ? "confirm" : "cancelConfirm")();
-      },
-      {
-        className: version.status === "editing" ? "confirm-version" : "cancel-confirm-version",
-        disabled:
-          getDocument.contentType === EDocumentTypes.form ||
-          (isWriterOrViewer() &&
-            version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase()),
-      },
-    ),
-    ...(version.status === EDraftStatus.pending && isAdminOrOwner()
+    ...(!isAdminOrOwner()
+      ? [
+          createItem(
+            version.status !== EDraftStatus.pending && version.state === "draft"
+              ? "درخواست تایید پیش نویس"
+              : "لغو درخواست تایید پیش نویس",
+            version.status === "editing" ? (
+              <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />
+            ) : (
+              <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />
+            ),
+            () => {
+              window.metrics?.track(
+                version.status === "editing"
+                  ? "version:confirm_dialog"
+                  : "version:cancelConfirm_dialog",
+              );
+              createAction(version.status === "editing" ? "confirm" : "cancelConfirm")();
+            },
+            {
+              className:
+                version.status === "editing" ? "confirm-version" : "cancel-confirm-version",
+              disabled:
+                getDocument.contentType === EDocumentTypes.form ||
+                (isWriterOrViewer() &&
+                  version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase()),
+            },
+          ),
+        ]
+      : []),
+    ...(version.status === EDraftStatus.pending && version.state === "draft" && isAdminOrOwner()
       ? [
           createItem(
             "تایید درخواست تایید پیش نویس",
@@ -221,12 +252,34 @@ const useVersionMenu = (
               createAction("acceptConfirmDraft")();
             },
           ),
+          createItem(
+            "رد درخواست تایید پیش نویس",
+            <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />,
+            () => {
+              window.metrics?.track("version:rejectConfirmDraft_dialog");
+              createAction("rejectConfirmDraft")();
+            },
+          ),
         ]
-      : []),
+      : version.status !== EDraftStatus.pending && version.state === "draft" && isAdminOrOwner()
+        ? [
+            createItem(
+              " تایید پیش نویس",
+              <ConfirmationVersionIcon className="h-4 w-4 fill-icon-active" />,
+              () => {
+                window.metrics?.track("version:confirm_dialog");
+                createAction("confirm")();
+              },
+              {
+                className: "confirm-version",
+              },
+            ),
+          ]
+        : []),
   ];
 
   const privateOptions: MenuItem[] = [
-    ...(isAdminOrOwner()
+    ...(isAdmin()
       ? [
           createItem(
             version.status === "private" ? "ارسال درخواست عمومی شدن" : "لغو درخواست عمومی شدن نسخه",
@@ -264,7 +317,7 @@ const useVersionMenu = (
           ),
         ]
       : []),
-    ...(version.status === EVersionStatus.pending && isAdminOrOwner()
+    ...(version.status === EVersionStatus.pending && isOwner()
       ? [
           createItem(
             "تایید درخواست عمومی شدن",
@@ -274,8 +327,27 @@ const useVersionMenu = (
               createAction("acceptPublicVersion")();
             },
           ),
+          createItem(
+            "رد درخواست عمومی شدن",
+            <CancelVersionIcon className="h-4 w-4 stroke-icon-active" />,
+            () => {
+              window.metrics?.track("version:rejectPublicVersion_dialog");
+              createAction("rejectPublicVersion")();
+            },
+          ),
         ]
-      : []),
+      : version.status !== EVersionStatus.pending && version.state === "version" && isOwner()
+        ? [
+            createItem(
+              "  عمومی شدن",
+              <LastVersionIcon className="h-4 w-4 fill-icon-active" />,
+              () => {
+                window.metrics?.track("version:acceptPublicVersion_dialog");
+                createAction("acceptPublicVersion")();
+              },
+            ),
+          ]
+        : []),
   ];
 
   const publicOptions: MenuItem[] = [
@@ -377,8 +449,9 @@ const useVersionMenu = (
       {
         className: "delete-version",
         disabled:
-          isWriterOrViewer() &&
-          version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase(),
+          (isWriterOrViewer() && version.state === "version") ||
+          (isWriterOrViewer() &&
+            version.creator?.userName.toLowerCase() !== userInfo?.username.toLowerCase()),
       },
     ),
   ];

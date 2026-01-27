@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import SelectAtom, { IOption } from "@components/molecules/select";
 import CreateDialog from "@components/templates/dialog/createDialog";
@@ -14,6 +14,7 @@ import { Spinner } from "@components/atoms/spinner";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { privateFeedSchema } from "./validation.yup";
 import { useFeedStore } from "@store/feed";
+import { useRepositoryStore } from "@store/repository";
 
 interface IForm {
   name: string;
@@ -28,6 +29,8 @@ interface IProps {
 const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
   const [imageHash, setImageHash] = useState<string | undefined>();
   const [repoInfo, setRepoInfo] = useState<IOption>();
+
+  const { repo: getRepo } = useRepositoryStore();
   const { repoFeed: getRepoFeed } = useFeedStore();
 
   const {
@@ -93,6 +96,12 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
     }
   };
 
+  useEffect(() => {
+    if (getRepo) {
+      setRepoInfo({ label: getRepo.name, value: getRepo.id });
+    }
+  }, [getRepo]);
+
   const renderRepo = () => {
     if (getRepoFeed) {
       return <FormInput placeholder={getRepoFeed.label} readOnly />;
@@ -127,31 +136,65 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">انتخاب مخزن</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            انتخاب مخزن
+          </Typography>
           {renderRepo()}
           {!repoInfo?.value && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">لطفا یک مخزن را انتخاب کنید.</Typography>
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              لطفا یک مخزن را انتخاب کنید.
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> عنوان</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            عنوان
+          </Typography>
           <FormInput placeholder="عنوان " register={{ ...register("name") }} />
-          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
+          {errors.name && (
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.name?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">متن </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            متن
+          </Typography>
           <TextareaAtom placeholder="متن" register={{ ...register("content") }} />
           {errors.content && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.content?.message}</Typography>
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.content?.message}
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> لینک</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            لینک
+          </Typography>
           <FormInput placeholder="لینک " register={{ ...register("link") }} />
-          {errors.link && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.link?.message}</Typography>}
+          {errors.link && (
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.link?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">عکس خبرنامه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            عکس خبرنامه
+          </Typography>
           {ImagesIsLoading ? (
             <div className="flex h-[50px] w-full items-center justify-center">
               <Spinner className="h-5 w-5 text-primary" />

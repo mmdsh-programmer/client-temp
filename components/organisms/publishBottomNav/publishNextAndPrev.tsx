@@ -118,7 +118,7 @@ const PublishNextAndPrev = ({ selectedDocument }: IProps) => {
 
       <Button
         {...({} as React.ComponentProps<typeof Button>)}
-        className="w-fit min-w-fit p-2.5 border-none"
+        className="w-fit min-w-fit p-1.5 border-none"
         variant="outlined"
         onClick={() => {
           return handleClick(navigation.prevChild);

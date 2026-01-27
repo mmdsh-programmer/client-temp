@@ -131,48 +131,65 @@ const DocumentTableRow = ({ document }: IProps) => {
                   />
                 ),
                 stopPropagation: true,
-                className: "!pl-0 !pr-2",
+                className: "!pl-0 !pr-3",
               },
           currentPath === "/admin/dashboard"
             ? null
             : {
-                data: document.order || document.order === 0 ? document.order : "--",
+                data: (
+                  <div className="!h-full !w-[50px] !max-w-[50px] text-center">
+                    {document.order || document.order === 0 ? document.order : "--"}
+                  </div>
+                ),
                 title: String(document.order) || "--",
-                className: "hidden xl:table-cell text-center !px-0",
+                className: "hidden xl:table-cell !w-[60px] !max-w-[60px] ",
               },
           {
             data: (
-              <div className="flex">
-                <DocumentIcon document={document} />
+              <div className="flex gap-2">
+                <div className="!h-5 !w-5">
+                  <DocumentIcon document={document} />
+                </div>
                 <span
-                  className="mr-2 flex gap-2 overflow-hidden truncate text-ellipsis"
+                  className="w-auto overflow-hidden truncate text-ellipsis"
                   title={document.name}
                 >
                   {document.name}
                 </span>
               </div>
             ),
-            className:
-              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]",
+            className: "w-auto max-w-[100px] xs:max-w-[100px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[150px] xl:max-w-[200px] 2xl:max-w-[400px]",
           },
           currentPath === "/admin/dashboard"
             ? null
             : {
-                data: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
+                data: (
+                  <div className="!h-full !w-[150px] !max-w-[150px] text-center">
+                    {document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--"}
+                  </div>
+                ),
                 title: document.createdAt ? FaDateFromTimestamp(+document.createdAt) : "--",
-                className: "!px-3",
+                className: "!w-[160px] !max-w-[160px] px-0",
               },
           currentPath === "/admin/dashboard"
             ? null
             : {
-                data: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
+                data: (
+                  <div className="!h-full !w-[150px] !max-w-[150px] text-center">
+                    {document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--"}
+                  </div>
+                ),
                 title: document.updatedAt ? FaDateFromTimestamp(+document.updatedAt) : "--",
-                className: "hidden xl:table-cell !px-3",
+                className: "hidden xl:table-cell !w-[160px] !max-w-[160px] px-0",
               },
           {
-            data: document.creator?.name || "--",
+            data: (
+              <div className="!h-full !w-[150px] !max-w-[150px] text-center">
+                {document.creator?.name || "--"}
+              </div>
+            ),
             title: document.creator?.name || "--",
-            className: "hidden lg:table-cell !px-3 ",
+            className: "hidden lg:table-cell !w-[160px] !max-w-[160px] px-0 ",
           },
           {
             data: <DocumentMenu document={document} />,

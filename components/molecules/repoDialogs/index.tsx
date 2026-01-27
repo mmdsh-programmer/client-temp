@@ -47,6 +47,7 @@ const RepoDialogs = ({ activeModal, closeModal }: IRepoDialogsProps) => {
           resourceId={getRepo?.id}
           dialogHeader="افزودن فایل"
           handleClose={handleClose}
+          hasPreview
         />
       ) : null}
       {activeModal === "versionRequests" ? (
