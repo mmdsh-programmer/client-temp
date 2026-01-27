@@ -11,6 +11,26 @@ import jwt from "jsonwebtoken";
 import { normalizeError } from "@utils/normalizeActionError";
 import { redirect } from "next/navigation";
 
+const domainSensitiveData = async () => {
+  const domain = await getDomainHost();
+
+  if (!domain) {
+    throw new Error("Domain is not found");
+  }
+
+  const domainInfo = await getCustomPostByDomain(domain);
+
+  const sensitiveStringData = await decryptKey(
+    domainInfo.sensitiveData,
+    process.env.CRYPTO_SECRET_KEY!,
+    process.env.CRYPTO_INIT_VECTOR_KEY!,
+  );
+  const sensitiveData = JSON.parse(sensitiveStringData);
+
+  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } = sensitiveData;
+  return { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey };
+};
+
 const refreshCookieHeader = async (rToken: string, clientId: string, clientSecret: string) => {
   const response = await refreshPodAccessToken(rToken, clientId, clientSecret);
   const { access_token, refresh_token, expires_in } = response;
@@ -21,7 +41,7 @@ const refreshCookieHeader = async (rToken: string, clientId: string, clientSecre
     throw new Error("Domain is not found");
   }
 
-  const { cryptoInitVectorKey, cryptoSecretKey } = await getCustomPostByDomain(domain);
+  const { cryptoInitVectorKey, cryptoSecretKey } = await domainSensitiveData();
 
   const encryptedData = encryptKey(
     JSON.stringify({
@@ -67,8 +87,8 @@ export const getMe = async () => {
     throw new Error("Domain is not found");
   }
 
-  const { cryptoSecretKey, cryptoInitVectorKey, clientId, clientSecret } =
-    await getCustomPostByDomain(domain);
+  const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
+    await domainSensitiveData();
 
   const tokenInfo = JSON.parse(decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey)) as {
     access_token: string;
@@ -116,21 +136,15 @@ export const userInfoAction = async () => {
 };
 
 export const login = async () => {
-  // get domain and find proper custom post base on domain
-  const domain = await getDomainHost();
-  if (!domain) {
-    throw new Error("Domain is not found");
-  }
-
+  
   const headerList = await headers();
   const domainUrl = headerList?.get("host");
 
-  const { clientId } = await getCustomPostByDomain(domain);
-  const url =
-    `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
-      `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domainUrl}/signin`,
-    )}&scope=login`;
-    // .replace("http:", "https:");
+  const { clientId } = await domainSensitiveData();
+  const url = `${process.env.ACCOUNTS}/oauth2/authorize/index.html?client_id=${clientId}&response_type=code&redirect_uri=${decodeURIComponent(
+    `${process.env.SECURE === "TRUE" ? "https" : "http"}://${domainUrl}/signin`,
+  )}&scope=login`;
+  // .replace("http:", "https:");
   redirect(url);
 };
 
@@ -141,7 +155,7 @@ export const getUserToken = async (code: string, redirectUrl: string) => {
   }
 
   const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
-    await getCustomPostByDomain(domain);
+    await domainSensitiveData();
   const { access_token, refresh_token, expires_in } = await getPodAccessToken(
     code,
     redirectUrl,
@@ -189,13 +203,8 @@ export const logoutAction = async () => {
       return;
     }
 
-    const domain = await getDomainHost();
-    if (!domain) {
-      throw new Error("Domain is not found");
-    }
-
-    const { cryptoSecretKey, cryptoInitVectorKey, clientId, clientSecret } =
-      await getCustomPostByDomain(domain);
+    const { clientId, clientSecret, cryptoInitVectorKey, cryptoSecretKey } =
+      await domainSensitiveData();
 
     const { access_token, refresh_token } = JSON.parse(
       decryptKey(payload, cryptoSecretKey, cryptoInitVectorKey),

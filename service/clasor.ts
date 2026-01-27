@@ -5077,15 +5077,8 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
       },
     );
 
-    const sensitiveStringData = await decryptKey(
-      data.data.sensitiveData,
-      process.env.CRYPTO_SECRET_KEY!,
-      process.env.CRYPTO_INIT_VECTOR_KEY!,
-    );
-    const sensitiveData = JSON.parse(sensitiveStringData);
     const domainInfo = {
-      ...data.data,
-      ...sensitiveData,
+      ...data.data
     };
     if (domainInfo) {
       await redisClient?.set(`domain:${domain}`, JSON.stringify(domainInfo), {
