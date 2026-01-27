@@ -30,7 +30,7 @@ const LikeButton = ({
     <Button
       placeholder=""
       onClick={onClick}
-      className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 ${likeButtonClassName} disabled:opacity-80`}
+      className={`w-12 h-12 p-0 rounded-full bg-transparent hover:bg-gray-700 ${likeButtonClassName} disabled:opacity-80`}
       title={likeCount.toString()}
       disabled={likePending || !userInfo}
       {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
@@ -38,10 +38,14 @@ const LikeButton = ({
       <RenderIf isTrue={!!showCounter}>
         <span className={counterClassName}>{likeCount.toString()}</span>
       </RenderIf>
-
+      <div className="flex items-center gap-0.5">
+      <span>
+        {likeCount}
+      </span>
       <LikeIcon
         className={`flex-none h-5 w-5 stroke-white ${isLiked ? "fill-success-normal" : ""} ${iconClassName}`}
       />
+      </div>
     </Button>
   );
 };

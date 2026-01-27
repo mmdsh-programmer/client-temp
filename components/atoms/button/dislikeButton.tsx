@@ -23,25 +23,27 @@ const DislikeButton = ({
   dislikeButtonClassName,
   iconClassName,
   showCounter,
-  isDisliked
+  isDisliked,
 }: IProps) => {
-  const {data: userInfo} = useGetUser();
+  const { data: userInfo } = useGetUser();
   return (
     <Button
       placeholder=""
       onClick={onClick}
-      className={`w-8 h-8 p-0 rounded-full bg-transparent hover:bg-gray-700 disabled:opacity-80 ${dislikeButtonClassName}`}
+      className={`h-12 w-12 rounded-full bg-transparent p-0 hover:bg-gray-700 disabled:opacity-80 ${dislikeButtonClassName}`}
       title={dislikeCount.toString()}
       disabled={dislikePending || !userInfo}
-      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+      {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       <RenderIf isTrue={!!showCounter}>
         <span className={counterClassName}>{dislikeCount.toString()}</span>
       </RenderIf>
-      
-      <DislikeIcon
-        className={`flex-none h-5 w-5 stroke-white ${isDisliked ? " fill-error" : ""} ${iconClassName}`}
-      />
+      <div className="flex items-center gap-0.5">
+        <span>{dislikeCount}</span>
+        <DislikeIcon
+          className={`h-5 w-5 flex-none stroke-white ${isDisliked ? "fill-error" : ""} ${iconClassName}`}
+        />
+      </div>
     </Button>
   );
 };

@@ -67,7 +67,7 @@ const PublishChangeVersion = ({ repoId, documentId, selectedVersionId }: IProps)
   return (
     <Menu {...({} as React.ComponentProps<typeof Menu>)} placement="top-end" open={openMenu} handler={setOpenMenu}>
       <MenuHandler {...({} as React.ComponentProps<typeof MenuHandler>)}>
-        <Button {...({} as React.ComponentProps<typeof Button>)} className="flex w-32 flex-none justify-between gap-2.5 rounded-[100px] bg-white bg-opacity-15 px-3 leading-4">
+        <Button {...({} as React.ComponentProps<typeof Button>)} className="flex w-28 flex-none justify-between gap-2.5 rounded-[100px] bg-white bg-opacity-15 px-3 leading-4">
           <span className="flex-none overflow-hidden text-ellipsis whitespace-nowrap text-sm text-white">
             {getPublishVersion?.versionNumber}
           </span>
@@ -76,7 +76,7 @@ const PublishChangeVersion = ({ repoId, documentId, selectedVersionId }: IProps)
           />
         </Button>
       </MenuHandler>
-      <MenuList {...({} as React.ComponentProps<typeof MenuList>)} className="w-32 border-none bg-[#222] p-1.5">
+      <MenuList {...({} as React.ComponentProps<typeof MenuList>)} className="w-28 border-none bg-[#222] p-1.5">
         {publishVersions?.pages.map((publicVersionPage, index) => {
           return publicVersionPage?.list.map((publishVersion) => {
             return (

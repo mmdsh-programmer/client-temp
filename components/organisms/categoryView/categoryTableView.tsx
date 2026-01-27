@@ -76,7 +76,7 @@ const TableView = ({
                             });
                           },
                           className:
-                            "categoryOrder whitespace-nowrap hidden !px-1 xl:flex !max-w-[70px] !w-[70px]",
+                            "categoryOrder whitespace-nowrap hidden !px-2 xl:flex !max-w-[80px] !w-[80px]",
                         },
                     {
                       key: "name",
@@ -88,8 +88,6 @@ const TableView = ({
                           order: getSortParams.name === "asc" ? "desc" : "asc",
                         });
                       },
-                      className:
-                        "whitespace-nowrap !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px] !px-2",
                     },
                     currentPath === "/admin/dashboard"
                       ? null
@@ -103,19 +101,19 @@ const TableView = ({
                               order: getSortParams.createdAt === "asc" ? "desc" : "asc",
                             });
                           },
-                          className: "!px-2 whitespace-nowrap",
+                          className: "!px-2 whitespace-nowrap text-center px-4",
                         },
                     currentPath === "/admin/dashboard"
                       ? null
                       : {
                           key: "editDate",
                           value: "تاریخ ویرایش",
-                          className: "hidden xl:table-cell whitespace-nowrap",
+                          className: "hidden xl:table-cell whitespace-nowrap text-center px-2",
                         },
                     {
                       key: "creator",
                       value: "نام سازنده",
-                      className: "hidden lg:table-cell whitespace-nowrap",
+                      className: "hidden lg:table-cell whitespace-nowrap text-center",
                     },
                     {
                       key: "action",

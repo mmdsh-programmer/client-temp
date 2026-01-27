@@ -65,49 +65,64 @@ const CategoryTableRow = ({ category: categoryProp }: IProps) => {
                     })}
                   />
                 ),
-                className: "!pl-0 !pr-2",
+                className: "!pl-0 !pr-3",
                 stopPropagation: true,
               },
           currentPath === "/admin/dashboard"
             ? null
             : {
-                data: categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--",
+                data: (
+                  <div className="!h-full !w-[50px] !max-w-[50px] text-center">
+                    {categoryProp.order || categoryProp.order === 0 ? categoryProp.order : "--"}
+                  </div>
+                ),
                 title: String(categoryProp.order) || "--",
-                className: "hidden xl:table-cell text-center !px-0",
+                className: "hidden xl:table-cell !w-[60px] !max-w-[60px] ",
               },
           {
             data: (
-              <div className="flex">
-                <FolderIcon className="h-5 min-h-5 w-5 min-w-5 stroke-blue-gray-600" />
+              <div className="flex gap-2">
+                <FolderIcon className="!h-5 min-h-5 !w-5 min-w-5 stroke-blue-gray-600" />
                 <span
-                  className="mr-2 flex gap-2 overflow-hidden truncate text-ellipsis"
+                  className="w-auto overflow-hidden truncate text-ellipsis"
                   title={categoryProp.name}
                 >
                   {categoryProp.name}
                 </span>
               </div>
             ),
-            className:
-              "!px-3 !max-w-[180px] !w-[180px] sm:!max-w-[300px] sm:!w-[300px] md:!max-w-[250px] md:!w-[250px] xl:!max-w-[300px] xl:!w-[300px]",
+            className: "w-auto max-w-[100px] xs:max-w-[100px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[150px] xl:max-w-[200px] 2xl:max-w-[400px]",
           },
           currentPath === "/admin/dashboard"
             ? null
             : {
-                data: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
+                data: (
+                  <div className="!h-full !w-[150px] !max-w-[150px] text-center">
+                    {categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--"}
+                  </div>
+                ),
                 title: categoryProp.createdAt ? FaDateFromTimestamp(+categoryProp.createdAt) : "--",
-                className: "!px-3",
+                className: "!w-[160px] !max-w-[160px] px-0",
               },
           currentPath === "/admin/dashboard"
             ? null
             : {
-                data: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
+                data: (
+                  <div className="!h-full !w-[150px] !max-w-[150px] text-center">
+                    {categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--"}
+                  </div>
+                ),
                 title: categoryProp.updatedAt ? FaDateFromTimestamp(+categoryProp.updatedAt) : "--",
-                className: "hidden xl:table-cell !px-3",
+                className: "hidden xl:table-cell !w-[160px] !max-w-[160px] px-0",
               },
           {
-            data: categoryProp.creator?.name || "--",
+            data: (
+              <div className="!h-full !w-[150px] !max-w-[150px] text-center">
+                {categoryProp.creator?.name || "--"}
+              </div>
+            ),
             title: categoryProp.creator?.name || "--",
-            className: "hidden lg:table-cell !px-3",
+            className: "hidden lg:table-cell !w-[160px] !max-w-[160px] !px-0 ",
           },
           {
             data: <CategoryMenu category={categoryProp} />,

@@ -36,7 +36,7 @@ const LikeDislikeButtons = ({
   counterClassName,
 }: IProps) => {  
   return (
-    <div className={`flex ${wrapperClassName}`}>
+    <div className={`flex items-center ${wrapperClassName}`}>
       <LikeButton
         likeButtonClassName={likeButtonClassName}
         iconClassName={iconClassName}
