@@ -5,24 +5,32 @@ export interface IClasorResult<T> {
   cacheResponse: boolean;
 }
 export interface IClasorDomainResult {
-  userName: string;
-  userSSOID: number;
+  id: number;
   domain: string;
   types: string[];
-  newsFeed: {
-    participants: number[];
-  };
+  userName: string;
+  userSSOID: number;
+  CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
+  entityId: number;
+  content: string;
+  enablePublishPage: boolean;
   participants: {
     ssoId: number;
     userName: string;
     name: string;
   }[];
-  enablePublishPage: boolean;
-  id: number;
-  entityId: number;
-  content?: string; // optional field
-  sensitiveData: string;
+  newsFeed: {
+    participants: number[];
+  };
   useDomainTag: boolean;
+  hasLikes: boolean;
+  hasComments: boolean;
+  hasQuestions: boolean;
+  needsAdminApprovalForComments: boolean;
+  needsAdminApprovalForQuestions: boolean;
+  allowQuestionReplies: boolean;
+  accessToCreateRepo: boolean;
+  sensitiveData: string;
 }
 export interface IClasorReport {
   podSpaceStatus: IPodSpaceStatus | null;
