@@ -321,20 +321,21 @@ export interface ICustomPostResult {
 export interface IDomainMetadata {
   id: number;
   domain: string;
-  clientId: string;
   types: string[];
-  clientSecret: string;
+  userName: string;
+  userSSOID: number;
   CUSTOM_POST_TYPE: "DOMAIN_BUSINESS";
   entityId: number;
   content: string;
-  cryptoInitVectorKey: string;
-  cryptoSecretKey: string;
   enablePublishPage: boolean;
   participants: {
     ssoId: number;
     userName: string;
     name: string;
   }[];
+  newsFeed: {
+    participants: number[];
+  };
   useDomainTag: boolean;
   hasLikes: boolean;
   hasComments: boolean;
@@ -343,6 +344,7 @@ export interface IDomainMetadata {
   needsAdminApprovalForQuestions: boolean;
   allowQuestionReplies: boolean;
   accessToCreateRepo: boolean;
+  sensitiveData: string;
 }
 
 export interface ICustomPostData {
