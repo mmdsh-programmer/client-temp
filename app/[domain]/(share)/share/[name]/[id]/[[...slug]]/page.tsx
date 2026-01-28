@@ -4,7 +4,13 @@ import {
   getPublishedDocumentLastVersion,
   getPublishedDocumentVersion,
 } from "@service/clasor";
-import { decodeKey, hasEnglishDigits, toEnglishDigit } from "@utils/index";
+import {
+  decodeKey,
+  hasEnglishDigits,
+  removeSpecialCharacters,
+  toEnglishDigit,
+  toPersianDigit,
+} from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IVersion } from "@interface/version.interface";
@@ -72,9 +78,22 @@ const SharePage = async ({ params }: PublishContentPageProps) => {
     const documentInfo = await getDocumentPublishLink(undefined, +documentId!, false);
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
 
-    if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
+    if (documentInfo.isHidden) {
       await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`], 60);
       return notFound();
+    }
+
+    if (documentId === documentInfo.id && documentInfoName !== documentName) {
+      await generateCachePageTag([`dc-ph-${documentId}`, `i-${domain}`], 60);
+
+      const correctDocumentName = removeSpecialCharacters(
+        toPersianDigit(documentInfo.name.replaceAll(/\s+/g, "-")),
+      );
+
+      const documentPath = toPersianDigit(`${correctDocumentName}/${documentInfo.id}`);
+
+      const redirectPath = `/share/${name}/${id}/${documentPath}`;
+      return <RedirectPage redirectUrl={redirectPath} />;
     }
 
     if (documentInfo?.hasPassword || documentInfo?.hasWhiteList || documentInfo?.hasBlackList) {

@@ -5,7 +5,13 @@ import {
   getPublishedDocumentLastVersion,
   getPublishedDocumentVersion,
 } from "@service/clasor";
-import { decodeKey, hasEnglishDigits, toEnglishDigit } from "@utils/index";
+import {
+  decodeKey,
+  hasEnglishDigits,
+  removeSpecialCharacters,
+  toEnglishDigit,
+  toPersianDigit,
+} from "@utils/index";
 
 import { FolderEmptyIcon } from "@components/atoms/icons";
 import { IActionError, ICustomPostData } from "@interface/app.interface";
@@ -98,9 +104,19 @@ export default async function PrivateSharePage({ params }: PublishContentPagePro
 
     documentInfo = await getDocumentPublishLink(undefined, +documentId!, false);
     const documentInfoName = documentInfo.name.replaceAll(/\s+/g, "-");
-
-    if (documentInfo.isHidden || toEnglishDigit(documentInfoName) !== documentName) {
+    if (documentInfo.isHidden) {
       return notFound();
+    }
+
+    if (documentId === documentInfo.id && documentInfoName !== documentName) {
+      const correctDocumentName = removeSpecialCharacters(
+        toPersianDigit(documentInfo.name.replaceAll(/\s+/g, "-")),
+      );
+
+      const documentPath = toPersianDigit(`${correctDocumentName}/${documentInfo.id}`);
+
+      const redirectPath = `/privateDoc/${name}/${id}/${documentPath}`;
+      return <RedirectPage redirectUrl={redirectPath} />;
     }
 
     if (!documentInfo?.hasPassword && !documentInfo?.hasWhiteList && !documentInfo?.hasBlackList) {
