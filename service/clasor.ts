@@ -5087,7 +5087,12 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
     }
     return domainInfo as IDomainMetadata;
   } catch (error) {
-    return handleClasorStatusError(error as AxiosError<IClasorError>, "cl-84");
+    return handleClasorStatusError(
+      error as AxiosError<IClasorError>, 
+      `cl-84\n
+       ${JSON.stringify(error)}
+      `
+    );
   }
 };
 
