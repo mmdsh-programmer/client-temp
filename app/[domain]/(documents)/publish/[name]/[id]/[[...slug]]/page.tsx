@@ -70,9 +70,6 @@ export default async function PublishContentPage({ params }: PublishContentPageP
 
     const decodeName = removeSpecialCharacters(toPersianDigit(decodeURIComponent(name)));
     const repoName = removeSpecialCharacters(toPersianDigit(repository.name));
-    if (decodeName !== repoName) {
-      return notFound();
-    }
 
     if (!enSlug?.length) {
       await generateCachePageTag([`rp-ph-${repository.id}`, `i-${domain}`]);
@@ -95,14 +92,37 @@ export default async function PublishContentPage({ params }: PublishContentPageP
     const documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
     const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
-    if (documentInfo.isHidden || documentInfoName !== documentName) {
+
+    if (documentInfo.isHidden) {
       await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
+
       return notFound();
+    }
+
+    if (
+      (+repoId === repository.id && decodeName !== repoName) ||
+      (documentId === documentInfo.id && documentInfoName !== documentName)
+    ) {
+      await generateCachePageTag([`dc-${documentId}`, `rp-ph-${repository.id}`, `i-${domain}`], 60);
+      
+      const correctRepoName = removeSpecialCharacters(
+        toPersianDigit(repository.name),
+      );
+    
+      const correctDocumentName = removeSpecialCharacters(
+        toPersianDigit(documentInfo.name.replaceAll(/\s+/g, "-")),
+      );
+    
+      const redirectPath = toPersianDigit(
+        `/publish/${correctRepoName}/${repository.id}/${correctDocumentName}/${documentInfo.id}`,
+      );
+      return <RedirectPage redirectUrl={redirectPath} />;
     }
 
     if (documentInfo?.hasPassword || documentInfo?.hasWhiteList || documentInfo?.hasBlackList) {
       // CHECK THE CACHE
       const privatePath = `/private/${removeSpecialCharacters(toPersianDigit(decodeName))}/${id}/${slug?.join("/")}`;
+
       return <RedirectPage redirectUrl={privatePath} />;
     }
 

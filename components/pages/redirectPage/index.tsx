@@ -20,7 +20,7 @@ const RedirectPage = ({ redirectUrl }: IProps) => {
       <div className="w-full flex justify-center items-center">
         <Spinner className="h-8 w-8 text-primary" />
       </div>
-      <p className="mt-4 text-xl">در حال دریافت اطلاعات</p>
+      <p className="mt-4 text-lg">در حال دریافت اطلاعات</p>
     </section>
   );
 };

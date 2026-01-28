@@ -110,9 +110,6 @@ export default async function PublishContentPage({
 
     const decodeName = removeSpecialCharacters(toPersianDigit(decodeURIComponent(name)));
     const repoName = removeSpecialCharacters(toPersianDigit(repository.name));
-    if (decodeName !== repoName) {
-      return notFound();
-    }
 
     if (!enSlug?.length) {
       return <RedirectPage redirectUrl={`/publish/${repoName}/${toPersianDigit(id)}`} />;
@@ -132,8 +129,24 @@ export default async function PublishContentPage({
     documentInfo = await getPublishDocumentInfo(repoId, documentId, true);
 
     const documentInfoName = removeSpecialCharacters(toPersianDigit(documentInfo.name));
-    if (documentInfo.isHidden || documentInfoName !== documentName) {
+    if (documentInfo.isHidden) {
       return notFound();
+    }
+
+    if (
+      (+repoId === repository.id && decodeName !== repoName) ||
+      (documentId === documentInfo.id && documentInfoName !== documentName)
+    ) {
+      const correctRepoName = removeSpecialCharacters(toPersianDigit(repository.name));
+
+      const correctDocumentName = removeSpecialCharacters(
+        toPersianDigit(documentInfo.name.replaceAll(/\s+/g, "-")),
+      );
+
+      const redirectPath = toPersianDigit(
+        `/private/${correctRepoName}/${repository.id}/${correctDocumentName}/${documentInfo.id}`,
+      );
+      return <RedirectPage redirectUrl={redirectPath} />;
     }
 
     if (!documentInfo?.hasPassword && !documentInfo?.hasWhiteList && !documentInfo?.hasBlackList) {
