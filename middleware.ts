@@ -141,7 +141,7 @@ export async function middleware(request: NextRequest) {
   const headersObject = Object.fromEntries(request.headers.entries());
 
   const ip = getIpAddress({ headers: headersObject });
-  const isRateLimitExceeded = await isRateLimited(ip);
+  const isRateLimitExceeded = await isRateLimited(`${ip}`);
   if(isRateLimitExceeded){
     return NextResponse.json({}, { status: 429 });
   }

@@ -5059,12 +5059,16 @@ export const acceptSubscription = async (
 };
 
 export const getCustomPostByDomain = async (domain: string): Promise<IDomainMetadata> => {
+  let message = "";
   try {
     if (domain === "") {
+      message += "دامنه ارسال شده خالی می باشد.\n";
       throw new NotFoundError(["دامنه ارسال شده خالی می باشد."]);
     }
     const redisClient = await global.redisClient;
+    message += "redis client is ok\n";
     const cachedDomain = await redisClient?.get(`domain:${domain}`);
+    message += `redis cache result: ${cachedDomain}\n`;
     if (cachedDomain) {
       const cacheResult = JSON.parse(cachedDomain);
       console.log(
@@ -5077,6 +5081,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
           0,
         ),
       );
+      message += "Redis cache data is ok\n";
       return cacheResult;
     }
     const { data } = await axiosClasorInstance.get<IClasorResult<IClasorDomainResult>>(
@@ -5087,7 +5092,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
         },
       },
     );
-
+    message += `Redis axios result is: ${JSON.stringify(data)}\n`;
     const domainInfo = {
       ...data.data
     };
@@ -5096,12 +5101,14 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
         EX: 60 * 60,
       });
     }
+     message += `domainInfo is: ${JSON.stringify(domainInfo)}\n`;
     return domainInfo as IDomainMetadata;
   } catch (error) {
     return handleClasorStatusError(
       error as AxiosError<IClasorError>,
       `cl-84\n
-       ${JSON.stringify(error)}
+       ${JSON.stringify(error)}\n,
+       ${message}
       `
     );
   }
