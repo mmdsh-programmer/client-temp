@@ -13,7 +13,7 @@ import useRepoId from "@hooks/custom/useRepoId";
 import { versionSchema } from "../version/validation.yup";
 
 interface IForm {
-  name: string;
+  versionNumber: string;
 }
 
 interface IProps {
@@ -32,9 +32,9 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
   const repoId = useRepoId();
   const createVersion = useCreateVersion();
 
-  const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(versionSchema), mode: "onChange" });
   const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const handleReset = () => {
     clearErrors();
@@ -49,7 +49,7 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
   const onSubmit = async (dataForm: IForm) => {
     // eslint-disable-next-line no-useless-escape
     const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
-    if (forbiddenRegex.test(dataForm.name)) {
+    if (forbiddenRegex.test(dataForm.versionNumber)) {
       toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
       return;
     }
@@ -57,13 +57,13 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
     createVersion.mutate({
       repoId,
       documentId: getDocument!.id,
-      versionNumber: dataForm.name,
+      versionNumber: dataForm.versionNumber,
       content: "",
       outline: "",
       isDirectAccess:
         sharedDocuments === "true" ||
-        currentPath === "/admin/sharedDocuments" ||
-        (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+          currentPath === "/admin/sharedDocuments" ||
+          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
           ? true
           : undefined,
       onSuccessHandler: () => {
@@ -84,6 +84,7 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="version-create-dialog"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-8">
         <div>
@@ -93,8 +94,8 @@ const LastVersionCreateDialog = ({ close }: IProps) => {
         </div>
         <div className="flex flex-col gap-2">
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام نسخه</Typography>
-          <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
-          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
+          <FormInput placeholder="نام نسخه" register={{ ...register("versionNumber") }} />
+          {errors.versionNumber && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.versionNumber?.message}</Typography>}
         </div>
       </form>
     </CreateDialog>
