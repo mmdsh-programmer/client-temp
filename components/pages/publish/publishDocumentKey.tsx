@@ -28,10 +28,11 @@ const PublishDocumentKey = ({ encryptedContent, onDecrypted }: IProps) => {
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentKeySchema),
+    mode: "onChange"
   });
 
   const { register, handleSubmit, formState, reset, clearErrors, setError } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const handleDecrypt = (privateKeyPem: string) => {
     try {
@@ -86,14 +87,14 @@ const PublishDocumentKey = ({ encryptedContent, onDecrypted }: IProps) => {
         className="flex h-full mt-10 w-[400px] max-w-[400px] flex-col items-center gap-5 px-5 xs:px-0"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2">
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
             کلید خصوصی سند
           </Typography>
           <TextareaAtom
             {...register("privateKey")}
             placeholder="-----BEGIN RSA PRIVATE KEY-----"
-            className=""
+            className="!w-full"
             dir="ltr"
             error={!!errors.privateKey}
           />
@@ -118,6 +119,7 @@ const PublishDocumentKey = ({ encryptedContent, onDecrypted }: IProps) => {
           className="!w-full bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={handleSubmit(onSubmit)}
           loading={loading}
+          disabled={!isValid}
         >
           <Typography
             {...({} as React.ComponentProps<typeof Typography>)}

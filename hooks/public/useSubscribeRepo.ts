@@ -43,7 +43,7 @@ const useSubscribeRepo = () => {
 
       const { message } = error as CustomError;
       const errorMsg = typeof message === "string" ? message : (message as any).message;
-      toast.error(errorMsg || "خطای نامشخصی رخ داد");
+      toast.error( "خطای نامشخصی رخ داد");
       errorCallBack?.((message as any).repoId);
     },
   });

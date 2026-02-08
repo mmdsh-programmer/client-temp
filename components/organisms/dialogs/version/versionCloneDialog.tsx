@@ -21,7 +21,7 @@ import { EDocumentTypes } from "@interface/enums";
 import useCreateFileVersion from "@hooks/version/useCreateFileVersion";
 
 interface IForm {
-  name: string;
+  versionNumber: string;
 }
 
 interface IProps {
@@ -49,17 +49,19 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
     false,
     false,
     sharedDocuments === "true" ||
-      currentPath === "/admin/sharedDocuments" ||
-      (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
+    currentPath === "/admin/sharedDocuments" ||
+    (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId),
     true,
   );
   const createVersion = useCreateVersion();
   const createFileVersionHook = useCreateFileVersion();
 
-  const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
+  const form = useForm<IForm>({
+    resolver: yupResolver(versionSchema), mode: "onChange"
+  });
 
   const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const handleReset = () => {
     clearErrors();
@@ -79,13 +81,13 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
         accessToken: info.access_token,
         repoId,
         documentId: getDocument!.id,
-        versionNumber: dataForm.name,
+        versionNumber: dataForm.versionNumber,
         content: getVersionInfo?.content || "",
         outline: getVersionInfo?.outline || "",
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
             ? true
             : undefined,
         username: userInfo?.username,
@@ -98,11 +100,11 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       createFileVersionHook.mutate({
         repoId,
         documentId: getDocument!.id,
-        versionNumber: dataForm.name,
+        versionNumber: dataForm.versionNumber,
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
             ? true
             : undefined,
         callBack: () => {
@@ -120,6 +122,7 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="version-clone-dialog"
+      disabled={!isValid}
     >
       {isLoading ? (
         <Spinner className="mx-auto h-8 w-8 text-primary" />
@@ -129,13 +132,13 @@ const VersionCloneDialog = ({ setOpen }: IProps) => {
             <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
               نام نسخه
             </Typography>
-            <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
-            {errors.name && (
+            <FormInput placeholder="نام نسخه" register={{ ...register("versionNumber") }} />
+            {errors.versionNumber && (
               <Typography
                 {...({} as React.ComponentProps<typeof Typography>)}
                 className="warning_text"
               >
-                {errors.name?.message}
+                {errors.versionNumber?.message}
               </Typography>
             )}
           </div>

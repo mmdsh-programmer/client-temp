@@ -58,7 +58,8 @@ export const getPendingVersionAction = async (
 export const acceptDraftAction = async (
   repoId: number,
   docId: number,
-  draftId: number
+  draftId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -66,7 +67,8 @@ export const acceptDraftAction = async (
       userInfo.access_token,
       repoId,
       docId,
-      draftId
+      draftId,
+      isDirectAccess
     );
 
     // revalidate page of version if exists
@@ -84,7 +86,8 @@ export const acceptDraftAction = async (
 export const rejectDraftAction = async (
   repoId: number,
   docId: number,
-  draftId: number
+  draftId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
@@ -92,7 +95,8 @@ export const rejectDraftAction = async (
       userInfo.access_token,
       repoId,
       docId,
-      draftId
+      draftId,
+      isDirectAccess
     );
 
     return response;
@@ -104,14 +108,16 @@ export const rejectDraftAction = async (
 export const acceptVersionAction = async (
   repoId: number,
   docId: number,
-  versionId: number
+  versionId: number,
+  isDirectAccess?: boolean
 ) => {
   const userInfo = await getMe();
   try {
     const response = await acceptVersion(
       userInfo.access_token,
       repoId,
-      versionId
+      versionId,
+      isDirectAccess
     );
 
     // revalidate page of version if exists
@@ -126,10 +132,10 @@ export const acceptVersionAction = async (
   }
 };
 
-export const rejectVersionAction = async (repoId: number, docId: number) => {
+export const rejectVersionAction = async (repoId: number, docId: number, isDirectAccess?: boolean) => {
   const userInfo = await getMe();
   try {
-    const response = await rejectVersion(userInfo.access_token, repoId, docId);
+    const response = await rejectVersion(userInfo.access_token, repoId, docId, isDirectAccess);
 
     return response;
   } catch (error) {
@@ -140,7 +146,8 @@ export const rejectVersionAction = async (repoId: number, docId: number) => {
 export const acceptPublicDraftAction = async (
   repoId: number,
   docId: number,
-  draftId: number
+  draftId: number,
+  isDirectAccess?: boolean,
 ) => {
   const userInfo = await getMe();
   try {
@@ -148,7 +155,8 @@ export const acceptPublicDraftAction = async (
       userInfo.access_token,
       repoId,
       docId,
-      draftId
+      draftId,
+      isDirectAccess
     );
 
     // revalidate page of version if exists

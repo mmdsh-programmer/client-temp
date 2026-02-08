@@ -1,8 +1,7 @@
+import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-
 import DeleteDialog from "@components/templates/dialog/deleteDialog";
 import FormInput from "@components/atoms/input/formInput";
-import React from "react";
 import { Typography } from "@material-tailwind/react";
 import { repoDeleteSchema } from "./validation.yup";
 import { toast } from "react-toastify";
@@ -29,10 +28,10 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
-  } = useForm<IForm>({ resolver: yupResolver(repoDeleteSchema) });
+  } = useForm<IForm>({ resolver: yupResolver(repoDeleteSchema), mode: "onChange" });
 
   const handleClose = () => {
     setOpen(false);
@@ -66,6 +65,7 @@ const RepoDeleteDialog = ({ setOpen }: IProps) => {
       dialogHeader="حذف مخزن"
       setOpen={handleClose}
       className="repo-delete-dialog !-mb-[50dvh] xs:!mb-0"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-5">
         <div className="flex flex-wrap font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">

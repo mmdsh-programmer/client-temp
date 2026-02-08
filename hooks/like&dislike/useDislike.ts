@@ -41,6 +41,11 @@ const useDislike = () => {
           `get-document-social-documentId-${documentId}`,
         ],
       });
+      queryClient.invalidateQueries({
+        queryKey: [
+          `get-publish-document-social-documentId-${documentId}`,
+        ],
+      });
       callBack?.();
     },
     onError: (error) => {

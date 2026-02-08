@@ -42,7 +42,7 @@ const AnswerEditDialog = ({ answer, setOpen }: IProps) => {
     }
 
     if (editorData.current && editorData.current.content.length > 1400) {
-      return toast.error("حداکثر کاراکتر مجاز 1400 کاراکتر میباشید");
+      return toast.error("حداکثر کاراکتر مجاز 1400 کاراکتر می باشد");
     }
 
     updateAnswer.mutate({

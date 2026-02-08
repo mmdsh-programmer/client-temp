@@ -56,6 +56,7 @@ const CategoryDeleteDialog = ({ setOpen, category }: IProps) => {
       onSubmit={handleDelete}
       setOpen={handleClose}
       className="category-delete-dialog"
+      disabled={!!errorMessage && !forceDelete}
     >
       <form className="flex flex-col gap-5">
         <div className="flex font-iranYekan text-[13px] leading-[26px] -tracking-[0.13px] text-primary_normal">

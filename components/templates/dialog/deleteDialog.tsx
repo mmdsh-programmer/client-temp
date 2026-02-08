@@ -20,6 +20,7 @@ export interface IProps {
   className?: string;
   isArchive?: boolean;
   backToMain?: boolean;
+  disabled?: boolean;
 }
 
 const DeleteDialog = ({
@@ -31,6 +32,7 @@ const DeleteDialog = ({
   className,
   isArchive,
   backToMain,
+  disabled,
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -91,6 +93,7 @@ const DeleteDialog = ({
           onClick={onSubmit}
           loading={isPending}
           isPrimary={false}
+          disabled={disabled}
         >
           <Typography
             className="text__label__button text-white"

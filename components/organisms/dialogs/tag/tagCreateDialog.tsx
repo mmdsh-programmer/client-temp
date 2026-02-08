@@ -10,11 +10,13 @@ import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import useCreateDomainTag from "@hooks/domainTags/useCreateDomainTag";
 import TextareaAtom from "@components/atoms/textarea/textarea";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { tagSchema } from "./validation.yup";
 
 interface IForm {
   name: string;
-  description: string;
-  order: number;
+  description?: string | null;
+  order?: number | null;
 }
 
 interface IProps {
@@ -36,10 +38,10 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
-  } = useForm<IForm>();
+  } = useForm<IForm>({ resolver: yupResolver(tagSchema), mode: "onChange" });
 
   const handleReset = () => {
     clearErrors();
@@ -55,8 +57,8 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
     if (userInfo?.domainConfig.useDomainTag) {
       return createDomainTag.mutate({
         name: dataForm.name,
-        description: dataForm.description,
-        order: dataForm.order,
+        description: dataForm.description ?? "",
+        order: dataForm.order ?? 0,
         callBack: () => {
           handleClose();
         },
@@ -81,6 +83,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="tag-create-dialog xs:max-w-auto h-full w-full max-w-full !rounded-lg xs:mb-4 xs:h-auto xs:w-auto"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">

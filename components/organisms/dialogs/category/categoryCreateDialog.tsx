@@ -40,11 +40,12 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<IForm>({
     resolver: yupResolver(categorySchema),
+    mode: "onChange"
   });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
   } = form;
@@ -60,12 +61,6 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    // eslint-disable-next-line no-useless-escape
-    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
-    if (forbiddenRegex.test(dataForm.name)) {
-      toast.error("نام دسته‌بندی شامل کاراکتر غیرمجاز است.");
-      return;
-    }
     const repoId =
       currentPath === "/admin/myDocuments" || currentPath === "/admin/dashboard"
         ? userInfo!.repository.id
@@ -92,13 +87,14 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="category-create-dialog"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             نام دسته‌بندی
           </Typography>
@@ -111,7 +107,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.name?.message}
             </Typography>
@@ -121,7 +117,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             اولویت دسته‌بندی
           </Typography>
@@ -136,7 +132,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.order?.message}
             </Typography>
@@ -146,7 +142,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             توضیحات دسته بندی
           </Typography>
@@ -159,7 +155,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.description?.message}
             </Typography>

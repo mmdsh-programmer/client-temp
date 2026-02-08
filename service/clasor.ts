@@ -2613,8 +2613,7 @@ export const deleteVersion = async (
 ) => {
   try {
     const response = await axiosClasorInstance.delete<IServerResult<any>>(
-      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${
-        state === "draft" ? "/draft" : ""
+      `repositories/${repoId}/documents/${documentId}/versions/${versionId}${state === "draft" ? "/draft" : ""
       }`,
       {
         headers: {
@@ -3249,6 +3248,7 @@ export const acceptDraft = async (
   repoId: number,
   docId: number,
   draftId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<IVersion>>(
@@ -3258,6 +3258,7 @@ export const acceptDraft = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: { isDirectAccess }
       },
     );
     return response.data.data;
@@ -3266,7 +3267,7 @@ export const acceptDraft = async (
   }
 };
 
-export const acceptVersion = async (accessToken: string, repoId: number, versionId: number) => {
+export const acceptVersion = async (accessToken: string, repoId: number, versionId: number, isDirectAccess?: boolean) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `admin/${repoId}/acceptVersion/${versionId}`,
@@ -3275,6 +3276,7 @@ export const acceptVersion = async (accessToken: string, repoId: number, version
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: { isDirectAccess }
       },
     );
     return response.data.data;
@@ -3288,6 +3290,7 @@ export const rejectDraft = async (
   repoId: number,
   docId: number,
   draftId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3297,6 +3300,7 @@ export const rejectDraft = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: { isDirectAccess }
       },
     );
     return response.data.data;
@@ -3305,7 +3309,7 @@ export const rejectDraft = async (
   }
 };
 
-export const rejectVersion = async (accessToken: string, repoId: number, versionId: number) => {
+export const rejectVersion = async (accessToken: string, repoId: number, versionId: number, isDirectAccess?: boolean) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
       `admin/${repoId}/rejectVersion/${versionId}`,
@@ -3314,6 +3318,9 @@ export const rejectVersion = async (accessToken: string, repoId: number, version
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          isDirectAccess
+        }
       },
     );
     return response.data.data;
@@ -3327,6 +3334,7 @@ export const acceptPublicDraft = async (
   repoId: number,
   docId: number,
   draftId: number,
+  isDirectAccess?: boolean
 ) => {
   try {
     const response = await axiosClasorInstance.post<IServerResult<any>>(
@@ -3336,6 +3344,9 @@ export const acceptPublicDraft = async (
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        params: {
+          isDirectAccess
+        }
       },
     );
     return response.data.data;
@@ -5088,7 +5099,7 @@ export const getCustomPostByDomain = async (domain: string): Promise<IDomainMeta
     return domainInfo as IDomainMetadata;
   } catch (error) {
     return handleClasorStatusError(
-      error as AxiosError<IClasorError>, 
+      error as AxiosError<IClasorError>,
       `cl-84\n
        ${JSON.stringify(error)}
       `

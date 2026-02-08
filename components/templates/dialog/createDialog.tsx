@@ -24,6 +24,7 @@ export interface IProps {
   backToMain?: boolean;
   customSize?: size;
   showFooter?: boolean;
+  disabled?: boolean;
 }
 
 const CreateDialog = ({
@@ -36,6 +37,7 @@ const CreateDialog = ({
   backToMain,
   customSize,
   showFooter = true,
+  disabled
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -107,6 +109,7 @@ const CreateDialog = ({
             className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
             onClick={onSubmit}
             loading={isPending}
+            disabled={disabled}
           >
             <Typography
               {...({} as React.ComponentProps<typeof Typography>)}

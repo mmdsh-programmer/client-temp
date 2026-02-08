@@ -37,7 +37,7 @@ const CreateAnswerDialog = ({ questionItem, setOpen }: IProps) => {
     }
 
     if (editorData && editorData.content.length > 1400) {
-      return toast.error("حداکثر کاراکتر مجاز 1400 کاراکتر میباشید");
+      return toast.error("حداکثر کاراکتر مجاز 1400 کاراکتر می باشد");
     }
 
     if (!editorData) {

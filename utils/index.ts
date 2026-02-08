@@ -2,7 +2,7 @@ import { ERoles } from "@interface/enums";
 import { IDocumentMetadata } from "@interface/document.interface";
 import { IRepo } from "@interface/repo.interface";
 import moment from "moment-jalaali";
-// import { getClientIp } from "request-ip";
+import { getClientIp } from "request-ip";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const logger = (key: string, newValue: any, oldValue: any) => {
@@ -352,6 +352,6 @@ export function getIpAddress(req: {
     [k: string]: string
   };
 }) {
-  const  result = (req);
+  const  result = getClientIp(req);
   return result;
 }

@@ -27,9 +27,10 @@ const PublishDocumentPassword = ({ documentId, documentPassword, errorMessage }:
   const [loading, setLoading] = useState(false);
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentPasswordSchema),
+    mode: "onChange"
   });
-  const { register, handleSubmit, formState, reset, setError, clearErrors } = form;
-  const { errors } = formState;
+  const { register, handleSubmit, formState, reset, clearErrors } = form;
+  const { errors, isValid } = formState;
 
   const saveDocumentPasswordHook = useSetPublishDocumentPassword();
   const deleteDocumentPasswordHook = useRemoveDocumentPasswordCookies(documentId);
@@ -98,6 +99,7 @@ const PublishDocumentPassword = ({ documentId, documentPassword, errorMessage }:
           className="!w-full bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={handleSubmit(onSubmit)}
           loading={loading}
+          disabled={!isValid}
         >
           <Typography
             {...({} as React.ComponentProps<typeof Typography>)}

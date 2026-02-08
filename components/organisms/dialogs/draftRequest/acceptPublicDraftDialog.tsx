@@ -42,6 +42,7 @@ const AcceptPublicDraftDialog = ({ setOpen }: IProps) => {
       repoId: getRepo.id,
       docId: getRequest ? getRequest?.documentId : getDocument!.id,
       draftId: getRequest ? getRequest.id : getVersion!.id,
+      isDirectAccess: getDocument?.hasDirectAccess,
       callBack: () => {
         toast.success("پیش‌نویس با موفقیت تایید و عمومی شد.");
         handleClose();

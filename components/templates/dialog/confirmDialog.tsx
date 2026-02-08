@@ -20,6 +20,7 @@ interface IProps {
   onSubmit: () => Promise<void>;
   className?: string;
   backToMain?: boolean;
+  disabled?: boolean
 }
 
 const ConfirmDialog = ({
@@ -30,6 +31,7 @@ const ConfirmDialog = ({
   onSubmit,
   className,
   backToMain,
+  disabled
 }: IProps) => {
   const handleClose = () => {
     setOpen(false);
@@ -63,8 +65,8 @@ const ConfirmDialog = ({
             </div>
           ) : null}
           <Typography
-           {...({} as React.ComponentProps<typeof Typography>)}
-          className="form__title">{dialogHeader}</Typography>
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="form__title">{dialogHeader}</Typography>
         </div>
         <div className="hidden xs:block">
           <CloseButton onClose={handleClose} disabled={isPending} />
@@ -91,10 +93,11 @@ const ConfirmDialog = ({
           className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
           onClick={onSubmit}
           loading={isPending}
+          disabled={disabled}
         >
-          <Typography 
-           {...({} as React.ComponentProps<typeof Typography>)}
-           className="text__label__button text-white"
+          <Typography
+            {...({} as React.ComponentProps<typeof Typography>)}
+            className="text__label__button text-white"
           >
             تایید
           </Typography>

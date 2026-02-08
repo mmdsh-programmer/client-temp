@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditDialog from "@components/templates/dialog/editDialog";
 import Files from "../../fileManagement";
 import FormInput from "@components/atoms/input/formInput";
@@ -40,10 +40,10 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
-  } = useForm<IForm>({ resolver: yupResolver(repoCreateSchema) });
+  } = useForm<IForm>({ resolver: yupResolver(repoCreateSchema), mode: "onChange" });
 
   const handleReset = () => {
     clearErrors();
@@ -126,6 +126,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       />
     );
   }
+
   return (
     <EditDialog
       isPending={isPending}
@@ -133,6 +134,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-edit-dialog m-0 h-full w-full max-w-full xs:!h-[600px]"
+      disabled={!isValid}
     >
       <form className="repo-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">
@@ -162,7 +164,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
               ...register("description", { value: getRepo?.description }),
             }}
           />
-          {errors.name && (
+          {errors.description && (
             <Typography
               {...({} as React.ComponentProps<typeof Typography>)}
               className="warning_text"

@@ -13,6 +13,7 @@ interface IProps {
   handlePreviousStep: () => void;
   handleNextStep: () => void;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 const DialogStepperFooter = ({
@@ -21,6 +22,7 @@ const DialogStepperFooter = ({
   hasPreviousStep,
   handleNextStep,
   loading,
+  disabled
 }: IProps) => {
   return (
     <DialogFooter
@@ -35,6 +37,7 @@ const DialogStepperFooter = ({
         className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
         onClick={handleNextStep}
         loading={loading}
+        disabled={disabled}
       >
         <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">
           {hasNextStep ? "ادامه" : "ایجاد"}

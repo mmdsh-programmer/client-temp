@@ -33,11 +33,11 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
   const { data: feedImages, isLoading } = useGetFeedImages(30);
   const updatePrivateFeed = useUpdatePrivateFeed();
 
-  const form = useForm<IForm>({ resolver: yupResolver(privateFeedSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(privateFeedSchema), mode: "onChange" });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
   } = form;
@@ -76,6 +76,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="m-0 sm:!min-w-[500px] sm:!max-w-[500px]"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">

@@ -27,10 +27,11 @@ const EditorKey = ({
 }: IProps) => {
   const form = useForm<IForm>({
     resolver: yupResolver(keySchema),
+    mode: "onChange"
   });
   const { register, handleSubmit, formState, reset, clearErrors, setError } =
     form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const decryptData = (key: string) => {
     if (!encryptedContent) {
@@ -70,7 +71,7 @@ const EditorKey = ({
       // Create decipher for AES decryption
       const decipher = forge.cipher.createDecipher("AES-CBC", aesKey);
       const iv = forge.util.decode64(encrypted.iv);
-      decipher.start({iv});
+      decipher.start({ iv });
 
       // Decrypt the content
       const encryptedBytes = forge.util.decode64(encrypted.content);
@@ -105,6 +106,7 @@ const EditorKey = ({
       onSubmit={handleSubmit(onSubmit)}
       dialogHeader="کلید خصوصی سند"
       setOpen={setOpen}
+      disabled={!isValid}
     >
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">کلید خصوصی</Typography>

@@ -35,9 +35,10 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentSetPasswordSchema),
+    mode: "onChange"
   });
   const { register, handleSubmit, formState, reset, clearErrors, setError } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const handleClose = () => {
     reset();
@@ -71,13 +72,14 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       dialogHeader="انتخاب رمز عبور سند"
       className="document-create-password-dialog"
+      disabled={!isValid}
     >
       <form className="create-password-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             رمز عبور
           </Typography>
@@ -93,7 +95,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.password?.message}
             </Typography>
@@ -103,7 +105,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             تکرار رمز عبور
           </Typography>
@@ -119,7 +121,7 @@ const DocumentCreatePasswordDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.confirmPassword?.message}
             </Typography>

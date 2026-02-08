@@ -17,7 +17,7 @@ import useCreateFormVersion from "@hooks/formVersion/useCreateFormVersion";
 import SelectAtom, { IOption } from "@components/molecules/select";
 
 interface IForm {
-  name: string;
+  versionNumber: string;
 }
 
 interface IProps {
@@ -48,9 +48,9 @@ const VersionCreateDialog = ({ close }: IProps) => {
   const createFileVersionHook = useCreateFileVersion();
   const createFormVersionHook = useCreateFormVersion();
 
-  const form = useForm<IForm>({ resolver: yupResolver(versionSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(versionSchema), mode: "onChange" });
   const { register, handleSubmit, reset, clearErrors, formState } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const typeOptions = [
     { label: "فرم معمولی", value: "GENERAL" },
@@ -73,18 +73,12 @@ const VersionCreateDialog = ({ close }: IProps) => {
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    // eslint-disable-next-line no-useless-escape
-    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
-    if (forbiddenRegex.test(dataForm.name)) {
-      toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
-      return;
-    }
     if (!repoId) return;
     if (getDocument?.contentType === EDocumentTypes.classic) {
       createVersion.mutate({
         repoId,
         documentId: getDocument!.id,
-        versionNumber: dataForm.name,
+        versionNumber: dataForm.versionNumber,
         content:
           getDocument?.contentType === EDocumentTypes.classic
             ? "<article class='clasor-editor-content'></article>"
@@ -92,8 +86,8 @@ const VersionCreateDialog = ({ close }: IProps) => {
         outline: "",
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
             ? true
             : undefined,
         username: userInfo?.username,
@@ -106,11 +100,11 @@ const VersionCreateDialog = ({ close }: IProps) => {
       createFileVersionHook.mutate({
         repoId,
         documentId: getDocument!.id,
-        versionNumber: dataForm.name,
+        versionNumber: dataForm.versionNumber,
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
             ? true
             : undefined,
         callBack: () => {
@@ -122,13 +116,13 @@ const VersionCreateDialog = ({ close }: IProps) => {
       createFormVersionHook.mutate({
         repoId,
         documentId: getDocument!.id,
-        versionNumber: dataForm.name,
+        versionNumber: dataForm.versionNumber,
         formType: "GENERAL",
         formDisplay: "CLASSIC",
         isDirectAccess:
           sharedDocuments === "true" ||
-          currentPath === "/admin/sharedDocuments" ||
-          (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
+            currentPath === "/admin/sharedDocuments" ||
+            (currentPath === "/admin/dashboard" && userInfo?.repository.id !== getDocument?.repoId)
             ? true
             : undefined,
         callBack: () => {
@@ -150,19 +144,20 @@ const VersionCreateDialog = ({ close }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="version-create-dialog"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
             نام نسخه
           </Typography>
-          <FormInput placeholder="نام نسخه" register={{ ...register("name") }} />
-          {errors.name && (
+          <FormInput placeholder="نام نسخه" register={{ ...register("versionNumber") }} />
+          {errors.versionNumber && (
             <Typography
               {...({} as React.ComponentProps<typeof Typography>)}
               className="warning_text"
             >
-              {errors.name?.message}
+              {errors.versionNumber?.message}
             </Typography>
           )}
         </div>

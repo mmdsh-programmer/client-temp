@@ -31,12 +31,13 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(categorySchema),
+    mode: "onChange"
   });
   const {
     register,
     handleSubmit,
     setError,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
   } = form;
@@ -86,6 +87,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="category-edit-dialog"
+      disabled={!isValid}
     >
       <form className="category-edit-dialog__form flex flex-col gap-6">
         <div className="flex flex-col gap-2">

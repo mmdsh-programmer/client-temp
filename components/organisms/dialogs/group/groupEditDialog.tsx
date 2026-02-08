@@ -1,8 +1,7 @@
+import React, { useEffect, useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import { Spinner } from "@components/atoms/spinner";
-import React, { useEffect, useState } from "react";
 import { UserIcon, XIcon } from "@components/atoms/icons";
-
 import ChipMolecule from "@components/molecules/chip";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
@@ -22,7 +21,7 @@ import { ERoles } from "@interface/enums";
 
 interface IForm {
   title: string;
-  description?: string;
+  description?: string | null;
   members: string[];
 }
 
@@ -49,37 +48,10 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   );
   const { isPending, mutate } = useEditGroup();
 
-  const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema), mode: "onChange" });
   const { reset, clearErrors, handleSubmit, register, formState, setValue } =
     form;
-  const { errors } = formState;
-
-  useEffect(() => {
-    const allUsers = getUsers?.pages.flatMap((page) => {
-      return page?.list || [];
-    });
-
-    const oldUsers = allUsers?.filter((user) => {
-      return groupInfo?.members.list.some((groupUser) => {
-        return groupUser.preferred_username === user.userInfo.userName;
-      });
-    });
-
-    const updatedUserList = oldUsers?.map((member) => {
-      return {
-        username: member.userInfo.userName,
-        picture: member.userInfo.img,
-      };
-    });
-
-    setUpdatedUsers(updatedUserList || []);
-    setValue(
-      "members",
-      updatedUserList?.map((user) => {
-        return user.username;
-      }) || []
-    );
-  }, [getUsers, groupInfo]);
+  const { errors, isValid } = formState;
 
   const filteredUsers = getUsers?.pages
     .map((page) => {
@@ -119,7 +91,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
     mutate({
       repoId: getRepo!.id,
       title: group.title,
-      description: dataForm.description,
+      description: dataForm.description || "",
       newTitle: dataForm.title,
       members: updatedUsers.map((user) => {
         return user.username;
@@ -132,25 +104,44 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   };
 
   const handleDelete = (username: string) => {
-    setUpdatedUsers((oldValue) => {
-      if (!oldValue.length) {
-        return [];
-      }
+    const newUsers = updatedUsers.filter((user) => { return user.username !== username; });
 
-      // Remove user and update form members field
-      const newUsers = oldValue.filter((user) => {
-        return user.username !== username;
-      });
-      setValue(
-        "members",
-        newUsers.map((user) => {
-          return user.username;
-        })
+    setUpdatedUsers(newUsers);
+
+    setValue(
+      "members",
+      newUsers.map((user) => { return user.username; }),
+      {
+        shouldValidate: true,
+        shouldDirty: true
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (getUsers && groupInfo) {
+      const allUsers = getUsers.pages.flatMap((page) => { return page?.list || []; });
+      const oldUsers = allUsers.filter((user) => {
+        return groupInfo.members.list.some((groupUser) => { return groupUser.preferred_username === user.userInfo.userName; });
+      }
       );
 
-      return [...newUsers];
-    });
-  };
+      const updatedUserList = oldUsers.map((member) => {
+        return {
+          username: member.userInfo.userName,
+          picture: member.userInfo.img,
+        };
+      });
+
+      setUpdatedUsers(updatedUserList);
+
+      setValue("title", group?.title || "");
+      setValue("description", group?.description || "");
+      setValue("members", updatedUserList.map(u => { return u.username; }), {
+        shouldValidate: true
+      });
+    }
+  }, [getUsers, groupInfo, group, setValue]);
 
   return (
     <EditDialog
@@ -159,7 +150,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-group-edit-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
-      disabled={getRepo?.roleName !== ERoles.owner}
+      disabled={getRepo?.roleName !== ERoles.owner || !isValid}
     >
       <form className="repo-group-edit-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
@@ -197,24 +188,15 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
             options={filteredUsers}
             handleSelect={(val) => {
               if (val) {
-                setUpdatedUsers((oldValue) => {
-                  const newUsers = [
-                    ...oldValue,
-                    {
-                      username: val.label,
-                      picture: val.value || undefined,
-                    },
-                  ];
+                const newUsers = [
+                  ...updatedUsers,
+                  { username: val.label, picture: val.value || undefined }
+                ];
+                setUpdatedUsers(newUsers);
 
-                  // Update form members field
-                  setValue(
-                    "members",
-                    updatedUsers.map((user) => {
-                      return user.username;
-                    })
-                  );
-
-                  return newUsers;
+                setValue("members", newUsers.map(u => { return u.username; }), {
+                  shouldValidate: true,
+                  shouldDirty: true
                 });
               }
             }}

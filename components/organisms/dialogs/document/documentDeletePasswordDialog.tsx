@@ -34,9 +34,10 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentDeletePasswordSchema),
+    mode: "onChange"
   });
   const { register, handleSubmit, formState, reset, clearErrors } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const handleClose = () => {
     reset();
@@ -64,13 +65,14 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       dialogHeader="حذف رمز عبور سند"
       className="document-delete-password-dialog"
+      disabled={!isValid}
     >
       <form className="delete-password-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             رمز عبور سابق
           </Typography>
@@ -86,7 +88,7 @@ const DocumentDeletePasswordDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.oldPassword?.message}
             </Typography>

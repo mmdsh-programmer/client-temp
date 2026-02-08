@@ -12,10 +12,11 @@ const useRejectDraft = () => {
       repoId: number;
       docId: number;
       draftId: number;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, docId, draftId } = values;
-      const response = await rejectDraftAction(repoId, docId, draftId);
+      const { repoId, docId, draftId, isDirectAccess } = values;
+      const response = await rejectDraftAction(repoId, docId, draftId, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response;
     },

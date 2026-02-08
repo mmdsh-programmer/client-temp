@@ -28,11 +28,12 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<IForm>({
     resolver: yupResolver(createBranchSchema),
+    mode: "onChange"
   });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
   } = form;
@@ -79,13 +80,14 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             نام شعبه
           </Typography>
@@ -97,7 +99,7 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.name?.message}
             </Typography>
@@ -107,7 +109,7 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             نوع شعبه
           </Typography>
@@ -119,7 +121,7 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.repoType?.message}
             </Typography>
@@ -129,9 +131,9 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
-             مالک 
+            مالک
           </Typography>
           <FormInput
             placeholder="مالک شعبه"
@@ -141,7 +143,7 @@ const BranchCreateDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.username?.message}
             </Typography>

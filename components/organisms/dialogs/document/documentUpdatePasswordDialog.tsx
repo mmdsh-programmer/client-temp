@@ -32,10 +32,11 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentResetPasswordSchema),
+    mode: "onChange"
   });
   const { register, handleSubmit, formState, reset, clearErrors, setError } =
     form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const handleClose = () => {
     reset();
@@ -56,7 +57,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
       repoId: getRepo!.id,
       documentId: document!.id,
       categoryId: getCategory?.id || null,
-      oldPassword: getRepo?.roleName !== ERoles.owner? dataForm.oldPassword : undefined,
+      oldPassword: getRepo?.roleName !== ERoles.owner ? dataForm.oldPassword : undefined,
       newPassword: dataForm.password,
       successCallBack: () => {
         toast.success("رمز عبور سند مورد نظر با موفقیت تعییر کرد.");
@@ -71,6 +72,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       dialogHeader="تغییر رمز عبور سند"
       className="document-update-password-dialog"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-5">
         {getRepo?.roleName !== ERoles.owner ? (
@@ -78,7 +80,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="form_label"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               رمز عبور سابق
             </Typography>
@@ -92,7 +94,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
               <Typography
                 placeholder=""
                 className="warning_text"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {errors.oldPassword?.message}
               </Typography>
@@ -103,7 +105,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             رمز عبور
           </Typography>
@@ -117,7 +119,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.password?.message}
             </Typography>
@@ -127,7 +129,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             تکرار رمز عبور
           </Typography>
@@ -141,7 +143,7 @@ const DocumentUpdatePasswordDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.confirmPassword?.message}
             </Typography>

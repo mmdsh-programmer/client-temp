@@ -42,6 +42,7 @@ const RejectVarionDialog = ({ setOpen }: IProps) => {
       repoId: getRepo.id,
       docId: getRequest ? getRequest?.documentId : getDocument!.id,
       versionId: getRequest ? getRequest.id : getVersion!.id,
+      isDirectAccess: getDocument?.hasDirectAccess,
       callBack: () => {
         toast.success("عمومی سازی نسخه رد شد");
         handleClose();

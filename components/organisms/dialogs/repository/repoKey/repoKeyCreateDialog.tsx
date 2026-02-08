@@ -1,6 +1,5 @@
-import { Button, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
-
+import { Button, Typography } from "@material-tailwind/react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import TextareaAtom from "@components/atoms/textarea/textarea";
@@ -27,9 +26,9 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
   const [showPrivateKey, setShowPrivateKey] = useState(false);
   const createRepoKeyHook = useCreateRepoPublicKey();
 
-  const form = useForm<IForm>({ resolver: yupResolver(repoCreateKeySchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(repoCreateKeySchema), mode: "onChange" });
   const { register, handleSubmit, formState, reset, clearErrors, setValue } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
   const handleClose = () => {
     reset();
     clearErrors();
@@ -82,6 +81,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-key-create-dialog xs:max-w-auto h-full w-full max-w-full !rounded-lg xs:mb-4 xs:h-auto xs:w-auto"
+      disabled={!isValid}
     >
       <form className="repo-key-create-dialog__form flex flex-col gap-2">
         <Typography {...({} as React.ComponentProps<typeof Typography>)} className="label">

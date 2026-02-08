@@ -40,12 +40,13 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
     setError,
   } = useForm<IForm>({
     resolver: yupResolver(documentEditSchema),
+    mode: "onChange"
   });
 
   const handleReset = () => {
@@ -85,6 +86,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
       });
       return;
     }
+
     if (!repoId() || !document) return;
     editDocument.mutate({
       repoId: repoId(),
@@ -118,7 +120,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             نام سند
           </Typography>
@@ -135,7 +137,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.title?.message}
             </Typography>
@@ -145,9 +147,9 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
-            اولویت سند 
+            اولویت سند
           </Typography>
           <FormInput
             type="number"
@@ -164,7 +166,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.order?.message}
             </Typography>
@@ -174,7 +176,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
           <Typography
             placeholder=""
             className="form_label"
-            {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+            {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
           >
             توضیحات سند
           </Typography>
@@ -189,7 +191,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
             <Typography
               placeholder=""
               className="warning_text"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               {errors.description?.message}
             </Typography>

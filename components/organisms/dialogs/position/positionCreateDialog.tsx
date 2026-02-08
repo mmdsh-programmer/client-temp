@@ -33,11 +33,11 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
 
   const setPositionForBranch = useCreatePosition();
 
-  const form = useForm<IForm>({ resolver: yupResolver(positionSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(positionSchema), mode: "onChange" });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
   } = form;
@@ -110,6 +110,7 @@ const PositionCreateDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className=""
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">

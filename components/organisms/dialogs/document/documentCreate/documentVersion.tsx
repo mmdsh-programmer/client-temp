@@ -18,6 +18,8 @@ import { useDocumentStore } from "@store/document";
 import { useCategoryStore } from "@store/category";
 import { useRepositoryStore } from "@store/repository";
 import useCreateFormVersion from "@hooks/formVersion/useCreateFormVersion";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { versionSchema } from "../../version/validation.yup";
 
 interface IProps {
   isTemplate: boolean;
@@ -48,9 +50,11 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
   const createFormVersionHook = useCreateFormVersion();
   const createDocFromTemplateHook = useCreateDocumentTemplate();
 
-  const form = useForm<IForm>();
+  const form = useForm<IForm>({
+    resolver: yupResolver(versionSchema), mode: "onChange"
+  });
   const { register, handleSubmit, formState } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const repoId =
     currentPath === "/admin/myDocuments" || currentPath === "/admin/dashboard"
@@ -65,13 +69,6 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
 
     if (!repoId) {
       toast.error("اطلاعات مخزن یافت نشد");
-      return;
-    }
-
-    // eslint-disable-next-line no-useless-escape
-    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<\>?/\{\|\}]).*$/;
-    if (forbiddenRegex.test(getDocumentInfo.title)) {
-      toast.error("نام سند شامل کاراکتر غیرمجاز است.");
       return;
     }
 
@@ -108,12 +105,6 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         order,
         publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         successCallBack: (result: IDocument) => {
-          // eslint-disable-next-line no-useless-escape
-          const invalidChar = /^.*?(?=[\^#%&$\*:<\>?/\{\|\}]).*$/;
-          if (invalidChar.test(dataForm.versionNumber)) {
-            toast.error("نام نسخه شامل کاراکتر غیرمجاز است.");
-            return;
-          }
           if (getDocumentType !== EDocumentTypes.file && getDocumentType !== EDocumentTypes.form) {
             const defaultContent =
               getDocumentType === EDocumentTypes.classic
@@ -248,6 +239,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         handleNextStep={handleSubmit(onSubmit)}
         handlePreviousStep={handlePrevStep}
         loading={isLoading}
+        disabled={!isValid}
       />
     </>
   );

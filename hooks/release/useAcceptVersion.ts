@@ -13,10 +13,11 @@ const useAcceptVersion = () => {
       repoId: number;
       docId: number;
       versionId: number;
+      isDirectAccess?: boolean;
       callBack?: () => void;
     }) => {
-      const { repoId, versionId, docId } = values;
-      const response = await acceptVersionAction(repoId, docId, versionId);
+      const { repoId, versionId, docId, isDirectAccess } = values;
+      const response = await acceptVersionAction(repoId, docId, versionId, isDirectAccess);
       handleClientSideHookError(response as IActionError);
       return response;
     },

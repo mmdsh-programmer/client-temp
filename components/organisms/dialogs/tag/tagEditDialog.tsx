@@ -13,11 +13,13 @@ import useGetUser from "@hooks/auth/useGetUser";
 import useEditDomainTag from "@hooks/domainTags/useEditDomainTag";
 import TextareaAtom from "@components/atoms/textarea/textarea";
 import { IDomainTag } from "@interface/domain.interface";
+import { tagSchema } from "./validation.yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   name: string;
-  description: string;
-  order: number;
+  description?: string | null;
+  order?: number | null;
 }
 interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -45,10 +47,10 @@ const TagEditDialog = ({ setOpen }: IProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
-  } = useForm<IForm>();
+  } = useForm<IForm>({ resolver: yupResolver(tagSchema), mode: "onChange" });
 
   const handleReset = () => {
     clearErrors();
@@ -75,8 +77,8 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       return editDomainTag.mutate({
         tagId: getTag.id,
         name: dataForm.name,
-        description: dataForm.description,
-        order: dataForm.order,
+        description: dataForm.description ?? "",
+        order: dataForm.order ?? 0,
         callBack: () => {
           handleClose();
         },
@@ -103,6 +105,8 @@ const TagEditDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="tag-edit-dialog"
       backToMain
+      disabled={!isValid}
+
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">

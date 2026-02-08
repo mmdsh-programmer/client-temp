@@ -43,11 +43,11 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
   const { data: feedImages, isLoading: ImagesIsLoading } = useGetFeedImages(30);
   const createPrivateFeed = useCreatePrivateFeed();
 
-  const form = useForm<IForm>({ resolver: yupResolver(privateFeedSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(privateFeedSchema), mode: "onChange" });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     clearErrors,
     reset,
   } = form;
@@ -133,6 +133,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="!h-screen overflow-y-auto xs:!h-[600px]"
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">

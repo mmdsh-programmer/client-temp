@@ -18,7 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IForm {
   title: string;
-  description?: string;
+  description?: string | null;
   members: string[];
 }
 
@@ -36,10 +36,10 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
 
   const { data: getUsers } = useGetRepoUsers(getRepo!.id, 20, true);
   const { isPending, mutate } = useCreateGroup();
-  const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema) });
+  const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema), mode: "onChange" });
 
   const { register, handleSubmit, formState, reset, clearErrors, setValue } = form;
-  const { errors } = formState;
+  const { errors, isValid } = formState;
 
   const filteredUsers = getUsers?.pages
     .map((page) => {
@@ -72,27 +72,24 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
 
   const handleDelete = (username: string) => {
     setUpdatedUsers((oldValue) => {
-      return [
-        ...oldValue.filter((user) => {
-          return user.username !== username;
-        }),
-      ];
+      const newUsers = oldValue.filter((user) => { return user.username !== username; });
+      setValue(
+        "members",
+        newUsers.map(u => { return u.username; }),
+        { shouldValidate: true, shouldDirty: true }
+      );
+
+      return newUsers;
     });
   };
 
   const onSubmit = async (dataForm: IForm) => {
-    // eslint-disable-next-line no-useless-escape
-    const forbiddenRegex = /^.*?(?=[\^#%&$\*:<>\?/\{\|\}]).*$/;
-    if (forbiddenRegex.test(dataForm.title)) {
-      toast.error("نام گروه شامل کاراکتر غیرمجاز است.");
-      return;
-    }
     if (!getRepo) return;
     if (!updatedUsers) return toast.error("لیست اعضای گروه نباید خالی باشد.");
     mutate({
       repoId: getRepo.id,
       title: dataForm.title,
-      description: dataForm.description,
+      description: dataForm.description || "",
       members: updatedUsers.map((user) => {
         return user.username;
       }),
@@ -111,6 +108,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
       setOpen={handleClose}
       className="repo-group-create-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
       backToMain
+      disabled={!isValid}
     >
       <form className="flex flex-col gap-5">
         <div className="flex flex-col gap-2">
@@ -142,20 +140,18 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
             options={filteredUsers}
             handleSelect={(val) => {
               if (val) {
-                setUpdatedUsers((oldValue) => {
-                  return [
-                    ...oldValue,
-                    {
-                      username: val.label,
-                      picture: val.value || undefined,
-                    },
-                  ];
-                });
+                const newUpdatedUsers = [
+                  ...updatedUsers,
+                  {
+                    username: val.label,
+                    picture: val.value || undefined,
+                  },
+                ];
+                setUpdatedUsers(newUpdatedUsers);
                 setValue(
                   "members",
-                  updatedUsers.map((user) => {
-                    return user.username;
-                  }),
+                  newUpdatedUsers.map((user) => { return user.username; }),
+                  { shouldValidate: true, shouldDirty: true }
                 );
               }
             }}

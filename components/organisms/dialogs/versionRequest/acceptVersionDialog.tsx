@@ -42,6 +42,7 @@ const AcceptVersionDialog = ({ setOpen }: IProps) => {
       repoId: getRepo.id,
       docId: getRequest ? getRequest?.documentId : getDocument!.id,
       versionId: getRequest ? getRequest.id : getVersion!.id,
+      isDirectAccess: getDocument?.hasDirectAccess,
       callBack: () => {
         toast.success("نسخه با موفقیت عمومی شد.");
         handleClose();

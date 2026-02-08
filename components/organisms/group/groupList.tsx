@@ -22,7 +22,7 @@ const GroupList = () => {
         getGroups?.pages.map((page) => {
           return page.total > 0 ? (
             page.list.map((group) => {
-              return <GroupItem key={group.title} group={group} />;
+              return <GroupItem key={group.path} group={group} />;
             })
           ) : (
             <EmptyList type={EEmptyList.GROUP} />

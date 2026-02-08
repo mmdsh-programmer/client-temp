@@ -21,11 +21,12 @@ const DocumentInfo = () => {
 
   const form = useForm<IForm>({
     resolver: yupResolver(documentInfoSchema),
+    mode: "onChange"
   });
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = form;
 
   const onSubmit = async (dataForm: IForm) => {
@@ -37,14 +38,14 @@ const DocumentInfo = () => {
       <DialogBody
         placeholder="dialog body"
         className="dialog-body flex-grow px-5 py-3 xs:p-6"
-        {...({} as  Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
+        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
       >
         <form className="document-info-form flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-2">
             <Typography
               placeholder=""
               className="form_label"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               نام سند
             </Typography>
@@ -59,7 +60,7 @@ const DocumentInfo = () => {
               <Typography
                 placeholder=""
                 className="warning_text"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {errors.title?.message}
               </Typography>
@@ -69,9 +70,9 @@ const DocumentInfo = () => {
             <Typography
               placeholder=""
               className="form_label"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
-              اولویت سند 
+              اولویت سند
             </Typography>
             <FormInput
               className="document-info-form__order w-full"
@@ -86,7 +87,7 @@ const DocumentInfo = () => {
               <Typography
                 placeholder=""
                 className="warning_text"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {errors.order?.message}
               </Typography>
@@ -96,7 +97,7 @@ const DocumentInfo = () => {
             <Typography
               placeholder=""
               className="form_label"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
             >
               توضیحات سند
             </Typography>
@@ -113,7 +114,7 @@ const DocumentInfo = () => {
               <Typography
                 placeholder=""
                 className="warning_text"
-                {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
               >
                 {errors.description?.message}
               </Typography>
@@ -126,6 +127,7 @@ const DocumentInfo = () => {
         hasPreviousStep
         handleNextStep={handleSubmit(onSubmit)}
         handlePreviousStep={handlePrevStep}
+        disabled={!isValid}
       />
     </>
   );
