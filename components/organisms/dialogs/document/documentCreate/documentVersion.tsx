@@ -103,6 +103,7 @@ const DocumentVersion = ({ isTemplate, setOpen }: IProps) => {
         contentType: getDocumentType,
         isTemplate,
         order,
+        imageUrl: undefined,
         publicKeyId: getDocumentKey?.id ? String(getDocumentKey.id) : undefined,
         successCallBack: (result: IDocument) => {
           if (getDocumentType !== EDocumentTypes.file && getDocumentType !== EDocumentTypes.form) {

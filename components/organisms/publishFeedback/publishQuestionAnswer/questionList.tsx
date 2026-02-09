@@ -6,15 +6,19 @@ import { Spinner } from "@components/atoms/spinner";
 import useGetQuestionList from "@hooks/questionAnswer/useGetQuestionList";
 import QuestionItem from "./questionItem";
 import AnswerList from "./answerList";
-import { usePublishStore } from "@store/publish";
 import useGetUser from "@hooks/auth/useGetUser";
 import useGetPublishQuestionList from "@hooks/publish/useGetPublishQuestionList";
 import Error from "@components/organisms/error";
+import { usePathname } from "next/navigation";
+import { toEnglishDigit } from "@utils/index";
 
 const QuestionList = () => {
   const { data: userInfo } = useGetUser();
 
-  const { publishPageSelectedDocument } = usePublishStore();
+  const pathname = usePathname();
+  const repoId = toEnglishDigit(decodeURIComponent(pathname.split("/")[3]));
+  const docId = toEnglishDigit(decodeURIComponent(pathname.split("/")[4]));
+
 
   const {
     data: questionList,
@@ -25,8 +29,8 @@ const QuestionList = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useGetQuestionList(
-    publishPageSelectedDocument!.repoId,
-    publishPageSelectedDocument!.id,
+    +repoId,
+    +docId,
     10,
     !!userInfo,
   );
@@ -39,7 +43,7 @@ const QuestionList = () => {
     hasNextPage: publishQuestionHasNextPage,
     isFetchingNextPage: publishQuestionIsFetchingNextPage,
     fetchNextPage: publishQuestionFetchNextPage,
-  } = useGetPublishQuestionList(publishPageSelectedDocument!.id, 10, !userInfo);
+  } = useGetPublishQuestionList(+docId, 10, !userInfo);
 
   if (isLoading || publishQuestionIsLoading) {
     return (
