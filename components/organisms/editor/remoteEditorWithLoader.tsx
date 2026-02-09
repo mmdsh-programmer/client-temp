@@ -43,7 +43,7 @@ const RemoteEditorWithLoader = ({
     <div className="relative h-full w-full" ref={containerRef}>
       {!iframeLoaded && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
-          <Spinner className="h-6 w-6 text-primary" />
+          <Spinner className="h-5 w-5 text-primary" />
         </div>
       )}
       <RemoteEditor
@@ -54,6 +54,7 @@ const RemoteEditorWithLoader = ({
         onGetConfig={onGetConfig}
         onChange={onChange}
         loadHtml={loadHtml}
+        onEditorLoad={() => { setIframeLoaded(true); }}
       />
     </div>
   );

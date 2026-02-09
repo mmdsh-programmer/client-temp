@@ -150,7 +150,7 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-group-edit-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
-      disabled={getRepo?.roleName !== ERoles.owner || !isValid}
+      disabled={(getRepo?.roleName !== ERoles.owner && getRepo?.roleName !== ERoles.admin) || !isValid}
     >
       <form className="repo-group-edit-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
