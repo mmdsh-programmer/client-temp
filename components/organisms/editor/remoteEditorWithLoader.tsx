@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import RemoteEditor, { IRemoteEditorRef } from "clasor-remote-editor";
 import { Spinner } from "@components/atoms/spinner";
 import { IClassicData } from "clasor-remote-editor/dist/interface";
@@ -24,20 +24,6 @@ const RemoteEditorWithLoader = ({
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
-
-  useEffect(() => {
-    const iframe = containerRef.current?.querySelector("iframe");
-    if (!iframe) return;
-
-    const handleLoad = () => {
-      return setIframeLoaded(true);
-    };
-    iframe.addEventListener("load", handleLoad);
-
-    return () => {
-      iframe.removeEventListener("load", handleLoad);
-    };
-  }, []);
 
   return (
     <div className="relative h-full w-full" ref={containerRef}>
