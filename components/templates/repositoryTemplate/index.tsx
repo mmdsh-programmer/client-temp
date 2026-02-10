@@ -16,7 +16,7 @@ const RepoLogComponent = dynamic(
   },
   {
     loading: () => {
-      return <p className="w-full text-center">در حال بارگذاری...</p>;
+      return null;
     },
     ssr: false,
   },
