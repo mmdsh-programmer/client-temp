@@ -1,6 +1,5 @@
-import { Typography } from "@material-tailwind/react";
-import { Spinner } from "@components/atoms/spinner";
 import React from "react";
+import { Spinner } from "@/components/ui/spinner";
 
 interface IProps {
   text: string;
@@ -8,15 +7,9 @@ interface IProps {
 
 const SpinnerText = ({ text }: IProps) => {
   return (
-    <div className="w-full h-full flex items-center justify-center">
-      <Spinner className="w-8 h-8 text-primary" />
-      <Typography
-        placeholder=""
-        className="font-bold mr-2 font-iranYekan"
-        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-      >
-        {text}
-      </Typography>
+    <div className="flex items-center gap-2">
+      <Spinner className="size-8 text-primary" />
+      <p className="font-bold text-panel-foreground-primary">{text}</p>
     </div>
   );
 };

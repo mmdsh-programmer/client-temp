@@ -1,5 +1,5 @@
-import { FolderEmptyIcon } from "@components/atoms/icons";
 import React from "react";
+import { FolderEmptyIcon } from "@components/atoms/icons";
 
 const NotFound = () => {
   return (

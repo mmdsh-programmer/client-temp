@@ -1,22 +1,20 @@
 import React from "react";
-import { Button } from "@material-tailwind/react";
-import { BackIcon } from "../icons";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { BackIcon } from "@components/atoms/icons";
+import { cn } from "@/utils/cn";
 
-interface IProps {
-  onClick: () => void;
-  disabled?: boolean;
-  className?: string;
-}
-
-const BackButton = ({ onClick, disabled, className }: IProps) => {
+const BackButton = ({ onClick, disabled, className, ...props }: ButtonProps) => {
   return (
     <Button
-      className={`${className || ""} back-button bg-transparent shadow-none hover:shadow-none outline-none p-3`}
+      className={cn(
+        "back-button h-auto w-auto bg-transparent p-3 shadow-none hover:shadow-none",
+        className,
+      )}
       onClick={onClick}
       disabled={disabled}
-      {...({} as React.ComponentProps<typeof Button>)}
+      {...props}
     >
-      <BackIcon className="fill-icon-active w-6 h-6" />
+      <BackIcon className="h-6 w-6 fill-icon-active" />
     </Button>
   );
 };

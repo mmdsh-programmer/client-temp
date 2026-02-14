@@ -1,45 +1,26 @@
-import { Spinner } from "@components/atoms/spinner";
-import { Button } from "@material-tailwind/react";
-
 import React from "react";
+import { Button, ButtonProps } from "@components/ui/button";
+import { Spinner } from "@components/ui/spinner";
+import { cn } from "@/utils/cn";
 
-interface IProps {
+export interface IProps extends ButtonProps {
   loading?: boolean;
-  children: React.ReactNode;
-  className?: string;
-  onClick: (() => void) | (() => Promise<void>);
-  disabled?: boolean;
-  isPrimary?: boolean;
+  buttonClassName?: string;
+  spinnerClassName?: string;
 }
 
 const LoadingButton = ({
   loading,
   children,
-  className,
-  onClick,
   disabled,
-  isPrimary,
+  spinnerClassName,
+  buttonClassName,
+  ...props
 }: IProps) => {
-  const loadingColor =
-    !!isPrimary || isPrimary === undefined ? "text-primary" : "text-error";
-
   return (
-    <Button
-      placeholder=""
-      variant="text"
-      className={`${className || ""} flex justify-center items-center gap-2 w-[50%] xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 rounded-lg`}
-      onClick={onClick}
-      disabled={disabled}
-      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
-    >
-      <>
-        {children}
-        {loading ? (
-          <Spinner
-            className={`w-5 h-5 ${loadingColor} ${isPrimary || isPrimary === undefined ? "text-white" : "text-white"}`}
-          />
-        ) : null}
-      </>
+    <Button disabled={disabled || loading} className={cn(buttonClassName)} {...props}>
+      {loading ? <Spinner className={cn("size-5", spinnerClassName)} /> : null}
+      {children}
     </Button>
   );
 };

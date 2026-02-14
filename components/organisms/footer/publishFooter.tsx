@@ -1,6 +1,6 @@
+import React from "react";
 import ImageComponent from "@components/atoms/image";
 import { InfoIcon } from "@components/atoms/icons";
-import React from "react";
 
 interface IProps {
   logo?: string;

@@ -1,11 +1,10 @@
 "use client";
 
-import * as yup from "yup";
-
-import { FooterLogo } from "@components/atoms/landingSvg/landingSvg";
 import React from "react";
+import { FooterLogo } from "@components/atoms/landingSvg/landingSvg";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 export const landingMessageValidation = yup.object().shape({
   title: yup.string().required("لطفا عنوان را وارد کنید"),

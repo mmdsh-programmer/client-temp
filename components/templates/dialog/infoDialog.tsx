@@ -1,68 +1,87 @@
-import { Dialog, DialogHeader, Typography } from "@material-tailwind/react";
+"use client";
 
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import BackButton from "@components/atoms/button/backButton";
 import CloseButton from "@components/atoms/button/closeButton";
-import React from "react";
-import { size } from "@material-tailwind/react/types/components/dialog";
+import { cn } from "@/utils/cn";
 
 export interface IProps {
+  isPending?: boolean;
   children: React.ReactNode;
-  dialogHeader?: string;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  trigger: React.ReactNode;
+  dialogHeader: string;
   className?: string;
-  customSize?: size;
+  contentClassName?: string;
+  dialogCloseClassName?: string;
+  dialogBackButtonClassName?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   backToMain?: boolean;
 }
 
 const InfoDialog = ({
   children,
+  trigger,
   dialogHeader,
-  setOpen,
   className,
-  customSize,
+  contentClassName,
+  open,
+  onOpenChange,
   backToMain,
+  isPending = false,
+  dialogCloseClassName,
+  dialogBackButtonClassName,
 }: IProps) => {
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <Dialog
-      placeholder=""
-      size={customSize || "sm"}
-      open
-      handler={handleClose}
-      dismiss={{
-        enabled: false,
-      }}
-      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
-      className={`${className} flex h-dvh m-0 w-full max-w-full flex-col rounded-none bg-white xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
-    >
-      <DialogHeader
-        placeholder="dialog header"
-        className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
-        {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder">)}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent
+        className={cn(
+          "[&>button]:hidden",
+          "m-0 flex h-dvh w-full max-w-full flex-col gap-0 rounded-none border-none bg-white p-0",
+          "xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg xs:border xs:border-normal",
+          "grid-rows-[auto_auto_1fr]",
+          className,
+        )}
       >
-        <div className="block xs:hidden">
-          <BackButton onClick={handleClose} />
+        <DialogHeader
+          className={cn(
+            "dialog-header border-b-none flex flex-row items-center gap-[10px] space-y-0 border-normal px-[6px] py-[6px]",
+            "xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5",
+            "shrink-0",
+          )}
+        >
+          <div className="flex items-center">
+            {backToMain ? (
+              <div className={cn("block xs:hidden", dialogBackButtonClassName)}>
+                <DialogClose asChild>
+                  <BackButton variant="ghost" size="icon" disabled={isPending} />
+                </DialogClose>
+              </div>
+            ) : null}
+            <DialogTitle className="form__title m-0 text-right text-base font-semibold">
+              {dialogHeader}
+            </DialogTitle>
+          </div>
+          <div className={cn("hidden xs:block", dialogCloseClassName)}>
+            <DialogClose asChild>
+              <CloseButton variant="clasorPrimary" size="icon" disabled={isPending} />
+            </DialogClose>
+          </div>
+        </DialogHeader>
+        <div className="block h-2 w-full shrink-0 bg-secondary xs:hidden" />
+        <div className={cn("min-h-0 flex-1 overflow-auto px-5 py-3 xs:p-6", contentClassName)}>
+          {children}
         </div>
-        <div className="flex items-center">
-          {backToMain ? (
-            <div className="hidden xs:block">
-              <BackButton className="!py-0 !pl-2 !pr-0" onClick={handleClose} />
-            </div>
-          ) : null}
-          <Typography 
-            {...({} as React.ComponentProps<typeof Typography>)}
-            className="form__title"
-          >{dialogHeader}</Typography>
-        </div>
-        <div className="hidden xs:block">
-          <CloseButton onClose={handleClose} />
-        </div>
-      </DialogHeader>
-      <div className="block h-2 w-full bg-secondary xs:hidden" />
-      {children}
+      </DialogContent>
     </Dialog>
   );
 };

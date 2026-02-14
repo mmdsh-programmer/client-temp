@@ -1,6 +1,6 @@
+import React from "react";
 import LoginButton from "@components/molecules/loginButton";
 import { Logo } from "@components/atoms/landingSvg/landingSvg";
-import React from "react";
 
 const LandingHeder = () => {
   return (

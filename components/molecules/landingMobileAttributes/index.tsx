@@ -1,14 +1,14 @@
-import LandingAccessManagementContext from "../landingAccessManagementContext";
-import LandingAdvancedFeaturesContext from "../landingAdvancedFeaturesContext";
-import LandingDocManagementContext from "../landingDocManagementContext";
-import LandingRepoManagementContext from "../landingRepoManagementContext";
-import LandingVariousEditorsContext from "../landingVariousEditorsContext";
-import Lottie from "react-lottie";
 import React from "react";
+import LandingAccessManagementContext from "@/components/molecules/landingAccessManagementContext";
+import LandingAdvancedFeaturesContext from "@/components/molecules/landingAdvancedFeaturesContext";
+import LandingDocManagementContext from "@/components/molecules/landingDocManagementContext";
+import LandingRepoManagementContext from "@/components/molecules/landingRepoManagementContext";
+import LandingVariousEditorsContext from "@/components/molecules/landingVariousEditorsContext";
+import { featuresDefaultOptions } from "@components/molecules/landingDesktopAttribute";
+import Lottie from "react-lottie";
 import accessManagement from "@dataJson/access-management.json";
 import advanceFeatures from "@dataJson/advance-features.json";
 import documentManagement from "@dataJson/document-management.json";
-import { featuresDefaultOptions } from "@components/molecules/landingDesktopAttribute";
 import repoManagement from "@dataJson/repo-management.json";
 import variousEditors from "@dataJson/various-editors.json";
 
@@ -19,7 +19,7 @@ const LandingMobileAttributes = () => {
         <h2 className="section-title">ویژگی های کلاسور</h2>
 
         <div className="mt-10 flex flex-col gap-y-[88px]">
-          <article className="clasor-attributes__item flex gap-10 flex-col md:flex-row">
+          <article className="clasor-attributes__item flex flex-col gap-10 md:flex-row">
             <div className="clasor-attributes__item-image">
               <Lottie
                 options={{
@@ -31,12 +31,12 @@ const LandingMobileAttributes = () => {
               />
             </div>
 
-            <div className="md:w-[50vw] w-full">
+            <div className="w-full md:w-[50vw]">
               <LandingRepoManagementContext />
             </div>
           </article>
 
-          <article className="clasor-attributes__item flex gap-10 flex-col md:flex-row">
+          <article className="clasor-attributes__item flex flex-col gap-10 md:flex-row">
             <div className="clasor-attributes__item-image">
               <Lottie
                 options={{
@@ -48,12 +48,12 @@ const LandingMobileAttributes = () => {
               />
             </div>
 
-            <div className="md:w-[50vw] w-full">
+            <div className="w-full md:w-[50vw]">
               <LandingDocManagementContext />
             </div>
           </article>
 
-          <article className="clasor-attributes__item flex gap-10 flex-col md:flex-row">
+          <article className="clasor-attributes__item flex flex-col gap-10 md:flex-row">
             <div className="clasor-attributes__item-image">
               <Lottie
                 options={{
@@ -65,12 +65,12 @@ const LandingMobileAttributes = () => {
               />
             </div>
 
-            <div className="md:w-[50vw] w-full">
+            <div className="w-full md:w-[50vw]">
               <LandingVariousEditorsContext />
             </div>
           </article>
 
-          <article className="clasor-attributes__item flex gap-10 flex-col md:flex-row">
+          <article className="clasor-attributes__item flex flex-col gap-10 md:flex-row">
             <div className="clasor-attributes__item-image">
               <Lottie
                 options={{
@@ -82,12 +82,12 @@ const LandingMobileAttributes = () => {
               />
             </div>
 
-            <div className="md:w-[50vw] w-full">
+            <div className="w-full md:w-[50vw]">
               <LandingAccessManagementContext />
             </div>
           </article>
 
-          <article className="clasor-attributes__item flex gap-10 flex-col md:flex-row">
+          <article className="clasor-attributes__item flex flex-col gap-10 md:flex-row">
             <div className="clasor-attributes__item-image">
               <Lottie
                 options={{
@@ -99,7 +99,7 @@ const LandingMobileAttributes = () => {
               />
             </div>
 
-            <div className="md:w-[50vw] w-full">
+            <div className="w-full md:w-[50vw]">
               <LandingAdvancedFeaturesContext />
             </div>
           </article>

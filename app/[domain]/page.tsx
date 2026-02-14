@@ -1,15 +1,15 @@
+import React from "react";
 import BasicError from "@utils/error";
 import Error from "@components/organisms/error";
-import { ICustomPostData } from "@interface/app.interface";
 import ImageComponent from "@components/atoms/image";
 import LandingPage from "@components/pages/landingPage";
 import PublishFooter from "@components/organisms/footer/publishFooter";
 import PublishHeader from "@components/organisms/header/publishHeader";
 import PublishRepositories from "@components/organisms/publishRepositoreis";
-import React from "react";
 import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
 import { generateCachePageTag } from "@utils/generateCachePageTag";
+import { ICustomPostData } from "@interface/app.interface";
 
 interface MainPageProps {
   params: Promise<{

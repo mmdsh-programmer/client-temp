@@ -1,8 +1,8 @@
 "use client";
 
-import ClientSideProvider from "provider/clientSideProvider";
-import Image from "next/image";
 import React from "react";
+import ClientSideProvider from "@/provider/clientSideProvider";
+import Image from "next/image"; 
 
 type IProps = React.ComponentProps<typeof Image> & {
   height?: number;

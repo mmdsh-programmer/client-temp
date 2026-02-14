@@ -7,11 +7,10 @@ import {
   MouseIcon,
   VersioningIcon,
 } from "@components/atoms/landingSvg/landingSvg";
-
-import BubbleItems from "./bubbleItems";
 import Image from "next/image";
-import LandingHeder from "../landingHeder";
 import React from "react";
+import BubbleItems from "@components/molecules/landingHero/bubbleItems";
+import LandingHeder from "@components/molecules/landingHeder";
 import { TypeAnimation } from "react-type-animation";
 
 const LandingHero = () => {

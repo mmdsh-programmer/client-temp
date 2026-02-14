@@ -1,17 +1,16 @@
 "use client";
 
-import "swiper/css";
-import "swiper/css/pagination";
-
+import React from "react";
 import {
   StacksIcon,
   UrgencyIcon,
   UsersIcon,
 } from "@components/atoms/landingSvg/landingSvg";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { Pagination } from "swiper/modules";
-import React from "react";
+
+import "swiper/css";
+import "swiper/css/pagination";
 
 const LandingAdvantages = () => {
   return (

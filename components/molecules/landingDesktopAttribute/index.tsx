@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useRef } from "react";
 import {
   AccessManagementIcon,
   CapabilitiesIcon,
@@ -8,13 +9,11 @@ import {
   RepoManagementIcon,
 } from "@components/atoms/landingSvg/landingSvg";
 import Lottie, { Options } from "react-lottie";
-import React, { useEffect, useRef } from "react";
-
-import LandingAccessManagementContext from "../landingAccessManagementContext";
-import LandingAdvancedFeaturesContext from "../landingAdvancedFeaturesContext";
-import LandingDocManagementContext from "../landingDocManagementContext";
-import LandingRepoManagementContext from "../landingRepoManagementContext";
-import LandingVariousEditorsContext from "../landingVariousEditorsContext";
+import LandingAccessManagementContext from "@/components/molecules/landingAccessManagementContext";
+import LandingAdvancedFeaturesContext from "@/components/molecules/landingAdvancedFeaturesContext";
+import LandingDocManagementContext from "@/components/molecules/landingDocManagementContext";
+import LandingRepoManagementContext from "@/components/molecules/landingRepoManagementContext";
+import LandingVariousEditorsContext from "@/components/molecules/landingVariousEditorsContext";
 import ScrollTrigger from "gsap/dist/ScrollTrigger";
 import accessManagement from "@dataJson/access-management.json";
 import advanceFeatures from "@dataJson/advance-features.json";

@@ -1,6 +1,9 @@
 import React from "react";
-import "../styles/globals.css";
 import localFont from "next/font/local";
+import { DirectionProvider } from "@components/ui/direction";
+import { TooltipProvider } from "@components/ui/tooltip";
+
+import "../styles/globals.css";
 
 interface IProps {
   children: React.ReactNode;
@@ -30,9 +33,11 @@ const iranYekanFont = localFont({
 
 const RootLayout = async ({ children }: IProps) => {
   return (
-    <html lang="fa">
+    <html lang="fa" dir="rtl">
       <body className={`${iranYekanFont.variable} h-full w-full bg-white !font-iranYekan`}>
-        {children}
+        <DirectionProvider direction="rtl">
+          <TooltipProvider>{children}</TooltipProvider>
+        </DirectionProvider>
         <p className="absolute top-0 -z-50 opacity-0">Clasor client is up and running</p>
       </body>
     </html>

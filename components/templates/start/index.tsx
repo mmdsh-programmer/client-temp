@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from "react";
 import AppError from "@app/error";
-import PanelUrl from "../panelUrl";
+import PanelUrl from "@components/templates/panelUrl";
 import SpinnerText from "@components/molecules/spinnerText";
 import useAppStartup from "@hooks/useAppStartup";
 

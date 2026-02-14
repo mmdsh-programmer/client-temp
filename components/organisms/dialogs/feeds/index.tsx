@@ -1,26 +1,23 @@
+"use client";
+
 import React from "react";
 import Feeds from "@components/organisms/feeds";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import { DialogBody, DialogFooter } from "@material-tailwind/react";
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  children: React.ReactNode;
 }
 
-const FeedsDialog = ({ setOpen }: IProps) => {
+const FeedsDialog = ({ children }: IProps) => {
   return (
     <InfoDialog
-      className="!max-w-[unset]"
-      customSize="lg"
-      setOpen={setOpen}
+      trigger={children}
       dialogHeader="خبرنامه ها"
+      contentClassName="p-0"
+      className="xs:max-w-[unset]"
+      backToMain
     >
-      <DialogBody {...({} as React.ComponentProps<typeof DialogBody>)} className="flex-grow p-0">
-        <Feeds />
-      </DialogBody>
-      <DialogFooter {...({} as React.ComponentProps<typeof DialogFooter>)}>
-        {null}
-      </DialogFooter>
+      <Feeds />
     </InfoDialog>
   );
 };

@@ -1,10 +1,10 @@
+import React from "react";
 import ClientSideProvider from "provider/clientSideProvider";
 import LandingAdvantages from "@components/molecules/landingAdvantages";
 import LandingAttributeWrapper from "@components/organisms/landingAttributeWrapper";
 import LandingFooter from "@components/molecules/landingFooter";
-import LandingHero from "../../molecules/landingHero";
+import LandingHero from "@components/molecules/landingHero";
 import LandingSupporters from "@components/molecules/landingSupporters";
-import React from "react";
 
 const Landing = () => {
 

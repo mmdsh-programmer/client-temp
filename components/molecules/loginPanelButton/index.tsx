@@ -1,22 +1,22 @@
 "use client";
 
-import { PanelIcon } from "@components/atoms/icons";
-import { IconButton } from "@material-tailwind/react";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { PanelIcon } from "@components/atoms/icons";
+import { Button } from "@components/ui/button";
 
 const LoginPanelButton = () => {
   return (
-    <Link href="/admin/dashboard" title="پنل ادمین">
-      <IconButton
-        placeholder=""
-        className="bg-tertiary"
-        variant="text"
-        {...({} as  Omit<React.ComponentProps<typeof IconButton>, "placeholder">)}
-      >
+    <Button
+      asChild
+      variant="ghost"
+      size="icon"
+      className="hover:bg-tertiary/90 bg-tertiary text-white"
+    >
+      <Link href="/admin/dashboard" title="پنل ادمین">
         <PanelIcon className="h-5 w-5 fill-white" />
-      </IconButton>
-    </Link>
+      </Link>
+    </Button>
   );
 };
 

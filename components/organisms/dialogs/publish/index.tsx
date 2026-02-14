@@ -1,21 +1,20 @@
+"use client";
+
 import React, { useState } from "react";
 import InfoDialog from "@components/templates/dialog/infoDialog";
-import { usePublishStore } from "@store/publish";
 import TabComponent from "@components/molecules/tab";
 import PublishAdvancedSearch from "@components/organisms/publishSearch/publishAdvancedSearch";
 import PublishContentSearch from "@components/organisms/publishSearch/publishContentSearch";
+import { Button } from "@/components/ui/button";
+import { SearchIcon } from "lucide-react";
 
 export enum ETabs {
   CONTENT_SEARCH = "جست و جو در محتوا",
   ADVANCED_SEARCH = "جستجوی پیشرفته",
 }
 
-const PublishSearchContentDialog = () => {
+const PublishSearchDialog = () => {
   const [activeTab, setActiveTab] = useState<string>(ETabs.CONTENT_SEARCH);
-
-  const setOpen = usePublishStore((s) => {
-    return s.setOpenPublishPageSearchContent;
-  });
 
   const tabList = [
     {
@@ -31,21 +30,22 @@ const PublishSearchContentDialog = () => {
   return (
     <InfoDialog
       dialogHeader="جست و جو "
-      setOpen={() => {
-        return setOpen(false);
-      }}
-      className="publish-search-dialog flex w-full max-w-full flex-col rounded-none bg-primary xs:!min-w-[550px] xs:!max-w-[550px] xs:rounded-lg"
+      trigger={
+        <Button variant="clasorPrimary" size="icon">
+          <SearchIcon className="size-5" />
+        </Button>
+      }
+      backToMain
+      contentClassName="p-0"
     >
-      <div className="px-5 py-4">
-        <TabComponent
-          tabList={tabList}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabContentClassName="overflow-visible"
-        />
-      </div>
+      <TabComponent
+        tabList={tabList}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabContentClassName="overflow-visible"
+      />
     </InfoDialog>
   );
 };
 
-export default PublishSearchContentDialog;
+export default PublishSearchDialog;

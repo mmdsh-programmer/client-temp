@@ -1,8 +1,8 @@
 "use client";
 
+import React from "react";
 import DesktopAttributes from "@components/molecules/landingDesktopAttribute";
 import LandingMobileAttributes from "@components/molecules/landingMobileAttributes";
-import React from "react";
 import useWindowSize from "@hooks/useWindowSize";
 
 const LandingAttributeWrapper = () => {

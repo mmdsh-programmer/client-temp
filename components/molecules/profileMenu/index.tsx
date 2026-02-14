@@ -1,23 +1,30 @@
 "use client";
 
-import { LogoutIcon, UserIcon } from "@components/atoms/icons";
-
-import { Button } from "@material-tailwind/react";
-import ImageComponent from "@components/atoms/image";
-import LoadingButton from "../loadingButton";
-import MenuComponent from "../menu";
 import React from "react";
+import { LogoutIcon, UserIcon } from "@components/atoms/icons";
+import LoadingButton from "@components/molecules/loadingButton";
+import ImageComponent from "@components/atoms/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@components/ui/dropdown-menu";
+import { Button } from "@components/ui/button";
 import { login } from "@actions/auth";
 import useGetOptionalUser from "@hooks/auth/useGetOptionalUser";
 import useLogout from "@hooks/auth/useLogout";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { LogInIcon } from "lucide-react";
 
 interface IProps {
   redirect?: boolean;
   renderSearchButton?: React.ReactNode;
   renderLoginButton?: React.ReactNode;
 }
+
 const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }: IProps) => {
   const { isFetching, data: userData } = useGetOptionalUser();
   const queryClient = useQueryClient();
@@ -36,7 +43,6 @@ const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }:
           queryClient.invalidateQueries({
             queryKey: ["user-info"],
           });
-
           router.refresh();
         }
       },
@@ -46,17 +52,17 @@ const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }:
   if (!isFetching && !userData) {
     return (
       <>
-        {renderSearchButton || null}
+        {renderSearchButton ?? null}
         <LoadingButton
-          className="flex justify-center items-center !w-fit px-2 sm:!px-10 py-5 rounded-lg lg:mt-0 bg-tertiary text-white font-iranYekan !max-h-[unset]"
+          variant="clasorPrimary"
+          size="icon"
+          className="sm:!px-10"
           onClick={() => {
-            window.localStorage.setItem(
-              "CLASOR:LAST_PAGE",
-              window.location.pathname
-            );
+            window.localStorage.setItem("CLASOR:LAST_PAGE", window.location.pathname);
             return login();
           }}
         >
+          <LogInIcon className="size-5" />
           <span className="hidden sm:block">ورود</span>
         </LoadingButton>
       </>
@@ -65,66 +71,43 @@ const ProfileMenu = ({ redirect = true, renderSearchButton, renderLoginButton }:
 
   return (
     <>
-      {renderSearchButton || null}
-      {renderLoginButton || null}
-      <MenuComponent
-        variant="medium"
-        menuList={[
-          {
-            text: `${userData?.firstName} ${userData?.lastName}`,
-            className: "title_t1",
-            // onClick: () => {
-            //   console.log(" user data clicked");
-            // },
-          },
-          // {
-          //   text: "ویرایش اطلاعات کاربری",
-          //   icon: <UserEditIcon className="h-[18px] w-[18px]" />,
-          //   className: "body_b3",
-          //   onClick: () => {
-          //     console.log(" user info edit");
-          //   },
-          // },
-          // {
-          //   text: "پوسته تیره",
-          //   icon: <ThemeDarkIcon className="h-[18px] w-[18px]" />,
-          //   className: "body_b3",
-          //   onClick: () => {
-          //     console.log(" theme changed");
-          //   },
-          // },
-          // {
-          //   text: " تاریخچه بروزرسانی",
-          //   icon: <UpdateIcon className="h-[18px] w-[18px]" />,
-          //   className: "body_b3",
-          //   onClick: () => {
-          //     console.log(" app upadate history");
-          //   },
-          // },
-          {
-            text: " خروج از حساب",
-            icon: <LogoutIcon className="h-[18px] w-[18px]" />,
-            className: "logout-button body_b3",
-            onClick: handleLogout,
-          },
-        ]}
-      >
-        <Button
-          placeholder=""
-          className="userProfile rounded-full p-1 bg-white shadow-lg flex justify-center items-center h-10 w-10 border-[1px] border-normal"
-          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+      {renderSearchButton ?? null}
+      {renderLoginButton ?? null}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            size="icon"
+            className="userProfile h-10 w-10 overflow-hidden rounded-full border border-normal bg-white p-0 shadow-lg"
+          >
+            {userData?.profileImage ? (
+              <ImageComponent
+                className="h-full w-full rounded-full"
+                src={userData?.profileImage}
+                alt={userData?.username}
+              />
+            ) : (
+              <UserIcon className="h-4 w-4 fill-gray-400" />
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="z-[99999] ml-4 min-w-[12rem] font-iranYekan text-primary_normal"
         >
-          {userData?.profileImage ? (
-            <ImageComponent
-              className="rounded-full h-full w-full"
-              src={userData?.profileImage}
-              alt={userData?.username}
-            />
-          ) : (
-            <UserIcon className="h-4 w-4 fill-gray-400" />
-          )}
-        </Button>
-      </MenuComponent>
+          <DropdownMenuLabel dir="rtl" className="title_t1 text-base font-medium">
+            {userData?.firstName} {userData?.lastName}
+          </DropdownMenuLabel>
+          <DropdownMenuItem
+            dir="rtl"
+            className="logout-button body_b3 cursor-pointer focus:bg-accent"
+            onSelect={handleLogout}
+          >
+            <LogoutIcon className="h-[18px] w-[18px]" />
+            <span dir="rtl">خروج از حساب</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </>
   );
 };

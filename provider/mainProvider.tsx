@@ -3,11 +3,10 @@
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ThemeProvider } from "@material-tailwind/react";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 import ToastCloseButton from "@components/atoms/button/toastCloseButton";
 import GlobalLoading from "./globalLoading";
+import "react-toastify/dist/ReactToastify.min.css";
 
 interface IProps {
   children: React.ReactNode;
@@ -25,7 +24,7 @@ const MainProvider = ({ children }: IProps) => {
   });
 
   return (
-    <ThemeProvider>
+    <>
       <QueryClientProvider client={queryClient}>
         <GlobalLoading />
         {children}
@@ -42,7 +41,7 @@ const MainProvider = ({ children }: IProps) => {
         draggable
         pauseOnHover
         style={{
-          zIndex: 99_999,
+          zIndex: 99999,
         }}
         toastStyle={{
           borderRadius: "8px",
@@ -59,7 +58,7 @@ const MainProvider = ({ children }: IProps) => {
         }}
         closeButton={ToastCloseButton}
       />
-    </ThemeProvider>
+    </>
   );
 };
 

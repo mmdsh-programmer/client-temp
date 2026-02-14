@@ -1,21 +1,20 @@
 import React from "react";
-import { Button } from "@material-tailwind/react";
-import { XIcon } from "../icons";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { XIcon } from "@components/atoms/icons";
+import { cn } from "@/utils/cn";
 
-interface IProps {
-  onClose: () => void;
-  disabled?: boolean;
-}
-
-const CloseButton = ({ onClose, disabled }: IProps) => {
+const CloseButton = ({ className, disabled, onClick, ...props }: ButtonProps) => {
   return (
     <Button
-      className="close-button bg-transparent shadow-none hover:shadow-none outline-none p-0"
-      onClick={onClose}
+      className={cn(
+        "close-button bg-transparent shadow-none hover:shadow-none p-0 h-auto w-auto",
+        className,
+      )}
       disabled={disabled}
-      {...({} as React.ComponentProps<typeof Button>)}
+      onClick={onClick}
+      {...props}
     >
-      <XIcon className="fill-icon-hover w-6 h-6" />
+      <XIcon className="fill-icon-hover h-6 w-6" />
     </Button>
   );
 };
