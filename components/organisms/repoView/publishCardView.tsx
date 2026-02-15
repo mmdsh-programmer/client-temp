@@ -1,10 +1,10 @@
-import EmptyList from "@components/molecules/emptyList";
-import { IRepoView } from "@interface/repo.interface";
-import LoadMore from "@components/molecules/loadMore";
 import React from "react";
+import EmptyList from "@components/molecules/emptyList";
+import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import RepoPublishCardMode from "@components/molecules/repoPublishCardMode";
-import { Spinner } from "@components/atoms/spinner";
+import { Spinner } from "@components/ui/spinner";
+import { IRepoView } from "@interface/repo.interface";
 
 const PublishCardView = ({
   isLoading,
@@ -19,15 +19,15 @@ const PublishCardView = ({
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="w-full h-full flex justify-center items-center">
-          <Spinner className="h-8 w-8 text-primary" />
+        <div className="flex h-full w-full items-center justify-center">
+          <Spinner className="size-8 text-primary" />
         </div>
       );
     }
     if (listLength) {
       return (
         <>
-          <div className="grid max-w-[1200px] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] auto-rows-[min-content] gap-4 mx-auto">
+          <div className="mx-auto grid max-w-[1200px] auto-rows-[min-content] grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
             {getRepoList?.pages.map((page) => {
               return page.list.map((repo) => {
                 return (
@@ -38,13 +38,12 @@ const PublishCardView = ({
               });
             })}
           </div>
-          <RenderIf isTrue={!!hasNextPage}>
-            <div className="flex justify-center w-full">
-              <LoadMore
-                isFetchingNextPage={isFetchingNextPage}
-                fetchNextPage={fetchNextPage}
-              />
-            </div>
+          <RenderIf isTrue={hasNextPage}>
+            <LoadMore
+              className="mt-4"
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
+            />
           </RenderIf>
         </>
       );
@@ -52,7 +51,7 @@ const PublishCardView = ({
     return <EmptyList type={type} />;
   };
 
-  return <div className="publish-card-view pb-4 mt-4">{renderContent()}</div>;
+  return <div className="publish-card-view mt-4 pb-4">{renderContent()}</div>;
 };
 
 export default PublishCardView;

@@ -1,11 +1,12 @@
 import React from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-import FeedItem from "./feedItem";
+import FeedItem from "@components/organisms/feeds/feedItem";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@components/atoms/spinner";
-import { Button, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/ui/spinner";
+import { Button } from "@/components/ui/button";
 import { BackIcon } from "@components/atoms/icons";
+import { cn } from "@/utils/cn";
 import useGetFollowinfRepoFeeds from "@hooks/feeds/useGetFollowinfRepoFeeds";
 
 interface IProps {
@@ -32,7 +33,7 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
     return (
       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <div className="flex w-full justify-center">
-          <Spinner className="h-6 w-6 text-primary" />
+          <Spinner className="size-6 text-primary" />
         </div>
       </div>
     );
@@ -42,15 +43,19 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
     <div className="flex flex-col gap-4">
       <div className="flex gap-2">
         <Button
-          {...({} as React.ComponentProps<typeof Button>)}
-          className="h-5 w-5 bg-transparent p-0"
+          type="button"
+          variant="ghost"
+          size="icon"
+          className={cn("h-5 w-5 bg-transparent p-0")}
           onClick={() => {
-            return setRepo(null);
+            setRepo(null);
           }}
         >
           <BackIcon className="h-4 w-4 fill-icon-hover" />
         </Button>
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="caption_c1 lowercase text-primary_normal">{repo?.label}</Typography>
+        <span className={cn("caption_c1 lowercase text-primary_normal")}>
+          {repo?.label}
+        </span>
       </div>
       {feedList?.length ? (
         <div className="mt-5 flex h-[calc(100vh-360px)] flex-col gap-2 overflow-y-auto px-5">
@@ -64,7 +69,7 @@ const PrivateFeedList = ({ ssoId, repo, setRepo }: IProps) => {
           </RenderIf>
         </div>
       ) : (
-            <EmptyList type={EEmptyList.FEED_LIST} />
+        <EmptyList type={EEmptyList.FEED_LIST} />
       )}
     </div>
   );

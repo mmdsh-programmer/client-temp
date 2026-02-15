@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { ISearchSortParams } from "./publishAdvancedSearch";
+import { ISearchSortParams } from "@components/organisms/publishSearch/publishAdvancedSearch";
+import PublishAdvancedSearchResultItem from "@components/organisms/publishSearch/publishAdvancedSearchResultItem";
 import LoadMore from "@components/molecules/loadMore";
-import PublishAdvancedSearchResultItem from "./publishAdvancedSearchResultItem";
 import useGetDomainDocuments from "@hooks/domain/useGetDomainDocuments";
-import { Typography } from "@material-tailwind/react";
 import BackButton from "@components/atoms/button/backButton";
-import { Spinner } from "@components/atoms/spinner";
+import { Spinner } from "@components/ui/spinner";
 import { useParams } from "next/navigation";
 import { toEnglishDigit } from "@utils/index";
 
@@ -32,7 +31,6 @@ const DomainDocumentsLoadMore = ({
     decodeURIComponent(Array.isArray(idParam) ? idParam[0] : (idParam ?? "")),
   );
 
-
   const {
     data: domainDocuments,
     isLoading,
@@ -52,17 +50,11 @@ const DomainDocumentsLoadMore = ({
     <div className="flex w-full flex-col gap-6">
       <div className="flex items-center gap-2">
         <BackButton onClick={handleBack} className="!p-0" />
-        <Typography
-          className="title_t2 text-primary_normal"
-          placeholder=""
-          {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-        >
-          نتایج در لیست سندها
-        </Typography>
+        <span className="title_t2 text-primary_normal">نتایج در لیست سندها</span>
       </div>
       {isLoading ? (
         <div className="flex w-full items-center justify-center">
-          <Spinner className="h-8 w-8 text-primary" />
+          <Spinner className="size-8 text-primary" />
         </div>
       ) : null}
       <div className="list max-h-[200px] w-full overflow-y-auto !overflow-x-hidden">

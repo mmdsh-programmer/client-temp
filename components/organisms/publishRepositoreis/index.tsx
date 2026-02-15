@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
+import PublishCardView from "@components/organisms/repoView/publishCardView";
+import useGetPublishRepositories from "@hooks/repository/useGetPublishRepositories";
 import { EEmptyList } from "@components/molecules/emptyList";
 import { IRepoView } from "@interface/repo.interface";
-import PublishCardView from "../repoView/publishCardView";
-import useGetPublishRepositories from "@hooks/repository/useGetPublishRepositories";
 
 const PublishRepositories = () => {
   const {

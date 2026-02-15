@@ -1,6 +1,8 @@
-import { Tab, TabPanel, Tabs, TabsBody, TabsHeader } from "@material-tailwind/react";
+"use client";
 
 import React from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from "@/utils/cn";
 
 interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
@@ -22,52 +24,37 @@ const TabComponent = ({
   tabContentClassName,
 }: IProps) => {
   return (
-    <Tabs
-      {...({} as React.ComponentProps<typeof Tabs>)}
-      value={activeTab}
-      className="h-full overflow-visible px-1"
-    >
-      <TabsHeader
-        className={`flex items-center overflow-x-auto rounded-lg bg-gray-200 p-[2px] ${headerClassName || ""}`}
-        indicatorProps={{
-          className: `p-2 rounded-lg shadow-small !text-purple-normal ${activeTabClassName || ""}`,
-        }}
-        {...({} as Omit<React.ComponentProps<typeof TabsHeader>, "indicatorProps">)}
-      >
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full" dir="rtl">
+      <TabsList className={cn("w-full rounded-lg bg-gray-200 h-full", headerClassName)} dir="rtl">
         {tabList.map((tab) => {
           return (
-            <Tab
-              {...({} as React.ComponentProps<typeof Tab>)}
+            <TabsTrigger
               key={tab.tabTitle}
               value={tab.tabTitle}
-              onClick={() => {
-                return setActiveTab(tab.tabTitle);
-              }}
-              className={`flex h-9 p-2 font-iranYekan text-[12px] text-secondary ${tabClassName || ""} text-nowrap font-medium leading-[18px] -tracking-[0.12px]`}
-              activeClassName={`!text-primary_normal ${activeTabClassName || ""} `}
+              className={cn(
+                "p-2 text-[12px] font-medium text-secondary w-full",
+                "data-[state=active]:bg-background data-[state=active]:!text-primary_normal data-[state=active]:shadow-small",
+                tabClassName,
+                activeTabClassName,
+              )}
             >
               {tab.tabTitle}
-            </Tab>
+            </TabsTrigger>
           );
         })}
-      </TabsHeader>
-      <TabsBody
-        {...({} as React.ComponentProps<typeof TabsBody>)}
-        className={`h-[calc(100%-45px)] ${tabContentClassName || ""}`}
-      >
-        {tabList.map((tab) => {
-          return (
-            <TabPanel
-              {...({} as React.ComponentProps<typeof TabPanel>)}
-              key={tab.tabTitle}
-              value={tab.tabTitle}
-              className="h-full p-0"
-            >
-              {tab.tabContent}
-            </TabPanel>
-          );
-        })}
-      </TabsBody>
+      </TabsList>
+      {tabList.map((tab) => {
+        return (
+          <TabsContent
+            key={tab.tabTitle}
+            value={tab.tabTitle}
+            className={cn(tabContentClassName)}
+            dir="rtl"
+          >
+            {tab.tabContent}
+          </TabsContent>
+        );
+      })}
     </Tabs>
   );
 };

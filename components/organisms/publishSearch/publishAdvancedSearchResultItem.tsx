@@ -1,5 +1,7 @@
+"use client";
+
 import React from "react";
-import { ListItem } from "@material-tailwind/react";
+import { cn } from "@utils/cn";
 import { removeSpecialCharacters, toPersianDigit } from "@utils/index";
 import { useRouter } from "next/navigation";
 import { usePublishStore } from "@store/publish";
@@ -13,7 +15,11 @@ interface IProps {
   disabled?: boolean;
 }
 
-const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems }: IProps) => {
+const PublishAdvancedSearchResultItem = ({
+  resultItem,
+  disabled,
+  setDisableItems,
+}: IProps) => {
   const router = useRouter();
   const createLink = useCreateDocumentLink();
 
@@ -22,6 +28,8 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
   });
 
   const handleResultItemClick = () => {
+    if (disabled) return;
+
     setDisableItems?.(true);
 
     createLink.mutate({
@@ -29,7 +37,9 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
       documentId: resultItem.id,
       callBack: (res) => {
         const url = toPersianDigit(
-          `/${removeSpecialCharacters(res.repoName)}/${resultItem.repoId}/${removeSpecialCharacters(resultItem.name)}/${resultItem.id}`,
+          `/${removeSpecialCharacters(res.repoName)}/${resultItem.repoId}/${
+            removeSpecialCharacters(resultItem.name)
+          }/${resultItem.id}`
         );
         const redirectLink = `${window.location.origin}/publish/${url}`;
         router.replace(redirectLink);
@@ -43,26 +53,38 @@ const PublishAdvancedSearchResultItem = ({ resultItem, disabled, setDisableItems
   };
 
   return (
-    <ListItem
+    <div
+      role="button"
+      tabIndex={disabled ? -1 : 0}
       onClick={handleResultItemClick}
-      className="flex min-h-10 gap-1 px-3 py-0"
-      itemProp="!p-0"
-      ripple
-      disabled={disabled}
-      {...({} as React.ComponentProps<typeof ListItem>)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleResultItemClick();
+        }
+      }}
+      className={cn(
+        "flex w-full items-center gap-1 rounded-md px-3 text-sm transition-colors",
+        "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none",
+        "min-h-10 py-0",
+        disabled && "pointer-events-none opacity-50 cursor-not-allowed",
+        !disabled && "cursor-pointer"
+      )}
     >
       <div className="flex max-w-[90%] items-center gap-2">
-        {resultItem.hasPassword || resultItem.hasBlackList || resultItem.hasWhiteList ? (
+        {resultItem.hasPassword ||
+        resultItem.hasBlackList ||
+        resultItem.hasWhiteList ? (
           <LockIcon className="h-6 w-6" />
         ) : null}
         <div
-          className="label flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
+          className="flex-1 overflow-hidden truncate text-ellipsis whitespace-nowrap"
           title={resultItem.name}
         >
           {resultItem.name}
         </div>
       </div>
-    </ListItem>
+    </div>
   );
 };
 

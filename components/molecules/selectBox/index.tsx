@@ -1,14 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Typography } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import { cn } from "@/utils/cn";
 import { ChevronLeftIcon } from "@components/atoms/icons";
-import Checkbox from "@components/atoms/checkbox";
+
+export interface ISelectOption {
+  label: string;
+  value: string | number;
+}
 
 interface IProps {
-  options: any[];
-  selectedOptions: any[];
-  setSelectedOptions: (options: any[]) => void;
+  options: ISelectOption[];
+  selectedOptions: (string | number)[];
+  setSelectedOptions: (options: (string | number)[]) => void;
   defaultOption: string;
   className?: string;
   disabled?: boolean;
@@ -24,128 +39,107 @@ const SelectBox = ({
   disabled,
   singleSelect = false,
 }: IProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleOptionChange = (option: string) => {
+  const handleOptionChange = (optionValue: string | number) => {
     if (singleSelect) {
-      setSelectedOptions([option]);
-      setIsOpen(false);
+      setSelectedOptions([optionValue]);
+      setOpen(false);
     } else {
       setSelectedOptions(
-        selectedOptions.includes(option)
+        selectedOptions.includes(optionValue)
           ? selectedOptions.filter((selected) => {
-              return selected !== option;
+              return selected !== optionValue;
             })
-          : [...selectedOptions, option],
+          : [...selectedOptions, optionValue],
       );
     }
   };
 
-  const filteredOptions = options.filter((option) => {
-    return option.label.toLowerCase().includes(searchValue.toLowerCase());
-  });
+  const displayLabel =
+    selectedOptions.length > 0
+      ? selectedOptions
+          .map((selected) => {
+            return options.find((opt) => {
+              return opt.value === selected;
+            })?.label;
+          })
+          .join(", ")
+      : defaultOption;
 
   return (
-    <div ref={dropdownRef} className={`${className || ""} relative inline-block rounded-md`}>
-      <button
-        onClick={() => {
-          toggleDropdown();
-        }}
-        className={`flex h-full w-full items-center justify-between truncate border-2 border-normal bg-inherit py-1 pl-1 pr-2 text-left font-iranYekan text-[13px] font-normal ${disabled ? "!bg-gray-100 text-gray-300" : ""} rounded-lg focus:outline-none`}
-        disabled={disabled}
-      >
-        <span className="max-w-min truncate">
-          {selectedOptions.length > 0
-            ? selectedOptions
-                .map((selected) => {
-                  return options.find((option) => {
-                    return option.value === selected;
-                  })?.label;
-                })
-                .join(", ")
-            : defaultOption}
-        </span>
-        <ChevronLeftIcon
-          className={`h-2 w-2 transform stroke-icon-active transition-transform ${
-            isOpen ? "rotate-90" : "-rotate-90"
-          }`}
-        />
-      </button>
-      {isOpen && (
-        <div className="absolute z-[99999] mt-2 max-h-[200px] min-h-[60px] w-full min-w-max overflow-visible rounded-md bg-white p-[1px] shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="sticky top-0 z-10 bg-white p-2 pb-1">
-            <input
-              type="text"
-              value={searchValue}
-              onChange={(e) => {
-                return setSearchValue(e.target.value);
-              }}
-              placeholder="جستجو..."
-              className="!text-[13px] font-iranYekan focus:border-primary bg-transparent w-full rounded border border-gray-200 px-2 py-2 text-sm focus:outline-none"
-              dir="rtl"
-            />
-          </div>
-          <ul
-            className="overflow-auto rounded-md p-1 text-right shadow-menu focus:outline-none"
-            role="listbox"
-            aria-labelledby="listbox-label"
-            style={{ maxHeight: "150px" }}
-          >
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((option) => {
-                return (
-                  <li
-                    key={option.value}
-                    className="relative cursor-pointer select-none p-[6px]"
-                    onClick={() => {
-                      return handleOptionChange(option.value);
-                    }}
-                  >
-                    <div className="flex items-center justify-start gap-2" dir="rtl">
-                      <Checkbox
-                        name="checkbox"
-                        className="p-0"
-                        checked={selectedOptions.includes(option.value)}
-                        onChange={() => {
-                          return handleOptionChange(option.value);
-                        }}
-                      />
-                      <Typography
-                        placeholder=""
-                        className="select_option__text truncate text-right text-primary_normal"
-                        {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-                      >
-                        {option.label}
-                      </Typography>
-                    </div>
-                  </li>
-                );
-              })
-            ) : (
-              <li className="font-iranYekan text-[13px] p-2 text-center text-sm text-gray-400">موردی یافت نشد</li>
+    <Popover
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+      }}
+    >
+      <PopoverTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          disabled={disabled}
+          className={cn(
+            "group flex h-full w-full items-center justify-between truncate border-2 border-normal bg-inherit py-1 pl-1 pr-2 text-left font-iranYekan text-[13px] font-normal focus:outline-none [&_svg]:size-2",
+            disabled && "!bg-gray-100 text-gray-300",
+            className,
+          )}
+        >
+          <span className="max-w-min truncate">{displayLabel}</span>
+          <ChevronLeftIcon
+            className={cn(
+              "h-2 w-2 -rotate-90 transform stroke-icon-active transition-transform group-data-[state=open]:rotate-90",
             )}
-          </ul>
-        </div>
-      )}
-    </div>
+          />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        className={cn(
+          "z-[99999] mt-2 w-full min-w-[var(--radix-popover-trigger-width)] max-w-[var(--radix-popover-trigger-width)] p-0",
+          "max-h-[200px] min-h-[60px] overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5",
+        )}
+        align="start"
+      >
+        <Command
+          className="rounded-md border-0 bg-transparent font-iranYekan text-[13px]"
+          dir="rtl"
+        >
+          <CommandInput
+            placeholder="جستجو..."
+            className="h-9 border-0 border-b border-gray-200 bg-transparent focus:border-primary focus:ring-0"
+          />
+          <CommandList className="max-h-[150px]">
+            <CommandEmpty className="py-4 text-center text-sm text-gray-400">
+              موردی یافت نشد
+            </CommandEmpty>
+            <CommandGroup className="p-1 text-right">
+              {options.map((option) => {
+                const isSelected = selectedOptions.includes(option.value);
+                return (
+                  <CommandItem
+                    key={String(option.value)}
+                    value={option.label}
+                    onSelect={() => {
+                      handleOptionChange(option.value);
+                    }}
+                    className="cursor-pointer gap-2 rounded-sm px-2 py-1.5 text-right text-primary_normal"
+                  >
+                    <Checkbox
+                      checked={isSelected}
+                      className="pointer-events-none shrink-0"
+                      aria-hidden
+                    />
+                    <span className="select_option__text truncate">{option.label}</span>
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 };
 

@@ -1,11 +1,8 @@
+"use client";
+
 import React from "react";
-import {
-  Tab,
-  TabPanel,
-  Tabs,
-  TabsBody,
-  TabsHeader,
-} from "@material-tailwind/react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from "@/utils/cn";
 
 interface IProps {
   tabList: { tabTitle: string; tabContent: React.ReactNode }[];
@@ -23,45 +20,45 @@ const PublishTab = ({
   tabPanelClassName,
 }: IProps) => {
   return (
-    <Tabs value={activeTab} className="w-full" {...({} as  React.ComponentProps<typeof Tabs>)}>
-      <TabsHeader
-        className={`rounded-none border-b-2 border-blue-gray-50 bg-transparent p-0 ${tabHeaderClassName}`}
-        indicatorProps={{
-          className:
-            "bg-transparent border-b-[3px] rounded-t-sm border-purp shadow-none rounded-none border-purple-normal",
-        }}
-        {...({} as  React.ComponentProps<typeof TabsHeader>)}
+    <Tabs
+      value={activeTab}
+      onValueChange={setActiveTab}
+      className="w-full"
+    >
+      <TabsList
+        className={cn(
+          "inline-flex h-auto w-full rounded-none border-b-2 border-blue-gray-50 bg-transparent p-0",
+          tabHeaderClassName
+        )}
+        dir="rtl"
       >
         {tabList.map((tab) => {
           return (
-            <Tab
+            <TabsTrigger
               key={tab.tabTitle}
               value={tab.tabTitle}
-              onClick={() => {
-                return setActiveTab(tab.tabTitle);
-              }}
-              className={`w-fit font-iranYekan text-sm px-0 mx-4 py-4 ${tab.tabTitle === activeTab ? "text-gray-800" : "text-gray-500"}`}
-              {...({} as  Omit<React.ComponentProps<typeof Tab>, "value">)}
+              className={cn(
+                "w-fit rounded-none border-b-[3px] border-transparent bg-transparent font-iranYekan text-sm font-medium text-gray-500 shadow-none transition-none",
+                "px-0 mx-4 py-4 data-[state=active]:border-purple-normal data-[state=active]:text-gray-800 data-[state=active]:shadow-none"
+              )}
             >
               {tab.tabTitle}
-            </Tab>
+            </TabsTrigger>
           );
         })}
-      </TabsHeader>
-      <TabsBody placeholder="tab-body" {...({} as  Omit<React.ComponentProps<typeof TabsBody>, "placeholder">)}>
-        {tabList.map((tab) => {
-          return (
-            <TabPanel
-              className={`px-0 py-0 min-h-[500px] ${tabPanelClassName || ""}`}
-              key={tab.tabTitle}
-              value={tab.tabTitle}
-              {...({} as  Omit<React.ComponentProps<typeof TabPanel>, "value">)}
-            >
-              {tab.tabTitle === activeTab ? tab.tabContent : null}
-            </TabPanel>
-          );
-        })}
-      </TabsBody>
+      </TabsList>
+      {tabList.map((tab) => {
+        return (
+          <TabsContent
+            key={tab.tabTitle}
+            value={tab.tabTitle}
+            className={cn(tabPanelClassName)}
+            dir="rtl"
+          >
+            {tab.tabContent}
+          </TabsContent>
+        );
+      })}
     </Tabs>
   );
 };

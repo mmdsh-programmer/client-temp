@@ -1,10 +1,14 @@
+"use client";
+
 import React, { useEffect } from "react";
-import { Button, Typography } from "@material-tailwind/react";
 import {
   FetchNextPageOptions,
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/utils/cn";
 
 interface IProps {
   className?: string;
@@ -21,29 +25,29 @@ const LoadMore = ({ className, isFetchingNextPage, fetchNextPage }: IProps) => {
     if (inView && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, isFetchingNextPage, fetchNextPage]);
 
   return (
     <Button
       ref={ref}
-      placeholder="load more"
-      className={`${className} w-full load-more__button mt-2 bg-transparent p-0 shadow-none hover:shadow-none`}
+      type="button"
+      variant="ghost"
+      size="default"
+      className={cn(
+        "w-full focus:bg-transparent hover:bg-transparent",
+        className
+      )}
       onClick={() => {
         fetchNextPage();
       }}
       disabled={isFetchingNextPage}
-      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
     >
       {isFetchingNextPage ? (
-        <div className="spinner" />
+        <Spinner className="!size-6 text-primary" />
       ) : (
-        <Typography
-          placeholder=""
-          className="font-iranYekan text-[#0369CD] text-xs"
-          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-        >
+        <span className="text-xs text-link">
           نمایش موارد بیشتر
-        </Typography>
+        </span>
       )}
     </Button>
   );

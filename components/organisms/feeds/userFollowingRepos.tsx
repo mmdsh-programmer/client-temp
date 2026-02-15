@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
 import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
-import { Spinner } from "@components/atoms/spinner";
-import { Card, Typography } from "@material-tailwind/react";
+import { Spinner } from "@components/ui/spinner";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/utils/cn";
 import RepoDefaultImage from "@components/molecules/repoDefaultImage";
 import useGetFollowingRepos from "@hooks/feeds/useGetFollowingRepos";
-import PrivateFeedList from "./privateFeedList";
+import PrivateFeedList from "@components/organisms/feeds/privateFeedList";
 
 interface IProps {
   ssoId: number;
@@ -31,7 +32,7 @@ const UserFollowingRepos = ({ ssoId }: IProps) => {
     if (isLoading) {
       return (
         <div className="flex !h-full w-full items-center justify-center">
-          <Spinner className="h-8 w-8 text-primary" />
+          <Spinner className="size-8 text-primary" />
         </div>
       );
     }
@@ -44,26 +45,28 @@ const UserFollowingRepos = ({ ssoId }: IProps) => {
                 return (
                   <div key={repo.repoId} className="aspect-square">
                     <Card
-                      {...({} as React.ComponentProps<typeof Card>)}
                       key={`repo-card-item-${repo.repoId}`}
-                      className="repo-publish-card h-full flex-col rounded-lg border-[1px] border-normal bg-white shadow-small last:flex"
+                      className={cn(
+                        "repo-publish-card h-full flex-col rounded-lg border-[1px] border-normal bg-white shadow-small last:flex",
+                      )}
                     >
                       <div
                         className="flex h-full w-full cursor-pointer flex-col items-center justify-between rounded-md"
                         onClick={() => {
-                          return setRepoFeed({ label: repo.repoName, value: repo.repoId });
+                          setRepoFeed({ label: repo.repoName, value: repo.repoId });
                         }}
                       >
                         <div className="default-repo-image relative flex h-44 w-full flex-1 items-center justify-center rounded-t-md bg-primary-normal">
                           <RepoDefaultImage className="!h-12 !w-12" />
                         </div>
-                        <Typography
-                          {...({} as React.ComponentProps<typeof Typography>)}
-                          className="title_t2 w-full truncate px-2 pb-8 pt-4 text-center font-[450]"
+                        <span
+                          className={cn(
+                            "title_t2 w-full truncate px-2 pb-8 pt-4 text-center font-[450]",
+                          )}
                           title={repo.repoName}
                         >
                           {repo.repoName}
-                        </Typography>
+                        </span>
                       </div>
                     </Card>
                   </div>

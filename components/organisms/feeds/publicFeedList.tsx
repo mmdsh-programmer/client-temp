@@ -1,13 +1,12 @@
 "use client";
 
-import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
-
-import FeedItem from "./feedItem";
-import LoadMore from "@components/molecules/loadMore";
 import React from "react";
+import EmptyList, { EEmptyList } from "@components/molecules/emptyList";
+import FeedItem from "@components/organisms/feeds/feedItem";
+import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import useGetPublicFeeds from "@hooks/feeds/useGetPublicFeeds";
-import { Spinner } from "@components/atoms/spinner";
+import { Spinner } from "@components/ui/spinner";
 
 const PublicFeedList = () => {
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -21,7 +20,7 @@ const PublicFeedList = () => {
     return (
       <div className="mt-6 grid h-[calc(100vh-250px)] place-content-center py-4">
         <div className="w-full flex justify-center">
-          <Spinner className="h-6 w-6 text-primary" />
+          <Spinner className="size-6 text-primary" />
         </div>
       </div>
     );

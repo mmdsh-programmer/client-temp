@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import PublicFeedList from "./publicFeedList";
+import PublicFeedList from "@components/organisms/feeds/publicFeedList";
 import PublishTab from "@components/molecules/publishTab";
-import useGetUser from "@hooks/auth/useGetUser";
-import UserFollowingRepos from "./userFollowingRepos";
+import UserFollowingRepos from "@components/organisms/feeds/userFollowingRepos";
 import useGetDomainInfo from "@hooks/domain/useGetDomainInfo";
+import useGetUser from "@hooks/auth/useGetUser";
 
 enum ETabs {
   PUBLIC_FEEDS = "خبرنامه های عمومی",
@@ -36,13 +36,12 @@ const Feeds = () => {
   ];
 
   return (
-    <section className="min-h- flex w-full items-center gap-4 bg-white">
+    <section className="flex w-full items-center gap-4 bg-white">
       <PublishTab
         tabList={tabList}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         tabHeaderClassName="w-full"
-        tabPanelClassName="!h-[calc(100vh-250px)] min-h-[unset]"
       />
     </section>
   );

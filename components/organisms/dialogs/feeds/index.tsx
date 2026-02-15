@@ -13,7 +13,7 @@ const FeedsDialog = ({ children }: IProps) => {
     <InfoDialog
       trigger={children}
       dialogHeader="خبرنامه ها"
-      contentClassName="p-0"
+      contentClassName="!pt-0 !px-0 min-h-[400px]"
       className="xs:max-w-[unset]"
       backToMain
     >

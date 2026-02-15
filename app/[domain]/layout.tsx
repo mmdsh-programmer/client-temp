@@ -1,12 +1,13 @@
 import React from "react";
-import "@styles/globals.css";
-import MainProvider from "provider/mainProvider";
 import type { Metadata } from "next";
 import { decodeKey } from "@utils/index";
 import { getCustomPostByDomain } from "@service/clasor";
 import { ICustomPostData } from "@interface/app.interface";
 import ThemeLoaderProvider from "provider/themeLoaderProvider";
+import MainProvider from "provider/mainProvider";
 import Script from "next/script";
+
+import "@styles/globals.css";
 
 interface IProps {
   children: React.ReactNode;
