@@ -6,7 +6,7 @@ import {
   MyFolderIcon,
   PublishIcon,
 } from "@components/atoms/icons";
-import { Button, List, ListItem, Typography } from "@material-tailwind/react";
+import { Button } from "@components/ui/button";
 import { ERepoGrouping } from "@interface/enums";
 import { ESidebarSection, useSidebarStore } from "@store/sidebar";
 import Link from "next/link";
@@ -77,37 +77,28 @@ const SidebarRepoList = () => {
   ];
 
   return (
-    <List {...({} as React.ComponentProps<typeof List>)} className="min-w-[200px] gap-1 p-0">
+    <ul className="m-0 flex min-w-[200px] list-none flex-col gap-1 p-0">
       {sidebarList.map((item) => {
         return (
-          <ListItem
-            {...({} as React.ComponentProps<typeof ListItem>)}
-            key={item.className}
-            className={`p-0 ${item.className}`}
-          >
+          <li key={item.className} className={`p-0 ${item.className}`}>
             <Link href={item.path} className="w-full">
               <Button
-                {...({} as React.ComponentProps<typeof Button>)}
-                className={`h-[44px] w-full justify-start 
-                     gap-1 bg-transparent px-3 text-link
-                ${
+                variant="ghost"
+                className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${
                   repoGrouping === item.text
-                    ? "bg-gray-100 !stroke-icon-active text-primary_normal"
+                    ? "bg-gray-100 text-primary_normal [&_svg]:stroke-icon-active"
                     : ""
-                }
-                  hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal`}
+                } shadow-none hover:bg-gray-100 hover:text-primary_normal hover:shadow-none hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active`}
                 onClick={item.onClick}
               >
                 {item.icon}
-                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3">
-                  {item.text}
-                </Typography>
+                <span className="title_t3">{item.text}</span>
               </Button>
             </Link>
-          </ListItem>
+          </li>
         );
       })}
-    </List>
+    </ul>
   );
 };
 

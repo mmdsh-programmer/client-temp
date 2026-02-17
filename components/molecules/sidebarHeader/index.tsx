@@ -1,10 +1,9 @@
-import { Card, Typography } from "@material-tailwind/react";
-
-import { ICustomPostData } from "@interface/app.interface";
-import ImageComponent from "@components/atoms/image";
-import { InfoIcon } from "@components/atoms/icons";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Card } from "@components/ui/card";
+import { ICustomPostData } from "@interface/app.interface";
+import { InfoIcon } from "@components/atoms/icons";
+import ImageComponent from "@components/atoms/image";
 
 interface IProps {
   domainInfo: ICustomPostData;
@@ -13,11 +12,7 @@ const SidebarHeader = ({ domainInfo }: IProps) => {
 
   return (
     <Link href="/" className="w-full">
-      <Card
-        placeholder="sidebar-header"
-        className="sidebar-header shadow-none px-3 py-2 text-primary_normal bg-primary-light rounded-md cursor-pointer hover:bg-primary-light w-full border-[1px] border-gray-200"
-        {...({} as  Omit<React.ComponentProps<typeof Card>, "placeholder">)}
-      >
+      <Card className="sidebar-header shadow-none px-3 py-2 text-primary_normal bg-primary-light rounded-md cursor-pointer hover:bg-primary-light w-full border-[1px] border-gray-200">
         <div className="flex items-center">
           <div className="w-10 h-10 min-w-10 min-h-10 rounded-md p-1">
             {domainInfo?.logo ? (
@@ -33,20 +28,12 @@ const SidebarHeader = ({ domainInfo }: IProps) => {
             )}
           </div>
           <div className="flex flex-col mr-2">
-            <Typography
-              placeholder=""
-              className="font-iranYekan font-medium text-[13px] group"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-            >
+            <div className="font-iranYekan font-medium text-[13px] group">
               {domainInfo?.projectName ?? "نام پروژه"}
-            </Typography>
-            <Typography
-              placeholder=""
-              className="font-iranYekan text-hint text-xs"
-              {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-            >
+            </div>
+            <div className="font-iranYekan text-hint text-xs">
               {domainInfo?.projectDescription ?? "توضیحات پروژه"}
-            </Typography>
+            </div>
           </div>
         </div>
       </Card>

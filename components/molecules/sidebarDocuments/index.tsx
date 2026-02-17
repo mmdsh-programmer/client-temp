@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, List, ListItem, Typography } from "@material-tailwind/react";
+import { Button } from "@components/ui/button";
 import { MyDocumentsIcon, SharedDocumentsIcon } from "@components/atoms/icons";
 import { usePathname, useRouter } from "next/navigation";
 import { ESidebarSection, useSidebarStore } from "@store/sidebar";
@@ -39,38 +39,36 @@ const SidebarDocuments = () => {
   }, [currentPath, isNavigating, setRepo, setRepoGrouping, setCategory, setSelectedDocument]);
 
   return (
-    <List placeholder="sidebar-list" className="min-w-[200px] gap-1 p-0" {...({} as  Omit<React.ComponentProps<typeof List>, "placeholder">)}>
-      <ListItem key="سندهای من" placeholder="sidebar-item" className="myDocuments p-0" {...({} as  Omit<React.ComponentProps<typeof ListItem>, "placeholder">)}>
+    <ul className="min-w-[200px] flex flex-col gap-1 p-0 m-0 list-none">
+      <li key="سندهای من" className="myDocuments p-0">
         <Button
-          placeholder="sidebar-button"
-          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.MY_DOCUMENTS ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} !stroke-icon-hover hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal`}
+          variant="ghost"
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.MY_DOCUMENTS ? "bg-gray-100 [&_svg]:stroke-icon-active text-primary_normal hover:[&_svg]:fill-icon-active" : "[&_svg]:stroke-icon-hover"} hover:bg-gray-100 hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:[&_svg]:stroke-icon-active active:text-primary_normal shadow-none hover:shadow-none`}
           onClick={() => {
             return handleNavigation("/admin/myDocuments", ESidebarSection.MY_DOCUMENTS);
           }}
-          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           <MyDocumentsIcon className="h-6 w-6 stroke-icon-hover" />
-          <Typography placeholder="sidebar-text" className="title_t3" {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}>
+          <span className="title_t3">
             {ESidebarSection.MY_DOCUMENTS}
-          </Typography>
+          </span>
         </Button>
-      </ListItem>
-      <ListItem key="سندهای اشتراکی" placeholder="sidebar-item" className="sharedDocuments p-0" {...({} as  Omit<React.ComponentProps<typeof ListItem>, "placeholder">)}>
+      </li>
+      <li key="سندهای اشتراکی" className="sharedDocuments p-0">
         <Button
-          placeholder="sidebar-button"
-          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.SHARED_DOCUMENTS ? "bg-gray-100 !stroke-icon-active text-primary_normal hover:!fill-icon-active" : "!stroke-icon-hover"} !stroke-icon-hover hover:bg-gray-100 hover:!fill-icon-active hover:!stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:!stroke-icon-active active:text-primary_normal`}
+          variant="ghost"
+          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.SHARED_DOCUMENTS ? "bg-gray-100 [&_svg]:stroke-icon-active text-primary_normal hover:[&_svg]:fill-icon-active" : "[&_svg]:stroke-icon-hover"} hover:bg-gray-100 hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:[&_svg]:stroke-icon-active active:text-primary_normal shadow-none hover:shadow-none`}
           onClick={() => {
             return handleNavigation("/admin/sharedDocuments", ESidebarSection.SHARED_DOCUMENTS);
           }}
-          {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
         >
           <SharedDocumentsIcon className="h-6 w-6 stroke-icon-hover" />
-          <Typography placeholder="sidebar-text" className="title_t3" {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}>
+          <span className="title_t3">
             {ESidebarSection.SHARED_DOCUMENTS}
-          </Typography>
+          </span>
         </Button>
-      </ListItem>
-    </List>
+      </li>
+    </ul>
   );
 };
 

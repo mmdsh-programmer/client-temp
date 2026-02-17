@@ -1,12 +1,12 @@
 "use client";
 
+import React from "react";
 import Header from "@components/organisms/header";
 import { ICustomPostData } from "@interface/app.interface";
-import React from "react";
 import Sidebar from "@components/organisms/sidebar";
 import SidebarHeader from "@components/molecules/sidebarHeader";
 import SidebarMobileView from "@components/molecules/sidebarMobileView";
-import Start from "../start";
+import Start from "@components/templates/start";
 import Tour from "@components/tour";
 import { usePathname } from "next/navigation";
 

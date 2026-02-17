@@ -14,6 +14,7 @@ export enum ESidebarSection {
   DOMAIN_MANAGEMENT = "مدیریت دامنه",
   BRANCH_MANAGEMENT = "مدیریت سازمانی",
   BRANCH_LIST = "لیست شعبات",
+  PERSONAL_DOCUMENTS = "اسناد شخصی",
 }
 
 export enum ESidebarTab {
