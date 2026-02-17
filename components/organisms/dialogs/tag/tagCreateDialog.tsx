@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import useRepoId from "@hooks/custom/useRepoId";
 import useGetUser from "@hooks/auth/useGetUser";
 import useCreateDomainTag from "@hooks/domainTags/useCreateDomainTag";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { tagSchema } from "./validation.yup";
 
@@ -116,9 +116,7 @@ const TagCreateDialog = ({ name, setOpen }: IProps) => {
               <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات تگ</Typography>
               <TextareaAtom
                 placeholder="توضیحات تگ"
-                register={{
-                  ...register("description"),
-                }}
+                {...register("description")}
                 className="tag-create-dialog__description"
               />
               {errors.description && (

@@ -1,10 +1,10 @@
 "use client";
 
-import Header from "@components/organisms/header";
 import React from "react";
-import Start from "../start";
+import Header from "@components/organisms/header";
+import Start from "@components/templates/start";
 import SidebarMobileView from "@components/molecules/sidebarMobileView";
-import NotFoundTemplate from "../not-found";
+import NotFoundTemplate from "@components/templates/not-found";
 import useGetUser from "@hooks/auth/useGetUser";
 
 interface IProps {

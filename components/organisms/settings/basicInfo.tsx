@@ -1,7 +1,7 @@
 import React from "react";
 import { Typography } from "@material-tailwind/react";
 import FormInput from "@components/atoms/input/formInput";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { UseFormRegister } from "react-hook-form";
 import { IDomainTheme } from "@interface/domain.interface";
 
@@ -15,7 +15,9 @@ const BasicInfo = ({ domain, onInputChange, register }: BasicInfoProps) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">نام دامنه</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+          نام دامنه
+        </Typography>
         <FormInput
           placeholder="نام دامنه"
           register={{
@@ -27,12 +29,12 @@ const BasicInfo = ({ domain, onInputChange, register }: BasicInfoProps) => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات دامنه</Typography>
+        <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+          توضیحات دامنه
+        </Typography>
         <TextareaAtom
           placeholder="توضیحات دامنه"
-          register={{
-            ...register("description"),
-          }}
+          {...register("description")}
           className="domain-edit__form-description"
           value={domain.description}
           onChange={onInputChange}
@@ -42,4 +44,4 @@ const BasicInfo = ({ domain, onInputChange, register }: BasicInfoProps) => {
   );
 };
 
-export default BasicInfo; 
+export default BasicInfo;

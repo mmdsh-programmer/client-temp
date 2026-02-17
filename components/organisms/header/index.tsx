@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   AlertIcon,
   BackIcon,
@@ -5,21 +6,19 @@ import {
   ThemeIcon,
   UserFillIcon,
 } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
 import Breadcrumb from "@components/molecules/breadcumb";
-import FeedbackDialog from "../dialogs/feedback";
+import FeedbackDialog from "@components/organisms/dialogs/feedback";
+import UserJoinToRepoRequestsDialog from "@components/organisms/dialogs/requests/userJoinToRepoRequests";
 import ProfileMenu from "@components/molecules/profileMenu";
-import UserJoinToRepoRequests from "../dialogs/requests/userJoinToRepoRequests";
 import useGetUser from "@hooks/auth/useGetUser";
+import { Button } from "@components/ui/button";
 import { useRepositoryStore } from "@store/repository";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@utils/cn";
 
 const Header = () => {
   const router = useRouter();
   const { setRepo } = useRepositoryStore();
-  const [openRequestDialog, setOpenRequestDialog] = useState(false);
-  const [openFeedbackDialog, setOpenFeedbackDialog] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const currentPath = usePathname();
 
@@ -46,17 +45,14 @@ const Header = () => {
           {currentPath?.includes("/panel-admin-clasor") ? (
             <div className="flex items-center gap-2">
               <Button
-                {...({} as React.ComponentProps<typeof Button>)}
-                className="back-button bg-transparent p-0"
-                onClick={() => {
-                  return window.history.back();
-                }}
+                variant="ghost"
+                size="icon"
+                className="back-button h-auto w-auto bg-transparent p-0 hover:bg-transparent"
+                onClick={() => window.history.back()}
               >
                 <BackIcon className="h-5 w-5 fill-icon-active" />
               </Button>
-              <Typography {...({} as React.ComponentProps<typeof Typography>)}>
-                پنل ادمین
-              </Typography>
+              <span className="text-base font-medium text-foreground">پنل ادمین</span>
             </div>
           ) : (
             <Breadcrumb />
@@ -69,51 +65,48 @@ const Header = () => {
           <div className="mr-auto flex items-center gap-4">
             {userInfo?.isClasorAdmin && currentPath !== "/panel-admin-clasor" ? (
               <Button
-                {...({} as React.ComponentProps<typeof Button>)}
+                variant="outline"
+                size="icon"
                 onClick={handleAdminPanelNavigation}
-                className="panel-admin__button flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg"
+                className={cn(
+                  "panel-admin__button flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg hover:bg-gray-50",
+                )}
                 title="پنل ادمین"
               >
                 <UserFillIcon className="h-4 w-4 fill-[#9AA6B1]" />
               </Button>
             ) : null}
-            <Button
-              {...({} as React.ComponentProps<typeof Button>)}
-              onClick={() => {
-                return setOpenRequestDialog(true);
-              }}
-              className="join-to-repo-requests__button notice flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg"
-            >
-              <AlertIcon className="h-4 w-4" />
-            </Button>
-            <Button
-              {...({} as React.ComponentProps<typeof Button>)}
-              onClick={() => {
-                return setOpenFeedbackDialog(true);
-              }}
-              className="feedback__button flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg"
-            >
-              <ThemeIcon className="h-4 w-4" />
-            </Button>
+            <UserJoinToRepoRequestsDialog
+              trigger={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "join-to-repo-requests__button notice flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg hover:bg-gray-50",
+                  )}
+                >
+                  <AlertIcon className="h-4 w-4" />
+                </Button>
+              }
+            />
+            <FeedbackDialog
+              trigger={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "feedback__button flex h-10 w-10 items-center justify-center rounded-full border-[1px] border-normal bg-white p-1 shadow-lg hover:bg-gray-50",
+                  )}
+                >
+                  <ThemeIcon className="h-4 w-4" />
+                </Button>
+              }
+            />
             <ProfileMenu />
           </div>
         </div>
       </div>
       <hr className="" />
-      {openRequestDialog && (
-        <UserJoinToRepoRequests
-          setOpen={() => {
-            return setOpenRequestDialog(false);
-          }}
-        />
-      )}
-      {openFeedbackDialog && (
-        <FeedbackDialog
-          setOpen={() => {
-            return setOpenFeedbackDialog(false);
-          }}
-        />
-      )}
     </>
   );
 };

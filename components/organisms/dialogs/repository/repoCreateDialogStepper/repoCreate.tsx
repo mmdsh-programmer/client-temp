@@ -4,7 +4,7 @@ import CancelButton from "@components/atoms/button/cancelButton";
 import FormInput from "@components/atoms/input/formInput";
 import LoadingButton from "@components/molecules/loadingButton";
 import React from "react";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { repoCreateSchema } from "../validation.yup";
 import { toast } from "react-toastify";
 import useCreateRepo from "@hooks/repository/useCreateRepo";
@@ -92,7 +92,7 @@ const RepoCreateDialog = ({ handleClose }: IProps) => {
             </Typography>
             <TextareaAtom
               placeholder="توضیحات مخزن"
-              register={{ ...register("description") }}
+              { ...register("description") }
               className="repo-create-dialog__textarea"
             />
             {errors.description && (

@@ -1,20 +1,18 @@
-import FileUploaderInput, {
-  IFileUploaderInput,
-} from "@components/organisms/fileUploader";
 import React, { ChangeEvent, useRef, useState } from "react";
-
+import FileUploaderInput, { IFileUploaderInput } from "@components/organisms/fileUploader";
 import ConfirmFullHeightDialog from "@components/templates/dialog/confirmFullHeightDialog";
-import { IPodspaceResult } from "@interface/app.interface";
-import TextareaAtom from "@components/atoms/textarea/textarea";
-import { Typography } from "@material-tailwind/react";
-import { UploadIcon } from "@components/atoms/icons";
-import { feedBackSchema } from "./validation.yup";
-import { toast } from "react-toastify";
+import TextareaAtom from "@components/atoms/textarea";
+import { Label } from "@components/ui/label";
+import { Input } from "@components/ui/input";
 import useAddUserToFeedbackGroupHash from "@hooks/feedback/useAddUserToFeedbackGroupHash";
-import { useForm } from "react-hook-form";
 import useSendFeedback from "@hooks/feedback/useSendFeedback";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { extractFileFromUnknown, validateBeforeUpload } from "@utils/uploadGuards";
+import { IPodspaceResult } from "@interface/app.interface";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { feedBackSchema } from "./validation.yup";
+import { UploadIcon } from "@components/atoms/icons";
 
 export interface IFileDetail {
   errorMessage?: string;
@@ -24,10 +22,11 @@ export interface IFileDetail {
 }
 
 interface IProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  trigger: React.ReactNode;
 }
 
-const FeedbackDialog = ({ setOpen }: IProps) => {
+const FeedbackDialog = ({ trigger }: IProps) => {
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fileInfo, setFileInfo] = useState<IFileDetail[] | null>(null);
   const fileIndex = useRef(0);
@@ -42,8 +41,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
     defaultValues: { fileHashList: [] },
     resolver: yupResolver(feedBackSchema),
   });
-  const { register, handleSubmit, setValue, formState, getValues, reset } =
-    form;
+  const { register, handleSubmit, setValue, formState, getValues, reset } = form;
   const { errors } = formState;
 
   const handleClose = () => {
@@ -57,7 +55,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
       const data = getValues();
       await sendFeedBackHook.mutateAsync({
         ...data,
-        fileHashList: data.fileHashList || [], // Ensure fileHashList is always an array
+        fileHashList: data.fileHashList || [],
         callBack: () => {
           handleClose();
         },
@@ -101,6 +99,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
       setLoading(false);
     }
   };
+
   const checkAllIsReady = () => {
     if (!fileInfo) return;
     const fileHashList = getValues("fileHashList");
@@ -136,13 +135,11 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const newFile = event.target?.files?.[0];
-    
+
     let fileToUpload = newFile;
     const file = await extractFileFromUnknown(newFile);
     if (file) {
-      const { valid, message, sanitizedFile } = await validateBeforeUpload(
-        file
-      );
+      const { valid, message, sanitizedFile } = await validateBeforeUpload(file);
       if (!valid) {
         toast.error(message || "آپلود این فایل مجاز نیست");
         return;
@@ -151,7 +148,7 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
         fileToUpload = sanitizedFile;
       }
     }
-    
+
     if (fileToUpload) {
       fileIndex.current += 1;
       if (fileInfo) {
@@ -177,54 +174,54 @@ const FeedbackDialog = ({ setOpen }: IProps) => {
 
   return (
     <ConfirmFullHeightDialog
+      trigger={trigger}
+      open={open}
+      onOpenChange={setOpen}
       isPending={loading || sendFeedBackHook.isPending}
       dialogHeader="ارسال نظر و بازخورد"
       onSubmit={handleSubmit(onSubmit)}
-      setOpen={setOpen}
       className="feedback__dialog xs:max-h-[600px]"
     >
-      <form className="feedback__form flex flex-col gap-4 ">
+      <form className="feedback__form flex flex-col gap-4">
         <div className="feedback__form-content flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label text-primary_normal"> متن بازخورد</Typography>
+          <Label className="form_label text-base font-medium text-primary_normal">
+            متن بازخورد
+          </Label>
           <TextareaAtom
             placeholder="لطفا متن خود را وارد کنید"
-            register={{ ...register("content") }}
+            {...register("content")}
             className="feedback__form-content-textarea"
           />
           {errors.content && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
-              {errors.content?.message}
-            </Typography>
+            <span className="warning_text text-sm text-red-500">{errors.content?.message}</span>
           )}
         </div>
         {fileIndex.current < 6 ? (
-          <div className="flex flex-col gap-4 ">
-            <label
+          <div className="flex flex-col gap-4">
+            <Label
               htmlFor="input-file"
-              className="h-[150px] flex flex-col gap-2 justify-center items-center rounded-lg border-normal border-[1px] cursor-pointer"
+              className="flex h-[150px] cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-[1px] border-normal hover:bg-gray-50"
             >
-              <div className="h-10 w-10 flex flex-col justify-center items-center rounded-lg border-normal border-[1px]">
+              <div className="flex h-10 w-10 flex-col items-center justify-center rounded-lg border-[1px] border-normal bg-white">
                 <UploadIcon className="h-5 w-5 stroke-[#667585]" />
               </div>
               <div className="flex gap-[3px]">
-                <Typography {...({} as React.ComponentProps<typeof Typography>)} className="select_option__text text-[#0369CD]">
+                <span className="select_option__text text-sm font-medium text-[#0369CD]">
                   برای آپلود کلیک کنید
-                </Typography>
+                </span>
               </div>
-              <input
+              <Input
                 type="file"
                 id="input-file"
                 className="feedback__upload-file-input hidden"
                 onChange={handleFileChange}
                 accept="image/*"
               />
-            </label>
+            </Label>
           </div>
         ) : null}
         <div className="feedback__form-file-list flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="title_t3 text-hint">
-            مشاهده همه فایل‌ها
-          </Typography>
+          <Label className="title_t3 text-sm font-medium text-hint">مشاهده همه فایل‌ها</Label>
           {fileInfo?.map((info, index) => {
             return (
               <FileUploaderInput

@@ -2,7 +2,7 @@ import React from "react";
 import { DialogBody, Typography } from "@material-tailwind/react";
 import DialogStepperFooter from "@components/molecules/stepperDialogFooter";
 import FormInput from "@components/atoms/input/formInput";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { documentInfoSchema } from "../validation.yup";
 import { useForm } from "react-hook-form";
 import useStepperNavigate from "@hooks/custom/useStepperNavigate";
@@ -104,11 +104,9 @@ const DocumentInfo = () => {
             <TextareaAtom
               className="document-info-form__description w-full"
               placeholder="توضیحات سند"
-              register={{
-                ...register("description", {
+                {...register("description", {
                   value: getDocumentInfo?.description,
-                }),
-              }}
+                })}
             />
             {errors.description && (
               <Typography

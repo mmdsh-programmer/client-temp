@@ -6,7 +6,7 @@ import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IFeedItem } from "@interface/feeds.interface";
 import ImageComponent from "@components/atoms/image";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { publicFeedSchema } from "./validation.yup";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -92,7 +92,7 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات </Typography>
           <TextareaAtom
             placeholder="توضیحات"
-            register={{ ...register("content", { value: feed.content }) }}
+            { ...register("content", { value: feed.content }) }
             rows={15}
           />
         </div>

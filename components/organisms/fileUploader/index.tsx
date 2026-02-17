@@ -1,14 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { Button, Typography } from "@material-tailwind/react";
+import React, { Ref, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { Button } from "@components/ui/button";
+import { Progress } from "@components/ui/progress";
 import { DeleteIcon, ReloadIcon, TickIcon } from "@components/atoms/icons";
-import React, {
-  Ref,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
 
 import useGetUser from "@hooks/auth/useGetUser";
 
@@ -54,10 +47,7 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
   const onProgress = (e: any) => {
     const contentLength = e.lengthComputable
       ? e.total
-      : Number.parseInt(
-          e.target.getResponseHeader("x-decompressed-content-length"),
-          10
-        );
+      : Number.parseInt(e.target.getResponseHeader("x-decompressed-content-length"), 10);
 
     const progressUpload = e.loaded / contentLength;
     setProgress(Math.round(progressUpload * 100));
@@ -109,17 +99,11 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
     xhrRef.current.open("POST", uploadUrl, true);
 
     const extension = ".png";
-    const newFile = new File(
-      [file],
-      fileName ? `${fileName}.${extension}` : file.name
-    );
+    const newFile = new File([file], fileName ? `${fileName}.${extension}` : file.name);
 
     formData.append("file", newFile);
 
-    xhrRef.current.setRequestHeader(
-      "Authorization",
-      `Bearer ${userInfo?.access_token}`
-    );
+    xhrRef.current.setRequestHeader("Authorization", `Bearer ${userInfo?.access_token}`);
     xhrRef.current.send(formData);
   };
 
@@ -152,52 +136,59 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
     return (
       <div
         key={file.name}
-        className={`file-${uniqueId ? `-${uniqueId}` : ""} w-full flex justify-between items-center p-4 rounded-lg border-normal border-[1px]
-          
-          `}
+        className={`file-${uniqueId ? `-${uniqueId}` : ""} relative flex w-full items-center justify-between overflow-hidden rounded-lg border border-border p-4`}
       >
-        <div
-          className="absolute inset-0 h-full rounded-lg"
-          style={{
-            backgroundColor: progress > 0 ? "#00f71b52" : "transparent",
-            width: `${progress}%`,
-            transition: "width 0.3s ease",
-          }}
-        />
-        {/*  eslint-disable-next-line no-nested-ternary */}
-        {failed ? (
-          <Button {...({} as React.ComponentProps<typeof Button>)} className="uploaded-file__retry-button bg-transparent p-0" onClick={retryUpload}>
-            <ReloadIcon className="h-6 w-6" />
-          </Button>
-        ) : progress && progress === 100 ? (
-          <Button {...({} as React.ComponentProps<typeof Button>)} className="uploaded-file__success-button bg-transparent p-0">
-            <TickIcon className="h-5 w-5 fill-[#249e00]" />
-          </Button>
-        ) : (
-          <Button
-            {...({} as React.ComponentProps<typeof Button>)}
-            className="uploaded-file__delete-button bg-transparent p-0"
-            onClick={() => {
-              return onDeleteFile?.(file);
-            }}
-            disabled={progress > 0}
-          >
-            <DeleteIcon className="h-5 w-5 fill-icon-hover" />
-          </Button>
+        {progress > 0 && (
+          <div className="absolute inset-0">
+            <Progress value={progress} className="h-full rounded-none" />
+          </div>
         )}
-        <div className="uploaded-file__file-info flex flex-col flex-grow items-end max-w-[90%]">
-          <Typography
-            {...({} as React.ComponentProps<typeof Typography>)}
-            className="uploaded-file__file-name title_t2 text-primary_normal truncate max-w-full"
+        {/*  eslint-disable-next-line no-nested-ternary */}
+        <div className="relative z-10">
+          {failed ? (
+            <Button
+              size="icon"
+              variant="ghost"
+              className="uploaded-file__retry-button h-6 w-6"
+              onClick={retryUpload}
+            >
+              <ReloadIcon className="h-6 w-6" />
+            </Button>
+          ) : progress && progress === 100 ? (
+            <Button
+              size="icon"
+              variant="ghost"
+              className="uploaded-file__success-button h-6 w-6"
+              disabled
+            >
+              <TickIcon className="h-5 w-5 fill-[#249e00]" />
+            </Button>
+          ) : (
+            <Button
+              size="icon"
+              variant="ghost"
+              className="uploaded-file__delete-button h-5 w-5"
+              onClick={() => {
+                return onDeleteFile?.(file);
+              }}
+              disabled={progress > 0}
+            >
+              <DeleteIcon className="h-5 w-5 fill-icon-hover" />
+            </Button>
+          )}
+        </div>
+        <div className="uploaded-file__file-info relative z-10 ml-4 flex max-w-[90%] flex-grow flex-col items-end">
+          <p
+            className="uploaded-file__file-name title_t2 max-w-full truncate text-primary_normal"
             dir="ltr"
           >
             {file.name}
-          </Typography>
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="uploaded-file__file-size title_t4 flex justify-end text-hint">
+          </p>
+          <p className="uploaded-file__file-size title_t4 flex justify-end text-hint">
             {fileSizeInKB < 1000
               ? `${fileSizeInKB.toFixed(2)} کیلوبایت`
               : `${fileSizeInMB?.toFixed(2)} مگابایت`}
-          </Typography>
+          </p>
         </div>
       </div>
     );
@@ -221,19 +212,15 @@ const FileUploaderInput = (props: IProps, ref: Ref<IFileUploaderInput>) => {
   }, []);
   return (
     <div className="uploaded-file flex w-full flex-col">
-      <div className="uploaded-file__item flex flex-col w-full">
+      <div className="uploaded-file__item flex w-full flex-col">
         {label ? (
-          <label className="uploaded-file__label w-full text-base font-bold">
-            {label}
-          </label>
+          <label className="uploaded-file__label w-full text-base font-bold">{label}</label>
         ) : null}
-        <div className="uploaded-file__info flex items-center relative w-full btn-group">
+        <div className="uploaded-file__info btn-group relative flex w-full items-center">
           {getButtonJsx()}
         </div>
       </div>
-      <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
-        {failed || errorMessage || " "}
-      </Typography>
+      <p className="warning_text text-sm">{failed || errorMessage || " "}</p>
     </div>
   );
 };

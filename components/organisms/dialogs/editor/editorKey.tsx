@@ -1,5 +1,5 @@
 import React from "react";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Typography } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
@@ -114,7 +114,7 @@ const EditorKey = ({
           className="mt-3"
           id="repo-private-key"
           placeholder="کلید خصوصی..."
-          register={{ ...register("privateKey") }}
+          { ...register("privateKey") }
         />
         {errors.privateKey ? (
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text mt-2">

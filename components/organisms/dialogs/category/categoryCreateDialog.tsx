@@ -2,7 +2,7 @@ import React from "react";
 import { useCategoryStore } from "@store/category";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categorySchema } from "./validation.yup";
 import { toast } from "react-toastify";
@@ -148,7 +148,7 @@ const CategoryCreateDialog = ({ setOpen }: IProps) => {
           </Typography>
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
-            register={{ ...register("description") }}
+            { ...register("description") }
             className="category-create-dialog__form-description"
           />
           {errors.description && (

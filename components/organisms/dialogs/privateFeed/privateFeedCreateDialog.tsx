@@ -4,7 +4,7 @@ import SelectAtom, { IOption } from "@components/molecules/select";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import ImageComponent from "@components/atoms/image";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { toast } from "react-toastify";
 import useCreatePrivateFeed from "@hooks/privateFeed/useCreatePrivateFeed";
 import { useForm } from "react-hook-form";
@@ -168,7 +168,7 @@ const PrivateFeedCreateDialog = ({ setOpen }: IProps) => {
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
             متن
           </Typography>
-          <TextareaAtom placeholder="متن" register={{ ...register("content") }} />
+          <TextareaAtom placeholder="متن" { ...register("content") } />
           {errors.content && (
             <Typography
               {...({} as React.ComponentProps<typeof Typography>)}

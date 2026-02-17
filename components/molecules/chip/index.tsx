@@ -1,5 +1,4 @@
 import React from "react";
-import { Typography } from "@material-tailwind/react";
 
 interface IProps {
   value: string;
@@ -14,14 +13,12 @@ const ChipMolecule = ({ className, value, icon, actionIcon }: IProps) => {
       className={`${className || ""} flex gap-2 items-center justify-center rounded-full cursor-pointer`}
     >
       {icon ? <div className="w-8 h-8 ">{icon}</div> : null}
-      <Typography
-        placeholder=""
+      <span
         title={value}
-        className="label truncate text-right lowercase "
-        {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+        className="label truncate text-right lowercase"
       >
         {value}
-      </Typography>
+      </span>
       {actionIcon}
     </div>
   );

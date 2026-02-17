@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import EditDialog from "@components/templates/dialog/editDialog";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import useEditDocument from "@hooks/document/useEditDocument";
 import { useDocumentStore } from "@store/document";
 import FormInput from "@components/atoms/input/formInput";
@@ -182,9 +182,7 @@ const DocumentEditDialog = ({ setOpen }: IProps) => {
           </Typography>
           <TextareaAtom
             placeholder="توضیحات سند"
-            register={{
-              ...register("description", { value: document?.description }),
-            }}
+            { ...register("description", { value: document?.description }) }
             className="document-edit__form-description"
           />
           {errors.description && (

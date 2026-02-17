@@ -1,21 +1,26 @@
+import React from "react";
 import {
   Dialog,
-  DialogBody,
+  DialogContent,
   DialogFooter,
   DialogHeader,
-  Typography,
-} from "@material-tailwind/react";
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import BackButton from "@components/atoms/button/backButton";
 import CancelButton from "@components/atoms/button/cancelButton";
 import CloseButton from "@components/atoms/button/closeButton";
 import LoadingButton from "@components/molecules/loadingButton";
-import React from "react";
+import { cn } from "@/utils/cn";
 
 export interface IProps {
-  isPending: boolean;
+  isPending?: boolean;
   children: React.ReactNode;
-  dialogHeader?: string;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  trigger: React.ReactNode;
+  dialogHeader: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onSubmit: () => Promise<void>;
   className?: string;
   disabled?: boolean;
@@ -26,86 +31,90 @@ export interface IProps {
 const ConfirmFullHeightDialog = ({
   isPending,
   children,
+  trigger,
   dialogHeader,
-  setOpen,
+  open,
+  onOpenChange,
   onSubmit,
   className,
   disabled,
   backToMain,
   bodyClassName,
 }: IProps) => {
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <Dialog
-      placeholder=""
-      size="sm"
-      open
-      handler={handleClose}
-      className={`${className} m-0 flex !h-dvh w-full max-w-full shrink-0 flex-col rounded-none bg-white xs:!h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg`}
-      dismiss={{
-        enabled: false,
-      }}
-      {...({} as Omit<React.ComponentProps<typeof Dialog>, "placeholder" | "open" | "handler">)}
-    >
-      <DialogHeader
-        placeholder="dialog header"
-        className="dialog-header border-b-none flex items-center gap-[10px] border-normal px-[6px] py-[6px] xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5"
-        {...({} as Omit<React.ComponentProps<typeof DialogHeader>, "placeholder">)}
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent
+        className={cn(
+          "[&>button]:hidden",
+          "m-0 flex h-dvh w-full max-w-full flex-col gap-0 rounded-none border-none bg-white p-0",
+          "xs:h-auto xs:min-w-[400px] xs:max-w-[400px] xs:rounded-lg xs:border xs:border-normal",
+          "grid-rows-[auto_auto_1fr_auto]",
+          className,
+        )}
+        onInteractOutside={(e) => {
+          if (isPending) e.preventDefault();
+        }}
       >
-        <div className="block xs:hidden">
-          <BackButton onClick={handleClose} disabled={isPending} />
-        </div>
-        <div className="flex items-center">
-          {backToMain ? (
-            <div className="hidden xs:block">
-              <BackButton
-                className="!py-0 !pl-2 !pr-0"
-                onClick={handleClose}
-                disabled={isPending}
-              />
-            </div>
-          ) : null}
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form__title">
-            {dialogHeader}
-          </Typography>
-        </div>
-        <div className="hidden xs:block">
-          <CloseButton onClose={handleClose} disabled={isPending} />
-        </div>
-      </DialogHeader>
-      <div className="block h-2 w-full bg-secondary xs:hidden" />
-      <DialogBody
-        placeholder="dialog body"
-        className={`${bodyClassName || ""} dialog-body flex-grow overflow-auto px-5 py-3 xs:p-6`}
-        {...({} as Omit<React.ComponentProps<typeof DialogBody>, "placeholder">)}
-      >
-        {children}
-      </DialogBody>
-      <DialogFooter
-        placeholder="dialog footer"
-        className="dialog-footer border-t-none flex gap-2 border-normal p-5 xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4"
-        {...({} as Omit<React.ComponentProps<typeof DialogFooter>, "placeholder">)}
-      >
-        <CancelButton onClick={handleClose} disabled={isPending}>
-          انصراف
-        </CancelButton>
-        <LoadingButton
-          className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
-          onClick={onSubmit}
-          loading={isPending}
-          disabled={disabled}
+        <DialogHeader
+          className={cn(
+            "dialog-header flex flex-row items-center gap-[10px] space-y-0 border-b-0 border-normal px-[6px] py-[6px]",
+            "xs:justify-between xs:gap-0 xs:border-b-[0.5px] xs:px-6 xs:py-5",
+            "shrink-0",
+          )}
         >
-          <Typography
-            className="text__label__button text-white"
-            {...({} as React.ComponentProps<typeof Typography>)}
+          <div className="block xs:hidden">
+            <DialogClose asChild>
+              <BackButton disabled={isPending} />
+            </DialogClose>
+          </div>
+          <div className="flex items-center">
+            {backToMain ? (
+              <div className="hidden xs:block">
+                <DialogClose asChild>
+                  <BackButton className="!py-0 !pl-2 !pr-0" disabled={isPending} />
+                </DialogClose>
+              </div>
+            ) : null}
+            <DialogTitle className="form__title m-0 text-right text-base font-semibold">
+              {dialogHeader}
+            </DialogTitle>
+          </div>
+          <div className="hidden xs:block">
+            <DialogClose asChild>
+              <CloseButton disabled={isPending} />
+            </DialogClose>
+          </div>
+        </DialogHeader>
+
+        <div className="block h-2 w-full shrink-0 bg-secondary xs:hidden" />
+
+        <div
+          className={cn("dialog-body min-h-0 flex-1 overflow-auto px-5 py-3 xs:p-6", bodyClassName)}
+        >
+          {children}
+        </div>
+
+        <DialogFooter
+          className={cn(
+            "dialog-footer flex flex-row items-center gap-2 border-t-0 border-normal p-5",
+            "xs:justify-end xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4",
+            "shrink-0",
+          )}
+        >
+          <DialogClose asChild>
+            <CancelButton disabled={isPending}>انصراف</CancelButton>
+          </DialogClose>
+          <LoadingButton
+            className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+            onClick={onSubmit}
+            loading={isPending}
+            disabled={disabled}
           >
-            تایید
-          </Typography>
-        </LoadingButton>
-      </DialogFooter>
+            <span className="text__label__button text-white">تایید</span>
+          </LoadingButton>
+        </DialogFooter>
+      </DialogContent>
     </Dialog>
   );
 };

@@ -1,30 +1,22 @@
-import { Button, Typography } from "@material-tailwind/react";
-
 import React from "react";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { cn } from "@/utils/cn";
 
-interface IProps {
-  onClick: () => void;
-  disabled?: boolean;
-  children: React.ReactNode;
-  className?: string;
-}
-
-const CancelButton = ({ onClick, disabled, children, className }: IProps) => {
+const CancelButton = ({ onClick, disabled, className, children, ...props }: ButtonProps) => {
   return (
     <Button
-      placeholder="cancel button"
-      variant="text"
-      className={`${className || ""} cancel-button flex justify-center items-center flex-1 xs:flex-0 xs:w-[100px] h-12 xs:h-8 px-3 xs:px-1 hover:bg-gray-50 bg-gray-50`}
+      variant="ghost"
+      className={cn(
+        "cancel-button flex h-12 flex-1 items-center justify-center px-3 xs:h-8 xs:w-[100px] xs:flex-none xs:px-1",
+        "bg-gray-50 hover:bg-gray-50",
+        "text__label__button text-primary_normal",
+        className,
+      )}
       onClick={onClick}
       disabled={disabled}
-      {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+      {...props}
     >
-      <Typography 
-        className="text__label__button text-primary_normal"
-        {...({} as  React.ComponentProps<typeof Typography>)} 
-      >
-        {children}
-      </Typography>
+      {children}
     </Button>
   );
 };

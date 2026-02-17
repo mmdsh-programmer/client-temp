@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Typography } from "@material-tailwind/react";
 import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import copy from "copy-to-clipboard";
 import forge from "node-forge";
 import { repoCreateKeySchema } from "../validation.yup";
@@ -105,7 +105,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
         <TextareaAtom
           id="repo-public-key"
           placeholder="کلید عمومی..."
-          register={{ ...register("publicKey") }}
+          { ...register("publicKey") }
           className="repo-public-key__textarea"
         />
         {errors.publicKey ? (
@@ -123,7 +123,7 @@ const RepoKeyCreateDialog = ({ setOpen, repoId }: IProps) => {
               id="repo-private-key"
               placeholder="کلید خصوصی..."
               readOnly
-              register={{ ...register("privateKey") }}
+              { ...register("privateKey") }
               className="repo-private-key__textarea"
             />
             <Typography

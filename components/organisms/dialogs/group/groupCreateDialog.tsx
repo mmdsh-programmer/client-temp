@@ -7,7 +7,7 @@ import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import ImageComponent from "@components/atoms/image";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { useRepositoryStore } from "@store/repository";
 import { toast } from "react-toastify";
 import useCreateGroup from "@hooks/group/useCreateGroup";
@@ -126,7 +126,7 @@ const GroupCreateDialog = ({ setOpen }: IProps) => {
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات گروه</Typography>
           <TextareaAtom
             placeholder="توضیحات گروه"
-            register={{ ...register("description") }}
+            { ...register("description") }
             className="repo-group-create-form__textarea"
           />
           {errors.description && (

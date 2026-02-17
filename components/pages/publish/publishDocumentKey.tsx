@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import forge from "node-forge";
 import { toast } from "react-toastify";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 
 const documentKeySchema = yup.object({
   privateKey: yup.string().required("وارد کردن کلید خصوصی الزامی است"),
@@ -28,7 +28,7 @@ const PublishDocumentKey = ({ encryptedContent, onDecrypted }: IProps) => {
 
   const form = useForm<IDataForm>({
     resolver: yupResolver(documentKeySchema),
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const { register, handleSubmit, formState, reset, clearErrors, setError } = form;
@@ -84,10 +84,10 @@ const PublishDocumentKey = ({ encryptedContent, onDecrypted }: IProps) => {
   return (
     <div className="scroller flex h-full w-full items-center justify-center overflow-y-auto">
       <form
-        className="flex h-full mt-10 w-[400px] max-w-[400px] flex-col items-center gap-5 px-5 xs:px-0"
+        className="mt-10 flex h-full w-[400px] max-w-[400px] flex-col items-center gap-5 px-5 xs:px-0"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="w-full flex flex-col gap-2">
+        <div className="flex w-full flex-col gap-2">
           <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
             کلید خصوصی سند
           </Typography>
@@ -96,7 +96,6 @@ const PublishDocumentKey = ({ encryptedContent, onDecrypted }: IProps) => {
             placeholder="-----BEGIN RSA PRIVATE KEY-----"
             className="!w-full"
             dir="ltr"
-            error={!!errors.privateKey}
           />
           {errors.privateKey ? (
             <Typography

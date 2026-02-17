@@ -51,6 +51,9 @@ const InfoDialog = ({
           "grid-rows-[auto_auto_1fr]",
           className,
         )}
+        onInteractOutside={(e) => {
+          if (isPending) e.preventDefault();
+        }}
       >
         <DialogHeader
           className={cn(

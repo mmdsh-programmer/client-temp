@@ -7,7 +7,7 @@ import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
 import ImageComponent from "@components/atoms/image";
 import SearchableDropdown from "@components/molecules/searchableDropdown";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { useRepositoryStore } from "@store/repository";
 import { useGroupStore } from "@store/group";
 import { toast } from "react-toastify";
@@ -42,15 +42,11 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   >([]);
 
   const { data: getUsers, isLoading } = useGetRepoUsers(getRepo!.id, 20, true);
-  const { data: groupInfo, isFetching } = useGetGroupInfo(
-    getRepo!.id,
-    group!.title
-  );
+  const { data: groupInfo, isFetching } = useGetGroupInfo(getRepo!.id, group!.title);
   const { isPending, mutate } = useEditGroup();
 
   const form = useForm<IForm>({ resolver: yupResolver(userGroupSchema), mode: "onChange" });
-  const { reset, clearErrors, handleSubmit, register, formState, setValue } =
-    form;
+  const { reset, clearErrors, handleSubmit, register, formState, setValue } = form;
   const { errors, isValid } = formState;
 
   const filteredUsers = getUsers?.pages
@@ -104,27 +100,34 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
   };
 
   const handleDelete = (username: string) => {
-    const newUsers = updatedUsers.filter((user) => { return user.username !== username; });
+    const newUsers = updatedUsers.filter((user) => {
+      return user.username !== username;
+    });
 
     setUpdatedUsers(newUsers);
 
     setValue(
       "members",
-      newUsers.map((user) => { return user.username; }),
+      newUsers.map((user) => {
+        return user.username;
+      }),
       {
         shouldValidate: true,
-        shouldDirty: true
-      }
+        shouldDirty: true,
+      },
     );
   };
 
   useEffect(() => {
     if (getUsers && groupInfo) {
-      const allUsers = getUsers.pages.flatMap((page) => { return page?.list || []; });
+      const allUsers = getUsers.pages.flatMap((page) => {
+        return page?.list || [];
+      });
       const oldUsers = allUsers.filter((user) => {
-        return groupInfo.members.list.some((groupUser) => { return groupUser.preferred_username === user.userInfo.userName; });
-      }
-      );
+        return groupInfo.members.list.some((groupUser) => {
+          return groupUser.preferred_username === user.userInfo.userName;
+        });
+      });
 
       const updatedUserList = oldUsers.map((member) => {
         return {
@@ -137,9 +140,15 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
 
       setValue("title", group?.title || "");
       setValue("description", group?.description || "");
-      setValue("members", updatedUserList.map(u => { return u.username; }), {
-        shouldValidate: true
-      });
+      setValue(
+        "members",
+        updatedUserList.map((u) => {
+          return u.username;
+        }),
+        {
+          shouldValidate: true,
+        },
+      );
     }
   }, [getUsers, groupInfo, group, setValue]);
 
@@ -150,39 +159,53 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
       onSubmit={handleSubmit(onSubmit)}
       setOpen={handleClose}
       className="repo-group-edit-dialog xs:!min-w-[450px] xs:!max-w-[450px]"
-      disabled={(getRepo?.roleName !== ERoles.owner && getRepo?.roleName !== ERoles.admin) || !isValid}
+      disabled={
+        (getRepo?.roleName !== ERoles.owner && getRepo?.roleName !== ERoles.admin) || !isValid
+      }
     >
       <form className="repo-group-edit-form flex flex-col gap-5">
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> نام گروه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            {" "}
+            نام گروه{" "}
+          </Typography>
           <FormInput
             placeholder="نام گروه"
             register={{ ...register("title", { value: group?.title }) }}
             className="repo-group-edit-form__input"
           />
           {errors.title && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
               {errors.title?.message}
             </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">توضیحات گروه</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            توضیحات گروه
+          </Typography>
           <TextareaAtom
             placeholder="توضیحات گروه"
-            register={{
-              ...register("description", { value: group?.description }),
-            }}
+            {...register("description", { value: group?.description })}
             className="repo-group-edit-form__textarea"
           />
           {errors.description && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
               {errors.description?.message}
             </Typography>
           )}
         </div>
-        <div className="flex flex-col gap-2 repo-group-edit-form__members">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> اعضای گروه</Typography>
+        <div className="repo-group-edit-form__members flex flex-col gap-2">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            {" "}
+            اعضای گروه
+          </Typography>
           <SearchableDropdown
             background="!bg-gray-50"
             options={filteredUsers}
@@ -190,24 +213,33 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
               if (val) {
                 const newUsers = [
                   ...updatedUsers,
-                  { username: val.label, picture: val.value || undefined }
+                  { username: val.label, picture: val.value || undefined },
                 ];
                 setUpdatedUsers(newUsers);
 
-                setValue("members", newUsers.map(u => { return u.username; }), {
-                  shouldValidate: true,
-                  shouldDirty: true
-                });
+                setValue(
+                  "members",
+                  newUsers.map((u) => {
+                    return u.username;
+                  }),
+                  {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  },
+                );
               }
             }}
           />
           {errors.members && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
               {errors.members?.message}
             </Typography>
           )}
         </div>
-        <div className="flex flex-wrap gap-2 group-edit-form__members-list">
+        <div className="group-edit-form__members-list flex flex-wrap gap-2">
           {isLoading || isFetching ? (
             <Spinner className="h-4 w-4 text-primary" />
           ) : (
@@ -220,12 +252,12 @@ const GroupEditDialog = ({ setOpen }: IProps) => {
                   icon={
                     item.picture ? (
                       <ImageComponent
-                        className="w-full h-full rounded-full overflow-hidden"
+                        className="h-full w-full overflow-hidden rounded-full"
                         src={item.picture.toString()}
                         alt={item.picture.toString()}
                       />
                     ) : (
-                      <UserIcon className="w-full h-full p-1 border-[1px] border-normal rounded-full overflow-hidden fill-icon-hover" />
+                      <UserIcon className="h-full w-full overflow-hidden rounded-full border-[1px] border-normal fill-icon-hover p-1" />
                     )
                   }
                   actionIcon={

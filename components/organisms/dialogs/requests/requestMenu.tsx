@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Typography } from "@material-tailwind/react";
-import { Spinner } from "@components/atoms/spinner";
+import { Button } from "@components/ui/button";
+import { Spinner } from "@components/ui/spinner";
 import { IAccessRequest } from "@interface/accessRequest.interface";
 import { toast } from "react-toastify";
 import useAcceptJoinToRepoRequest from "@hooks/requests/useAcceptJoinToRepoRequest";
@@ -36,22 +36,21 @@ const RequestMenu = ({ request, setAcceptedRepo }: IProps) => {
   return (
     <div className="request-menu flex gap-3">
       {acceptRequest.isPending || rejectRequest.isPending ? (
-        <Spinner className="h-5 w-5 text-primary" />
+        <Spinner className="size-5 text-primary" />
       ) : (
         <>
           <Button
-            {...({} as React.ComponentProps<typeof Button>)}
-            className="request-menu__reject-button h-8 w-16 bg-gray-50 hover:bg-gray-50 xs:w-20 "
+            className="request-menu__reject-button h-8 w-16 bg-gray-50 hover:bg-gray-50 xs:w-20"
             onClick={handleRejectRequest}
+            variant="ghost"
           >
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-primary_normal">ردکردن</Typography>
+            <span className="text__label__button text-primary_normal">ردکردن</span>
           </Button>
           <Button
-            {...({} as React.ComponentProps<typeof Button>)}
-            className="request-menu__accept-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal h-8 w-16 xs:w-20"
+            className="request-menu__accept-button h-8 w-16 bg-primary-normal hover:bg-primary-normal active:bg-primary-normal xs:w-20"
             onClick={handleAcceptRequest}
           >
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text__label__button text-white">تایید</Typography>
+            <span className="text__label__button text-white">تایید</span>
           </Button>
         </>
       )}

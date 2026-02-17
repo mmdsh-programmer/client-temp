@@ -4,7 +4,7 @@ import CreateDialog from "@components/templates/dialog/createDialog";
 import FormInput from "@components/atoms/input/formInput";
 import { IFeedItem } from "@interface/feeds.interface";
 import ImageComponent from "@components/atoms/image";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import useGetFeedImages from "@hooks/publicFeed/useGetFeedImages";
@@ -80,30 +80,56 @@ const PublicFeedEditDialog = ({ feed, setOpen }: IProps) => {
     >
       <form className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> عنوان</Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            {" "}
+            عنوان
+          </Typography>
           <FormInput
             placeholder="عنوان "
             register={{ ...register("name", { value: feed.name }) }}
           />
-          {errors.name && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.name?.message}</Typography>}
-        </div>
-        <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">متن </Typography>
-          <TextareaAtom
-            placeholder="متن"
-            register={{ ...register("content", { value: feed.content }) }}
-          />
-          {errors.content && (
-            <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.content?.message}</Typography>
+          {errors.name && (
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.name?.message}
+            </Typography>
           )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label"> لینک</Typography>
-          <FormInput placeholder="لینک " register={{ ...register("link", { value: link }) }} />
-          {errors.link && <Typography {...({} as React.ComponentProps<typeof Typography>)} className="warning_text">{errors.link?.message}</Typography>}
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            متن{" "}
+          </Typography>
+          <TextareaAtom placeholder="متن" {...register("content", { value: feed.content })} />
+          {errors.content && (
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.content?.message}
+            </Typography>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">عکس خبرنامه </Typography>
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            {" "}
+            لینک
+          </Typography>
+          <FormInput placeholder="لینک " register={{ ...register("link", { value: link }) }} />
+          {errors.link && (
+            <Typography
+              {...({} as React.ComponentProps<typeof Typography>)}
+              className="warning_text"
+            >
+              {errors.link?.message}
+            </Typography>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <Typography {...({} as React.ComponentProps<typeof Typography>)} className="form_label">
+            عکس خبرنامه{" "}
+          </Typography>
           {isLoading ? (
             <div className="flex h-[50px] w-full items-center justify-center">
               <Spinner className="h-5 w-5 text-primary" />

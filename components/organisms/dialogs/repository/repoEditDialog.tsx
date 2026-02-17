@@ -3,7 +3,7 @@ import EditDialog from "@components/templates/dialog/editDialog";
 import Files from "../../fileManagement";
 import FormInput from "@components/atoms/input/formInput";
 import RepoAttachCustomImage from "@components/molecules/repoAttachImage/repoAttachCustomImage";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { Typography } from "@material-tailwind/react";
 import { toast } from "react-toastify";
 import useAddImageToRepo from "@hooks/repository/useAddImageToRepo";
@@ -160,9 +160,7 @@ const RepoEditDialog = ({ setOpen }: IProps) => {
           </Typography>
           <TextareaAtom
             placeholder="توضیحات"
-            register={{
-              ...register("description", { value: getRepo?.description }),
-            }}
+            {...register("description", { value: getRepo?.description })}
           />
           {errors.description && (
             <Typography

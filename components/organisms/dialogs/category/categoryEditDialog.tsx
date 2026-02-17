@@ -1,7 +1,7 @@
 import React from "react";
 import EditDialog from "@components/templates/dialog/editDialog";
 import FormInput from "@components/atoms/input/formInput";
-import TextareaAtom from "@components/atoms/textarea/textarea";
+import TextareaAtom from "@/components/atoms/textarea";
 import { Typography } from "@material-tailwind/react";
 import { categorySchema } from "./validation.yup";
 import { toast } from "react-toastify";
@@ -157,9 +157,7 @@ const CategoryEditDialog = ({ setOpen }: IProps) => {
           </Typography>
           <TextareaAtom
             placeholder="توضیحات دسته بندی"
-            register={{
-              ...register("description", { value: getCategory?.description }),
-            }}
+            { ...register("description", { value: getCategory?.description }) }
             className="category-edit-dialog__form-description"
           />
           {errors.description && (
