@@ -1,7 +1,8 @@
 import React from "react";
-import { Button } from "@material-tailwind/react";
-import { MoreDotIcon } from "@components/atoms/icons";
 import MenuComponent from "@components/molecules/menu";
+import { Button } from "@components/ui/button";
+import { MoreDotIcon } from "@components/atoms/icons";
+import { cn } from "@utils/cn";
 
 export interface MenuItem {
   text: string;
@@ -26,20 +27,13 @@ const MenuTemplate = ({ menuList, onMobileClick, icon, className }: IProps) => {
     <>
       <div className="desktop-menu hidden justify-end xs:flex">
         <MenuComponent variant="small" menuList={menuList} className="!w-auto !min-w-max">
-          <Button
-            className={`${className || ""} flex items-center justify-center rounded-lg bg-transparent p-1 shadow-none hover:shadow-none`}
-            {...({} as React.ComponentProps<typeof Button>)}
-          >
+          <Button className={cn(className, "flex items-center justify-center rounded-lg bg-transparent p-1 shadow-none hover:shadow-none")}>
             {triggerIcon}
           </Button>
         </MenuComponent>
       </div>
       <div className="mobile-menu flex xs:hidden">
-        <Button
-          className={`${className || ""} flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none hover:shadow-none`}
-          {...({} as React.ComponentProps<typeof Button>)}
-          onClick={onMobileClick}
-        >
+        <Button className={cn(className, "flex items-center justify-center rounded-lg bg-transparent p-0 shadow-none hover:shadow-none")} onClick={onMobileClick}>
           {triggerIcon}
         </Button>
       </div>

@@ -1,26 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { type InputHTMLAttributes } from "react";
+import { Input } from "@/components/ui/input";
+import { cn } from "@utils/cn";
 
-import { Input, InputProps } from "@material-tailwind/react";
-
-import React from "react";
-
-interface IProps extends InputProps {
-  register?: any;
-}
-
-const FormInput = ({ register, className, ...restProps }: IProps) => {
+const FormInput = ({ className, ...restProps }: InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <Input
-      labelProps={{ className: "before:content-none after:content-none" }}
-      containerProps={{ className: "!min-w-0 !h-12" }}
       type="text"
-      {...register}
-      className={`${className || ""}
-        flex items-center !h-12 gap-2 pr-3 pl-2 placeholder:!opacity-100
-        !font-iranYekan focus:font-iranYekan placeholder:font-iranYekan
-        font-normal text-primary_normal text-[13px] leading-[18.2px] -tracking-[0.13px]
-        placeholder:!text-placeholder placeholder:text-[13px] text-right
-        !bg-gray-50 border-[1px] !border-normal focus:!border-normal`}
+      className={cn(
+        className,
+        "flex items-center h-12 gap-2 pr-3 pl-2 placeholder:!opacity-100 font-iranYekan font-normal text-primary_normal text-[13px] leading-[18.2px] -tracking-[0.13px] placeholder:!text-placeholder placeholder:text-[13px] text-right bg-gray-50 border-[1px] border-normal"
+      )}
       {...restProps}
     />
   );

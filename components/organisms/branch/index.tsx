@@ -1,35 +1,37 @@
+"use client";
+
 import React, { useState } from "react";
+import { Button } from "@components/ui/button";
 import { AddIcon } from "@components/atoms/icons";
-import BranchCreateDialog from "../dialogs/branch/branchCreateDialog";
+import BranchCreateDialog from "@components/organisms/dialogs/branch/branchCreateDialog";
 import BranchList from "./branchList";
-import { IconButton } from "@material-tailwind/react";
 import useGetUser from "@hooks/auth/useGetUser";
 import { useBranchStore } from "@store/branch";
 
 const Branch = () => {
   const [open, setOpen] = useState(false);
   const { setBranchId } = useBranchStore();
-
   const { data: userInfo } = useGetUser();
 
   return (
-    <div className=" flex flex-col h-full bg-white rounded-lg shadow-small">
+    <div className="flex h-full flex-col rounded-lg bg-white shadow-small">
       {userInfo?.isClasorAdmin ? (
-        <div className="flex items-center gap-2 p-3 justify-end border-b-2 border-normal">
-          <IconButton
-            {...({} as React.ComponentProps<typeof IconButton>)}
-            className="bg-primary-normal w-6 h-6 flex justify-center"
+        <div className="flex items-center justify-end gap-2 border-b-2 border-normal p-3">
+          <Button
+            size="icon"
+            className="hover:bg-primary-normal/90 flex h-6 w-6 justify-center bg-primary-normal"
             onClick={() => {
-              setOpen(true);
               setBranchId(null);
+              setOpen(true);
             }}
           >
-            <AddIcon className="w-4 h-4 stroke-white" />
-          </IconButton>
+            <AddIcon className="h-4 w-4 stroke-white" />
+          </Button>
+          
+          <BranchCreateDialog open={open} onOpenChange={setOpen} />
         </div>
       ) : null}
-      {open ? <BranchCreateDialog setOpen={setOpen} /> : null}
-      <div className="branch-wrapper p-3 overflow-y-auto overflow-x-hidden flex-grow">
+      <div className="branch-wrapper flex-grow overflow-y-auto overflow-x-hidden p-3">
         <BranchList branchId={null} />
       </div>
     </div>

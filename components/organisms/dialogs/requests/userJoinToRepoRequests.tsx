@@ -36,6 +36,7 @@ const UserJoinToRepoRequests = ({ trigger }: IProps) => {
       dialogHeader="لیست درخواست‌ها"
       className="join-to-repo-requests__dialog xs:!min-w-[450px] xs:!max-w-[450px]"
       contentClassName="h-[450px] flex-grow overflow-auto px-5 py-3 xs:p-6"
+      backToMain
     >
       {isLoading ? (
         <div className="flex h-full w-full items-center justify-center">

@@ -1,15 +1,14 @@
-/* eslint-disable react/no-array-index-key */
+"use client";
 
-import {
-  Menu,
-  MenuHandler,
-  MenuItem,
-  MenuList,
-  Typography,
-} from "@material-tailwind/react";
-
-import NestedMenu from "./nestedMenu";
 import React from "react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@components/ui/dropdown-menu";
+import NestedMenu from "./nestedMenu";
+import { cn } from "@utils/cn";
 
 interface IProps {
   variant: "small" | "medium" | "large";
@@ -20,10 +19,7 @@ interface IProps {
     icon?: React.ReactNode;
     className?: string;
     disabled?: boolean;
-    onClick?:
-      | (React.MouseEventHandler<HTMLLIElement> &
-          React.MouseEventHandler<HTMLButtonElement>)
-      | undefined;
+    onClick?: () => void;
     subMenu?: {
       text: string;
       icon?: React.JSX.Element;
@@ -36,48 +32,47 @@ interface IProps {
 
 const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
   return (
-    <Menu placement="bottom" {...({} as  React.ComponentProps<typeof Menu>)}>
-      <MenuHandler {...({} as  React.ComponentProps<typeof MenuHandler>)}>{children}</MenuHandler>
-      <MenuList
-        className={` ${className} !z-[99999] ml-4 font-iranYekan text-primary_normal overflow-hidden p-[2px]`}
-        placeholder="menu-list"
-        {...({} as  Omit<React.ComponentProps<typeof MenuList>, "placeholder">)}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+      <DropdownMenuContent
+        sideOffset={6}
+        className={cn(
+          className,
+          "!z-[99999] ml-4 overflow-hidden p-[2px] font-iranYekan text-primary_normal",
+        )}
       >
-        {menuList.map((menuItem, index) => {
-          return menuItem.subMenu ? (
+        {menuList.map((menuItem, index) =>
+          menuItem.subMenu ? (
             <NestedMenu
-              variant="small"
-              menuName={menuItem.text}
-              subMenuList={menuItem.subMenu}
               key={`sub-menu-${index}`}
+              variant={variant}
+              menuName={menuItem.text}
               icon={menuItem.icon}
+              subMenuList={menuItem.subMenu}
               className={menuItem.className}
             />
           ) : (
-            <MenuItem
+            <DropdownMenuItem
               key={`menu-${index}`}
-              placeholder="menu-item"
-              className={`p-2 ${menuItem.className}`}
-              onClick={menuItem.onClick}
-              disabled={menuItem.disabled}
-              {...({} as  Omit<React.ComponentProps<typeof MenuItem>, "placeholder">)}
+              className={cn("p-2", menuItem.className)}
+              onSelect={() => menuItem.onClick?.()}
             >
               <div className="flex items-center gap-2">
                 {menuItem.icon}
-                <Typography
-                  placeholder="menu-item-text"
-                  className={`font-iranYekan 
-                     ${variant === "small" ? " font-light text-[12px] " : "font-medium text-base mb-1"}`}
-                  {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
+                <span
+                  className={cn(
+                    "font-iranYekan",
+                    variant === "small" ? "text-[12px] font-light" : "mb-1 text-base font-medium",
+                  )}
                 >
                   {menuItem.text}
-                </Typography>
+                </span>
               </div>
-            </MenuItem>
-          );
-        })}
-      </MenuList>
-    </Menu>
+            </DropdownMenuItem>
+          ),
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

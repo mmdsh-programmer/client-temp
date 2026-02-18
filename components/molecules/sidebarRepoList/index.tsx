@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   ArchiveIcon,
   BookmarkRepoIcon,
@@ -9,9 +10,9 @@ import {
 import { Button } from "@components/ui/button";
 import { ERepoGrouping } from "@interface/enums";
 import { ESidebarSection, useSidebarStore } from "@store/sidebar";
-import Link from "next/link";
 import { useRepositoryStore } from "@store/repository";
 import { useRepoSearchParamStore } from "@store/repoSearchParam";
+import { cn } from "@utils/cn";
 
 const SidebarRepoList = () => {
   const { repoGrouping, setRepoGrouping } = useRepositoryStore();
@@ -80,15 +81,15 @@ const SidebarRepoList = () => {
     <ul className="m-0 flex min-w-[200px] list-none flex-col gap-1 p-0">
       {sidebarList.map((item) => {
         return (
-          <li key={item.className} className={`p-0 ${item.className}`}>
+          <li key={item.className} className={cn("p-0", item.className)}>
             <Link href={item.path} className="w-full">
               <Button
                 variant="ghost"
-                className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${
-                  repoGrouping === item.text
-                    ? "bg-gray-100 text-primary_normal [&_svg]:stroke-icon-active"
-                    : ""
-                } shadow-none hover:bg-gray-100 hover:text-primary_normal hover:shadow-none hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active`}
+                className={cn(
+                  "h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link",
+                  repoGrouping === item.text ? "bg-gray-100 text-primary_normal [&_svg]:stroke-icon-active" : "",
+                  "shadow-none hover:bg-gray-100 hover:text-primary_normal hover:shadow-none hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active"
+                )}
                 onClick={item.onClick}
               >
                 {item.icon}

@@ -97,16 +97,16 @@ const ConfirmFullHeightDialog = ({
 
         <DialogFooter
           className={cn(
-            "dialog-footer flex flex-row items-center gap-2 border-t-0 border-normal p-5",
-            "xs:justify-end xs:gap-3 xs:border-t-[0.5px] xs:px-6 xs:py-4",
+            "dialog-footer gap-2 flex flex-row items-center border-t-0 border-normal p-5",
+            "xs:justify-end xs:border-t-[0.5px] xs:px-6 xs:py-4",
             "shrink-0",
           )}
         >
           <DialogClose asChild>
-            <CancelButton disabled={isPending}>انصراف</CancelButton>
+            <CancelButton className="flex-1 xs:flex-none" disabled={isPending}>انصراف</CancelButton>
           </DialogClose>
           <LoadingButton
-            className="dialog-footer__submit-button bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
+            className="dialog-footer__submit-button min-w-[100px] flex-1 xs:flex-none bg-primary-normal hover:bg-primary-normal active:bg-primary-normal"
             onClick={onSubmit}
             loading={isPending}
             disabled={disabled}

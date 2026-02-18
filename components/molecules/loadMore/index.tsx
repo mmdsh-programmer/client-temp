@@ -6,9 +6,9 @@ import {
   InfiniteQueryObserverResult,
 } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { cn } from "@/utils/cn";
+import { Button } from "@components/ui/button";
+import { Spinner } from "@components/ui/spinner";
+import { cn } from "@utils/cn";
 
 interface IProps {
   className?: string;

@@ -1,12 +1,13 @@
-import { Typography } from "@material-tailwind/react";
-import BranchCollapse from "../../molecules/branchCollapse";
-import Error from "../error";
-import LoadMore from "@components/molecules/loadMore";
+"use client";
+
 import React from "react";
+import BranchCollapse from "@components/molecules/branchCollapse";
+import Error from "@components/organisms/error";
+import LoadMore from "@components/molecules/loadMore";
 import RenderIf from "@components/atoms/renderIf";
 import useGetBranchList from "@hooks/branch/useGetBranchList";
 import useGetUser from "@hooks/auth/useGetUser";
-import { Spinner } from "@components/atoms/spinner";
+import { Spinner } from "@components/ui/spinner";
 import { useBranchStore } from "@store/branch";
 
 interface IProps {
@@ -44,8 +45,8 @@ const BranchList = ({ branchId }: IProps) => {
   return (
     <>
       {isLoading ? (
-        <div className="w-full flex justify-center h-3 my-3">
-          <Spinner {...({} as React.ComponentProps<typeof Spinner>)} className="w-4 h-4 text-primary" />
+        <div className="my-3 flex h-3 w-full justify-center">
+          <Spinner className="size-4 text-primary" />
         </div>
       ) : (
         branchList?.pages.map((page) => {
@@ -62,17 +63,17 @@ const BranchList = ({ branchId }: IProps) => {
               );
             })
           ) : (
-            <div className="flex items-center w-full">
-              <Typography {...({} as React.ComponentProps<typeof Typography>)} className="text-right text-xs pr-4 py-1 text-dashboard-text-color-light">
+            <div className="flex w-full items-center">
+              <span className="text-dashboard-text-color-light block w-full py-1 pr-4 text-right text-xs">
                 موردی وجود ندارد
-              </Typography>
+              </span>
             </div>
           );
         })
       )}
       <RenderIf isTrue={!!hasNextPage}>
         <LoadMore
-          className="self-center !shadow-none underline xl:bg-primary text-[10px] text-primary_normal !font-normal"
+          className="self-center text-[10px] !font-normal text-primary_normal underline !shadow-none xl:bg-primary"
           isFetchingNextPage={isFetchingNextPage}
           fetchNextPage={fetchNextPage}
         />

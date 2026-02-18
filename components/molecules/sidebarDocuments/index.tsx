@@ -6,6 +6,7 @@ import { ESidebarSection, useSidebarStore } from "@store/sidebar";
 import { useRepositoryStore } from "@store/repository";
 import { useCategoryStore } from "@store/category";
 import { useDocumentStore } from "@store/document";
+import { cn } from "@utils/cn";
 
 const SidebarDocuments = () => {
   const router = useRouter();
@@ -43,7 +44,13 @@ const SidebarDocuments = () => {
       <li key="سندهای من" className="myDocuments p-0">
         <Button
           variant="ghost"
-          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.MY_DOCUMENTS ? "bg-gray-100 [&_svg]:stroke-icon-active text-primary_normal hover:[&_svg]:fill-icon-active" : "[&_svg]:stroke-icon-hover"} hover:bg-gray-100 hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:[&_svg]:stroke-icon-active active:text-primary_normal shadow-none hover:shadow-none`}
+          className={cn(
+            "h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link",
+            sidebarSection === ESidebarSection.MY_DOCUMENTS
+              ? "bg-gray-100 [&_svg]:stroke-icon-active text-primary_normal hover:[&_svg]:fill-icon-active"
+              : "[&_svg]:stroke-icon-hover",
+            "hover:bg-gray-100 hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:[&_svg]:stroke-icon-active active:text-primary_normal shadow-none hover:shadow-none"
+          )}
           onClick={() => {
             return handleNavigation("/admin/myDocuments", ESidebarSection.MY_DOCUMENTS);
           }}
@@ -57,7 +64,13 @@ const SidebarDocuments = () => {
       <li key="سندهای اشتراکی" className="sharedDocuments p-0">
         <Button
           variant="ghost"
-          className={`h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link ${sidebarSection === ESidebarSection.SHARED_DOCUMENTS ? "bg-gray-100 [&_svg]:stroke-icon-active text-primary_normal hover:[&_svg]:fill-icon-active" : "[&_svg]:stroke-icon-hover"} hover:bg-gray-100 hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:[&_svg]:stroke-icon-active active:text-primary_normal shadow-none hover:shadow-none`}
+          className={cn(
+            "h-[44px] w-full justify-start gap-1 bg-transparent px-3 text-link",
+            sidebarSection === ESidebarSection.SHARED_DOCUMENTS
+              ? "bg-gray-100 [&_svg]:stroke-icon-active text-primary_normal hover:[&_svg]:fill-icon-active"
+              : "[&_svg]:stroke-icon-hover",
+            "hover:bg-gray-100 hover:[&_svg]:fill-icon-active hover:[&_svg]:stroke-icon-active hover:text-primary_normal active:bg-gray-100 active:[&_svg]:stroke-icon-active active:text-primary_normal shadow-none hover:shadow-none"
+          )}
           onClick={() => {
             return handleNavigation("/admin/sharedDocuments", ESidebarSection.SHARED_DOCUMENTS);
           }}
