@@ -32,10 +32,9 @@ interface IProps {
 
 const MenuComponent = ({ variant, children, menuList, className }: IProps) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
+    <DropdownMenu dir="rtl">
+      <DropdownMenuTrigger className="cursor-pointer" asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent
-        sideOffset={6}
         className={cn(
           className,
           "!z-[99999] ml-4 overflow-hidden p-[2px] font-iranYekan text-primary_normal",

@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import { BackIcon, ChevronLeftIcon } from "@components/atoms/icons";
-import { Button, Typography } from "@material-tailwind/react";
+import { Button } from "@components/ui/button";
 import { ICategoryMetadata } from "@interface/category.interface";
 import { useCategoryStore } from "@store/category";
 import { useBulkStore } from "@store/bulk";
@@ -67,10 +67,10 @@ const CategoryBreadCrumb = () => {
       <div className="flex items-center">
         {breadCrumb.length > 0 ? (
           <Button
-            placeholder="button"
             className="h-5 w-5 bg-transparent p-0"
             onClick={handleBack}
-            {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+            variant="ghost"
+            size="sm"
           >
             <BackIcon className="h-4 w-4 fill-icon-hover" />
           </Button>
@@ -78,10 +78,10 @@ const CategoryBreadCrumb = () => {
         {breadCrumb.length === 1 && getCategoryShow?.parentId ? (
           <div className="flex">
             <Button
-              placeholder="button"
               className="block h-5 w-5 cursor-pointer bg-transparent p-0 text-secondary"
               onClick={clearBreadCrumb}
-              {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+              variant="ghost"
+              size="sm"
             >
               ...
             </Button>
@@ -96,7 +96,6 @@ const CategoryBreadCrumb = () => {
               return (
                 <div className="flex items-center" key={breadItem.id}>
                   <Button
-                    placeholder="button"
                     className="block cursor-pointer bg-transparent !px-2 !py-[2px]"
                     onClick={() => {
                       setCategoryShow(breadItem);
@@ -105,15 +104,14 @@ const CategoryBreadCrumb = () => {
                         setBulkItems([]);
                       }
                     }}
-                    {...({} as  Omit<React.ComponentProps<typeof Button>, "placeholder">)}
+                    variant="ghost"
+                    size="sm"
                   >
-                    <Typography
-                      placeholder=""
+                    <span
                       className={`caption_c1 ${breadItem.id === getCategoryShow?.id ? "text-primary_normal" : "text-secondary"} lowercase`}
-                      {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
                     >
                       {breadItem.name}
-                    </Typography>
+                    </span>
                   </Button>
                   {index + 1 < breadCrumb.length && (
                     <div className="flex h-6 w-[14px] items-center justify-center">

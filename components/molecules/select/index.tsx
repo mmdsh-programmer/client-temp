@@ -7,9 +7,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@components/ui/select";
 import { Spinner } from "@components/ui/spinner";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 export interface IOption {
   label: string;

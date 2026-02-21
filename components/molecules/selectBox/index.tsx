@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Popover, PopoverContent, PopoverTrigger } from "@components/ui/popover";
+import { Button } from "@components/ui/button";
+import { Checkbox } from "@components/ui/checkbox";
 import {
   Command,
   CommandEmpty,
@@ -11,8 +11,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { cn } from "@/utils/cn";
+} from "@components/ui/command";
+import { cn } from "@utils/cn";
 import { ChevronLeftIcon } from "@components/atoms/icons";
 
 export interface ISelectOption {

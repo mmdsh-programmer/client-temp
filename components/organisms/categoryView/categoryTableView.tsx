@@ -1,8 +1,6 @@
-/* eslint-disable no-nested-ternary */
-
-import { Button, Typography } from "@material-tailwind/react";
-import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import React, { useState } from "react";
+import { Button } from "@components/ui/button";
+import { ICategoryMetadata, ICategoryView } from "@interface/category.interface";
 import { useFilterStore } from "@store/filter";
 import { useSortStore } from "@store/sortParam";
 import AdvancedFilter from "@components/molecules/advancedFilter";
@@ -180,17 +178,9 @@ const TableView = ({
               setFilterChildren(null);
               setFilterReport(null);
             }}
-            placeholder=""
-            {...({} as Omit<React.ComponentProps<typeof Button>, "placeholder">)}
           >
             <DeleteIcon className="h-4 w-4 fill-white" />
-            <Typography
-              placeholder=""
-              className="label text-white"
-              {...({} as Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-            >
-              حذف فیلتر
-            </Typography>
+            <span className="label text-white">حذف فیلتر</span>
           </Button>
         </div>
       ) : null}

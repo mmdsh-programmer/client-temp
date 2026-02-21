@@ -23,7 +23,7 @@ export interface IProps {
   dialogHeader: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   onSubmit: () => Promise<void> | void;
   className?: string;
   backToMain?: boolean;
@@ -46,7 +46,7 @@ const CreateDialog = ({
 }: IProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
       <DialogContent
         className={cn(
           "[&>button]:hidden",

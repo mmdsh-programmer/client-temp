@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { InvisibleIcon, MoreDotIcon } from "@components/atoms/icons";
 import { useCategoryDrawerStore, useCategoryStore } from "@store/category";
-import { ICategoryMetadata } from "@interface/category.interface";
-import useCategoryMenuList from "./useCategoryMenuList";
-import CategoryDialogs from "../categoryDialogs";
+import useCategoryMenuList from "@components/molecules/categoryMenu/useCategoryMenuList";
+import CategoryDialogs from "@components/molecules/categoryDialogs";
 import MenuTemplate from "@components/templates/menuTemplate";
+import { ICategoryMetadata } from "@interface/category.interface";
 
 interface IProps {
   category: ICategoryMetadata;

@@ -5,7 +5,7 @@ import CategoryDeleteDialog from "@components/organisms/dialogs/category/categor
 import CategoryEditDialog from "@components/organisms/dialogs/category/categoryEditDialog";
 import CategoryHideDialog from "@components/organisms/dialogs/category/categoryHideDialog";
 import CategoryMoveDialog from "@components/organisms/dialogs/category/categoryMoveDialog";
-import CategoryVisibleDialog from "../../organisms/dialogs/category/categoryVisibleDialog";
+import CategoryVisibleDialog from "@components/organisms/dialogs/category/categoryVisibleDialog";
 import DocumentCreate from "@components/organisms/dialogs/document/documentCreate";
 
 interface ICategoryDialogsProps {

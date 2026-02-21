@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
+import { cn } from "@utils/cn";
 
 export interface ITableCell {
   data: string | React.ReactNode;
@@ -12,27 +13,22 @@ export interface ITableCell {
 }
 
 interface IProps {
-  tableCell: {
-    data: string | React.ReactNode;
-    title?: string;
-    className?: string;
-    rowSpan?: number;
-    colSpan?: number;
-    onClick?: () => void;
-    stopPropagation?: boolean;
-  }[];
+  tableCell: ITableCell[];
   navigateTo?: string;
   onClick?: () => void;
   active?: boolean;
   className?: string;
 }
-const TableCell = ({
- tableCell, navigateTo, onClick, active, className
-}: IProps) => {
+
+const TableCell = ({ tableCell, navigateTo, onClick, active, className }: IProps) => {
   const router = useRouter();
   return (
     <tr
-      className={`table-cell-track cursor-pointer text-[13px] font-normal text-primary_normal border-b-[1px] border-normal ${active ? "bg-gray-300" : ""} ${className || ""}`}
+      className={cn(
+        "table-cell-track cursor-pointer border-b-[1px] border-normal text-[13px] font-normal text-primary_normal",
+        active ? "bg-gray-300" : "",
+        className || "",
+      )}
       onClick={() => {
         onClick?.();
         if (navigateTo) {
@@ -40,14 +36,12 @@ const TableCell = ({
         }
       }}
     >
-      {tableCell.map((row, index) => {
+      {tableCell.map((row) => {
         return (
           <td
             title={row.title}
-            // eslint-disable-next-line react/no-array-index-key
-            key={`${row.title}-${index}`}
-            className={`p-4 truncate font-iranYekan ${row.className || ""}
-              `}
+            key={row.title}
+            className={cn("truncate p-4 font-iranYekan", row.className || "")}
             onClick={(e) => {
               if (row.stopPropagation) {
                 e.stopPropagation();

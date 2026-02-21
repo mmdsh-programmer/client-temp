@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonProps } from "@components/ui/button";
 import { Spinner } from "@components/ui/spinner";
-import { cn } from "@/utils/cn";
+import { cn } from "@utils/cn";
 
 export interface IProps extends ButtonProps {
   loading?: boolean;

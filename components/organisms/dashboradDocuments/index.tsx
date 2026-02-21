@@ -13,7 +13,6 @@ import VersionDialogView from "@components/organisms/versionView/versionDialogVi
 import Editor from "@components/organisms/dialogs/editor";
 import useGetCategoryChildren from "@hooks/category/useGetCategorychildren";
 import useGetUser from "@hooks/auth/useGetUser";
-import { Typography } from "@material-tailwind/react";
 import DrawerTemplate from "@components/templates/drawerTemplate";
 import CategoryDialogs from "@components/molecules/categoryDialogs";
 import useCategoryMenuList from "@components/molecules/categoryMenu/useCategoryMenuList";
@@ -168,13 +167,7 @@ const DashboardDocuments = () => {
         />
       ) : null}
       <div className="flex flex-col gap-0 xs:gap-4">
-        <Typography
-          placeholder=""
-          className="title_t1 p-4 font-medium text-primary_normal xs:p-0"
-          {...({} as  Omit<React.ComponentProps<typeof Typography>, "placeholder">)}
-        >
-          سندها
-        </Typography>
+        <h2 className="title_t1 p-4 font-medium text-primary_normal xs:p-0">سندها</h2>
         <div className="px-4 xs:px-0">
           <TabComponent
             tabList={tabList}

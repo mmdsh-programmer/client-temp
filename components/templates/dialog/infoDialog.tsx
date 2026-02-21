@@ -16,7 +16,7 @@ import { cn } from "@/utils/cn";
 export interface IProps {
   isPending?: boolean;
   children: React.ReactNode;
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   dialogHeader: string;
   className?: string;
   contentClassName?: string;
@@ -42,7 +42,7 @@ const InfoDialog = ({
 }: IProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
       <DialogContent
         className={cn(
           "[&>button]:hidden",
